@@ -1,0 +1,6 @@
+name: PluginBase
+version: '${project.version}'
+main: me.emmy.pluginbase.PluginBase
+author: Emma
+description: '${project.description}'
+website: dsc.gg/dulcy
