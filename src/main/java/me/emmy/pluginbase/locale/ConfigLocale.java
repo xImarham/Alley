@@ -7,7 +7,7 @@ import net.md_5.bungee.api.ChatColor;
 import java.text.MessageFormat;
 
 /**
- * Created by Emmy (originally by remi for FlowerCore)
+ * Created by Emmy
  * Project: PluginBase
  * Date: 19/04/2024 - 17:41
  */
