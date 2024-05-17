@@ -1,8 +1,8 @@
-package me.emmy.pluginbase.handler;
+package me.emmy.alley.handler;
 
 import lombok.Getter;
-import me.emmy.pluginbase.PluginBase;
-import me.emmy.pluginbase.utils.chat.CC;
+import me.emmy.alley.Alley;
+import me.emmy.alley.utils.chat.CC;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -19,13 +19,13 @@ import java.util.Map;
 @Getter
 public class ConfigHandler {
 
-    private final PluginBase plugin = PluginBase.getInstance();
+    private final Alley plugin = Alley.getInstance();
 
     private final Map<String, File> configFiles = new HashMap<>();
     private final Map<String, FileConfiguration> fileConfigurations = new HashMap<>();
 
     private final String[] configFileNames = {
-            "settings.yml", "messages.yml"
+            "settings.yml", "messages.yml", "storage/kits.yml", "storage/arenas.yml"
     };
 
     public ConfigHandler() {
