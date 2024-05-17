@@ -49,6 +49,7 @@ me\emmy\alley\utils\command\Completer.class
 me\emmy\alley\utils\pagination\ViewAllPagesMenu.class
 me\emmy\alley\utils\PlayerUtil.class
 me\emmy\alley\utils\Utils.class
+me\emmy\alley\spawn\SpawnManager.class
 me\emmy\alley\hotbar\ItemManager.class
 me\emmy\alley\utils\menu\button\BackButton.class
 me\emmy\alley\commands\admin\kit\subcommands\KitListCommand.class
