@@ -5,13 +5,13 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>me.emmy</groupId>
-    <artifactId>PluginBase</artifactId>
+    <artifactId>Alley</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>PluginBase</name>
+    <name>Alley</name>
 
-    <description>A base/template to make Spigot plugins faster</description>
+    <description>Coder girl</description>
     <properties>
         <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
