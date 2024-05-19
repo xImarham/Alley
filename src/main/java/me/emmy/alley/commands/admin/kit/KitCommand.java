@@ -23,7 +23,7 @@ public class KitCommand extends BaseCommand {
         sender.sendMessage(CC.translate("&d&lKit Commands Help:"));
         sender.sendMessage(CC.translate(" &f● &d/kit create &8(&7kitName&8) &7| Create a kit"));
         sender.sendMessage(CC.translate(" &f● &d/kit delete &8(&7kitName&8) &7| Delete a kit"));
-        sender.sendMessage(CC.translate(" &f● &d/kit getInventory &8<(&7kitName&8) &7| Get inventory of a kit"));
+        sender.sendMessage(CC.translate(" &f● &d/kit getInventory &8(&7kitName&8) &7| Get inventory of a kit"));
         sender.sendMessage(CC.translate(" &f● &d/kit list &7| View all kits"));
         sender.sendMessage(CC.translate(" &f● &d/kit save &7| Save all kits"));
         sender.sendMessage(CC.translate(" &f● &d/kit description &8(&7kitName&8) &8(&7description&8) &7| Set desc of a kit"));

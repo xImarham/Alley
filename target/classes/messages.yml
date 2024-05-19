@@ -1,3 +1,19 @@
 no-permission: "&cI'm sorry, but it doesn't seem like you have permission to execute this command."
 
+welcome-message:
+  enabled: true
+  message:
+    - ""
+    - "&d&m------------&f&m------------&d&m------------"
+    - ""
+    - " &fWelcome to the &dAlley Network&f, &d{player}&f!"
+    - "  &f* Season: &dI"
+    - "  &f* Author: &d{author}"
+    - "  &f* Version: &d{version}"
+    - ""
+    - " &fFor more information, join &ddsc.gg/dulcy&f!"
+    - ""
+    - "&d&m------------&f&m------------&d&m------------"
+    - ""
+
 spawn-set: "&aSuccessfully set new join location! \n &8- &7{world}: {x}, {y}, {z} (Yaw: {yaw}, Pitch: {pitch})"

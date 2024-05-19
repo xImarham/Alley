@@ -126,12 +126,15 @@ public class CC {
     public static void on(long timeTaken) {
         Bukkit.getConsoleSender().sendMessage(" ");
         Bukkit.getConsoleSender().sendMessage(CC.translate("&8&m-----------------------------------------------"));
-        Bukkit.getConsoleSender().sendMessage(CC.translate(" &f| Plugin: &d" + Alley.getInstance().getDescription().getName()));
+        Bukkit.getConsoleSender().sendMessage(CC.translate(" &f| Plugin: &d" + Alley.getInstance().getDescription().getName() + " &dPractice"));
         Bukkit.getConsoleSender().sendMessage(CC.translate(" &f| Authors: &d" + Alley.getInstance().getDescription().getAuthors().toString().replace("[", "").replace("]", "")));
-        Bukkit.getConsoleSender().sendMessage(CC.translate(" "));
+        Bukkit.getConsoleSender().sendMessage(" ");
         Bukkit.getConsoleSender().sendMessage(CC.translate(" &f| Version: &d" + Alley.getInstance().getDescription().getVersion()));
         Bukkit.getConsoleSender().sendMessage(CC.translate(" &f| Link: &d" + Alley.getInstance().getDescription().getWebsite()));
-        Bukkit.getConsoleSender().sendMessage(CC.translate(" "));
+        Bukkit.getConsoleSender().sendMessage(" ");
+        Bukkit.getConsoleSender().sendMessage(CC.translate(" &f| Arenas: &dnull"));
+        Bukkit.getConsoleSender().sendMessage(CC.translate(" &f| Kits: &d" + Alley.getInstance().getKitManager().getKits().size()));
+        Bukkit.getConsoleSender().sendMessage(" ");
         Bukkit.getConsoleSender().sendMessage(CC.translate(" &f| Load time: &d" + (timeTaken) + " &dms"));
         Bukkit.getConsoleSender().sendMessage(CC.translate("&8&m-----------------------------------------------"));
         Bukkit.getConsoleSender().sendMessage(" ");

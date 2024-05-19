@@ -20,9 +20,10 @@ public class ItemManager implements Listener {
     }
 
     public void applySpawnItems(Player player) {
-        player.getInventory().setItem(LobbyItem.SOLO_GAME.getSlot(), LobbyItem.SOLO_GAME.constructItem());
-        player.getInventory().setItem(LobbyItem.DUO_GAME.getSlot(), LobbyItem.DUO_GAME.constructItem());
+        player.getInventory().setItem(LobbyItem.UNRANKED_QUEUE.getSlot(), LobbyItem.UNRANKED_QUEUE.constructItem());
+        player.getInventory().setItem(LobbyItem.RANKED_QUEUE.getSlot(), LobbyItem.RANKED_QUEUE.constructItem());
         player.getInventory().setItem(LobbyItem.LEADERBOARD.getSlot(), LobbyItem.LEADERBOARD.constructItem());
+        player.getInventory().setItem(LobbyItem.EVENTS.getSlot(), LobbyItem.EVENTS.constructItem());
         player.getInventory().setItem(LobbyItem.SETTINGS.getSlot(), LobbyItem.SETTINGS.constructItem());
     }
 

@@ -6,6 +6,11 @@ import me.emmy.alley.commands.AlleyCommand;
 import me.emmy.alley.commands.admin.kit.KitCommand;
 import me.emmy.alley.commands.admin.kit.subcommands.*;
 import me.emmy.alley.commands.admin.spawn.SetSpawnCommand;
+import me.emmy.alley.commands.global.queue.RankedCommand;
+import me.emmy.alley.commands.global.queue.UnrankedCommand;
+import me.emmy.alley.commands.global.settings.SettingsCommand;
+import me.emmy.alley.commands.global.stats.LeaderboardCommand;
+import me.emmy.alley.commands.global.stats.StatsCommand;
 import me.emmy.alley.handler.ConfigHandler;
 import me.emmy.alley.hotbar.ItemManager;
 import me.emmy.alley.kit.KitManager;
@@ -98,8 +103,9 @@ public class Alley extends JavaPlugin {
 
     private void registerCommands() {
         new AlleyCommand();
-        new SetSpawnCommand();
 
+        //admin commands
+        new SetSpawnCommand();
         new KitCommand();
         new KitCreateCommand();
         new KitDeleteCommand();
@@ -112,6 +118,13 @@ public class Alley extends JavaPlugin {
         new KitSetInventoryCommand();
         new KitSetRuleCommand();
         new KitViewRulesCommand();
+
+        //player commands
+        new UnrankedCommand();
+        new RankedCommand();
+        new SettingsCommand();
+        new LeaderboardCommand();
+        new StatsCommand();
     }
 
     public FileConfiguration getConfig(String fileName) {

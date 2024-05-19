@@ -17,6 +17,7 @@ C:\Users\Riesey\Desktop\Development\1 Projects\Alley\src\main\java\me\emmy\alley
 C:\Users\Riesey\Desktop\Development\1 Projects\Alley\src\main\java\me\emmy\alley\commands\admin\kit\subcommands\KitDeleteCommand.java
 C:\Users\Riesey\Desktop\Development\1 Projects\Alley\src\main\java\me\emmy\alley\utils\command\BukkitCompleter.java
 C:\Users\Riesey\Desktop\Development\1 Projects\Alley\src\main\java\me\emmy\alley\utils\pagination\PageFilterButton.java
+C:\Users\Riesey\Desktop\Development\1 Projects\Alley\src\main\java\me\emmy\alley\commands\global\stats\StatsCommand.java
 C:\Users\Riesey\Desktop\Development\1 Projects\Alley\src\main\java\me\emmy\alley\utils\pagination\ViewAllPagesMenu.java
 C:\Users\Riesey\Desktop\Development\1 Projects\Alley\src\main\java\me\emmy\alley\commands\admin\kit\subcommands\KitSetIconCommand.java
 C:\Users\Riesey\Desktop\Development\1 Projects\Alley\src\main\java\me\emmy\alley\commands\admin\kit\subcommands\KitCreateCommand.java
@@ -25,8 +26,11 @@ C:\Users\Riesey\Desktop\Development\1 Projects\Alley\src\main\java\me\emmy\alley
 C:\Users\Riesey\Desktop\Development\1 Projects\Alley\src\main\java\me\emmy\alley\utils\pagination\PageFilter.java
 C:\Users\Riesey\Desktop\Development\1 Projects\Alley\src\main\java\me\emmy\alley\utils\item\ItemBuilder.java
 C:\Users\Riesey\Desktop\Development\1 Projects\Alley\src\main\java\me\emmy\alley\commands\AlleyCommand.java
+C:\Users\Riesey\Desktop\Development\1 Projects\Alley\src\main\java\me\emmy\alley\commands\global\settings\SettingsCommand.java
 C:\Users\Riesey\Desktop\Development\1 Projects\Alley\src\main\java\me\emmy\alley\locale\Locale.java
+C:\Users\Riesey\Desktop\Development\1 Projects\Alley\src\main\java\me\emmy\alley\commands\global\queue\RankedCommand.java
 C:\Users\Riesey\Desktop\Development\1 Projects\Alley\src\main\java\me\emmy\alley\utils\menu\MenuListener.java
+C:\Users\Riesey\Desktop\Development\1 Projects\Alley\src\main\java\me\emmy\alley\commands\global\queue\UnrankedCommand.java
 C:\Users\Riesey\Desktop\Development\1 Projects\Alley\src\main\java\me\emmy\alley\utils\menu\button\RefillGlassButton.java
 C:\Users\Riesey\Desktop\Development\1 Projects\Alley\src\main\java\me\emmy\alley\utils\menu\Button.java
 C:\Users\Riesey\Desktop\Development\1 Projects\Alley\src\main\java\me\emmy\alley\utils\Clickable.java
@@ -34,6 +38,7 @@ C:\Users\Riesey\Desktop\Development\1 Projects\Alley\src\main\java\me\emmy\alley
 C:\Users\Riesey\Desktop\Development\1 Projects\Alley\src\main\java\me\emmy\alley\commands\admin\kit\subcommands\KitViewRulesCommand.java
 C:\Users\Riesey\Desktop\Development\1 Projects\Alley\src\main\java\me\emmy\alley\hotbar\ItemManager.java
 C:\Users\Riesey\Desktop\Development\1 Projects\Alley\src\main\java\me\emmy\alley\utils\item\ItemCreator.java
+C:\Users\Riesey\Desktop\Development\1 Projects\Alley\src\main\java\me\emmy\alley\commands\global\stats\LeaderboardCommand.java
 C:\Users\Riesey\Desktop\Development\1 Projects\Alley\src\main\java\me\emmy\alley\handler\ConfigHandler.java
 C:\Users\Riesey\Desktop\Development\1 Projects\Alley\src\main\java\me\emmy\alley\utils\pagination\JumpToPageButton.java
 C:\Users\Riesey\Desktop\Development\1 Projects\Alley\src\main\java\me\emmy\alley\commands\admin\kit\subcommands\KitSetDescriptionCommand.java
@@ -46,6 +51,7 @@ C:\Users\Riesey\Desktop\Development\1 Projects\Alley\src\main\java\me\emmy\alley
 C:\Users\Riesey\Desktop\Development\1 Projects\Alley\src\main\java\me\emmy\alley\utils\others\NumberUtils.java
 C:\Users\Riesey\Desktop\Development\1 Projects\Alley\src\main\java\me\emmy\alley\commands\admin\kit\subcommands\KitSetDisplayNameCommand.java
 C:\Users\Riesey\Desktop\Development\1 Projects\Alley\src\main\java\me\emmy\alley\listeners\PlayerListener.java
+C:\Users\Riesey\Desktop\Development\1 Projects\Alley\src\main\java\me\emmy\alley\utils\others\LocationUtil.java
 C:\Users\Riesey\Desktop\Development\1 Projects\Alley\src\main\java\me\emmy\alley\utils\chat\CC.java
 C:\Users\Riesey\Desktop\Development\1 Projects\Alley\src\main\java\me\emmy\alley\utils\menu\Menu.java
 C:\Users\Riesey\Desktop\Development\1 Projects\Alley\src\main\java\me\emmy\alley\commands\admin\kit\subcommands\KitListCommand.java

@@ -16,7 +16,9 @@ import org.bukkit.configuration.file.FileConfiguration;
 
 @Getter
 public class SpawnManager {
+
     private Location spawnLocation;
+
     public void loadSpawnLocation() {
         FileConfiguration config = Alley.getInstance().getConfigHandler().getConfigByName("settings.yml");
 

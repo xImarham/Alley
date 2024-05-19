@@ -13,10 +13,11 @@ import org.bukkit.inventory.ItemStack;
 
 @Getter
 public enum LobbyItem {
-    SOLO_GAME("&aSolo Game", Material.IRON_AXE, 0, 0, "sologame"),
-    DUO_GAME("&6Duo Game", Material.DIAMOND_AXE, 0, 1, "duogame"),
-    LEADERBOARD("&dLeaderboard", Material.EMERALD, 0, 4, "leaderboard"),
-    SETTINGS("&cSettings", Material.BOOK, 0, 8, "settings");
+    UNRANKED_QUEUE("&dUnranked Queue", Material.IRON_SWORD, 0, 0, "unranked"),
+    RANKED_QUEUE("&dRanked Queue", Material.DIAMOND_SWORD, 0, 1, "ranked"),
+    LEADERBOARD("&dLeaderboard", Material.EMERALD, 0, 4, "leaderboards"),
+    EVENTS("&dEvents", Material.EYE_OF_ENDER, 0, 7, "events"),
+    SETTINGS("&dSettings", Material.BOOK, 0, 8, "settings");
 
 
     private final String name;

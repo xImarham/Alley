@@ -20,20 +20,33 @@ import java.util.UUID;
 
 public class PlayerListener implements Listener {
 
+    private final Alley plugin = Alley.getInstance();
+
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onJoin(PlayerJoinEvent event) {
         Player joinedPlayer = event.getPlayer();
         UUID playerUUID = joinedPlayer.getUniqueId();
+        Location spawnLocation = Alley.getInstance().getSpawnManager().getSpawnLocation();
 
         joinedPlayer.setFlySpeed(1 * 0.1F);
         joinedPlayer.setWalkSpeed(2 * 0.1F);
 
         event.setJoinMessage(null);
-        Location spawnLocation = Alley.getInstance().getSpawnManager().getSpawnLocation();
+
         if (spawnLocation != null) {
             event.getPlayer().teleport(spawnLocation);
         } else {
             Bukkit.getConsoleSender().sendMessage(CC.translate("&4&l(!) SPAWN LOCATION IS NULL (!)"));
+        }
+
+        if (plugin.getConfig("messages.yml").getBoolean("welcome-message.enabled")) {
+            for (String message : plugin.getConfig("messages.yml").getStringList("welcome-message.message")) {
+                joinedPlayer.sendMessage(CC.translate(message)
+                        .replace("{player}", joinedPlayer.getName())
+                        .replace("{version}", plugin.getDescription().getVersion())
+                        .replace("{author}", plugin.getDescription().getAuthors().get(0))
+                );
+            }
         }
     }
 }

@@ -1,5 +1,6 @@
 package me.emmy.alley.kit;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
@@ -9,6 +10,7 @@ import lombok.Getter;
  */
 
 @Getter
+@AllArgsConstructor
 public enum KitType {
     FALL_DAMAGE,
     RANKED,
@@ -23,4 +25,3 @@ public enum KitType {
     BED_FIGHT,
     BATTLE_RUSH
 }
-
