@@ -5,6 +5,7 @@ import me.emmy.alley.utils.chat.CC;
 import org.bukkit.Difficulty;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.*;
@@ -36,13 +37,13 @@ public class ArenaListener implements Listener {
 
         Player player = event.getPlayer();
         Block clickedBlock = event.getClickedBlock();
-        int locationType;
+        int locationType = 0;
 
         Selection selection = Selection.createSelection(player);
-        if (event.getAction() == Action.LEFT_CLICK_BLOCK) {
+        if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
             selection.setMinimum(clickedBlock.getLocation());
             locationType = 2;
-        } else {
+        } else if (event.getAction() == Action.LEFT_CLICK_BLOCK) {
             selection.setMaximum(clickedBlock.getLocation());
             locationType = 1;
         }
