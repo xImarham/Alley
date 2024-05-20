@@ -1,0 +1,42 @@
+scoreboard:
+  enabled: true
+  title:
+    text: "  &b&lPractice  "
+    animated: true
+    ticks: 5
+    animation:
+      - "   &d&lPractice   "
+      - "   &f&l&d&lPractice   "
+      - "   &f&lP&d&lractice   "
+      - "   &f&lPr&d&lactice   "
+      - "   &f&lPra&d&lctice   "
+      - "   &f&lPrac&d&ltice   "
+      - "   &f&lPract&d&lice   "
+      - "   &f&lPracti&d&lce   "
+      - "   &f&lPractic&d&le   "
+      - "   &f&lPractice   "
+      - "   &f&lPractice   "
+      - "   &f&lPractic&d&le   "
+      - "   &f&lPracti&d&lce   "
+      - "   &f&lPract&d&lice   "
+      - "   &f&lPrac&d&ltice   "
+      - "   &f&lPra&d&lctice   "
+      - "   &f&lPr&d&lactice   "
+      - "   &f&lP&d&lractice   "
+      - "   &d&lPractice   "
+      - "   &d&lPractice   "
+      - "   &f&lPractice   "
+      - "   &d&lPractice   "
+      - "   &d&lPractice   "
+      - "   &d&lPractice   "
+  lines:
+    - ""
+    - "&d&lInfo"
+    - " &rOnline: &d{online}"
+    - " &rPlaying: &d0"
+    - ""
+    - "&d&lStats"
+    - " &rELO: &d1000"
+    - " &rTitle: &dBronze I"
+    - ""
+    - "&dalley.net"
