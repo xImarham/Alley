@@ -142,7 +142,7 @@ public class CC {
 
     public static void off() {
         Bukkit.getConsoleSender().sendMessage(" ");
-        Bukkit.getConsoleSender().sendMessage(CC.translate("&8[&bPluginBase&8] &fDisabled &bFlowerCore&f!"));
+        Bukkit.getConsoleSender().sendMessage(CC.translate("&8[&dAlley&8] &fDisabled &dAlley Practice&f!"));
         Bukkit.getConsoleSender().sendMessage(" ");
     }
 }

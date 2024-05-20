@@ -8,11 +8,6 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 
-/**
- * @author ZionRank
- * @project WavePractice
- * @since 03/12/2023
- */
 public class ItemManager implements Listener {
 
     public ItemManager() {
