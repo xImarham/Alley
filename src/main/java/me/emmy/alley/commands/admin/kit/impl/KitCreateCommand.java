@@ -31,15 +31,15 @@ public class KitCreateCommand extends BaseCommand {
 
         String kitName = args[0];
 
-        if (Alley.getInstance().getKitManager().getKit(kitName) != null) {
+        if (Alley.getInstance().getKitRepository().getKit(kitName) != null) {
             player.sendMessage(CC.translate("&cA kit with that name already exists!"));
             return;
         }
 
         Kit kit = createKit(player, kitName);
 
-        Alley.getInstance().getKitManager().getKits().add(kit);
-        Alley.getInstance().getKitManager().saveKit(kit);
+        Alley.getInstance().getKitRepository().getKits().add(kit);
+        Alley.getInstance().getKitRepository().saveKit(kit);
 
         player.sendMessage(CC.translate(ConfigLocale.KIT_CREATED.getMessage().replace("{kit-name}", kitName)));
     }

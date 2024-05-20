@@ -46,7 +46,7 @@ public class Selection {
 
         Selection selection = new Selection();
 
-        player.setMetadata(SELECTION_METADATA, new FixedMetadataValue(Alley.getInstance(), true));
+        player.setMetadata(SELECTION_METADATA, new FixedMetadataValue(Alley.getInstance(), selection));
         return selection;
     }
 

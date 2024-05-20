@@ -28,7 +28,7 @@ public class KitSetInvCommand extends BaseCommand {
 
         String kitName = args.getArgs()[0];
 
-        Kit kit = Alley.getInstance().getKitManager().getKit(kitName);
+        Kit kit = Alley.getInstance().getKitRepository().getKit(kitName);
 
         if (kit == null) {
             sender.sendMessage(CC.translate(ConfigLocale.KIT_NOT_FOUND.getMessage()));
@@ -37,7 +37,7 @@ public class KitSetInvCommand extends BaseCommand {
 
         kit.setInventory(sender.getInventory().getContents());
         kit.setArmor(sender.getInventory().getArmorContents());
-        Alley.getInstance().getKitManager().saveKit(kit);
+        Alley.getInstance().getKitRepository().saveKit(kit);
         sender.sendMessage(CC.translate(ConfigLocale.KIT_INVENTORY_SET.getMessage().replace("{kit-name}", kitName)));
     }
 }

@@ -7,6 +7,7 @@ import me.emmy.alley.arena.impl.FreeForAllArena;
 import me.emmy.alley.arena.impl.SharedArena;
 import me.emmy.alley.arena.impl.StandAloneArena;
 import me.emmy.alley.arena.selection.Selection;
+import me.emmy.alley.utils.chat.CC;
 import me.emmy.alley.utils.command.BaseCommand;
 import me.emmy.alley.utils.command.Command;
 import me.emmy.alley.utils.command.CommandArgs;
@@ -28,7 +29,7 @@ public class ArenaCreateCommand extends BaseCommand {
         String[] args = command.getArgs();
 
         if (args.length < 2) {
-            player.sendMessage("Usage: /arena create <arenaName> <type>");
+            player.sendMessage(CC.translate("&cUsage: /arena create <arenaName> <type>"));
             return;
         }
 
@@ -39,18 +40,18 @@ public class ArenaCreateCommand extends BaseCommand {
                 .orElse(null);
 
         if (arenaType == null) {
-            player.sendMessage("Invalid arena type.");
+            player.sendMessage(CC.translate("&cInvalid arena type! Valid types: SHARED, STANDALONE, FFA"));
             return;
         }
 
-        if (Alley.getInstance().getArenaManager().getArenaByName(arenaName) != null) {
-            player.sendMessage("An arena with that name already exists.");
+        if (Alley.getInstance().getArenaRepository().getArenaByName(arenaName) != null) {
+            player.sendMessage(CC.translate("&cAn arena with that name already exists!"));
             return;
         }
 
         Selection selection = Selection.createSelection(player);
         if (!selection.hasSelection()) {
-            player.sendMessage("You must select the minimum and maximum locations for the arena.");
+            player.sendMessage(CC.translate("&cYou must select the minimum and maximum locations for the arena."));
             return;
         }
 
@@ -69,6 +70,7 @@ public class ArenaCreateCommand extends BaseCommand {
                 return;
         }
 
-        Alley.getInstance().getArenaManager().getArenas().add(arena);
+        arena.createArena();
+        player.sendMessage(CC.translate("&aSuccessfully created a new arena named &b" + arenaName + "&a with type &b" + arenaType.name() + "&a!"));
     }
 }

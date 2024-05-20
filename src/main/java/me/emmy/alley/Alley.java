@@ -2,11 +2,11 @@ package me.emmy.alley;
 
 import lombok.Getter;
 import lombok.Setter;
-import me.emmy.alley.arena.ArenaManager;
+import me.emmy.alley.arena.ArenaRepository;
 import me.emmy.alley.arena.listener.ArenaListener;
 import me.emmy.alley.commands.AlleyCommand;
-import me.emmy.alley.commands.admin.arena.impl.ArenaCreateCommand;
-import me.emmy.alley.commands.admin.arena.impl.ArenaToolCommand;
+import me.emmy.alley.commands.admin.arena.ArenaCommand;
+import me.emmy.alley.commands.admin.arena.impl.*;
 import me.emmy.alley.commands.admin.essential.SpawnItemsCommand;
 import me.emmy.alley.commands.admin.kit.KitCommand;
 import me.emmy.alley.commands.admin.kit.impl.*;
@@ -19,7 +19,7 @@ import me.emmy.alley.commands.global.stats.LeaderboardCommand;
 import me.emmy.alley.commands.global.stats.StatsCommand;
 import me.emmy.alley.handler.ConfigHandler;
 import me.emmy.alley.hotbar.ItemManager;
-import me.emmy.alley.kit.KitManager;
+import me.emmy.alley.kit.KitRepository;
 import me.emmy.alley.listeners.PlayerListener;
 import me.emmy.alley.spawn.SpawnManager;
 import me.emmy.alley.utils.chat.CC;
@@ -42,8 +42,8 @@ public class Alley extends JavaPlugin {
     private CommandFramework framework;
     private ItemManager itemManager;
     private SpawnManager spawnManager;
-    private KitManager kitManager;
-    private ArenaManager arenaManager;
+    private KitRepository kitRepository;
+    private ArenaRepository arenaRepository;
     private String prefix = "§f[§dAlley§f] &r";
 
     @Override
@@ -92,9 +92,13 @@ public class Alley extends JavaPlugin {
     private void registerManagers() {
         this.framework = new CommandFramework(this);
         this.itemManager = new ItemManager();
-        this.arenaManager = new ArenaManager();
-        this.kitManager = new KitManager();
-        this.kitManager.loadKits();
+
+        this.kitRepository = new KitRepository();
+        this.kitRepository.loadKits();
+
+        this.arenaRepository = new ArenaRepository();
+        this.arenaRepository.loadArenas();
+
         this.spawnManager = new SpawnManager();
         this.spawnManager.loadSpawnLocation();
 
@@ -113,6 +117,7 @@ public class Alley extends JavaPlugin {
         new SpawnItemsCommand();
         new SetSpawnCommand();
         new SpawnCommand();
+
         new KitCommand();
         new KitCreateCommand();
         new KitDeleteCommand();
@@ -121,8 +126,19 @@ public class Alley extends JavaPlugin {
         new KitSetInvCommand();
         new KitSetDescriptionCommand();
 
+        new ArenaCenterCommand();
         new ArenaCreateCommand();
+        new ArenaCuboidCommand();
+        new ArenaDeleteCommand();
+        new ArenaAddKitCommand();
+        new ArenaKitListCommand();
+        new ArenaListCommand();
+        new ArenaRemoveKitCommand();
+        new ArenaSaveCommand();
+        new ArenaSpawnCommand();
+        new ArenaToggleCommand();
         new ArenaToolCommand();
+        new ArenaCommand();
 
         //player commands
         new UnrankedCommand();

@@ -25,7 +25,7 @@ public class Arena {
     private Location minimum;
     private Location maximum;
     private ArenaType type;
-    private List<Kit> kits = new ArrayList<>();
+    private List<String> kits = new ArrayList<>();
     private boolean enabled;
 
     /**
@@ -41,6 +41,7 @@ public class Arena {
         this.maximum = maximum;
     }
 
+    public void createArena() {}
     public void saveArena() {}
     public void deleteArena() {}
 }

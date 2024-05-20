@@ -20,7 +20,7 @@ import java.util.List;
  */
 
 @Getter
-public class ArenaManager {
+public class ArenaRepository {
 
     private final List<Arena> arenas = new ArrayList<>();
 
@@ -67,8 +67,10 @@ public class ArenaManager {
             }
 
             if (config.contains(name + ".kits")) {
-                for (String kitName : config.getStringList(config + ".kits")) {
-                    arena.getKits().add(Alley.getInstance().getKitManager().getKit(kitName));
+                for (String kitName : config.getStringList(name + ".kits")) {
+                    if (Alley.getInstance().getKitRepository().getKit(kitName).getName() != null) {
+                        arena.getKits().add(kitName);
+                    }
                 }
             }
 

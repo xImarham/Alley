@@ -18,7 +18,7 @@ import java.util.List;
  */
 
 @Getter
-public class KitManager {
+public class KitRepository {
     private final List<Kit> kits = new ArrayList<>();
 
     public void loadKits() {

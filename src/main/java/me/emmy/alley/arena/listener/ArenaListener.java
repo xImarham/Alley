@@ -5,8 +5,8 @@ import me.emmy.alley.utils.chat.CC;
 import org.bukkit.Difficulty;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.*;
 import org.bukkit.event.entity.CreatureSpawnEvent;
@@ -24,7 +24,7 @@ import org.bukkit.inventory.ItemStack;
  */
 public class ArenaListener implements Listener {
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOW)
     private void onPlayerInteractEvent(PlayerInteractEvent event) {
         if (!(event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_BLOCK)) {
             return;
@@ -35,16 +35,18 @@ public class ArenaListener implements Listener {
             return;
         }
 
+
         Player player = event.getPlayer();
         Block clickedBlock = event.getClickedBlock();
         int locationType = 0;
 
         Selection selection = Selection.createSelection(player);
+
         if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
-            selection.setMinimum(clickedBlock.getLocation());
+            selection.setMaximum(clickedBlock.getLocation());
             locationType = 2;
         } else if (event.getAction() == Action.LEFT_CLICK_BLOCK) {
-            selection.setMaximum(clickedBlock.getLocation());
+            selection.setMinimum(clickedBlock.getLocation());
             locationType = 1;
         }
 
@@ -52,7 +54,13 @@ public class ArenaListener implements Listener {
         event.setUseItemInHand(PlayerInteractEvent.Result.DENY);
         event.setUseInteractedBlock(PlayerInteractEvent.Result.DENY);
 
-        String message = locationType == 1 ? "Maximum | " + clickedBlock.getLocation() : "Minimum | " + clickedBlock.getLocation() + " | location has been set!";
+        int getBlockX = clickedBlock.getLocation().getBlockX();
+        int getBlockY = clickedBlock.getLocation().getBlockY();
+        int getBlockZ = clickedBlock.getLocation().getBlockZ();
+
+        String coordinates = getBlockX + " | " + getBlockY + " | " + getBlockZ;
+        String message = locationType == 1 ? "&aSet minimum location to &b" + coordinates : "&aSet maximum location to &b" + coordinates;
+
         player.sendMessage(CC.translate(message));
     }
 

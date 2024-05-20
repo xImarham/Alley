@@ -2,6 +2,7 @@ package me.emmy.alley.arena.impl;
 
 import me.emmy.alley.Alley;
 import me.emmy.alley.arena.Arena;
+import me.emmy.alley.arena.ArenaType;
 import me.emmy.alley.utils.others.LocationUtil;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -26,6 +27,17 @@ public class StandAloneArena extends Arena {
     }
 
     @Override
+    public ArenaType getType() {
+        return ArenaType.STANDALONE;
+    }
+
+    @Override
+    public void createArena() {
+        Alley.getInstance().getArenaRepository().getArenas().add(this);
+        saveArena();
+    }
+
+    @Override
     public void saveArena() {
         String name = "arenas." + getName();
 
@@ -47,7 +59,7 @@ public class StandAloneArena extends Arena {
         FileConfiguration config = Alley.getInstance().getConfigHandler().getConfigByName("storage/arenas.yml");
         config.set("arenas." + getName(), null);
 
-        Alley.getInstance().getArenaManager().getArenas().remove(this);
+        Alley.getInstance().getArenaRepository().getArenas().remove(this);
         Alley.getInstance().getConfigHandler().saveConfig(Alley.getInstance().getConfigHandler().getConfigFileByName("storage/arenas.yml"), config);
     }
 }
