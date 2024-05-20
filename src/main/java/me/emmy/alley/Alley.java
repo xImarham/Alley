@@ -18,10 +18,14 @@ import me.emmy.alley.commands.global.settings.SettingsCommand;
 import me.emmy.alley.commands.global.stats.LeaderboardCommand;
 import me.emmy.alley.commands.global.stats.StatsCommand;
 import me.emmy.alley.handler.ConfigHandler;
+import me.emmy.alley.handler.ScoreboardHandler;
 import me.emmy.alley.hotbar.ItemManager;
 import me.emmy.alley.kit.KitRepository;
 import me.emmy.alley.listeners.PlayerListener;
+import me.emmy.alley.scoreboard.ScoreboardAdapter;
 import me.emmy.alley.spawn.SpawnManager;
+import me.emmy.alley.utils.assemble.Assemble;
+import me.emmy.alley.utils.assemble.AssembleStyle;
 import me.emmy.alley.utils.chat.CC;
 import me.emmy.alley.utils.command.CommandFramework;
 import me.emmy.alley.utils.menu.MenuListener;
@@ -39,6 +43,7 @@ public class Alley extends JavaPlugin {
     @Getter
     public static Alley instance;
     private ConfigHandler configHandler;
+    private ScoreboardHandler scoreboardHandler;
     private CommandFramework framework;
     private ItemManager itemManager;
     private SpawnManager spawnManager;
@@ -57,6 +62,7 @@ public class Alley extends JavaPlugin {
         registerManagers();
         registerListeners();
         registerCommands();
+        loadScoreboard();
 
         long end = System.currentTimeMillis();
         long timeTaken = end - start;
@@ -87,6 +93,7 @@ public class Alley extends JavaPlugin {
 
     private void registerHandlers() {
         configHandler = new ConfigHandler();
+        scoreboardHandler = new ScoreboardHandler();
     }
 
     private void registerManagers() {
@@ -146,6 +153,12 @@ public class Alley extends JavaPlugin {
         new SettingsCommand();
         new LeaderboardCommand();
         new StatsCommand();
+    }
+
+    private void loadScoreboard() {
+        Assemble assemble = new Assemble(this, new ScoreboardAdapter());
+        assemble.setTicks(2);
+        assemble.setAssembleStyle(AssembleStyle.MODERN);
     }
 
     public FileConfiguration getConfig(String fileName) {

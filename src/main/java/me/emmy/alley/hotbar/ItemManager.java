@@ -6,7 +6,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
 
 public class ItemManager implements Listener {
 
@@ -39,13 +38,5 @@ public class ItemManager implements Listener {
         } else {
             int menuID = clickedItem.getMenu();
         }
-    }
-
-    @EventHandler
-    public void onJoin(PlayerJoinEvent event) {
-        Player player = event.getPlayer();
-
-        player.getInventory().clear();
-        applySpawnItems(player);
     }
 }

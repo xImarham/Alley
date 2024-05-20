@@ -1,6 +1,7 @@
 package me.emmy.alley.listeners;
 
 import me.emmy.alley.Alley;
+import me.emmy.alley.utils.PlayerUtil;
 import me.emmy.alley.utils.chat.CC;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -26,18 +27,16 @@ public class PlayerListener implements Listener {
     public void onJoin(PlayerJoinEvent event) {
         Player joinedPlayer = event.getPlayer();
         UUID playerUUID = joinedPlayer.getUniqueId();
-        Location spawnLocation = Alley.getInstance().getSpawnManager().getSpawnLocation();
 
         joinedPlayer.setFlySpeed(1 * 0.1F);
         joinedPlayer.setWalkSpeed(2 * 0.1F);
 
         event.setJoinMessage(null);
 
-        if (spawnLocation != null) {
-            event.getPlayer().teleport(spawnLocation);
-        } else {
-            Bukkit.getConsoleSender().sendMessage(CC.translate("&4&l(!) SPAWN LOCATION IS NULL (!)"));
-        }
+        PlayerUtil.reset(joinedPlayer);
+        PlayerUtil.teleportToSpawn(joinedPlayer);
+        joinedPlayer.getInventory().setHeldItemSlot(0);
+        Alley.getInstance().getItemManager().applySpawnItems(joinedPlayer);
 
         if (plugin.getConfig("messages.yml").getBoolean("welcome-message.enabled")) {
             for (String message : plugin.getConfig("messages.yml").getStringList("welcome-message.message")) {

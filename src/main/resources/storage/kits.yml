@@ -1,11 +1,11 @@
 kits:
   NoDebuff:
     displayname: '&dNoDebuff'
-    description: '&dHi'
+    description: '&7The best experience!'
     enabled: true
-    unrankedslot: 0
-    rankedslot: 0
-    editorslot: 0
+    unrankedslot: 10
+    rankedslot: 10
+    editorslot: 10
     items:
       - ==: org.bukkit.inventory.ItemStack
         type: DIAMOND_SWORD
@@ -164,11 +164,11 @@ kits:
     icondata: 0
   Classic:
     displayname: '&dClassic'
-    description: '&dClassic kit description'
+    description: '&7Old styled PvP.'
     enabled: true
-    unrankedslot: 0
-    rankedslot: 0
-    editorslot: 0
+    unrankedslot: 11
+    rankedslot: 11
+    editorslot: 11
     items:
       - ==: org.bukkit.inventory.ItemStack
         type: DIAMOND_SWORD

@@ -110,5 +110,13 @@
             <version>4.4.0-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
+
+        <dependency>
+            <groupId>me.clip</groupId>
+            <artifactId>placeholderapi</artifactId>
+            <version>3.8.2</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/libs/PlaceHolderAPI.jar</systemPath>
+        </dependency>
     </dependencies>
 </project>

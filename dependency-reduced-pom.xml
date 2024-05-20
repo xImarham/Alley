@@ -39,6 +39,14 @@
   </build>
   <repositories>
     <repository>
+      <id>minebench-repo</id>
+      <url>https://repo.minebench.de</url>
+    </repository>
+    <repository>
+      <id>enginehub-maven</id>
+      <url>https://maven.enginehub.org/repo/</url>
+    </repository>
+    <repository>
       <id>spigotmc-repo</id>
       <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
     </repository>
@@ -63,23 +71,27 @@
     <dependency>
       <groupId>com.sk89q.worldedit</groupId>
       <artifactId>worldedit-core</artifactId>
-      <version>6.0.0-SNAPSHOT</version>
-      <scope>system</scope>
-      <systemPath>${project.basedir}/libs/WorldEdit.jar</systemPath>
+      <version>6.1.4-SNAPSHOT</version>
+      <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>com.boydti</groupId>
-      <artifactId>fawe-api</artifactId>
-      <version>latest</version>
-      <scope>system</scope>
-      <systemPath>${project.basedir}/libs/fawe-api-latest.jar</systemPath>
+      <groupId>com.sk89q.worldedit</groupId>
+      <artifactId>worldedit-bukkit</artifactId>
+      <version>6.1.5</version>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>com.comphenix.protocol</groupId>
-      <artifactId>ProtocolLib-API</artifactId>
-      <version>4.4.0</version>
+      <artifactId>ProtocolLib</artifactId>
+      <version>4.4.0-SNAPSHOT</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>me.clip</groupId>
+      <artifactId>placeholderapi</artifactId>
+      <version>3.8.2</version>
       <scope>system</scope>
-      <systemPath>${project.basedir}/libs/ProtocolLib.jar</systemPath>
+      <systemPath>${project.basedir}/libs/PlaceHolderAPI.jar</systemPath>
     </dependency>
   </dependencies>
   <properties>
