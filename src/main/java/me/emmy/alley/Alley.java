@@ -91,7 +91,7 @@ public class Alley extends JavaPlugin {
         this.itemManager = new ItemManager();
         this.arenaManager = new ArenaManager();
         this.kitManager = new KitManager();
-        this.kitManager.loadConfig();
+        this.kitManager.loadKits();
         this.spawnManager = new SpawnManager();
         this.spawnManager.loadSpawnLocation();
 
@@ -113,7 +113,9 @@ public class Alley extends JavaPlugin {
         new KitCreateCommand();
         new KitDeleteCommand();
         new KitListCommand();
-        new KitGetInventoryCommand();
+        new KitGetInvCommand();
+        new KitSetInvCommand();
+        new KitSetDescriptionCommand();
 
         //player commands
         new UnrankedCommand();

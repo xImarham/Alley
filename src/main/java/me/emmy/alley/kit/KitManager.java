@@ -5,7 +5,6 @@ import me.emmy.alley.Alley;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
@@ -22,7 +21,7 @@ import java.util.List;
 public class KitManager {
     private final List<Kit> kits = new ArrayList<>();
 
-    public void loadConfig() {
+    public void loadKits() {
         FileConfiguration config = Alley.getInstance().getConfigHandler().getConfigByName("storage/kits.yml");
 
         ConfigurationSection kitsSection = config.getConfigurationSection("kits");
@@ -56,9 +55,8 @@ public class KitManager {
         }
     }
 
-    public void saveConfig() {
+    public void saveKits() {
         FileConfiguration config = Alley.getInstance().getConfigHandler().getConfigByName("storage/kits.yml");
-        File file = Alley.getInstance().getConfigHandler().getConfigFileByName("storage/kits.yml");
         for (Kit kit : kits) {
             String key = "kits." + kit.getName();
 
@@ -74,10 +72,11 @@ public class KitManager {
             config.set(key + ".icondata", kit.getIconData());
 
         }
-        Alley.getInstance().getConfigHandler().saveConfig(file, config);
+        Alley.getInstance().getConfigHandler().saveConfig(Alley.getInstance().getConfigHandler().getConfigFileByName("storage/kits.yml"), config);
     }
 
-    /*public void saveToConfig(FileConfiguration config, Kit kit) {
+    public void saveKit(Kit kit) {
+        FileConfiguration config = Alley.getInstance().getConfigHandler().getConfigByName("storage/kits.yml");
         String key = "kits." + kit.getName();
 
         config.set(key + ".displayname", kit.getDisplayName());
@@ -86,30 +85,12 @@ public class KitManager {
         config.set(key + ".unrankedslot", kit.getUnrankedslot());
         config.set(key + ".rankedslot", kit.getRankedslot());
         config.set(key + ".editorslot", kit.getEditorslot());
-        config.set(key + ".icon", kit.getIcon());
+        config.set(key + ".items", kit.getInventory());
+        config.set(key + ".armor", kit.getArmor());
+        config.set(key + ".icon", kit.getIcon().name());
+        config.set(key + ".icondata", kit.getIconData());
 
-        config.set(key + ".items", serializeItemStackArray(kit.getInventory()));
-        config.set(key + ".armor", serializeItemStackArray(kit.getArmor()));
-
-        //need to add icon later if this is gonna be used
-    }*/
-
-    public void setInventory(Player player, String kitName) {
-        Kit kit = getKitByName(kitName);
-        if (kit != null) {
-            kit.setInventory(player.getInventory().getContents());
-            kit.setArmor(player.getInventory().getArmorContents());
-            saveConfig();
-        }
-    }
-
-    public Kit getKitByName(String name) {
-        for (Kit kit : kits) {
-            if (kit.getName().equalsIgnoreCase(name)) {
-                return kit;
-            }
-        }
-        return null;
+        Alley.getInstance().getConfigHandler().saveConfig(Alley.getInstance().getConfigHandler().getConfigFileByName("storage/kits.yml"), config);
     }
 
     public void deleteKit(Kit kit) {
@@ -120,5 +101,12 @@ public class KitManager {
         config.set("kits." + kit.getName(), null);
 
         Alley.getInstance().getConfigHandler().saveConfig(file, config);
+    }
+
+    public Kit getKit(String name) {
+        return kits.stream()
+                .filter(kit -> kit.getName().equalsIgnoreCase(name))
+                .findFirst()
+                .orElse(null);
     }
 }

@@ -20,4 +20,6 @@ kit:
   not-found: "&cThere is no kit with that name!"
   created: "&aSuccessfully created a new kit named &b{kit-name}&a!"
   deleted: "&cSuccessfully deleted the kit named &b{kit-name}&c!"
-  given: "&aSuccessfully retrieved the inventory of the &b{kit-name} &akit!"
+  description-set: "&aSuccessfully set the description of the &b{kit-name} &akit: &r{kit-description}"
+  inventory-given: "&aSuccessfully retrieved the inventory of the &b{kit-name} &akit!"
+  inventory-set: "&aSuccessfully set the inventory of the &b{kit-name} &akit!"
