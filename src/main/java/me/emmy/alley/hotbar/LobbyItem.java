@@ -5,12 +5,6 @@ import me.emmy.alley.utils.item.ItemBuilder;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
-/**
- * @author ZionRank
- * @project WavePractice
- * @since 03/12/2023
- */
-
 @Getter
 public enum LobbyItem {
     UNRANKED_QUEUE("&dUnranked Queue", Material.IRON_SWORD, 0, 0, "unranked"),
