@@ -32,34 +32,32 @@ public class ArenaManager {
             return;
         }
 
-        for (String name : arenasConfig.getKeys(false)) {
-            String arenaName = "arenas." + name;
+        for (String arenaName : arenasConfig.getKeys(false)) {
+            String name = "arenas." + arenaName;
 
-            ArenaType arenaType = ArenaType.valueOf(config.getString(arenaName + ".type"));
-
-            Location minimum = LocationUtil.deserialize(config.getString(arenaName + ".minimum"));
-            Location maximum = LocationUtil.deserialize(config.getString(arenaName + ".maximum"));
+            ArenaType arenaType = ArenaType.valueOf(config.getString(name + ".type"));
+            Location minimum = LocationUtil.deserialize(config.getString(name + ".minimum"));
+            Location maximum = LocationUtil.deserialize(config.getString(name + ".maximum"));
 
             Arena arena;
-
-            switch(arenaType) {
+            switch (arenaType) {
                 case SHARED:
                     arena = new SharedArena(
-                            name,
+                            arenaName,
                             minimum,
                             maximum
                     );
                     break;
                 case STANDALONE:
                     arena = new StandAloneArena(
-                            name,
+                            arenaName,
                             minimum,
                             maximum
                     );
                     break;
                 case FFA:
                     arena = new FreeForAllArena(
-                            name,
+                            arenaName,
                             minimum,
                             maximum
                     );
@@ -68,17 +66,71 @@ public class ArenaManager {
                     throw new IllegalStateException("Unexpected value: " + arenaType);
             }
 
-            if (config.contains(arenaName + ".kits")) {
+            if (config.contains(name + ".kits")) {
                 for (String kitName : config.getStringList(config + ".kits")) {
                     arena.getKits().add(Alley.getInstance().getKitManager().getKit(kitName));
                 }
             }
 
-            if (config.contains(arenaName + ".pos1")) {
-                arena.setPos1();
+            if (config.contains(name + ".pos1")) {
+                arena.setPos1(LocationUtil.deserialize(config.getString(name + ".pos1")));
             }
 
-        }
+            if (config.contains(name + ".pos2")) {
+                arena.setPos2(LocationUtil.deserialize(config.getString(name + ".pos2")));
+            }
 
+            if (config.contains(name + ".center")) {
+                arena.setCenter(LocationUtil.deserialize(config.getString(name + ".center")));
+            }
+
+            if (config.contains(name + ".displayName")) {
+                arena.setDisplayName(config.getString(name + ".displayName"));
+            }
+
+            if (config.contains(name + ".enabled")) {
+                arena.setEnabled(config.getBoolean(name + ".enabled"));
+            }
+
+            arenas.add(arena);
+        }
+    }
+
+    /**
+     * Save an arena
+     *
+     * @param arena the arena to save
+     */
+    public void saveArena(Arena arena) {
+        arena.saveArena();
+    }
+
+    /**
+     * Delete an arena
+     *
+     * @param arena the arena to delete
+     */
+    public void deleteArena(Arena arena) {
+        arena.deleteArena();
+    }
+
+    /**
+     * Get an arena by its name
+     *
+     * @param name the name of the arena
+     * @return the arena
+     */
+    public Arena getArenaByName(String name) {
+        return arenas.stream().filter(arena -> arena.getName().equalsIgnoreCase(name)).findFirst().orElse(null);
+    }
+
+    /**
+     * Get an arena by its class
+     *
+     * @param clazz the class of the arena
+     * @return the arena
+     */
+    public Arena getArenaByClass(Class<? extends Arena> clazz) {
+        return arenas.stream().filter(arena -> arena.getClass().equals(clazz)).findFirst().orElse(null);
     }
 }

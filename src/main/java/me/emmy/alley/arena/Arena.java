@@ -28,19 +28,19 @@ public class Arena {
     private List<Kit> kits = new ArrayList<>();
     private boolean enabled;
 
-    public Arena(String name, String displayName, Location pos1, Location pos2, Location center, Location minimum, Location maximum) {
-        this.name = name;
-        this.displayName = displayName;
-        this.pos1 = pos1;
-        this.pos2 = pos2;
-        this.center = center;
-        this.minimum = minimum;
-        this.maximum = maximum;
-    }
-
+    /**
+     * Constructor for the Arena class.
+     *
+     * @param name The name of the arena.
+     * @param minimum The minimum location of the arena.
+     * @param maximum The maximum location of the arena.
+     */
     public Arena(String name, Location minimum, Location maximum) {
         this.name = name;
         this.minimum = minimum;
         this.maximum = maximum;
     }
+
+    public void saveArena() {}
+    public void deleteArena() {}
 }
