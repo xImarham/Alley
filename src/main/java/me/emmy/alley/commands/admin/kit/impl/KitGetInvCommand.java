@@ -15,9 +15,9 @@ import org.bukkit.entity.Player;
  * Date: 28/04/2024 - 22:25
  */
 
-public class KitGetInventoryCommand extends BaseCommand {
+public class KitGetInvCommand extends BaseCommand {
     @Override
-    @Command(name = "kit.getinventory", permission = "alley.admin")
+    @Command(name = "kit.getinventory", aliases = "kit.getinv",permission = "alley.admin")
     public void onCommand(CommandArgs command) {
         Player sender = command.getPlayer();
         String[] args = command.getArgs();
@@ -28,7 +28,7 @@ public class KitGetInventoryCommand extends BaseCommand {
         }
 
         String kitName = args[0];
-        Kit kit = Alley.getInstance().getKitManager().getKitByName(kitName);
+        Kit kit = Alley.getInstance().getKitManager().getKit(kitName);
 
         if (kit == null) {
             sender.sendMessage(CC.translate(ConfigLocale.KIT_NOT_FOUND.getMessage()));
@@ -37,6 +37,6 @@ public class KitGetInventoryCommand extends BaseCommand {
 
         sender.getInventory().setContents(kit.getInventory());
         sender.getInventory().setArmorContents(kit.getArmor());
-        sender.sendMessage(CC.translate(ConfigLocale.KIT_GIVEN.getMessage().replace("{kit-name}", kitName)));
+        sender.sendMessage(CC.translate(ConfigLocale.KIT_INVENTORY_GIVEN.getMessage().replace("{kit-name}", kitName)));
     }
 }

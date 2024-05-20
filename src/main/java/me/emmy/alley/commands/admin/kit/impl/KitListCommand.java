@@ -16,8 +16,8 @@ import org.bukkit.command.CommandSender;
 public class KitListCommand extends BaseCommand {
     @Override
     @Command(name = "kit.list", permission = "alley.admin")
-    public void onCommand(CommandArgs args) {
-        CommandSender sender = args.getSender();
+    public void onCommand(CommandArgs command) {
+        CommandSender sender = command.getSender();
 
         sender.sendMessage("");
         sender.sendMessage(CC.FLOWER_BAR);

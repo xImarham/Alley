@@ -22,7 +22,7 @@ public class KitDeleteCommand extends BaseCommand {
         }
 
         String kitName = args[0];
-        Kit kit = Alley.getInstance().getKitManager().getKitByName(kitName);
+        Kit kit = Alley.getInstance().getKitManager().getKit(kitName);
 
         if (kit == null) {
             player.sendMessage(CC.translate(ConfigLocale.KIT_NOT_FOUND.getMessage()));

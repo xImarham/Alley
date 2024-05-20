@@ -2,7 +2,7 @@ package me.emmy.alley.locale;
 
 /**
  * Created by Emmy
- * Project: PluginBase
+ * Project: Alley
  * Date: 19/04/2024 - 17:49
  */
 
