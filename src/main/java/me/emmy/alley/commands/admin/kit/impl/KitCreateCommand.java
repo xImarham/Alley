@@ -2,6 +2,7 @@ package me.emmy.alley.commands.admin.kit.impl;
 
 import me.emmy.alley.Alley;
 import me.emmy.alley.kit.Kit;
+import me.emmy.alley.locale.ConfigLocale;
 import me.emmy.alley.utils.chat.CC;
 import me.emmy.alley.utils.command.BaseCommand;
 import me.emmy.alley.utils.command.Command;
@@ -40,7 +41,7 @@ public class KitCreateCommand extends BaseCommand {
         Alley.getInstance().getKitManager().getKits().add(kit);
         Alley.getInstance().getKitManager().saveConfig();
 
-        player.sendMessage(CC.translate("&aSuccessfully created a new kit named &b" + kitName + "&a!"));
+        player.sendMessage(CC.translate(ConfigLocale.KIT_CREATED.getMessage().replace("{kit-name}", kitName)));
     }
 
     private Kit createKit(Player player, String kitName) {

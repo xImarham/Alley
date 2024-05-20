@@ -1,6 +1,7 @@
 me\emmy\alley\commands\global\settings\SettingsCommand.class
 me\emmy\alley\utils\chat\JSONMessage$HoverEvent.class
 me\emmy\alley\utils\menu\Button.class
+me\emmy\alley\arena\ArenaManager.class
 me\emmy\alley\locale\ConfigLocale.class
 me\emmy\alley\utils\item\ItemCreator$Glow.class
 me\emmy\alley\utils\menu\button\DisplayButton.class
@@ -23,17 +24,20 @@ me\emmy\alley\utils\menu\MenuListener.class
 me\emmy\alley\utils\item\ItemBuilder.class
 me\emmy\alley\commands\admin\kit\impl\KitCreateCommand.class
 me\emmy\alley\utils\pagination\PageFilter.class
+me\emmy\alley\commands\admin\essential\SpawnItemsCommand.class
 me\emmy\alley\commands\global\queue\UnrankedCommand.class
 me\emmy\alley\utils\chat\StringUtil.class
 me\emmy\alley\commands\global\queue\RankedCommand.class
 me\emmy\alley\utils\menu\button\RefillGlassButton.class
 me\emmy\alley\utils\menu\button\PageGlassButton.class
+me\emmy\alley\commands\admin\spawn\SpawnCommand.class
 me\emmy\alley\handler\ConfigHandler.class
 me\emmy\alley\utils\pagination\PageInfoButton.class
 me\emmy\alley\utils\command\BukkitCommand.class
 me\emmy\alley\commands\admin\kit\impl\KitListCommand.class
 me\emmy\alley\commands\admin\kit\impl\KitGetInventoryCommand.class
 me\emmy\alley\utils\pagination\JumpToPageButton.class
+me\emmy\alley\commands\admin\arena\ArenaCommand.class
 me\emmy\alley\commands\admin\kit\KitCommand.class
 me\emmy\alley\utils\chat\JSONMessage$ReflectionHelper.class
 me\emmy\alley\utils\others\Cooldown.class
@@ -55,6 +59,7 @@ me\emmy\alley\commands\admin\kit\impl\KitDeleteCommand.class
 me\emmy\alley\utils\Clickable.class
 me\emmy\alley\utils\chat\JSONMessage$MessagePart.class
 me\emmy\alley\utils\command\CommandFramework.class
+me\emmy\alley\arena\Arena.class
 me\emmy\alley\utils\pagination\PageFilterButton.class
 me\emmy\alley\utils\menu\Menu.class
 me\emmy\alley\utils\pagination\FilterablePaginatedMenu.class

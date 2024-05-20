@@ -1,5 +1,5 @@
 no-permission: "&cI'm sorry, but it doesn't seem like you have permission to execute this command."
-
+spawn-set: "&aSuccessfully set the new spawn location of &dAlley Practice&a! \n &8- &7{world}: {x}, {y}, {z} (Yaw: {yaw}, Pitch: {pitch})"
 welcome-message:
   enabled: true
   message:
@@ -16,4 +16,8 @@ welcome-message:
     - "&d&m------------&f&m------------&d&m------------"
     - ""
 
-spawn-set: "&aSuccessfully set new join location! \n &8- &7{world}: {x}, {y}, {z} (Yaw: {yaw}, Pitch: {pitch})"
+kit:
+  not-found: "&cThere is no kit with that name!"
+  created: "&aSuccessfully created a new kit named &b{kit-name}&a!"
+  deleted: "&cSuccessfully deleted the kit named &b{kit-name}&c!"
+  given: "&aSuccessfully retrieved the inventory of the &b{kit-name} &akit!"

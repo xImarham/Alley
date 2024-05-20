@@ -15,7 +15,11 @@ import java.text.MessageFormat;
 @Getter
 public enum ConfigLocale {
 
-    NO_PERM("messages.yml", "no-permission");
+    NO_PERM("messages.yml", "no-permission"),
+    KIT_NOT_FOUND("messages.yml", "kit.not-found"),
+    KIT_CREATED("messages.yml", "kit.created"),
+    KIT_DELETED("messages.yml", "kit.deleted"),
+    KIT_GIVEN("messages.yml", "kit.given");
 
     private final String configName, configString;
 
@@ -24,8 +28,8 @@ public enum ConfigLocale {
         this.configString = configString;
     }
 
-    public String format(Object... objects) {
-        return new MessageFormat(ChatColor.translateAlternateColorCodes('&',
-                Alley.getInstance().getConfig(configName).getString(configString))).format(objects);
+    public String getMessage() {
+        return ChatColor.translateAlternateColorCodes('&',
+                Alley.getInstance().getConfig(configName).getString(configString));
     }
 }

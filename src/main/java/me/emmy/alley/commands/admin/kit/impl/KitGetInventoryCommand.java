@@ -2,6 +2,7 @@ package me.emmy.alley.commands.admin.kit.impl;
 
 import me.emmy.alley.Alley;
 import me.emmy.alley.kit.Kit;
+import me.emmy.alley.locale.ConfigLocale;
 import me.emmy.alley.utils.chat.CC;
 import me.emmy.alley.utils.command.BaseCommand;
 import me.emmy.alley.utils.command.Command;
@@ -30,12 +31,12 @@ public class KitGetInventoryCommand extends BaseCommand {
         Kit kit = Alley.getInstance().getKitManager().getKitByName(kitName);
 
         if (kit == null) {
-            sender.sendMessage(CC.translate("&cThere is no kit with that name."));
+            sender.sendMessage(CC.translate(ConfigLocale.KIT_NOT_FOUND.getMessage()));
             return;
         }
 
         sender.getInventory().setContents(kit.getInventory());
         sender.getInventory().setArmorContents(kit.getArmor());
-        sender.sendMessage(CC.translate("&aSuccessfully retrieved the inventory of the kit."));
+        sender.sendMessage(CC.translate(ConfigLocale.KIT_GIVEN.getMessage().replace("{kit-name}", kitName)));
     }
 }

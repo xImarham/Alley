@@ -12,8 +12,10 @@ C:\Users\Riesey\Desktop\Development\1 Projects\Alley\src\main\java\me\emmy\alley
 C:\Users\Riesey\Desktop\Development\1 Projects\Alley\src\main\java\me\emmy\alley\locale\ConfigLocale.java
 C:\Users\Riesey\Desktop\Development\1 Projects\Alley\src\main\java\me\emmy\alley\utils\pagination\ItemBuilder.java
 C:\Users\Riesey\Desktop\Development\1 Projects\Alley\src\main\java\me\emmy\alley\commands\admin\kit\impl\KitCreateCommand.java
+C:\Users\Riesey\Desktop\Development\1 Projects\Alley\src\main\java\me\emmy\alley\commands\admin\arena\ArenaCommand.java
 C:\Users\Riesey\Desktop\Development\1 Projects\Alley\src\main\java\me\emmy\alley\utils\chat\JSONMessage.java
 C:\Users\Riesey\Desktop\Development\1 Projects\Alley\src\main\java\me\emmy\alley\commands\admin\kit\KitCommand.java
+C:\Users\Riesey\Desktop\Development\1 Projects\Alley\src\main\java\me\emmy\alley\arena\Arena.java
 C:\Users\Riesey\Desktop\Development\1 Projects\Alley\src\main\java\me\emmy\alley\utils\command\BukkitCompleter.java
 C:\Users\Riesey\Desktop\Development\1 Projects\Alley\src\main\java\me\emmy\alley\utils\pagination\PageFilterButton.java
 C:\Users\Riesey\Desktop\Development\1 Projects\Alley\src\main\java\me\emmy\alley\commands\admin\kit\impl\KitDeleteCommand.java
@@ -33,6 +35,7 @@ C:\Users\Riesey\Desktop\Development\1 Projects\Alley\src\main\java\me\emmy\alley
 C:\Users\Riesey\Desktop\Development\1 Projects\Alley\src\main\java\me\emmy\alley\utils\menu\Button.java
 C:\Users\Riesey\Desktop\Development\1 Projects\Alley\src\main\java\me\emmy\alley\utils\Clickable.java
 C:\Users\Riesey\Desktop\Development\1 Projects\Alley\src\main\java\me\emmy\alley\utils\PlayerUtil.java
+C:\Users\Riesey\Desktop\Development\1 Projects\Alley\src\main\java\me\emmy\alley\commands\admin\essential\SpawnItemsCommand.java
 C:\Users\Riesey\Desktop\Development\1 Projects\Alley\src\main\java\me\emmy\alley\hotbar\ItemManager.java
 C:\Users\Riesey\Desktop\Development\1 Projects\Alley\src\main\java\me\emmy\alley\utils\item\ItemCreator.java
 C:\Users\Riesey\Desktop\Development\1 Projects\Alley\src\main\java\me\emmy\alley\commands\global\stats\LeaderboardCommand.java
@@ -49,10 +52,12 @@ C:\Users\Riesey\Desktop\Development\1 Projects\Alley\src\main\java\me\emmy\alley
 C:\Users\Riesey\Desktop\Development\1 Projects\Alley\src\main\java\me\emmy\alley\utils\others\LocationUtil.java
 C:\Users\Riesey\Desktop\Development\1 Projects\Alley\src\main\java\me\emmy\alley\utils\chat\CC.java
 C:\Users\Riesey\Desktop\Development\1 Projects\Alley\src\main\java\me\emmy\alley\utils\menu\Menu.java
+C:\Users\Riesey\Desktop\Development\1 Projects\Alley\src\main\java\me\emmy\alley\commands\admin\spawn\SpawnCommand.java
 C:\Users\Riesey\Desktop\Development\1 Projects\Alley\src\main\java\me\emmy\alley\utils\command\BaseCommand.java
 C:\Users\Riesey\Desktop\Development\1 Projects\Alley\src\main\java\me\emmy\alley\utils\menu\button\DisplayButton.java
 C:\Users\Riesey\Desktop\Development\1 Projects\Alley\src\main\java\me\emmy\alley\utils\chat\StringUtil.java
 C:\Users\Riesey\Desktop\Development\1 Projects\Alley\src\main\java\me\emmy\alley\utils\pagination\PageButton.java
 C:\Users\Riesey\Desktop\Development\1 Projects\Alley\src\main\java\me\emmy\alley\utils\command\Command.java
+C:\Users\Riesey\Desktop\Development\1 Projects\Alley\src\main\java\me\emmy\alley\arena\ArenaManager.java
 C:\Users\Riesey\Desktop\Development\1 Projects\Alley\src\main\java\me\emmy\alley\utils\command\CommandFramework.java
 C:\Users\Riesey\Desktop\Development\1 Projects\Alley\src\main\java\me\emmy\alley\utils\command\Completer.java

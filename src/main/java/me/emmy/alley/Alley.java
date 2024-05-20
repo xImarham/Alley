@@ -2,12 +2,13 @@ package me.emmy.alley;
 
 import lombok.Getter;
 import lombok.Setter;
-import me.emmy.alley.arena.Arena;
 import me.emmy.alley.arena.ArenaManager;
 import me.emmy.alley.commands.AlleyCommand;
+import me.emmy.alley.commands.admin.essential.SpawnItemsCommand;
 import me.emmy.alley.commands.admin.kit.KitCommand;
 import me.emmy.alley.commands.admin.kit.impl.*;
 import me.emmy.alley.commands.admin.spawn.SetSpawnCommand;
+import me.emmy.alley.commands.admin.spawn.SpawnCommand;
 import me.emmy.alley.commands.global.queue.RankedCommand;
 import me.emmy.alley.commands.global.queue.UnrankedCommand;
 import me.emmy.alley.commands.global.settings.SettingsCommand;
@@ -105,7 +106,9 @@ public class Alley extends JavaPlugin {
         new AlleyCommand();
 
         //admin commands
+        new SpawnItemsCommand();
         new SetSpawnCommand();
+        new SpawnCommand();
         new KitCommand();
         new KitCreateCommand();
         new KitDeleteCommand();

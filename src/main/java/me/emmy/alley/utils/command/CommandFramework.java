@@ -65,7 +65,7 @@ public class CommandFramework implements CommandExecutor {
                     return true;
                 }
                 if (!command.permission().equals("") && (!sender.hasPermission(command.permission()))) {
-                    sender.sendMessage(CC.translate(CC.translate(ConfigLocale.NO_PERM.format()))); // TODO change
+                    sender.sendMessage(CC.translate(CC.translate(ConfigLocale.NO_PERM.getMessage()))); // TODO change
                     return true;
                 }
                 if (command.inGameOnly() && !(sender instanceof Player)) {

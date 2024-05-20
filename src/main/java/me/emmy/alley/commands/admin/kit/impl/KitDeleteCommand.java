@@ -2,6 +2,7 @@ package me.emmy.alley.commands.admin.kit.impl;
 
 import me.emmy.alley.Alley;
 import me.emmy.alley.kit.Kit;
+import me.emmy.alley.locale.ConfigLocale;
 import me.emmy.alley.utils.chat.CC;
 import me.emmy.alley.utils.command.BaseCommand;
 import me.emmy.alley.utils.command.Command;
@@ -24,11 +25,11 @@ public class KitDeleteCommand extends BaseCommand {
         Kit kit = Alley.getInstance().getKitManager().getKitByName(kitName);
 
         if (kit == null) {
-            player.sendMessage(CC.translate("&cThere is no kit with that name!"));
+            player.sendMessage(CC.translate(ConfigLocale.KIT_NOT_FOUND.getMessage()));
             return;
         }
 
         Alley.getInstance().getKitManager().deleteKit(kit);
-        player.sendMessage(CC.translate("&aSuccessfully deleted the &b" + kitName + " &akit!"));
+        player.sendMessage(CC.translate(ConfigLocale.KIT_DELETED.getMessage().replace("{kit-name}", kitName)));
     }
 }
