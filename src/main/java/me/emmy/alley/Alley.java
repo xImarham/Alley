@@ -132,6 +132,9 @@ public class Alley extends JavaPlugin {
         new KitGetInvCommand();
         new KitSetInvCommand();
         new KitSetDescriptionCommand();
+        new KitSetEditorSlotCommand();
+        new KitSetUnrankedSlotCommand();
+        new KitSetRankedSlotCommand();
 
         new ArenaCenterCommand();
         new ArenaCreateCommand();

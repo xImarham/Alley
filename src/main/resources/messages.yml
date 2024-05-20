@@ -23,3 +23,6 @@ kit:
   description-set: "&aSuccessfully set the description of the &b{kit-name} &akit: &r{kit-description}"
   inventory-given: "&aSuccessfully retrieved the inventory of the &b{kit-name} &akit!"
   inventory-set: "&aSuccessfully set the inventory of the &b{kit-name} &akit!"
+  editorslot-set: "&aSuccessfully set the editor slot of the &b{kit-name} &akit to &b{editor-slot}&a!"
+  unrankedslot-set: "&aSuccessfully set the unranked slot of the &b{kit-name} &akit to &b{editor-slot}&a!"
+  rankedslot-set: "&aSuccessfully set the ranked slot of the &b{kit-name} &akit to &b{editor-slot}&a!"

@@ -3,7 +3,6 @@ package me.emmy.alley.locale;
 import lombok.Getter;
 import me.emmy.alley.Alley;
 import me.emmy.alley.utils.chat.CC;
-import net.md_5.bungee.api.ChatColor;
 
 /**
  * Created by Emmy
@@ -20,7 +19,10 @@ public enum ConfigLocale {
     KIT_DELETED("messages.yml", "kit.deleted"),
     KIT_INVENTORY_GIVEN("messages.yml", "kit.inventory-given"),
     KIT_INVENTORY_SET("messages.yml", "kit.inventory-set"),
-    KIT_DESCRIPTION_SET("messages.yml", "kit.description-set");
+    KIT_DESCRIPTION_SET("messages.yml", "kit.description-set"),
+    KIT_EDITORSLOT_SET("messages.yml", "kit.editorslot-set"),
+    KIT_UNRANKEDSLOT_SET("messages.yml", "kit.unrankedslot-set"),
+    KIT_RANKEDSLOT_SET("messages.yml", "kit.rankedslot-set");
 
     private final String configName, configString;
 

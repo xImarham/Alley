@@ -28,9 +28,12 @@ public class KitCommand extends BaseCommand {
         sender.sendMessage(CC.translate(" &f● &d/kit save &7| Save all kits"));
         sender.sendMessage(CC.translate(" &f● &d/kit setdesc &8(&7kitName&8) &8(&7description&8) &7| Set desc of a kit"));
         sender.sendMessage(CC.translate(" &f● &d/kit setdisplayname &8(&7kitName&8) &7| Set display-name of a kit"));
+        sender.sendMessage(CC.translate(" &f● &d/kit seticon &8(&7kitName&8) &7| Set icon of a kit"));
+        sender.sendMessage(CC.translate(" &f● &d/kit setinv &8(&7kitName&8) &7| Set inventory of a kit"));
+        sender.sendMessage(CC.translate(" &f● &d/kit setunrankedslot &8(&7kitName&8) &8(&7slot&8) &7| Set unranked menu slot"));
+        sender.sendMessage(CC.translate(" &f● &d/kit setrankedslot &8(&7kitName&8) &8(&7slot&8) &7| Set ranked menu slot"));
+        sender.sendMessage(CC.translate(" &f● &d/kit seteditorslot &8(&7kitName&8) &8(&7slot&8) &7| Set editor menu slot"));
         //sender.sendMessage(CC.translate(" &f● &d/kit addarena &8(&7kitName&8) &8(&7arena&8) &7| Add an arena to a kit"));
-        sender.sendMessage(CC.translate(" &f● &d/kit seticon &8(&7kitName&8) &7| Set the icon of a kit"));
-        sender.sendMessage(CC.translate(" &f● &d/kit setinv &8(&7kitName&8) &7| Set the inventory of a kit"));
         //sender.sendMessage(CC.translate(" &f● &d/kit setrule &8(&7rule&8) &8(&7value&8) &7| Toggle kit rules"));
         //sender.sendMessage(CC.translate(" &f● &d/kit viewrules &8(&7kitName&8) &7| View rules of a kit"));
         sender.sendMessage(CC.FLOWER_BAR);
