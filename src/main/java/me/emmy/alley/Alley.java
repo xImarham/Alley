@@ -135,7 +135,7 @@ public class Alley extends JavaPlugin {
         new ArenaListCommand();
         new ArenaRemoveKitCommand();
         new ArenaSaveCommand();
-        new ArenaSpawnCommand();
+        new ArenaSetSpawnCommand();
         new ArenaToggleCommand();
         new ArenaToolCommand();
         new ArenaCommand();

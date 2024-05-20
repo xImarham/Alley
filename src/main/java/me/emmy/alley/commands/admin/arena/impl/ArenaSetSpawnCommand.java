@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
  * @project Alley
  * @date 5/20/2024
  */
-public class ArenaSpawnCommand extends BaseCommand {
+public class ArenaSetSpawnCommand extends BaseCommand {
     @Command(name = "arena.setspawn", permission = "alley.admin")
     @Override
     public void onCommand(CommandArgs command) {

@@ -1,7 +1,7 @@
 kits:
   NoDebuff:
     displayname: '&dNoDebuff'
-    description: '&fClassic NoDebuff experience.'
+    description: '&dHi'
     enabled: true
     unrankedslot: 0
     rankedslot: 0
@@ -14,8 +14,8 @@ kits:
           meta-type: UNSPECIFIC
           enchants:
             DAMAGE_ALL: 3
-            FIRE_ASPECT: 2
             DURABILITY: 3
+            FIRE_ASPECT: 2
           repair-cost: 7
       - ==: org.bukkit.inventory.ItemStack
         type: ENDER_PEARL
@@ -161,4 +161,66 @@ kits:
             DURABILITY: 3
           repair-cost: 3
     icon: DIAMOND_SWORD
+    icondata: 0
+  Classic:
+    displayname: '&dClassic'
+    description: '&dClassic kit description'
+    enabled: true
+    unrankedslot: 0
+    rankedslot: 0
+    editorslot: 0
+    items:
+      - ==: org.bukkit.inventory.ItemStack
+        type: DIAMOND_SWORD
+      - ==: org.bukkit.inventory.ItemStack
+        type: FISHING_ROD
+      - ==: org.bukkit.inventory.ItemStack
+        type: BOW
+      - ==: org.bukkit.inventory.ItemStack
+        type: GOLDEN_APPLE
+        amount: 8
+      - null
+      - null
+      - null
+      - null
+      - null
+      - ==: org.bukkit.inventory.ItemStack
+        type: ARROW
+        amount: 16
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+    armor:
+      - ==: org.bukkit.inventory.ItemStack
+        type: DIAMOND_BOOTS
+      - ==: org.bukkit.inventory.ItemStack
+        type: DIAMOND_LEGGINGS
+      - ==: org.bukkit.inventory.ItemStack
+        type: DIAMOND_CHESTPLATE
+      - ==: org.bukkit.inventory.ItemStack
+        type: DIAMOND_HELMET
+    icon: BOW
     icondata: 0
