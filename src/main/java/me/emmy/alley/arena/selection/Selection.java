@@ -40,11 +40,11 @@ public class Selection {
      * @return The selection created.
      */
     public static Selection createSelection(Player player) {
-        Selection selection = new Selection();
-
         if (player.hasMetadata(SELECTION_METADATA)) {
             return (Selection) player.getMetadata(SELECTION_METADATA).get(0).value();
         }
+
+        Selection selection = new Selection();
 
         player.setMetadata(SELECTION_METADATA, new FixedMetadataValue(Alley.getInstance(), true));
         return selection;
