@@ -3,7 +3,10 @@ package me.emmy.alley;
 import lombok.Getter;
 import lombok.Setter;
 import me.emmy.alley.arena.ArenaManager;
+import me.emmy.alley.arena.listener.ArenaListener;
 import me.emmy.alley.commands.AlleyCommand;
+import me.emmy.alley.commands.admin.arena.impl.ArenaCreateCommand;
+import me.emmy.alley.commands.admin.arena.impl.ArenaToolCommand;
 import me.emmy.alley.commands.admin.essential.SpawnItemsCommand;
 import me.emmy.alley.commands.admin.kit.KitCommand;
 import me.emmy.alley.commands.admin.kit.impl.*;
@@ -100,6 +103,7 @@ public class Alley extends JavaPlugin {
     private void registerListeners() {
         getServer().getPluginManager().registerEvents(new PlayerListener(), this);
         getServer().getPluginManager().registerEvents(new MenuListener(), this);
+        getServer().getPluginManager().registerEvents(new ArenaListener(), this);
     }
 
     private void registerCommands() {
@@ -116,6 +120,9 @@ public class Alley extends JavaPlugin {
         new KitGetInvCommand();
         new KitSetInvCommand();
         new KitSetDescriptionCommand();
+
+        new ArenaCreateCommand();
+        new ArenaToolCommand();
 
         //player commands
         new UnrankedCommand();

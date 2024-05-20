@@ -19,8 +19,8 @@ import org.bukkit.metadata.FixedMetadataValue;
 @Getter
 public class Selection {
 
-    public static final ItemStack SELECTION_TOOL = new ItemBuilder(Material.WOOD_AXE)
-            .name("&aSelection Tool")
+    public static final ItemStack SELECTION_TOOL = new ItemBuilder(Material.FEATHER)
+            .name("&dSelection Tool")
             .lore("&7Use this tool to select the minimum and maximum locations.")
             .build();
 
