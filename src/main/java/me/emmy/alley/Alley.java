@@ -2,9 +2,11 @@ package me.emmy.alley;
 
 import lombok.Getter;
 import lombok.Setter;
+import me.emmy.alley.arena.Arena;
+import me.emmy.alley.arena.ArenaManager;
 import me.emmy.alley.commands.AlleyCommand;
 import me.emmy.alley.commands.admin.kit.KitCommand;
-import me.emmy.alley.commands.admin.kit.subcommands.*;
+import me.emmy.alley.commands.admin.kit.impl.*;
 import me.emmy.alley.commands.admin.spawn.SetSpawnCommand;
 import me.emmy.alley.commands.global.queue.RankedCommand;
 import me.emmy.alley.commands.global.queue.UnrankedCommand;
@@ -35,8 +37,9 @@ public class Alley extends JavaPlugin {
     private ConfigHandler configHandler;
     private CommandFramework framework;
     private ItemManager itemManager;
-    private KitManager kitManager;
     private SpawnManager spawnManager;
+    private KitManager kitManager;
+    private ArenaManager arenaManager;
     private String prefix = "§f[§dAlley§f] &r";
 
     @Override
@@ -59,7 +62,6 @@ public class Alley extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        kitManager.saveKitsToFile();
         Bukkit.getConsoleSender().sendMessage(CC.translate(prefix + "&aSaved all kits to the config file."));
         CC.off();
     }
@@ -84,15 +86,13 @@ public class Alley extends JavaPlugin {
     }
 
     private void registerManagers() {
-        framework = new CommandFramework(this);
-
-        itemManager = new ItemManager();
-
-        kitManager = new KitManager();
-        kitManager.loadKitsFromFile();
-
-        spawnManager = new SpawnManager();
-        spawnManager.loadSpawnLocation();
+        this.framework = new CommandFramework(this);
+        this.itemManager = new ItemManager();
+        this.arenaManager = new ArenaManager();
+        this.kitManager = new KitManager();
+        this.kitManager.loadConfig();
+        this.spawnManager = new SpawnManager();
+        this.spawnManager.loadSpawnLocation();
 
     }
 
@@ -109,15 +109,8 @@ public class Alley extends JavaPlugin {
         new KitCommand();
         new KitCreateCommand();
         new KitDeleteCommand();
-        new KitGetInventoryCommand();
         new KitListCommand();
-        new KitSaveCommand();
-        new KitSetDescriptionCommand();
-        new KitSetDisplayNameCommand();
-        new KitSetIconCommand();
-        new KitSetInventoryCommand();
-        new KitSetRuleCommand();
-        new KitViewRulesCommand();
+        new KitGetInventoryCommand();
 
         //player commands
         new UnrankedCommand();
