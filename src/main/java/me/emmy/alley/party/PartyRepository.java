@@ -1,6 +1,5 @@
 package me.emmy.alley.party;
 
-import com.sun.xml.internal.ws.wsdl.writer.document.Part;
 import lombok.Getter;
 import lombok.Setter;
 

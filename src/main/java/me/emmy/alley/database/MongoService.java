@@ -6,5 +6,6 @@ package me.emmy.alley.database;
  * Date: 21/05/2024 - 21:40
  */
 
-public class MongoManager {
+public class MongoService {
+
 }
