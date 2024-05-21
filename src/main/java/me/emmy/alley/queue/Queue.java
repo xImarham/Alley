@@ -48,8 +48,6 @@ public class Queue {
         profile.setQueueProfile(queueProfile);
         profile.setState(EnumProfileState.WAITING);
 
-        Alley.getInstance().getHotbarUtility().applySpawnItems(player);
-
         profiles.add(queueProfile);
     }
 

@@ -1,7 +1,8 @@
 package me.emmy.alley.hotbar.listener;
 
 import me.emmy.alley.Alley;
-import me.emmy.alley.hotbar.HotbarItem;
+import me.emmy.alley.hotbar.LobbyItem;
+import me.emmy.alley.hotbar.QueueItem;
 import me.emmy.alley.profile.Profile;
 import me.emmy.alley.profile.enums.EnumProfileState;
 import org.bukkit.entity.Player;
@@ -20,7 +21,8 @@ public class HotbarListener implements Listener {
             return;
         }
 
-        handleLobbyInteract(event, player);
+        handleLobbyItemInteract(event, player);
+        handleQueueItemInteract(event, player);
     }
 
     /**
@@ -29,23 +31,31 @@ public class HotbarListener implements Listener {
      * @param event  The event to handle.
      * @param player The player to handle.
      */
-    private void handleLobbyInteract(PlayerInteractEvent event, Player player) {
-        HotbarItem clickedItem = HotbarItem.getByItemStack(event.getItem());
-        if (clickedItem == null) {
+    private void handleLobbyItemInteract(PlayerInteractEvent event, Player player) {
+        LobbyItem lobbyItem = LobbyItem.getByItemStack(event.getItem());
+
+        if (lobbyItem == null) {
             return;
         }
+
         if (event.getAction() != Action.RIGHT_CLICK_AIR && event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
 
-        if (clickedItem.getCommand() != null) {
-            player.performCommand(clickedItem.getCommand());
-        } else {
-            Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
+        if (lobbyItem.getCommand() != null) {
+            player.performCommand(lobbyItem.getCommand());
+        }
+    }
 
-            if (clickedItem == HotbarItem.LEAVE_QUEUE) {
-                if (profile.getState() == EnumProfileState.WAITING) {
-                    profile.getQueueProfile().getQueue().removePlayer(profile.getQueueProfile());
-                }
-            }
+    private void handleQueueItemInteract(PlayerInteractEvent event, Player player) {
+        QueueItem queueItem = QueueItem.getByItemStack(event.getItem());
+
+        if (queueItem == null) {
+            return;
+        }
+
+        if (event.getAction() != Action.RIGHT_CLICK_AIR && event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
+
+        if (queueItem.getCommand() != null) {
+            player.performCommand(queueItem.getCommand());
         }
     }
 }

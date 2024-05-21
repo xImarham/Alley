@@ -1,8 +1,10 @@
 package me.emmy.alley.menus.unranked;
 
 import lombok.AllArgsConstructor;
+import me.emmy.alley.Alley;
 import me.emmy.alley.kit.Kit;
 import me.emmy.alley.queue.Queue;
+import me.emmy.alley.utils.PlayerUtil;
 import me.emmy.alley.utils.chat.CC;
 import me.emmy.alley.utils.item.ItemBuilder;
 import me.emmy.alley.utils.menu.Button;
@@ -37,8 +39,10 @@ public class UnrankedButton extends Button {
             return;
         }
 
-        player.closeInventory();
-        player.playSound(player.getLocation(), Sound.STEP_GRASS, 2.0F, 1.5F);
         queue.addPlayer(player);
+        PlayerUtil.reset(player);
+        player.closeInventory();
+        Alley.getInstance().getHotbarUtility().applyQueueItems(player);
+        player.playSound(player.getLocation(), Sound.ANVIL_LAND, 2.0F, 1.5F);
     }
 }
