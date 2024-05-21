@@ -31,7 +31,8 @@ public class ScoreboardAdapter implements AssembleAdapter {
                     replacedLine = replacedLine
                             .replaceAll("\\{sidebar\\}", "&7&m----------------------------")
                             .replaceAll("\\{online\\}", String.valueOf(Bukkit.getOnlinePlayers().size()))
-                            .replaceAll("\\{max-online\\}", String.valueOf(Bukkit.getMaxPlayers()));
+                            .replaceAll("\\{playing\\}", String.valueOf(Alley.getInstance().getMatchRepository().getMatches().size()))
+                            .replaceAll("\\{in-queue\\}", "null");
                     toReturn.add(CC.translate(replacedLine));
                 }
                 break;
@@ -40,9 +41,12 @@ public class ScoreboardAdapter implements AssembleAdapter {
                     String replacedLine = PlaceholderAPI.setPlaceholders(player, line);
                     replacedLine = replacedLine
                             .replaceAll("\\{sidebar\\}", "&7&m----------------------------")
+                            .replaceAll("\\{online\\}", String.valueOf(Bukkit.getOnlinePlayers().size()))
+                            .replaceAll("\\{playing\\}", String.valueOf(Alley.getInstance().getMatchRepository().getMatches().size()))
+                            .replaceAll("\\{in-queue\\}", "null")
                             .replaceAll("\\{queued-type\\}", "null")
                             .replaceAll("\\{queued-time\\}", "null")
-                            .replaceAll("\\{queued-kit\\}", "null");
+                            .replaceAll("\\{queued-kit\\}", String.valueOf(Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId()).getQueueProfile().getQueue().getKit().getName()));
                     toReturn.add(CC.translate(replacedLine));
                 }
                 break;
