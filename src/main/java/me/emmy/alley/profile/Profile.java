@@ -12,6 +12,8 @@ import java.util.UUID;
 @Setter
 public class Profile {
 
+    public static final int DEFAULT_COINS = 100;
+    public static final int DEFAULT_ELO = 1000;
     private QueueProfile queueProfile;
     private EnumProfileState state;
     private AbstractMatch match;

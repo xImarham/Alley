@@ -26,6 +26,7 @@ import me.emmy.alley.kit.settings.KitSettingRepository;
 import me.emmy.alley.match.MatchRepository;
 import me.emmy.alley.match.command.SpectateCommand;
 import me.emmy.alley.match.listener.MatchListener;
+import me.emmy.alley.party.PartyRepository;
 import me.emmy.alley.profile.ProfileRepository;
 import me.emmy.alley.profile.listener.ProfileListener;
 import me.emmy.alley.queue.QueueRepository;
@@ -61,6 +62,7 @@ public class Alley extends JavaPlugin {
     private MatchRepository matchRepository;
     private ProfileRepository profileRepository;
     private QueueRepository queueRepository;
+    private PartyRepository partyRepository;
     private String prefix = "§f[§dAlley§f] &r";
 
     @Override
@@ -115,6 +117,7 @@ public class Alley extends JavaPlugin {
         this.queueRepository = new QueueRepository();
         this.matchRepository = new MatchRepository();
         this.kitSettingRepository = new KitSettingRepository();
+        this.partyRepository = new PartyRepository();
         this.kitRepository = new KitRepository();
         this.kitRepository.loadKits();
 
