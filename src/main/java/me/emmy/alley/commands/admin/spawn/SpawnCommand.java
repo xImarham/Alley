@@ -22,7 +22,7 @@ public class SpawnCommand extends BaseCommand {
 
         PlayerUtil.reset(player);
         PlayerUtil.teleportToSpawn(player);
-        Alley.getInstance().getItemManager().applySpawnItems(player);
+        Alley.getInstance().getHotbarUtility().applySpawnItems(player);
         player.sendMessage(CC.translate("&bTeleported you to spawn!"));
     }
 }

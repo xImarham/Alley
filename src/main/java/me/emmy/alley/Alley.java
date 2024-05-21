@@ -19,9 +19,12 @@ import me.emmy.alley.commands.global.stats.LeaderboardCommand;
 import me.emmy.alley.commands.global.stats.StatsCommand;
 import me.emmy.alley.handler.ConfigHandler;
 import me.emmy.alley.handler.ScoreboardHandler;
-import me.emmy.alley.hotbar.ItemManager;
+import me.emmy.alley.hotbar.listener.HotbarListener;
+import me.emmy.alley.hotbar.util.HotbarUtility;
 import me.emmy.alley.kit.KitRepository;
-import me.emmy.alley.listeners.PlayerListener;
+import me.emmy.alley.match.MatchRepository;
+import me.emmy.alley.profile.ProfileRepository;
+import me.emmy.alley.profile.listener.ProfileListener;
 import me.emmy.alley.scoreboard.ScoreboardAdapter;
 import me.emmy.alley.spawn.SpawnManager;
 import me.emmy.alley.utils.assemble.Assemble;
@@ -45,10 +48,12 @@ public class Alley extends JavaPlugin {
     private ConfigHandler configHandler;
     private ScoreboardHandler scoreboardHandler;
     private CommandFramework framework;
-    private ItemManager itemManager;
+    private HotbarUtility hotbarUtility;
     private SpawnManager spawnManager;
     private KitRepository kitRepository;
     private ArenaRepository arenaRepository;
+    private MatchRepository matchRepository;
+    private ProfileRepository profileRepository;
     private String prefix = "§f[§dAlley§f] &r";
 
     @Override
@@ -98,7 +103,7 @@ public class Alley extends JavaPlugin {
 
     private void registerManagers() {
         this.framework = new CommandFramework(this);
-        this.itemManager = new ItemManager();
+        this.hotbarUtility = new HotbarUtility();
 
         this.kitRepository = new KitRepository();
         this.kitRepository.loadKits();
@@ -112,9 +117,10 @@ public class Alley extends JavaPlugin {
     }
 
     private void registerListeners() {
-        getServer().getPluginManager().registerEvents(new PlayerListener(), this);
-        getServer().getPluginManager().registerEvents(new MenuListener(), this);
+        getServer().getPluginManager().registerEvents(new ProfileListener(), this);
+        getServer().getPluginManager().registerEvents(new HotbarListener(), this);
         getServer().getPluginManager().registerEvents(new ArenaListener(), this);
+        getServer().getPluginManager().registerEvents(new MenuListener(), this);
     }
 
     private void registerCommands() {

@@ -21,7 +21,7 @@ public class SpawnItemsCommand extends BaseCommand {
         Player player = args.getPlayer();
 
         PlayerUtil.reset(player);
-        Alley.getInstance().getItemManager().applySpawnItems(player);
+        Alley.getInstance().getHotbarUtility().applySpawnItems(player);
         player.sendMessage(CC.translate("&aYou were given the spawn items!"));
     }
 }

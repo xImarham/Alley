@@ -13,7 +13,6 @@ public enum LobbyItem {
     EVENTS("&dEvents", Material.EYE_OF_ENDER, 0, 7, "events"),
     SETTINGS("&dSettings", Material.BOOK, 0, 8, "settings");
 
-
     private final String name;
     private final Material type;
     private final int data;
@@ -21,24 +20,46 @@ public enum LobbyItem {
     private String command;
     private int menu;
 
+    /**
+     * Constructor for items that run a command.
+     *
+     * @param name The name of the item.
+     * @param type The type of the item.
+     * @param data The data of the item.
+     * @param slot The slot of the item.
+     * @param command The command to run.
+     */
     LobbyItem(String name, Material type, int data, int slot, String command) {
         this.name = name;
         this.type = type;
         this.data = data;
         this.slot = slot;
-
         this.command = command;
     }
 
+    /**
+     * Constructor for items that open a menu.
+     *
+     * @param name The name of the item.
+     * @param type The type of the item.
+     * @param data The data of the item.
+     * @param slot The slot of the item.
+     * @param menu The menu ID to open.
+     */
     LobbyItem(String name, Material type, int data, int slot, int menu) {
         this.name = name;
         this.type = type;
         this.data = data;
         this.slot = slot;
-
         this.menu = menu;
     }
 
+    /**
+     * Gets a lobby item by an item stack.
+     *
+     * @param itemStack The item stack to get the lobby item from.
+     * @return The lobby item.
+     */
     public static LobbyItem getByItemStack(ItemStack itemStack) {
         for (LobbyItem lobbyItem : values()) {
             if (lobbyItem.constructItem().isSimilar(itemStack)) {
@@ -49,8 +70,7 @@ public enum LobbyItem {
         return null;
     }
 
-    ItemStack constructItem() {
+    public ItemStack constructItem() {
         return new ItemBuilder(type).name(name).durability(data).build();
     }
-
 }
