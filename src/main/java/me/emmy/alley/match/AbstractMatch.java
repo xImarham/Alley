@@ -5,6 +5,8 @@ import lombok.Setter;
 import me.emmy.alley.Alley;
 import me.emmy.alley.arena.Arena;
 import me.emmy.alley.kit.Kit;
+import me.emmy.alley.match.player.GameParticipant;
+import me.emmy.alley.match.player.impl.MatchGamePlayerImpl;
 import me.emmy.alley.profile.enums.EnumProfileState;
 import me.emmy.alley.profile.Profile;
 import org.bukkit.entity.Player;
@@ -119,6 +121,11 @@ public abstract class AbstractMatch {
 
     }
 
+    public MatchGamePlayerImpl getGamePlayer(Player player) {
+        return getParticipants().stream().filter(gameParticipant -> gameParticipant.getPlayers().get(0).getUuid().equals(player.getUniqueId())).findFirst().map(gameParticipant -> gameParticipant.getPlayers().get(0)).orElse(null);
+    }
+
+    public abstract List<GameParticipant<MatchGamePlayerImpl>> getParticipants();
     public abstract boolean canEndRound();
     public abstract boolean canEndMatch();
 }

@@ -23,6 +23,8 @@ import me.emmy.alley.hotbar.listener.HotbarListener;
 import me.emmy.alley.hotbar.util.HotbarUtility;
 import me.emmy.alley.kit.KitRepository;
 import me.emmy.alley.match.MatchRepository;
+import me.emmy.alley.match.command.SpectateCommand;
+import me.emmy.alley.match.listener.MatchListener;
 import me.emmy.alley.profile.ProfileRepository;
 import me.emmy.alley.profile.listener.ProfileListener;
 import me.emmy.alley.scoreboard.ScoreboardAdapter;
@@ -119,6 +121,7 @@ public class Alley extends JavaPlugin {
     private void registerListeners() {
         getServer().getPluginManager().registerEvents(new ProfileListener(), this);
         getServer().getPluginManager().registerEvents(new HotbarListener(), this);
+        getServer().getPluginManager().registerEvents(new MatchListener(), this);
         getServer().getPluginManager().registerEvents(new ArenaListener(), this);
         getServer().getPluginManager().registerEvents(new MenuListener(), this);
     }
@@ -155,6 +158,8 @@ public class Alley extends JavaPlugin {
         new ArenaToggleCommand();
         new ArenaToolCommand();
         new ArenaCommand();
+
+        new SpectateCommand();
 
         //player commands
         new UnrankedCommand();
