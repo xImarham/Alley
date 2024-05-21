@@ -9,6 +9,7 @@ import me.emmy.alley.match.player.GameParticipant;
 import me.emmy.alley.match.player.impl.MatchGamePlayerImpl;
 import me.emmy.alley.profile.enums.EnumProfileState;
 import me.emmy.alley.profile.Profile;
+import me.emmy.alley.queue.Queue;
 import org.bukkit.entity.Player;
 
 import java.util.List;
@@ -19,6 +20,7 @@ import java.util.UUID;
 public abstract class AbstractMatch {
 
     private EnumMatchState state = EnumMatchState.STARTING;
+    private final Queue queue;
     private final Arena arena;
     private final Kit kit;
 
@@ -30,7 +32,8 @@ public abstract class AbstractMatch {
      * @param kit   The kit of the match.
      * @param arena The arena of the match.
      */
-    public AbstractMatch(Kit kit, Arena arena) {
+    public AbstractMatch(Queue queue, Kit kit, Arena arena) {
+        this.queue = queue;
         this.kit = kit;
         this.arena = arena;
 

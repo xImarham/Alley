@@ -6,6 +6,7 @@ import me.emmy.alley.kit.Kit;
 import me.emmy.alley.match.AbstractMatch;
 import me.emmy.alley.match.player.GameParticipant;
 import me.emmy.alley.match.player.impl.MatchGamePlayerImpl;
+import me.emmy.alley.queue.Queue;
 
 import java.util.Arrays;
 import java.util.List;
@@ -24,8 +25,8 @@ public class RegularMatchImpl extends AbstractMatch {
      * @param participantA The first participant.
      * @param participantB The second participant.
      */
-    public RegularMatchImpl(Kit kit, Arena arena, GameParticipant<MatchGamePlayerImpl> participantA, GameParticipant<MatchGamePlayerImpl> participantB) {
-        super(kit, arena);
+    public RegularMatchImpl(Queue queue, Kit kit, Arena arena, GameParticipant<MatchGamePlayerImpl> participantA, GameParticipant<MatchGamePlayerImpl> participantB) {
+        super(queue, kit, arena);
         this.participantA = participantA;
         this.participantB = participantB;
     }

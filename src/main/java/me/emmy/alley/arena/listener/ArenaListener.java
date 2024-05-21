@@ -26,42 +26,37 @@ public class ArenaListener implements Listener {
 
     @EventHandler(priority = EventPriority.LOW)
     private void onPlayerInteractEvent(PlayerInteractEvent event) {
-        if (!(event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_BLOCK)) {
-            return;
+        if (event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
+            ItemStack itemStack = event.getItem();
+            if (itemStack != null && itemStack.equals(Selection.SELECTION_TOOL)) {
+                Player player = event.getPlayer();
+                Block clickedBlock = event.getClickedBlock();
+                int locationType = 0;
+
+                Selection selection = Selection.createSelection(player);
+
+                if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
+                    selection.setMaximum(clickedBlock.getLocation());
+                    locationType = 2;
+                } else if (event.getAction() == Action.LEFT_CLICK_BLOCK) {
+                    selection.setMinimum(clickedBlock.getLocation());
+                    locationType = 1;
+                }
+
+                event.setCancelled(true);
+                event.setUseItemInHand(PlayerInteractEvent.Result.DENY);
+                event.setUseInteractedBlock(PlayerInteractEvent.Result.DENY);
+
+                int getBlockX = clickedBlock.getLocation().getBlockX();
+                int getBlockY = clickedBlock.getLocation().getBlockY();
+                int getBlockZ = clickedBlock.getLocation().getBlockZ();
+
+                String coordinates = getBlockX + " | " + getBlockY + " | " + getBlockZ;
+                String message = locationType == 1 ? "&aSet minimum location to &b" + coordinates : "&aSet maximum location to &b" + coordinates;
+
+                player.sendMessage(CC.translate(message));
+            }
         }
-
-        ItemStack itemStack = event.getItem();
-        if (itemStack == null || !itemStack.equals(Selection.SELECTION_TOOL)) {
-            return;
-        }
-
-
-        Player player = event.getPlayer();
-        Block clickedBlock = event.getClickedBlock();
-        int locationType = 0;
-
-        Selection selection = Selection.createSelection(player);
-
-        if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
-            selection.setMaximum(clickedBlock.getLocation());
-            locationType = 2;
-        } else if (event.getAction() == Action.LEFT_CLICK_BLOCK) {
-            selection.setMinimum(clickedBlock.getLocation());
-            locationType = 1;
-        }
-
-        event.setCancelled(true);
-        event.setUseItemInHand(PlayerInteractEvent.Result.DENY);
-        event.setUseInteractedBlock(PlayerInteractEvent.Result.DENY);
-
-        int getBlockX = clickedBlock.getLocation().getBlockX();
-        int getBlockY = clickedBlock.getLocation().getBlockY();
-        int getBlockZ = clickedBlock.getLocation().getBlockZ();
-
-        String coordinates = getBlockX + " | " + getBlockY + " | " + getBlockZ;
-        String message = locationType == 1 ? "&aSet minimum location to &b" + coordinates : "&aSet maximum location to &b" + coordinates;
-
-        player.sendMessage(CC.translate(message));
     }
 
     @EventHandler

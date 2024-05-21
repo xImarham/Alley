@@ -22,11 +22,14 @@ import me.emmy.alley.handler.ScoreboardHandler;
 import me.emmy.alley.hotbar.listener.HotbarListener;
 import me.emmy.alley.hotbar.util.HotbarUtility;
 import me.emmy.alley.kit.KitRepository;
+import me.emmy.alley.kit.settings.KitSettingRepository;
 import me.emmy.alley.match.MatchRepository;
 import me.emmy.alley.match.command.SpectateCommand;
 import me.emmy.alley.match.listener.MatchListener;
 import me.emmy.alley.profile.ProfileRepository;
 import me.emmy.alley.profile.listener.ProfileListener;
+import me.emmy.alley.queue.QueueRepository;
+import me.emmy.alley.queue.command.LeaveQueueCommand;
 import me.emmy.alley.scoreboard.ScoreboardAdapter;
 import me.emmy.alley.spawn.SpawnManager;
 import me.emmy.alley.utils.assemble.Assemble;
@@ -53,9 +56,11 @@ public class Alley extends JavaPlugin {
     private HotbarUtility hotbarUtility;
     private SpawnManager spawnManager;
     private KitRepository kitRepository;
+    private KitSettingRepository kitSettingRepository;
     private ArenaRepository arenaRepository;
     private MatchRepository matchRepository;
     private ProfileRepository profileRepository;
+    private QueueRepository queueRepository;
     private String prefix = "§f[§dAlley§f] &r";
 
     @Override
@@ -106,7 +111,10 @@ public class Alley extends JavaPlugin {
     private void registerManagers() {
         this.framework = new CommandFramework(this);
         this.hotbarUtility = new HotbarUtility();
-
+        this.profileRepository = new ProfileRepository();
+        this.queueRepository = new QueueRepository();
+        this.matchRepository = new MatchRepository();
+        this.kitSettingRepository = new KitSettingRepository();
         this.kitRepository = new KitRepository();
         this.kitRepository.loadKits();
 
@@ -144,6 +152,7 @@ public class Alley extends JavaPlugin {
         new KitSetEditorSlotCommand();
         new KitSetUnrankedSlotCommand();
         new KitSetRankedSlotCommand();
+        new KitSettingCommand();
 
         new ArenaCenterCommand();
         new ArenaCreateCommand();
@@ -158,6 +167,8 @@ public class Alley extends JavaPlugin {
         new ArenaToggleCommand();
         new ArenaToolCommand();
         new ArenaCommand();
+
+        new LeaveQueueCommand();
 
         new SpectateCommand();
 

@@ -2,6 +2,7 @@ package me.emmy.alley.scoreboard;
 
 import me.clip.placeholderapi.PlaceholderAPI;
 import me.emmy.alley.Alley;
+import me.emmy.alley.profile.Profile;
 import me.emmy.alley.utils.assemble.AssembleAdapter;
 import me.emmy.alley.utils.chat.CC;
 import org.bukkit.Bukkit;
@@ -21,13 +22,55 @@ public class ScoreboardAdapter implements AssembleAdapter {
 
     @Override
     public List<String> getLines(Player player) {
+        Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
         List<String> toReturn = new ArrayList<>();
-        for (String line : Alley.getInstance().getConfigHandler().getConfigByName("providers/scoreboard.yml").getStringList("scoreboard.lines")) {
-            String replacedLine = PlaceholderAPI.setPlaceholders(player, line);
-            replacedLine = replacedLine.replaceAll("\\{sidebar\\}", "&7&m----------------------------")
-                    .replaceAll("\\{online\\}", String.valueOf(Bukkit.getOnlinePlayers().size()))
-                    .replaceAll("\\{max-online\\}", String.valueOf(Bukkit.getMaxPlayers()));
-            toReturn.add(CC.translate(replacedLine));
+        switch (profile.getState()) {
+            case LOBBY:
+                for (String line : Alley.getInstance().getConfigHandler().getConfigByName("providers/scoreboard.yml").getStringList("scoreboard.lines.lobby")) {
+                    String replacedLine = PlaceholderAPI.setPlaceholders(player, line);
+                    replacedLine = replacedLine
+                            .replaceAll("\\{sidebar\\}", "&7&m----------------------------")
+                            .replaceAll("\\{online\\}", String.valueOf(Bukkit.getOnlinePlayers().size()))
+                            .replaceAll("\\{max-online\\}", String.valueOf(Bukkit.getMaxPlayers()));
+                    toReturn.add(CC.translate(replacedLine));
+                }
+                break;
+            case WAITING:
+                for (String line : Alley.getInstance().getConfigHandler().getConfigByName("providers/scoreboard.yml").getStringList("scoreboard.lines.waiting")) {
+                    String replacedLine = PlaceholderAPI.setPlaceholders(player, line);
+                    replacedLine = replacedLine
+                            .replaceAll("\\{sidebar\\}", "&7&m----------------------------")
+                            .replaceAll("\\{queued-type\\}", "null")
+                            .replaceAll("\\{queued-time\\}", "null")
+                            .replaceAll("\\{queued-kit\\}", "null");
+                    toReturn.add(CC.translate(replacedLine));
+                }
+                break;
+            case PLAYING:
+                for (String line : Alley.getInstance().getConfigHandler().getConfigByName("providers/scoreboard.yml").getStringList("scoreboard.lines.playing")) {
+                    String replacedLine = PlaceholderAPI.setPlaceholders(player, line);
+                    replacedLine = replacedLine
+                            .replaceAll("\\{sidebar\\}", "&7&m----------------------------")
+                            .replaceAll("\\{opponent\\}", "null")
+                            .replaceAll("\\{ping\\}", "null")
+                            .replaceAll("\\{duration\\}", "null")
+                            .replaceAll("\\{kit\\}", "null");
+                    toReturn.add(CC.translate(replacedLine));
+                }
+                break;
+            case SPECTATING:
+                for (String line : Alley.getInstance().getConfigHandler().getConfigByName("providers/scoreboard.yml").getStringList("scoreboard.lines.spectating")) {
+                    String replacedLine = PlaceholderAPI.setPlaceholders(player, line);
+                    replacedLine = replacedLine
+                            .replaceAll("\\{player1\\}", "&7&m----------------------------")
+                            .replaceAll("\\{player2\\}", "null")
+                            .replaceAll("\\{player1-ping\\}", "null")
+                            .replaceAll("\\{player2-ping\\}", "null")
+                            .replaceAll("\\{duration\\}", "null")
+                            .replaceAll("\\{kit\\}", "null");
+                    toReturn.add(CC.translate(replacedLine));
+                }
+                break;
         }
         return toReturn;
     }

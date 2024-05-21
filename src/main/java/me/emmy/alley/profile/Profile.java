@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import me.emmy.alley.match.AbstractMatch;
 import me.emmy.alley.profile.enums.EnumProfileState;
+import me.emmy.alley.queue.QueueProfile;
 
 import java.util.UUID;
 
@@ -11,6 +12,7 @@ import java.util.UUID;
 @Setter
 public class Profile {
 
+    private QueueProfile queueProfile;
     private EnumProfileState state;
     private AbstractMatch match;
     private final UUID uuid;

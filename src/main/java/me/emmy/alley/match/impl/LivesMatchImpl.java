@@ -4,6 +4,7 @@ import me.emmy.alley.arena.Arena;
 import me.emmy.alley.kit.Kit;
 import me.emmy.alley.match.player.GameParticipant;
 import me.emmy.alley.match.player.impl.MatchGamePlayerImpl;
+import me.emmy.alley.queue.Queue;
 
 public class LivesMatchImpl extends RegularMatchImpl {
 
@@ -15,7 +16,7 @@ public class LivesMatchImpl extends RegularMatchImpl {
      * @param participantA The first participant.
      * @param participantB The second participant.
      */
-    public LivesMatchImpl(Kit kit, Arena arena, GameParticipant<MatchGamePlayerImpl> participantA, GameParticipant<MatchGamePlayerImpl> participantB) {
-        super(kit, arena, participantA, participantB);
+    public LivesMatchImpl(Queue queue, Kit kit, Arena arena, GameParticipant<MatchGamePlayerImpl> participantA, GameParticipant<MatchGamePlayerImpl> participantB) {
+        super(queue, kit, arena, participantA, participantB);
     }
 }

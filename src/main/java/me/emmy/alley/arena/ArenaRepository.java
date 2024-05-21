@@ -5,6 +5,7 @@ import me.emmy.alley.Alley;
 import me.emmy.alley.arena.impl.FreeForAllArena;
 import me.emmy.alley.arena.impl.SharedArena;
 import me.emmy.alley.arena.impl.StandAloneArena;
+import me.emmy.alley.kit.Kit;
 import me.emmy.alley.utils.others.LocationUtil;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
@@ -12,6 +13,8 @@ import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
 
 /**
  * Created by Emmy
@@ -134,5 +137,20 @@ public class ArenaRepository {
      */
     public Arena getArenaByClass(Class<? extends Arena> clazz) {
         return arenas.stream().filter(arena -> arena.getClass().equals(clazz)).findFirst().orElse(null);
+    }
+
+    /**
+     * Get a random arena by its kit
+     *
+     * @param kit the kit
+     * @return the arena
+     */
+    public Arena getRandomArena(Kit kit) {
+        List<Arena> availableArenas = arenas.stream().filter(arena -> arena.getKits().contains(kit.getName())).filter(Arena::isEnabled).collect(Collectors.toList());
+        if (availableArenas.isEmpty()) {
+            return null;
+        }
+
+        return availableArenas.get(ThreadLocalRandom.current().nextInt(availableArenas.size()));
     }
 }

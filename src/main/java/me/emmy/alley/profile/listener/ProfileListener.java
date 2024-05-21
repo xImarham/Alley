@@ -24,11 +24,18 @@ public class ProfileListener implements Listener {
             return;
         }
 
+        if (plugin.getProfileRepository() == null) {
+            return;
+        }
+
         if (plugin.getProfileRepository().getProfile(event.getPlayer().getUniqueId()) != null) {
             return;
         }
 
         Profile profile = new Profile(event.getPlayer().getUniqueId());
+        profile.setState(EnumProfileState.LOBBY);
+        profile.setOnline(true);
+        profile.setMatch(null);
         profile.load();
 
         plugin.getProfileRepository().getProfiles().add(profile);
@@ -37,11 +44,6 @@ public class ProfileListener implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-
-        Profile profile = plugin.getProfileRepository().getProfile(player.getUniqueId());
-        profile.setState(EnumProfileState.LOBBY);
-        profile.setOnline(true);
-        profile.setMatch(null);
 
         player.setFlySpeed(1 * 0.1F);
         player.setWalkSpeed(2 * 0.1F);
