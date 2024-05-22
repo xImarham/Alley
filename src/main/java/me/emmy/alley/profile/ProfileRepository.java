@@ -4,12 +4,11 @@ import com.mongodb.client.MongoCollection;
 import lombok.Getter;
 import lombok.Setter;
 import me.emmy.alley.Alley;
+import me.emmy.alley.database.profile.IProfile;
 import org.bson.Document;
 
 import java.util.HashMap;
 import java.util.UUID;
-
-import static com.mongodb.client.model.Filters.eq;
 
 @Getter
 @Setter
@@ -17,6 +16,7 @@ public class ProfileRepository {
 
     private final HashMap<UUID, Profile> profiles = new HashMap<>();
     public MongoCollection<Document> collection;
+    public IProfile iProfile;
 
     /**
      * Gets a profile by UUID.
@@ -33,15 +33,10 @@ public class ProfileRepository {
      */
     public void loadProfiles() {
         this.collection = Alley.getInstance().getMongoService().getMongoDatabase().getCollection("profiles");
+
         for (Document document : collection.find()) {
             UUID uuid = UUID.fromString(document.getString("uuid"));
-            Profile profile = Alley.getInstance().getProfileRepository().getProfile(uuid);
-
-            if (profile == null) {
-                //TODO: create profile/document
-                return;
-            }
-
+            Profile profile = new Profile(uuid);
             profile.load();
 
             Alley.getInstance().getProfileRepository().getProfiles().put(uuid, profile);
