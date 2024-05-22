@@ -26,7 +26,7 @@ public class PartyCreateCommand extends BaseCommand {
 
         Party party = Alley.getInstance().getPartyRepository().getPartyLeader(playerUUID);
 
-        //TODO: check if player is in party. If so, return.
+        // TODO: check if player is in party. If so, return.
 
         Alley.getInstance().getHotbarUtility().applyPartyItems(player);
         player.sendMessage(CC.translate(ConfigLocale.PARTY_CREATED.getMessage()));

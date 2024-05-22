@@ -47,12 +47,12 @@ public class HotbarUtility {
     public void applyPartyItems(Player player) {
         PlayerUtil.reset(player);
 
-        player.getInventory().setItem(PartyItem.DUO_UNRANKED_QUEUE.getData(), PartyItem.DUO_UNRANKED_QUEUE.constructItem());
-        player.getInventory().setItem(PartyItem.KIT_EDITOR.getData(), PartyItem.KIT_EDITOR.constructItem());
-        player.getInventory().setItem(PartyItem.START_PARTY_EVENT.getData(), PartyItem.START_PARTY_EVENT.constructItem());
-        player.getInventory().setItem(PartyItem.FIGHT_OTHER_PARTY.getData(), PartyItem.FIGHT_OTHER_PARTY.constructItem());
-        player.getInventory().setItem(PartyItem.PARTY_INFO.getData(), PartyItem.PARTY_INFO.constructItem());
-        player.getInventory().setItem(PartyItem.PARTY_LEAVE.getData(), PartyItem.PARTY_LEAVE.constructItem());
+        player.getInventory().setItem(PartyItem.DUO_UNRANKED_QUEUE.getSlot(), PartyItem.DUO_UNRANKED_QUEUE.constructItem());
+        player.getInventory().setItem(PartyItem.KIT_EDITOR.getSlot(), PartyItem.KIT_EDITOR.constructItem());
+        player.getInventory().setItem(PartyItem.START_PARTY_EVENT.getSlot(), PartyItem.START_PARTY_EVENT.constructItem());
+        player.getInventory().setItem(PartyItem.FIGHT_OTHER_PARTY.getSlot(), PartyItem.FIGHT_OTHER_PARTY.constructItem());
+        player.getInventory().setItem(PartyItem.PARTY_INFO.getSlot(), PartyItem.PARTY_INFO.constructItem());
+        player.getInventory().setItem(PartyItem.PARTY_LEAVE.getSlot(), PartyItem.PARTY_LEAVE.constructItem());
 
         player.updateInventory();
     }
