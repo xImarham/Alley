@@ -167,6 +167,8 @@ public class Alley extends JavaPlugin {
         new SpawnCommand();
 
         new KitCommand();
+        new KitSaveCommand();
+        new KitSaveAllCommand();
         new KitCreateCommand();
         new KitDeleteCommand();
         new KitListCommand();

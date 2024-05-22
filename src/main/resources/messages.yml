@@ -1,5 +1,9 @@
 no-permission: "&cI'm sorry, but it doesn't seem like you have permission to execute this command."
-spawn-set: "&aSuccessfully set the new spawn location of &dAlley Practice&a! \n &8- &7{world}: {x}, {y}, {z} (Yaw: {yaw}, Pitch: {pitch})"
+
+spawn:
+  teleported: "&bTeleported you to spawn!"
+  spawn-set: "&aSuccessfully set the new spawn location of &dAlley Practice&a! \n &8- &7{world}: {x}, {y}, {z} (Yaw: {yaw}, Pitch: {pitch})"
+
 welcome-message:
   enabled: true
   message:
@@ -18,6 +22,8 @@ welcome-message:
 
 kit:
   not-found: "&cThere is no kit with that name!"
+  saved: "&aSuccessfully saved the &b{kit-name} &akit!"
+  saved-all: "&aSuccessfully saved all kits!"
   created: "&aSuccessfully created a new kit named &b{kit-name}&a!"
   deleted: "&cSuccessfully deleted the kit named &b{kit-name}&c!"
   description-set: "&aSuccessfully set the description of the &b{kit-name} &akit: &r{kit-description}"

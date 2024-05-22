@@ -16,6 +16,8 @@ public enum ConfigLocale {
     NO_PERM("messages.yml", "no-permission"),
 
     KIT_NOT_FOUND("messages.yml", "kit.not-found"),
+    KIT_SAVED("messages.yml", "kit.saved"),
+    KIT_SAVED_ALL("messages.yml", "kit.saved-all"),
     KIT_CREATED("messages.yml", "kit.created"),
     KIT_DELETED("messages.yml", "kit.deleted"),
     KIT_INVENTORY_GIVEN("messages.yml", "kit.inventory-given"),
