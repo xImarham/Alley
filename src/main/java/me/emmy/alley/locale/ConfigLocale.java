@@ -14,6 +14,7 @@ import me.emmy.alley.utils.chat.CC;
 public enum ConfigLocale {
 
     NO_PERM("messages.yml", "no-permission"),
+
     KIT_NOT_FOUND("messages.yml", "kit.not-found"),
     KIT_CREATED("messages.yml", "kit.created"),
     KIT_DELETED("messages.yml", "kit.deleted"),
@@ -22,7 +23,13 @@ public enum ConfigLocale {
     KIT_DESCRIPTION_SET("messages.yml", "kit.description-set"),
     KIT_EDITORSLOT_SET("messages.yml", "kit.editorslot-set"),
     KIT_UNRANKEDSLOT_SET("messages.yml", "kit.unrankedslot-set"),
-    KIT_RANKEDSLOT_SET("messages.yml", "kit.rankedslot-set");
+    KIT_RANKEDSLOT_SET("messages.yml", "kit.rankedslot-set"),
+
+    NOT_IN_PARTY("messages.yml", "party.not-in-party"),
+    PARTY_CREATED("messages.yml", "party.created"),
+    PARTY_DISBANDED("messages.yml", "party.disbanded"),
+    PARTY_LEFT("messages.yml", "party.left")
+    ;
 
     private final String configName, configString;
 
