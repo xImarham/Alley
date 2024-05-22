@@ -2,12 +2,10 @@ command:
   anti-syntax-message: "&cYou cannot execute {argument}."
   syntax-bypass-perm: "alley.owner"
 
-on-join:
-  teleport:
-    location:
-      world: world
-      x: 0.5
-      y: 73.0
-      z: 0.5
-      yaw: 90.0
-      pitch: 0.0
+spawn-location:
+  world: world
+  x: 0.5
+  y: 73.0
+  z: 0.5
+  yaw: 90.0
+  pitch: 0.0
