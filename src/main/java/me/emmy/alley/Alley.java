@@ -116,7 +116,7 @@ public class Alley extends JavaPlugin {
     }
 
     private void registerDatabase() {
-        FileConfiguration config = getConfig("database.yml");
+        FileConfiguration config = configHandler.getConfigByName("database/database.yml");
         String uri = config.getString("mongo.uri");
 
         this.profileRepository = new ProfileRepository();

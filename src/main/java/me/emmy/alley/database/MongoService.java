@@ -6,6 +6,7 @@ import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoDatabase;
 import lombok.Getter;
+import me.emmy.alley.Alley;
 import me.emmy.alley.utils.chat.CC;
 import org.bukkit.Bukkit;
 
@@ -37,10 +38,10 @@ public class MongoService {
                     .build();
 
             this.mongoClient = MongoClients.create(settings);
-            this.mongoDatabase = mongoClient.getDatabase(Objects.requireNonNull(connectionString.getDatabase()));
+            this.mongoDatabase = mongoClient.getDatabase(Alley.getInstance().getConfigHandler().getConfigByName("database/database.yml").getString("mongo.database"));
         } catch (Exception e) {
             Bukkit.getConsoleSender().sendMessage(CC.translate("&f[&cAlley&f] &cMongoDB failed to create a connection."));
-            //e.printStackTrace();
+            e.printStackTrace();
         }
     }
 }
