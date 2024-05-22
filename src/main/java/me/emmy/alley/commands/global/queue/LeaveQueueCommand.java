@@ -1,4 +1,4 @@
-package me.emmy.alley.queue.command;
+package me.emmy.alley.commands.global.queue;
 
 import me.emmy.alley.Alley;
 import me.emmy.alley.profile.Profile;

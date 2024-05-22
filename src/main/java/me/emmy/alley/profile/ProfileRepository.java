@@ -9,6 +9,8 @@ import org.bson.Document;
 import java.util.HashMap;
 import java.util.UUID;
 
+import static com.mongodb.client.model.Filters.eq;
+
 @Getter
 @Setter
 public class ProfileRepository {
@@ -34,6 +36,12 @@ public class ProfileRepository {
         for (Document document : collection.find()) {
             UUID uuid = UUID.fromString(document.getString("uuid"));
             Profile profile = Alley.getInstance().getProfileRepository().getProfile(uuid);
+
+            if (profile == null) {
+                //TODO: create profile/document
+                return;
+            }
+
             profile.load();
 
             Alley.getInstance().getProfileRepository().getProfiles().put(uuid, profile);

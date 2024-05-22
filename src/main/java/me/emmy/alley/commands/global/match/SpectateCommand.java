@@ -1,4 +1,4 @@
-package me.emmy.alley.match.command;
+package me.emmy.alley.commands.global.match;
 
 import me.emmy.alley.Alley;
 import me.emmy.alley.profile.Profile;

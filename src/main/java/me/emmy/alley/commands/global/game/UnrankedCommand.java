@@ -1,4 +1,4 @@
-package me.emmy.alley.commands.global.queue;
+package me.emmy.alley.commands.global.game;
 
 import me.emmy.alley.locale.Locale;
 import me.emmy.alley.menus.unranked.UnrankedMenu;

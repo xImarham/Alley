@@ -12,8 +12,11 @@ import me.emmy.alley.commands.admin.kit.KitCommand;
 import me.emmy.alley.commands.admin.kit.impl.*;
 import me.emmy.alley.commands.admin.spawn.SetSpawnCommand;
 import me.emmy.alley.commands.admin.spawn.SpawnCommand;
-import me.emmy.alley.commands.global.queue.RankedCommand;
-import me.emmy.alley.commands.global.queue.UnrankedCommand;
+import me.emmy.alley.commands.global.game.RankedCommand;
+import me.emmy.alley.commands.global.game.UnrankedCommand;
+import me.emmy.alley.commands.global.party.PartyCommand;
+import me.emmy.alley.commands.global.party.impl.PartyCreateCommand;
+import me.emmy.alley.commands.global.party.impl.PartyLeaveCommand;
 import me.emmy.alley.commands.global.settings.SettingsCommand;
 import me.emmy.alley.commands.global.stats.LeaderboardCommand;
 import me.emmy.alley.commands.global.stats.StatsCommand;
@@ -26,14 +29,14 @@ import me.emmy.alley.hotbar.util.HotbarUtility;
 import me.emmy.alley.kit.KitRepository;
 import me.emmy.alley.kit.settings.KitSettingRepository;
 import me.emmy.alley.match.MatchRepository;
-import me.emmy.alley.match.command.SpectateCommand;
+import me.emmy.alley.commands.global.match.SpectateCommand;
 import me.emmy.alley.match.listener.MatchListener;
 import me.emmy.alley.party.PartyRepository;
 import me.emmy.alley.profile.Profile;
 import me.emmy.alley.profile.ProfileRepository;
 import me.emmy.alley.profile.listener.ProfileListener;
 import me.emmy.alley.queue.QueueRepository;
-import me.emmy.alley.queue.command.LeaveQueueCommand;
+import me.emmy.alley.commands.global.queue.LeaveQueueCommand;
 import me.emmy.alley.scoreboard.ScoreboardAdapter;
 import me.emmy.alley.spawn.SpawnManager;
 import me.emmy.alley.utils.assemble.Assemble;
@@ -93,7 +96,7 @@ public class Alley extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        Bukkit.getConsoleSender().sendMessage(CC.translate(prefix + "&aSaved all kits to the config file."));
+        kitRepository.saveKits();
         CC.off();
     }
 
@@ -189,16 +192,19 @@ public class Alley extends JavaPlugin {
         new ArenaToolCommand();
         new ArenaCommand();
 
-        new LeaveQueueCommand();
-
-        new SpectateCommand();
-
         //player commands
+
+        new PartyCommand();
+        new PartyCreateCommand();
+        new PartyLeaveCommand();
+
         new UnrankedCommand();
         new RankedCommand();
         new SettingsCommand();
         new LeaderboardCommand();
         new StatsCommand();
+        new SpectateCommand();
+        new LeaveQueueCommand();
     }
 
     private void loadScoreboard() {

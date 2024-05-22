@@ -26,3 +26,9 @@ kit:
   editorslot-set: "&aSuccessfully set the editor slot of the &b{kit-name} &akit to &b{editor-slot}&a!"
   unrankedslot-set: "&aSuccessfully set the unranked slot of the &b{kit-name} &akit to &b{editor-slot}&a!"
   rankedslot-set: "&aSuccessfully set the ranked slot of the &b{kit-name} &akit to &b{editor-slot}&a!"
+
+party:
+  not-in-party: "&cYou are not in a party."
+  created: "&aYou've created a new party!"
+  disbanded: "&cYou've disbanded the party!"
+  left: "&cYou've left the party!"
