@@ -31,6 +31,7 @@ public class Profile {
     public Profile(UUID uuid) {
         this.uuid = uuid;
         this.state = EnumProfileState.LOBBY;
+        this.profileData = new ProfileData();
     }
 
     /**
