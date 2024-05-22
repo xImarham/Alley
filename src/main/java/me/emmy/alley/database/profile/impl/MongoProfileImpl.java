@@ -17,6 +17,7 @@ public class MongoProfileImpl implements IProfile {
     public void saveProfile(Profile profile) {
         Document document = new Document();
         document.put("uuid", profile.getUuid().toString());
+        document.put("name", profile.getName());
         document.put("coins", profile.getProfileData().getCoins());
 
         Alley.getInstance().getProfileRepository().getCollection().replaceOne(Filters.eq("uuid", profile.getUuid().toString()), document, new ReplaceOptions().upsert(true));

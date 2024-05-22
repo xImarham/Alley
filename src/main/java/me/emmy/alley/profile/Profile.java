@@ -7,6 +7,7 @@ import me.emmy.alley.database.profile.IProfile;
 import me.emmy.alley.match.AbstractMatch;
 import me.emmy.alley.profile.enums.EnumProfileState;
 import me.emmy.alley.queue.QueueProfile;
+import org.bukkit.Bukkit;
 
 import java.util.UUID;
 
@@ -22,6 +23,7 @@ public class Profile {
     private AbstractMatch match;
     private final UUID uuid;
     private boolean online;
+    private String name;
 
     /**
      * Constructor for the Profile class.
@@ -32,6 +34,7 @@ public class Profile {
         this.uuid = uuid;
         this.state = EnumProfileState.LOBBY;
         this.profileData = new ProfileData();
+        this.name = Bukkit.getOfflinePlayer(this.uuid).getName();
     }
 
     /**
