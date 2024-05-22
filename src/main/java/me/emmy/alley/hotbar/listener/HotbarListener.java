@@ -2,6 +2,7 @@ package me.emmy.alley.hotbar.listener;
 
 import me.emmy.alley.Alley;
 import me.emmy.alley.hotbar.LobbyItem;
+import me.emmy.alley.hotbar.PartyItem;
 import me.emmy.alley.hotbar.QueueItem;
 import me.emmy.alley.profile.Profile;
 import me.emmy.alley.profile.enums.EnumProfileState;
@@ -23,6 +24,7 @@ public class HotbarListener implements Listener {
 
         handleLobbyItemInteract(event, player);
         handleQueueItemInteract(event, player);
+        handePartyItemInteract(event, player);
     }
 
     /**
@@ -56,6 +58,20 @@ public class HotbarListener implements Listener {
 
         if (queueItem.getCommand() != null) {
             player.performCommand(queueItem.getCommand());
+        }
+    }
+
+    private void handePartyItemInteract(PlayerInteractEvent event, Player player) {
+        PartyItem partyItem = PartyItem.getByItemStack(event.getItem());
+
+        if (partyItem == null) {
+            return;
+        }
+
+        if (event.getAction() != Action.RIGHT_CLICK_AIR && event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
+
+        if (partyItem.getCommand() != null) {
+            player.performCommand(partyItem.getCommand());
         }
     }
 }

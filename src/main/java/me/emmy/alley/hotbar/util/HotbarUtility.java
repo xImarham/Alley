@@ -2,6 +2,7 @@ package me.emmy.alley.hotbar.util;
 
 import me.emmy.alley.Alley;
 import me.emmy.alley.hotbar.LobbyItem;
+import me.emmy.alley.hotbar.PartyItem;
 import me.emmy.alley.hotbar.QueueItem;
 import me.emmy.alley.profile.Profile;
 import me.emmy.alley.profile.enums.EnumProfileState;
@@ -21,6 +22,8 @@ public class HotbarUtility {
 
         player.getInventory().setItem(LobbyItem.UNRANKED_QUEUE.getSlot(), LobbyItem.UNRANKED_QUEUE.constructItem());
         player.getInventory().setItem(LobbyItem.RANKED_QUEUE.getSlot(), LobbyItem.RANKED_QUEUE.constructItem());
+        player.getInventory().setItem(LobbyItem.KIT_EDITOR.getSlot(), LobbyItem.KIT_EDITOR.constructItem());
+        player.getInventory().setItem(LobbyItem.PARTY.getSlot(), LobbyItem.PARTY.constructItem());
         player.getInventory().setItem(LobbyItem.LEADERBOARD.getSlot(), LobbyItem.LEADERBOARD.constructItem());
         player.getInventory().setItem(LobbyItem.EVENTS.getSlot(), LobbyItem.EVENTS.constructItem());
         player.getInventory().setItem(LobbyItem.SETTINGS.getSlot(), LobbyItem.SETTINGS.constructItem());
@@ -37,6 +40,19 @@ public class HotbarUtility {
         PlayerUtil.reset(player);
 
         player.getInventory().setItem(QueueItem.LEAVE_QUEUE.getSlot(), QueueItem.LEAVE_QUEUE.constructItem());
+
+        player.updateInventory();
+    }
+
+    public void applyPartyItems(Player player) {
+        PlayerUtil.reset(player);
+
+        player.getInventory().setItem(PartyItem.DUO_UNRANKED_QUEUE.getData(), PartyItem.DUO_UNRANKED_QUEUE.constructItem());
+        player.getInventory().setItem(PartyItem.KIT_EDITOR.getData(), PartyItem.KIT_EDITOR.constructItem());
+        player.getInventory().setItem(PartyItem.START_PARTY_EVENT.getData(), PartyItem.START_PARTY_EVENT.constructItem());
+        player.getInventory().setItem(PartyItem.FIGHT_OTHER_PARTY.getData(), PartyItem.FIGHT_OTHER_PARTY.constructItem());
+        player.getInventory().setItem(PartyItem.PARTY_INFO.getData(), PartyItem.PARTY_INFO.constructItem());
+        player.getInventory().setItem(PartyItem.PARTY_LEAVE.getData(), PartyItem.PARTY_LEAVE.constructItem());
 
         player.updateInventory();
     }

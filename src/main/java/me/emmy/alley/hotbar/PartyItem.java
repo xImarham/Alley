@@ -6,14 +6,13 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 @Getter
-public enum LobbyItem {
-    UNRANKED_QUEUE("&dUnranked Queue", Material.IRON_SWORD, 0, 0, "unranked"),
-    RANKED_QUEUE("&dRanked Queue", Material.DIAMOND_SWORD, 0, 1, "ranked"),
+public enum PartyItem {
+    DUO_UNRANKED_QUEUE("&dUnranked Queue", Material.IRON_SWORD, 0, 0, "unrankedduo"),
     KIT_EDITOR("&dKit Editor", Material.BOOK, 0, 2, "kiteditor"),
-    PARTY("&dCreate Party", Material.NAME_TAG, 0, 4, "party create"),
-    LEADERBOARD("&dLeaderboard", Material.EMERALD, 0, 6, "leaderboards"),
-    EVENTS("&dEvents", Material.EYE_OF_ENDER, 0, 7, "events"),
-    SETTINGS("&dSettings", Material.CHEST, 0, 8, "settings");
+    START_PARTY_EVENT("&dStart Party Event", Material.IRON_AXE, 0, 4, "party event"),
+    FIGHT_OTHER_PARTY("&dFight Other Party", Material.DIAMOND_AXE, 0, 5, "party duel"),
+    PARTY_INFO("&dParty Info", Material.PAPER, 0, 7, "party info"),
+    PARTY_LEAVE("&cLeave Party", Material.REDSTONE, 0, 8, "party leave");
 
     private final String name;
     private final Material type;
@@ -31,7 +30,7 @@ public enum LobbyItem {
      * @param slot The slot of the item.
      * @param command The command to run.
      */
-    LobbyItem(String name, Material type, int data, int slot, String command) {
+    PartyItem(String name, Material type, int data, int slot, String command) {
         this.name = name;
         this.type = type;
         this.data = data;
@@ -48,7 +47,7 @@ public enum LobbyItem {
      * @param slot The slot of the item.
      * @param menu The menu ID to open.
      */
-    LobbyItem(String name, Material type, int data, int slot, int menu) {
+    PartyItem(String name, Material type, int data, int slot, int menu) {
         this.name = name;
         this.type = type;
         this.data = data;
@@ -62,10 +61,10 @@ public enum LobbyItem {
      * @param itemStack The item stack to get the lobby item from.
      * @return The lobby item.
      */
-    public static LobbyItem getByItemStack(ItemStack itemStack) {
-        for (LobbyItem lobbyItem : values()) {
-            if (lobbyItem.constructItem().isSimilar(itemStack)) {
-                return lobbyItem;
+    public static PartyItem getByItemStack(ItemStack itemStack) {
+        for (PartyItem partyItem : values()) {
+            if (partyItem.constructItem().isSimilar(itemStack)) {
+                return partyItem;
             }
         }
 
