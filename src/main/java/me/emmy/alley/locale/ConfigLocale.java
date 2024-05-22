@@ -41,6 +41,6 @@ public enum ConfigLocale {
     }
 
     public String getMessage() {
-        return CC.translate(Alley.getInstance().getConfig(configName).getString(configString));
+        return CC.translate(Alley.getInstance().getConfigHandler().getConfigByName(configName).getString(configString));
     }
 }
