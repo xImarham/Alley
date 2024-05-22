@@ -119,6 +119,7 @@ public class Alley extends JavaPlugin {
         FileConfiguration config = getConfig("database.yml");
         String uri = config.getString("mongo.uri");
 
+        this.profileRepository = new ProfileRepository();
         this.profileRepository.iProfile = new MongoProfileImpl();
         this.mongoService = new MongoService(uri);
     }
@@ -132,7 +133,6 @@ public class Alley extends JavaPlugin {
         this.framework = new CommandFramework(this);
         this.hotbarUtility = new HotbarUtility();
 
-        this.profileRepository = new ProfileRepository();
         this.profileRepository.loadProfiles();
 
         this.queueRepository = new QueueRepository();
