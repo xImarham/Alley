@@ -17,6 +17,7 @@ public class Profile {
     public static final int DEFAULT_COINS = 100;
     public static final int DEFAULT_ELO = 1000;
     private QueueProfile queueProfile;
+    private ProfileData profileData;
     private EnumProfileState state;
     private AbstractMatch match;
     private final UUID uuid;
@@ -36,13 +37,13 @@ public class Profile {
      * Loads the profile from the database.
      */
     public void load() {
-        Alley.getInstance().getProfileRepository().getIProfile().loadProfile();
+        Alley.getInstance().getProfileRepository().getIProfile().loadProfile(this);
     }
 
     /**
      * Saves the profile to the database.
      */
     public void save() {
-        Alley.getInstance().getProfileRepository().getIProfile().saveProfile();
+        Alley.getInstance().getProfileRepository().getIProfile().saveProfile(this);
     }
 }

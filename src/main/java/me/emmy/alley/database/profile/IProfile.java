@@ -1,5 +1,7 @@
 package me.emmy.alley.database.profile;
 
+import me.emmy.alley.profile.Profile;
+
 /**
  * @author Remi
  * @project Alley
@@ -7,6 +9,6 @@ package me.emmy.alley.database.profile;
  */
 public interface IProfile {
 
-    void saveProfile();
-    void loadProfile();
+    void saveProfile(Profile profile);
+    void loadProfile(Profile profile);
 }
