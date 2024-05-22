@@ -1,17 +1,20 @@
 package me.emmy.alley.profile;
 
+import com.mongodb.client.MongoCollection;
 import lombok.Getter;
 import lombok.Setter;
+import me.emmy.alley.Alley;
+import org.bson.Document;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 import java.util.UUID;
 
 @Getter
 @Setter
 public class ProfileRepository {
 
-    private final List<Profile> profiles = new ArrayList<>();
+    private final HashMap<UUID, Profile> profiles = new HashMap<>();
+    public MongoCollection<Document> collection;
 
     /**
      * Gets a profile by UUID.
@@ -20,6 +23,20 @@ public class ProfileRepository {
      * @return The profile.
      */
     public Profile getProfile(UUID uuid) {
-        return profiles.stream().filter(profile -> profile.getUuid().equals(uuid)).findFirst().orElse(null);
+        return profiles.get(uuid);
+    }
+
+    /**
+     * Loads all profiles from the database.
+     */
+    public void loadProfiles() {
+        this.collection = Alley.getInstance().getMongoService().getMongoDatabase().getCollection("profiles");
+        for (Document document : collection.find()) {
+            UUID uuid = UUID.fromString(document.getString("uuid"));
+            Profile profile = Alley.getInstance().getProfileRepository().getProfile(uuid);
+            profile.load();
+
+            Alley.getInstance().getProfileRepository().getProfiles().put(uuid, profile);
+        }
     }
 }

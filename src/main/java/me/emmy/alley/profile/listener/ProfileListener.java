@@ -38,7 +38,7 @@ public class ProfileListener implements Listener {
         profile.setMatch(null);
         profile.load();
 
-        plugin.getProfileRepository().getProfiles().add(profile);
+        plugin.getProfileRepository().getProfiles().put(event.getPlayer().getUniqueId(), profile);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)

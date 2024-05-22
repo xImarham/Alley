@@ -17,6 +17,8 @@ import me.emmy.alley.commands.global.queue.UnrankedCommand;
 import me.emmy.alley.commands.global.settings.SettingsCommand;
 import me.emmy.alley.commands.global.stats.LeaderboardCommand;
 import me.emmy.alley.commands.global.stats.StatsCommand;
+import me.emmy.alley.database.MongoService;
+import me.emmy.alley.database.profile.impl.MongoProfileImpl;
 import me.emmy.alley.handler.ConfigHandler;
 import me.emmy.alley.handler.ScoreboardHandler;
 import me.emmy.alley.hotbar.listener.HotbarListener;
@@ -27,6 +29,7 @@ import me.emmy.alley.match.MatchRepository;
 import me.emmy.alley.match.command.SpectateCommand;
 import me.emmy.alley.match.listener.MatchListener;
 import me.emmy.alley.party.PartyRepository;
+import me.emmy.alley.profile.Profile;
 import me.emmy.alley.profile.ProfileRepository;
 import me.emmy.alley.profile.listener.ProfileListener;
 import me.emmy.alley.queue.QueueRepository;
@@ -51,18 +54,21 @@ public class Alley extends JavaPlugin {
 
     @Getter
     public static Alley instance;
-    private ConfigHandler configHandler;
-    private ScoreboardHandler scoreboardHandler;
-    private CommandFramework framework;
-    private HotbarUtility hotbarUtility;
-    private SpawnManager spawnManager;
-    private KitRepository kitRepository;
+
     private KitSettingRepository kitSettingRepository;
+    private ProfileRepository profileRepository;
+    private ScoreboardHandler scoreboardHandler;
     private ArenaRepository arenaRepository;
     private MatchRepository matchRepository;
-    private ProfileRepository profileRepository;
     private QueueRepository queueRepository;
     private PartyRepository partyRepository;
+    private KitRepository kitRepository;
+    private HotbarUtility hotbarUtility;
+    private ConfigHandler configHandler;
+    private CommandFramework framework;
+    private SpawnManager spawnManager;
+    private MongoService mongoService;
+
     private String prefix = "§f[§dAlley§f] &r";
 
     @Override
@@ -73,6 +79,7 @@ public class Alley extends JavaPlugin {
 
         checkDescription();
         registerHandlers();
+        registerDatabase();
         registerManagers();
         registerListeners();
         registerCommands();
@@ -105,6 +112,14 @@ public class Alley extends JavaPlugin {
         }
     }
 
+    private void registerDatabase() {
+        FileConfiguration config = getConfig("database.yml");
+        String uri = config.getString("mongo.uri");
+
+        Profile.iProfile = new MongoProfileImpl();
+        this.mongoService = new MongoService(uri);
+    }
+
     private void registerHandlers() {
         configHandler = new ConfigHandler();
         scoreboardHandler = new ScoreboardHandler();
@@ -113,7 +128,10 @@ public class Alley extends JavaPlugin {
     private void registerManagers() {
         this.framework = new CommandFramework(this);
         this.hotbarUtility = new HotbarUtility();
+
         this.profileRepository = new ProfileRepository();
+        this.profileRepository.loadProfiles();
+
         this.queueRepository = new QueueRepository();
         this.matchRepository = new MatchRepository();
         this.kitSettingRepository = new KitSettingRepository();
