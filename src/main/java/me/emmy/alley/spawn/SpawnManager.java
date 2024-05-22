@@ -22,12 +22,12 @@ public class SpawnManager {
     public void loadSpawnLocation() {
         FileConfiguration config = Alley.getInstance().getConfigHandler().getConfigByName("settings.yml");
 
-        World world = Bukkit.getWorld(config.getString("on-join.teleport.location.world"));
-        double x = config.getDouble("on-join.teleport.location.x");
-        double y = config.getDouble("on-join.teleport.location.y");
-        double z = config.getDouble("on-join.teleport.location.z");
-        float yaw = (float) config.getDouble("on-join.teleport.location.yaw");
-        float pitch = (float) config.getDouble("on-join.teleport.location.pitch");
+        World world = Bukkit.getWorld(config.getString("spawn-location.world"));
+        double x = config.getDouble("spawn-location.x");
+        double y = config.getDouble("spawn-location.y");
+        double z = config.getDouble("spawn-location.z");
+        float yaw = (float) config.getDouble("spawn-location.yaw");
+        float pitch = (float) config.getDouble("spawn-location.pitch");
 
         spawnLocation = new Location(world, x, y, z, yaw, pitch);
     }
@@ -36,12 +36,12 @@ public class SpawnManager {
         this.spawnLocation = location;
         FileConfiguration config = Alley.getInstance().getConfigHandler().getConfigByName("settings.yml");
 
-        config.set("on-join.teleport.location.world", location.getWorld().getName());
-        config.set("on-join.teleport.location.x", location.getX());
-        config.set("on-join.teleport.location.y", location.getY());
-        config.set("on-join.teleport.location.z", location.getZ());
-        config.set("on-join.teleport.location.yaw", location.getYaw());
-        config.set("on-join.teleport.location.pitch", location.getPitch());
+        config.set("spawn-location.world", location.getWorld().getName());
+        config.set("spawn-location.x", location.getX());
+        config.set("spawn-location.y", location.getY());
+        config.set("spawn-location.z", location.getZ());
+        config.set("spawn-location.yaw", location.getYaw());
+        config.set("spawn-location.pitch", location.getPitch());
 
         Alley.getInstance().getConfigHandler().saveConfig(Alley.getInstance().getConfigHandler().getConfigFileByName("settings.yml"), config);
     }
