@@ -9,6 +9,7 @@ public enum EnumProfileState {
     WAITING("Waiting", "The player is waiting for a match"),
     PLAYING("Playing", "The player is playing a match"),
     SPECTATING("Spectating", "The player is spectating a match"),
+    EDITING("Editing", "The player is editing a kit"),
 
     ;
 
