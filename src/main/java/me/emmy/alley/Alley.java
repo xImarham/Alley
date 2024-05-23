@@ -32,7 +32,6 @@ import me.emmy.alley.match.MatchRepository;
 import me.emmy.alley.commands.global.match.SpectateCommand;
 import me.emmy.alley.match.listener.MatchListener;
 import me.emmy.alley.party.PartyRepository;
-import me.emmy.alley.profile.Profile;
 import me.emmy.alley.profile.ProfileRepository;
 import me.emmy.alley.profile.listener.ProfileListener;
 import me.emmy.alley.queue.QueueRepository;
