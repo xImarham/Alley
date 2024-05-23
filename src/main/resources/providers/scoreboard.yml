@@ -47,8 +47,8 @@ scoreboard:
       - ""
       - "&d&lQueue"
       - " &rKit: &d{queued-kit}"
-      - " &rTime: &d"
-      - " &rType: &d"
+      - " &rTime: &d{queued-time}"
+      - " &rType: &d{queued-type}"
       - ""
       - "&dalley.net"
     playing:

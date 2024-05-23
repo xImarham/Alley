@@ -45,7 +45,7 @@ public class ScoreboardAdapter implements AssembleAdapter {
                             .replaceAll("\\{playing\\}", String.valueOf(Alley.getInstance().getMatchRepository().getMatches().size()))
                             .replaceAll("\\{in-queue\\}", "null")
                             .replaceAll("\\{queued-type\\}", "null")
-                            .replaceAll("\\{queued-time\\}", "null")
+                            .replaceAll("\\{queued-time\\}", String.valueOf(Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId()).getQueueProfile().getElapsedTime()))
                             .replaceAll("\\{queued-kit\\}", String.valueOf(Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId()).getQueueProfile().getQueue().getKit().getName()));
                     toReturn.add(CC.translate(replacedLine));
                 }

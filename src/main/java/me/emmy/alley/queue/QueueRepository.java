@@ -5,6 +5,7 @@ import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * @author Remi
@@ -22,7 +23,7 @@ public class QueueRepository {
      * @param uuid The UUID of the queue.
      * @return The queue.
      */
-    public Queue getQueueByUUID(String uuid) {
+    public Queue getQueueByUUID(UUID uuid) {
         return queues.stream().filter(queue -> queue.getUuid().toString().equals(uuid)).findFirst().orElse(null);
     }
 }
