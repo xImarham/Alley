@@ -23,6 +23,7 @@ public class Queue {
 
     private final LinkedList<QueueProfile> profiles = new LinkedList<>();
     private final UUID uuid = UUID.randomUUID();
+    private final boolean ranked;
     private final Kit kit;
 
     /**
@@ -30,8 +31,9 @@ public class Queue {
      *
      * @param kit The kit associated with the queue.
      */
-    public Queue(Kit kit) {
+    public Queue(Kit kit, boolean ranked) {
         this.kit = kit;
+        this.ranked = ranked;
         Alley.getInstance().getQueueRepository().getQueues().add(this);
     }
 

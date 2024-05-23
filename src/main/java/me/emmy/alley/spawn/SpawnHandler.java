@@ -1,7 +1,6 @@
 package me.emmy.alley.spawn;
 
 import lombok.Getter;
-import lombok.Setter;
 import me.emmy.alley.Alley;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -15,10 +14,13 @@ import org.bukkit.configuration.file.FileConfiguration;
  */
 
 @Getter
-public class SpawnManager {
+public class SpawnHandler {
 
     private Location spawnLocation;
 
+    /**
+     * Load the spawn location
+     */
     public void loadSpawnLocation() {
         FileConfiguration config = Alley.getInstance().getConfigHandler().getConfigByName("settings.yml");
 
@@ -32,6 +34,11 @@ public class SpawnManager {
         spawnLocation = new Location(world, x, y, z, yaw, pitch);
     }
 
+    /**
+     * Set the spawn location
+     *
+     * @param location the location to set
+     */
     public void setSpawnLocation(Location location) {
         this.spawnLocation = location;
         FileConfiguration config = Alley.getInstance().getConfigHandler().getConfigByName("settings.yml");

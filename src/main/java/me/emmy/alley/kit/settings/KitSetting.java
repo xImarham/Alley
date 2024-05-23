@@ -11,21 +11,14 @@ import lombok.Setter;
 @Getter
 @Setter
 public class KitSetting {
-
     private final String name;
     private String description;
     private boolean enabled;
 
-    /**
-     * Constructor for the KitSetting class.
-     *
-     * @param name The name of the setting.
-     * @param description The description of the setting.
-     * @param enabled Whether the setting is enabled.
-     */
-    public KitSetting(String name, String description, boolean enabled) {
-        this.name = name;
-        this.description = description;
-        this.enabled = enabled;
+    public KitSetting() {
+        KitSettingData data = getClass().getAnnotation(KitSettingData.class);
+        this.name = data.name();
+        this.description = data.description();
+        this.enabled = data.enabled();
     }
 }

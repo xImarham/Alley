@@ -32,7 +32,7 @@ public class RankedMenu extends Menu {
         Map<Integer, Button> buttons = new HashMap<>();
 
         for (Queue queue : Alley.getInstance().getQueueRepository().getQueues()) {
-            if (queue.getKit().isSettingEnabled(KitSettingRankedImpl.class)) {
+            if (queue.isRanked()) {
                 buttons.put(queue.getKit().getRankedslot(), new RankedButton(queue));
             }
         }

@@ -54,3 +54,4 @@ public class KitSettingRepository {
         return settings.stream().filter(setting -> setting.getClass().equals(clazz)).findFirst().orElse(null);
     }
 }
+

@@ -3,6 +3,7 @@ package me.emmy.alley.kit;
 import lombok.Getter;
 import me.emmy.alley.Alley;
 import me.emmy.alley.kit.settings.KitSetting;
+import me.emmy.alley.kit.settings.impl.KitSettingRankedImpl;
 import me.emmy.alley.queue.Queue;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
@@ -143,14 +144,11 @@ public class KitRepository {
 
     private void addKitToQueue(Kit kit) {
         if (!kit.isEnabled()) return;
-        new Queue(kit);
-
-        /*
-        todo: add ranked queue
+        new Queue(kit, false);
 
         if (kit.isSettingEnabled(KitSettingRankedImpl.class)) {
             new Queue(kit, true);
-        }*/
+        }
     }
 
     public void deleteKit(Kit kit) {

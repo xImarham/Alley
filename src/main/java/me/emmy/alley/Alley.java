@@ -37,7 +37,7 @@ import me.emmy.alley.profile.listener.ProfileListener;
 import me.emmy.alley.queue.QueueRepository;
 import me.emmy.alley.commands.global.queue.LeaveQueueCommand;
 import me.emmy.alley.scoreboard.ScoreboardAdapter;
-import me.emmy.alley.spawn.SpawnManager;
+import me.emmy.alley.spawn.SpawnHandler;
 import me.emmy.alley.utils.assemble.Assemble;
 import me.emmy.alley.utils.assemble.AssembleStyle;
 import me.emmy.alley.utils.chat.CC;
@@ -68,7 +68,7 @@ public class Alley extends JavaPlugin {
     private HotbarUtility hotbarUtility;
     private ConfigHandler configHandler;
     private CommandFramework framework;
-    private SpawnManager spawnManager;
+    private SpawnHandler spawnHandler;
     private MongoService mongoService;
 
     private String prefix = "§f[§dAlley§f] &r";
@@ -144,8 +144,8 @@ public class Alley extends JavaPlugin {
         this.arenaRepository = new ArenaRepository();
         this.arenaRepository.loadArenas();
 
-        this.spawnManager = new SpawnManager();
-        this.spawnManager.loadSpawnLocation();
+        this.spawnHandler = new SpawnHandler();
+        this.spawnHandler.loadSpawnLocation();
 
     }
 

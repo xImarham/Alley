@@ -40,7 +40,7 @@ public class PlayerUtil {
     }
 
     public static void teleportToSpawn(Player player) {
-        Location spawnLocation = Alley.getInstance().getSpawnManager().getSpawnLocation();
+        Location spawnLocation = Alley.getInstance().getSpawnHandler().getSpawnLocation();
         if (spawnLocation != null) {
             player.teleport(spawnLocation);
         } else {
