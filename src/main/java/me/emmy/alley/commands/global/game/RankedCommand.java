@@ -1,6 +1,7 @@
 package me.emmy.alley.commands.global.game;
 
 import me.emmy.alley.locale.Locale;
+import me.emmy.alley.menus.ranked.RankedMenu;
 import me.emmy.alley.utils.chat.CC;
 import me.emmy.alley.utils.command.BaseCommand;
 import me.emmy.alley.utils.command.Command;
@@ -19,6 +20,6 @@ public class RankedCommand extends BaseCommand {
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
 
-        player.sendMessage(CC.translate(Locale.DEBUG_CMD));
+        new RankedMenu().openMenu(player);
     }
 }
