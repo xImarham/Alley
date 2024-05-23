@@ -31,4 +31,9 @@ public class QueueProfile {
     public long getElapsedTime() {
         return System.currentTimeMillis() - startTime;
     }
+
+    public String getFormattedElapsedTime() {
+        long elapsedSeconds = getElapsedTime() / 1000;
+        return String.format("%02d:%02d", elapsedSeconds / 60, elapsedSeconds % 60);
+    }
 }
