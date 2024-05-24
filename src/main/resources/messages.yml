@@ -38,3 +38,6 @@ party:
   created: "&aYou've created a new party!"
   disbanded: "&cYou've disbanded the party!"
   left: "&cYou've left the party!"
+
+playtime:
+  message: " \n&b{target}'s total playtime:\n &b{days} &fdays, &b{hours} &fhours, &b{minutes} &fminutes and &b{seconds} &fseconds.\n "

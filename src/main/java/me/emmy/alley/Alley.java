@@ -7,6 +7,7 @@ import me.emmy.alley.arena.listener.ArenaListener;
 import me.emmy.alley.commands.AlleyCommand;
 import me.emmy.alley.commands.admin.arena.ArenaCommand;
 import me.emmy.alley.commands.admin.arena.impl.*;
+import me.emmy.alley.commands.admin.essential.PlaytimeCommand;
 import me.emmy.alley.commands.admin.essential.SpawnItemsCommand;
 import me.emmy.alley.commands.admin.kit.KitCommand;
 import me.emmy.alley.commands.admin.kit.impl.*;
@@ -16,6 +17,7 @@ import me.emmy.alley.commands.global.game.RankedCommand;
 import me.emmy.alley.commands.global.game.UnrankedCommand;
 import me.emmy.alley.commands.global.party.PartyCommand;
 import me.emmy.alley.commands.global.party.impl.PartyCreateCommand;
+import me.emmy.alley.commands.global.party.impl.PartyInfoCommand;
 import me.emmy.alley.commands.global.party.impl.PartyLeaveCommand;
 import me.emmy.alley.commands.global.settings.SettingsCommand;
 import me.emmy.alley.commands.global.stats.LeaderboardCommand;
@@ -71,7 +73,7 @@ public class Alley extends JavaPlugin {
     private SpawnHandler spawnHandler;
     private MongoService mongoService;
 
-    private String prefix = "§f[§dAlley§f] &r";
+    private String prefix = "§f[§dAlley§f] §r";
 
     @Override
     public void onEnable() {
@@ -114,6 +116,11 @@ public class Alley extends JavaPlugin {
         }
     }
 
+    private void registerHandlers() {
+        configHandler = new ConfigHandler();
+        scoreboardHandler = new ScoreboardHandler();
+    }
+
     private void registerDatabase() {
         FileConfiguration config = configHandler.getConfigByName("database/database.yml");
         String uri = config.getString("mongo.uri");
@@ -121,11 +128,6 @@ public class Alley extends JavaPlugin {
         this.profileRepository = new ProfileRepository();
         this.profileRepository.setIProfile(new MongoProfileImpl());
         this.mongoService = new MongoService(uri);
-    }
-
-    private void registerHandlers() {
-        configHandler = new ConfigHandler();
-        scoreboardHandler = new ScoreboardHandler();
     }
 
     private void registerManagers() {
@@ -165,6 +167,8 @@ public class Alley extends JavaPlugin {
         new SetSpawnCommand();
         new SpawnCommand();
 
+        new PlaytimeCommand();
+
         new KitCommand();
         new KitSaveCommand();
         new KitSaveAllCommand();
@@ -198,6 +202,7 @@ public class Alley extends JavaPlugin {
         new PartyCommand();
         new PartyCreateCommand();
         new PartyLeaveCommand();
+        new PartyInfoCommand();
 
         new UnrankedCommand();
         new RankedCommand();
