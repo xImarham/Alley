@@ -2,10 +2,12 @@ package me.emmy.alley.spawn;
 
 import lombok.Getter;
 import me.emmy.alley.Alley;
+import me.emmy.alley.utils.chat.CC;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Player;
 
 /**
  * Created by Emmy
@@ -51,5 +53,19 @@ public class SpawnHandler {
         config.set("spawn-location.pitch", location.getPitch());
 
         Alley.getInstance().getConfigHandler().saveConfig(Alley.getInstance().getConfigHandler().getConfigFileByName("settings.yml"), config);
+    }
+
+    /**
+     * Teleport a player to the spawn location
+     *
+     * @param player the player to teleport
+     */
+    public void teleportToSpawn(Player player) {
+        Location spawnLocation = getSpawnLocation();
+        if (spawnLocation != null) {
+            player.teleport(spawnLocation);
+        } else {
+            Bukkit.getConsoleSender().sendMessage(CC.translate("&4&l(!) SPAWN LOCATION IS NULL (!)"));
+        }
     }
 }

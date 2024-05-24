@@ -21,7 +21,7 @@ public class SpawnCommand extends BaseCommand {
         Player player = args.getPlayer();
 
         PlayerUtil.reset(player);
-        PlayerUtil.teleportToSpawn(player);
+        Alley.getInstance().getSpawnHandler().teleportToSpawn(player);
         Alley.getInstance().getHotbarUtility().applySpawnItems(player);
         player.sendMessage(CC.translate(Alley.getInstance().getConfig("messages.yml").getString("spawn.teleported")));
     }

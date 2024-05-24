@@ -1,8 +1,8 @@
 package me.emmy.alley.hotbar.listener;
 
-import me.emmy.alley.hotbar.LobbyItem;
-import me.emmy.alley.hotbar.PartyItem;
-import me.emmy.alley.hotbar.QueueItem;
+import me.emmy.alley.hotbar.enums.LobbyItem;
+import me.emmy.alley.hotbar.enums.PartyItem;
+import me.emmy.alley.hotbar.enums.QueueItem;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

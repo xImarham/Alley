@@ -38,13 +38,4 @@ public class PlayerUtil {
         //player.getInventory().setHeldItemSlot(0);
         player.updateInventory();
     }
-
-    public static void teleportToSpawn(Player player) {
-        Location spawnLocation = Alley.getInstance().getSpawnHandler().getSpawnLocation();
-        if (spawnLocation != null) {
-            player.teleport(spawnLocation);
-        } else {
-            Bukkit.getConsoleSender().sendMessage(CC.translate("&4&l(!) SPAWN LOCATION IS NULL (!)"));
-        }
-    }
 }

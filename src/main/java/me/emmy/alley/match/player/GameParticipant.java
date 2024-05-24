@@ -6,6 +6,7 @@ import lombok.Setter;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * @author Remi
@@ -29,5 +30,15 @@ public class GameParticipant<T extends GamePlayer> {
 
     public List<T> getPlayers() {
         return Collections.singletonList(player);
+    }
+
+    /**
+     * Checks if the participant contains a player.
+     *
+     * @param uuid The UUID of the player.
+     * @return True if the participant contains the player.
+     */
+    public boolean containsPlayer(UUID uuid) {
+        return player.getUuid().equals(uuid);
     }
 }

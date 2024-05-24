@@ -16,6 +16,7 @@ import me.emmy.alley.commands.admin.spawn.SpawnCommand;
 import me.emmy.alley.commands.global.game.RankedCommand;
 import me.emmy.alley.commands.global.game.UnrankedCommand;
 import me.emmy.alley.commands.global.party.PartyCommand;
+import me.emmy.alley.commands.global.party.impl.PartyChatCommand;
 import me.emmy.alley.commands.global.party.impl.PartyCreateCommand;
 import me.emmy.alley.commands.global.party.impl.PartyInfoCommand;
 import me.emmy.alley.commands.global.party.impl.PartyLeaveCommand;
@@ -27,13 +28,14 @@ import me.emmy.alley.database.profile.impl.MongoProfileImpl;
 import me.emmy.alley.handler.ConfigHandler;
 import me.emmy.alley.handler.ScoreboardHandler;
 import me.emmy.alley.hotbar.listener.HotbarListener;
-import me.emmy.alley.hotbar.util.HotbarUtility;
+import me.emmy.alley.hotbar.HotbarUtility;
 import me.emmy.alley.kit.KitRepository;
 import me.emmy.alley.kit.settings.KitSettingRepository;
 import me.emmy.alley.match.MatchRepository;
 import me.emmy.alley.commands.global.match.SpectateCommand;
 import me.emmy.alley.match.listener.MatchListener;
 import me.emmy.alley.party.PartyRepository;
+import me.emmy.alley.party.listener.PartyListener;
 import me.emmy.alley.profile.ProfileRepository;
 import me.emmy.alley.profile.listener.ProfileListener;
 import me.emmy.alley.queue.QueueRepository;
@@ -60,7 +62,7 @@ import java.util.List;
 public class Alley extends JavaPlugin {
 
     @Getter
-    public static Alley instance;
+    private static Alley instance;
 
     private KitSettingRepository kitSettingRepository;
     private ProfileRepository profileRepository;
@@ -157,6 +159,7 @@ public class Alley extends JavaPlugin {
     private void registerListeners() {
         getServer().getPluginManager().registerEvents(new ProfileListener(), this);
         getServer().getPluginManager().registerEvents(new HotbarListener(), this);
+        getServer().getPluginManager().registerEvents(new PartyListener(), this);
         getServer().getPluginManager().registerEvents(new MatchListener(), this);
         getServer().getPluginManager().registerEvents(new ArenaListener(), this);
         getServer().getPluginManager().registerEvents(new MenuListener(), this);
@@ -206,6 +209,7 @@ public class Alley extends JavaPlugin {
         new PartyCreateCommand();
         new PartyLeaveCommand();
         new PartyInfoCommand();
+        new PartyChatCommand();
 
         new UnrankedCommand();
         new RankedCommand();

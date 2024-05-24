@@ -2,8 +2,8 @@ package me.emmy.alley.commands.global.party.impl;
 
 import me.emmy.alley.Alley;
 import me.emmy.alley.locale.ConfigLocale;
-import me.emmy.alley.party.Party;
 import me.emmy.alley.party.PartyRepository;
+import me.emmy.alley.profile.Profile;
 import me.emmy.alley.utils.chat.CC;
 import me.emmy.alley.utils.command.BaseCommand;
 import me.emmy.alley.utils.command.Command;
@@ -20,25 +20,25 @@ import java.util.UUID;
 
 public class PartyCreateCommand extends BaseCommand {
     @Override
-    @Command(name = "party.create")
+    @Command(name = "party.create", aliases = {"p.create"})
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
         UUID playerUUID = player.getUniqueId();
 
+        Profile profile = Alley.getInstance().getProfileRepository().getProfile(playerUUID);
         PartyRepository partyRepository = Alley.getInstance().getPartyRepository();
 
-        if (partyRepository.getPartyLeader(playerUUID) != null) {
+        if (partyRepository.getPartyByLeader(player) != null) {
             player.sendMessage(CC.translate("&cYou're already in a party"));
             return;
         }
 
-        if (partyRepository.getPartyMembers(playerUUID) != null) {
+        if (partyRepository.getPartyByMember(playerUUID) != null) {
             player.sendMessage(CC.translate("&cYou're already in a party"));
             return;
         }
 
-        partyRepository.createParty(playerUUID);
-        Alley.getInstance().getHotbarUtility().applyPartyItems(player);
+        partyRepository.createParty(player);
         player.sendMessage(CC.translate(ConfigLocale.PARTY_CREATED.getMessage()));
     }
 }

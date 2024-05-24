@@ -8,6 +8,7 @@ public enum EnumMatchState {
     STARTING("Starting", "The match is starting"),
     RUNNING("Running", "The match is running"),
     ENDING("Ending", "The match is ending"),
+    ENDED("Ended", "The match has ended")
 
     ;
 

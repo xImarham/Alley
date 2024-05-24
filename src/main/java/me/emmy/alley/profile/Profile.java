@@ -3,8 +3,8 @@ package me.emmy.alley.profile;
 import lombok.Getter;
 import lombok.Setter;
 import me.emmy.alley.Alley;
-import me.emmy.alley.database.profile.IProfile;
 import me.emmy.alley.match.AbstractMatch;
+import me.emmy.alley.party.Party;
 import me.emmy.alley.profile.enums.EnumProfileState;
 import me.emmy.alley.queue.QueueProfile;
 import org.bukkit.Bukkit;
@@ -24,6 +24,7 @@ public class Profile {
     private final UUID uuid;
     private boolean online;
     private String name;
+    private Party party;
 
     /**
      * Constructor for the Profile class.

@@ -1,8 +1,6 @@
 package me.emmy.alley.commands.global.party.impl;
 
 import me.emmy.alley.Alley;
-import me.emmy.alley.party.Party;
-import me.emmy.alley.party.PartyRepository;
 import me.emmy.alley.utils.chat.CC;
 import me.emmy.alley.utils.command.BaseCommand;
 import me.emmy.alley.utils.command.Command;
@@ -21,17 +19,17 @@ import java.util.stream.Collectors;
 
 public class PartyInfoCommand extends BaseCommand {
     @Override
-    @Command(name = "party.info")
+    @Command(name = "party.info", aliases = {"p.info"})
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
         UUID playerUUID = player.getUniqueId();
 
-        if (Alley.getInstance().getPartyRepository().getPartyLeader(playerUUID) == null) {
+        if (Alley.getInstance().getPartyRepository().getPartyByLeader(player) == null) {
             player.sendMessage(CC.translate("&cYou are not in any party."));
             return;
         }
 
-        String members = Alley.getInstance().getPartyRepository().getPartyLeader(playerUUID).getMembers().stream()
+        String members = Alley.getInstance().getPartyRepository().getPartyByLeader(player).getMembers().stream()
                 .map(uuid -> Alley.getInstance().getServer().getPlayer(uuid))
                 .filter(Objects::nonNull)
                 .map(Player::getName)

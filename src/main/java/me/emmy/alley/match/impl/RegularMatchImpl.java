@@ -7,6 +7,8 @@ import me.emmy.alley.match.AbstractMatch;
 import me.emmy.alley.match.player.GameParticipant;
 import me.emmy.alley.match.player.impl.MatchGamePlayerImpl;
 import me.emmy.alley.queue.Queue;
+import org.bukkit.Location;
+import org.bukkit.entity.Player;
 
 import java.util.Arrays;
 import java.util.List;
@@ -29,6 +31,14 @@ public class RegularMatchImpl extends AbstractMatch {
         super(queue, kit, arena);
         this.participantA = participantA;
         this.participantB = participantB;
+    }
+
+    @Override
+    public void setupPlayer(Player player) {
+        super.setupPlayer(player);
+
+        Location spawnLocation = participantA.containsPlayer(player.getUniqueId()) ? getMatchArena().getPos1() : getMatchArena().getPos2();
+        player.teleport(spawnLocation);
     }
 
     @Override

@@ -2,7 +2,6 @@ package me.emmy.alley.commands.global.party.impl;
 
 import me.emmy.alley.Alley;
 import me.emmy.alley.locale.ConfigLocale;
-import me.emmy.alley.party.Party;
 import me.emmy.alley.party.PartyRepository;
 import me.emmy.alley.utils.chat.CC;
 import me.emmy.alley.utils.command.BaseCommand;
@@ -20,24 +19,22 @@ import java.util.UUID;
 
 public class PartyLeaveCommand extends BaseCommand {
     @Override
-    @Command(name = "party.leave")
+    @Command(name = "party.leave", aliases = {"p.leave"})
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
         UUID playerUUID = player.getUniqueId();
 
         PartyRepository partyRepository = Alley.getInstance().getPartyRepository();
 
-        if (partyRepository.getPartyLeader(playerUUID) != null) {
-            partyRepository.disbandParty(playerUUID);
+        if (partyRepository.getPartyByLeader(player) != null) {
+            partyRepository.disbandParty(player);
             player.sendMessage(CC.translate(ConfigLocale.PARTY_DISBANDED.getMessage()));
-            Alley.getInstance().getHotbarUtility().applySpawnItems(player);
             return;
         }
 
-        if (partyRepository.getPartyMembers(playerUUID) != null) {
-            partyRepository.leaveParty(playerUUID);
+        if (partyRepository.getPartyByMember(playerUUID) != null) {
+            partyRepository.leaveParty(player);
             player.sendMessage(CC.translate(ConfigLocale.PARTY_LEFT.getMessage()));
-            Alley.getInstance().getHotbarUtility().applySpawnItems(player);
             return;
         }
 

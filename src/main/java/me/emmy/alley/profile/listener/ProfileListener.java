@@ -51,9 +51,9 @@ public class ProfileListener implements Listener {
         event.setJoinMessage(null);
 
         PlayerUtil.reset(player);
-        PlayerUtil.teleportToSpawn(player);
-        player.getInventory().setHeldItemSlot(0);
+        Alley.getInstance().getSpawnHandler().teleportToSpawn(player);
         Alley.getInstance().getHotbarUtility().applySpawnItems(player);
+        player.getInventory().setHeldItemSlot(0);
 
         if (plugin.getConfig("messages.yml").getBoolean("welcome-message.enabled")) {
             for (String message : plugin.getConfig("messages.yml").getStringList("welcome-message.message")) {

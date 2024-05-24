@@ -28,7 +28,7 @@ public class MatchListener implements Listener {
             return;
         }
 
-        if (profile.getMatch().getKit().isSettingEnabled(KitSettingBoxingImpl.class)) {
+        if (profile.getMatch().getMatchKit().isSettingEnabled(KitSettingBoxingImpl.class)) {
             event.setCancelled(true);
         }
     }

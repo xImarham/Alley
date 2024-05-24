@@ -24,6 +24,8 @@ public class PartyCommand extends BaseCommand {
         player.sendMessage(CC.translate(" &f● &d/party create &7| Create a party"));
         player.sendMessage(CC.translate(" &f● &d/party disband &7| Disband a party"));
         player.sendMessage(CC.translate(" &f● &d/party leave &7| Leave a party"));
+        player.sendMessage(CC.translate(" &f● &d/party info &7| Get information about your party"));
+        player.sendMessage(CC.translate(" &f● &d/party chat &7(&8message&7) &7| Chat with your party"));
         player.sendMessage(CC.translate(" &f● &d/party invite &7(&8player&7) &7| Invite a player to your party"));
         player.sendMessage(CC.translate(" &f● &d/party kick &7(&8player&7) &7| Kick a player out of your party"));
         player.sendMessage(CC.FLOWER_BAR);
