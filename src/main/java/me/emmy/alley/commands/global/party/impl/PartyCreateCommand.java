@@ -3,6 +3,7 @@ package me.emmy.alley.commands.global.party.impl;
 import me.emmy.alley.Alley;
 import me.emmy.alley.locale.ConfigLocale;
 import me.emmy.alley.party.Party;
+import me.emmy.alley.party.PartyRepository;
 import me.emmy.alley.utils.chat.CC;
 import me.emmy.alley.utils.command.BaseCommand;
 import me.emmy.alley.utils.command.Command;
@@ -24,10 +25,19 @@ public class PartyCreateCommand extends BaseCommand {
         Player player = command.getPlayer();
         UUID playerUUID = player.getUniqueId();
 
-        Party party = Alley.getInstance().getPartyRepository().getPartyLeader(playerUUID);
+        PartyRepository partyRepository = Alley.getInstance().getPartyRepository();
 
-        // TODO: check if player is in party. If so, return.
+        if (partyRepository.getPartyLeader(playerUUID) != null) {
+            player.sendMessage(CC.translate("&cYou're already in a party"));
+            return;
+        }
 
+        if (partyRepository.getPartyMembers(playerUUID) != null) {
+            player.sendMessage(CC.translate("&cYou're already in a party"));
+            return;
+        }
+
+        partyRepository.createParty(playerUUID);
         Alley.getInstance().getHotbarUtility().applyPartyItems(player);
         player.sendMessage(CC.translate(ConfigLocale.PARTY_CREATED.getMessage()));
     }
