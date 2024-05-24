@@ -2,10 +2,11 @@ package me.emmy.alley.queue;
 
 import lombok.Getter;
 import lombok.Setter;
+import me.emmy.alley.Alley;
+import me.emmy.alley.queue.runnable.QueueRunnable;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * @author Remi
@@ -17,13 +18,7 @@ import java.util.UUID;
 public class QueueRepository {
     private final List<Queue> queues = new ArrayList<>();
 
-    /**
-     * Method to get a queue by its UUID.
-     *
-     * @param uuid The UUID of the queue.
-     * @return The queue.
-     */
-    public Queue getQueueByUUID(UUID uuid) {
-        return queues.stream().filter(queue -> queue.getUuid().toString().equals(uuid)).findFirst().orElse(null);
+    public void initialize() {
+        Alley.getInstance().getServer().getScheduler().runTaskTimer(Alley.getInstance(), new QueueRunnable(), 10L, 10L);
     }
 }
