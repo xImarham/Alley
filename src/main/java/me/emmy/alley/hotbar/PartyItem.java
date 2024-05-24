@@ -7,7 +7,7 @@ import org.bukkit.inventory.ItemStack;
 
 @Getter
 public enum PartyItem {
-    DUO_UNRANKED_QUEUE("&dUnranked Queue", Material.IRON_SWORD, 0, 0, "unrankedduo"),
+    DUO_UNRANKED_QUEUE("&dUnranked Duo Queue", Material.IRON_SWORD, 0, 0, "unrankedduo"),
     KIT_EDITOR("&dKit Editor", Material.BOOK, 0, 2, "kiteditor"),
     START_PARTY_EVENT("&dStart Party Event", Material.IRON_AXE, 0, 4, "party event"),
     FIGHT_OTHER_PARTY("&dFight Other Party", Material.DIAMOND_AXE, 0, 5, "party duel"),
