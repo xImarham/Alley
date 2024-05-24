@@ -51,6 +51,9 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
 
 @Getter
 @Setter
@@ -102,12 +105,12 @@ public class Alley extends JavaPlugin {
     }
 
     private void checkDescription() {
-        String author = getDescription().getAuthors().get(0);
-        String expectedAuthor = "Emma";
+        List<String> authors = getDescription().getAuthors();
+        List<String> expectedAuthors = Arrays.asList("Emma", "Remi");
 
-        Bukkit.getConsoleSender().sendMessage(CC.translate(prefix + "Expected author: &a" + expectedAuthor + "&f, Retrieved author: &c" + author));
+        Bukkit.getConsoleSender().sendMessage(CC.translate(prefix + "Expected authors: &a" + expectedAuthors + "&f, Retrieved authors: &c" + authors));
 
-        if (!author.equalsIgnoreCase(expectedAuthor)) {
+        if (!new HashSet<>(authors).containsAll(expectedAuthors)) {
             Bukkit.getConsoleSender().sendMessage(CC.translate(prefix + "&4&lAuthor mismatch! Shutting down the server."));
             System.exit(0);
             Bukkit.shutdown();
