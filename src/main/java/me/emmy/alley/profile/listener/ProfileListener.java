@@ -3,8 +3,10 @@ package me.emmy.alley.profile.listener;
 import me.emmy.alley.Alley;
 import me.emmy.alley.profile.Profile;
 import me.emmy.alley.profile.enums.EnumProfileState;
+import me.emmy.alley.queue.Queue;
 import me.emmy.alley.utils.PlayerUtil;
 import me.emmy.alley.utils.chat.CC;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -76,6 +78,10 @@ public class ProfileListener implements Listener {
         Profile profile = plugin.getProfileRepository().getProfile(player.getUniqueId());
         profile.setOnline(false);
         profile.save();
+
+        Queue queue = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId()).getQueueProfile().getQueue();
+        CC.broadcast("&c" + player.getName() + " has been removed from the queue.");
+        queue.removePlayer(profile.getQueueProfile());
     }
 
     @EventHandler(ignoreCancelled = true)
