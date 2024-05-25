@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import me.emmy.alley.Alley;
 import me.emmy.alley.queue.Queue;
 import me.emmy.alley.queue.menu.queues.QueuesMenu;
+import me.emmy.alley.utils.chat.CC;
 import me.emmy.alley.utils.menu.Button;
 import me.emmy.alley.utils.menu.Menu;
 import me.emmy.alley.utils.menu.button.BackButton;
@@ -34,7 +35,10 @@ public class UnrankedMenu extends Menu {
         //buttons.put(0, new BackButton(previousMenu));
 
         for (Queue queue : Alley.getInstance().getQueueRepository().getQueues()) {
-            buttons.put(queue.getKit().getUnrankedslot(), new UnrankedButton(queue));
+            CC.broadcast(queue.getQueueType());
+            if (!queue.isRanked()) {
+                buttons.put(queue.getKit().getUnrankedslot(), new UnrankedButton(queue));
+            }
         }
 
         return buttons;

@@ -3,6 +3,7 @@ package me.emmy.alley.scoreboard;
 import me.clip.placeholderapi.PlaceholderAPI;
 import me.emmy.alley.Alley;
 import me.emmy.alley.profile.Profile;
+import me.emmy.alley.profile.enums.EnumProfileState;
 import me.emmy.alley.utils.assemble.AssembleAdapter;
 import me.emmy.alley.utils.chat.CC;
 import org.bukkit.Bukkit;
@@ -32,8 +33,8 @@ public class ScoreboardAdapter implements AssembleAdapter {
                         replacedLine = replacedLine
                                 .replaceAll("\\{sidebar\\}", "&7&m----------------------------")
                                 .replaceAll("\\{online\\}", String.valueOf(Bukkit.getOnlinePlayers().size()))
-                                .replaceAll("\\{playing\\}", String.valueOf(Alley.getInstance().getMatchRepository().getMatches().size()))
-                                .replaceAll("\\{in-queue\\}", "null");
+                                .replaceAll("\\{playing\\}", String.valueOf(Alley.getInstance().getProfileRepository().getProfiles().values().stream().filter(profile1 -> profile1.getState() == EnumProfileState.PLAYING).count()))
+                                .replaceAll("\\{in-queue\\}", String.valueOf(Alley.getInstance().getProfileRepository().getProfiles().values().stream().filter(profile1 -> profile1.getState() == EnumProfileState.PLAYING).count()));
                         toReturn.add(CC.translate(replacedLine));
                     }
                     break;
@@ -43,12 +44,9 @@ public class ScoreboardAdapter implements AssembleAdapter {
                         replacedLine = replacedLine
                                 .replaceAll("\\{sidebar\\}", "&7&m----------------------------")
                                 .replaceAll("\\{online\\}", String.valueOf(Bukkit.getOnlinePlayers().size()))
-                                .replaceAll("\\{playing\\}", String.valueOf(Alley.getInstance().getMatchRepository().getMatches().size()))
-                                .replaceAll("\\{in-queue\\}", "null")
-
-                                // TODO: {queue-type} always returns ranked if the kit has ranked enabled. So even if you queue in the unranked menu, it will still display ranked because as you can tell, the ranked settings is enabled.... :shrug:
-
-                                .replaceAll("\\{queued-type\\}", Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId()).getQueueProfile().getQueue().isRanked() ? "Ranked" : "Unranked")
+                                .replaceAll("\\{playing\\}", String.valueOf(Alley.getInstance().getProfileRepository().getProfiles().values().stream().filter(profile1 -> profile1.getState() == EnumProfileState.PLAYING).count()))
+                                .replaceAll("\\{in-queue\\}", String.valueOf(Alley.getInstance().getProfileRepository().getProfiles().values().stream().filter(profile1 -> profile1.getState() == EnumProfileState.WAITING).count()))
+                                .replaceAll("\\{queued-type\\}", Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId()).getQueueProfile().getQueue().getQueueType())
                                 .replaceAll("\\{queued-time\\}", String.valueOf(Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId()).getQueueProfile().getFormattedElapsedTime()))
                                 .replaceAll("\\{queued-kit\\}", String.valueOf(Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId()).getQueueProfile().getQueue().getKit().getName()));
                         toReturn.add(CC.translate(replacedLine));

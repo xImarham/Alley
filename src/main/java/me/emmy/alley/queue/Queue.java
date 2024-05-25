@@ -38,6 +38,10 @@ public class Queue {
         Alley.getInstance().getQueueRepository().getQueues().add(this);
     }
 
+    public String getQueueType() {
+        return (ranked ? "Ranked" : "Unranked");
+    }
+
     /**
      * Adds a player to the queue.
      *

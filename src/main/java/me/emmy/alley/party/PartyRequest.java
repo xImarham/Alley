@@ -25,5 +25,7 @@ public class PartyRequest {
         invitation.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, hoverComponentW));
 
         target.spigot().sendMessage(invitation);
+
+        //TODO: Fix this weird class
     }
 }
