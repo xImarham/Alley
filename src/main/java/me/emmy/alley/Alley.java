@@ -11,16 +11,14 @@ import me.emmy.alley.commands.admin.management.PlaytimeCommand;
 import me.emmy.alley.commands.admin.essential.SpawnItemsCommand;
 import me.emmy.alley.kit.command.KitCommand;
 import me.emmy.alley.kit.command.impl.*;
+import me.emmy.alley.party.PartyRequest;
+import me.emmy.alley.party.command.impl.*;
 import me.emmy.alley.queue.command.QueuesCommand;
 import me.emmy.alley.spawn.command.SetSpawnCommand;
 import me.emmy.alley.spawn.command.SpawnCommand;
 import me.emmy.alley.queue.command.RankedCommand;
 import me.emmy.alley.queue.command.UnrankedCommand;
 import me.emmy.alley.party.command.PartyCommand;
-import me.emmy.alley.party.command.impl.PartyChatCommand;
-import me.emmy.alley.party.command.impl.PartyCreateCommand;
-import me.emmy.alley.party.command.impl.PartyInfoCommand;
-import me.emmy.alley.party.command.impl.PartyLeaveCommand;
 import me.emmy.alley.settings.command.SettingsCommand;
 import me.emmy.alley.leaderboard.command.LeaderboardCommand;
 import me.emmy.alley.leaderboard.command.StatsCommand;
@@ -79,6 +77,7 @@ public class Alley extends JavaPlugin {
     private CommandFramework framework;
     private SpawnHandler spawnHandler;
     private MongoService mongoService;
+    private PartyRequest partyRequest;
 
     private String prefix = "§f[§dAlley§f] §r";
 
@@ -215,6 +214,8 @@ public class Alley extends JavaPlugin {
         new PartyLeaveCommand();
         new PartyInfoCommand();
         new PartyChatCommand();
+        new PartyInviteCommand();
+        new PartyAcceptCommand();
 
         new UnrankedCommand();
         new RankedCommand();

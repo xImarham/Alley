@@ -17,4 +17,6 @@ public class PlayerSettings {
 
     private boolean scoreboardEnabled;
     private boolean tablistEnabled;
+    private boolean partyInvitesEnabled;
+    private boolean partyMessagesEnabled;
 }
