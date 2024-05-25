@@ -81,6 +81,10 @@ public class ProfileListener implements Listener {
         profile.save();
 
         Queue queue = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId()).getQueueProfile().getQueue();
+        if (queue == null) {
+            return;
+        }
+
         CC.broadcast("&c" + player.getName() + " has been removed from the queue.");
         queue.removePlayer(profile.getQueueProfile());
     }
