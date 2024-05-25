@@ -2,9 +2,6 @@ package me.emmy.alley.menus.ranked;
 
 import lombok.AllArgsConstructor;
 import me.emmy.alley.Alley;
-import me.emmy.alley.kit.Kit;
-import me.emmy.alley.kit.settings.impl.KitSettingRankedImpl;
-import me.emmy.alley.menus.unranked.UnrankedButton;
 import me.emmy.alley.queue.Queue;
 import me.emmy.alley.utils.menu.Button;
 import me.emmy.alley.utils.menu.Menu;

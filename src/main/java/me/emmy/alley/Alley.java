@@ -142,6 +142,8 @@ public class Alley extends JavaPlugin {
         this.profileRepository.loadProfiles();
 
         this.queueRepository = new QueueRepository();
+        this.queueRepository.initialize();
+
         this.matchRepository = new MatchRepository();
         this.kitSettingRepository = new KitSettingRepository();
         this.partyRepository = new PartyRepository();

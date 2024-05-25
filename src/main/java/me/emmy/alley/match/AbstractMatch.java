@@ -7,6 +7,7 @@ import me.emmy.alley.arena.Arena;
 import me.emmy.alley.kit.Kit;
 import me.emmy.alley.match.player.GameParticipant;
 import me.emmy.alley.match.player.impl.MatchGamePlayerImpl;
+import me.emmy.alley.match.runnable.MatchRunnable;
 import me.emmy.alley.profile.enums.EnumProfileState;
 import me.emmy.alley.profile.Profile;
 import me.emmy.alley.queue.Queue;
@@ -22,11 +23,13 @@ import java.util.concurrent.CopyOnWriteArrayList;
 @Setter
 public abstract class AbstractMatch {
 
+    private final List<UUID> matchSpectators = new CopyOnWriteArrayList<>();
     private EnumMatchState matchState = EnumMatchState.STARTING;
     private final Queue matchQueue;
     private final Arena matchArena;
     private final Kit matchKit;
-    private final List<UUID> matchSpectators = new CopyOnWriteArrayList<>();
+
+    private MatchRunnable matchRunnable;
 
     /**
      * Constructor for the AbstractMatch class.
@@ -47,6 +50,8 @@ public abstract class AbstractMatch {
      */
     public void startMatch() {
         matchState = EnumMatchState.STARTING;
+        matchRunnable = new MatchRunnable(this);
+        matchRunnable.runTaskTimer(Alley.getInstance(), 0L, 20L);
         getParticipants().forEach(this::initializeParticipant);
     }
 
@@ -62,6 +67,7 @@ public abstract class AbstractMatch {
                 Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
                 profile.setState(EnumProfileState.PLAYING);
                 profile.setMatch(this);
+                setupPlayer(player);
             }
         });
     }
@@ -145,6 +151,7 @@ public abstract class AbstractMatch {
 
         gamePlayer.setDead(true);
         notifySpectators(player.getName() + " has died");
+        notifyParticipants(player.getName() + " has died");
 
         if (canEndRound()) {
             matchState = EnumMatchState.ENDING;
@@ -152,8 +159,19 @@ public abstract class AbstractMatch {
 
             if (canEndMatch()) {
                 matchState = EnumMatchState.ENDING;
+
+
             }
         }
+    }
+
+    private void notifyParticipants(String message) {
+        getParticipants().forEach(gameParticipant -> gameParticipant.getPlayers().forEach(uuid -> {
+            Player player = Alley.getInstance().getServer().getPlayer(uuid.getUuid());
+            if (player != null) {
+                player.sendMessage(message);
+            }
+        }));
     }
 
     /**

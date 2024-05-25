@@ -50,7 +50,6 @@ public class RankedButton extends Button {
         queue.addPlayer(player);
         PlayerUtil.reset(player);
         player.closeInventory();
-        Alley.getInstance().getHotbarUtility().applyQueueItems(player);
         player.playSound(player.getLocation(), Sound.ANVIL_LAND, 2.0F, 1.5F);
     }
 }
