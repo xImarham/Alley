@@ -5,6 +5,7 @@ import lombok.Setter;
 import me.emmy.alley.Alley;
 import me.emmy.alley.match.AbstractMatch;
 import me.emmy.alley.match.enums.EnumMatchState;
+import me.emmy.alley.utils.chat.CC;
 import org.bukkit.scheduler.BukkitRunnable;
 
 /**
@@ -32,6 +33,10 @@ public class MatchRunnable extends BukkitRunnable {
                 if (stage == 0) {
                     Alley.getInstance().getServer().getScheduler().runTask(Alley.getInstance(), match::handleRoundStart);
                     match.setMatchState(EnumMatchState.RUNNING);
+                    match.sendMessage(CC.translate("&aMatch has started. Good luck!"));
+
+                } else {
+                    match.sendMessage(CC.translate("&aMatch is starting in " + stage + " seconds."));
                 }
                 break;
             case ENDING_ROUND:

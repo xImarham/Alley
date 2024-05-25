@@ -9,7 +9,6 @@ import org.bukkit.inventory.ItemStack;
  * Project: Practice
  * Date: 29/04/2024 - 18:53
  */
-
 public class PlayerUtil {
     public static void reset(Player player) {
         if (!player.hasMetadata("frozen")) {

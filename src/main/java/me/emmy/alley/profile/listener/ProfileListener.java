@@ -81,12 +81,5 @@ public class ProfileListener implements Listener {
 
         profile.setOnline(false);
         profile.save();
-        if (profile.getQueueProfile() == null) {
-            CC.broadcast(" \n&c&l" + player.getName() + " is not in a queue and therefore couldn't be removed.\n ");
-            return;
-        }
-
-        CC.broadcast(" \n&c&l" + player.getName() + " has been removed from the queue.\n ");
-        profile.getQueueProfile().getQueue().removePlayer(profile.getQueueProfile());
     }
 }

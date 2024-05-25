@@ -96,6 +96,13 @@ public abstract class AbstractMatch {
      */
     public void endMatch() {
         getParticipants().forEach(this::finalizeParticipant);
+        getMatchSpectators().forEach(uuid -> {
+            Player player = Alley.getInstance().getServer().getPlayer(uuid);
+            if (player != null) {
+                removeSpectator(player);
+            }
+        });
+
         Alley.getInstance().getMatchRepository().getMatches().remove(this);
         matchRunnable.cancel();
     }
@@ -107,13 +114,15 @@ public abstract class AbstractMatch {
      */
     private void finalizeParticipant(GameParticipant<MatchGamePlayerImpl> gameParticipant) {
         gameParticipant.getPlayers().forEach(gamePlayer -> {
-            Player player = Alley.getInstance().getServer().getPlayer(gamePlayer.getUuid());
-            if (player != null) {
-                resetPlayerState(player);
-                Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
-                profile.setState(EnumProfileState.LOBBY);
-                profile.setMatch(null);
-                teleportPlayerToSpawn(player);
+            if (!gamePlayer.isDisconnected()) {
+                Player player = Alley.getInstance().getServer().getPlayer(gamePlayer.getUuid());
+                if (player != null) {
+                    resetPlayerState(player);
+                    Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
+                    profile.setState(EnumProfileState.LOBBY);
+                    profile.setMatch(null);
+                    teleportPlayerToSpawn(player);
+                }
             }
         });
     }
@@ -267,6 +276,27 @@ public abstract class AbstractMatch {
                 .filter(gamePlayer -> gamePlayer.getUuid().equals(player.getUniqueId()))
                 .findFirst()
                 .orElse(null);
+    }
+
+    /**
+     * Sends a message to all participants.
+     *
+     * @param message The message to send.
+     */
+    public void sendMessage(String message) {
+        getParticipants().forEach(gameParticipant -> gameParticipant.getPlayers().forEach(uuid -> {
+            Player player = Alley.getInstance().getServer().getPlayer(uuid.getUuid());
+            if (player != null) {
+                player.sendMessage(message);
+            }
+        }));
+
+        getMatchSpectators().forEach(uuid -> {
+            Player player = Alley.getInstance().getServer().getPlayer(uuid);
+            if (player != null) {
+                player.sendMessage(message);
+            }
+        });
     }
 
     /**
