@@ -1,4 +1,4 @@
-package me.emmy.alley.menus.settings;
+package me.emmy.alley.settings.menu;
 
 /**
  * Created by Emmy
@@ -6,5 +6,5 @@ package me.emmy.alley.menus.settings;
  * Date: 23/05/2024 - 01:27
  */
 
-public class SettingsButton {
+public class SettingsMenu {
 }
