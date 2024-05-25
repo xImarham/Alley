@@ -1,4 +1,4 @@
-package me.emmy.alley.handler;
+package me.emmy.alley.config;
 
 import lombok.Getter;
 import me.emmy.alley.Alley;
