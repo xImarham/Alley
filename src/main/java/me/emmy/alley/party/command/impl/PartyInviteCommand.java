@@ -29,7 +29,7 @@ public class PartyInviteCommand extends BaseCommand {
             return;
         }
 
-        //TODO: Check if the target player allows party invited (in future when profiles are done)
+        //TODO: Check if the target player allows party invites (in future when profiles are done)
 
         String target = args[0];
         Player targetPlayer = Bukkit.getPlayer(target);
