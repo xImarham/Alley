@@ -36,8 +36,10 @@ public class MatchRunnable extends BukkitRunnable {
                 break;
             case ENDING:
                 if (stage == 0) {
-                    match.setMatchState(EnumMatchState.STARTING);
-                    setStage(4);
+                    if (match.canStartRound()) {
+                        match.setMatchState(EnumMatchState.STARTING);
+                        match.getMatchRunnable().setStage(4);
+                    }
                 }
                 break;
             case ENDED:

@@ -33,6 +33,15 @@ public class GameParticipant<T extends GamePlayer> {
     }
 
     /**
+     * Checks if all the players in the participant are dead.
+     *
+     * @return True if all the players are dead.
+     */
+    public boolean isAllDead() {
+        return player.isDead();
+    }
+
+    /**
      * Checks if the participant contains a player.
      *
      * @param uuid The UUID of the player.

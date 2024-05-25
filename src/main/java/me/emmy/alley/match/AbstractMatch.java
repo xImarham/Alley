@@ -158,10 +158,10 @@ public abstract class AbstractMatch {
             handleRoundEnd();
 
             if (canEndMatch()) {
-                matchState = EnumMatchState.ENDING;
-
-
+                matchState = EnumMatchState.ENDED;
+                endMatch();
             }
+            getMatchRunnable().setStage(4);
         }
     }
 
@@ -224,7 +224,10 @@ public abstract class AbstractMatch {
      * Handles the end of a round.
      */
     public void handleRoundEnd() {
-
+        if (!canEndMatch()) {
+            matchState = EnumMatchState.ENDING;
+            matchRunnable.setStage(3);
+        }
     }
 
     /**
@@ -269,6 +272,13 @@ public abstract class AbstractMatch {
      * @return The participants of the match.
      */
     public abstract List<GameParticipant<MatchGamePlayerImpl>> getParticipants();
+
+    /**
+     * Checks if the round can start.
+     *
+     * @return True if the round can start.
+     */
+    public abstract boolean canStartRound();
 
     /**
      * Checks if the round can end.

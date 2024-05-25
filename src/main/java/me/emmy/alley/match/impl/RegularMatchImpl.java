@@ -47,8 +47,13 @@ public class RegularMatchImpl extends AbstractMatch {
     }
 
     @Override
+    public boolean canStartRound() {
+        return false;
+    }
+
+    @Override
     public boolean canEndRound() {
-        return participantA.getPlayer().isDead() || participantB.getPlayer().isDead();
+        return participantA.isAllDead() || participantB.isAllDead();
     }
 
     @Override
