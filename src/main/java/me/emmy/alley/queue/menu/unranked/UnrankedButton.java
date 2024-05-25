@@ -5,7 +5,7 @@ import me.emmy.alley.Alley;
 import me.emmy.alley.kit.Kit;
 import me.emmy.alley.queue.Queue;
 import me.emmy.alley.utils.PlayerUtil;
-import me.emmy.alley.utils.item.ItemBuilder;
+import me.emmy.alley.utils.pagination.ItemBuilder;
 import me.emmy.alley.utils.menu.Button;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;

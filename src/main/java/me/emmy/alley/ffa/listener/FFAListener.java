@@ -1,7 +1,6 @@
 package me.emmy.alley.ffa.listener;
 
 import me.emmy.alley.Alley;
-import me.emmy.alley.kit.settings.impl.KitSettingBoxingImpl;
 import me.emmy.alley.profile.Profile;
 import me.emmy.alley.profile.enums.EnumProfileState;
 import org.bukkit.entity.Player;
@@ -9,8 +8,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
-
-import java.util.List;
 
 /**
  * Created by Emmy

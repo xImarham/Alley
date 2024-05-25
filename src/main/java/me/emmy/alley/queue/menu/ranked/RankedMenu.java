@@ -1,12 +1,9 @@
 package me.emmy.alley.queue.menu.ranked;
 
-import lombok.AllArgsConstructor;
 import me.emmy.alley.Alley;
 import me.emmy.alley.queue.Queue;
-import me.emmy.alley.queue.menu.queues.QueuesMenu;
 import me.emmy.alley.utils.menu.Button;
 import me.emmy.alley.utils.menu.Menu;
-import me.emmy.alley.utils.menu.button.BackButton;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;

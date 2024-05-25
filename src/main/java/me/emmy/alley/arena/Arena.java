@@ -2,7 +2,6 @@ package me.emmy.alley.arena;
 
 import lombok.Getter;
 import lombok.Setter;
-import me.emmy.alley.kit.Kit;
 import org.bukkit.Location;
 
 import java.util.ArrayList;

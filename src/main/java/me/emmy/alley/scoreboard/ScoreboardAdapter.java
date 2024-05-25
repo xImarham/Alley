@@ -2,7 +2,6 @@ package me.emmy.alley.scoreboard;
 
 import me.clip.placeholderapi.PlaceholderAPI;
 import me.emmy.alley.Alley;
-import me.emmy.alley.kit.settings.impl.KitSettingRankedImpl;
 import me.emmy.alley.profile.Profile;
 import me.emmy.alley.utils.assemble.AssembleAdapter;
 import me.emmy.alley.utils.chat.CC;

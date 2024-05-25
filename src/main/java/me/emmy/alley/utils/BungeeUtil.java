@@ -25,12 +25,14 @@ public class BungeeUtil {
             out.writeUTF(server);
         } catch (IOException e) {
         }
-        player.sendMessage(CC.translate(Alley.getInstance().getConfig().getString("join.joining").replace("%server%", server)));
+        //player.sendMessage(CC.translate(Alley.getInstance().getConfig().getString("join.joining").replace("%server%", server)));
+        player.sendMessage(CC.translate("&aJoining &b" + server + "&a..."));
         player.sendPluginMessage(Alley.getInstance(), "BungeeCord", b.toByteArray());
         BukkitRunnable task = new BukkitRunnable() {
             @Override
             public void run() {
-                player.sendMessage(CC.translate(Alley.getInstance().getConfig().getString("join.failed").replace("%server%", server)));
+                player.sendMessage("join failed");
+                //player.sendMessage(CC.translate(Alley.getInstance().getConfig().getString("join.failed").replace("%server%", server)));
             }
         };
         task.runTaskLater(Alley.getInstance(), 20);

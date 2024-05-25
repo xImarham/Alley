@@ -3,7 +3,6 @@ package me.emmy.alley.match.player;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;

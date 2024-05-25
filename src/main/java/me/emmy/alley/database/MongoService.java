@@ -10,8 +10,6 @@ import me.emmy.alley.Alley;
 import me.emmy.alley.utils.chat.CC;
 import org.bukkit.Bukkit;
 
-import java.util.Objects;
-
 /**
  * Created by Emmy
  * Project: Alley
@@ -41,7 +39,6 @@ public class MongoService {
             this.mongoDatabase = mongoClient.getDatabase(Alley.getInstance().getConfigHandler().getConfigByName("database/database.yml").getString("mongo.database"));
         } catch (Exception e) {
             Bukkit.getConsoleSender().sendMessage(CC.translate("&f[&cAlley&f] &cMongoDB failed to create a connection."));
-            e.printStackTrace();
         }
     }
 }

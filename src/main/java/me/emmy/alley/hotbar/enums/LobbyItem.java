@@ -1,7 +1,7 @@
 package me.emmy.alley.hotbar.enums;
 
 import lombok.Getter;
-import me.emmy.alley.utils.item.ItemBuilder;
+import me.emmy.alley.utils.pagination.ItemBuilder;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 

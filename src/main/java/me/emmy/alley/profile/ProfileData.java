@@ -2,7 +2,6 @@ package me.emmy.alley.profile;
 
 import lombok.Getter;
 import lombok.Setter;
-import me.emmy.alley.Alley;
 
 /**
  * Created by Emmy

@@ -1,6 +1,5 @@
 package me.emmy.alley.ffa;
 
-import me.emmy.alley.Alley;
 import me.emmy.alley.arena.Arena;
 import me.emmy.alley.ffa.enums.EnumFFAState;
 import me.emmy.alley.kit.Kit;
