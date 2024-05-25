@@ -92,13 +92,4 @@ public class ProfileListener implements Listener {
         CC.broadcast(" \n&c&l" + player.getName() + " has been removed from the queue.\n ");
         profile.getQueueProfile().getQueue().removePlayer(profile.getQueueProfile());
     }
-
-    @EventHandler(ignoreCancelled = true)
-    public void onPlayerItemDamageEvent(PlayerItemDamageEvent event) {
-        Profile profile = Alley.getInstance().getProfileRepository().getProfile(event.getPlayer().getUniqueId());
-
-        if (profile.getState() == EnumProfileState.LOBBY) {
-            event.setCancelled(true);
-        }
-    }
 }

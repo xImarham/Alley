@@ -42,6 +42,7 @@ import me.emmy.alley.queue.QueueRepository;
 import me.emmy.alley.queue.command.LeaveQueueCommand;
 import me.emmy.alley.scoreboard.ScoreboardAdapter;
 import me.emmy.alley.spawn.SpawnHandler;
+import me.emmy.alley.spawn.listener.SpawnListener;
 import me.emmy.alley.utils.assemble.Assemble;
 import me.emmy.alley.utils.assemble.AssembleStyle;
 import me.emmy.alley.utils.chat.CC;
@@ -165,6 +166,7 @@ public class Alley extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new MatchListener(), this);
         getServer().getPluginManager().registerEvents(new ArenaListener(), this);
         getServer().getPluginManager().registerEvents(new MenuListener(), this);
+        getServer().getPluginManager().registerEvents(new SpawnListener(), this);
     }
 
     private void registerCommands() {
