@@ -13,7 +13,7 @@ public enum LobbyItem {
     PARTY("&dCreate Party", Material.NAME_TAG, 0, 4, "party create"),
     LEADERBOARD("&dLeaderboard", Material.EMERALD, 0, 6, "leaderboards"),
     EVENTS("&dEvents", Material.EYE_OF_ENDER, 0, 7, "events"),
-    SETTINGS("&dSettings", Material.CHEST, 0, 8, "settings");
+    SETTINGS("&dSettings", Material.SKULL_ITEM, 0, 8, "settings");
 
     private final String name;
     private final Material type;
