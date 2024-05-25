@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import me.emmy.alley.Alley;
 import me.emmy.alley.match.AbstractMatch;
-import me.emmy.alley.match.EnumMatchState;
+import me.emmy.alley.match.enums.EnumMatchState;
 import org.bukkit.scheduler.BukkitRunnable;
 
 /**

@@ -1,7 +1,7 @@
 package me.emmy.alley.utils.command;
 
 import me.emmy.alley.Alley;
-import me.emmy.alley.locale.ConfigLocale;
+import me.emmy.alley.locale.Locale;
 import me.emmy.alley.utils.chat.CC;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -65,7 +65,7 @@ public class CommandFramework implements CommandExecutor {
                     return true;
                 }
                 if (!command.permission().equals("") && (!sender.hasPermission(command.permission()))) {
-                    sender.sendMessage(CC.translate(CC.translate(ConfigLocale.NO_PERM.getMessage()))); // TODO change
+                    sender.sendMessage(CC.translate(CC.translate(Locale.NO_PERM.getMessage()))); // TODO change
                     return true;
                 }
                 if (command.inGameOnly() && !(sender instanceof Player)) {

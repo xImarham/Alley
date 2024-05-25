@@ -3,7 +3,7 @@ package me.emmy.alley.match.listener;
 import me.emmy.alley.Alley;
 import me.emmy.alley.kit.settings.impl.KitSettingBoxingImpl;
 import me.emmy.alley.match.AbstractMatch;
-import me.emmy.alley.match.EnumMatchState;
+import me.emmy.alley.match.enums.EnumMatchState;
 import me.emmy.alley.profile.Profile;
 import me.emmy.alley.profile.enums.EnumProfileState;
 import org.bukkit.entity.Player;
