@@ -30,7 +30,12 @@ public enum Locale {
     NOT_IN_PARTY("messages.yml", "party.not-in-party"),
     PARTY_CREATED("messages.yml", "party.created"),
     PARTY_DISBANDED("messages.yml", "party.disbanded"),
-    PARTY_LEFT("messages.yml", "party.left")
+    PARTY_LEFT("messages.yml", "party.left"),
+
+    TOGGLED_PARTY_INVITES("messages.yml", "player-settings.party-invites"),
+    TOGGLED_PARTY_MESSAGES("messages.yml", "player-settings.party-messages"),
+    TOGGLED_SCOREBOARD("messages.yml", "player-settings.scoreboard"),
+    TOGGLE_TABLIST("messages.yml", "player-settings.tablist")
     ;
 
     private final String configName, configString;

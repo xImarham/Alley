@@ -1,4 +1,4 @@
-package me.emmy.alley.settings.command;
+package me.emmy.alley.profile.settings.command;
 
 import me.emmy.alley.locale.ErrorMessage;
 import me.emmy.alley.utils.chat.CC;

@@ -1,4 +1,4 @@
-package me.emmy.alley.settings.menu;
+package me.emmy.alley.profile.settings.menu;
 
 /**
  * Created by Emmy

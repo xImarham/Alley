@@ -13,13 +13,17 @@ import me.emmy.alley.kit.command.KitCommand;
 import me.emmy.alley.kit.command.impl.*;
 import me.emmy.alley.party.PartyRequest;
 import me.emmy.alley.party.command.impl.*;
+import me.emmy.alley.profile.settings.command.toggle.TogglePartyInvitesCommand;
+import me.emmy.alley.profile.settings.command.toggle.TogglePartyMessagesCommand;
+import me.emmy.alley.profile.settings.command.toggle.ToggleScoreboardCommand;
+import me.emmy.alley.profile.settings.command.toggle.ToggleTablistCommand;
 import me.emmy.alley.queue.command.QueuesCommand;
 import me.emmy.alley.spawn.command.SetSpawnCommand;
 import me.emmy.alley.spawn.command.SpawnCommand;
 import me.emmy.alley.queue.command.RankedCommand;
 import me.emmy.alley.queue.command.UnrankedCommand;
 import me.emmy.alley.party.command.PartyCommand;
-import me.emmy.alley.settings.command.SettingsCommand;
+import me.emmy.alley.profile.settings.command.SettingsCommand;
 import me.emmy.alley.leaderboard.command.LeaderboardCommand;
 import me.emmy.alley.leaderboard.command.StatsCommand;
 import me.emmy.alley.database.MongoService;
@@ -208,6 +212,11 @@ public class Alley extends JavaPlugin {
         new ArenaCommand();
 
         //player commands
+
+        new TogglePartyInvitesCommand();
+        new TogglePartyMessagesCommand();
+        new ToggleScoreboardCommand();
+        new ToggleTablistCommand();
 
         new PartyCommand();
         new PartyCreateCommand();

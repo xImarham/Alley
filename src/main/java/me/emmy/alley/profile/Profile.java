@@ -7,6 +7,7 @@ import me.emmy.alley.ffa.FFA;
 import me.emmy.alley.match.AbstractMatch;
 import me.emmy.alley.party.Party;
 import me.emmy.alley.profile.enums.EnumProfileState;
+import me.emmy.alley.profile.settings.player.PlayerSettings;
 import me.emmy.alley.queue.QueueProfile;
 import org.bukkit.Bukkit;
 

@@ -41,3 +41,9 @@ party:
 
 playtime:
   message: " \n&b{target}'s total playtime:\n &b{days} &fdays, &b{hours} &fhours, &b{minutes} &fminutes and &b{seconds} &fseconds.\n "
+
+player-settings:
+  party-invites: "&aYou've {status} &aparty invites."
+  party-messages: "&aYou've {status} &aparty messages."
+  scoreboard: "&aYou've {status} &athe scoreboard."
+  tablist: "&aYou've {status} &athe tablist."

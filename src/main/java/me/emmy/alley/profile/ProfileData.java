@@ -2,6 +2,7 @@ package me.emmy.alley.profile;
 
 import lombok.Getter;
 import lombok.Setter;
+import me.emmy.alley.profile.settings.player.PlayerSettings;
 
 /**
  * Created by Emmy
@@ -20,6 +21,11 @@ public class ProfileData {
     private int rankedLosses = 0;
     private int ffaWins = 0;
     private int ffaLosses= 0;
+    private PlayerSettings playerSettings;
+
+    public ProfileData() {
+        this.playerSettings = new PlayerSettings();
+    }
 
     public void addUnrankedWins() {
         this.unrankedWins++;

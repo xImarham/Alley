@@ -18,8 +18,9 @@ public class MongoProfileImpl implements IProfile {
         Document document = new Document();
         document.put("uuid", profile.getUuid().toString());
         document.put("name", profile.getName());
-        Document statsDocument = new Document();
 
+        //stats object
+        Document statsDocument = new Document();
         statsDocument.put("coins", profile.getProfileData().getCoins());
         statsDocument.put("unrankedWins", profile.getProfileData().getUnrankedWins());
         statsDocument.put("unrankedLosses", profile.getProfileData().getUnrankedLosses());
@@ -27,8 +28,15 @@ public class MongoProfileImpl implements IProfile {
         statsDocument.put("rankedLosses", profile.getProfileData().getRankedLosses());
         statsDocument.put("ffaWins", profile.getProfileData().getFfaWins());
         statsDocument.put("ffaLosses", profile.getProfileData().getFfaLosses());
-
         document.append("stats", statsDocument);
+
+        //settings object
+        Document optionsDocument = new Document();
+        optionsDocument.put("scoreboardEnabled", profile.getProfileData().getPlayerSettings().isScoreboardEnabled());
+        optionsDocument.put("tablistEnabled", profile.getProfileData().getPlayerSettings().isTablistEnabled());
+        optionsDocument.put("partyInvitesEnabled", profile.getProfileData().getPlayerSettings().isPartyInvitesEnabled());
+        optionsDocument.put("partyMessagesEnabled", profile.getProfileData().getPlayerSettings().isPartyMessagesEnabled());
+        document.append("options", optionsDocument);
 
         Alley.getInstance().getProfileRepository().getCollection().replaceOne(Filters.eq("uuid", profile.getUuid().toString()), document, new ReplaceOptions().upsert(true));
     }
@@ -44,8 +52,30 @@ public class MongoProfileImpl implements IProfile {
             return;
         }
 
+        if (!document.containsKey("options")) {
+            saveProfile(profile);
+            return;
+        }
+
+        Document options = (Document) document.get("options");
         if (document.containsKey("coins")) {
             profile.getProfileData().setCoins(document.getInteger("coins"));
+        }
+
+        if (options.containsKey("scoreboardEnabled")) {
+            profile.getProfileData().getPlayerSettings().setScoreboardEnabled(options.getBoolean("scoreboardEnabled"));
+        }
+
+        if (options.containsKey("tablistEnabled")) {
+            profile.getProfileData().getPlayerSettings().setTablistEnabled(options.getBoolean("tablistEnabled"));
+        }
+
+        if (options.containsKey("partyInvitesEnabled")) {
+            profile.getProfileData().getPlayerSettings().setPartyInvitesEnabled(options.getBoolean("partyInvitesEnabled"));
+        }
+
+        if (options.containsKey("partyMessagesEnabled")) {
+            profile.getProfileData().getPlayerSettings().setPartyMessagesEnabled(options.getBoolean("partyMessagesEnabled"));
         }
 
     }
