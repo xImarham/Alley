@@ -34,7 +34,7 @@ public class MatchRunnable extends BukkitRunnable {
                     match.setMatchState(EnumMatchState.RUNNING);
                 }
                 break;
-            case ENDING:
+            case ENDING_ROUND:
                 if (stage == 0) {
                     if (match.canStartRound()) {
                         match.setMatchState(EnumMatchState.STARTING);
@@ -42,7 +42,7 @@ public class MatchRunnable extends BukkitRunnable {
                     }
                 }
                 break;
-            case ENDED:
+            case ENDING_MATCH:
                 if (stage == 0) {
                     Alley.getInstance().getServer().getScheduler().runTask(Alley.getInstance(), match::endMatch);
                 }

@@ -157,11 +157,11 @@ public abstract class AbstractMatch {
         notifyParticipants(player.getName() + " has died");
 
         if (canEndRound()) {
-            matchState = EnumMatchState.ENDING;
+            matchState = EnumMatchState.ENDING_ROUND;
             handleRoundEnd();
 
             if (canEndMatch()) {
-                matchState = EnumMatchState.ENDED;
+                matchState = EnumMatchState.ENDING_MATCH;
                 endMatch();
             }
             getMatchRunnable().setStage(4);
@@ -228,7 +228,7 @@ public abstract class AbstractMatch {
      */
     public void handleRoundEnd() {
         if (!canEndMatch()) {
-            matchState = EnumMatchState.ENDING;
+            matchState = EnumMatchState.ENDING_ROUND;
             matchRunnable.setStage(3);
         }
     }
