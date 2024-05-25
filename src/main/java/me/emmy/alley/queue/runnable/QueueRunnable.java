@@ -9,6 +9,8 @@ import me.emmy.alley.match.player.GameParticipant;
 import me.emmy.alley.match.player.impl.MatchGamePlayerImpl;
 import me.emmy.alley.queue.Queue;
 import me.emmy.alley.queue.QueueProfile;
+import me.emmy.alley.utils.chat.CC;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -26,6 +28,7 @@ public class QueueRunnable implements Runnable {
      */
     @Override
     public void run() {
+        Bukkit.getConsoleSender().sendMessage("ok ziue running the game right now");
         Alley.getInstance().getQueueRepository().getQueues().stream()
                 .filter(queue -> queue.getProfiles().size() >= 2)
                 .forEach(this::processQueue);
@@ -37,6 +40,7 @@ public class QueueRunnable implements Runnable {
      * @param queue The queue.
      */
     public void processQueue(Queue queue) {
+        Bukkit.getConsoleSender().sendMessage("ok ziue processing the queue right now");
         for (QueueProfile firstProfile : queue.getProfiles()) {
             Optional<Player> firstPlayerOpt = getPlayer(firstProfile);
             if (!firstPlayerOpt.isPresent()) {
@@ -76,6 +80,7 @@ public class QueueRunnable implements Runnable {
      * @param gameParticipantList The game participant list.
      */
     private void processGame(Queue queue, GameParticipantList gameParticipantList) {
+        Bukkit.getConsoleSender().sendMessage("ok ziue processing the game right now");
         Arena arena = getArena(queue);
         AbstractMatch match = getMatchType(queue, gameParticipantList, arena);
         match.startMatch();
