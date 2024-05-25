@@ -15,13 +15,13 @@ import org.bukkit.command.CommandSender;
 
 public class AlleyCommand extends BaseCommand {
     @Override
-    @Command(name = "alley", aliases = "emmy", inGameOnly = false)
+    @Command(name = "alley", aliases = {"emmy", "ziue"}, inGameOnly = false)
     public void onCommand(CommandArgs command) {
         CommandSender sender = command.getSender();
         sender.sendMessage(" ");
         sender.sendMessage(CC.FLOWER_BAR);
         sender.sendMessage(CC.translate("  &d&l   Alley"));
-        sender.sendMessage(CC.translate("      &f┃ Author: &d" + Alley.getInstance().getDescription().getAuthors().get(0)/*.toString().replace("[", "").replace("]", "")*/));
+        sender.sendMessage(CC.translate("      &f┃ Author: &d" + Alley.getInstance().getDescription().getAuthors().toString().replace("[", "").replace("]", "")));
         sender.sendMessage(CC.translate("      &f┃ Version: &d" + Alley.getInstance().getDescription().getVersion()));
         sender.sendMessage(CC.translate(" "));
         sender.sendMessage(CC.translate("  &d&l   Description:"));
