@@ -77,16 +77,20 @@ public class ProfileListener implements Listener {
     public void onPlayerQuitEvent(PlayerQuitEvent event) {
         Player player = event.getPlayer();
         Profile profile = plugin.getProfileRepository().getProfile(player.getUniqueId());
-        profile.setOnline(false);
-        profile.save();
-
-        Queue queue = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId()).getQueueProfile().getQueue();
-        if (queue == null) {
+        if (profile == null) {
+            CC.broadcast(" \n&c&l" + player.getName() + "'s profile is null ??? \n ");
             return;
         }
 
-        CC.broadcast("&c" + player.getName() + " has been removed from the queue.");
-        queue.removePlayer(profile.getQueueProfile());
+        profile.setOnline(false);
+        profile.save();
+        if (profile.getQueueProfile() == null) {
+            CC.broadcast(" \n&c&l" + player.getName() + " is not in a queue and therefore couldn't be removed.\n ");
+            return;
+        }
+
+        CC.broadcast(" \n&c&l" + player.getName() + " has been removed from the queue.\n ");
+        profile.getQueueProfile().getQueue().removePlayer(profile.getQueueProfile());
     }
 
     @EventHandler(ignoreCancelled = true)
