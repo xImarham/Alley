@@ -1,5 +1,6 @@
 package me.emmy.alley.queue.command;
 
+import me.emmy.alley.queue.menu.queues.QueuesMenu;
 import me.emmy.alley.queue.menu.unranked.UnrankedMenu;
 import me.emmy.alley.utils.command.BaseCommand;
 import me.emmy.alley.utils.command.Command;
@@ -18,6 +19,7 @@ public class UnrankedCommand extends BaseCommand {
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
 
+        //QueuesMenu queuesMenu = new QueuesMenu();
         new UnrankedMenu().openMenu(player);
     }
 }

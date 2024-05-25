@@ -1,4 +1,4 @@
-package me.emmy.alley.utils.others;
+package me.emmy.alley.utils;
 
 
 /**

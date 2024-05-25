@@ -11,6 +11,7 @@ import me.emmy.alley.commands.admin.management.PlaytimeCommand;
 import me.emmy.alley.commands.admin.essential.SpawnItemsCommand;
 import me.emmy.alley.kit.command.KitCommand;
 import me.emmy.alley.kit.command.impl.*;
+import me.emmy.alley.queue.command.QueuesCommand;
 import me.emmy.alley.spawn.command.SetSpawnCommand;
 import me.emmy.alley.spawn.command.SpawnCommand;
 import me.emmy.alley.queue.command.RankedCommand;
@@ -222,6 +223,7 @@ public class Alley extends JavaPlugin {
         new StatsCommand();
         new SpectateCommand();
         new LeaveQueueCommand();
+        new QueuesCommand();
     }
 
     private void loadScoreboard() {

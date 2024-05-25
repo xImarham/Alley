@@ -6,7 +6,7 @@ import me.emmy.alley.arena.impl.FreeForAllArena;
 import me.emmy.alley.arena.impl.SharedArena;
 import me.emmy.alley.arena.impl.StandAloneArena;
 import me.emmy.alley.kit.Kit;
-import me.emmy.alley.utils.others.LocationUtil;
+import me.emmy.alley.utils.LocationUtil;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
