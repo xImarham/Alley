@@ -18,7 +18,7 @@ public class ProfileListener implements Listener {
 
     private final Alley plugin = Alley.getInstance();
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onLogin(PlayerLoginEvent event) {
         if (event.getResult() != PlayerLoginEvent.Result.ALLOWED) {
             return;
@@ -33,9 +33,6 @@ public class ProfileListener implements Listener {
         }
 
         Profile profile = new Profile(event.getPlayer().getUniqueId());
-        profile.setState(EnumProfileState.LOBBY);
-        profile.setOnline(true);
-        profile.setMatch(null);
         profile.load();
 
         plugin.getProfileRepository().getProfiles().put(event.getPlayer().getUniqueId(), profile);
@@ -45,15 +42,22 @@ public class ProfileListener implements Listener {
     public void onJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
 
-        player.setFlySpeed(1 * 0.1F);
-        player.setWalkSpeed(2 * 0.1F);
-
-        event.setJoinMessage(null);
+        Profile profile = plugin.getProfileRepository().getProfile(player.getUniqueId());
+        profile.setState(EnumProfileState.LOBBY);
+        profile.setName(player.getName());
+        profile.setOnline(true);
+        profile.setMatch(null);
 
         PlayerUtil.reset(player);
         Alley.getInstance().getSpawnHandler().teleportToSpawn(player);
         Alley.getInstance().getHotbarUtility().applySpawnItems(player);
+
+        player.setFlySpeed(1 * 0.1F);
+        player.setWalkSpeed(2 * 0.1F);
         player.getInventory().setHeldItemSlot(0);
+
+        event.setJoinMessage(null);
+
 
         if (plugin.getConfig("messages.yml").getBoolean("welcome-message.enabled")) {
             for (String message : plugin.getConfig("messages.yml").getStringList("welcome-message.message")) {

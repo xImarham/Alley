@@ -2,6 +2,8 @@ package me.emmy.alley.match.listener;
 
 import me.emmy.alley.Alley;
 import me.emmy.alley.kit.settings.impl.KitSettingBoxingImpl;
+import me.emmy.alley.match.AbstractMatch;
+import me.emmy.alley.match.EnumMatchState;
 import me.emmy.alley.profile.Profile;
 import me.emmy.alley.profile.enums.EnumProfileState;
 import org.bukkit.entity.Player;
@@ -10,6 +12,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.player.PlayerKickEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 
 /**
  * @author Remi
@@ -39,6 +43,7 @@ public class MatchListener implements Listener {
         Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
         if (profile.getState() != EnumProfileState.PLAYING) return;
         event.setDeathMessage(null);
+        event.getDrops().clear();
         profile.getMatch().handleDeath(player);
     }
 
@@ -49,5 +54,33 @@ public class MatchListener implements Listener {
 
         Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
         if (profile.getState() == EnumProfileState.SPECTATING) event.setCancelled(true);
+    }
+
+    @EventHandler
+    private void onPlayerQuit(PlayerQuitEvent event) {
+        Player player = event.getPlayer();
+        Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
+
+        if (profile.getState() == EnumProfileState.PLAYING) {
+            AbstractMatch match = profile.getMatch();
+
+            if (match.getMatchState() == EnumMatchState.STARTING || match.getMatchState() == EnumMatchState.RUNNING) {
+                match.handleDisconnect(player);
+            }
+        }
+    }
+
+    @EventHandler
+    private void onPlayerKick(PlayerKickEvent event) {
+        Player player = event.getPlayer();
+        Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
+
+        if (profile.getState() == EnumProfileState.PLAYING) {
+            AbstractMatch match = profile.getMatch();
+
+            if (match.getMatchState() == EnumMatchState.STARTING || match.getMatchState() == EnumMatchState.RUNNING) {
+                match.handleDisconnect(player);
+            }
+        }
     }
 }

@@ -95,6 +95,8 @@ public abstract class AbstractMatch {
      */
     public void endMatch() {
         getParticipants().forEach(this::finalizeParticipant);
+        Alley.getInstance().getMatchRepository().getMatches().remove(this);
+        matchRunnable.cancel();
     }
 
     /**
