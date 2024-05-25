@@ -47,6 +47,7 @@ public class ProfileListener implements Listener {
         Profile profile = plugin.getProfileRepository().getProfile(player.getUniqueId());
         profile.setState(EnumProfileState.LOBBY);
         profile.setName(player.getName());
+        profile.setFfaGame(null);
         profile.setOnline(true);
         profile.setMatch(null);
 

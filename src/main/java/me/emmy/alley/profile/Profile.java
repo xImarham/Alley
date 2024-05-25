@@ -3,6 +3,7 @@ package me.emmy.alley.profile;
 import lombok.Getter;
 import lombok.Setter;
 import me.emmy.alley.Alley;
+import me.emmy.alley.ffa.FFA;
 import me.emmy.alley.match.AbstractMatch;
 import me.emmy.alley.party.Party;
 import me.emmy.alley.profile.enums.EnumProfileState;
@@ -25,6 +26,7 @@ public class Profile {
     private boolean online;
     private String name;
     private Party party;
+    private FFA ffaGame;
 
     /**
      * Constructor for the Profile class.
