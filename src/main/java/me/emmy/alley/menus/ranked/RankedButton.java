@@ -3,6 +3,7 @@ package me.emmy.alley.menus.ranked;
 import lombok.AllArgsConstructor;
 import me.emmy.alley.Alley;
 import me.emmy.alley.kit.Kit;
+import me.emmy.alley.profile.Profile;
 import me.emmy.alley.queue.Queue;
 import me.emmy.alley.utils.PlayerUtil;
 import me.emmy.alley.utils.item.ItemBuilder;
@@ -51,5 +52,6 @@ public class RankedButton extends Button {
         PlayerUtil.reset(player);
         player.closeInventory();
         player.playSound(player.getLocation(), Sound.ANVIL_LAND, 2.0F, 1.5F);
+        Alley.getInstance().getHotbarUtility().applyQueueItems(player);
     }
 }

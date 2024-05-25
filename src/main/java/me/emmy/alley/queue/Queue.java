@@ -6,6 +6,7 @@ import me.emmy.alley.Alley;
 import me.emmy.alley.kit.Kit;
 import me.emmy.alley.profile.Profile;
 import me.emmy.alley.profile.enums.EnumProfileState;
+import me.emmy.alley.utils.chat.CC;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -52,7 +53,7 @@ public class Queue {
 
         profiles.add(queueProfile);
 
-        Alley.getInstance().getHotbarUtility().applyQueueItems(player);
+        player.sendMessage(CC.translate("&aYou've joined the &b" + queueProfile.getQueue().getKit().getName() + " &aqueue."));
     }
 
     /**
@@ -74,7 +75,7 @@ public class Queue {
         }
 
         Alley.getInstance().getHotbarUtility().applySpawnItems(player);
-        player.sendMessage("You have left the queue.");
+        player.sendMessage(CC.translate("&cYou've left the queue."));
     }
 
     /**
