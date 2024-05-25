@@ -18,7 +18,17 @@ public class MongoProfileImpl implements IProfile {
         Document document = new Document();
         document.put("uuid", profile.getUuid().toString());
         document.put("name", profile.getName());
-        document.put("coins", profile.getProfileData().getCoins());
+        Document statsDocument = new Document();
+
+        statsDocument.put("coins", profile.getProfileData().getCoins());
+        statsDocument.put("unrankedWins", profile.getProfileData().getUnrankedWins());
+        statsDocument.put("unrankedLosses", profile.getProfileData().getUnrankedLosses());
+        statsDocument.put("rankedWins", profile.getProfileData().getRankedWins());
+        statsDocument.put("rankedLosses", profile.getProfileData().getRankedLosses());
+        statsDocument.put("ffaWins", profile.getProfileData().getFfaWins());
+        statsDocument.put("ffaLosses", profile.getProfileData().getFfaLosses());
+
+        document.append("stats", statsDocument);
 
         Alley.getInstance().getProfileRepository().getCollection().replaceOne(Filters.eq("uuid", profile.getUuid().toString()), document, new ReplaceOptions().upsert(true));
     }

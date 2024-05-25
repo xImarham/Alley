@@ -18,6 +18,8 @@ public class ProfileData {
     private int unrankedLosses = 0;
     private int rankedWins = 0;
     private int rankedLosses = 0;
+    private int ffaWins = 0;
+    private int ffaLosses= 0;
 
     public void addUnrankedWins() {
         this.unrankedWins++;
@@ -41,6 +43,14 @@ public class ProfileData {
 
     public void addCoins() {
         this.coins++;
+    }
+
+    public void addFFAWins() {
+        this.ffaWins++;
+    }
+
+    public void addFFALosses() {
+        this.ffaLosses++;
     }
 
 }
