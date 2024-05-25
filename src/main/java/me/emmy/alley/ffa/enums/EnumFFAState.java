@@ -11,7 +11,7 @@ import lombok.Getter;
 @Getter
 public enum EnumFFAState {
     SPAWN("Spawn", "The player is in the safezone."),
-    FIGHTING("", "The player is fighting outside safezone.")
+    FIGHTING("Fighting", "The player is fighting outside safezone.")
 
     ;
 
