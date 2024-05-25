@@ -29,6 +29,10 @@ public class FFASafezone {
 
     }
 
+    public void teleportToSafezone() {
+
+    }
+
     public void enterSafezone() {
 
     }

@@ -34,6 +34,9 @@ public class FFA {
     public void startFighting() {
         ffaState = EnumFFAState.FIGHTING;
     }
+    public void respawn() {
+        ffaState = EnumFFAState.SPAWN;
+    }
 
     public void enterSpawn() {
         ffaState = EnumFFAState.SPAWN;
