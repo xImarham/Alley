@@ -3,8 +3,8 @@ A modern Practice core made by Emmy and Remi...
 
 ## Todo List:
 ### Finished:
-- Arena System - done
-- Queue System - done
+- Arena System
+- Queue System
 
 ### Ongoing:
 - Match System
