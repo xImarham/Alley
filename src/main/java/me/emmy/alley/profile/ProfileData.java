@@ -20,7 +20,7 @@ public class ProfileData {
     private int rankedWins = 0;
     private int rankedLosses = 0;
     private int ffaWins = 0;
-    private int ffaLosses= 0;
+    private int ffaDeaths = 0;
     private PlayerSettings playerSettings;
 
     public ProfileData() {
@@ -56,7 +56,7 @@ public class ProfileData {
     }
 
     public void addFFALosses() {
-        this.ffaLosses++;
+        this.ffaDeaths++;
     }
 
 }

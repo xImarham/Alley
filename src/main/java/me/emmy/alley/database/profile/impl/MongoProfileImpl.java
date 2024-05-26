@@ -27,7 +27,7 @@ public class MongoProfileImpl implements IProfile {
         statsDocument.put("rankedWins", profile.getProfileData().getRankedWins());
         statsDocument.put("rankedLosses", profile.getProfileData().getRankedLosses());
         statsDocument.put("ffaWins", profile.getProfileData().getFfaWins());
-        statsDocument.put("ffaLosses", profile.getProfileData().getFfaLosses());
+        statsDocument.put("ffaDeaths", profile.getProfileData().getFfaDeaths());
         document.append("stats", statsDocument);
 
         //settings object
@@ -52,16 +52,48 @@ public class MongoProfileImpl implements IProfile {
             return;
         }
 
+        // Statistics
+        if (!document.containsKey("stats")) {
+            saveProfile(profile);
+            return;
+        }
+
+        Document statsDocument = (Document) document.get("stats");
+        if (statsDocument.containsKey("coins")) {
+            profile.getProfileData().setCoins(document.getInteger("coins"));
+        }
+
+        if (statsDocument.containsKey("unrankedWins")) {
+            profile.getProfileData().setUnrankedWins(document.getInteger("unrankedWins"));
+        }
+
+        if (statsDocument.containsKey("unrankedLosses")) {
+            profile.getProfileData().setUnrankedLosses(document.getInteger("unrankedLosses"));
+        }
+
+        if (statsDocument.containsKey("rankedWins")) {
+            profile.getProfileData().setRankedWins(document.getInteger("rankedWins"));
+        }
+
+        if (statsDocument.containsKey("rankedLosses")) {
+            profile.getProfileData().setRankedLosses(document.getInteger("rankedLosses"));
+        }
+
+        if (statsDocument.containsKey("ffaWins")) {
+            profile.getProfileData().setFfaWins(document.getInteger("ffaWins"));
+        }
+
+        if (statsDocument.containsKey("ffaDeaths")) {
+            profile.getProfileData().setFfaDeaths(document.getInteger("ffaDeaths"));
+        }
+
+        // Player Settings
         if (!document.containsKey("options")) {
             saveProfile(profile);
             return;
         }
 
         Document options = (Document) document.get("options");
-        if (document.containsKey("coins")) {
-            profile.getProfileData().setCoins(document.getInteger("coins"));
-        }
-
         if (options.containsKey("scoreboardEnabled")) {
             profile.getProfileData().getPlayerSettings().setScoreboardEnabled(options.getBoolean("scoreboardEnabled"));
         }
