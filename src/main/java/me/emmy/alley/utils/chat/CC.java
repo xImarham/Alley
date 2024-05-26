@@ -12,12 +12,23 @@ import java.util.List;
  * Project: Alley
  * Date: 25/05/2024 - 12:41
  */
-
 public class CC {
+    /**
+     * Translate a string to a colored string.
+     *
+     * @param string The string to translate.
+     * @return The translated string.
+     */
     public static String translate(String string) {
         return ChatColor.translateAlternateColorCodes('&', string);
     }
 
+    /**
+     * Translate a list of strings to a colored list of strings.
+     *
+     * @param lines The list of strings to translate.
+     * @return The translated list of strings.
+     */
     public static List<String> translate(List<String> lines) {
         List<String> toReturn = new ArrayList<>();
 
@@ -28,6 +39,12 @@ public class CC {
         return toReturn;
     }
 
+    /**
+     * Translate an array of strings to a colored list of strings.
+     *
+     * @param lines The array of strings to translate.
+     * @return The translated list of strings.
+     */
     public static List<String> translate(String[] lines) {
         List<String> toReturn = new ArrayList<>();
 
@@ -40,10 +57,20 @@ public class CC {
         return toReturn;
     }
 
+    /**
+     * Send an error message to the console.
+     *
+     * @param message The message to send.
+     */
     public static void sendError(String message) {
         Bukkit.getServer().getConsoleSender().sendMessage(CC.translate("&f[&cERROR&f] &c" + message + "!"));
     }
 
+    /**
+     * Broadcast a message to all players.
+     *
+     * @param text The message to send.
+     */
     public static void broadcast(String text) {
         Bukkit.broadcastMessage(translate(text));
     }
@@ -54,7 +81,12 @@ public class CC {
     public static String FLOWER_BAR_VERY_LONG = translate("&b&lೋღ&b&l&m«-------&f&l&m----------------------------&b&l&m-------»&r&b&lღೋ");
     public static String FLOWER_BAR_LONG_RED = translate("&4&lೋღ&4&l&m«-------&f&l&m-----------------&4&l&m-------»&r&4&lღೋ");
 
-    public static void on(long timeTaken) {
+    /**
+     * Send a message to the console when the plugin is enabled.
+     *
+     * @param timeTaken The time taken to enable the plugin.
+     */
+    public static void pluginEnabled(long timeTaken) {
         Bukkit.getConsoleSender().sendMessage(" ");
         Bukkit.getConsoleSender().sendMessage(CC.translate("&8&m-----------------------------------------------"));
         Bukkit.getConsoleSender().sendMessage(CC.translate(" &f| Plugin: &d" + Alley.getInstance().getDescription().getName() + " &dPractice"));
@@ -71,7 +103,10 @@ public class CC {
         Bukkit.getConsoleSender().sendMessage(" ");
     }
 
-    public static void off() {
+    /**
+     * Send a message to the console when the plugin is disabled.
+     */
+    public static void pluginDisabled() {
         Bukkit.getConsoleSender().sendMessage(" ");
         Bukkit.getConsoleSender().sendMessage(CC.translate("&8[&dAlley&8] &fDisabled &dAlley Practice&f!"));
         Bukkit.getConsoleSender().sendMessage(" ");

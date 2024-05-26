@@ -102,13 +102,13 @@ public class Alley extends JavaPlugin {
         long end = System.currentTimeMillis();
         long timeTaken = end - start;
 
-        CC.on(timeTaken);
+        CC.pluginEnabled(timeTaken);
     }
 
     @Override
     public void onDisable() {
         kitRepository.saveKits();
-        CC.off();
+        CC.pluginDisabled();
     }
 
     private void checkDescription() {

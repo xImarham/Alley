@@ -21,7 +21,9 @@ public class QueueListener implements Listener {
         Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
 
         if (profile.getState() == EnumProfileState.WAITING) {
-            profile.getQueueProfile().getQueue().removePlayer(profile.getQueueProfile());
+            if (profile.getQueueProfile().getQueue() != null) {
+                profile.getQueueProfile().getQueue().removePlayer(profile.getQueueProfile());
+            }
         }
     }
 }

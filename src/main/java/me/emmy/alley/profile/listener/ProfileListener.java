@@ -74,11 +74,6 @@ public class ProfileListener implements Listener {
     public void onPlayerQuitEvent(PlayerQuitEvent event) {
         Player player = event.getPlayer();
         Profile profile = plugin.getProfileRepository().getProfile(player.getUniqueId());
-        if (profile == null) {
-            CC.broadcast(" \n&c&l" + player.getName() + "'s profile is null ??? \n ");
-            return;
-        }
-
         profile.setOnline(false);
         profile.save();
     }
