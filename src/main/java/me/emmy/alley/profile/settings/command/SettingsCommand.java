@@ -1,7 +1,6 @@
 package me.emmy.alley.profile.settings.command;
 
-import me.emmy.alley.locale.ErrorMessage;
-import me.emmy.alley.utils.chat.CC;
+import me.emmy.alley.profile.settings.menu.SettingsMenu;
 import me.emmy.alley.utils.command.BaseCommand;
 import me.emmy.alley.utils.command.Command;
 import me.emmy.alley.utils.command.CommandArgs;
@@ -19,6 +18,6 @@ public class SettingsCommand extends BaseCommand {
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
 
-        player.sendMessage(CC.translate(ErrorMessage.DEBUG_CMD));
+        new SettingsMenu().openMenu(player);
     }
 }

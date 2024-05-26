@@ -60,31 +60,31 @@ public class MongoProfileImpl implements IProfile {
 
         Document statsDocument = (Document) document.get("stats");
         if (statsDocument.containsKey("coins")) {
-            profile.getProfileData().setCoins(document.getInteger("coins"));
+            profile.getProfileData().setCoins(statsDocument.getInteger("coins"));
         }
 
         if (statsDocument.containsKey("unrankedWins")) {
-            profile.getProfileData().setUnrankedWins(document.getInteger("unrankedWins"));
+            profile.getProfileData().setUnrankedWins(statsDocument.getInteger("unrankedWins"));
         }
 
         if (statsDocument.containsKey("unrankedLosses")) {
-            profile.getProfileData().setUnrankedLosses(document.getInteger("unrankedLosses"));
+            profile.getProfileData().setUnrankedLosses(statsDocument.getInteger("unrankedLosses"));
         }
 
         if (statsDocument.containsKey("rankedWins")) {
-            profile.getProfileData().setRankedWins(document.getInteger("rankedWins"));
+            profile.getProfileData().setRankedWins(statsDocument.getInteger("rankedWins"));
         }
 
         if (statsDocument.containsKey("rankedLosses")) {
-            profile.getProfileData().setRankedLosses(document.getInteger("rankedLosses"));
+            profile.getProfileData().setRankedLosses(statsDocument.getInteger("rankedLosses"));
         }
 
         if (statsDocument.containsKey("ffaWins")) {
-            profile.getProfileData().setFfaWins(document.getInteger("ffaWins"));
+            profile.getProfileData().setFfaWins(statsDocument.getInteger("ffaWins"));
         }
 
         if (statsDocument.containsKey("ffaDeaths")) {
-            profile.getProfileData().setFfaDeaths(document.getInteger("ffaDeaths"));
+            profile.getProfileData().setFfaDeaths(statsDocument.getInteger("ffaDeaths"));
         }
 
         // Player Settings

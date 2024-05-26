@@ -21,8 +21,8 @@ public class PartyRequest {
         invitation.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/party join " + partyLeader));
 
         String hover = CC.translate("&aClick to join " + partyLeader + "&a's party.");
-        BaseComponent[] hoverComponentW = new ComponentBuilder(hover).create();
-        invitation.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, hoverComponentW));
+        BaseComponent[] hoverComponent = new ComponentBuilder(hover).create();
+        invitation.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, hoverComponent));
 
         target.spigot().sendMessage(invitation);
 
