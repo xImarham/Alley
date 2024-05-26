@@ -1,6 +1,7 @@
 package me.emmy.alley.ffa.listener;
 
 import me.emmy.alley.Alley;
+import me.emmy.alley.ffa.enums.EnumFFAState;
 import me.emmy.alley.profile.Profile;
 import me.emmy.alley.profile.enums.EnumProfileState;
 import org.bukkit.entity.Player;
@@ -21,10 +22,11 @@ public class FFAListener implements Listener {
     private void onPlayerDeath(PlayerDeathEvent event) {
         Player player = event.getEntity();
         Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
-        if (profile.getState() != EnumProfileState.PLAYING) return;
-        event.setDeathMessage(null);
-        event.getDrops().clear();
-        profile.getFfaGame().respawn();
+        if (profile.getState() == EnumProfileState.FFA) {
+            event.setDeathMessage(null);
+            event.getDrops().clear();
+            profile.getFfaGame().setFfaState(EnumFFAState.SPAWN);
+        }
     }
 
     @EventHandler
@@ -32,10 +34,9 @@ public class FFAListener implements Listener {
         if (!(event.getEntity() instanceof Player)) return;
         Player player = (Player) event.getEntity();
         Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
-        if (profile.getState() != EnumProfileState.PLAYING) {
+        if (profile.getState() == EnumProfileState.FFA) {
             event.setCancelled(true);
             return;
         }
     }
-
 }

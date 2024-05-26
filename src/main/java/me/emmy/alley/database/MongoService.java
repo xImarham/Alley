@@ -22,11 +22,18 @@ public class MongoService {
     private MongoClient mongoClient;
     private final String uri;
 
+    /**
+     * Constructor for the MongoService class.
+     * @param uri The MongoDB URI.
+     */
     public MongoService(String uri) {
         this.uri = uri;
         this.createConnection();
     }
 
+    /**
+     * Creates a connection to the MongoDB database.
+     */
     private void createConnection() {
         try {
             ConnectionString connectionString = new ConnectionString(uri);
@@ -35,8 +42,11 @@ public class MongoService {
                     .retryWrites(true)
                     .build();
 
+            String databaseName = Alley.getInstance().getConfigHandler().getConfigByName("database/database.yml").getString("mongo.database");
             this.mongoClient = MongoClients.create(settings);
-            this.mongoDatabase = mongoClient.getDatabase(Alley.getInstance().getConfigHandler().getConfigByName("database/database.yml").getString("mongo.database"));
+            this.mongoDatabase = mongoClient.getDatabase(databaseName);
+
+            Bukkit.getConsoleSender().sendMessage(CC.translate("&f[&aAlley&f] &aMongoDB connection established."));
         } catch (Exception e) {
             Bukkit.getConsoleSender().sendMessage(CC.translate("&f[&cAlley&f] &cMongoDB failed to create a connection."));
         }

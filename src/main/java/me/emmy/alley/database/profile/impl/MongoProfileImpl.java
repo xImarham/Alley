@@ -14,6 +14,11 @@ import org.bson.Document;
  * @date 5/22/2024
  */
 public class MongoProfileImpl implements IProfile {
+    /**
+     * Saves a profile to the database.
+     *
+     * @param profile The profile to save.
+     */
     @Override
     public void saveProfile(Profile profile) {
         Document document = MongoUtility.toDocument(profile);
@@ -21,6 +26,11 @@ public class MongoProfileImpl implements IProfile {
                 .replaceOne(Filters.eq("uuid", profile.getUuid().toString()), document, new ReplaceOptions().upsert(true));
     }
 
+    /**
+     * Loads a profile from the database.
+     *
+     * @param profile The profile to load.
+     */
     @Override
     public void loadProfile(Profile profile) {
         if (profile.getUuid() == null) return;
@@ -32,7 +42,6 @@ public class MongoProfileImpl implements IProfile {
             return;
         }
 
-        Profile loadedProfile = MongoUtility.fromDocument(document, Profile.class);
-        profile.setProfileData(loadedProfile.getProfileData());
+        MongoUtility.updateProfileFromDocument(profile, document);
     }
 }

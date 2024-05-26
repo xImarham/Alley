@@ -18,6 +18,12 @@ public enum EnumFFAState {
     private final String name;
     private final String description;
 
+    /**
+     * Constructor for the EnumFFAState enum.
+     *
+     * @param name The name of the state.
+     * @param description The description of the state.
+     */
     EnumFFAState(String name, String description) {
         this.name = name;
         this.description = description;

@@ -11,6 +11,7 @@ public enum EnumProfileState {
     PLAYING_FFA("Playing FFA", "The player is playing in FFA."),
     SPECTATING("Spectating", "The player is spectating a match"),
     EDITING("Editing", "The player is editing a kit"),
+    FFA("FFA", "The player is in the FFA lobby"),
 
     ;
 
