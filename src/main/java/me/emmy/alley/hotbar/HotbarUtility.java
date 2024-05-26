@@ -3,6 +3,7 @@ package me.emmy.alley.hotbar;
 import me.emmy.alley.hotbar.enums.LobbyItem;
 import me.emmy.alley.hotbar.enums.PartyItem;
 import me.emmy.alley.hotbar.enums.QueueItem;
+import me.emmy.alley.hotbar.enums.SpectatorItem;
 import me.emmy.alley.utils.PlayerUtil;
 import org.bukkit.entity.Player;
 
@@ -15,13 +16,24 @@ public class HotbarUtility {
      */
     public void applySpawnItems(Player player) {
         PlayerUtil.reset(player);
-        player.getInventory().setItem(LobbyItem.UNRANKED_QUEUE.getSlot(), LobbyItem.UNRANKED_QUEUE.constructItem());
-        player.getInventory().setItem(LobbyItem.RANKED_QUEUE.getSlot(), LobbyItem.RANKED_QUEUE.constructItem());
+        player.getInventory().setItem(LobbyItem.QUEUES.getSlot(), LobbyItem.QUEUES.constructItem());
+        player.getInventory().setItem(LobbyItem.CURRENT_MATCHES.getSlot(), LobbyItem.CURRENT_MATCHES.constructItem());
         player.getInventory().setItem(LobbyItem.KIT_EDITOR.getSlot(), LobbyItem.KIT_EDITOR.constructItem());
         player.getInventory().setItem(LobbyItem.PARTY.getSlot(), LobbyItem.PARTY.constructItem());
         player.getInventory().setItem(LobbyItem.LEADERBOARD.getSlot(), LobbyItem.LEADERBOARD.constructItem());
         player.getInventory().setItem(LobbyItem.EVENTS.getSlot(), LobbyItem.EVENTS.constructItem());
         player.getInventory().setItem(LobbyItem.SETTINGS.getSlot(), LobbyItem.SETTINGS.constructItem());
+        player.updateInventory();
+    }
+
+    /**
+     * Applies the spectator items to the player's inventory.
+     *
+     * @param player The player to apply the spectator items to.
+     */
+    public void applySpectatorItems(Player player) {
+        PlayerUtil.reset(player);
+        player.getInventory().setItem(SpectatorItem.STOP_WATCHING.getSlot(), SpectatorItem.STOP_WATCHING.constructItem());
         player.updateInventory();
     }
 
@@ -32,7 +44,6 @@ public class HotbarUtility {
      */
     public void applyQueueItems(Player player) {
         PlayerUtil.reset(player);
-
         player.getInventory().setItem(QueueItem.LEAVE_QUEUE.getSlot(), QueueItem.LEAVE_QUEUE.constructItem());
         player.updateInventory();
     }

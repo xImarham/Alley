@@ -10,22 +10,51 @@ import me.emmy.alley.arena.command.impl.*;
 import me.emmy.alley.commands.admin.management.PlaytimeCommand;
 import me.emmy.alley.commands.admin.essential.SpawnItemsCommand;
 import me.emmy.alley.kit.command.KitCommand;
-import me.emmy.alley.kit.command.impl.*;
+import me.emmy.alley.kit.command.impl.data.KitSetDescriptionCommand;
+import me.emmy.alley.kit.command.impl.data.KitSetDisplayNameCommand;
+import me.emmy.alley.kit.command.impl.data.KitSetIconCommand;
+import me.emmy.alley.kit.command.impl.manage.KitViewCommand;
+import me.emmy.alley.kit.command.impl.data.inventory.KitGetInvCommand;
+import me.emmy.alley.kit.command.impl.data.inventory.KitSetInvCommand;
+import me.emmy.alley.kit.command.impl.manage.KitCreateCommand;
+import me.emmy.alley.kit.command.impl.manage.KitDeleteCommand;
+import me.emmy.alley.kit.command.impl.manage.KitListCommand;
+import me.emmy.alley.kit.command.impl.settings.KitSetSettingCommand;
+import me.emmy.alley.kit.command.impl.settings.KitSettingsCommand;
+import me.emmy.alley.kit.command.impl.data.slot.KitSetEditorSlotCommand;
+import me.emmy.alley.kit.command.impl.data.slot.KitSetRankedSlotCommand;
+import me.emmy.alley.kit.command.impl.data.slot.KitSetUnrankedSlotCommand;
+import me.emmy.alley.kit.command.impl.storage.KitSaveAllCommand;
+import me.emmy.alley.kit.command.impl.storage.KitSaveCommand;
+import me.emmy.alley.match.command.admin.MatchCommand;
+import me.emmy.alley.match.command.admin.impl.MatchCancelCommand;
+import me.emmy.alley.match.command.admin.impl.MatchStartCommand;
+import me.emmy.alley.match.command.player.CurrentMatchesCommand;
+import me.emmy.alley.match.command.player.LeaveMatchCommand;
+import me.emmy.alley.match.command.player.LeaveSpectatorCommand;
+import me.emmy.alley.match.snapshot.SnapshotRepository;
 import me.emmy.alley.party.PartyRequest;
-import me.emmy.alley.party.command.impl.*;
+import me.emmy.alley.party.command.impl.leader.PartyCreateCommand;
+import me.emmy.alley.party.command.impl.leader.PartyDisbandCommand;
+import me.emmy.alley.party.command.impl.leader.PartyInviteCommand;
+import me.emmy.alley.party.command.impl.member.PartyAcceptCommand;
+import me.emmy.alley.party.command.impl.member.PartyChatCommand;
+import me.emmy.alley.party.command.impl.member.PartyInfoCommand;
+import me.emmy.alley.party.command.impl.member.PartyLeaveCommand;
 import me.emmy.alley.profile.settings.command.toggle.TogglePartyInvitesCommand;
 import me.emmy.alley.profile.settings.command.toggle.TogglePartyMessagesCommand;
 import me.emmy.alley.profile.settings.command.toggle.ToggleScoreboardCommand;
 import me.emmy.alley.profile.settings.command.toggle.ToggleTablistCommand;
-import me.emmy.alley.queue.command.QueuesCommand;
+import me.emmy.alley.queue.command.admin.ForceQueueCommand;
+import me.emmy.alley.queue.command.admin.QueueReloadCommand;
+import me.emmy.alley.queue.command.player.QueuesCommand;
 import me.emmy.alley.spawn.command.SetSpawnCommand;
 import me.emmy.alley.spawn.command.SpawnCommand;
-import me.emmy.alley.queue.command.RankedCommand;
-import me.emmy.alley.queue.command.UnrankedCommand;
+import me.emmy.alley.queue.command.player.RankedCommand;
+import me.emmy.alley.queue.command.player.UnrankedCommand;
 import me.emmy.alley.party.command.PartyCommand;
 import me.emmy.alley.profile.settings.command.SettingsCommand;
 import me.emmy.alley.leaderboard.command.LeaderboardCommand;
-import me.emmy.alley.leaderboard.command.StatsCommand;
 import me.emmy.alley.database.MongoService;
 import me.emmy.alley.database.profile.impl.MongoProfileImpl;
 import me.emmy.alley.config.ConfigHandler;
@@ -35,14 +64,14 @@ import me.emmy.alley.hotbar.HotbarUtility;
 import me.emmy.alley.kit.KitRepository;
 import me.emmy.alley.kit.settings.KitSettingRepository;
 import me.emmy.alley.match.MatchRepository;
-import me.emmy.alley.match.command.SpectateCommand;
+import me.emmy.alley.match.command.player.SpectateCommand;
 import me.emmy.alley.match.listener.MatchListener;
 import me.emmy.alley.party.PartyRepository;
 import me.emmy.alley.party.listener.PartyListener;
 import me.emmy.alley.profile.ProfileRepository;
 import me.emmy.alley.profile.listener.ProfileListener;
 import me.emmy.alley.queue.QueueRepository;
-import me.emmy.alley.queue.command.LeaveQueueCommand;
+import me.emmy.alley.queue.command.player.LeaveQueueCommand;
 import me.emmy.alley.scoreboard.ScoreboardAdapter;
 import me.emmy.alley.spawn.SpawnHandler;
 import me.emmy.alley.spawn.listener.SpawnListener;
@@ -69,6 +98,7 @@ public class Alley extends JavaPlugin {
     private static Alley instance;
 
     private KitSettingRepository kitSettingRepository;
+    private SnapshotRepository snapshotRepository;
     private ProfileRepository profileRepository;
     private ScoreboardHandler scoreboardHandler;
     private ArenaRepository arenaRepository;
@@ -107,7 +137,7 @@ public class Alley extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        kitRepository.saveKits();
+        //kitRepository.saveKits();
         CC.pluginDisabled();
     }
 
@@ -131,29 +161,32 @@ public class Alley extends JavaPlugin {
         scoreboardHandler = new ScoreboardHandler();
     }
 
-    private void registerDatabase() {
+    private String registerDatabase() {
         FileConfiguration config = configHandler.getConfigByName("database/database.yml");
-        String uri = config.getString("mongo.uri");
-
-        this.profileRepository = new ProfileRepository();
-        this.profileRepository.setIProfile(new MongoProfileImpl());
-        this.mongoService = new MongoService(uri);
+        return config.getString("mongo.uri");
     }
 
     private void registerManagers() {
         this.framework = new CommandFramework(this);
-        this.hotbarUtility = new HotbarUtility();
-
-        this.profileRepository.loadProfiles();
 
         this.queueRepository = new QueueRepository();
         this.queueRepository.initialize();
 
-        this.matchRepository = new MatchRepository();
         this.kitSettingRepository = new KitSettingRepository();
-        this.partyRepository = new PartyRepository();
         this.kitRepository = new KitRepository();
         this.kitRepository.loadKits();
+
+        this.profileRepository = new ProfileRepository();
+        this.profileRepository.setIProfile(new MongoProfileImpl());
+        this.mongoService = new MongoService(registerDatabase());
+
+        this.hotbarUtility = new HotbarUtility();
+
+        this.profileRepository.loadProfiles();
+
+        this.snapshotRepository = new SnapshotRepository();
+        this.matchRepository = new MatchRepository();
+        this.partyRepository = new PartyRepository();
 
         this.arenaRepository = new ArenaRepository();
         this.arenaRepository.loadArenas();
@@ -192,10 +225,14 @@ public class Alley extends JavaPlugin {
         new KitGetInvCommand();
         new KitSetInvCommand();
         new KitSetDescriptionCommand();
+        new KitSetDisplayNameCommand();
         new KitSetEditorSlotCommand();
         new KitSetUnrankedSlotCommand();
         new KitSetRankedSlotCommand();
-        new KitSettingCommand();
+        new KitSetSettingCommand();
+        new KitSettingsCommand();
+        new KitSetIconCommand();
+        new KitViewCommand();
 
         new ArenaCenterCommand();
         new ArenaCreateCommand();
@@ -211,7 +248,12 @@ public class Alley extends JavaPlugin {
         new ArenaToolCommand();
         new ArenaCommand();
 
-        //player commands
+        new ForceQueueCommand();
+        new QueueReloadCommand();
+
+        new MatchCommand();
+        new MatchStartCommand();
+        new MatchCancelCommand();
 
         new TogglePartyInvitesCommand();
         new TogglePartyMessagesCommand();
@@ -225,13 +267,16 @@ public class Alley extends JavaPlugin {
         new PartyChatCommand();
         new PartyInviteCommand();
         new PartyAcceptCommand();
+        new PartyDisbandCommand();
 
         new UnrankedCommand();
         new RankedCommand();
         new SettingsCommand();
         new LeaderboardCommand();
-        new StatsCommand();
         new SpectateCommand();
+        new LeaveSpectatorCommand();
+        new LeaveMatchCommand();
+        new CurrentMatchesCommand();
         new LeaveQueueCommand();
         new QueuesCommand();
     }

@@ -5,10 +5,10 @@ import lombok.Getter;
 @Getter
 public enum EnumMatchState {
 
-    STARTING("Starting", "The match is starting"),
-    RUNNING("Running", "The match is running"),
-    ENDING_ROUND("Ending Round", "The round is ending"),
-    ENDING_MATCH("Ending Match", "The match is ending")
+    STARTING("Starting", "Starting"),
+    RUNNING("Running", "In-Game"),
+    ENDING_ROUND("Ending Round", "Ending"),
+    ENDING_MATCH("Ending Match", "Ending")
 
     ;
 

@@ -22,8 +22,8 @@ public class TogglePartyMessagesCommand extends BaseCommand {
         Player player = command.getPlayer();
 
         Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
-        profile.getProfileData().getPlayerSettings().setPartyMessagesEnabled(!profile.getProfileData().getPlayerSettings().isPartyMessagesEnabled());
+        profile.getProfileData().getProfileSettingData().setPartyMessagesEnabled(!profile.getProfileData().getProfileSettingData().isPartyMessagesEnabled());
 
-        player.sendMessage(CC.translate(Locale.TOGGLED_PARTY_MESSAGES.getMessage().replace("{status}", profile.getProfileData().getPlayerSettings().isPartyMessagesEnabled() ? "&aenabled" : "&cdisabled")));
+        player.sendMessage(CC.translate(Locale.TOGGLED_PARTY_MESSAGES.getMessage().replace("{status}", profile.getProfileData().getProfileSettingData().isPartyMessagesEnabled() ? "&aenabled" : "&cdisabled")));
     }
 }

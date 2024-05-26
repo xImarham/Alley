@@ -5,6 +5,7 @@ import me.emmy.alley.Alley;
 import me.emmy.alley.kit.settings.KitSetting;
 import me.emmy.alley.kit.settings.impl.KitSettingRankedImpl;
 import me.emmy.alley.queue.Queue;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -60,8 +61,8 @@ public class KitRepository {
     }
 
     public void saveKits() {
-        FileConfiguration config = Alley.getInstance().getConfigHandler().getConfigByName("storage/kits.yml");
         for (Kit kit : kits) {
+            FileConfiguration config = Alley.getInstance().getConfigHandler().getConfigByName("storage/kits.yml");
             String key = "kits." + kit.getName();
 
             config.set(key + ".displayname", kit.getDisplayName());
@@ -75,9 +76,8 @@ public class KitRepository {
             config.set(key + ".icon", kit.getIcon().name());
             config.set(key + ".icondata", kit.getIconData());
             saveKitSettings(config, key, kit);
-
+            Alley.getInstance().getConfigHandler().saveConfig(Alley.getInstance().getConfigHandler().getConfigFileByName("storage/kits.yml"), config);
         }
-        Alley.getInstance().getConfigHandler().saveConfig(Alley.getInstance().getConfigHandler().getConfigFileByName("storage/kits.yml"), config);
     }
 
     /**
@@ -113,11 +113,14 @@ public class KitRepository {
             String description = config.getString(settingKey + ".description");
             boolean enabled = config.getBoolean(settingKey + ".enabled");
 
-            KitSetting kitSetting = Alley.getInstance().getKitSettingRepository().getSettingByName(settingName);
+            KitSetting kitSetting = kit.getKitSettings().stream()
+                    .filter(setting -> setting.getName().equals(settingName))
+                    .findFirst()
+                    .orElse(null);
+
             if (kitSetting != null) {
                 kitSetting.setDescription(description);
                 kitSetting.setEnabled(enabled);
-                kit.getKitSettings().add(kitSetting);
             }
         }
     }

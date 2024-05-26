@@ -32,7 +32,7 @@ public class RankedButton extends Button {
                 "&7" + kit.getDescription(),
                 "",
                 "&fIn Queue: &d" + queue.getProfiles().size(),
-                "&fIn Fights: &dnull",
+                "&fIn Fights: &d" + queue.getQueueFightCount(),
                 "",
                 "&fWins: &d" + Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId()).getProfileData().getRankedWins(),
                 "&fElo: &d" + Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId()).getProfileData().getElo(),

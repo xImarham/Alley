@@ -7,8 +7,8 @@ import org.bukkit.inventory.ItemStack;
 
 @Getter
 public enum LobbyItem {
-    UNRANKED_QUEUE("&dQueues", Material.IRON_SWORD, 0, 0, "queues"),
-    RANKED_QUEUE("&dRanked Queue", Material.DIAMOND_SWORD, 0, 1, "ranked"),
+    QUEUES("&dQueues", Material.IRON_SWORD, 0, 0, "queues"),
+    CURRENT_MATCHES("&dCurrent Matches", Material.COMPASS, 0, 1, "currentmatches"),
     KIT_EDITOR("&dKit Editor", Material.BOOK, 0, 2, "kiteditor"),
     PARTY("&dCreate Party", Material.NAME_TAG, 0, 4, "party create"),
     LEADERBOARD("&dLeaderboard", Material.EMERALD, 0, 6, "leaderboards"),

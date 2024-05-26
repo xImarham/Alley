@@ -20,6 +20,11 @@ public class MatchRunnable extends BukkitRunnable {
     private final AbstractMatch match;
     private int stage;
 
+    /**
+     * Constructor for the MatchRunnable class.
+     *
+     * @param match The match.
+     */
     public MatchRunnable(AbstractMatch match) {
         this.match = match;
         this.stage = 6;

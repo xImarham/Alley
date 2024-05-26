@@ -35,7 +35,7 @@ public class SettingsMenu extends Menu {
                 "&7see the party chat",
                 "&7messages or not.",
                 "",
-                "&7Status: " + (Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId()).getProfileData().getPlayerSettings().isPartyMessagesEnabled() ? "&aEnabled" : "&cDisabled"),
+                "&7Status: " + (Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId()).getProfileData().getProfileSettingData().isPartyMessagesEnabled() ? "&aEnabled" : "&cDisabled"),
                 "",
                 "&fClick to toggle!"
         )));
@@ -46,7 +46,7 @@ public class SettingsMenu extends Menu {
                 "&7recieve party invites",
                 "&7or not.",
                 "",
-                "&7Status: " + (Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId()).getProfileData().getPlayerSettings().isPartyInvitesEnabled() ? "&aEnabled" : "&cDisabled"),
+                "&7Status: " + (Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId()).getProfileData().getProfileSettingData().isPartyInvitesEnabled() ? "&aEnabled" : "&cDisabled"),
                 "",
                 "&fClick to toggle!"
         )));
@@ -57,7 +57,7 @@ public class SettingsMenu extends Menu {
                 "&7see the scoreboard",
                 "&7or not.",
                 "",
-                "&7Status: " + (Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId()).getProfileData().getPlayerSettings().isScoreboardEnabled() ? "&aEnabled" : "&cDisabled"),
+                "&7Status: " + (Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId()).getProfileData().getProfileSettingData().isScoreboardEnabled() ? "&aEnabled" : "&cDisabled"),
                 "",
                 "&fClick to toggle!"
         )));
@@ -68,7 +68,7 @@ public class SettingsMenu extends Menu {
                 "&7see the tablist",
                 "&7or not.",
                 "",
-                "&7Status: " + (Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId()).getProfileData().getPlayerSettings().isTablistEnabled() ? "&aEnabled" : "&cDisabled"),
+                "&7Status: " + (Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId()).getProfileData().getProfileSettingData().isTablistEnabled() ? "&aEnabled" : "&cDisabled"),
                 "",
                 "&fClick to toggle!"
         )));

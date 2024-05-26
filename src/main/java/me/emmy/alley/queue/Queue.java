@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import me.emmy.alley.Alley;
 import me.emmy.alley.kit.Kit;
+import me.emmy.alley.match.enums.EnumMatchState;
 import me.emmy.alley.profile.Profile;
 import me.emmy.alley.profile.enums.EnumProfileState;
 import me.emmy.alley.utils.chat.CC;
@@ -38,6 +39,23 @@ public class Queue {
         Alley.getInstance().getQueueRepository().getQueues().add(this);
     }
 
+    /**
+     * Gets the amount of people playing that queue.
+     *
+     * @return The amount of people playing that queue.
+     */
+    public int getQueueFightCount() {
+        return Alley.getInstance().getMatchRepository().getMatches().stream()
+                .filter(match -> match.getMatchQueue() != null && (match.getMatchState() == EnumMatchState.STARTING || match.getMatchState() == EnumMatchState.RUNNING)).flatMap(match -> match.getParticipants().stream())
+                .mapToInt(participant -> participant.getPlayers().size())
+                .sum();
+    }
+
+    /**
+     * Gets the queue type.
+     *
+     * @return The queue type.
+     */
     public String getQueueType() {
         return (ranked ? "Ranked" : "Unranked");
     }

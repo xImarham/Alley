@@ -25,7 +25,7 @@ public class FFAListener implements Listener {
         if (profile.getState() == EnumProfileState.FFA) {
             event.setDeathMessage(null);
             event.getDrops().clear();
-            profile.getFfaGame().setFfaState(EnumFFAState.SPAWN);
+            profile.getFreeForAllGame().setFfaState(EnumFFAState.SPAWN);
         }
     }
 

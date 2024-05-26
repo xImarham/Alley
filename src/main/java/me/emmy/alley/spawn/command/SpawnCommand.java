@@ -1,6 +1,8 @@
 package me.emmy.alley.spawn.command;
 
 import me.emmy.alley.Alley;
+import me.emmy.alley.profile.Profile;
+import me.emmy.alley.profile.enums.EnumProfileState;
 import me.emmy.alley.utils.PlayerUtil;
 import me.emmy.alley.utils.chat.CC;
 import me.emmy.alley.utils.command.BaseCommand;
@@ -19,6 +21,11 @@ public class SpawnCommand extends BaseCommand {
     @Command(name = "spawn", permission = "practice.admin")
     public void onCommand(CommandArgs args) {
         Player player = args.getPlayer();
+        Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
+        if (profile.getState() == EnumProfileState.FFA || profile.getState() == EnumProfileState.PLAYING) {
+            player.sendMessage(CC.translate("&cYou cannot teleport to spawn while in this state."));
+            return;
+        }
 
         PlayerUtil.reset(player);
         Alley.getInstance().getSpawnHandler().teleportToSpawn(player);

@@ -3,9 +3,11 @@ package me.emmy.alley.profile;
 import lombok.Getter;
 import lombok.Setter;
 import me.emmy.alley.Alley;
-import me.emmy.alley.ffa.FFA;
+import me.emmy.alley.ffa.FreeForAll;
+import me.emmy.alley.leaderboard.menu.leaderboard.enums.EnumLeaderboardType;
 import me.emmy.alley.match.AbstractMatch;
 import me.emmy.alley.party.Party;
+import me.emmy.alley.profile.data.ProfileData;
 import me.emmy.alley.profile.enums.EnumProfileState;
 import me.emmy.alley.queue.QueueProfile;
 import org.bukkit.Bukkit;
@@ -26,7 +28,8 @@ public class Profile {
     private boolean online;
     private String name;
     private Party party;
-    private FFA ffaGame;
+    private FreeForAll freeForAllGame;
+    private EnumLeaderboardType leaderboardType = EnumLeaderboardType.RANKED;
 
     /**
      * Constructor for the Profile class.

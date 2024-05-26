@@ -4,16 +4,17 @@ import lombok.Getter;
 import me.emmy.alley.Alley;
 import me.emmy.alley.arena.Arena;
 import me.emmy.alley.match.AbstractMatch;
-import me.emmy.alley.match.impl.RegularMatchImpl;
+import me.emmy.alley.match.impl.MatchRegularImpl;
 import me.emmy.alley.match.player.GameParticipant;
 import me.emmy.alley.match.player.impl.MatchGamePlayerImpl;
 import me.emmy.alley.queue.Queue;
 import me.emmy.alley.queue.QueueProfile;
 import me.emmy.alley.utils.chat.CC;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -79,6 +80,15 @@ public class QueueRunnable implements Runnable {
      */
     private void processGame(Queue queue, GameParticipantList gameParticipantList) {
         Arena arena = getArena(queue);
+
+        if (arena == null) {
+            gameParticipantList.getParticipants().forEach(participant -> {
+                Player player = Alley.getInstance().getServer().getPlayer(participant.getPlayer().getUuid());
+                player.sendMessage(CC.translate("&cThere are no available arenas for the kit you're playing."));
+            });
+            return;
+        }
+
         AbstractMatch match = getMatchType(queue, gameParticipantList, arena);
         match.startMatch();
     }
@@ -92,7 +102,7 @@ public class QueueRunnable implements Runnable {
      * @return The match type.
      */
     private @NotNull AbstractMatch getMatchType(Queue queue, GameParticipantList gameParticipantList, Arena arena) {
-        return new RegularMatchImpl(queue, queue.getKit(), arena, gameParticipantList.getParticipantA(), gameParticipantList.getParticipantB());
+        return new MatchRegularImpl(queue, queue.getKit(), arena, gameParticipantList.getParticipantA(), gameParticipantList.getParticipantB());
     }
 
     /**
@@ -158,6 +168,10 @@ public class QueueRunnable implements Runnable {
         public GameParticipantList(GameParticipant<MatchGamePlayerImpl> participantA, GameParticipant<MatchGamePlayerImpl> participantB) {
             this.participantA = participantA;
             this.participantB = participantB;
+        }
+
+        public List<GameParticipant<MatchGamePlayerImpl>> getParticipants() {
+            return Arrays.asList(getParticipantA(), getParticipantB());
         }
     }
 

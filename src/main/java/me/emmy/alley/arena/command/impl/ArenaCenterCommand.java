@@ -31,6 +31,7 @@ public class ArenaCenterCommand extends BaseCommand {
         }
 
         Alley.getInstance().getArenaRepository().getArenaByName(arenaName).setCenter(player.getLocation());
+        Alley.getInstance().getArenaRepository().saveArena(Alley.getInstance().getArenaRepository().getArenaByName(arenaName));
         player.sendMessage(CC.translate("&aCenter has been set for arena &b" + arenaName + "&a!"));
     }
 }

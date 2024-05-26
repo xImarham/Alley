@@ -45,13 +45,6 @@ public abstract class Menu {
         return item;
     }
 
-    /**
-     *
-     * I Edited the openMenu void so that it does not close the previously opened menu.
-     * It's just smoother - Emmy
-     *
-     */
-
     public void openMenu(final Player player) {
         this.buttons = this.getButtons(player);
 
@@ -97,6 +90,24 @@ public abstract class Menu {
         }
 
         return (int) (Math.ceil((highest + 1) / 9D) * 9D);
+    }
+
+    /**
+     * Adds a border to the inventory.
+     *
+     * @param buttons the buttons in the inventory
+     * @param data the data value of the border
+     */
+    public void addBorder(Map<Integer, Button> buttons, byte data) {
+        for (int i = 0; i < 9; i++) {
+            buttons.putIfAbsent(i, Button.placeholder(Material.STAINED_GLASS_PANE, data, ""));
+            buttons.putIfAbsent(4 * 9 + i, Button.placeholder(Material.STAINED_GLASS_PANE, data, ""));
+        }
+
+        for (int i = 0; i < 5; i++) {
+            buttons.putIfAbsent(i * 9, Button.placeholder(Material.STAINED_GLASS_PANE, data, ""));
+            buttons.putIfAbsent(i * 9 + 8, Button.placeholder(Material.STAINED_GLASS_PANE, data, ""));
+        }
     }
 
     public int getSize() {

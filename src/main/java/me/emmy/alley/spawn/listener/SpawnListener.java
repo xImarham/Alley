@@ -7,7 +7,9 @@ import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerDropItemEvent;
@@ -28,7 +30,10 @@ public class SpawnListener implements Listener {
         Player player = event.getPlayer();
         Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
 
-        if (player.getGameMode() == GameMode.SURVIVAL && profile.getState().equals(EnumProfileState.LOBBY)) {
+        if (player.getGameMode() == GameMode.SURVIVAL
+                && (profile.getState().equals(EnumProfileState.LOBBY)
+                || profile.getState().equals(EnumProfileState.EDITING)
+                || profile.getState().equals(EnumProfileState.WAITING))) {
             event.setCancelled(true);
         }
     }
@@ -38,7 +43,10 @@ public class SpawnListener implements Listener {
         Player player = event.getPlayer();
         Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
 
-        if (player.getGameMode() == GameMode.SURVIVAL && profile.getState().equals(EnumProfileState.LOBBY)) {
+        if (player.getGameMode() == GameMode.SURVIVAL
+                && (profile.getState().equals(EnumProfileState.LOBBY)
+                || profile.getState().equals(EnumProfileState.EDITING)
+                || profile.getState().equals(EnumProfileState.WAITING))) {
             event.setCancelled(true);
         }
     }
@@ -48,18 +56,38 @@ public class SpawnListener implements Listener {
         Player player = event.getPlayer();
         Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
 
-        if (player.getGameMode() == GameMode.SURVIVAL && profile.getState().equals(EnumProfileState.LOBBY)) {
+        if (player.getGameMode() == GameMode.SURVIVAL
+                && (profile.getState().equals(EnumProfileState.LOBBY)
+                || profile.getState().equals(EnumProfileState.EDITING)
+                || profile.getState().equals(EnumProfileState.WAITING))) {
             event.setCancelled(true);
         }
     }
 
     @EventHandler
-    public void onInteract(PlayerInteractEvent event) {
+    public void onBlockBreak(BlockBreakEvent event) {
         Player player = event.getPlayer();
         Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
 
-        if (player.getGameMode() == GameMode.SURVIVAL && profile.getState().equals(EnumProfileState.LOBBY)) {
+        if (player.getGameMode() == GameMode.SURVIVAL
+                && (profile.getState().equals(EnumProfileState.LOBBY)
+                || profile.getState().equals(EnumProfileState.EDITING)
+                || profile.getState().equals(EnumProfileState.WAITING))) {
             event.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    private void onHunger(FoodLevelChangeEvent event) {
+        if (event.getEntity() instanceof Player) {
+            Player player = (Player) event.getEntity();
+            Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
+
+            if (profile.getState().equals(EnumProfileState.LOBBY)
+                    || profile.getState().equals(EnumProfileState.EDITING)
+                    || profile.getState().equals(EnumProfileState.WAITING)) {
+                event.setCancelled(true);
+            }
         }
     }
 
@@ -69,7 +97,10 @@ public class SpawnListener implements Listener {
             Player player = (Player) event.getWhoClicked();
             Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
 
-            if (player.getGameMode() == GameMode.SURVIVAL && profile.getState().equals(EnumProfileState.LOBBY)) {
+            if (player.getGameMode() == GameMode.SURVIVAL
+                    && (profile.getState().equals(EnumProfileState.LOBBY)
+                    || profile.getState().equals(EnumProfileState.EDITING)
+                    || profile.getState().equals(EnumProfileState.WAITING))) {
                 if (event.getClickedInventory() != null && event.getClickedInventory().equals(player.getInventory())) {
                     event.setCancelled(true);
                 }
@@ -85,9 +116,10 @@ public class SpawnListener implements Listener {
     public void onPlayerItemDamageEvent(PlayerItemDamageEvent event) {
         Profile profile = Alley.getInstance().getProfileRepository().getProfile(event.getPlayer().getUniqueId());
 
-        if (profile.getState() == EnumProfileState.LOBBY) {
+        if (profile.getState().equals(EnumProfileState.LOBBY)
+                || profile.getState().equals(EnumProfileState.EDITING)
+                || profile.getState().equals(EnumProfileState.WAITING)) {
             event.setCancelled(true);
         }
     }
-
 }

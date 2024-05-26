@@ -46,6 +46,7 @@ public class StandAloneArena extends Arena {
         config.set(name + ".type", getType().name());
         config.set(name + ".minimum", LocationUtil.serialize(getMinimum()));
         config.set(name + ".maximum", LocationUtil.serialize(getMaximum()));
+        config.set(name + ".center", LocationUtil.serialize(getCenter()));
         config.set(name + ".pos1", LocationUtil.serialize(getPos1()));
         config.set(name + ".pos2", LocationUtil.serialize(getPos2()));
         config.set(name + ".kits", getKits());

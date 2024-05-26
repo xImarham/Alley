@@ -21,7 +21,7 @@ public class AlleyCommand extends BaseCommand {
         sender.sendMessage(" ");
         sender.sendMessage(CC.FLOWER_BAR);
         sender.sendMessage(CC.translate("  &d&l   Alley"));
-        sender.sendMessage(CC.translate("      &f┃ Author: &d" + Alley.getInstance().getDescription().getAuthors().toString().replace("[", "").replace("]", "")));
+        sender.sendMessage(CC.translate("      &f┃ Authors: &d" + Alley.getInstance().getDescription().getAuthors().toString().replace("[", "").replace("]", "")));
         sender.sendMessage(CC.translate("      &f┃ Version: &d" + Alley.getInstance().getDescription().getVersion()));
         sender.sendMessage(CC.translate(" "));
         sender.sendMessage(CC.translate("  &d&l   Description:"));

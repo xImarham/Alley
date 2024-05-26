@@ -3,6 +3,8 @@ package me.emmy.alley.match.player;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,8 +27,6 @@ public class GamePlayer {
 
     private List<UUID> players;
     private List<UUID> alivePlayers = new ArrayList<>();
-    private String leaderName;
-    private UUID leader;
 
     /**
      * Constructor for the GamePlayer class.
@@ -37,5 +37,14 @@ public class GamePlayer {
     public GamePlayer(UUID uuid, String username) {
         this.uuid = uuid;
         this.username = username;
+    }
+
+    /**
+     * Gets the player associated with the GamePlayer.
+     *
+     * @return The player associated with the GamePlayer.
+     */
+    public Player getPlayer() {
+        return Bukkit.getPlayer(uuid);
     }
 }

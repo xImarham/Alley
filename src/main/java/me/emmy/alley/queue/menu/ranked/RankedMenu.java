@@ -32,7 +32,6 @@ public class RankedMenu extends Menu {
         //buttons.put(0, new BackButton(previousMenu));
 
         for (Queue queue : Alley.getInstance().getQueueRepository().getQueues()) {
-            CC.broadcast(queue.getQueueType());
             if (queue.isRanked()) {
                 buttons.put(queue.getKit().getRankedslot(), new RankedButton(queue));
             }

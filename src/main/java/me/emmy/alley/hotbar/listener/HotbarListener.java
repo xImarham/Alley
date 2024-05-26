@@ -3,6 +3,7 @@ package me.emmy.alley.hotbar.listener;
 import me.emmy.alley.hotbar.enums.LobbyItem;
 import me.emmy.alley.hotbar.enums.PartyItem;
 import me.emmy.alley.hotbar.enums.QueueItem;
+import me.emmy.alley.hotbar.enums.SpectatorItem;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -22,6 +23,12 @@ public class HotbarListener implements Listener {
         LobbyItem lobbyItem = LobbyItem.getByItemStack(event.getItem());
         if (lobbyItem != null) {
             handleLobbyItemInteract(event, player, lobbyItem);
+            return;
+        }
+
+        SpectatorItem spectatorItem = SpectatorItem.getByItemStack(event.getItem());
+        if (spectatorItem != null) {
+            handlesSpectatorItemInteract(event, player, spectatorItem);
             return;
         }
 
@@ -49,6 +56,21 @@ public class HotbarListener implements Listener {
 
         if (lobbyItem.getCommand() != null) {
             player.performCommand(lobbyItem.getCommand());
+        }
+    }
+
+    /**
+     * Handles the player's interaction with the spectator items.
+     *
+     * @param event     The event to handle.
+     * @param player    The player to handle.
+     * @param spectatorItem The queue item to handle.
+     */
+    private void handlesSpectatorItemInteract(PlayerInteractEvent event, Player player, SpectatorItem spectatorItem) {
+        if (event.getAction() != Action.RIGHT_CLICK_AIR && event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
+
+        if (spectatorItem.getCommand() != null) {
+            player.performCommand(spectatorItem.getCommand());
         }
     }
 

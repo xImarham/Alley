@@ -71,7 +71,7 @@ public class ArenaRepository {
 
             if (config.contains(name + ".kits")) {
                 for (String kitName : config.getStringList(name + ".kits")) {
-                    if (Alley.getInstance().getKitRepository().getKit(kitName).getName() != null) {
+                    if (Alley.getInstance().getKitRepository().getKit(kitName) != null) {
                         arena.getKits().add(kitName);
                     }
                 }

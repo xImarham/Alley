@@ -22,8 +22,8 @@ public class ToggleTablistCommand extends BaseCommand {
         Player player = command.getPlayer();
 
         Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
-        profile.getProfileData().getPlayerSettings().setScoreboardEnabled(!profile.getProfileData().getPlayerSettings().isScoreboardEnabled());
+        profile.getProfileData().getProfileSettingData().setScoreboardEnabled(!profile.getProfileData().getProfileSettingData().isScoreboardEnabled());
 
-        player.sendMessage(CC.translate(Locale.TOGGLE_TABLIST.getMessage().replace("{status}", profile.getProfileData().getPlayerSettings().isTablistEnabled() ? "&aenabled" : "&cdisabled")));
+        player.sendMessage(CC.translate(Locale.TOGGLE_TABLIST.getMessage().replace("{status}", profile.getProfileData().getProfileSettingData().isTablistEnabled() ? "&aenabled" : "&cdisabled")));
     }
 }

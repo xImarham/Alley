@@ -1,7 +1,7 @@
 package me.emmy.alley.leaderboard.command;
 
-import me.emmy.alley.locale.ErrorMessage;
-import me.emmy.alley.utils.chat.CC;
+import me.emmy.alley.leaderboard.menu.leaderboard.LeaderboardMenu;
+import me.emmy.alley.leaderboard.menu.personal.StatisticsMenu;
 import me.emmy.alley.utils.command.BaseCommand;
 import me.emmy.alley.utils.command.Command;
 import me.emmy.alley.utils.command.CommandArgs;
@@ -18,7 +18,6 @@ public class LeaderboardCommand extends BaseCommand {
     @Command(name = "leaderboard", aliases = {"leaderboards", "lb"})
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
-
-        player.sendMessage(CC.translate(ErrorMessage.DEBUG_CMD));
+        new StatisticsMenu().openMenu(player);
     }
 }

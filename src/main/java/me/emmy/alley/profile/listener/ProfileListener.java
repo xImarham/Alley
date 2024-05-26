@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -44,7 +45,7 @@ public class ProfileListener implements Listener {
         Profile profile = plugin.getProfileRepository().getProfile(player.getUniqueId());
         profile.setState(EnumProfileState.LOBBY);
         profile.setName(player.getName());
-        profile.setFfaGame(null);
+        profile.setFreeForAllGame(null);
         profile.setOnline(true);
         profile.setMatch(null);
 
@@ -67,6 +68,19 @@ public class ProfileListener implements Listener {
                         .replace("{author}", plugin.getDescription().getAuthors().get(0))
                 );
             }
+        }
+    }
+
+    @EventHandler
+    private void onEntityDamage(EntityDamageEvent event) {
+        if (!(event.getEntity() instanceof Player)) return;
+        Player player = (Player) event.getEntity();
+        Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
+        if (profile.getState() == EnumProfileState.LOBBY
+                || profile.getState() == EnumProfileState.SPECTATING
+                || profile.getState() == EnumProfileState.EDITING
+                || profile.getState() == EnumProfileState.WAITING) {
+            event.setCancelled(true);
         }
     }
 

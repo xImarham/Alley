@@ -22,8 +22,8 @@ public class TogglePartyInvitesCommand extends BaseCommand {
         Player player = command.getPlayer();
 
         Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
-        profile.getProfileData().getPlayerSettings().setPartyInvitesEnabled(!profile.getProfileData().getPlayerSettings().isPartyInvitesEnabled());
+        profile.getProfileData().getProfileSettingData().setPartyInvitesEnabled(!profile.getProfileData().getProfileSettingData().isPartyInvitesEnabled());
 
-        player.sendMessage(CC.translate(Locale.TOGGLED_PARTY_INVITES.getMessage().replace("{status}", profile.getProfileData().getPlayerSettings().isPartyInvitesEnabled() ? "&aenabled" : "&cdisabled")));
+        player.sendMessage(CC.translate(Locale.TOGGLED_PARTY_INVITES.getMessage().replace("{status}", profile.getProfileData().getProfileSettingData().isPartyInvitesEnabled() ? "&aenabled" : "&cdisabled")));
     }
 }
