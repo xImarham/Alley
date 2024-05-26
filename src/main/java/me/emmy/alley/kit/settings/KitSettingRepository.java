@@ -2,6 +2,7 @@ package me.emmy.alley.kit.settings;
 
 import lombok.Getter;
 import lombok.Setter;
+import me.emmy.alley.kit.settings.impl.KitSettingBoxingImpl;
 import me.emmy.alley.kit.settings.impl.KitSettingBuildImpl;
 import me.emmy.alley.kit.settings.impl.KitSettingRankedImpl;
 
@@ -22,7 +23,7 @@ public class KitSettingRepository {
     public KitSettingRepository() {
         addSetting(new KitSettingBuildImpl());
         addSetting(new KitSettingRankedImpl());
-        addSetting(new KitSettingBuildImpl());
+        addSetting(new KitSettingBoxingImpl());
     }
 
     /**

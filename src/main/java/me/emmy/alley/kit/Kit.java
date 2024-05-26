@@ -13,7 +13,7 @@ import java.util.List;
 @Setter
 public class Kit {
 
-    private final List<KitSetting> kitSettings = Alley.getInstance().getKitSettingRepository().getSettings();
+    private final List<KitSetting> kitSettings;
 
     private String name;
     private String displayName;
@@ -56,6 +56,7 @@ public class Kit {
         this.armor = armor;
         this.icon = icon;
         this.iconData = iconData;
+        this.kitSettings = Alley.getInstance().getKitSettingRepository().getSettings();
     }
 
     /**

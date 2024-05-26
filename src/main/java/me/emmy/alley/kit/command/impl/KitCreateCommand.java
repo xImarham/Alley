@@ -65,7 +65,6 @@ public class KitCreateCommand extends BaseCommand {
                 armor,
                 icon,
                 (byte) 0
-
         );
     }
 }

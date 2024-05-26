@@ -6,7 +6,10 @@ import me.emmy.alley.utils.chat.CC;
 import me.emmy.alley.utils.command.BaseCommand;
 import me.emmy.alley.utils.command.Command;
 import me.emmy.alley.utils.command.CommandArgs;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+
+import java.util.Arrays;
 
 /**
  * @author Remi
@@ -36,6 +39,8 @@ public class KitSettingCommand extends BaseCommand {
             player.sendMessage(CC.translate("&cA setting with that name does not exist."));
             return;
         }
+
+        kit.getKitSettings().forEach(setting -> Bukkit.broadcastMessage(kit.getName() + ":" + setting.getName() + ":" + setting.isEnabled() + ":" + Arrays.toString(kit.getKitSettings().toArray())));
 
         boolean enabled = Boolean.parseBoolean(args[2]);
         kit.getKitSettings().stream().filter(setting -> setting.getName().equalsIgnoreCase(settingName)).findFirst().ifPresent(setting -> setting.setEnabled(enabled));
