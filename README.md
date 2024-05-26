@@ -1,7 +1,7 @@
 # Alley Practice core
 A modern Practice core made by Emmy and Remi...
 
-###Todo List:
+## Todo List:
 #### - Arena System - done
 #### - Arena Resetting System - not done
 #### - Kit System - almost done
