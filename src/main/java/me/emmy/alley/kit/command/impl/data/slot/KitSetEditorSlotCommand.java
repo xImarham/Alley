@@ -39,6 +39,6 @@ public class KitSetEditorSlotCommand extends BaseCommand {
 
         kit.setEditorslot(slot);
         Alley.getInstance().getKitRepository().saveKit(kit);
-        player.sendMessage(CC.translate(Locale.KIT_EDITORSLOT_SET.getMessage()).replace("{kit-name}", kitName).replace("{editor-slot}", args[1]));
+        player.sendMessage(CC.translate(Locale.KIT_EDITORSLOT_SET.getMessage()).replace("{kit-name}", kitName).replace("{slot}", args[1]));
     }
 }
