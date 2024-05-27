@@ -162,6 +162,16 @@ kits:
           repair-cost: 3
     icon: DIAMOND_SWORD
     icondata: 0
+    settings:
+      Build:
+        description: Allows you to build in matches
+        enabled: false
+      Ranked:
+        description: This is the ranked kit type
+        enabled: true
+      Boxing:
+        description: This is the boxing kit type
+        enabled: false
   Classic:
     displayname: '&dClassic'
     description: '&7Old styled PvP.'
@@ -224,3 +234,91 @@ kits:
         type: DIAMOND_HELMET
     icon: BOW
     icondata: 0
+    settings:
+      Build:
+        description: Allows you to build in matches
+        enabled: false
+      Ranked:
+        description: This is the ranked kit type
+        enabled: true
+      Boxing:
+        description: This is the boxing kit type
+        enabled: false
+  Boxing:
+    displayname: '&dBoxing'
+    description: '&dBoxing kit description'
+    enabled: true
+    unrankedslot: 12
+    rankedslot: 12
+    editorslot: 12
+    items:
+      - ==: org.bukkit.inventory.ItemStack
+        type: DIAMOND_SWORD
+        meta:
+          ==: ItemMeta
+          meta-type: UNSPECIFIC
+          display-name: §d§lBoxing Sword
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+    armor:
+      - ==: org.bukkit.inventory.ItemStack
+        type: AIR
+        damage: -1
+        amount: 0
+      - ==: org.bukkit.inventory.ItemStack
+        type: AIR
+        damage: -1
+        amount: 0
+      - ==: org.bukkit.inventory.ItemStack
+        type: AIR
+        damage: -1
+        amount: 0
+      - ==: org.bukkit.inventory.ItemStack
+        type: AIR
+        damage: -1
+        amount: 0
+    icon: IRON_SWORD
+    icondata: 0
+    settings:
+      Build:
+        description: Allows you to build in matches
+        enabled: false
+      Ranked:
+        description: This is the ranked kit type
+        enabled: true
+      Boxing:
+        description: This is the boxing kit type
+        enabled: true
