@@ -1,6 +1,7 @@
 package me.emmy.alley.queue.menu.queues;
 
 import lombok.AllArgsConstructor;
+import me.emmy.alley.ffa.menu.FFAMenu;
 import me.emmy.alley.utils.SoundUtil;
 import me.emmy.alley.utils.menu.Button;
 import me.emmy.alley.utils.pagination.ItemBuilder;
@@ -42,7 +43,7 @@ public class QueuesButton extends Button {
             player.performCommand("ranked");
             SoundUtil.playSuccess(player);
         } else if (material.equals(Material.GOLD_AXE)) {
-            player.performCommand("ffa");
+            new FFAMenu().openMenu(player);
             SoundUtil.playSuccess(player);
         }
     }

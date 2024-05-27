@@ -3,6 +3,7 @@ package me.emmy.alley.queue;
 import lombok.Getter;
 import lombok.Setter;
 import me.emmy.alley.Alley;
+import me.emmy.alley.hotbar.enums.HotbarType;
 import me.emmy.alley.kit.Kit;
 import me.emmy.alley.match.enums.EnumMatchState;
 import me.emmy.alley.profile.Profile;
@@ -67,6 +68,12 @@ public class Queue {
      */
     public void addPlayer(Player player) {
         UUID uuid = player.getUniqueId();
+
+        if (profiles.stream().anyMatch(queueProfile -> queueProfile.getUuid().equals(uuid))) {
+            player.sendMessage(CC.translate("&cYou're already in a queue."));
+            return;
+        }
+
         QueueProfile queueProfile = new QueueProfile(this, uuid);
         Profile profile = Alley.getInstance().getProfileRepository().getProfile(uuid);
 
@@ -96,7 +103,7 @@ public class Queue {
             return;
         }
 
-        Alley.getInstance().getHotbarUtility().applySpawnItems(player);
+        Alley.getInstance().getHotbarRepository().applyHotbarItems(player, HotbarType.LOBBY);
         player.sendMessage(CC.translate("&cYou've left the queue."));
     }
 

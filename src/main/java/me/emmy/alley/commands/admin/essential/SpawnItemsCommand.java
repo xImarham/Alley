@@ -1,7 +1,7 @@
 package me.emmy.alley.commands.admin.essential;
 
 import me.emmy.alley.Alley;
-import me.emmy.alley.utils.PlayerUtil;
+import me.emmy.alley.hotbar.enums.HotbarType;
 import me.emmy.alley.utils.chat.CC;
 import me.emmy.alley.utils.command.BaseCommand;
 import me.emmy.alley.utils.command.Command;
@@ -20,7 +20,7 @@ public class SpawnItemsCommand extends BaseCommand {
     public void onCommand(CommandArgs args) {
         Player player = args.getPlayer();
 
-        Alley.getInstance().getHotbarUtility().applySpawnItems(player);
+        Alley.getInstance().getHotbarRepository().applyHotbarItems(player, HotbarType.LOBBY);
         player.sendMessage(CC.translate("&aYou were given the spawn items!"));
     }
 }

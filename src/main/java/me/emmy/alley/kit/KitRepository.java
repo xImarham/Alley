@@ -5,7 +5,6 @@ import me.emmy.alley.Alley;
 import me.emmy.alley.kit.settings.KitSetting;
 import me.emmy.alley.kit.settings.impl.KitSettingRankedImpl;
 import me.emmy.alley.queue.Queue;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -27,7 +26,6 @@ public class KitRepository {
 
     public void loadKits() {
         FileConfiguration config = Alley.getInstance().getConfigHandler().getConfigByName("storage/kits.yml");
-
         ConfigurationSection kitsSection = config.getConfigurationSection("kits");
         if (kitsSection == null) {
             return;
@@ -57,6 +55,7 @@ public class KitRepository {
             loadKitSettings(config, key, kit);
             kits.add(kit);
             addKitToQueue(kit);
+
         }
     }
 
@@ -113,14 +112,11 @@ public class KitRepository {
             String description = config.getString(settingKey + ".description");
             boolean enabled = config.getBoolean(settingKey + ".enabled");
 
-            KitSetting kitSetting = kit.getKitSettings().stream()
-                    .filter(setting -> setting.getName().equals(settingName))
-                    .findFirst()
-                    .orElse(null);
-
+            KitSetting kitSetting = Alley.getInstance().getKitSettingRepository().createSettingByName(settingName);
             if (kitSetting != null) {
                 kitSetting.setDescription(description);
                 kitSetting.setEnabled(enabled);
+                kit.addKitSetting(kitSetting);
             }
         }
     }

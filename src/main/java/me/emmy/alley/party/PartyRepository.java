@@ -3,8 +3,10 @@ package me.emmy.alley.party;
 import lombok.Getter;
 import lombok.Setter;
 import me.emmy.alley.Alley;
+import me.emmy.alley.hotbar.enums.HotbarType;
 import me.emmy.alley.profile.Profile;
 import me.emmy.alley.profile.enums.EnumProfileState;
+import me.emmy.alley.utils.chat.CC;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -51,16 +53,17 @@ public class PartyRepository {
     /**
      * Creates a party.
      *
-     * @param leader The leader of the party.
+     * @param player The leader of the party.
      */
-    public void createParty(Player leader) {
-        Profile profile = Alley.getInstance().getProfileRepository().getProfile(leader.getUniqueId());
-        Party party = new Party(leader);
-        profile.setParty(party);
-
-        if (profile.getState().equals(EnumProfileState.LOBBY)) {
-            Alley.getInstance().getHotbarUtility().applyPartyItems(leader);
+    public void createParty(Player player) {
+        Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
+        if (profile.getState() != EnumProfileState.LOBBY) {
+            player.sendMessage(CC.translate("&cYou cannot create a party in this state."));
+            return;
         }
+        Party party = new Party(player);
+        profile.setParty(party);
+        Alley.getInstance().getHotbarRepository().applyHotbarItems(player, HotbarType.PARTY);
     }
 
     /**
@@ -71,7 +74,7 @@ public class PartyRepository {
     public void disbandParty(Player leader) {
         Party party = getPartyByLeader(leader);
         if (party != null) {
-            party.disband();
+            party.disbandParty();
         }
     }
 

@@ -46,7 +46,7 @@ public class MongoService {
             this.mongoClient = MongoClients.create(settings);
             this.mongoDatabase = mongoClient.getDatabase(databaseName);
 
-            Bukkit.getConsoleSender().sendMessage(CC.translate("&f[&dAlley&f] &aMongoDB connection established."));
+            Bukkit.getConsoleSender().sendMessage(CC.translate("&f[&dAlley&f] &fSuccessfully connected to MongoDB."));
         } catch (Exception e) {
             Bukkit.getConsoleSender().sendMessage(CC.translate("&f[&dAlley&f] &cMongoDB failed to create a connection."));
         }

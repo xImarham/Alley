@@ -9,6 +9,13 @@ import me.emmy.alley.arena.command.ArenaCommand;
 import me.emmy.alley.arena.command.impl.*;
 import me.emmy.alley.commands.admin.management.PlaytimeCommand;
 import me.emmy.alley.commands.admin.essential.SpawnItemsCommand;
+import me.emmy.alley.cooldown.CooldownRepository;
+import me.emmy.alley.ffa.FFARepository;
+import me.emmy.alley.ffa.command.admin.*;
+import me.emmy.alley.ffa.command.player.FFAJoinCommand;
+import me.emmy.alley.ffa.command.player.FFALeaveCommand;
+import me.emmy.alley.ffa.listener.FFAListener;
+import me.emmy.alley.hotbar.HotbarRepository;
 import me.emmy.alley.kit.command.KitCommand;
 import me.emmy.alley.kit.command.impl.data.KitSetDescriptionCommand;
 import me.emmy.alley.kit.command.impl.data.KitSetDisplayNameCommand;
@@ -60,7 +67,6 @@ import me.emmy.alley.database.profile.impl.MongoProfileImpl;
 import me.emmy.alley.config.ConfigHandler;
 import me.emmy.alley.scoreboard.handler.ScoreboardHandler;
 import me.emmy.alley.hotbar.listener.HotbarListener;
-import me.emmy.alley.hotbar.HotbarUtility;
 import me.emmy.alley.kit.KitRepository;
 import me.emmy.alley.kit.settings.KitSettingRepository;
 import me.emmy.alley.match.MatchRepository;
@@ -75,6 +81,7 @@ import me.emmy.alley.queue.command.player.LeaveQueueCommand;
 import me.emmy.alley.scoreboard.ScoreboardAdapter;
 import me.emmy.alley.spawn.SpawnHandler;
 import me.emmy.alley.spawn.listener.SpawnListener;
+import me.emmy.alley.utils.Logger;
 import me.emmy.alley.utils.assemble.Assemble;
 import me.emmy.alley.utils.assemble.AssembleStyle;
 import me.emmy.alley.utils.chat.CC;
@@ -99,14 +106,16 @@ public class Alley extends JavaPlugin {
 
     private KitSettingRepository kitSettingRepository;
     private SnapshotRepository snapshotRepository;
+    private CooldownRepository cooldownRepository;
     private ProfileRepository profileRepository;
     private ScoreboardHandler scoreboardHandler;
+    private HotbarRepository hotbarRepository;
     private ArenaRepository arenaRepository;
     private MatchRepository matchRepository;
     private QueueRepository queueRepository;
     private PartyRepository partyRepository;
     private KitRepository kitRepository;
-    private HotbarUtility hotbarUtility;
+    private FFARepository ffaRepository;
     private ConfigHandler configHandler;
     private CommandFramework framework;
     private SpawnHandler spawnHandler;
@@ -137,7 +146,8 @@ public class Alley extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        //kitRepository.saveKits();
+        kitRepository.saveKits();
+        ffaRepository.saveFFAMatches();
         CC.pluginDisabled();
     }
 
@@ -151,8 +161,6 @@ public class Alley extends JavaPlugin {
             Bukkit.getConsoleSender().sendMessage(CC.translate(prefix + "&4&lAuthor mismatch! Shutting down the server."));
             System.exit(0);
             Bukkit.shutdown();
-        } else {
-            Bukkit.getConsoleSender().sendMessage(CC.translate(prefix + "&aNo changes detected!"));
         }
     }
 
@@ -167,32 +175,39 @@ public class Alley extends JavaPlugin {
     }
 
     private void registerManagers() {
-        this.framework = new CommandFramework(this);
-
-        this.queueRepository = new QueueRepository();
-        this.queueRepository.initialize();
-
-        this.kitSettingRepository = new KitSettingRepository();
-        this.kitRepository = new KitRepository();
-        this.kitRepository.loadKits();
-
-        this.profileRepository = new ProfileRepository();
-        this.profileRepository.setIProfile(new MongoProfileImpl());
-        this.mongoService = new MongoService(registerDatabase());
-
-        this.hotbarUtility = new HotbarUtility();
-
-        this.profileRepository.loadProfiles();
-
-        this.snapshotRepository = new SnapshotRepository();
-        this.matchRepository = new MatchRepository();
-        this.partyRepository = new PartyRepository();
-
-        this.arenaRepository = new ArenaRepository();
-        this.arenaRepository.loadArenas();
-
-        this.spawnHandler = new SpawnHandler();
-        this.spawnHandler.loadSpawnLocation();
+        Logger.logTime("CommandFramework", () -> this.framework = new CommandFramework(this));
+        Logger.logTime("QueueRepository", () -> {
+            this.queueRepository = new QueueRepository();
+            this.queueRepository.initialize();
+        });
+        Logger.logTime("KitSettingRepository", () -> this.kitSettingRepository = new KitSettingRepository());
+        Logger.logTime("KitRepository", () -> {
+            this.kitRepository = new KitRepository();
+            this.kitRepository.loadKits();
+        });
+        Logger.logTime("ArenaRepository", () -> {
+            this.arenaRepository = new ArenaRepository();
+            this.arenaRepository.loadArenas();
+        });
+        Logger.logTime("FFARepository", () -> {
+            this.ffaRepository = new FFARepository();
+            this.ffaRepository.loadFFAMatches();
+        });
+        Logger.logTime("ProfileRepository", () -> {
+            this.profileRepository = new ProfileRepository();
+            this.profileRepository.setIProfile(new MongoProfileImpl());
+        });
+        Logger.logTime("MongoService", () -> this.mongoService = new MongoService(registerDatabase()));
+        Logger.logTime("HotbarRepository", () -> this.hotbarRepository = new HotbarRepository());
+        Logger.logTime("ProfileRepository.loadProfiles", () -> this.profileRepository.loadProfiles());
+        Logger.logTime("CooldownRepository", () -> this.cooldownRepository = new CooldownRepository());
+        Logger.logTime("SnapshotRepository", () -> this.snapshotRepository = new SnapshotRepository());
+        Logger.logTime("MatchRepository", () -> this.matchRepository = new MatchRepository());
+        Logger.logTime("PartyRepository", () -> this.partyRepository = new PartyRepository());
+        Logger.logTime("SpawnHandler", () -> {
+            this.spawnHandler = new SpawnHandler();
+            this.spawnHandler.loadSpawnLocation();
+        });
 
     }
 
@@ -204,6 +219,7 @@ public class Alley extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new ArenaListener(), this);
         getServer().getPluginManager().registerEvents(new MenuListener(), this);
         getServer().getPluginManager().registerEvents(new SpawnListener(), this);
+        getServer().getPluginManager().registerEvents(new FFAListener(), this);
     }
 
     private void registerCommands() {
@@ -268,6 +284,15 @@ public class Alley extends JavaPlugin {
         new PartyInviteCommand();
         new PartyAcceptCommand();
         new PartyDisbandCommand();
+
+        new FFACreateCommand();
+        new FFADeleteCommand();
+        new FFAKickCommand();
+        new FFAListCommand();
+        new FFAListPlayersCommand();
+        new FFAMaxPlayersCommand();
+        new FFAJoinCommand();
+        new FFALeaveCommand();
 
         new UnrankedCommand();
         new RankedCommand();

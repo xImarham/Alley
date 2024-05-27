@@ -1,106 +1,63 @@
 package me.emmy.alley.hotbar.listener;
 
-import me.emmy.alley.hotbar.enums.LobbyItem;
-import me.emmy.alley.hotbar.enums.PartyItem;
-import me.emmy.alley.hotbar.enums.QueueItem;
-import me.emmy.alley.hotbar.enums.SpectatorItem;
+import me.emmy.alley.Alley;
+import me.emmy.alley.hotbar.HotbarItem;
+import me.emmy.alley.leaderboard.menu.personal.StatisticsMenu;
+import me.emmy.alley.match.menu.CurrentMatchesMenu;
+import me.emmy.alley.profile.Profile;
+import me.emmy.alley.profile.settings.menu.SettingsMenu;
+import me.emmy.alley.queue.menu.queues.QueuesMenu;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.ItemStack;
 
 public class HotbarListener implements Listener {
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
+        Action action = event.getAction();
+        if ((action != Action.RIGHT_CLICK_AIR && action != Action.RIGHT_CLICK_BLOCK)) {
+            return;
+        }
+
         Player player = event.getPlayer();
-
-        if (event.getItem() == null) {
+        ItemStack item = player.getItemInHand();
+        if (item == null || !item.hasItemMeta() || !item.getItemMeta().hasDisplayName()) {
             return;
         }
 
-        LobbyItem lobbyItem = LobbyItem.getByItemStack(event.getItem());
-        if (lobbyItem != null) {
-            handleLobbyItemInteract(event, player, lobbyItem);
-            return;
-        }
+        Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
+        HotbarItem hotbarItem = Alley.getInstance().getHotbarRepository().getItemByStack(item);
 
-        SpectatorItem spectatorItem = SpectatorItem.getByItemStack(event.getItem());
-        if (spectatorItem != null) {
-            handlesSpectatorItemInteract(event, player, spectatorItem);
-            return;
-        }
-
-        QueueItem queueItem = QueueItem.getByItemStack(event.getItem());
-        if (queueItem != null) {
-            handleQueueItemInteract(event, player, queueItem);
-            return;
-        }
-
-        PartyItem partyItem = PartyItem.getByItemStack(event.getItem());
-        if (partyItem != null) {
-            handlePartyItemInteract(event, player, partyItem);
-        }
-    }
-
-    /**
-     * Handles the player's interaction with the lobby items.
-     *
-     * @param event     The event to handle.
-     * @param player    The player to handle.
-     * @param lobbyItem The lobby item to handle.
-     */
-    private void handleLobbyItemInteract(PlayerInteractEvent event, Player player, LobbyItem lobbyItem) {
-        if (event.getAction() != Action.RIGHT_CLICK_AIR && event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
-
-        if (lobbyItem.getCommand() != null) {
-            player.performCommand(lobbyItem.getCommand());
-        }
-    }
-
-    /**
-     * Handles the player's interaction with the spectator items.
-     *
-     * @param event     The event to handle.
-     * @param player    The player to handle.
-     * @param spectatorItem The queue item to handle.
-     */
-    private void handlesSpectatorItemInteract(PlayerInteractEvent event, Player player, SpectatorItem spectatorItem) {
-        if (event.getAction() != Action.RIGHT_CLICK_AIR && event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
-
-        if (spectatorItem.getCommand() != null) {
-            player.performCommand(spectatorItem.getCommand());
-        }
-    }
-
-    /**
-     * Handles the player's interaction with the queue items.
-     *
-     * @param event     The event to handle.
-     * @param player    The player to handle.
-     * @param queueItem The queue item to handle.
-     */
-    private void handleQueueItemInteract(PlayerInteractEvent event, Player player, QueueItem queueItem) {
-        if (event.getAction() != Action.RIGHT_CLICK_AIR && event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
-
-        if (queueItem.getCommand() != null) {
-            player.performCommand(queueItem.getCommand());
-        }
-    }
-
-    /**
-     * Handles the player's interaction with the party items.
-     *
-     * @param event     The event to handle.
-     * @param player    The player to handle.
-     * @param partyItem The party item to handle.
-     */
-    private void handlePartyItemInteract(PlayerInteractEvent event, Player player, PartyItem partyItem) {
-        if (event.getAction() != Action.RIGHT_CLICK_AIR && event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
-
-        if (partyItem.getCommand() != null) {
-            player.performCommand(partyItem.getCommand());
+        if (hotbarItem != null) {
+            String command = hotbarItem.getHotbarItems().getCommand();
+            if (command != null && !command.isEmpty()) {
+                player.performCommand(command);
+            } else {
+                switch (profile.getState()) {
+                    case LOBBY:
+                        switch (hotbarItem.getHotbarItems()) {
+                            case QUEUES:
+                                new QueuesMenu().openMenu(player);
+                                break;
+                            case CURRENT_MATCHES:
+                                new CurrentMatchesMenu().openMenu(player);
+                                break;
+                            case KIT_EDITOR:
+                                break;
+                            case LEADERBOARD:
+                                new StatisticsMenu().openMenu(player);
+                                break;
+                            case SETTINGS:
+                                new SettingsMenu().openMenu(player);
+                                break;
+                        }
+                        break;
+                }
+            }
         }
     }
 }

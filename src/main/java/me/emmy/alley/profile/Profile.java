@@ -3,7 +3,7 @@ package me.emmy.alley.profile;
 import lombok.Getter;
 import lombok.Setter;
 import me.emmy.alley.Alley;
-import me.emmy.alley.ffa.FreeForAll;
+import me.emmy.alley.ffa.AbstractFFAMatch;
 import me.emmy.alley.leaderboard.menu.leaderboard.enums.EnumLeaderboardType;
 import me.emmy.alley.match.AbstractMatch;
 import me.emmy.alley.party.Party;
@@ -18,9 +18,11 @@ import java.util.UUID;
 @Setter
 public class Profile {
 
+    private EnumLeaderboardType leaderboardType = EnumLeaderboardType.RANKED;
     public static final int DEFAULT_COINS = 100;
     public static final int DEFAULT_ELO = 1000;
     private QueueProfile queueProfile;
+    private AbstractFFAMatch ffaMatch;
     private ProfileData profileData;
     private EnumProfileState state;
     private AbstractMatch match;
@@ -28,8 +30,6 @@ public class Profile {
     private boolean online;
     private String name;
     private Party party;
-    private FreeForAll freeForAllGame;
-    private EnumLeaderboardType leaderboardType = EnumLeaderboardType.RANKED;
 
     /**
      * Constructor for the Profile class.

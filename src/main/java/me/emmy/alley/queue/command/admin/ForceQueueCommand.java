@@ -1,6 +1,7 @@
 package me.emmy.alley.queue.command.admin;
 
 import me.emmy.alley.Alley;
+import me.emmy.alley.hotbar.enums.HotbarType;
 import me.emmy.alley.kit.Kit;
 import me.emmy.alley.queue.Queue;
 import me.emmy.alley.utils.PlayerUtil;
@@ -48,7 +49,7 @@ public class ForceQueueCommand extends BaseCommand {
                 queue.addPlayer(target);
                 PlayerUtil.reset(target);
                 target.playSound(target.getLocation(), Sound.ANVIL_LAND, 2.0F, 1.5F);
-                Alley.getInstance().getHotbarUtility().applyQueueItems(target);
+                Alley.getInstance().getHotbarRepository().applyHotbarItems(target, HotbarType.QUEUE);
                 player.sendMessage(CC.translate("&aYou've added &b" + target.getName() + " &ato the &b" + queue.getQueueType() + " &aqueue."));
                 return;
             }

@@ -1,6 +1,7 @@
 package me.emmy.alley.spawn.command;
 
 import me.emmy.alley.Alley;
+import me.emmy.alley.hotbar.enums.HotbarType;
 import me.emmy.alley.profile.Profile;
 import me.emmy.alley.profile.enums.EnumProfileState;
 import me.emmy.alley.utils.PlayerUtil;
@@ -29,7 +30,7 @@ public class SpawnCommand extends BaseCommand {
 
         PlayerUtil.reset(player);
         Alley.getInstance().getSpawnHandler().teleportToSpawn(player);
-        Alley.getInstance().getHotbarUtility().applySpawnItems(player);
+        Alley.getInstance().getHotbarRepository().applyHotbarItems(player, HotbarType.LOBBY);
         player.sendMessage(CC.translate(Alley.getInstance().getConfig("messages.yml").getString("spawn.teleported")));
     }
 }

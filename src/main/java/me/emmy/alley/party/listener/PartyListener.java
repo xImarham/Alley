@@ -38,7 +38,7 @@ public class PartyListener implements Listener {
 
         if (profile.getParty() != null) {
             if (profile.getParty().getLeader().equals(player)) {
-                profile.getParty().disband();
+                profile.getParty().disbandParty();
                 return;
             }
 

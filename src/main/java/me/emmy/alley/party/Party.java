@@ -3,6 +3,7 @@ package me.emmy.alley.party;
 import lombok.Getter;
 import lombok.Setter;
 import me.emmy.alley.Alley;
+import me.emmy.alley.hotbar.enums.HotbarType;
 import me.emmy.alley.party.enums.EnumPartyState;
 import me.emmy.alley.profile.Profile;
 import me.emmy.alley.profile.enums.EnumProfileState;
@@ -43,7 +44,7 @@ public class Party {
     /**
      * Disbands the party.
      */
-    public void disband() {
+    public void disbandParty() {
         this.notifyParty("&cThe party has been disbanded.");
         this.unregisterParty();
         this.resetAllPlayers();
@@ -129,9 +130,9 @@ public class Party {
         Profile profile = getProfile(player);
         profile.setParty(join ? this : null);
         if (join && (profile.getState() == EnumProfileState.LOBBY || profile.getState() == EnumProfileState.WAITING)) {
-            Alley.getInstance().getHotbarUtility().applyPartyItems(player);
+            Alley.getInstance().getHotbarRepository().applyHotbarItems(player, HotbarType.PARTY);
         } else {
-            Alley.getInstance().getHotbarUtility().applySpawnItems(player);
+            Alley.getInstance().getHotbarRepository().applyHotbarItems(player, HotbarType.LOBBY);
         }
     }
 

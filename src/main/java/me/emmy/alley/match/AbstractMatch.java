@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import me.emmy.alley.Alley;
 import me.emmy.alley.arena.Arena;
+import me.emmy.alley.hotbar.enums.HotbarType;
 import me.emmy.alley.kit.Kit;
 import me.emmy.alley.match.enums.EnumMatchState;
 import me.emmy.alley.match.impl.MatchRegularImpl;
@@ -142,7 +143,7 @@ public abstract class AbstractMatch {
      */
     private void teleportPlayerToSpawn(Player player) {
         Alley.getInstance().getSpawnHandler().teleportToSpawn(player);
-        Alley.getInstance().getHotbarUtility().applySpawnItems(player);
+        Alley.getInstance().getHotbarRepository().applyHotbarItems(player, HotbarType.LOBBY);
     }
 
     /**
@@ -170,6 +171,7 @@ public abstract class AbstractMatch {
         }
 
         gamePlayer.setDead(true);
+
         notifySpectators(player.getName() + " has died");
         notifyParticipants(player.getName() + " has died");
 
@@ -234,7 +236,7 @@ public abstract class AbstractMatch {
 
         MatchGamePlayerImpl gamePlayer = getGamePlayer(player);
         if (gamePlayer != null) {
-            gamePlayer.setDisconnected(false);
+            gamePlayer.setDisconnected(true);
             if (!gamePlayer.isDead()) {
                 handleDeath(player);
             }
@@ -303,7 +305,7 @@ public abstract class AbstractMatch {
         Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
         profile.setState(EnumProfileState.SPECTATING);
         profile.setMatch(this);
-        Alley.getInstance().getHotbarUtility().applySpectatorItems(player);
+        Alley.getInstance().getHotbarRepository().applyHotbarItems(player, HotbarType.SPECTATOR);
 
         if (matchArena.getCenter() == null) {
             player.sendMessage(CC.translate("&cThe arena is not set up for spectating"));

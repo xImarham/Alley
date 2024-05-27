@@ -5,9 +5,12 @@ import lombok.Setter;
 import me.emmy.alley.kit.settings.impl.KitSettingBoxingImpl;
 import me.emmy.alley.kit.settings.impl.KitSettingBuildImpl;
 import me.emmy.alley.kit.settings.impl.KitSettingRankedImpl;
+import me.emmy.alley.utils.chat.CC;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Remi
@@ -19,20 +22,45 @@ import java.util.List;
 public class KitSettingRepository {
 
     private final List<KitSetting> settings = new ArrayList<>();
+    private final Map<String, Class<? extends KitSetting>> settingClasses = new HashMap<>();
 
     public KitSettingRepository() {
-        addSetting(new KitSettingBuildImpl());
-        addSetting(new KitSettingRankedImpl());
-        addSetting(new KitSettingBoxingImpl());
+        registerSetting(KitSettingBuildImpl.class);
+        registerSetting(KitSettingRankedImpl.class);
+        registerSetting(KitSettingBoxingImpl.class);
     }
 
     /**
-     * Method to add a setting.
+     * Method to register a setting class.
      *
-     * @param setting The setting.
+     * @param clazz The setting class.
      */
-    public void addSetting(KitSetting setting) {
-        settings.add(setting);
+    public void registerSetting(Class<? extends KitSetting> clazz) {
+        try {
+            KitSetting instance = clazz.getDeclaredConstructor().newInstance();
+            settings.add(instance);
+            settingClasses.put(instance.getName(), clazz);
+        } catch (Exception e) {
+            CC.sendError("Failed to register setting class " + clazz.getSimpleName() + "!");
+        }
+    }
+
+    /**
+     * Method to create a new setting instance by its name.
+     *
+     * @param name The name of the setting.
+     * @return A new instance of the setting.
+     */
+    public KitSetting createSettingByName(String name) {
+        Class<? extends KitSetting> clazz = settingClasses.get(name);
+        if (clazz != null) {
+            try {
+                return clazz.getDeclaredConstructor().newInstance();
+            } catch (Exception e) {
+                CC.sendError("Failed to create setting instance for " + name + "!");
+            }
+        }
+        return null;
     }
 
     /**

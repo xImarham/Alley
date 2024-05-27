@@ -4,9 +4,11 @@ import lombok.Getter;
 import lombok.Setter;
 import me.emmy.alley.Alley;
 import me.emmy.alley.kit.settings.KitSetting;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -56,7 +58,16 @@ public class Kit {
         this.armor = armor;
         this.icon = icon;
         this.iconData = iconData;
-        this.kitSettings = Alley.getInstance().getKitSettingRepository().getSettings();
+        this.kitSettings = new ArrayList<>();
+    }
+
+    /**
+     * Method to add a kit setting.
+     *
+     * @param kitSetting The kit setting to add.
+     */
+    public void addKitSetting(KitSetting kitSetting) {
+        kitSettings.add(kitSetting);
     }
 
     /**
@@ -66,7 +77,12 @@ public class Kit {
      * @return Whether the setting is enabled.
      */
     public boolean isSettingEnabled(String name) {
-        return kitSettings.stream().filter(setting -> setting.getName().equals(name)).anyMatch(KitSetting::isEnabled);
+        KitSetting kitSetting = kitSettings.stream()
+                .filter(setting -> setting.getName().equals(name))
+                .findFirst()
+                .orElse(null);
+
+        return kitSetting != null && kitSetting.isEnabled();
     }
 
     /**
@@ -76,6 +92,11 @@ public class Kit {
      * @return Whether the setting is enabled.
      */
     public boolean isSettingEnabled(Class<? extends KitSetting> clazz) {
-        return kitSettings.stream().filter(setting -> setting.getClass().equals(clazz)).anyMatch(KitSetting::isEnabled);
+        KitSetting kitSetting = kitSettings.stream()
+                .filter(setting -> setting.getClass().equals(clazz))
+                .findFirst()
+                .orElse(null);
+
+        return kitSetting != null && kitSetting.isEnabled();
     }
 }

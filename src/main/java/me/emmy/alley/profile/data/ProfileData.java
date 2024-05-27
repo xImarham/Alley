@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import me.emmy.alley.Alley;
 import me.emmy.alley.profile.Profile;
+import me.emmy.alley.profile.data.impl.ProfileFFAData;
 import me.emmy.alley.profile.data.impl.ProfileKitData;
 import me.emmy.alley.profile.data.impl.ProfileSettingData;
 
@@ -21,6 +22,7 @@ import java.util.Map;
 public class ProfileData {
 
     private Map<String, ProfileKitData> kitData;
+    private Map<String, ProfileFFAData> ffaData;
     private ProfileSettingData profileSettingData;
 
     private int coins = Profile.DEFAULT_COINS;
@@ -35,7 +37,9 @@ public class ProfileData {
     public ProfileData() {
         this.profileSettingData = new ProfileSettingData();
         this.kitData = Maps.newHashMap();
+        this.ffaData = Maps.newHashMap();
         Alley.getInstance().getKitRepository().getKits().forEach(kit -> this.kitData.put(kit.getName(), new ProfileKitData()));
+        Alley.getInstance().getFfaRepository().getMatches().forEach(kit -> this.ffaData.put(kit.getName(), new ProfileFFAData()));
     }
 
     public void addUnrankedWins() {

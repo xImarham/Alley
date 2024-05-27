@@ -1,6 +1,7 @@
 package me.emmy.alley.profile.listener;
 
 import me.emmy.alley.Alley;
+import me.emmy.alley.hotbar.enums.HotbarType;
 import me.emmy.alley.profile.Profile;
 import me.emmy.alley.profile.enums.EnumProfileState;
 import me.emmy.alley.utils.PlayerUtil;
@@ -45,13 +46,13 @@ public class ProfileListener implements Listener {
         Profile profile = plugin.getProfileRepository().getProfile(player.getUniqueId());
         profile.setState(EnumProfileState.LOBBY);
         profile.setName(player.getName());
-        profile.setFreeForAllGame(null);
+        profile.setFfaMatch(null);
         profile.setOnline(true);
         profile.setMatch(null);
 
         PlayerUtil.reset(player);
         Alley.getInstance().getSpawnHandler().teleportToSpawn(player);
-        Alley.getInstance().getHotbarUtility().applySpawnItems(player);
+        Alley.getInstance().getHotbarRepository().applyHotbarItems(player, HotbarType.LOBBY);
 
         player.setFlySpeed(1 * 0.1F);
         player.setWalkSpeed(2 * 0.1F);

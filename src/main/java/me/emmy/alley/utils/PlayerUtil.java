@@ -1,8 +1,13 @@
 package me.emmy.alley.utils;
 
+import me.emmy.alley.Alley;
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.metadata.FixedMetadataValue;
+
+import java.util.UUID;
 
 /**
  * Created by Emmy
@@ -10,6 +15,19 @@ import org.bukkit.inventory.ItemStack;
  * Date: 29/04/2024 - 18:53
  */
 public class PlayerUtil {
+
+    public static void setLastAttacker(Player victim, Player attacker) {
+        victim.setMetadata("lastAttacker", new FixedMetadataValue(Alley.getInstance(), attacker.getUniqueId()));
+    }
+
+    public static Player getLastAttacker(Player victim) {
+        if (victim.hasMetadata("lastAttacker")) {
+            return Bukkit.getPlayer((UUID) victim.getMetadata("lastAttacker").get(0).value());
+        } else {
+            return null;
+        }
+    }
+
     public static void reset(Player player) {
         if (!player.hasMetadata("frozen")) {
             player.setWalkSpeed(0.2F);

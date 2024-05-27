@@ -4,6 +4,7 @@ import me.emmy.alley.Alley;
 import me.emmy.alley.locale.ErrorMessage;
 import me.emmy.alley.locale.Locale;
 import me.emmy.alley.party.Party;
+import me.emmy.alley.party.PartyRepository;
 import me.emmy.alley.utils.chat.CC;
 import me.emmy.alley.utils.command.BaseCommand;
 import me.emmy.alley.utils.command.Command;
@@ -38,13 +39,10 @@ public class PartyAcceptCommand extends BaseCommand {
         }
 
         //TODO: Check if the target has sent an invite
-
-        Party party = Alley.getInstance().getPartyRepository().getPartyByMember(targetPlayer.getUniqueId());
-        if (party == null) {
-            player.sendMessage(CC.translate(Locale.NOT_IN_PARTY.getMessage()));
+        PartyRepository partyRepository = Alley.getInstance().getPartyRepository();
+        if (partyRepository.getPartyByLeader(targetPlayer) != null) {
+            partyRepository.joinParty(player, targetPlayer);
             return;
         }
-
-        party.joinParty(command.getPlayer());
     }
 }
