@@ -11,21 +11,21 @@ import java.util.Map;
 
 public class EnchantUtil {
 
-    private static final Map<String, String> ENCHANTMENTS = new HashMap<>();
+    private static final Map<String, String> enchantment = new HashMap<>();
 
     static {
-        ENCHANTMENTS.put("sharpness", "DAMAGE_ALL");
-        ENCHANTMENTS.put("efficiency", "DIG_SPEED");
-        ENCHANTMENTS.put("unbreaking", "DURABILITY");
-        ENCHANTMENTS.put("fortune", "LOOT_BONUS_BLOCKS");
-        ENCHANTMENTS.put("power", "ARROW_DAMAGE");
-        ENCHANTMENTS.put("punch", "ARROW_KNOCKBACK");
-        ENCHANTMENTS.put("flame", "ARROW_FIRE");
-        ENCHANTMENTS.put("infinity", "ARROW_INFINITE");
+        enchantment.put("sharpness", "DAMAGE_ALL");
+        enchantment.put("efficiency", "DIG_SPEED");
+        enchantment.put("unbreaking", "DURABILITY");
+        enchantment.put("fortune", "LOOT_BONUS_BLOCKS");
+        enchantment.put("power", "ARROW_DAMAGE");
+        enchantment.put("punch", "ARROW_KNOCKBACK");
+        enchantment.put("flame", "ARROW_FIRE");
+        enchantment.put("infinity", "ARROW_INFINITE");
     }
 
     public static String getEnchantment(String key) {
-        return ENCHANTMENTS.get(key.toLowerCase());
+        return enchantment.get(key.toLowerCase());
     }
 }
 
