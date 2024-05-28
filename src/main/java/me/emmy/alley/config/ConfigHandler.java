@@ -21,17 +21,6 @@ public class ConfigHandler {
 
     private final Alley plugin = Alley.getInstance();
 
-    /**
-     * Example Usage: Alley.getInstance().getConfigHandler().getMessagesConfig().getString("example");
-     */
-    private final FileConfiguration messagesConfig = getConfigByName("messages.yml");
-    private final FileConfiguration settingsConfig = getConfigByName("settings.yml");
-    private final FileConfiguration databaseConfig = getConfigByName("database/database.yml");
-    private final FileConfiguration ffaConfig = getConfigByName("storage/ffa.yml");
-    private final FileConfiguration kitsConfig = getConfigByName("storage/kits.yml");
-    private final FileConfiguration arenasConfig = getConfigByName("storage/arenas.yml");
-    private final FileConfiguration scoreboardConfig = getConfigByName("providers/scoreboard.yml");
-
     private final Map<String, File> configFiles = new HashMap<>();
     private final Map<String, FileConfiguration> fileConfigurations = new HashMap<>();
 
