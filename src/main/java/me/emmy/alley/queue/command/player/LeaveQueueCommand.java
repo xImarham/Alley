@@ -2,6 +2,8 @@ package me.emmy.alley.queue.command.player;
 
 import me.emmy.alley.Alley;
 import me.emmy.alley.profile.Profile;
+import me.emmy.alley.profile.enums.EnumProfileState;
+import me.emmy.alley.utils.chat.CC;
 import me.emmy.alley.utils.command.BaseCommand;
 import me.emmy.alley.utils.command.Command;
 import me.emmy.alley.utils.command.CommandArgs;
@@ -17,7 +19,13 @@ public class LeaveQueueCommand extends BaseCommand {
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
+
         Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
+        if (!profile.getState().equals(EnumProfileState.WAITING)) {
+            player.sendMessage(CC.translate("&cYou are not in a queue."));
+            return;
+        }
+
         profile.getQueueProfile().getQueue().removePlayer(profile.getQueueProfile());
     }
 }
