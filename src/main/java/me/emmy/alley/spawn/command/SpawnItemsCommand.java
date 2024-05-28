@@ -1,4 +1,4 @@
-package me.emmy.alley.commands.admin.essential;
+package me.emmy.alley.spawn.command;
 
 import me.emmy.alley.Alley;
 import me.emmy.alley.hotbar.enums.HotbarType;

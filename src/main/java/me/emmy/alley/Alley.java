@@ -7,8 +7,10 @@ import me.emmy.alley.arena.listener.ArenaListener;
 import me.emmy.alley.commands.AlleyCommand;
 import me.emmy.alley.arena.command.ArenaCommand;
 import me.emmy.alley.arena.command.impl.*;
+import me.emmy.alley.commands.admin.essential.EnchantCommand;
+import me.emmy.alley.commands.admin.essential.RenameCommand;
 import me.emmy.alley.commands.admin.management.PlaytimeCommand;
-import me.emmy.alley.commands.admin.essential.SpawnItemsCommand;
+import me.emmy.alley.spawn.command.SpawnItemsCommand;
 import me.emmy.alley.cooldown.CooldownRepository;
 import me.emmy.alley.ffa.FFARepository;
 import me.emmy.alley.ffa.command.admin.*;
@@ -231,6 +233,9 @@ public class Alley extends JavaPlugin {
         new SpawnCommand();
 
         new PlaytimeCommand();
+
+        new RenameCommand();
+        new EnchantCommand();
 
         new KitCommand();
         new KitSaveCommand();

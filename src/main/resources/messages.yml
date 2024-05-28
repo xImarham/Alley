@@ -47,3 +47,8 @@ player-settings:
   party-messages: "&aYou've {status} &aparty messages."
   scoreboard: "&aYou've {status} &athe scoreboard."
   tablist: "&aYou've {status} &athe tablist."
+
+rename-item:
+  missing-arguments: "&cMissing arguments! Please enter a name for the item."
+  no-item: "&cYou need to be holding an item!"
+  renamed: "&aYou've renamed the &a'&r{item}&a' &aitem to &a'&r{renamed}&a'."
