@@ -10,6 +10,7 @@ import me.emmy.alley.arena.command.impl.*;
 import me.emmy.alley.commands.admin.essential.EnchantCommand;
 import me.emmy.alley.commands.admin.essential.RenameCommand;
 import me.emmy.alley.commands.admin.management.PlaytimeCommand;
+import me.emmy.alley.party.command.impl.leader.PartyKickCommand;
 import me.emmy.alley.spawn.command.SpawnItemsCommand;
 import me.emmy.alley.cooldown.CooldownRepository;
 import me.emmy.alley.ffa.FFARepository;
@@ -289,6 +290,7 @@ public class Alley extends JavaPlugin {
         new PartyInviteCommand();
         new PartyAcceptCommand();
         new PartyDisbandCommand();
+        new PartyKickCommand();
 
         new FFACreateCommand();
         new FFADeleteCommand();

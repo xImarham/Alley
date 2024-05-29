@@ -17,7 +17,6 @@ import org.bukkit.entity.Player;
  * Project: Alley
  * Date: 25/05/2024 - 18:33
  */
-
 public class PartyAcceptCommand extends BaseCommand {
     @Override
     @Command(name = "party.accept", aliases = "p.accept")
@@ -40,19 +39,20 @@ public class PartyAcceptCommand extends BaseCommand {
 
         PartyRepository partyRepository = Alley.getInstance().getPartyRepository();
         PartyRequest partyRequest = partyRepository.getRequest(player);
+        Party party = partyRepository.getPartyByLeader(targetPlayer);
+
+        if (party == null) {
+            player.sendMessage(CC.translate("&cThat player is not in a party."));
+            return;
+        }
 
         if (partyRequest == null || !partyRequest.getSender().equals(targetPlayer)) {
             player.sendMessage(CC.translate("&cYou do not have a party invitation from " + targetPlayer.getName() + "."));
             return;
         }
 
-        Party party = partyRepository.getPartyByLeader(targetPlayer);
-        if (party != null) {
-            partyRepository.joinParty(player, targetPlayer);
-            partyRepository.removeRequest(partyRequest);
-            player.sendMessage(CC.translate("&aYou have joined " + targetPlayer.getName() + "'s party."));
-        } else {
-            player.sendMessage(CC.translate("&cThe party led by " + targetPlayer.getName() + " no longer exists."));
-        }
+        partyRepository.joinParty(player, targetPlayer);
+        partyRepository.removeRequest(partyRequest);
+        player.sendMessage(CC.translate("&aYou have joined " + targetPlayer.getName() + "'s party."));
     }
 }

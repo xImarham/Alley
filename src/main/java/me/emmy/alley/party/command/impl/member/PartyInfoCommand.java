@@ -1,6 +1,8 @@
 package me.emmy.alley.party.command.impl.member;
 
 import me.emmy.alley.Alley;
+import me.emmy.alley.party.Party;
+import me.emmy.alley.party.PartyRepository;
 import me.emmy.alley.utils.chat.CC;
 import me.emmy.alley.utils.command.BaseCommand;
 import me.emmy.alley.utils.command.Command;
@@ -23,12 +25,18 @@ public class PartyInfoCommand extends BaseCommand {
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
 
-        if (Alley.getInstance().getPartyRepository().getPartyByLeader(player) == null) {
+        PartyRepository partyRepository = Alley.getInstance().getPartyRepository();
+        Party party = partyRepository.getPartyByMember(player.getUniqueId());
+
+        if (party == null) {
             player.sendMessage(CC.translate("&cYou are not in any party."));
             return;
         }
 
-        String members = Alley.getInstance().getPartyRepository().getPartyByLeader(player).getMembers().stream()
+        UUID leaderUUID = party.getLeader().getUniqueId();
+
+        String members = party.getMembers().stream()
+                .filter(uuid -> !uuid.equals(leaderUUID)) // Exclude the leader
                 .map(uuid -> Alley.getInstance().getServer().getPlayer(uuid))
                 .filter(Objects::nonNull)
                 .map(Player::getName)
@@ -37,7 +45,7 @@ public class PartyInfoCommand extends BaseCommand {
         player.sendMessage(CC.translate(""));
         player.sendMessage(CC.FLOWER_BAR);
         player.sendMessage(CC.translate("&d&lParty Info"));
-        player.sendMessage(CC.translate(" &fLeader: &d" + player.getName()));
+        player.sendMessage(CC.translate(" &fLeader: &d" + Alley.getInstance().getServer().getPlayer(leaderUUID).getName()));
 
         if (members.isEmpty()) {
             player.sendMessage(CC.translate(" &fMembers: &cNo members."));
