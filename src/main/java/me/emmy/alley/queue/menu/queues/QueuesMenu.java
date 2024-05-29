@@ -34,25 +34,25 @@ public class QueuesMenu extends Menu {
                 "&fa &dvariety &fof &dgamemodes &fwithout",
                 "&dstat changes &fand no &dloss penalty&f!",
                 "",
-                "&fClick to select a kit!"
+                "&dClick to select a kit!"
         )));
 
-        buttons.put(13, new QueuesButton("&eFFA Arena", Material.GOLD_AXE, (short) 0, Arrays.asList(
+        buttons.put(13, new QueuesButton("&dFFA Arena", Material.GOLD_AXE, (short) 0, Arrays.asList(
                 "",
                 "&fFree For All Arena allows you to fight",
                 "&ffree for yourself against",
-                "&eeverybody &felse!",
+                "&deverybody &felse!",
                 "",
-                "&fClick to select a kit!"
+                "&dClick to select a kit!"
         )));
 
-        buttons.put(15, new QueuesButton("&cRanked Queue", Material.DIAMOND_SWORD, (short) 0, Arrays.asList(
+        buttons.put(15, new QueuesButton("&dRanked Queue", Material.DIAMOND_SWORD, (short) 0, Arrays.asList(
                 "",
-                "&fThe ranked queue &cchallenge &fother players",
-                "&fand climb the &cleaderboards",
-                "&fto become the &cbest&f!",
+                "&fThe ranked queue &dchallenge &fother players",
+                "&fand climb the &dleaderboards",
+                "&fto become the &dbest&f!",
                 "",
-                "&fClick to select a kit!"
+                "&dClick to select a kit!"
         )));
 
         for (int slot = 0; slot < getSize(); slot++) {

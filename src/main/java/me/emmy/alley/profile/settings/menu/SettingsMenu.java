@@ -31,7 +31,7 @@ public class SettingsMenu extends Menu {
 
         buttons.put(11, new SettingsButton("&dToggle Party Messages", Material.FEATHER, (short) 0, Arrays.asList(
                 "",
-                "&7Decide whther you should",
+                "&7Decide whether you should",
                 "&7see the party chat",
                 "&7messages or not.",
                 "",
@@ -42,8 +42,8 @@ public class SettingsMenu extends Menu {
 
         buttons.put(12, new SettingsButton("&dToggle Party Invites", Material.NAME_TAG, (short) 0, Arrays.asList(
                 "",
-                "&7Decide whther you should",
-                "&7recieve party invites",
+                "&7Decide whether you should",
+                "&7receive party invites",
                 "&7or not.",
                 "",
                 "&7Status: " + (Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId()).getProfileData().getProfileSettingData().isPartyInvitesEnabled() ? "&aEnabled" : "&cDisabled"),
@@ -53,7 +53,7 @@ public class SettingsMenu extends Menu {
 
         buttons.put(13, new SettingsButton("&dToggle Scoreboard", Material.CARPET, (short) 5, Arrays.asList(
                 "",
-                "&7Decide whther you should",
+                "&7Decide whether you should",
                 "&7see the scoreboard",
                 "&7or not.",
                 "",
@@ -64,7 +64,7 @@ public class SettingsMenu extends Menu {
 
         buttons.put(14, new SettingsButton("&dToggle Tablist", Material.ITEM_FRAME, (short) 0, Arrays.asList(
                 "",
-                "&7Decide whther you should",
+                "&7Decide whether you should",
                 "&7see the tablist",
                 "&7or not.",
                 "",
