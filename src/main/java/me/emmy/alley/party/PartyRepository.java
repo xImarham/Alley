@@ -23,6 +23,7 @@ import java.util.UUID;
 @Setter
 public class PartyRepository {
     private final List<Party> parties = new ArrayList<>();
+    private final List<PartyRequest> partyRequests = new ArrayList<>();
 
     /**
      * Gets the party of a leader.
@@ -114,5 +115,36 @@ public class PartyRepository {
         if (party != null && party.getMembers().contains(member.getUniqueId())) {
             party.leaveParty(member);
         }
+    }
+
+    /**
+     * Adds a party request to the repository.
+     *
+     * @param request The party request to add.
+     */
+    public void addRequest(PartyRequest request) {
+        partyRequests.add(request);
+    }
+
+    /**
+     * Gets a party request for a specific player.
+     *
+     * @param player The player to get the request for.
+     * @return The party request for the player.
+     */
+    public PartyRequest getRequest(Player player) {
+        return partyRequests.stream()
+                .filter(request -> request.getTarget().equals(player))
+                .findFirst()
+                .orElse(null);
+    }
+
+    /**
+     * Removes a party request from the repository.
+     *
+     * @param request The party request to remove.
+     */
+    public void removeRequest(PartyRequest request) {
+        partyRequests.remove(request);
     }
 }

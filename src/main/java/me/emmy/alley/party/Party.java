@@ -76,6 +76,14 @@ public class Party {
         }
     }
 
+    public void kickPlayer(Player player) {
+        if (this.isMember(player)) {
+            this.removeMember(player);
+            this.notifyParty("&4" + player.getName() + " &cwas kicked from the party.");
+            this.setupProfile(player, false);
+        }
+    }
+
     /**
      * Checks if a player is in the party.
      *

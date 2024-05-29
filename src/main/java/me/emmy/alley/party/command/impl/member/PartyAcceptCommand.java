@@ -2,9 +2,9 @@ package me.emmy.alley.party.command.impl.member;
 
 import me.emmy.alley.Alley;
 import me.emmy.alley.locale.ErrorMessage;
-import me.emmy.alley.locale.Locale;
 import me.emmy.alley.party.Party;
 import me.emmy.alley.party.PartyRepository;
+import me.emmy.alley.party.PartyRequest;
 import me.emmy.alley.utils.chat.CC;
 import me.emmy.alley.utils.command.BaseCommand;
 import me.emmy.alley.utils.command.Command;
@@ -20,7 +20,7 @@ import org.bukkit.entity.Player;
 
 public class PartyAcceptCommand extends BaseCommand {
     @Override
-    @Command(name = "party.accept")
+    @Command(name = "party.accept", aliases = "p.accept")
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
         String[] args = command.getArgs();
@@ -38,11 +38,21 @@ public class PartyAcceptCommand extends BaseCommand {
             return;
         }
 
-        //TODO: Check if the target has sent an invite
         PartyRepository partyRepository = Alley.getInstance().getPartyRepository();
-        if (partyRepository.getPartyByLeader(targetPlayer) != null) {
-            partyRepository.joinParty(player, targetPlayer);
+        PartyRequest partyRequest = partyRepository.getRequest(player);
+
+        if (partyRequest == null || !partyRequest.getSender().equals(targetPlayer)) {
+            player.sendMessage(CC.translate("&cYou do not have a party invitation from " + targetPlayer.getName() + "."));
             return;
+        }
+
+        Party party = partyRepository.getPartyByLeader(targetPlayer);
+        if (party != null) {
+            partyRepository.joinParty(player, targetPlayer);
+            partyRepository.removeRequest(partyRequest);
+            player.sendMessage(CC.translate("&aYou have joined " + targetPlayer.getName() + "'s party."));
+        } else {
+            player.sendMessage(CC.translate("&cThe party led by " + targetPlayer.getName() + " no longer exists."));
         }
     }
 }

@@ -3,6 +3,7 @@ package me.emmy.alley.party.command.impl.leader;
 import me.emmy.alley.Alley;
 import me.emmy.alley.locale.ErrorMessage;
 import me.emmy.alley.party.Party;
+import me.emmy.alley.party.PartyRequest;
 import me.emmy.alley.utils.chat.CC;
 import me.emmy.alley.utils.command.BaseCommand;
 import me.emmy.alley.utils.command.Command;
@@ -18,7 +19,7 @@ import org.bukkit.entity.Player;
 
 public class PartyInviteCommand extends BaseCommand {
     @Override
-    @Command(name = "party.invite")
+    @Command(name = "party.invite", aliases = "p.invite")
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
         String[] args = command.getArgs();
@@ -27,8 +28,6 @@ public class PartyInviteCommand extends BaseCommand {
             player.sendMessage(CC.translate("&cUsage: /party invite (player)"));
             return;
         }
-
-        //TODO: Check if the target player allows party invites (in future when profiles are done)
 
         String target = args[0];
         Player targetPlayer = Bukkit.getPlayer(target);
@@ -43,7 +42,14 @@ public class PartyInviteCommand extends BaseCommand {
             return;
         }
 
-        Party party = Alley.getInstance().getPartyRepository().getPartyByMember(command.getPlayer().getUniqueId());
-        Alley.getInstance().getPartyRequest().sendRequest(party, targetPlayer);
+        Party party = Alley.getInstance().getPartyRepository().getPartyByMember(player.getUniqueId());
+        if (party == null) {
+            player.sendMessage(CC.translate("&cYou are not in a party."));
+            return;
+        }
+
+        PartyRequest request = new PartyRequest(player, targetPlayer);
+        Alley.getInstance().getPartyRepository().addRequest(request);
+        request.sendRequest(party, targetPlayer);
     }
 }
