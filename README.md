@@ -23,3 +23,4 @@ A modern Practice core made by Emmy and Remi...
 - Coin shop maybe?
 - Core support?
 - Nametags?
+- Support for newer minecraft versions?
