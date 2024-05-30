@@ -97,6 +97,9 @@ public class CC {
         Bukkit.getConsoleSender().sendMessage(" ");
         Bukkit.getConsoleSender().sendMessage(CC.translate(" &f| Arenas: &d" + Alley.getInstance().getArenaRepository().getArenas().size()));
         Bukkit.getConsoleSender().sendMessage(CC.translate(" &f| Kits: &d" + Alley.getInstance().getKitRepository().getKits().size()));
+        Bukkit.getConsoleSender().sendMessage(CC.translate(" &f| FFA Arenas: &d" + Alley.getInstance().getFfaRepository().getMatches().size()));
+        Bukkit.getConsoleSender().sendMessage(" ");
+        Bukkit.getConsoleSender().sendMessage(CC.translate(" &f| Spigot: &d" + Bukkit.getName()));
         Bukkit.getConsoleSender().sendMessage(" ");
         Bukkit.getConsoleSender().sendMessage(CC.translate(" &f| Load time: &d" + (timeTaken) + " &dms"));
         Bukkit.getConsoleSender().sendMessage(CC.translate("&8&m-----------------------------------------------"));

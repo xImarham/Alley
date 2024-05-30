@@ -7,6 +7,7 @@ import me.emmy.alley.arena.listener.ArenaListener;
 import me.emmy.alley.commands.AlleyCommand;
 import me.emmy.alley.arena.command.ArenaCommand;
 import me.emmy.alley.arena.command.impl.*;
+import me.emmy.alley.commands.admin.debug.StateCommand;
 import me.emmy.alley.commands.admin.essential.EnchantCommand;
 import me.emmy.alley.commands.admin.essential.RenameCommand;
 import me.emmy.alley.commands.admin.management.PlaytimeCommand;
@@ -161,7 +162,6 @@ public class Alley extends JavaPlugin {
         Bukkit.getConsoleSender().sendMessage(CC.translate(prefix + "Expected authors: &a" + expectedAuthors + "&f, Retrieved authors: &c" + authors));
 
         if (!new HashSet<>(authors).containsAll(expectedAuthors)) {
-            Bukkit.getConsoleSender().sendMessage(CC.translate(prefix + "&4&lAuthor mismatch! Shutting down the server."));
             System.exit(0);
             Bukkit.shutdown();
         }
@@ -201,8 +201,9 @@ public class Alley extends JavaPlugin {
             this.profileRepository.setIProfile(new MongoProfileImpl());
         });
         Logger.logTime("MongoService", () -> this.mongoService = new MongoService(registerDatabase()));
+        Logger.logMongoDetails();
         Logger.logTime("HotbarRepository", () -> this.hotbarRepository = new HotbarRepository());
-        Logger.logTime("ProfileRepository.loadProfiles", () -> this.profileRepository.loadProfiles());
+        Logger.logTime("profiles", () -> this.profileRepository.loadProfiles());
         Logger.logTime("CooldownRepository", () -> this.cooldownRepository = new CooldownRepository());
         Logger.logTime("SnapshotRepository", () -> this.snapshotRepository = new SnapshotRepository());
         Logger.logTime("MatchRepository", () -> this.matchRepository = new MatchRepository());
@@ -226,91 +227,99 @@ public class Alley extends JavaPlugin {
     }
 
     private void registerCommands() {
-        new AlleyCommand();
+        Logger.logTime("Admin Commands", () -> {
+            new AlleyCommand();
 
-        //admin commands
-        new SpawnItemsCommand();
-        new SetSpawnCommand();
-        new SpawnCommand();
+            new SpawnItemsCommand();
+            new SetSpawnCommand();
+            new SpawnCommand();
 
-        new PlaytimeCommand();
+            new PlaytimeCommand();
 
-        new RenameCommand();
-        new EnchantCommand();
+            new KitCommand();
+            new KitSaveCommand();
+            new KitSaveAllCommand();
+            new KitCreateCommand();
+            new KitDeleteCommand();
+            new KitListCommand();
+            new KitGetInvCommand();
+            new KitSetInvCommand();
+            new KitSetDescriptionCommand();
+            new KitSetDisplayNameCommand();
+            new KitSetEditorSlotCommand();
+            new KitSetUnrankedSlotCommand();
+            new KitSetRankedSlotCommand();
+            new KitSetSettingCommand();
+            new KitSettingsCommand();
+            new KitSetIconCommand();
+            new KitViewCommand();
 
-        new KitCommand();
-        new KitSaveCommand();
-        new KitSaveAllCommand();
-        new KitCreateCommand();
-        new KitDeleteCommand();
-        new KitListCommand();
-        new KitGetInvCommand();
-        new KitSetInvCommand();
-        new KitSetDescriptionCommand();
-        new KitSetDisplayNameCommand();
-        new KitSetEditorSlotCommand();
-        new KitSetUnrankedSlotCommand();
-        new KitSetRankedSlotCommand();
-        new KitSetSettingCommand();
-        new KitSettingsCommand();
-        new KitSetIconCommand();
-        new KitViewCommand();
+            new RenameCommand();
+            new EnchantCommand();
 
-        new ArenaCenterCommand();
-        new ArenaCreateCommand();
-        new ArenaCuboidCommand();
-        new ArenaDeleteCommand();
-        new ArenaAddKitCommand();
-        new ArenaKitListCommand();
-        new ArenaListCommand();
-        new ArenaRemoveKitCommand();
-        new ArenaSaveCommand();
-        new ArenaSetSpawnCommand();
-        new ArenaToggleCommand();
-        new ArenaToolCommand();
-        new ArenaCommand();
+            new ArenaCenterCommand();
+            new ArenaCreateCommand();
+            new ArenaCuboidCommand();
+            new ArenaDeleteCommand();
+            new ArenaAddKitCommand();
+            new ArenaKitListCommand();
+            new ArenaListCommand();
+            new ArenaRemoveKitCommand();
+            new ArenaSaveCommand();
+            new ArenaSetSpawnCommand();
+            new ArenaToggleCommand();
+            new ArenaToolCommand();
+            new ArenaCommand();
 
-        new ForceQueueCommand();
-        new QueueReloadCommand();
+            new ForceQueueCommand();
+            new QueueReloadCommand();
 
-        new MatchCommand();
-        new MatchStartCommand();
-        new MatchCancelCommand();
+            new MatchCommand();
+            new MatchStartCommand();
+            new MatchCancelCommand();
 
-        new TogglePartyInvitesCommand();
-        new TogglePartyMessagesCommand();
-        new ToggleScoreboardCommand();
-        new ToggleTablistCommand();
+            new FFACreateCommand();
+            new FFADeleteCommand();
+            new FFAKickCommand();
+            new FFAListCommand();
+            new FFAListPlayersCommand();
+            new FFAMaxPlayersCommand();
+        });
 
-        new PartyCommand();
-        new PartyCreateCommand();
-        new PartyLeaveCommand();
-        new PartyInfoCommand();
-        new PartyChatCommand();
-        new PartyInviteCommand();
-        new PartyAcceptCommand();
-        new PartyDisbandCommand();
-        new PartyKickCommand();
+        Logger.logTime("Player Commands", () -> {
+            new TogglePartyInvitesCommand();
+            new TogglePartyMessagesCommand();
+            new ToggleScoreboardCommand();
+            new ToggleTablistCommand();
 
-        new FFACreateCommand();
-        new FFADeleteCommand();
-        new FFAKickCommand();
-        new FFAListCommand();
-        new FFAListPlayersCommand();
-        new FFAMaxPlayersCommand();
-        new FFAJoinCommand();
-        new FFALeaveCommand();
+            new PartyCommand();
+            new PartyCreateCommand();
+            new PartyLeaveCommand();
+            new PartyInfoCommand();
+            new PartyChatCommand();
+            new PartyInviteCommand();
+            new PartyAcceptCommand();
+            new PartyDisbandCommand();
+            new PartyKickCommand();
 
-        new UnrankedCommand();
-        new RankedCommand();
-        new SettingsCommand();
-        new LeaderboardCommand();
-        new SpectateCommand();
-        new LeaveSpectatorCommand();
-        new LeaveMatchCommand();
-        new CurrentMatchesCommand();
-        new LeaveQueueCommand();
-        new QueuesCommand();
+            new FFAJoinCommand();
+            new FFALeaveCommand();
+
+            new UnrankedCommand();
+            new RankedCommand();
+            new SettingsCommand();
+            new LeaderboardCommand();
+            new SpectateCommand();
+            new LeaveSpectatorCommand();
+            new LeaveMatchCommand();
+            new CurrentMatchesCommand();
+            new LeaveQueueCommand();
+            new QueuesCommand();
+
+
+            new StateCommand();
+
+        });
     }
 
     private void loadScoreboard() {
