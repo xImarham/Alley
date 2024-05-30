@@ -95,7 +95,7 @@ public class Tournament {
 
         setRunning(true);
         setEnumTournamentState(EnumTournamentState.FIGHTING);
-        getPlayers().forEach(p -> p.sendMessage("The tournament has started!"));
+        getPlayers().forEach(p -> p.sendMessage(CC.translate("&aThe tournament has started!")));
         getPlayers().forEach(p -> p.getInventory().setContents(getKit().getInventory()));
         getPlayers().forEach(p -> p.getInventory().setArmorContents(getKit().getArmor()));
     }
@@ -109,6 +109,6 @@ public class Tournament {
 
         setRunning(false);
         setEnumTournamentState(EnumTournamentState.WAITING);
-        getPlayers().forEach(p -> p.sendMessage("The tournament has ended!"));
+        getPlayers().forEach(p -> p.sendMessage(CC.translate("&aThe tournament has ended!")));
     }
 }
