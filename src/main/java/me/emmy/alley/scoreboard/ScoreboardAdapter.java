@@ -118,7 +118,8 @@ public class ScoreboardAdapter implements AssembleAdapter {
                                 .replaceAll("\\{players\\}", String.valueOf(ffaMatch.getPlayers().size()))
                                 .replaceAll("\\{zone\\}", ffaMatch.getState() == EnumFFAState.SPAWN ? "Spawn" : "Warzone")
                                 .replaceAll("\\{kills\\}", String.valueOf(profile.getProfileData().getFfaData().get(ffaMatch.getKit().getName()).getKills()))
-                                .replaceAll("\\{deaths\\}", String.valueOf(profile.getProfileData().getFfaData().get(ffaMatch.getKit().getName()).getDeaths()));
+                                .replaceAll("\\{deaths\\}", String.valueOf(profile.getProfileData().getFfaData().get(ffaMatch.getKit().getName()).getDeaths()))
+                                .replaceAll("\\{ping\\}", String.valueOf(BukkitReflection.getPing(player)));
                         toReturn.add(CC.translate(replacedLine));
                     }
                     break;

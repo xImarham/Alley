@@ -1,8 +1,6 @@
 package me.emmy.alley.ffa.command.player;
 
 import me.emmy.alley.Alley;
-import me.emmy.alley.ffa.FFARepository;
-import me.emmy.alley.kit.Kit;
 import me.emmy.alley.profile.Profile;
 import me.emmy.alley.utils.chat.CC;
 import me.emmy.alley.utils.command.BaseCommand;
@@ -16,7 +14,7 @@ import org.bukkit.entity.Player;
  * @date 5/27/2024
  */
 public class FFALeaveCommand extends BaseCommand {
-    @Command(name = "ffa.leave")
+    @Command(name = "ffa.leave", aliases = "leaveffa")
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();

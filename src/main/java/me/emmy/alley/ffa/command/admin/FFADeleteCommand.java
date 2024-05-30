@@ -1,12 +1,7 @@
 package me.emmy.alley.ffa.command.admin;
 
 import me.emmy.alley.Alley;
-import me.emmy.alley.arena.Arena;
-import me.emmy.alley.arena.ArenaType;
 import me.emmy.alley.ffa.AbstractFFAMatch;
-import me.emmy.alley.ffa.impl.DefaultFFAMatchImpl;
-import me.emmy.alley.kit.Kit;
-import me.emmy.alley.locale.Locale;
 import me.emmy.alley.utils.chat.CC;
 import me.emmy.alley.utils.command.BaseCommand;
 import me.emmy.alley.utils.command.Command;
