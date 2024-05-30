@@ -2,7 +2,6 @@ package me.emmy.alley.tournament;
 
 import lombok.Getter;
 import lombok.Setter;
-import me.emmy.alley.arena.Arena;
 import me.emmy.alley.kit.Kit;
 import me.emmy.alley.tournament.enums.EnumTournamentState;
 import me.emmy.alley.utils.chat.CC;
@@ -28,7 +27,7 @@ public class Tournament {
     private TournamentType tournamentType;
     private boolean running;
 
-    public Tournament(List<Player> players, Kit kit, Arena arena, int teamSize, TournamentType tournamentType) {
+    public Tournament(List<Player> players, Kit kit, int teamSize, TournamentType tournamentType) {
         this.players = players;
         this.kit = kit;
         this.teamSize = teamSize;
