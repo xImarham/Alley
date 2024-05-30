@@ -24,11 +24,23 @@ public class PartyRequest {
     private final Player sender;
     private final Player target;
 
+    /**
+     * Constructor for the PartyRequest class.
+     *
+     * @param sender The player sending the request.
+     * @param target The player receiving the request.
+     */
     public PartyRequest(Player sender, Player target) {
         this.sender = sender;
         this.target = target;
     }
 
+    /**
+     * Sends a party request to the target player.
+     *
+     * @param party  The party to send the request to.
+     * @param target The target player to send the request to.
+     */
     public void sendRequest(Party party, Player target) {
         party.notifyParty("&b" + target.getName() + " &ahas been invited to the party.");
 

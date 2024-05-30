@@ -27,6 +27,14 @@ public class Tournament {
     private TournamentType tournamentType;
     private boolean running;
 
+    /**
+     * Constructor for the Tournament class.
+     *
+     * @param players        The players in the tournament.
+     * @param kit            The kit of the tournament.
+     * @param teamSize       The team size of the tournament.
+     * @param tournamentType The type of the tournament.
+     */
     public Tournament(List<Player> players, Kit kit, int teamSize, TournamentType tournamentType) {
         this.players = players;
         this.kit = kit;
@@ -34,14 +42,27 @@ public class Tournament {
         this.tournamentType = tournamentType;
     }
 
+    /**
+     * Adds a player to the tournament.
+     *
+     * @param player The player to add.
+     */
     public void addPlayer(Player player) {
         this.players.add(player);
     }
 
+    /**
+     * Removes a player from the tournament.
+     *
+     * @param player The player to remove.
+     */
     public void removePlayer(Player player) {
         this.players.remove(player);
     }
 
+    /**
+     * Announces the tournament.
+     */
     public void announce() {
         List<String> announcement = Arrays.asList(
                 "",
@@ -63,5 +84,31 @@ public class Tournament {
                 player.sendMessage(CC.translate(message));
             }
         }
+    }
+
+    /**
+     * Starts the tournament.
+     */
+    public void start() {
+        this.running = true;
+        this.enumTournamentState = EnumTournamentState.STARTING;
+
+        setRunning(true);
+        setEnumTournamentState(EnumTournamentState.FIGHTING);
+        getPlayers().forEach(p -> p.sendMessage("The tournament has started!"));
+        getPlayers().forEach(p -> p.getInventory().setContents(getKit().getInventory()));
+        getPlayers().forEach(p -> p.getInventory().setArmorContents(getKit().getArmor()));
+    }
+
+    /**
+     * Ends the tournament.
+     */
+    public void end() {
+        this.running = false;
+        this.enumTournamentState = EnumTournamentState.ENDING;
+
+        setRunning(false);
+        setEnumTournamentState(EnumTournamentState.WAITING);
+        getPlayers().forEach(p -> p.sendMessage("The tournament has ended!"));
     }
 }

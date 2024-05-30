@@ -17,4 +17,5 @@ import java.util.List;
 public class TournamentRepository {
 
     private final List<Tournament> tournaments = new ArrayList<>();
+
 }

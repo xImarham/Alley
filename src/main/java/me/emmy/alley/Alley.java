@@ -85,6 +85,7 @@ import me.emmy.alley.queue.command.player.LeaveQueueCommand;
 import me.emmy.alley.scoreboard.ScoreboardAdapter;
 import me.emmy.alley.spawn.SpawnHandler;
 import me.emmy.alley.spawn.listener.SpawnListener;
+import me.emmy.alley.tournament.TournamentRepository;
 import me.emmy.alley.utils.Logger;
 import me.emmy.alley.utils.assemble.Assemble;
 import me.emmy.alley.utils.assemble.AssembleStyle;
@@ -109,6 +110,7 @@ public class Alley extends JavaPlugin {
     private static Alley instance;
 
     private KitSettingRepository kitSettingRepository;
+    private TournamentRepository tournamentRepository;
     private SnapshotRepository snapshotRepository;
     private CooldownRepository cooldownRepository;
     private ProfileRepository profileRepository;
@@ -212,6 +214,7 @@ public class Alley extends JavaPlugin {
             this.spawnHandler = new SpawnHandler();
             this.spawnHandler.loadSpawnLocation();
         });
+        Logger.logTime("TournamentRepository", () -> this.tournamentRepository = new TournamentRepository());
 
     }
 
