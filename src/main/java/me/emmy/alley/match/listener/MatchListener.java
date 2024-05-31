@@ -210,9 +210,13 @@ public class MatchListener implements Listener {
     private void onPlayerDeath(PlayerDeathEvent event) {
         Player player = event.getEntity();
         Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
+
         if (profile.getState() == EnumProfileState.PLAYING) {
             event.setDeathMessage(null);
             event.getDrops().clear();
+
+            profile.getProfileData().getActiveKillEffect().spawnEffect(player.getLocation());
+
             Alley.getInstance().getServer().getScheduler().runTaskLater(Alley.getInstance(), () -> player.spigot().respawn(), 1L);
             profile.getMatch().handleDeath(player);
         }

@@ -4,6 +4,7 @@ import com.google.common.collect.Maps;
 import lombok.Getter;
 import lombok.Setter;
 import me.emmy.alley.Alley;
+import me.emmy.alley.killeffects.AbstractKillEffect;
 import me.emmy.alley.profile.Profile;
 import me.emmy.alley.profile.data.impl.ProfileFFAData;
 import me.emmy.alley.profile.data.impl.ProfileKitData;
@@ -24,6 +25,8 @@ public class ProfileData {
     private Map<String, ProfileKitData> kitData;
     private Map<String, ProfileFFAData> ffaData;
     private ProfileSettingData profileSettingData;
+
+    private AbstractKillEffect activeKillEffect;
 
     private int coins = Profile.DEFAULT_COINS;
     private int elo = Profile.DEFAULT_ELO;
