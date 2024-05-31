@@ -27,6 +27,7 @@ public class Party {
     private boolean shared;
     private List<UUID> members;
     private EnumPartyState state;
+    private String chatFormat = Alley.getInstance().getConfigHandler().getConfigByName("messages.yml").getString("party.chat-format");
 
     /**
      * Constructor for the Party class.
@@ -158,12 +159,26 @@ public class Party {
     }
 
     /**
-     * Sends a message to the party.
+     * Forces a message to be sent to the party regardless of their profile settings.
+     *
+     * @param message The message to send.
+     */
+    public void notifyPartyForcefully(String message) {
+        this.getPlayersInParty().forEach(player -> player.sendMessage(CC.translate(message)));
+    }
+
+    /**
+     * Notifies the party members based on their profile settings.
      *
      * @param message The message to send.
      */
     public void notifyParty(String message) {
-        this.getPlayersInParty().forEach(player -> player.sendMessage(CC.translate(message)));
+        for (Player player : this.getPlayersInParty()) {
+            Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
+            if (profile.getProfileData().getProfileSettingData().isPartyMessagesEnabled()) {
+                player.sendMessage(CC.translate(message));
+            }
+        }
     }
 
     /**

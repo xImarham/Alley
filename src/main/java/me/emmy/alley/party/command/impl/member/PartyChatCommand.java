@@ -1,7 +1,9 @@
 package me.emmy.alley.party.command.impl.member;
 
 import me.emmy.alley.Alley;
+import me.emmy.alley.party.Party;
 import me.emmy.alley.profile.Profile;
+import me.emmy.alley.utils.chat.CC;
 import me.emmy.alley.utils.command.BaseCommand;
 import me.emmy.alley.utils.command.Command;
 import me.emmy.alley.utils.command.CommandArgs;
@@ -23,7 +25,7 @@ public class PartyChatCommand extends BaseCommand {
         String[] args = command.getArgs();
 
         if (args.length == 0) {
-            player.sendMessage("Usage: /party chat <message>");
+            player.sendMessage("Usage: /party chat (message)");
             return;
         }
 
@@ -31,10 +33,17 @@ public class PartyChatCommand extends BaseCommand {
         String message = Arrays.stream(args).map(argument -> argument + " ").collect(Collectors.joining());
 
         if (profile.getParty() == null) {
-            player.sendMessage("You're not in a party.");
+            player.sendMessage(CC.translate("&cYou are not in a party."));
             return;
         }
 
-        profile.getParty().notifyParty("&7[&aParty&7] &a" + player.getName() + "&7: &f" + message);
+        if (!profile.getProfileData().getProfileSettingData().isPartyMessagesEnabled()) {
+            player.sendMessage(CC.translate("&cYou have party messages disabled."));
+            return;
+        }
+
+        Party party = Alley.getInstance().getPartyRepository().getPartyByMember(player.getUniqueId());
+
+        profile.getParty().notifyParty(party.getChatFormat().replace("{player}", player.getName()).replace("{message}", message));
     }
 }

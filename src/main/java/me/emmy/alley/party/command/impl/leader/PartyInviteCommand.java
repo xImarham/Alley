@@ -2,8 +2,10 @@ package me.emmy.alley.party.command.impl.leader;
 
 import me.emmy.alley.Alley;
 import me.emmy.alley.locale.ErrorMessage;
+import me.emmy.alley.locale.Locale;
 import me.emmy.alley.party.Party;
 import me.emmy.alley.party.PartyRequest;
+import me.emmy.alley.profile.Profile;
 import me.emmy.alley.utils.chat.CC;
 import me.emmy.alley.utils.command.BaseCommand;
 import me.emmy.alley.utils.command.Command;
@@ -45,6 +47,12 @@ public class PartyInviteCommand extends BaseCommand {
         Party party = Alley.getInstance().getPartyRepository().getPartyByMember(player.getUniqueId());
         if (party == null) {
             player.sendMessage(CC.translate("&cYou are not in a party."));
+            return;
+        }
+
+        Profile targetProfile = Alley.getInstance().getProfileRepository().getProfile(targetPlayer.getUniqueId());
+        if (targetProfile.getProfileData().getProfileSettingData().isPartyInvitesEnabled()) {
+            player.sendMessage(CC.translate(Locale.PLAYER_DISABLED_PARTY_INVITES.getMessage().replace("{player}", target)));
             return;
         }
 
