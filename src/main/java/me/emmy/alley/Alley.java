@@ -116,6 +116,7 @@ public class Alley extends JavaPlugin {
     private ProfileRepository profileRepository;
     private ScoreboardHandler scoreboardHandler;
     private HotbarRepository hotbarRepository;
+    private CommandFramework commandFramework;
     private ArenaRepository arenaRepository;
     private MatchRepository matchRepository;
     private QueueRepository queueRepository;
@@ -123,7 +124,6 @@ public class Alley extends JavaPlugin {
     private KitRepository kitRepository;
     private FFARepository ffaRepository;
     private ConfigHandler configHandler;
-    private CommandFramework framework;
     private SpawnHandler spawnHandler;
     private MongoService mongoService;
     private PartyRequest partyRequest;
@@ -180,7 +180,7 @@ public class Alley extends JavaPlugin {
     }
 
     private void registerManagers() {
-        Logger.logTime("CommandFramework", () -> this.framework = new CommandFramework(this));
+        Logger.logTime("CommandFramework", () -> this.commandFramework = new CommandFramework(this));
         Logger.logTime("QueueRepository", () -> {
             this.queueRepository = new QueueRepository();
             this.queueRepository.initialize();

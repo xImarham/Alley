@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import me.emmy.alley.ffa.menu.FFAMenu;
 import me.emmy.alley.queue.menu.ranked.RankedMenu;
 import me.emmy.alley.queue.menu.unranked.UnrankedMenu;
-import me.emmy.alley.utils.SoundUtil;
 import me.emmy.alley.utils.menu.Button;
 import me.emmy.alley.utils.pagination.ItemBuilder;
 import org.bukkit.Material;
@@ -40,13 +39,13 @@ public class QueuesButton extends Button {
 
         if (material.equals(Material.IRON_SWORD)) {
             new UnrankedMenu().openMenu(player);
-            SoundUtil.playSuccess(player);
+            playNeutral(player);
         } else if (material.equals(Material.DIAMOND_SWORD)) {
             new RankedMenu().openMenu(player);
-            SoundUtil.playSuccess(player);
+            playNeutral(player);
         } else if (material.equals(Material.GOLD_AXE)) {
             new FFAMenu().openMenu(player);
-            SoundUtil.playSuccess(player);
+            playNeutral(player);
         }
     }
 }

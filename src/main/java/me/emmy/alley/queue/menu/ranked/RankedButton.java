@@ -6,9 +6,8 @@ import me.emmy.alley.hotbar.enums.HotbarType;
 import me.emmy.alley.kit.Kit;
 import me.emmy.alley.queue.Queue;
 import me.emmy.alley.utils.PlayerUtil;
-import me.emmy.alley.utils.pagination.ItemBuilder;
 import me.emmy.alley.utils.menu.Button;
-import org.bukkit.Sound;
+import me.emmy.alley.utils.pagination.ItemBuilder;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
@@ -51,7 +50,7 @@ public class RankedButton extends Button {
         queue.addPlayer(player);
         PlayerUtil.reset(player);
         player.closeInventory();
-        player.playSound(player.getLocation(), Sound.ANVIL_LAND, 2.0F, 1.5F);
+        playNeutral(player);
         Alley.getInstance().getHotbarRepository().applyHotbarItems(player, HotbarType.QUEUE);
     }
 }

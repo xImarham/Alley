@@ -29,7 +29,7 @@ public class SettingsMenu extends Menu {
     public Map<Integer, Button> getButtons(Player player) {
         Map<Integer, Button> buttons = new HashMap<>();
 
-        buttons.put(11, new SettingsButton("&dToggle Party Messages", Material.FEATHER, (short) 0, Arrays.asList(
+        buttons.put(10, new SettingsButton("&dToggle Party Messages", Material.FEATHER, (short) 0, Arrays.asList(
                 "",
                 "&7Decide whether you should",
                 "&7see the party chat",
@@ -40,7 +40,7 @@ public class SettingsMenu extends Menu {
                 "&fClick to toggle!"
         )));
 
-        buttons.put(12, new SettingsButton("&dToggle Party Invites", Material.NAME_TAG, (short) 0, Arrays.asList(
+        buttons.put(11, new SettingsButton("&dToggle Party Invites", Material.NAME_TAG, (short) 0, Arrays.asList(
                 "",
                 "&7Decide whether you should",
                 "&7receive party invites",
@@ -51,7 +51,7 @@ public class SettingsMenu extends Menu {
                 "&fClick to toggle!"
         )));
 
-        buttons.put(13, new SettingsButton("&dToggle Scoreboard", Material.CARPET, (short) 5, Arrays.asList(
+        buttons.put(12, new SettingsButton("&dToggle Scoreboard", Material.CARPET, (short) 5, Arrays.asList(
                 "",
                 "&7Decide whether you should",
                 "&7see the scoreboard",
@@ -62,7 +62,7 @@ public class SettingsMenu extends Menu {
                 "&fClick to toggle!"
         )));
 
-        buttons.put(14, new SettingsButton("&dToggle Tablist", Material.ITEM_FRAME, (short) 0, Arrays.asList(
+        buttons.put(13, new SettingsButton("&dToggle Tablist", Material.ITEM_FRAME, (short) 0, Arrays.asList(
                 "",
                 "&7Decide whether you should",
                 "&7see the tablist",
@@ -75,10 +75,7 @@ public class SettingsMenu extends Menu {
 
         for (int slot = 0; slot < getSize(); slot++) {
             if (!buttons.containsKey(slot)) {
-                buttons.put(slot, new SettingsButton("", Material.STAINED_GLASS_PANE, (short) 6, Arrays.asList(
-                        "",
-                        ""
-                )));
+                buttons.put(slot, new SettingsButton("", Material.STAINED_GLASS_PANE, (short) 6, Arrays.asList("")));
             }
         }
 

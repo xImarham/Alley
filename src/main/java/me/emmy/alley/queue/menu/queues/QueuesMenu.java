@@ -57,10 +57,7 @@ public class QueuesMenu extends Menu {
 
         for (int slot = 0; slot < getSize(); slot++) {
             if (!buttons.containsKey(slot)) {
-                buttons.put(slot, new QueuesButton("", Material.STAINED_GLASS_PANE, (short) 6, Arrays.asList(
-                        "",
-                        ""
-                )));
+                buttons.put(slot, new QueuesButton("", Material.STAINED_GLASS_PANE, (short) 6, Arrays.asList("")));
             }
         }
 

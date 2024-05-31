@@ -31,6 +31,7 @@ public enum Locale {
     PARTY_CREATED("messages.yml", "party.created"),
     PARTY_DISBANDED("messages.yml", "party.disbanded"),
     PARTY_LEFT("messages.yml", "party.left"),
+    PLAYER_DISABLED_PARTY_INVITES("messages.yml", "party.target-disabled-invites"),
 
     TOGGLED_PARTY_INVITES("messages.yml", "player-settings.party-invites"),
     TOGGLED_PARTY_MESSAGES("messages.yml", "player-settings.party-messages"),

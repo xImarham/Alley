@@ -34,10 +34,12 @@ kit:
   rankedslot-set: "&aSuccessfully set the ranked slot of the &b{kit-name} &akit to &b{slot}&a!"
 
 party:
+  chat-format: "&7[&dParty&7] &d{player}&7: &f{message}"
   not-in-party: "&cYou are not in a party."
   created: "&aYou've created a new party!"
   disbanded: "&cYou've disbanded the party!"
   left: "&cYou've left the party!"
+  target-disabled-invites: "&c{player} has party invites disabled."
 
 playtime:
   message: " \n&b{target}'s total playtime:\n &b{days} &fdays, &b{hours} &fhours, &b{minutes} &fminutes and &b{seconds} &fseconds.\n "

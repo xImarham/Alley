@@ -7,7 +7,7 @@ public abstract class BaseCommand {
     public Alley main = Alley.getInstance();
 
     public BaseCommand() {
-        main.getFramework().registerCommands(this);
+        main.getCommandFramework().registerCommands(this);
     }
 
     public abstract void onCommand(CommandArgs command);
