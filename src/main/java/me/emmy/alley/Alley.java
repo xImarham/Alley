@@ -206,7 +206,6 @@ public class Alley extends JavaPlugin {
         });
         Logger.logTime("KillEffectRepository", () -> this.killEffectRepository = new KillEffectRepository());
         Logger.logTime("MongoService", () -> this.mongoService = new MongoService(registerDatabase()));
-        Logger.logMongoDetails();
         Logger.logTime("HotbarRepository", () -> this.hotbarRepository = new HotbarRepository());
         Logger.logTime("profiles", () -> this.profileRepository.loadProfiles());
         Logger.logTime("CooldownRepository", () -> this.cooldownRepository = new CooldownRepository());

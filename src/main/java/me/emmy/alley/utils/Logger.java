@@ -18,13 +18,4 @@ public class Logger {
         long end = System.currentTimeMillis();
         Bukkit.getConsoleSender().sendMessage(CC.translate("&f[&dAlley&f] &fSuccessfully loaded &d" + taskName + " &fin &d" + (end - start) + "ms&f."));
     }
-
-    public static void logMongoDetails() {
-        FileConfiguration config = Alley.getInstance().getConfigHandler().getConfigByName("database/database.yml");
-        String prefix = Alley.getInstance().getPrefix();
-
-        Bukkit.getConsoleSender().sendMessage(CC.translate(prefix + "&fMongo Database"));
-        Bukkit.getConsoleSender().sendMessage(CC.translate(prefix + " > Host: &d" + config.getString("mongo.uri")));
-        Bukkit.getConsoleSender().sendMessage(CC.translate(prefix + " > Database: &d" + config.getString("mongo.database")));
-    }
 }

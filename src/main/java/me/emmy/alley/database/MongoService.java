@@ -9,6 +9,7 @@ import lombok.Getter;
 import me.emmy.alley.Alley;
 import me.emmy.alley.utils.chat.CC;
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.FileConfiguration;
 
 /**
  * Created by Emmy
@@ -45,10 +46,19 @@ public class MongoService {
             String databaseName = Alley.getInstance().getConfigHandler().getConfigByName("database/database.yml").getString("mongo.database");
             this.mongoClient = MongoClients.create(settings);
             this.mongoDatabase = mongoClient.getDatabase(databaseName);
-
-            Bukkit.getConsoleSender().sendMessage(CC.translate("&f[&dAlley&f] &fSuccessfully connected to MongoDB."));
+            this.sendConnectionMessage();
         } catch (Exception e) {
             Bukkit.getConsoleSender().sendMessage(CC.translate("&f[&dAlley&f] &cMongoDB failed to create a connection."));
         }
+    }
+
+    private void sendConnectionMessage() {
+        FileConfiguration config = Alley.getInstance().getConfigHandler().getConfigByName("database/database.yml");
+        String prefix = Alley.getInstance().getPrefix();
+
+        Bukkit.getConsoleSender().sendMessage(CC.translate("&f[&dAlley&f] &fSuccessfully connected to MongoDB."));
+        Bukkit.getConsoleSender().sendMessage(CC.translate(prefix + "&fMongo Database"));
+        Bukkit.getConsoleSender().sendMessage(CC.translate(prefix + " > Host: &d" + config.getString("mongo.uri")));
+        Bukkit.getConsoleSender().sendMessage(CC.translate(prefix + " > Database: &d" + config.getString("mongo.database")));
     }
 }
