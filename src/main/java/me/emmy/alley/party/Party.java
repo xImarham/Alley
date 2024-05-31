@@ -173,12 +173,11 @@ public class Party {
      * @param message The message to send.
      */
     public void notifyParty(String message) {
-        for (Player player : this.getPlayersInParty()) {
-            Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
-            if (profile.getProfileData().getProfileSettingData().isPartyMessagesEnabled()) {
+        this.getPlayersInParty().forEach(player -> {
+            if (getProfile(player).getProfileData().getProfileSettingData().isPartyMessagesEnabled()) {
                 player.sendMessage(CC.translate(message));
             }
-        }
+        });
     }
 
     /**

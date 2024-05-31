@@ -204,11 +204,7 @@ public class Alley extends JavaPlugin {
             this.profileRepository = new ProfileRepository();
             this.profileRepository.setIProfile(new MongoProfileImpl());
         });
-
-        Logger.logTime("KillEffectRepository", () -> {
-            this.killEffectRepository = new KillEffectRepository();
-        });
-
+        Logger.logTime("KillEffectRepository", () -> this.killEffectRepository = new KillEffectRepository());
         Logger.logTime("MongoService", () -> this.mongoService = new MongoService(registerDatabase()));
         Logger.logMongoDetails();
         Logger.logTime("HotbarRepository", () -> this.hotbarRepository = new HotbarRepository());
