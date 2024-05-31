@@ -4,7 +4,6 @@ import com.google.common.collect.Maps;
 import lombok.Getter;
 import lombok.Setter;
 import me.emmy.alley.Alley;
-import me.emmy.alley.profile.cosmetic.killeffects.AbstractKillEffect;
 import me.emmy.alley.profile.Profile;
 import me.emmy.alley.profile.data.impl.ProfileFFAData;
 import me.emmy.alley.profile.data.impl.ProfileKitData;
@@ -25,7 +24,6 @@ public class ProfileData {
     private Map<String, ProfileKitData> kitData;
     private Map<String, ProfileFFAData> ffaData;
     private ProfileSettingData profileSettingData;
-
     private String activeKillEffect;
 
     private int coins = Profile.DEFAULT_COINS;
@@ -34,8 +32,6 @@ public class ProfileData {
     private int unrankedLosses = 0;
     private int rankedWins = 0;
     private int rankedLosses = 0;
-    private int ffaKills = 0;
-    private int ffaDeaths = 0;
 
     public ProfileData() {
         this.profileSettingData = new ProfileSettingData();
@@ -43,37 +39,5 @@ public class ProfileData {
         this.ffaData = Maps.newHashMap();
         Alley.getInstance().getKitRepository().getKits().forEach(kit -> this.kitData.put(kit.getName(), new ProfileKitData()));
         Alley.getInstance().getFfaRepository().getMatches().forEach(kit -> this.ffaData.put(kit.getName(), new ProfileFFAData()));
-    }
-
-    public void addUnrankedWins() {
-        this.unrankedWins++;
-    }
-
-    public void addUnrankedLosses() {
-        this.unrankedLosses++;
-    }
-
-    public void addRankedWins() {
-        this.rankedWins++;
-    }
-
-    public void addRankedLosses() {
-        this.rankedLosses++;
-    }
-
-    public void addElo() {
-        this.elo++;
-    }
-
-    public void addCoins() {
-        this.coins++;
-    }
-
-    public void addFFAKill() {
-        this.ffaKills++;
-    }
-
-    public void addFFALosses() {
-        this.ffaDeaths++;
     }
 }

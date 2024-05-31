@@ -2,6 +2,8 @@ package me.emmy.alley.leaderboard.menu.personal.button;
 
 import me.emmy.alley.Alley;
 import me.emmy.alley.profile.Profile;
+import me.emmy.alley.profile.data.impl.ProfileFFAData;
+import me.emmy.alley.profile.data.impl.ProfileKitData;
 import me.emmy.alley.utils.item.ItemBuilder;
 import me.emmy.alley.utils.menu.Button;
 import org.bukkit.Material;
@@ -38,8 +40,8 @@ public class GlobalStatButton extends Button {
                         "&f● &dLosses: &f" + profile.getProfileData().getUnrankedLosses(),
                         "",
                         "&d&lFFA Statistics",
-                        "&f● &dKills: &f" + profile.getProfileData().getFfaKills(),
-                        "&f● &dDeaths: &f" + profile.getProfileData().getFfaDeaths(),
+                        "&f● &dKills: &f" + profile.getProfileData().getFfaData().values().stream().mapToInt(ProfileFFAData::getKills).sum(),
+                        "&f● &dDeaths: &f" + profile.getProfileData().getFfaData().values().stream().mapToInt(ProfileFFAData::getDeaths).sum(),
                         ""
 
                 )
