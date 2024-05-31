@@ -11,7 +11,7 @@ import me.emmy.alley.commands.admin.debug.StateCommand;
 import me.emmy.alley.commands.admin.essential.EnchantCommand;
 import me.emmy.alley.commands.admin.essential.RenameCommand;
 import me.emmy.alley.commands.admin.management.PlaytimeCommand;
-import me.emmy.alley.killeffects.KillEffectRepository;
+import me.emmy.alley.profile.cosmetic.killeffects.KillEffectRepository;
 import me.emmy.alley.party.command.impl.leader.PartyKickCommand;
 import me.emmy.alley.spawn.command.SpawnItemsCommand;
 import me.emmy.alley.cooldown.CooldownRepository;

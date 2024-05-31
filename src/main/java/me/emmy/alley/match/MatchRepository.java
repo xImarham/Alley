@@ -9,6 +9,5 @@ import java.util.List;
 @Getter
 @Setter
 public class MatchRepository {
-
     private final List<AbstractMatch> matches = new ArrayList<>();
 }

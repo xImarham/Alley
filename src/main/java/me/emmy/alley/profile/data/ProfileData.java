@@ -4,7 +4,7 @@ import com.google.common.collect.Maps;
 import lombok.Getter;
 import lombok.Setter;
 import me.emmy.alley.Alley;
-import me.emmy.alley.killeffects.AbstractKillEffect;
+import me.emmy.alley.profile.cosmetic.killeffects.AbstractKillEffect;
 import me.emmy.alley.profile.Profile;
 import me.emmy.alley.profile.data.impl.ProfileFFAData;
 import me.emmy.alley.profile.data.impl.ProfileKitData;

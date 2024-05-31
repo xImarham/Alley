@@ -19,7 +19,6 @@ import java.util.stream.Collectors;
  * Project: Alley
  * Date: 24/05/2024 - 19:17
  */
-
 public class PartyInfoCommand extends BaseCommand {
     @Override
     @Command(name = "party.info", aliases = {"p.info"})
