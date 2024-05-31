@@ -19,4 +19,14 @@ public class KillEffectRepository {
     public KillEffectRepository() {
         killEffects.add(new NoneKillEffect());
     }
+
+    public AbstractKillEffect getByName(String name) {
+        for(AbstractKillEffect killEffect : killEffects) {
+            if(killEffect.getName().equals(name)) {
+                return killEffect;
+            }
+        }
+
+        return null;
+    }
 }

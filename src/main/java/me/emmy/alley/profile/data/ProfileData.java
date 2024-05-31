@@ -26,7 +26,7 @@ public class ProfileData {
     private Map<String, ProfileFFAData> ffaData;
     private ProfileSettingData profileSettingData;
 
-    private AbstractKillEffect activeKillEffect;
+    private String activeKillEffect;
 
     private int coins = Profile.DEFAULT_COINS;
     private int elo = Profile.DEFAULT_ELO;
