@@ -263,6 +263,7 @@ public class Alley extends JavaPlugin {
             new ArenaCenterCommand();
             new ArenaCreateCommand();
             new ArenaCuboidCommand();
+            new ArenaTeleportCommand();
             new ArenaDeleteCommand();
             new ArenaAddKitCommand();
             new ArenaKitListCommand();
@@ -281,6 +282,7 @@ public class Alley extends JavaPlugin {
             new MatchStartCommand();
             new MatchCancelCommand();
 
+            new FFACommand();
             new FFACreateCommand();
             new FFADeleteCommand();
             new FFAKickCommand();

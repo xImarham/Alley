@@ -1,6 +1,7 @@
 package me.emmy.alley.party.listener;
 
 import me.emmy.alley.Alley;
+import me.emmy.alley.party.Party;
 import me.emmy.alley.profile.Profile;
 import me.emmy.alley.utils.chat.CC;
 import org.bukkit.entity.Player;
@@ -27,7 +28,13 @@ public class PartyListener implements Listener {
             }
 
             event.setCancelled(true);
-            profile.getParty().notifyParty(CC.translate("&7[&aParty&7] &a" + event.getPlayer().getName() + "&7: &f" + event.getMessage().substring(1)));
+            if (!profile.getProfileData().getProfileSettingData().isPartyMessagesEnabled()) {
+                event.getPlayer().sendMessage(CC.translate("&cYou have party messages disabled."));
+                return;
+            }
+
+            Party party = Alley.getInstance().getPartyRepository().getPartyByMember(event.getPlayer().getUniqueId());
+            profile.getParty().notifyParty(party.getChatFormat().replace("{player}", event.getPlayer().getName()).replace("{message}", event.getMessage().substring(1)));
         }
     }
 

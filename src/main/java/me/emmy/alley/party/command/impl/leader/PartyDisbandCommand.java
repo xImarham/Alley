@@ -10,8 +10,6 @@ import me.emmy.alley.utils.command.Command;
 import me.emmy.alley.utils.command.CommandArgs;
 import org.bukkit.entity.Player;
 
-import java.util.UUID;
-
 /**
  * Created by Emmy
  * Project: Alley

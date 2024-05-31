@@ -46,7 +46,7 @@ public class PartyInviteCommand extends BaseCommand {
 
         Party party = Alley.getInstance().getPartyRepository().getPartyByMember(player.getUniqueId());
         if (party == null) {
-            player.sendMessage(CC.translate("&cYou are not in a party."));
+            player.sendMessage(CC.translate(Locale.NOT_IN_PARTY.getMessage()));
             return;
         }
 

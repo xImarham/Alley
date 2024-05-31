@@ -2,6 +2,7 @@ package me.emmy.alley.party.command.impl.member;
 
 import me.emmy.alley.Alley;
 import me.emmy.alley.locale.ErrorMessage;
+import me.emmy.alley.locale.Locale;
 import me.emmy.alley.party.Party;
 import me.emmy.alley.party.PartyRepository;
 import me.emmy.alley.party.PartyRequest;
@@ -42,7 +43,7 @@ public class PartyAcceptCommand extends BaseCommand {
         Party party = partyRepository.getPartyByLeader(targetPlayer);
 
         if (party == null) {
-            player.sendMessage(CC.translate("&cThat player is not in a party."));
+            player.sendMessage(CC.translate(Locale.NOT_IN_PARTY.getMessage()));
             return;
         }
 

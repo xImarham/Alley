@@ -28,6 +28,7 @@ public enum Locale {
     KIT_RANKEDSLOT_SET("messages.yml", "kit.rankedslot-set"),
 
     NOT_IN_PARTY("messages.yml", "party.not-in-party"),
+    ALREADY_IN_PARTY("messages.yml", "party.already-in-party"),
     PARTY_CREATED("messages.yml", "party.created"),
     PARTY_DISBANDED("messages.yml", "party.disbanded"),
     PARTY_LEFT("messages.yml", "party.left"),

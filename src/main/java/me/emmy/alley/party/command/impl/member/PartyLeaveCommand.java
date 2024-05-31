@@ -38,6 +38,6 @@ public class PartyLeaveCommand extends BaseCommand {
             return;
         }
 
-        player.sendMessage(CC.translate("&cYou're not in a party"));
+        player.sendMessage(CC.translate(Locale.NOT_IN_PARTY.getMessage()));
     }
 }

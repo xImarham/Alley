@@ -35,6 +35,7 @@ kit:
 
 party:
   chat-format: "&7[&dParty&7] &d{player}&7: &f{message}"
+  already-in-party: "&cYou are already in a party."
   not-in-party: "&cYou are not in a party."
   created: "&aYou've created a new party!"
   disbanded: "&cYou've disbanded the party!"

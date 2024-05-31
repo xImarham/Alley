@@ -1,6 +1,7 @@
 package me.emmy.alley.party.command.impl.member;
 
 import me.emmy.alley.Alley;
+import me.emmy.alley.locale.Locale;
 import me.emmy.alley.party.Party;
 import me.emmy.alley.profile.Profile;
 import me.emmy.alley.utils.chat.CC;
@@ -33,7 +34,7 @@ public class PartyChatCommand extends BaseCommand {
         String message = Arrays.stream(args).map(argument -> argument + " ").collect(Collectors.joining());
 
         if (profile.getParty() == null) {
-            player.sendMessage(CC.translate("&cYou are not in a party."));
+            player.sendMessage(CC.translate(Locale.NOT_IN_PARTY.getMessage()));
             return;
         }
 
