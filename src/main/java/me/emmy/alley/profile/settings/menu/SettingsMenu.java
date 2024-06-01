@@ -37,7 +37,7 @@ public class SettingsMenu extends Menu {
                 "",
                 "&7Status: " + (Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId()).getProfileData().getProfileSettingData().isPartyMessagesEnabled() ? "&aEnabled" : "&cDisabled"),
                 "",
-                "&fClick to toggle!"
+                "&dClick to toggle!"
         )));
 
         buttons.put(11, new SettingsButton("&dToggle Party Invites", Material.NAME_TAG, (short) 0, Arrays.asList(
@@ -48,7 +48,7 @@ public class SettingsMenu extends Menu {
                 "",
                 "&7Status: " + (Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId()).getProfileData().getProfileSettingData().isPartyInvitesEnabled() ? "&aEnabled" : "&cDisabled"),
                 "",
-                "&fClick to toggle!"
+                "&dClick to toggle!"
         )));
 
         buttons.put(12, new SettingsButton("&dToggle Scoreboard", Material.CARPET, (short) 5, Arrays.asList(
@@ -59,7 +59,7 @@ public class SettingsMenu extends Menu {
                 "",
                 "&7Status: " + (Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId()).getProfileData().getProfileSettingData().isScoreboardEnabled() ? "&aEnabled" : "&cDisabled"),
                 "",
-                "&fClick to toggle!"
+                "&dClick to toggle!"
         )));
 
         buttons.put(13, new SettingsButton("&dToggle Tablist", Material.ITEM_FRAME, (short) 0, Arrays.asList(
@@ -70,7 +70,15 @@ public class SettingsMenu extends Menu {
                 "",
                 "&7Status: " + (Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId()).getProfileData().getProfileSettingData().isTablistEnabled() ? "&aEnabled" : "&cDisabled"),
                 "",
-                "&fClick to toggle!"
+                "&dClick to toggle!"
+        )));
+
+        buttons.put(16, new SettingsButton("&dCosmetics", Material.BOOK, (short) 0, Arrays.asList(
+                "",
+                "&7Customize your available",
+                "&7cosmetics.",
+                "",
+                "&dClick to view!"
         )));
 
         for (int slot = 0; slot < getSize(); slot++) {
