@@ -51,7 +51,7 @@ public class PartyInviteCommand extends BaseCommand {
         }
 
         Profile targetProfile = Alley.getInstance().getProfileRepository().getProfile(targetPlayer.getUniqueId());
-        if (targetProfile.getProfileData().getProfileSettingData().isPartyInvitesEnabled()) {
+        if (!targetProfile.getProfileData().getProfileSettingData().isPartyInvitesEnabled()) {
             player.sendMessage(CC.translate(Locale.PLAYER_DISABLED_PARTY_INVITES.getMessage().replace("{player}", target)));
             return;
         }
