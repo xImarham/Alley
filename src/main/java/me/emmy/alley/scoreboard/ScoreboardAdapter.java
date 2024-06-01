@@ -42,6 +42,16 @@ public class ScoreboardAdapter implements AssembleAdapter {
                                 .replaceAll("\\{in-queue\\}", String.valueOf(Alley.getInstance().getProfileRepository().getProfiles().values().stream().filter(profile1 -> profile1.getState() == EnumProfileState.WAITING).count()));
                         toReturn.add(CC.translate(replacedLine));
                     }
+
+                    for (String line : Alley.getInstance().getConfigHandler().getConfigByName("providers/scoreboard.yml").getStringList("scoreboard.lines.party-addition")) {
+                        String replacedLine = PlaceholderAPI.setPlaceholders(player, line);
+                        replacedLine = replacedLine
+                                .replaceAll("\\{sidebar\\}", "&7&m----------------------------")
+                                .replaceAll("\\{party-size\\}", String.valueOf(profile.getParty().getMembers().size()))
+                                .replaceAll("\\{party-leader\\}", profile.getParty().getLeader().getName());
+                        toReturn.add(CC.translate(replacedLine));
+                    }
+
                     break;
                 case WAITING:
                     for (String line : Alley.getInstance().getConfigHandler().getConfigByName("providers/scoreboard.yml").getStringList("scoreboard.lines.waiting")) {
@@ -124,6 +134,8 @@ public class ScoreboardAdapter implements AssembleAdapter {
                     }
                     break;
             }
+            toReturn.add("");
+            toReturn.add(Alley.getInstance().getConfigHandler().getConfigByName("providers/scoreboard.yml").getString("scoreboard.footer"));
             return toReturn;
         }
         return null;

@@ -1,5 +1,6 @@
 scoreboard:
   enabled: true
+  footer: "&dalley.net"
   title:
     text: "  &b&lPractice  "
     animated: true
@@ -36,8 +37,11 @@ scoreboard:
       - " &rOnline: &d{online}"
       - " &rPlaying: &d{playing}"
       - " &rIn Queue: &d{in-queue}"
+    party-addition:
       - ""
-      - "&dalley.net"
+      - "&d&lParty"
+      - " &rLeader: &d{party-leader}"
+      - " &rMembers: &d{party-size}"
     waiting:
       - ""
       - "&d&lInfo"
@@ -49,21 +53,15 @@ scoreboard:
       - " &rKit: &d{queued-kit}"
       - " &rTime: &d{queued-time}"
       - " &rType: &d{queued-type}"
-      - ""
-      - "&dalley.net"
     playing:
       - ""
       - "&d&lMatch"
       - " &rDuration: &d{duration}"
       - " &rOpponent: &d{opponent}"
       - " &rPing: &d{player-ping}ms &7/ &d{opponent-ping}ms"
-      - ""
-      - "&dalley.net"
     spectating:
       - ""
       - "&dSPECTATING"
-      - ""
-      - "&dalley.net"
     ffa:
       - ""
       - "&d&lFFA"
@@ -73,5 +71,3 @@ scoreboard:
       - ""
       - " &rKills: &d{kills}"
       - " &rDeaths: &d{deaths}"
-      - ""
-      - "&dalley.net"
