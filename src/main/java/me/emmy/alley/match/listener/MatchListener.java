@@ -10,11 +10,13 @@ import me.emmy.alley.match.AbstractMatch;
 import me.emmy.alley.match.enums.EnumMatchState;
 import me.emmy.alley.profile.Profile;
 import me.emmy.alley.profile.enums.EnumProfileState;
+import me.emmy.alley.utils.PlayerUtil;
 import me.emmy.alley.utils.chat.CC;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
@@ -215,11 +217,23 @@ public class MatchListener implements Listener {
             event.setDeathMessage(null);
             event.getDrops().clear();
 
-            //Alley.getInstance().getKillEffectRepository().getByName(profile.getProfileData().getActiveKillEffect()).spawnEffect(player.getLocation());
             Alley.getInstance().getServer().getScheduler().runTaskLater(Alley.getInstance(), () -> player.spigot().respawn(), 1L);
             profile.getMatch().handleDeath(player);
         }
     }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onEntityDamageByEntityMonitor(EntityDamageByEntityEvent event) {
+        if (event.getEntity() instanceof Player && event.getDamager() instanceof Player) {
+            Profile profile = Alley.getInstance().getProfileRepository().getProfile(event.getEntity().getUniqueId());
+            if (profile.getState() == EnumProfileState.PLAYING) {
+                Player player = (Player) event.getEntity();
+                Player damager = (Player) event.getDamager();
+                PlayerUtil.setLastAttacker(player, damager);
+            }
+        }
+    }
+
 
     @EventHandler
     private void onPlayerInteract(PlayerInteractEvent event) {

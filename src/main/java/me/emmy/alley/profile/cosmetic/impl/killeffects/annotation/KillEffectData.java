@@ -1,4 +1,4 @@
-package me.emmy.alley.profile.cosmetic.killeffects.annotation;
+package me.emmy.alley.profile.cosmetic.impl.killeffects.annotation;
 
 import org.bukkit.Material;
 
@@ -15,25 +15,9 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 public @interface KillEffectData {
-    /**
-     * The name of the kill effect
-     *
-     * @return the name of the kill effect
-     */
     String name();
-
-    /**
-     * The description of the kill effect
-     *
-     * @return the description of the kill effect
-     */
     String description();
-
-    /**
-     * The icon of the kill effect
-     *
-     * @return the icon of the kill effect
-     */
+    String permission() default "";
     Material icon();
-
+    int slot();
 }

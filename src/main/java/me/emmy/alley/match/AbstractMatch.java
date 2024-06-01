@@ -13,6 +13,10 @@ import me.emmy.alley.match.player.impl.MatchGamePlayerImpl;
 import me.emmy.alley.match.runnable.MatchRunnable;
 import me.emmy.alley.match.snapshot.Snapshot;
 import me.emmy.alley.profile.Profile;
+import me.emmy.alley.profile.cosmetic.impl.killeffects.AbstractKillEffect;
+import me.emmy.alley.profile.cosmetic.impl.killeffects.KillEffectRepository;
+import me.emmy.alley.profile.cosmetic.impl.soundeffect.AbstractSoundEffect;
+import me.emmy.alley.profile.cosmetic.impl.soundeffect.SoundEffectRepository;
 import me.emmy.alley.profile.enums.EnumProfileState;
 import me.emmy.alley.queue.Queue;
 import me.emmy.alley.utils.PlayerUtil;
@@ -184,11 +188,36 @@ public abstract class AbstractMatch {
             matchState = EnumMatchState.ENDING_ROUND;
             handleRoundEnd();
 
-            if (canEndMatch()) matchState = EnumMatchState.ENDING_MATCH;
+            if (canEndMatch()) {
+                Player killer = PlayerUtil.getLastAttacker(player);
+                if (killer != null) {
+                    handleEffects(player, killer);
+                }
+                matchState = EnumMatchState.ENDING_MATCH;
+            }
             getMatchRunnable().setStage(4);
         } else {
             handleRespawn(player);
         }
+    }
+
+    /**
+     * Handles the effects of a player.
+     *
+     * @param player The player to handle the effects of.
+     * @param killer The killer of the player.
+     */
+    private void handleEffects(Player player, Player killer) {
+        Profile profile = Alley.getInstance().getProfileRepository().getProfile(killer.getUniqueId());
+        String selectedKillEffectName = profile.getProfileData().getProfileCosmeticData().getSelectedKillEffect();
+        KillEffectRepository killEffectRepository = new KillEffectRepository();
+        AbstractKillEffect selectedKillEffect = killEffectRepository.getByName(selectedKillEffectName);
+        selectedKillEffect.spawnEffect(player);
+
+        String selectedSoundEffectName = profile.getProfileData().getProfileCosmeticData().getSelectedSoundEffect();
+        SoundEffectRepository soundEffectRepository = new SoundEffectRepository();
+        AbstractSoundEffect selectedSoundEffect = soundEffectRepository.getByName(selectedSoundEffectName);
+        selectedSoundEffect.spawnEffect(killer);
     }
 
     /**

@@ -12,7 +12,12 @@ import me.emmy.alley.commands.admin.debug.StateCommand;
 import me.emmy.alley.commands.admin.essential.EnchantCommand;
 import me.emmy.alley.commands.admin.essential.RenameCommand;
 import me.emmy.alley.commands.admin.management.PlaytimeCommand;
-import me.emmy.alley.profile.cosmetic.killeffects.KillEffectRepository;
+import me.emmy.alley.profile.cosmetic.command.CosmeticCommand;
+import me.emmy.alley.profile.cosmetic.command.impl.admin.CosmeticGetSelectedCommand;
+import me.emmy.alley.profile.cosmetic.command.impl.admin.CosmeticSetCommand;
+import me.emmy.alley.profile.cosmetic.command.impl.admin.CosmeticListCommand;
+import me.emmy.alley.profile.cosmetic.command.impl.player.CosmeticsCommand;
+import me.emmy.alley.profile.cosmetic.repository.CosmeticRepository;
 import me.emmy.alley.party.command.impl.leader.PartyKickCommand;
 import me.emmy.alley.spawn.command.SpawnItemsCommand;
 import me.emmy.alley.cooldown.CooldownRepository;
@@ -112,11 +117,11 @@ public class Alley extends JavaPlugin {
     @Getter
     private static Alley instance;
 
-    private KillEffectRepository killEffectRepository;
     private KitSettingRepository kitSettingRepository;
     private TournamentRepository tournamentRepository;
     private SnapshotRepository snapshotRepository;
     private CooldownRepository cooldownRepository;
+    private CosmeticRepository cosmeticRepository;
     private ProfileRepository profileRepository;
     private ScoreboardHandler scoreboardHandler;
     private HotbarRepository hotbarRepository;
@@ -157,6 +162,7 @@ public class Alley extends JavaPlugin {
     @Override
     public void onDisable() {
         ServerUtil.disconnectPlayers();
+        profileRepository.getProfiles().forEach((uuid, profile) -> profile.save());
         kitRepository.saveKits();
         ffaRepository.saveFFAMatches();
         CC.pluginDisabled();
@@ -203,11 +209,11 @@ public class Alley extends JavaPlugin {
             this.ffaRepository = new FFARepository();
             this.ffaRepository.loadFFAMatches();
         });
+        Logger.logTime("CosmeticRepository", () -> this.cosmeticRepository = new CosmeticRepository());
         Logger.logTime("ProfileRepository", () -> {
             this.profileRepository = new ProfileRepository();
             this.profileRepository.setIProfile(new MongoProfileImpl());
         });
-        Logger.logTime("KillEffectRepository", () -> this.killEffectRepository = new KillEffectRepository());
         Logger.logTime("MongoService", () -> this.mongoService = new MongoService(registerDatabase()));
         Logger.logTime("HotbarRepository", () -> this.hotbarRepository = new HotbarRepository());
         Logger.logTime("profiles", () -> this.profileRepository.loadProfiles());
@@ -295,6 +301,12 @@ public class Alley extends JavaPlugin {
             new FFAListCommand();
             new FFAListPlayersCommand();
             new FFAMaxPlayersCommand();
+
+            new CosmeticCommand();
+            new CosmeticsCommand();
+            new CosmeticListCommand();
+            new CosmeticSetCommand();
+            new CosmeticGetSelectedCommand();
         });
 
         Logger.logTime("Player Commands", () -> {

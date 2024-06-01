@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import me.emmy.alley.Alley;
 import me.emmy.alley.profile.Profile;
+import me.emmy.alley.profile.data.impl.ProfileCosmeticData;
 import me.emmy.alley.profile.data.impl.ProfileFFAData;
 import me.emmy.alley.profile.data.impl.ProfileKitData;
 import me.emmy.alley.profile.data.impl.ProfileSettingData;
@@ -24,7 +25,7 @@ public class ProfileData {
     private Map<String, ProfileKitData> kitData;
     private Map<String, ProfileFFAData> ffaData;
     private ProfileSettingData profileSettingData;
-    private String activeKillEffect;
+    private ProfileCosmeticData profileCosmeticData;
 
     private int coins = Profile.DEFAULT_COINS;
     private int elo = Profile.DEFAULT_ELO;
@@ -35,6 +36,7 @@ public class ProfileData {
 
     public ProfileData() {
         this.profileSettingData = new ProfileSettingData();
+        this.profileCosmeticData = new ProfileCosmeticData();
         this.kitData = Maps.newHashMap();
         this.ffaData = Maps.newHashMap();
         Alley.getInstance().getKitRepository().getKits().forEach(kit -> this.kitData.put(kit.getName(), new ProfileKitData()));
