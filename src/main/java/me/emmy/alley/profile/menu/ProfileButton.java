@@ -1,4 +1,4 @@
-package me.emmy.alley.profile.settings.menu;
+package me.emmy.alley.profile.menu;
 
 import lombok.AllArgsConstructor;
 import me.emmy.alley.utils.menu.Button;
@@ -16,7 +16,7 @@ import java.util.List;
  * Date: 23/05/2024 - 01:27
  */
 @AllArgsConstructor
-public class SettingsButton extends Button {
+public class ProfileButton extends Button {
 
     private String displayName;
     private Material material;
@@ -40,25 +40,30 @@ public class SettingsButton extends Button {
         }
 
         switch (material) {
-            case FEATHER:
-                player.performCommand("togglepartymessages");
-                break;
-            case NAME_TAG:
-                player.performCommand("togglepartyinvites");
-                break;
-            case CARPET:
-                if (data == (short) 5) {
-                    player.performCommand("togglescoreboard");
-                }
-                break;
-            case ITEM_FRAME:
-                player.performCommand("toggletablist");
+            case PAPER:
+                player.performCommand("leaderboard");
+                playNeutral(player);
                 break;
             case BOOK:
+                player.performCommand("matchhistory");
+                playNeutral(player);
+                break;
+            case SKULL_ITEM:
+                playNeutral(player);
+                break;
+            case ANVIL:
+                player.performCommand("settings");
+                playNeutral(player);
+                break;
+            case FEATHER:
+                player.performCommand("divisions");
+                playNeutral(player);
+                break;
+            case BEACON:
                 player.performCommand("cosmetics");
+                playNeutral(player);
                 break;
         }
-        playNeutral(player);
     }
 }
 

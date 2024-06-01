@@ -12,6 +12,7 @@ import me.emmy.alley.commands.admin.debug.StateCommand;
 import me.emmy.alley.commands.admin.essential.EnchantCommand;
 import me.emmy.alley.commands.admin.essential.RenameCommand;
 import me.emmy.alley.commands.admin.management.PlaytimeCommand;
+import me.emmy.alley.profile.command.ProfileMenuCommand;
 import me.emmy.alley.profile.cosmetic.command.CosmeticCommand;
 import me.emmy.alley.profile.cosmetic.command.impl.admin.CosmeticGetSelectedCommand;
 import me.emmy.alley.profile.cosmetic.command.impl.admin.CosmeticSetCommand;
@@ -339,6 +340,7 @@ public class Alley extends JavaPlugin {
             new LeaveQueueCommand();
             new QueuesCommand();
 
+            new ProfileMenuCommand();
 
             new StateCommand();
 

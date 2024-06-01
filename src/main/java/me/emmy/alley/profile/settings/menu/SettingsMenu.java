@@ -73,14 +73,6 @@ public class SettingsMenu extends Menu {
                 "&dClick to toggle!"
         )));
 
-        buttons.put(16, new SettingsButton("&dCosmetics", Material.BOOK, (short) 0, Arrays.asList(
-                "",
-                "&7Customize your available",
-                "&7cosmetics.",
-                "",
-                "&dClick to view!"
-        )));
-
         for (int slot = 0; slot < getSize(); slot++) {
             if (!buttons.containsKey(slot)) {
                 buttons.put(slot, new SettingsButton("", Material.STAINED_GLASS_PANE, (short) 6, Arrays.asList("")));
