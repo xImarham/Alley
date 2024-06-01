@@ -101,6 +101,26 @@ public class ArenaRepository {
         }
     }
 
+    public void saveArenas() {
+        FileConfiguration config = Alley.getInstance().getConfigHandler().getConfigByName("storage/arenas.yml");
+
+        for (Arena arena : arenas) {
+            String name = "arenas." + arena.getName();
+
+            config.set(name + ".type", arena.getType().name());
+            config.set(name + ".minimum", LocationUtil.serialize(arena.getMinimum()));
+            config.set(name + ".maximum", LocationUtil.serialize(arena.getMaximum()));
+            config.set(name + ".kits", arena.getKits());
+            config.set(name + ".pos1", LocationUtil.serialize(arena.getPos1()));
+            config.set(name + ".pos2", LocationUtil.serialize(arena.getPos2()));
+            config.set(name + ".center", LocationUtil.serialize(arena.getCenter()));
+            config.set(name + ".displayName", arena.getDisplayName());
+            config.set(name + ".enabled", arena.isEnabled());
+        }
+
+        Alley.getInstance().getConfigHandler().saveConfig(Alley.getInstance().getConfigHandler().getConfigFileByName("storage/arenas.yml"), config);
+    }
+
     /**
      * Save an arena
      *
