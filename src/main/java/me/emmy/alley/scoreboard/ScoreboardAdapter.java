@@ -44,12 +44,14 @@ public class ScoreboardAdapter implements AssembleAdapter {
                     }
 
                     for (String line : Alley.getInstance().getConfigHandler().getConfigByName("providers/scoreboard.yml").getStringList("scoreboard.lines.party-addition")) {
-                        String replacedLine = PlaceholderAPI.setPlaceholders(player, line);
-                        replacedLine = replacedLine
-                                .replaceAll("\\{sidebar\\}", "&7&m----------------------------")
-                                .replaceAll("\\{party-size\\}", String.valueOf(profile.getParty().getMembers().size()))
-                                .replaceAll("\\{party-leader\\}", profile.getParty().getLeader().getName());
-                        toReturn.add(CC.translate(replacedLine));
+                        if (profile.getParty() != null) {
+                            String replacedLine = PlaceholderAPI.setPlaceholders(player, line);
+                            replacedLine = replacedLine
+                                    .replaceAll("\\{sidebar\\}", "&7&m----------------------------")
+                                    .replaceAll("\\{party-size\\}", String.valueOf(profile.getParty().getMembers().size()))
+                                    .replaceAll("\\{party-leader\\}", profile.getParty().getLeader().getName());
+                            toReturn.add(CC.translate(replacedLine));
+                        }
                     }
 
                     break;
