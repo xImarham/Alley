@@ -246,7 +246,7 @@ kits:
         enabled: false
   Boxing:
     displayname: '&dBoxing'
-    description: '&dBoxing kit description'
+    description: '&71st to 100 Hits, wins!'
     enabled: true
     unrankedslot: 12
     rankedslot: 12

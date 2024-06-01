@@ -1,1 +1,4 @@
 ffa:
+  NoDebuff:
+    arena: freeforall
+    maxPlayers: 50
