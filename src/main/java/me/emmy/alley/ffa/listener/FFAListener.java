@@ -2,11 +2,13 @@ package me.emmy.alley.ffa.listener;
 
 import me.emmy.alley.Alley;
 import me.emmy.alley.arena.Arena;
+import me.emmy.alley.cooldown.Cooldown;
+import me.emmy.alley.cooldown.CooldownRepository;
 import me.emmy.alley.ffa.enums.EnumFFAState;
 import me.emmy.alley.profile.Profile;
 import me.emmy.alley.profile.enums.EnumProfileState;
 import me.emmy.alley.utils.PlayerUtil;
-import me.emmy.alley.utils.TaskUtil;
+import me.emmy.alley.utils.chat.CC;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -17,9 +19,13 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.inventory.ItemStack;
+
+import java.util.Optional;
 
 /**
  * Created by Emmy
@@ -100,13 +106,53 @@ public class FFAListener implements Listener {
     }
 
     @EventHandler
+    private void onPlayerInteract(PlayerInteractEvent event) {
+        Player player = event.getPlayer();
+        Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
+        ItemStack item = player.getItemInHand();
+
+        if (profile.getState() == EnumProfileState.FFA) {
+            switch (item.getType()) {
+                case ENDER_PEARL:
+                    if (profile.getFfaMatch().getState() == EnumFFAState.SPAWN) {
+                        event.setCancelled(true);
+                        player.updateInventory();
+                        player.sendMessage(CC.translate("&cYou cannot use ender pearls at spawn."));
+                        return;
+                    }
+
+                    Alley alley = Alley.getInstance();
+                    CooldownRepository cooldownRepository = alley.getCooldownRepository();
+
+                    Optional<Cooldown> optionalCooldown = Optional.ofNullable(cooldownRepository.getCooldown(player.getUniqueId(), "ENDERPEARL"));
+                    if (optionalCooldown.isPresent()) {
+                        Cooldown cooldown = optionalCooldown.get();
+                        if (cooldown.isActive()) {
+                            event.setCancelled(true);
+                            player.updateInventory();
+                            player.sendMessage(CC.translate("&cYou must wait " + cooldown.remainingTime() + " seconds before using another ender pearl."));
+                            return;
+                        }
+                        cooldown.resetCooldown();
+                    } else {
+                        Cooldown cooldown = new Cooldown(15 * 1000L, () -> player.sendMessage(CC.translate("&aYou can now use pearls again!")));
+                        cooldownRepository.addCooldown(player.getUniqueId(), "ENDERPEARL", cooldown);
+                    }
+                    break;
+            }
+        }
+    }
+
+    @EventHandler
     private void onPlayerMove(PlayerMoveEvent event) {
         Player player = event.getPlayer();
         Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
         if (profile.getState() == EnumProfileState.FFA && profile.getFfaMatch() != null) {
-            Arena arena = profile.getFfaMatch().getArena();;
+            Arena arena = profile.getFfaMatch().getArena();
             Location corner1 = arena.getMinimum();
             Location corner2 = arena.getMaximum();
+
+            //TODO: send one single message whenever the player enters or leaves the spawn
 
             if (isWithinBounds(event, arena, corner1, corner2)) {
                 profile.getFfaMatch().setState(EnumFFAState.SPAWN);
@@ -115,6 +161,7 @@ public class FFAListener implements Listener {
             }
         }
     }
+
 
     /**
      * Checks if the player is within the bounds of the arena.

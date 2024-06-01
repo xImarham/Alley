@@ -7,6 +7,7 @@ import me.emmy.alley.arena.listener.ArenaListener;
 import me.emmy.alley.commands.AlleyCommand;
 import me.emmy.alley.arena.command.ArenaCommand;
 import me.emmy.alley.arena.command.impl.*;
+import me.emmy.alley.commands.admin.debug.FFAStateCommand;
 import me.emmy.alley.commands.admin.debug.StateCommand;
 import me.emmy.alley.commands.admin.essential.EnchantCommand;
 import me.emmy.alley.commands.admin.essential.RenameCommand;
@@ -88,6 +89,7 @@ import me.emmy.alley.spawn.SpawnHandler;
 import me.emmy.alley.spawn.listener.SpawnListener;
 import me.emmy.alley.tournament.TournamentRepository;
 import me.emmy.alley.utils.Logger;
+import me.emmy.alley.utils.ServerUtil;
 import me.emmy.alley.utils.assemble.Assemble;
 import me.emmy.alley.utils.assemble.AssembleStyle;
 import me.emmy.alley.utils.chat.CC;
@@ -154,6 +156,7 @@ public class Alley extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        ServerUtil.disconnectPlayers();
         kitRepository.saveKits();
         ffaRepository.saveFFAMatches();
         CC.pluginDisabled();
@@ -285,6 +288,7 @@ public class Alley extends JavaPlugin {
             new MatchCancelCommand();
 
             new FFACommand();
+            new FFAStateCommand();
             new FFACreateCommand();
             new FFADeleteCommand();
             new FFAKickCommand();
