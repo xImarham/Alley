@@ -2,13 +2,10 @@ package me.emmy.alley.profile.cosmetic.impl.killeffects;
 
 import lombok.Getter;
 import me.emmy.alley.profile.cosmetic.impl.killeffects.impl.BloodKillEffect;
-import me.emmy.alley.profile.cosmetic.interfaces.BaseCosmeticRepository;
 import me.emmy.alley.profile.cosmetic.impl.killeffects.impl.NoneKillEffect;
 import me.emmy.alley.profile.cosmetic.impl.killeffects.impl.ThunderKillEffect;
 import me.emmy.alley.profile.cosmetic.interfaces.ICosmeticRepository;
-
-import java.util.ArrayList;
-import java.util.List;
+import me.emmy.alley.profile.cosmetic.repository.BaseCosmeticRepository;
 
 /**
  * @author Remi

@@ -1,6 +1,7 @@
-package me.emmy.alley.profile.cosmetic.interfaces;
+package me.emmy.alley.profile.cosmetic.repository;
 
 import lombok.Getter;
+import me.emmy.alley.profile.cosmetic.interfaces.ICosmetic;
 
 import java.util.ArrayList;
 import java.util.List;

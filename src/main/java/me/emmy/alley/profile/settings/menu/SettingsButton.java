@@ -1,8 +1,6 @@
 package me.emmy.alley.profile.settings.menu;
 
 import lombok.AllArgsConstructor;
-import me.emmy.alley.profile.cosmetic.menu.CosmeticsMenu;
-import me.emmy.alley.utils.SoundUtil;
 import me.emmy.alley.utils.menu.Button;
 import me.emmy.alley.utils.pagination.ItemBuilder;
 import org.bukkit.Material;
@@ -42,22 +40,26 @@ public class SettingsButton extends Button {
             return;
         }
 
-        if (material.equals(Material.FEATHER)) {
-            player.performCommand("togglepartymessages");
-            playNeutral(player);
-        } else if (material.equals(Material.NAME_TAG)) {
-            player.performCommand("togglepartyinvites");
-            playNeutral(player);
-        } else if (material.equals(Material.CARPET) && data == (short) 5) {
-            player.performCommand("togglescoreboard");
-            playNeutral(player);
-        } else if (material.equals(Material.ITEM_FRAME)){
-            player.performCommand("toggletablist");
-            playNeutral(player);
-        } else if (material.equals(Material.BOOK)){
-            player.performCommand("cosmetics");
-            playNeutral(player);
+        switch (material) {
+            case FEATHER:
+                player.performCommand("togglepartymessages");
+                break;
+            case NAME_TAG:
+                player.performCommand("togglepartyinvites");
+                break;
+            case CARPET:
+                if (data == (short) 5) {
+                    player.performCommand("togglescoreboard");
+                }
+                break;
+            case ITEM_FRAME:
+                player.performCommand("toggletablist");
+                break;
+            case BOOK:
+                player.performCommand("cosmetics");
+                break;
         }
+        playNeutral(player);
     }
 }
 
