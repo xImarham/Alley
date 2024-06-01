@@ -215,7 +215,7 @@ public class MatchListener implements Listener {
             event.setDeathMessage(null);
             event.getDrops().clear();
 
-            Alley.getInstance().getKillEffectRepository().getByName(profile.getProfileData().getActiveKillEffect()).spawnEffect(player.getLocation());
+            //Alley.getInstance().getKillEffectRepository().getByName(profile.getProfileData().getActiveKillEffect()).spawnEffect(player.getLocation());
             Alley.getInstance().getServer().getScheduler().runTaskLater(Alley.getInstance(), () -> player.spigot().respawn(), 1L);
             profile.getMatch().handleDeath(player);
         }
