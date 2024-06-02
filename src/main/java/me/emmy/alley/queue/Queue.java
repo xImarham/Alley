@@ -66,7 +66,7 @@ public class Queue {
      *
      * @param player The player to add.
      */
-    public void addPlayer(Player player) {
+    public void addPlayer(Player player, int elo) {
         UUID uuid = player.getUniqueId();
 
         if (profiles.stream().anyMatch(queueProfile -> queueProfile.getUuid().equals(uuid))) {
@@ -75,8 +75,9 @@ public class Queue {
         }
 
         QueueProfile queueProfile = new QueueProfile(this, uuid);
-        Profile profile = Alley.getInstance().getProfileRepository().getProfile(uuid);
+        queueProfile.setElo(elo);
 
+        Profile profile = Alley.getInstance().getProfileRepository().getProfile(uuid);
         profile.setQueueProfile(queueProfile);
         profile.setState(EnumProfileState.WAITING);
 

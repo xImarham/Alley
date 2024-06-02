@@ -20,6 +20,11 @@ import me.emmy.alley.profile.cosmetic.command.impl.admin.CosmeticListCommand;
 import me.emmy.alley.profile.cosmetic.command.impl.player.CosmeticsCommand;
 import me.emmy.alley.profile.cosmetic.repository.CosmeticRepository;
 import me.emmy.alley.party.command.impl.leader.PartyKickCommand;
+import me.emmy.alley.profile.division.DivisionRepository;
+import me.emmy.alley.profile.division.command.DivisionCommand;
+import me.emmy.alley.profile.division.command.impl.DivisionListCommand;
+import me.emmy.alley.profile.division.command.impl.DivisionMenuCommand;
+import me.emmy.alley.profile.division.menu.DivisionsMenu;
 import me.emmy.alley.spawn.command.SpawnItemsCommand;
 import me.emmy.alley.cooldown.CooldownRepository;
 import me.emmy.alley.ffa.FFARepository;
@@ -123,6 +128,7 @@ public class Alley extends JavaPlugin {
     private SnapshotRepository snapshotRepository;
     private CooldownRepository cooldownRepository;
     private CosmeticRepository cosmeticRepository;
+    private DivisionRepository divisionRepository;
     private ProfileRepository profileRepository;
     private ScoreboardHandler scoreboardHandler;
     private HotbarRepository hotbarRepository;
@@ -215,6 +221,7 @@ public class Alley extends JavaPlugin {
             this.profileRepository = new ProfileRepository();
             this.profileRepository.setIProfile(new MongoProfileImpl());
         });
+        Logger.logTime("DivisionRepository", () -> this.divisionRepository = new DivisionRepository());
         Logger.logTime("MongoService", () -> this.mongoService = new MongoService(registerDatabase()));
         Logger.logTime("HotbarRepository", () -> this.hotbarRepository = new HotbarRepository());
         Logger.logTime("profiles", () -> this.profileRepository.loadProfiles());
@@ -308,6 +315,10 @@ public class Alley extends JavaPlugin {
             new CosmeticListCommand();
             new CosmeticSetCommand();
             new CosmeticGetSelectedCommand();
+
+            new DivisionCommand();
+            new DivisionMenuCommand();
+            new DivisionListCommand();
         });
 
         Logger.logTime("Player Commands", () -> {

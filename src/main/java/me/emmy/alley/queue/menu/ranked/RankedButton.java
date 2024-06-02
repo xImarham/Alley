@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import me.emmy.alley.Alley;
 import me.emmy.alley.hotbar.enums.HotbarType;
 import me.emmy.alley.kit.Kit;
+import me.emmy.alley.profile.Profile;
 import me.emmy.alley.queue.Queue;
 import me.emmy.alley.utils.PlayerUtil;
 import me.emmy.alley.utils.menu.Button;
@@ -34,8 +35,9 @@ public class RankedButton extends Button {
                 "&fIn Queue: &d" + queue.getProfiles().size(),
                 "&fIn Fights: &d" + queue.getQueueFightCount(),
                 "",
-                "&fWins: &d" + Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId()).getProfileData().getRankedWins(),
-                "&fElo: &d" + Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId()).getProfileData().getElo(),
+                "&fTotal Wins: &d" + Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId()).getProfileData().getKitData().get(kit.getName()).getWins(),
+                "&fTotal Losses: &d" + Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId()).getProfileData().getKitData().get(kit.getName()).getLosses(),
+                "&fElo: &d" + Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId()).getProfileData().getKitData().get(kit.getName()).getElo(),
                 "",
                 "&fClick to join the &d" + kit.getName() + " &fqueue!")
         ).hideMeta().build();
@@ -47,7 +49,8 @@ public class RankedButton extends Button {
             return;
         }
 
-        queue.addPlayer(player);
+        Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
+        queue.addPlayer(player, queue.isRanked() ? profile.getProfileData().getKitData().get(queue.getKit().getName()).getElo() : 0);
         PlayerUtil.reset(player);
         player.closeInventory();
         playNeutral(player);

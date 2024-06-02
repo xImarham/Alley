@@ -3,7 +3,6 @@ package me.emmy.alley.leaderboard.menu.personal.button;
 import me.emmy.alley.Alley;
 import me.emmy.alley.profile.Profile;
 import me.emmy.alley.profile.data.impl.ProfileFFAData;
-import me.emmy.alley.profile.data.impl.ProfileKitData;
 import me.emmy.alley.utils.item.ItemBuilder;
 import me.emmy.alley.utils.menu.Button;
 import org.bukkit.Material;
@@ -33,7 +32,7 @@ public class GlobalStatButton extends Button {
                         "&d&lRanked Kit Statistics",
                         "&f● &dWins: &f" + profile.getProfileData().getRankedWins(),
                         "&f● &dLosses: &f" + profile.getProfileData().getRankedLosses(),
-                        "&f● &dElo: &f" + profile.getProfileData().getElo(),
+                        "&f● &dElo: &f" + profile.getProfileData().getProfileDivisionData().getGlobalElo(),
                         "",
                         "&d&lUnranked Kit Statistics",
                         "&f● &dWins: &f" + profile.getProfileData().getUnrankedWins(),

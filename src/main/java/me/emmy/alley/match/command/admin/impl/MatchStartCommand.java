@@ -61,7 +61,7 @@ public class MatchStartCommand extends BaseCommand {
 
         for (Queue queue : Alley.getInstance().getQueueRepository().getQueues()) {
             if (queue.getKit().equals(kit) && !queue.isRanked()) {
-                AbstractMatch match = new MatchRegularImpl(queue, kit, arena, participantA, participantB);
+                AbstractMatch match = new MatchRegularImpl(queue, kit, arena, false, participantA, participantB);
                 match.startMatch();
             }
         }

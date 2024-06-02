@@ -43,8 +43,8 @@ public class ScoreboardAdapter implements AssembleAdapter {
                         toReturn.add(CC.translate(replacedLine));
                     }
 
-                    for (String line : Alley.getInstance().getConfigHandler().getConfigByName("providers/scoreboard.yml").getStringList("scoreboard.lines.party-addition")) {
-                        if (profile.getParty() != null) {
+                    if (profile.getParty() != null) {
+                        for (String line : Alley.getInstance().getConfigHandler().getConfigByName("providers/scoreboard.yml").getStringList("scoreboard.lines.party-addition")) {
                             String replacedLine = PlaceholderAPI.setPlaceholders(player, line);
                             replacedLine = replacedLine
                                     .replaceAll("\\{sidebar\\}", "&7&m----------------------------")

@@ -42,6 +42,7 @@ public abstract class AbstractMatch {
     private final Arena matchArena;
     private final Kit matchKit;
     private long startTime;
+    private boolean ranked;
 
     /**
      * Constructor for the AbstractMatch class.
@@ -50,10 +51,11 @@ public abstract class AbstractMatch {
      * @param matchKit   The kit of the match.
      * @param matchArena The matchArena of the match.
      */
-    public AbstractMatch(Queue matchQueue, Kit matchKit, Arena matchArena) {
+    public AbstractMatch(Queue matchQueue, Kit matchKit, Arena matchArena, boolean ranked) {
         this.matchQueue = matchQueue;
         this.matchKit = matchKit;
         this.matchArena = matchArena;
+        this.ranked = ranked;
         this.snapshots = new ArrayList<>();
         Alley.getInstance().getMatchRepository().getMatches().add(this);
     }

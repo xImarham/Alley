@@ -16,7 +16,7 @@ public class MatchBedRegularImpl extends MatchRegularImpl {
      * @param participantA The first participant.
      * @param participantB The second participant.
      */
-    public MatchBedRegularImpl(Queue queue, Kit kit, Arena arena, GameParticipant<MatchGamePlayerImpl> participantA, GameParticipant<MatchGamePlayerImpl> participantB) {
-        super(queue, kit, arena, participantA, participantB);
+    public MatchBedRegularImpl(Queue queue, Kit kit, Arena arena, boolean ranked, GameParticipant<MatchGamePlayerImpl> participantA, GameParticipant<MatchGamePlayerImpl> participantB) {
+        super(queue, kit, arena, ranked, participantA, participantB);
     }
 }

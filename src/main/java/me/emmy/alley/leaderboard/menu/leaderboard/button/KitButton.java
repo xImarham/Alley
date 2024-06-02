@@ -40,7 +40,7 @@ public class KitButton extends Button {
             case RANKED:
                 lore.add("&f● &dWins: &f" + profile.getProfileData().getRankedWins());
                 lore.add("&f● &dLosses: &f" + profile.getProfileData().getRankedLosses());
-                lore.add("&f● &dElo: &f" + profile.getProfileData().getElo());
+                lore.add("&f● &dElo: &f" + profile.getProfileData().getProfileDivisionData().getGlobalElo());
                 break;
             case UNRANKED:
                 lore.add("&f● &dWins: &f" + profile.getProfileData().getUnrankedWins());

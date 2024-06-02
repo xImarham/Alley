@@ -17,6 +17,7 @@ import java.util.UUID;
 public class GameParticipant<T extends GamePlayer> {
 
     private T player;
+    private boolean eliminated;
 
     /**
      * Constructor for the GameParticipant class.

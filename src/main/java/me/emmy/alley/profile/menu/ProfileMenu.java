@@ -3,7 +3,6 @@ package me.emmy.alley.profile.menu;
 import lombok.AllArgsConstructor;
 import me.emmy.alley.Alley;
 import me.emmy.alley.profile.Profile;
-import me.emmy.alley.profile.settings.menu.SettingsButton;
 import me.emmy.alley.utils.menu.Button;
 import me.emmy.alley.utils.menu.Menu;
 import org.bukkit.Material;
@@ -18,7 +17,6 @@ import java.util.Map;
  * Project: Alley
  * Date: 23/05/2024 - 01:27
  */
-
 @AllArgsConstructor
 public class ProfileMenu extends Menu {
 
@@ -37,7 +35,7 @@ public class ProfileMenu extends Menu {
                 "&d&lGlobal",
                 " &d● &fWins: &dnull",
                 " &d● &fLosses: &dnull",
-                " &d● &fElo: &d" + profile.getProfileData().getElo(),
+                " &d● &fElo: &d" + profile.getProfileData().getProfileDivisionData().getGlobalElo(),
                 "",
                 "&d&lRanked",
                 " &d● &fWins: &d" + profile.getProfileData().getRankedWins(),

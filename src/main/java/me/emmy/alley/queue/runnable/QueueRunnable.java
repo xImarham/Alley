@@ -29,8 +29,7 @@ public class QueueRunnable implements Runnable {
      */
     @Override
     public void run() {
-        Alley.getInstance().getQueueRepository().getQueues().stream()
-                .filter(queue -> queue.getProfiles().size() >= 2)
+        Alley.getInstance().getQueueRepository().getQueues()
                 .forEach(this::processQueue);
     }
 
@@ -40,6 +39,19 @@ public class QueueRunnable implements Runnable {
      * @param queue The queue.
      */
     public void processQueue(Queue queue) {
+        queue.getProfiles().forEach(QueueProfile::queueRange);
+        queue.getProfiles().forEach(profile -> {
+            if (profile.getElapsedTime() >= 60000) {
+                queue.getProfiles().remove(profile);
+                Player player = Alley.getInstance().getServer().getPlayer(profile.getUuid());
+                player.sendMessage(CC.translate("&cYou have been removed from the queue due to inactivity."));
+            }
+        });
+
+        if (queue.getProfiles().size() < 2) {
+            return;
+        }
+
         for (QueueProfile firstProfile : queue.getProfiles()) {
             Optional<Player> firstPlayerOpt = getPlayer(firstProfile);
             if (!firstPlayerOpt.isPresent()) {
@@ -54,7 +66,7 @@ public class QueueRunnable implements Runnable {
                     }
 
                     clearQueueProfiles(queue, firstProfile, secondProfile);
-                    GamePlayerList gamePlayerList = getGamePlayerList(firstPlayerOpt.get(), secondPlayerOpt.get());
+                    GamePlayerList gamePlayerList = getGamePlayerList(firstPlayerOpt.get(), secondPlayerOpt.get(), firstProfile, secondProfile);
                     GameParticipantList gameParticipantList = getGameParticipantList(gamePlayerList);
                     processGame(queue, gameParticipantList);
                 }
@@ -102,7 +114,7 @@ public class QueueRunnable implements Runnable {
      * @return The match type.
      */
     private @NotNull AbstractMatch getMatchType(Queue queue, GameParticipantList gameParticipantList, Arena arena) {
-        return new MatchRegularImpl(queue, queue.getKit(), arena, gameParticipantList.getParticipantA(), gameParticipantList.getParticipantB());
+        return new MatchRegularImpl(queue, queue.getKit(), arena, queue.isRanked(), gameParticipantList.getParticipantA(), gameParticipantList.getParticipantB());
     }
 
     /**
@@ -147,10 +159,10 @@ public class QueueRunnable implements Runnable {
      * @param secondPlayer The second player.
      * @return The game player list.
      */
-    private @NotNull GamePlayerList getGamePlayerList(Player firstPlayer, Player secondPlayer) {
+    private @NotNull GamePlayerList getGamePlayerList(Player firstPlayer, Player secondPlayer, QueueProfile firstProfile, QueueProfile secondProfile) {
         return new GamePlayerList(
-                new MatchGamePlayerImpl(firstPlayer.getUniqueId(), firstPlayer.getName()),
-                new MatchGamePlayerImpl(secondPlayer.getUniqueId(), secondPlayer.getName())
+                new MatchGamePlayerImpl(firstPlayer.getUniqueId(), firstPlayer.getName(), firstProfile.getElo()),
+                new MatchGamePlayerImpl(secondPlayer.getUniqueId(), secondPlayer.getName(), secondProfile.getElo())
         );
     }
 
