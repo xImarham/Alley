@@ -82,8 +82,7 @@ public class SettingsMenu extends Menu {
                 "&aClick to change!"
         )));
 
-        //doesnt work for some reason...?
-        //addBorder(buttons, (byte) 6);
+        addBorder(buttons, (byte) 6);
 
         return buttons;
     }
