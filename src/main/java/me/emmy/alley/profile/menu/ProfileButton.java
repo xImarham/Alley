@@ -39,33 +39,35 @@ public class ProfileButton extends Button {
             return;
         }
 
-        if (material.equals(Material.PAPER)) {
-            player.performCommand("stats");
-            playNeutral(player);
-        } else if (material.equals(Material.BOOK)) {
-            player.performCommand("matchhistory");
-            playNeutral(player);
-        } else if (material.equals(Material.SKULL_ITEM)) {
-            playNeutral(player);
-        } else if (material.equals(Material.ANVIL)) {
-            player.performCommand("settings");
-            playNeutral(player);
-        } else if (material.equals(Material.FEATHER)) {
-            player.performCommand("divisions");
-            playNeutral(player);
-        } else if (material.equals(Material.BEACON)) {
-            player.performCommand("cosmetics");
-            playNeutral(player);
-        } else if (material.equals(Material.ENDER_CHEST)) {
-            player.performCommand("themes");
-            playNeutral(player);
-        } else if (material.equals(Material.EYE_OF_ENDER)) {
-            player.performCommand("leaderboards");
-            playNeutral(player);
-        } else if (material.equals(Material.EMERALD)) {
-            player.performCommand("coinshop");
-            playNeutral(player);
+        switch (material) {
+            case PAPER:
+                player.performCommand("stats");
+                break;
+            case BOOK:
+                player.performCommand("matchhistory");
+                break;
+            case SKULL_ITEM:
+                break;
+            case ANVIL:
+                player.performCommand("settings");
+                break;
+            case FEATHER:
+                player.performCommand("divisions");
+                break;
+            case BEACON:
+                player.performCommand("cosmetics");
+                break;
+            case ENDER_CHEST:
+                player.performCommand("themes");
+                break;
+            case EYE_OF_ENDER:
+                player.performCommand("leaderboards");
+                break;
+            case EMERALD:
+                player.performCommand("coinshop");
+                break;
         }
+        playNeutral(player);
     }
 }
 
