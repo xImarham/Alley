@@ -8,6 +8,8 @@ import me.emmy.alley.utils.menu.Button;
 import me.emmy.alley.utils.menu.Menu;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.SkullMeta;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -32,7 +34,7 @@ public class ProfileMenu extends Menu {
         Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
         AbstractDivision abstractDivision = Alley.getInstance().getDivisionRepository().getDivision(profile.getProfileData().getProfileDivisionData().getDivision());
 
-        buttons.put(10, new ProfileButton("&d&lYour Statistics", Material.PAPER, (short) 0, Arrays.asList(
+        buttons.put(10, new ProfileButton("&d&lYour Statistics", new ItemStack(Material.PAPER), Arrays.asList(
                 "",
                 "&d&lGlobal",
                 " &d● &fWins: &dnull",
@@ -50,21 +52,29 @@ public class ProfileMenu extends Menu {
                 "&aClick to view!"
         )));
 
-        buttons.put(11, new ProfileButton("&d&lMatch History", Material.BOOK, (short) 0, Arrays.asList(
+        buttons.put(11, new ProfileButton("&d&lMatch History", new ItemStack(Material.BOOK), Arrays.asList(
                 "",
                 "&fView your match history.",
                 "",
                 "&aClick to view!"
         )));
 
-        buttons.put(12, new ProfileButton("&d&lThemes", Material.ENDER_CHEST, (short) 0, Arrays.asList(
+        buttons.put(12, new ProfileButton("&d&lThemes", new ItemStack(Material.ENDER_CHEST), Arrays.asList(
                 "",
                 "&fCustomize your profile theme.",
                 "",
                 "&aClick to view!"
         )));
 
-        buttons.put(4, new ProfileButton("&d&lYour Profile", Material.SKULL_ITEM, (short) 3, Arrays.asList(
+        ItemStack skullItem = new ItemStack(Material.SKULL_ITEM, 1, (short) 3);
+        SkullMeta skullMeta = (SkullMeta) skullItem.getItemMeta();
+
+        if (skullMeta != null) {
+            skullMeta.setOwner(player.getName());
+            skullItem.setItemMeta(skullMeta);
+        }
+
+        buttons.put(4, new ProfileButton("&d&lYour Profile", skullItem, Arrays.asList(
                 "",
                 " &d● &fCoins: &d" + profile.getProfileData().getCoins(),
                 " &d● &fLevel: &dnull",
@@ -73,7 +83,7 @@ public class ProfileMenu extends Menu {
                 " &d● &fProgress: &dnull%"
         )));
 
-        buttons.put(14, new ProfileButton("&d&lDivisions", Material.FEATHER, (short) 0, Arrays.asList(
+        buttons.put(14, new ProfileButton("&d&lDivisions", new ItemStack(Material.FEATHER), Arrays.asList(
                 "",
                 " &d● &fCurrent Division: &d" + abstractDivision.getTier().getName(),
                 " &d● &fNext Division: &dnull",
@@ -83,7 +93,7 @@ public class ProfileMenu extends Menu {
                 "&aClick to view all divisions!"
         )));
 
-        buttons.put(15, new ProfileButton("&d&lProfile Settings", Material.ANVIL, (short) 0, Arrays.asList(
+        buttons.put(15, new ProfileButton("&d&lProfile Settings", new ItemStack(Material.ANVIL), Arrays.asList(
                 "",
                 "&fCustomize your profile settings",
                 "&fto your preference.",
@@ -91,7 +101,7 @@ public class ProfileMenu extends Menu {
                 "&aClick to view!"
         )));
 
-        buttons.put(16, new ProfileButton("&d&lCosmetics", Material.BEACON, (short) 0, Arrays.asList(
+        buttons.put(16, new ProfileButton("&d&lCosmetics", new ItemStack(Material.BEACON), Arrays.asList(
                 "",
                 "&fCustomize your available",
                 "&fcosmetics.",
@@ -99,7 +109,7 @@ public class ProfileMenu extends Menu {
                 "&aClick to view!"
         )));
 
-        buttons.put(20, new ProfileButton("&d&lLeaderboards", Material.EYE_OF_ENDER, (short) 0, Arrays.asList(
+        buttons.put(20, new ProfileButton("&d&lLeaderboards", new ItemStack(Material.EYE_OF_ENDER), Arrays.asList(
                 "",
                 "&fView the leaderboards",
                 "&fwhere the best players",
@@ -123,7 +133,7 @@ public class ProfileMenu extends Menu {
                 "&aClick to see the leaderboards!"
         )));
 
-        buttons.put(25, new ProfileButton("&d&lCoin Shop", Material.EMERALD, (short) 0, Arrays.asList(
+        buttons.put(24, new ProfileButton("&d&lCoin Shop", new ItemStack(Material.EMERALD), Arrays.asList(
                 "",
                 "&fPurchase cosmetics,",
                 "&fthemes, and more with",
@@ -142,4 +152,3 @@ public class ProfileMenu extends Menu {
         return 9 * 5;
     }
 }
-

@@ -19,15 +19,13 @@ import java.util.List;
 public class ProfileButton extends Button {
 
     private String displayName;
-    private Material material;
-    private short data;
+    private ItemStack itemStack;
     private List<String> lore;
 
     @Override
     public ItemStack getButtonItem(Player player) {
-        return new ItemBuilder(material)
+        return new ItemBuilder(itemStack)
                 .name(displayName)
-                .durability(data)
                 .lore(lore)
                 .hideMeta()
                 .build();
@@ -38,6 +36,8 @@ public class ProfileButton extends Button {
         if (clickType == ClickType.MIDDLE || clickType == ClickType.RIGHT || clickType == ClickType.NUMBER_KEY || clickType == ClickType.DROP || clickType == ClickType.SHIFT_LEFT || clickType == ClickType.SHIFT_RIGHT) {
             return;
         }
+
+        Material material = itemStack.getType();
 
         switch (material) {
             case PAPER:
@@ -70,4 +70,3 @@ public class ProfileButton extends Button {
         playNeutral(player);
     }
 }
-
