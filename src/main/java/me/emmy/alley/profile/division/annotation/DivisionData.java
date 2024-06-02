@@ -40,6 +40,13 @@ public @interface DivisionData {
     Material icon();
 
     /**
+     * The durability of the icon
+     *
+     * @return the durability
+     */
+    int durability() default 0;
+
+    /**
      * The tier of the division
      *
      * @return the tier

@@ -19,6 +19,7 @@ public abstract class AbstractSoundEffect implements ICosmetic {
     private final String permission;
     private final Material icon;
     private final int slot;
+    private final int price;
 
     public AbstractSoundEffect() {
         SoundEffectData data = getClass().getAnnotation(SoundEffectData.class);
@@ -28,6 +29,7 @@ public abstract class AbstractSoundEffect implements ICosmetic {
             this.permission = data.permission();
             this.icon = data.icon();
             this.slot = data.slot();
+            this.price = data.price();
         } else {
             throw new IllegalStateException("SoundEffectData annotation missing");
         }

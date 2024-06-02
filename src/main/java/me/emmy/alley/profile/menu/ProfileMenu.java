@@ -3,7 +3,10 @@ package me.emmy.alley.profile.menu;
 import lombok.AllArgsConstructor;
 import me.emmy.alley.Alley;
 import me.emmy.alley.profile.Profile;
+import me.emmy.alley.profile.data.impl.ProfileKitData;
 import me.emmy.alley.profile.division.AbstractDivision;
+import me.emmy.alley.profile.division.enums.EnumDivisionLevel;
+import me.emmy.alley.profile.division.enums.EnumDivisionTier;
 import me.emmy.alley.utils.menu.Button;
 import me.emmy.alley.utils.menu.Menu;
 import org.bukkit.Material;
@@ -37,8 +40,8 @@ public class ProfileMenu extends Menu {
         buttons.put(10, new ProfileButton("&d&lYour Statistics", new ItemStack(Material.PAPER), Arrays.asList(
                 "",
                 "&d&lGlobal",
-                " &d● &fWins: &dnull",
-                " &d● &fLosses: &dnull",
+                " &d● &fWins: &d" + profile.getProfileData().getTotalWins(),
+                " &d● &fLosses: &d" + profile.getProfileData().getTotalLosses(),
                 " &d● &fElo: &d" + profile.getProfileData().getProfileDivisionData().getGlobalElo(),
                 "",
                 "&d&lRanked",
@@ -83,12 +86,16 @@ public class ProfileMenu extends Menu {
                 " &d● &fProgress: &dnull%"
         )));
 
+        String[] nextDivisionAndLevel = abstractDivision.getNextDivisionAndLevelArray();
+        int eloNeeded = abstractDivision.getEloNeededForDivision(EnumDivisionTier.valueOf(nextDivisionAndLevel[0].toUpperCase()), EnumDivisionLevel.valueOf("LEVEL_" + nextDivisionAndLevel[1]));
+        String progressBar = abstractDivision.generateProgressBar(eloNeeded);
         buttons.put(14, new ProfileButton("&d&lDivisions", new ItemStack(Material.FEATHER), Arrays.asList(
                 "",
                 " &d● &fCurrent Division: &d" + abstractDivision.getTier().getName(),
-                " &d● &fNext Division: &dnull",
+                " &d● &fCurrent Level: &d" + abstractDivision.getLevel().getName(),
                 "",
-                " &d● &fCurrent level: &d" + abstractDivision.getLevel().getName(),
+                " &d● &fNext Division: &d" + abstractDivision.getNextDivisionAndLevel(),
+                " &d● &fProgress: &d" + progressBar,
                 "",
                 "&aClick to view all divisions!"
         )));

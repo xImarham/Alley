@@ -89,7 +89,7 @@ public class ProfileDivisionData {
                 }
             }
         }
-        return Alley.getInstance().getDivisionRepository().getDivision(EnumDivisionTier.BRONZE, EnumDivisionLevel.LEVEL_1);
+        return Alley.getInstance().getDivisionRepository().getDivision(EnumDivisionTier.GRANDMASTER, EnumDivisionLevel.LEVEL_1);
     }
 
     /**

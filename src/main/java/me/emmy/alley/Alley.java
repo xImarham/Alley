@@ -88,6 +88,8 @@ import me.emmy.alley.profile.settings.playersettings.command.worldtime.CurrentTi
 import me.emmy.alley.profile.settings.playersettings.command.worldtime.DayCommand;
 import me.emmy.alley.profile.settings.playersettings.command.worldtime.NightCommand;
 import me.emmy.alley.profile.settings.playersettings.command.worldtime.SunsetCommand;
+import me.emmy.alley.profile.shop.command.ShopCommand;
+import me.emmy.alley.profile.shop.command.admin.SetCoinsCommand;
 import me.emmy.alley.queue.QueueRepository;
 import me.emmy.alley.queue.command.admin.ForceQueueCommand;
 import me.emmy.alley.queue.command.admin.QueueReloadCommand;
@@ -323,6 +325,8 @@ public class Alley extends JavaPlugin {
             new DivisionMenuCommand();
             new DivisionListCommand();
 
+            new SetCoinsCommand();
+
             //debugging
             new StateCommand();
             new FFAStateCommand();
@@ -364,6 +368,8 @@ public class Alley extends JavaPlugin {
             new QueuesCommand();
             new ProfileMenuCommand();
             new MatchSettingsCommand();
+
+            new ShopCommand();
         });
     }
 

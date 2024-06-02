@@ -35,7 +35,7 @@ public class SettingsMenu extends Menu {
         buttons.put(10, new SettingsButton("&d&lToggle Party Messages", Material.FEATHER, (short) 0, Arrays.asList(
                 "",
                 "&fDecide whether you should",
-                "&fsee the &party chat",
+                "&fsee the &dparty chat",
                 "&fmessages or not.",
                 "",
                 " &d● &fStatus: &r" + (Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId()).getProfileData().getProfileSettingData().isPartyMessagesEnabled() ? "&aEnabled" : "&cDisabled"),

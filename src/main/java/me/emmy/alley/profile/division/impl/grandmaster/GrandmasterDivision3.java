@@ -1,4 +1,4 @@
-package me.emmy.alley.profile.division.impl.bronze;
+package me.emmy.alley.profile.division.impl.grandmaster;
 
 import me.emmy.alley.profile.division.AbstractDivision;
 import me.emmy.alley.profile.division.annotation.DivisionData;
@@ -12,11 +12,13 @@ import org.bukkit.Material;
  * @date 6/1/2024
  */
 @DivisionData(
-        name = "Bronze 3",
-        description = "The third division of the bronze tier",
-        icon = Material.CLAY_BRICK,
-        tier = EnumDivisionTier.BRONZE,
+        name = "Grandmaster 3",
+        description = "The third division of the grandmaster tier",
+        icon = Material.INK_SACK,
+        tier = EnumDivisionTier.GRANDMASTER,
         level = EnumDivisionLevel.LEVEL_3,
-        slot = 12)
-public class BronzeDivision3 extends AbstractDivision {
+        durability = 6,
+        slot = 34)
+public class GrandmasterDivision3 extends AbstractDivision {
+
 }

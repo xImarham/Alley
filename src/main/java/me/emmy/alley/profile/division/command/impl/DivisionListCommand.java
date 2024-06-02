@@ -23,7 +23,7 @@ public class DivisionListCommand extends BaseCommand {
         if (Alley.getInstance().getDivisionRepository().getDivisions().isEmpty()) {
             player.sendMessage(CC.translate("      &f● &cNo Divisions available."));
         }
-        Alley.getInstance().getDivisionRepository().getDivisions().forEach(division -> player.sendMessage(CC.translate("      &f● &d" + division.getName() + " &f(&d" + division.getLevel().getName() + "&f) (&d" + division.getEloMin() + " &f- &d" + division.getEloMax() + "&f)")));
+        Alley.getInstance().getDivisionRepository().getDivisions().forEach(division -> player.sendMessage(CC.translate("      &f● &d" + division.getName() + " " + division.getLevel().getName().replace("Level ", "") + " &f(&d" + division.getLevel().getName() + "&f) (&d" + division.getEloMin() + " &f- &d" + division.getEloMax() + "&f)")));
         player.sendMessage(CC.FLOWER_BAR);
         player.sendMessage("");
 

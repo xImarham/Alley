@@ -19,6 +19,7 @@ public abstract class AbstractKillEffect implements ICosmetic {
     private final String permission;
     private final Material icon;
     private final int slot;
+    private final int price;
 
     public AbstractKillEffect() {
         KillEffectData data = getClass().getAnnotation(KillEffectData.class);
@@ -28,6 +29,7 @@ public abstract class AbstractKillEffect implements ICosmetic {
             this.permission = data.permission();
             this.icon = data.icon();
             this.slot = data.slot();
+            this.price = data.price();
         } else {
             throw new IllegalStateException("KillEffectData annotation missing");
         }

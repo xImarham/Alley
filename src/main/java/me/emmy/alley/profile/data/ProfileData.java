@@ -64,4 +64,12 @@ public class ProfileData {
         this.kitData = Maps.newHashMap();
         this.ffaData = Maps.newHashMap();
     }
+
+    public int getTotalWins() {
+        return this.rankedWins + this.unrankedWins;
+    }
+
+    public int getTotalLosses() {
+        return this.rankedLosses + this.unrankedLosses;
+    }
 }

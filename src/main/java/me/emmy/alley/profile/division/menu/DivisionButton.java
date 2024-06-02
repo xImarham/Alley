@@ -1,12 +1,12 @@
 package me.emmy.alley.profile.division.menu;
 
-import com.sk89q.worldedit.EditSession;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import me.emmy.alley.Alley;
 import me.emmy.alley.profile.Profile;
-import me.emmy.alley.profile.data.impl.ProfileFFAData;
 import me.emmy.alley.profile.division.AbstractDivision;
+import me.emmy.alley.profile.division.enums.EnumDivisionLevel;
+import me.emmy.alley.profile.division.enums.EnumDivisionTier;
 import me.emmy.alley.utils.item.ItemBuilder;
 import me.emmy.alley.utils.menu.Button;
 import org.bukkit.entity.Player;
@@ -27,7 +27,11 @@ public class DivisionButton extends Button {
     public ItemStack getButtonItem(Player player) {
         Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
         AbstractDivision abstractDivision = Alley.getInstance().getDivisionRepository().getDivision(profile.getProfileData().getProfileDivisionData().getDivision());
+        String[] nextDivisionAndLevel = division.getNextDivisionAndLevelArray();
+        int eloNeeded = division.getEloNeededForDivision(EnumDivisionTier.valueOf(nextDivisionAndLevel[0].toUpperCase()), EnumDivisionLevel.valueOf("LEVEL_" + nextDivisionAndLevel[1]));
+        String progressBar = division.generateProgressBar(eloNeeded);
         return new ItemBuilder(division.getIcon())
+                .durability(division.getDurability())
                 .name("&d&l" + division.getName())
                 .lore(
                         "",
@@ -41,6 +45,7 @@ public class DivisionButton extends Button {
                         "&f● &dLevel: &f" + division.getLevel().getName(),
                         "&f● &dElo Range: &f" + division.getEloMin() + " - " + division.getEloMax(),
                         "&f● &dDescription: &f" + division.getDescription(),
+                        "&f● &dProgress: &f" + progressBar,
                         ""
 
                 )

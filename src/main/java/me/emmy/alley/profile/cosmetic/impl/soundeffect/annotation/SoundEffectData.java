@@ -16,8 +16,14 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 public @interface SoundEffectData {
     String name();
+
     String description();
+
     String permission() default "";
+
     Material icon();
+
     int slot();
+
+    int price() default 500;
 }

@@ -12,5 +12,6 @@ public interface ICosmetic {
     String getDescription();
     String getPermission();
     Material getIcon();
+    int getPrice();
     int getSlot();
 }

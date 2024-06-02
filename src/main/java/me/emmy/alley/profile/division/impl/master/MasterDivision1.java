@@ -1,10 +1,11 @@
-package me.emmy.alley.profile.division.impl.bronze;
+package me.emmy.alley.profile.division.impl.master;
 
 import me.emmy.alley.profile.division.AbstractDivision;
 import me.emmy.alley.profile.division.annotation.DivisionData;
 import me.emmy.alley.profile.division.enums.EnumDivisionLevel;
 import me.emmy.alley.profile.division.enums.EnumDivisionTier;
 import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
 
 /**
  * @author Remi
@@ -12,11 +13,13 @@ import org.bukkit.Material;
  * @date 6/1/2024
  */
 @DivisionData(
-        name = "Bronze 1",
-        description = "The first division of the bronze tier",
-        icon = Material.CLAY_BRICK,
-        tier = EnumDivisionTier.BRONZE,
+        name = "Master 1",
+        description = "The first division of the master tier",
+        icon = Material.INK_SACK,
+        tier = EnumDivisionTier.MASTER,
         level = EnumDivisionLevel.LEVEL_1,
-        slot = 10)
-public class BronzeDivision1 extends AbstractDivision {
+        durability = 12,
+        slot = 29)
+public class MasterDivision1 extends AbstractDivision {
+
 }

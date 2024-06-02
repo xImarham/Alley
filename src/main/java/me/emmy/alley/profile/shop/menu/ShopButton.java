@@ -1,10 +1,12 @@
-package me.emmy.alley.profile.menu;
+package me.emmy.alley.profile.shop.menu;
 
 import lombok.AllArgsConstructor;
 import me.emmy.alley.leaderboard.menu.leaderboard.LeaderboardMenu;
 import me.emmy.alley.leaderboard.menu.personal.StatisticsMenu;
+import me.emmy.alley.profile.cosmetic.menu.CosmeticsMenu;
 import me.emmy.alley.profile.division.menu.DivisionsMenu;
 import me.emmy.alley.profile.settings.playersettings.menu.SettingsMenu;
+import me.emmy.alley.profile.shop.menu.impl.ShopEffectMenu;
 import me.emmy.alley.utils.menu.Button;
 import me.emmy.alley.utils.pagination.ItemBuilder;
 import org.bukkit.Material;
@@ -20,7 +22,7 @@ import java.util.List;
  * Date: 23/05/2024 - 01:27
  */
 @AllArgsConstructor
-public class ProfileButton extends Button {
+public class ShopButton extends Button {
 
     private String displayName;
     private ItemStack itemStack;
@@ -44,31 +46,11 @@ public class ProfileButton extends Button {
         Material material = itemStack.getType();
 
         switch (material) {
-            case PAPER:
-                new StatisticsMenu().openMenu(player);
-                break;
-            case BOOK:
-                player.performCommand("matchhistory");
-                break;
-            case SKULL_ITEM:
-                break;
-            case ANVIL:
-                new SettingsMenu().openMenu(player);
-                break;
             case FEATHER:
-                new DivisionsMenu().openMenu(player);
+                new ShopEffectMenu("SoundEffect").openMenu(player);
                 break;
-            case BEACON:
-                player.performCommand("challenges");
-                break;
-            case ENDER_CHEST:
-                player.performCommand("themes");
-                break;
-            case EYE_OF_ENDER:
-                new LeaderboardMenu().openMenu(player);
-                break;
-            case EMERALD:
-                player.performCommand("shop");
+            case REDSTONE:
+                new ShopEffectMenu("KillEffect").openMenu(player);
                 break;
         }
         playNeutral(player);

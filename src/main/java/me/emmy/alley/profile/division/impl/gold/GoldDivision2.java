@@ -1,4 +1,4 @@
-package me.emmy.alley.profile.division.impl.bronze;
+package me.emmy.alley.profile.division.impl.gold;
 
 import me.emmy.alley.profile.division.AbstractDivision;
 import me.emmy.alley.profile.division.annotation.DivisionData;
@@ -9,14 +9,14 @@ import org.bukkit.Material;
 /**
  * @author Remi
  * @project Alley
- * @date 6/1/2024
+ * @date 6/2/2024
  */
 @DivisionData(
-        name = "Bronze 2",
-        description = "The second division of the bronze tier",
-        icon = Material.CLAY_BRICK,
-        tier = EnumDivisionTier.BRONZE,
+        name = "Gold 2",
+        description = "The second division of the gold tier",
+        icon = Material.GOLD_INGOT,
+        tier = EnumDivisionTier.GOLD,
         level = EnumDivisionLevel.LEVEL_2,
-        slot = 11)
-public class BronzeDivision2 extends AbstractDivision {
+        slot = 19)
+public class GoldDivision2 extends AbstractDivision {
 }
