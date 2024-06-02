@@ -9,13 +9,13 @@ import lombok.Getter;
  */
 @Getter
 public enum EnumDivisionTier {
-    BRONZE("Bronze", 1200, 0),
-    SILVER("Silver", 1400, 1200),
-    GOLD("Gold", 1600, 1400),
-    PLATINUM("Platinum", 1800, 1600),
-    DIAMOND("Diamond", 2000, 1800),
-    MASTER("Master", 2200, 2000),
-    GRANDMASTER("Grandmaster", 2400, 2200),
+    BRONZE("Bronze", 1100, 0),
+    SILVER("Silver", 1200, 1100),
+    GOLD("Gold", 1300, 1200),
+    PLATINUM("Platinum", 1400, 1300),
+    DIAMOND("Diamond", 1500, 1400),
+    MASTER("Master", 1600, 1500),
+    GRANDMASTER("Grandmaster", 1700, 1600),
 
     ;
 
@@ -24,7 +24,7 @@ public enum EnumDivisionTier {
     private final int minElo;
 
     private static final int LEVELS_PER_TIER = 3;
-    private static final int ELO_INCREMENT_PER_LEVEL = 50;
+    private static final int ELO_INCREMENT_PER_LEVEL = 33;
 
     /**
      * Constructor for the EnumDivisionTier
