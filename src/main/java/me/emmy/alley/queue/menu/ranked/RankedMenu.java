@@ -37,7 +37,7 @@ public class RankedMenu extends Menu {
             }
         }
 
-        addBorder(buttons, (byte) 6);
+        addBorder(buttons, (byte) 6, 5);
 
         return buttons;
     }

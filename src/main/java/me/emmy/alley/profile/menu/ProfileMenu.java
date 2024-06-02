@@ -132,7 +132,7 @@ public class ProfileMenu extends Menu {
                 "&aClick to view!"
         )));
 
-        addBorder(buttons, (byte) 6);
+        addBorder(buttons, (byte) 6, 5);
 
         return buttons;
     }

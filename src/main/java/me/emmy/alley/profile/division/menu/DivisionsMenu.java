@@ -28,7 +28,7 @@ public class DivisionsMenu extends Menu {
             buttons.put(division.getSlot(), new DivisionButton(division));
         });
 
-        addBorder(buttons, (byte) 6);
+        addBorder(buttons, (byte) 6, 5);
 
         return buttons;
     }
