@@ -1,6 +1,6 @@
-package me.emmy.alley.profile.settings.command.worldtime;
+package me.emmy.alley.profile.settings.playersettings.command;
 
-import me.emmy.alley.utils.chat.CC;
+import me.emmy.alley.profile.settings.playersettings.menu.SettingsMenu;
 import me.emmy.alley.utils.command.BaseCommand;
 import me.emmy.alley.utils.command.Command;
 import me.emmy.alley.utils.command.CommandArgs;
@@ -9,15 +9,15 @@ import org.bukkit.entity.Player;
 /**
  * Created by Emmy
  * Project: Alley
- * Date: 02/06/2024 - 10:59
+ * Date: 19/05/2024 - 11:27
  */
-public class CurrentTimeCommand extends BaseCommand {
+
+public class SettingsCommand extends BaseCommand {
     @Override
-    @Command(name = "currenttime")
+    @Command(name = "settings")
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
 
-        player.resetPlayerTime();
-        player.sendMessage(CC.translate("&aYou have reset your world time."));
+        new SettingsMenu().openMenu(player);
     }
 }

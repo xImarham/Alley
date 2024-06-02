@@ -1,8 +1,11 @@
 package me.emmy.alley.profile.division.menu;
 
 import me.emmy.alley.Alley;
+import me.emmy.alley.profile.menu.ProfileMenu;
+import me.emmy.alley.queue.menu.queues.QueuesMenu;
 import me.emmy.alley.utils.menu.Button;
 import me.emmy.alley.utils.menu.Menu;
+import me.emmy.alley.utils.menu.button.BackButton;
 import org.bukkit.entity.Player;
 
 import java.util.Collections;
@@ -23,6 +26,8 @@ public class DivisionsMenu extends Menu {
     @Override
     public Map<Integer, Button> getButtons(Player player) {
         final Map<Integer, Button> buttons = new HashMap<>();
+
+        buttons.put(0, new BackButton(new ProfileMenu()));
 
         Alley.getInstance().getDivisionRepository().getDivisions().forEach(division -> {
             buttons.put(division.getSlot(), new DivisionButton(division));

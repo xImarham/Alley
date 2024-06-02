@@ -7,8 +7,11 @@ import me.emmy.alley.leaderboard.menu.button.StatisticsButton;
 import me.emmy.alley.leaderboard.menu.personal.button.GlobalStatButton;
 import me.emmy.alley.leaderboard.menu.personal.button.KitStatButton;
 import me.emmy.alley.leaderboard.menu.personal.button.LeaderboardButton;
+import me.emmy.alley.profile.menu.ProfileMenu;
+import me.emmy.alley.queue.menu.queues.QueuesMenu;
 import me.emmy.alley.utils.menu.Button;
 import me.emmy.alley.utils.menu.Menu;
+import me.emmy.alley.utils.menu.button.BackButton;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
@@ -42,6 +45,7 @@ public class StatisticsMenu extends Menu {
     public Map<Integer, Button> getButtons(Player player) {
         final Map<Integer, Button> buttons = new HashMap<>();
 
+        buttons.put(0, new BackButton(new ProfileMenu()));
         buttons.put(2, new StatisticsButton());
         buttons.put(4, new GlobalStatButton());
         buttons.put(6, new LeaderboardButton());

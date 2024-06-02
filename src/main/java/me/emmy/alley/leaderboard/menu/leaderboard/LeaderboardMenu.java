@@ -9,8 +9,11 @@ import me.emmy.alley.leaderboard.menu.leaderboard.button.DisplayTypeButton;
 import me.emmy.alley.leaderboard.menu.leaderboard.button.KitButton;
 import me.emmy.alley.leaderboard.menu.leaderboard.enums.EnumLeaderboardType;
 import me.emmy.alley.profile.Profile;
+import me.emmy.alley.profile.menu.ProfileMenu;
+import me.emmy.alley.queue.menu.queues.QueuesMenu;
 import me.emmy.alley.utils.menu.Button;
 import me.emmy.alley.utils.menu.Menu;
+import me.emmy.alley.utils.menu.button.BackButton;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
@@ -36,6 +39,7 @@ public class LeaderboardMenu extends Menu {
         Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
         EnumLeaderboardType currentType = profile.getLeaderboardType();
 
+        buttons.put(0, new BackButton(new ProfileMenu()));
         buttons.put(2, new StatisticsButton());
         buttons.put(6, new DisplayTypeButton());
 

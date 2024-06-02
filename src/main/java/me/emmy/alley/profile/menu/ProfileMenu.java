@@ -101,10 +101,10 @@ public class ProfileMenu extends Menu {
                 "&aClick to view!"
         )));
 
-        buttons.put(16, new ProfileButton("&d&lCosmetics", new ItemStack(Material.BEACON), Arrays.asList(
+        buttons.put(16, new ProfileButton("&d&lChallenges", new ItemStack(Material.BEACON), Arrays.asList(
                 "",
-                "&fCustomize your available",
-                "&fcosmetics.",
+                "&fView your current challenges",
+                "&fand complete them for rewards.",
                 "",
                 "&aClick to view!"
         )));

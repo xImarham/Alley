@@ -18,8 +18,9 @@ public class BackButton extends Button {
 
     @Override
     public ItemStack getButtonItem(Player player) {
-        return new ItemBuilder(Material.CARPET)
+        return new ItemBuilder(Material.STAINED_GLASS_PANE)
                 .name("&c&lBack")
+                .durability(14)
                 .lore(Arrays.asList(
                         "&cClick here to return to",
                         "&cthe previous menu.")

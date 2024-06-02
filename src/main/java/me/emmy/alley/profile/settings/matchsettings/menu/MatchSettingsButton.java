@@ -1,6 +1,7 @@
-package me.emmy.alley.profile.settings.menu;
+package me.emmy.alley.profile.settings.matchsettings.menu;
 
 import lombok.AllArgsConstructor;
+import me.emmy.alley.profile.cosmetic.menu.CosmeticsMenu;
 import me.emmy.alley.utils.menu.Button;
 import me.emmy.alley.utils.pagination.ItemBuilder;
 import org.bukkit.Material;
@@ -16,7 +17,7 @@ import java.util.List;
  * Date: 23/05/2024 - 01:27
  */
 @AllArgsConstructor
-public class SettingsButton extends Button {
+public class MatchSettingsButton extends Button {
 
     private String displayName;
     private Material material;
@@ -40,25 +41,14 @@ public class SettingsButton extends Button {
         }
 
         switch (material) {
+            case FIREWORK:
+                new CosmeticsMenu("KillEffect").openMenu(player);
+                break;
+            case CHEST:
+                //matchsetting clear inventory
+                break;
             case FEATHER:
-                player.performCommand("togglepartymessages");
-                break;
-            case NAME_TAG:
-                player.performCommand("togglepartyinvites");
-                break;
-            case CARPET:
-                if (data == (short) 5) {
-                    player.performCommand("togglescoreboard");
-                }
-                break;
-            case ITEM_FRAME:
-                player.performCommand("toggletablist");
-                break;
-            case BOOK:
-                player.performCommand("cosmetics");
-                break;
-            case WATCH:
-                player.performCommand("toggleworldtime");
+                //matchsetting toggle flight
                 break;
         }
         playNeutral(player);

@@ -1,9 +1,11 @@
-package me.emmy.alley.profile.settings.menu;
+package me.emmy.alley.profile.settings.playersettings.menu;
 
 import lombok.AllArgsConstructor;
 import me.emmy.alley.Alley;
+import me.emmy.alley.profile.menu.ProfileMenu;
 import me.emmy.alley.utils.menu.Button;
 import me.emmy.alley.utils.menu.Menu;
+import me.emmy.alley.utils.menu.button.BackButton;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
@@ -27,6 +29,8 @@ public class SettingsMenu extends Menu {
     @Override
     public Map<Integer, Button> getButtons(Player player) {
         Map<Integer, Button> buttons = new HashMap<>();
+
+        buttons.put(0, new BackButton(new ProfileMenu()));
 
         buttons.put(10, new SettingsButton("&d&lToggle Party Messages", Material.FEATHER, (short) 0, Arrays.asList(
                 "",
@@ -80,6 +84,15 @@ public class SettingsMenu extends Menu {
                 " &d● &fStatus: &rnull",
                 "",
                 "&aClick to change!"
+        )));
+
+        buttons.put(16, new SettingsButton("&d&lMatch Settings", Material.BOOK_AND_QUILL, (short) 0, Arrays.asList(
+                "",
+                "&fChange your match settings",
+                "&fsuch as &dmatch sounds&f, &dmatch particles&f,",
+                "&dmatch cosmetics&f, and &dmatch animations&f.",
+                "",
+                "&aClick to view!"
         )));
 
         addBorder(buttons, (byte) 6, 3);

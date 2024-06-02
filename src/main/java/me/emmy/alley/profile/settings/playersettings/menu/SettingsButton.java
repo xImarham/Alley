@@ -1,10 +1,7 @@
-package me.emmy.alley.profile.menu;
+package me.emmy.alley.profile.settings.playersettings.menu;
 
 import lombok.AllArgsConstructor;
-import me.emmy.alley.leaderboard.menu.leaderboard.LeaderboardMenu;
-import me.emmy.alley.leaderboard.menu.personal.StatisticsMenu;
-import me.emmy.alley.profile.division.menu.DivisionsMenu;
-import me.emmy.alley.profile.settings.playersettings.menu.SettingsMenu;
+import me.emmy.alley.profile.settings.matchsettings.menu.MatchSettingsMenu;
 import me.emmy.alley.utils.menu.Button;
 import me.emmy.alley.utils.pagination.ItemBuilder;
 import org.bukkit.Material;
@@ -20,16 +17,18 @@ import java.util.List;
  * Date: 23/05/2024 - 01:27
  */
 @AllArgsConstructor
-public class ProfileButton extends Button {
+public class SettingsButton extends Button {
 
     private String displayName;
-    private ItemStack itemStack;
+    private Material material;
+    private short data;
     private List<String> lore;
 
     @Override
     public ItemStack getButtonItem(Player player) {
-        return new ItemBuilder(itemStack)
+        return new ItemBuilder(material)
                 .name(displayName)
+                .durability(data)
                 .lore(lore)
                 .hideMeta()
                 .build();
@@ -41,36 +40,29 @@ public class ProfileButton extends Button {
             return;
         }
 
-        Material material = itemStack.getType();
-
         switch (material) {
-            case PAPER:
-                new StatisticsMenu().openMenu(player);
-                break;
-            case BOOK:
-                player.performCommand("matchhistory");
-                break;
-            case SKULL_ITEM:
-                break;
-            case ANVIL:
-                new SettingsMenu().openMenu(player);
-                break;
             case FEATHER:
-                new DivisionsMenu().openMenu(player);
+                player.performCommand("togglepartymessages");
                 break;
-            case BEACON:
-                player.performCommand("challenges");
+            case NAME_TAG:
+                player.performCommand("togglepartyinvites");
                 break;
-            case ENDER_CHEST:
-                player.performCommand("themes");
+            case CARPET:
+                if (data == (short) 5) {
+                    player.performCommand("togglescoreboard");
+                }
                 break;
-            case EYE_OF_ENDER:
-                new LeaderboardMenu().openMenu(player);
+            case ITEM_FRAME:
+                player.performCommand("toggletablist");
                 break;
-            case EMERALD:
-                player.performCommand("coinshop");
+            case WATCH:
+                player.performCommand("toggleworldtime");
+                break;
+            case BOOK_AND_QUILL:
+                new MatchSettingsMenu().openMenu(player);
                 break;
         }
         playNeutral(player);
     }
 }
+

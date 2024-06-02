@@ -95,9 +95,26 @@ public abstract class Menu {
     /**
      * Adds a border to the inventory.
      *
-     * @param buttons the buttons in the inventory
-     * @param data the data value of the border
+     * @param buttons the buttons
+     * @param data    the data
+     * @param rows    the rows
      */
+    public void addBorder(Map<Integer, Button> buttons, byte data, int rows) {
+        for (int i = 0; i < 9; i++) {
+            buttons.putIfAbsent(i, Button.placeholder(Material.STAINED_GLASS_PANE, data, ""));
+        }
+
+        for (int i = 0; i < 9; i++) {
+            buttons.putIfAbsent((rows - 1) * 9 + i, Button.placeholder(Material.STAINED_GLASS_PANE, data, ""));
+        }
+
+        for (int i = 0; i < rows; i++) {
+            buttons.putIfAbsent(i * 9, Button.placeholder(Material.STAINED_GLASS_PANE, data, ""));
+            buttons.putIfAbsent(i * 9 + 8, Button.placeholder(Material.STAINED_GLASS_PANE, data, ""));
+        }
+    }
+
+    /*
     public void addBorder(Map<Integer, Button> buttons, byte data, int rows) {
         for (int i = 0; i < 9; i++) {
             buttons.putIfAbsent(i, Button.placeholder(Material.STAINED_GLASS_PANE, data, ""));
@@ -108,7 +125,7 @@ public abstract class Menu {
             buttons.putIfAbsent(i * 9, Button.placeholder(Material.STAINED_GLASS_PANE, data, ""));
             buttons.putIfAbsent(i * 9 + 8, Button.placeholder(Material.STAINED_GLASS_PANE, data, ""));
         }
-    }
+    }*/
 
     public int getSize() {
         return -1;

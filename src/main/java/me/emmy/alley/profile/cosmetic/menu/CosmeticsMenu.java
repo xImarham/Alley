@@ -1,14 +1,19 @@
 package me.emmy.alley.profile.cosmetic.menu;
 
+import com.sun.org.apache.xerces.internal.impl.xpath.regex.Match;
 import lombok.AllArgsConstructor;
 import me.emmy.alley.Alley;
 import me.emmy.alley.profile.cosmetic.menu.button.SoundEffectButton;
 import me.emmy.alley.profile.cosmetic.menu.button.CosmeticButton;
 import me.emmy.alley.profile.cosmetic.menu.button.KillEffectButton;
+import me.emmy.alley.profile.settings.matchsettings.menu.MatchSettingsMenu;
 import me.emmy.alley.utils.menu.Button;
 import me.emmy.alley.utils.menu.Menu;
+import me.emmy.alley.utils.menu.button.BackButton;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -31,6 +36,7 @@ public class CosmeticsMenu extends Menu {
     public Map<Integer, Button> getButtons(Player player) {
         final Map<Integer, Button> buttons = new HashMap<>();
 
+        buttons.put(0, new BackButton(new MatchSettingsMenu()));
         buttons.put(3, new KillEffectButton());
         buttons.put(5, new SoundEffectButton());
 

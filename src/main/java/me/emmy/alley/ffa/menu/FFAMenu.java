@@ -5,8 +5,10 @@ import me.emmy.alley.Alley;
 import me.emmy.alley.ffa.AbstractFFAMatch;
 import me.emmy.alley.kit.Kit;
 import me.emmy.alley.leaderboard.menu.personal.button.KitStatButton;
+import me.emmy.alley.queue.menu.queues.QueuesMenu;
 import me.emmy.alley.utils.menu.Button;
 import me.emmy.alley.utils.menu.Menu;
+import me.emmy.alley.utils.menu.button.BackButton;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
@@ -31,6 +33,8 @@ public class FFAMenu extends Menu {
     @Override
     public Map<Integer, Button> getButtons(Player player) {
         Map<Integer, Button> buttons = new HashMap<>();
+
+        buttons.put(0, new BackButton(new QueuesMenu()));
 
         int slot = 10;
 

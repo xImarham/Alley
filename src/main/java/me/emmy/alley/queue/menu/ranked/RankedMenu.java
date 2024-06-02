@@ -2,9 +2,11 @@ package me.emmy.alley.queue.menu.ranked;
 
 import me.emmy.alley.Alley;
 import me.emmy.alley.queue.Queue;
+import me.emmy.alley.queue.menu.queues.QueuesMenu;
 import me.emmy.alley.utils.chat.CC;
 import me.emmy.alley.utils.menu.Button;
 import me.emmy.alley.utils.menu.Menu;
+import me.emmy.alley.utils.menu.button.BackButton;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
@@ -18,8 +20,6 @@ import java.util.Map;
 
 public class RankedMenu extends Menu {
 
-    //private QueuesMenu previousMenu;
-
     @Override
     public String getTitle(Player player) {
         return "Ranked Queue";
@@ -29,7 +29,7 @@ public class RankedMenu extends Menu {
     public Map<Integer, Button> getButtons(Player player) {
         Map<Integer, Button> buttons = new HashMap<>();
 
-        //buttons.put(0, new BackButton(previousMenu));
+        buttons.put(0, new BackButton(new QueuesMenu()));
 
         for (Queue queue : Alley.getInstance().getQueueRepository().getQueues()) {
             if (queue.isRanked()) {
