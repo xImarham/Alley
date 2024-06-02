@@ -42,29 +42,23 @@ public class SettingsButton extends Button {
         switch (material) {
             case FEATHER:
                 player.performCommand("togglepartymessages");
-                playNeutral(player);
                 break;
             case NAME_TAG:
                 player.performCommand("togglepartyinvites");
-                playNeutral(player);
                 break;
             case CARPET:
                 if (data == (short) 5) {
                     player.performCommand("togglescoreboard");
                 }
-                playNeutral(player);
                 break;
             case ITEM_FRAME:
                 player.performCommand("toggletablist");
-                playNeutral(player);
                 break;
             case BOOK:
                 player.performCommand("cosmetics");
-                playNeutral(player);
                 break;
             case WATCH:
                 player.performCommand("toggleworldtime");
-                playNeutral(player);
                 break;
         }
         playNeutral(player);
