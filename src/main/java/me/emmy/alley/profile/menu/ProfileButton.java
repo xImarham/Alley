@@ -39,30 +39,32 @@ public class ProfileButton extends Button {
             return;
         }
 
-        switch (material) {
-            case PAPER:
-                player.performCommand("leaderboard");
-                playNeutral(player);
-                break;
-            case BOOK:
-                player.performCommand("matchhistory");
-                playNeutral(player);
-                break;
-            case SKULL_ITEM:
-                playNeutral(player);
-                break;
-            case ANVIL:
-                player.performCommand("settings");
-                playNeutral(player);
-                break;
-            case FEATHER:
-                player.performCommand("divisions");
-                playNeutral(player);
-                break;
-            case BEACON:
-                player.performCommand("cosmetics");
-                playNeutral(player);
-                break;
+        if (material.equals(Material.PAPER)) {
+            player.performCommand("stats");
+            playNeutral(player);
+        } else if (material.equals(Material.BOOK)) {
+            player.performCommand("matchhistory");
+            playNeutral(player);
+        } else if (material.equals(Material.SKULL_ITEM)) {
+            playNeutral(player);
+        } else if (material.equals(Material.ANVIL)) {
+            player.performCommand("settings");
+            playNeutral(player);
+        } else if (material.equals(Material.FEATHER)) {
+            player.performCommand("divisions");
+            playNeutral(player);
+        } else if (material.equals(Material.BEACON)) {
+            player.performCommand("cosmetics");
+            playNeutral(player);
+        } else if (material.equals(Material.ENDER_CHEST)) {
+            player.performCommand("themes");
+            playNeutral(player);
+        } else if (material.equals(Material.EYE_OF_ENDER)) {
+            player.performCommand("leaderboards");
+            playNeutral(player);
+        } else if (material.equals(Material.EMERALD)) {
+            player.performCommand("coinshop");
+            playNeutral(player);
         }
     }
 }

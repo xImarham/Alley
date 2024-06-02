@@ -16,7 +16,6 @@ import java.util.Map;
  * Project: Alley
  * Date: 23/05/2024 - 01:27
  */
-
 @AllArgsConstructor
 public class SettingsMenu extends Menu {
 
@@ -29,55 +28,62 @@ public class SettingsMenu extends Menu {
     public Map<Integer, Button> getButtons(Player player) {
         Map<Integer, Button> buttons = new HashMap<>();
 
-        buttons.put(10, new SettingsButton("&dToggle Party Messages", Material.FEATHER, (short) 0, Arrays.asList(
+        buttons.put(10, new SettingsButton("&d&lToggle Party Messages", Material.FEATHER, (short) 0, Arrays.asList(
                 "",
-                "&7Decide whether you should",
-                "&7see the party chat",
-                "&7messages or not.",
+                "&fDecide whether you should",
+                "&fsee the &party chat",
+                "&fmessages or not.",
                 "",
-                "&7Status: " + (Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId()).getProfileData().getProfileSettingData().isPartyMessagesEnabled() ? "&aEnabled" : "&cDisabled"),
+                " &d● &fStatus: &r" + (Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId()).getProfileData().getProfileSettingData().isPartyMessagesEnabled() ? "&aEnabled" : "&cDisabled"),
                 "",
-                "&dClick to toggle!"
+                "&aClick to toggle!"
         )));
 
-        buttons.put(11, new SettingsButton("&dToggle Party Invites", Material.NAME_TAG, (short) 0, Arrays.asList(
+        buttons.put(11, new SettingsButton("&d&lToggle Party Invites", Material.NAME_TAG, (short) 0, Arrays.asList(
                 "",
-                "&7Decide whether you should",
-                "&7receive party invites",
-                "&7or not.",
+                "&fDecide whether you should",
+                "&freceive &dparty invites",
+                "&for not.",
                 "",
-                "&7Status: " + (Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId()).getProfileData().getProfileSettingData().isPartyInvitesEnabled() ? "&aEnabled" : "&cDisabled"),
+                " &d● &fStatus: &r" + (Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId()).getProfileData().getProfileSettingData().isPartyInvitesEnabled() ? "&aEnabled" : "&cDisabled"),
                 "",
-                "&dClick to toggle!"
+                "&aClick to toggle!"
         )));
 
-        buttons.put(12, new SettingsButton("&dToggle Scoreboard", Material.CARPET, (short) 5, Arrays.asList(
+        buttons.put(12, new SettingsButton("&d&lToggle Scoreboard", Material.CARPET, (short) 5, Arrays.asList(
                 "",
-                "&7Decide whether you should",
-                "&7see the scoreboard",
-                "&7or not.",
+                "&fDecide whether you should",
+                "&fsee the &dscoreboard",
+                "&for not.",
                 "",
-                "&7Status: " + (Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId()).getProfileData().getProfileSettingData().isScoreboardEnabled() ? "&aEnabled" : "&cDisabled"),
+                " &d● &fStatus: &r" + (Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId()).getProfileData().getProfileSettingData().isScoreboardEnabled() ? "&aEnabled" : "&cDisabled"),
                 "",
-                "&dClick to toggle!"
+                "&aClick to toggle!"
         )));
 
-        buttons.put(13, new SettingsButton("&dToggle Tablist", Material.ITEM_FRAME, (short) 0, Arrays.asList(
+        buttons.put(13, new SettingsButton("&d&lToggle Tablist", Material.ITEM_FRAME, (short) 0, Arrays.asList(
                 "",
-                "&7Decide whether you should",
-                "&7see the tablist",
-                "&7or not.",
+                "&fDecide whether you should",
+                "&fsee the &dtablist",
+                "&for not.",
                 "",
-                "&7Status: " + (Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId()).getProfileData().getProfileSettingData().isTablistEnabled() ? "&aEnabled" : "&cDisabled"),
+                " &d● &fStatus: &r" + (Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId()).getProfileData().getProfileSettingData().isTablistEnabled() ? "&aEnabled" : "&cDisabled"),
                 "",
-                "&dClick to toggle!"
+                "&aClick to toggle!"
         )));
 
-        for (int slot = 0; slot < getSize(); slot++) {
-            if (!buttons.containsKey(slot)) {
-                buttons.put(slot, new SettingsButton("", Material.STAINED_GLASS_PANE, (short) 6, Arrays.asList("")));
-            }
-        }
+        buttons.put(14, new SettingsButton("&d&lWorld time", Material.WATCH, (short) 0, Arrays.asList(
+                "",
+                "&fChange your world time",
+                "&fto &dday&f, &dnight&f, or &dsunset&f.",
+                "",
+                " &d● &fStatus: &rnull",
+                "",
+                "&aClick to change!"
+        )));
+
+        //doesnt work for some reason...?
+        //addBorder(buttons, (byte) 6);
 
         return buttons;
     }
