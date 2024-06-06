@@ -7,6 +7,7 @@ import me.emmy.alley.arena.command.ArenaCommand;
 import me.emmy.alley.arena.command.impl.*;
 import me.emmy.alley.arena.listener.ArenaListener;
 import me.emmy.alley.commands.AlleyCommand;
+import me.emmy.alley.commands.AlleyReloadCommand;
 import me.emmy.alley.commands.admin.debug.FFAStateCommand;
 import me.emmy.alley.commands.admin.debug.StateCommand;
 import me.emmy.alley.commands.admin.essential.EnchantCommand;
@@ -253,6 +254,7 @@ public class Alley extends JavaPlugin {
     private void registerCommands() {
         Logger.logTime("Admin Commands", () -> {
             new AlleyCommand();
+            new AlleyReloadCommand();
 
             new SpawnItemsCommand();
             new SetSpawnCommand();

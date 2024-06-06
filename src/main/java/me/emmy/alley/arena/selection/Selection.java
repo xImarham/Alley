@@ -50,12 +50,23 @@ public class Selection {
         return selection;
     }
 
+    /**
+     * Gets the selection of the player.
+     *
+     * @param player The player to get the selection of.
+     * @return The selection of the player.
+     */
     public static void removeSelection(Player player) {
         if (player.hasMetadata(SELECTION_METADATA)) {
             player.removeMetadata(SELECTION_METADATA, Alley.getInstance());
         }
     }
 
+    /**
+     * Checks if the player has a selection.
+     *
+     * @return True if the player has a selection, false otherwise.
+     */
     public boolean hasSelection() {
         return minimum != null && maximum != null;
     }

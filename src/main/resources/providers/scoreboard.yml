@@ -1,8 +1,8 @@
 scoreboard:
   enabled: true
-  footer: "&dalley.net"
+  sidebar-format: "&7&m----------------------"
   title:
-    text: "  &b&lPractice  "
+    text: "&d&lPractice &f- &d&lEU"
     animated: true
     ticks: 5
     animation:
@@ -30,44 +30,49 @@ scoreboard:
       - "   &d&lPractice   "
       - "   &d&lPractice   "
       - "   &d&lPractice   "
+  footer-addition:
+    - ""
+    - "&dalley.club"
+    - "{sidebar}"
   lines:
     lobby:
-      - ""
-      - "&d&lInfo"
-      - " &rOnline: &d{online}"
-      - " &rPlaying: &d{playing}"
-      - " &rIn Queue: &d{in-queue}"
+      - "{sidebar}"
+      - "&rOnline: &d{online}"
+      - "&rPlaying: &d{playing}"
+      - "&rIn Queue: &d{in-queue}"
     party-addition:
       - ""
-      - "&d&lParty"
-      - " &rLeader: &d{party-leader}"
-      - " &rMembers: &d{party-size}"
+      - "&rLeader: &d{party-leader}"
+      - "&rMembers: &d{party-size}"
     waiting:
-      - ""
-      - "&d&lInfo"
-      - " &rOnline: &d{online}"
-      - " &rPlaying: &d{playing}"
-      - " &rIn Queue: &d{in-queue}"
+      - "{sidebar}"
+      - "&rOnline: &d{online}"
+      - "&rPlaying: &d{playing}"
+      - "&rIn Queue: &d{in-queue}"
       - ""
       - "&d&lQueue"
       - " &rKit: &d{queued-kit}"
       - " &rTime: &d{queued-time}"
       - " &rType: &d{queued-type}"
     playing:
-      - ""
-      - "&d&lMatch"
-      - " &rDuration: &d{duration}"
-      - " &rOpponent: &d{opponent}"
-      - " &rPing: &d{player-ping}ms &7/ &d{opponent-ping}ms"
+      - "{sidebar}"
+      - "&rDuration: &d{duration}"
+      - "&rOpponent: &d{opponent}"
+      - "&rPing: &d{player-ping}ms &7/ &d{opponent-ping}ms"
     spectating:
+      - "{sidebar}"
+      - "&rDuration: &d{duration}"
       - ""
-      - "&dSPECTATING"
+      - "&9{Player1} &dvs &c{Player2}"
+      - "&9{ping1}ms &d/ &c{ping2}ms"
     ffa:
+      - "{sidebar}"
+      - "&f&lPlaying FFA"
+      - " &d{kit}"
       - ""
-      - "&d&lFFA"
-      - " &rKit: &d{kit}"
-      - " &rZone: &d{zone}"
       - " &rPlayers: &d{players}"
+      - " &rZone: &d{zone}"
       - ""
       - " &rKills: &d{kills}"
       - " &rDeaths: &d{deaths}"
+      - " &rPing: &d{ping}ms"
