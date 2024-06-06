@@ -38,6 +38,10 @@ public class DefaultFFAMatchImpl extends AbstractFFAMatch {
             return;
         }
 
+        if (!getArena().isEnabled()) {
+            CC.broadcast(CC.translate("(!) &cThe Arena of this ffa match is disabled (!)"));
+        }
+
         getPlayers().add(player);
         getPlayers().forEach(online -> online.sendMessage(CC.translate("&a" + player.getName() + " has joined the FFA match.")));
         setupPlayer(player);
