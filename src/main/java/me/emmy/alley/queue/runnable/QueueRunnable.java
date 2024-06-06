@@ -3,6 +3,7 @@ package me.emmy.alley.queue.runnable;
 import lombok.Getter;
 import me.emmy.alley.Alley;
 import me.emmy.alley.arena.Arena;
+import me.emmy.alley.arena.ArenaType;
 import me.emmy.alley.match.AbstractMatch;
 import me.emmy.alley.match.impl.MatchRegularImpl;
 import me.emmy.alley.match.player.GameParticipant;
@@ -93,7 +94,7 @@ public class QueueRunnable implements Runnable {
     private void processGame(Queue queue, GameParticipantList gameParticipantList) {
         Arena arena = getArena(queue);
 
-        if (arena == null) {
+        if (arena == null || arena.getType().equals(ArenaType.FFA)) {
             gameParticipantList.getParticipants().forEach(participant -> {
                 Player player = Alley.getInstance().getServer().getPlayer(participant.getPlayer().getUuid());
                 player.sendMessage(CC.translate("&cThere are no available arenas for the kit you're playing."));
