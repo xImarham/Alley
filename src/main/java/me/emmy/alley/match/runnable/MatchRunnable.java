@@ -3,6 +3,7 @@ package me.emmy.alley.match.runnable;
 import lombok.Getter;
 import lombok.Setter;
 import me.emmy.alley.Alley;
+import me.emmy.alley.kit.settings.impl.KitSettingSumoImpl;
 import me.emmy.alley.match.AbstractMatch;
 import me.emmy.alley.match.enums.EnumMatchState;
 import me.emmy.alley.utils.chat.CC;

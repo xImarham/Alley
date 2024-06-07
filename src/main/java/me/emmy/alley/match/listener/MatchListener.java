@@ -6,13 +6,17 @@ import me.emmy.alley.cooldown.Cooldown;
 import me.emmy.alley.cooldown.CooldownRepository;
 import me.emmy.alley.kit.settings.impl.KitSettingBoxingImpl;
 import me.emmy.alley.kit.settings.impl.KitSettingBuildImpl;
+import me.emmy.alley.kit.settings.impl.KitSettingSumoImpl;
 import me.emmy.alley.match.AbstractMatch;
 import me.emmy.alley.match.enums.EnumMatchState;
+import me.emmy.alley.match.player.GameParticipant;
+import me.emmy.alley.match.player.impl.MatchGamePlayerImpl;
 import me.emmy.alley.profile.Profile;
 import me.emmy.alley.profile.enums.EnumProfileState;
 import me.emmy.alley.utils.PlayerUtil;
 import me.emmy.alley.utils.chat.CC;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
@@ -27,6 +31,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -54,6 +59,12 @@ public class MatchListener implements Listener {
             }
 
             if (profile.getMatch().getMatchKit().isSettingEnabled(KitSettingBoxingImpl.class)) {
+                event.setDamage(0);
+                player.setHealth(20.0);
+                player.updateInventory();
+            }
+
+            if (profile.getMatch().getMatchKit().isSettingEnabled(KitSettingSumoImpl.class)) {
                 event.setDamage(0);
                 player.setHealth(20.0);
                 player.updateInventory();
@@ -177,6 +188,37 @@ public class MatchListener implements Listener {
     private void onPlayerMove(PlayerMoveEvent event) {
         Player player = event.getPlayer();
         Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
+
+        if (profile != null && profile.getMatch() != null && profile.getState() == EnumProfileState.PLAYING && profile.getMatch().getMatchState() == EnumMatchState.RUNNING) {
+            if (profile.getMatch().getMatchKit().isSettingEnabled(KitSettingSumoImpl.class)) {
+                if (player.getLocation().getBlock().getType() == Material.WATER || player.getLocation().getBlock().getType() == Material.STATIONARY_WATER) {
+                    player.setHealth(0);
+                }
+            }
+        }
+
+        if (profile != null && profile.getMatch() != null && profile.getState() == EnumProfileState.PLAYING) {
+            AbstractMatch match = profile.getMatch();
+            if (match.getMatchState() == EnumMatchState.STARTING && match.getMatchKit().isSettingEnabled(KitSettingSumoImpl.class)) {
+                List<GameParticipant<MatchGamePlayerImpl>> participants = match.getParticipants();
+                if (participants.size() == 2) { // Ensure there are exactly two participants
+                    GameParticipant<?> participantA = participants.get(0);
+                    GameParticipant<?> participantB = participants.get(1);
+
+                    Player playerA = participantA.getPlayer().getPlayer();
+                    Player playerB = participantB.getPlayer().getPlayer();
+
+                    if (player.equals(playerA)) {
+                        playerA.teleport(match.getMatchArena().getPos1());
+                    } else if (player.equals(playerB)) {
+                        playerB.teleport(match.getMatchArena().getPos2());
+                    }
+
+                    CC.broadcast("&cDenying movement...");
+                }
+            }
+        }
+
         if (profile.getState() == EnumProfileState.SPECTATING || profile.getState() == EnumProfileState.PLAYING) {
             Arena arena = profile.getMatch().getMatchArena();
             Location corner1 = arena.getMinimum();

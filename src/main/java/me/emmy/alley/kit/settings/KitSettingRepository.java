@@ -5,6 +5,7 @@ import lombok.Setter;
 import me.emmy.alley.kit.settings.impl.KitSettingBoxingImpl;
 import me.emmy.alley.kit.settings.impl.KitSettingBuildImpl;
 import me.emmy.alley.kit.settings.impl.KitSettingRankedImpl;
+import me.emmy.alley.kit.settings.impl.KitSettingSumoImpl;
 import me.emmy.alley.utils.chat.CC;
 
 import java.util.ArrayList;
@@ -28,6 +29,7 @@ public class KitSettingRepository {
         registerSetting(KitSettingBuildImpl.class);
         registerSetting(KitSettingRankedImpl.class);
         registerSetting(KitSettingBoxingImpl.class);
+        registerSetting(KitSettingSumoImpl.class);
     }
 
     /**

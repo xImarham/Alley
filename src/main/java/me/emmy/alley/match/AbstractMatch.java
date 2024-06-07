@@ -6,6 +6,7 @@ import me.emmy.alley.Alley;
 import me.emmy.alley.arena.Arena;
 import me.emmy.alley.hotbar.enums.HotbarType;
 import me.emmy.alley.kit.Kit;
+import me.emmy.alley.kit.settings.impl.KitSettingSumoImpl;
 import me.emmy.alley.match.enums.EnumMatchState;
 import me.emmy.alley.match.impl.MatchRegularImpl;
 import me.emmy.alley.match.player.GameParticipant;
@@ -23,6 +24,8 @@ import me.emmy.alley.utils.PlayerUtil;
 import me.emmy.alley.utils.chat.CC;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
@@ -99,9 +102,13 @@ public abstract class AbstractMatch {
             gamePlayer.setDead(false);
             if (!gamePlayer.isDisconnected()) {
                 PlayerUtil.reset(player);
-
                 player.getInventory().setArmorContents(getMatchKit().getArmor());
                 player.getInventory().setContents(getMatchKit().getInventory());
+
+                /*if (matchKit.getKitSettings().stream().anyMatch(setting -> setting instanceof KitSettingSumoImpl)) {
+                    denyMovement(player);
+                    CC.broadcast("&cPLAYER SETUP HAPPENING | DENYING MOVEMENT");
+                }*/
             }
         }
     }
@@ -465,4 +472,24 @@ public abstract class AbstractMatch {
      * @return True if the match can end.
      */
     public abstract boolean canEndMatch();
+
+
+    /*
+    public void allowMovement(Player player) {
+        player.setWalkSpeed(0.2F);
+        player.setFoodLevel(20);
+        player.setSprinting(true);
+        player.removePotionEffect(PotionEffectType.JUMP);
+    }
+
+    public void denyMovement(Player player) {
+        if (player.getAllowFlight()) {
+            player.setAllowFlight(false);
+        }
+        player.setWalkSpeed(0.0F);
+        player.setFoodLevel(0);
+        player.setSprinting(false);
+        player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, Integer.MAX_VALUE, 128));
+    }
+    */
 }

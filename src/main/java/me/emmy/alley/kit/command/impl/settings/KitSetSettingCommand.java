@@ -34,7 +34,7 @@ public class KitSetSettingCommand extends BaseCommand {
         String settingName = args[1];
         boolean enabled = Boolean.parseBoolean(args[2]);
 
-        if (kit.getKitSettings().stream().filter(setting -> setting.getName().equalsIgnoreCase(settingName)).findFirst().orElse(null) == null) {
+        if (Alley.getInstance().getKitSettingRepository().getSettings().stream().filter(setting -> setting.getName().equalsIgnoreCase(settingName)).findFirst().orElse(null) == null) {
             player.sendMessage(CC.translate("&cA setting with that name does not exist."));
             return;
         }

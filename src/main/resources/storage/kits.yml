@@ -258,6 +258,94 @@ kits:
           ==: ItemMeta
           meta-type: UNSPECIFIC
           display-name: §d§lBoxing Sword
+          enchants:
+            DAMAGE_ALL: 10
+          Unbreakable: true
+      - ==: org.bukkit.inventory.ItemStack
+        type: POTION
+        damage: 8226
+        meta:
+          ==: ItemMeta
+          meta-type: POTION
+          custom-effects:
+            - ==: PotionEffect
+              effect: 1
+              duration: 36000
+              amplifier: 1
+              ambient: false
+              has-particles: false
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+    armor:
+      - ==: org.bukkit.inventory.ItemStack
+        type: AIR
+        damage: -1
+        amount: 0
+      - ==: org.bukkit.inventory.ItemStack
+        type: AIR
+        damage: -1
+        amount: 0
+      - ==: org.bukkit.inventory.ItemStack
+        type: AIR
+        damage: -1
+        amount: 0
+      - ==: org.bukkit.inventory.ItemStack
+        type: AIR
+        damage: -1
+        amount: 0
+    icon: IRON_SWORD
+    icondata: 0
+    settings:
+      Build:
+        description: Allows you to build in matches
+        enabled: false
+      Ranked:
+        description: This is the ranked kit type
+        enabled: true
+      Boxing:
+        description: This is the boxing kit type
+        enabled: true
+  Sumo:
+    displayname: '&dSumo'
+    description: '&dSumo kit description'
+    enabled: true
+    unrankedslot: 13
+    rankedslot: 13
+    editorslot: 13
+    items:
+      - null
       - null
       - null
       - null
@@ -320,5 +408,8 @@ kits:
         description: This is the ranked kit type
         enabled: true
       Boxing:
+        description: This is the boxing kit type
+        enabled: false
+      Sumo:
         description: This is the boxing kit type
         enabled: true
