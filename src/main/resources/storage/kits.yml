@@ -160,8 +160,8 @@ kits:
             PROTECTION_ENVIRONMENTAL: 2
             DURABILITY: 3
           repair-cost: 3
-    icon: DIAMOND_SWORD
-    icondata: 0
+    icon: POTION
+    icondata: 16421
     settings:
       Build:
         description: Allows you to build in matches
@@ -171,6 +171,12 @@ kits:
         enabled: true
       Boxing:
         description: This is the boxing kit type
+        enabled: false
+      Sumo:
+        description: This is the sumo kit type
+        enabled: false
+      Spleef:
+        description: This is the spleef kit type
         enabled: false
   Classic:
     displayname: '&dClassic'
@@ -232,7 +238,7 @@ kits:
         type: DIAMOND_CHESTPLATE
       - ==: org.bukkit.inventory.ItemStack
         type: DIAMOND_HELMET
-    icon: BOW
+    icon: DIAMOND_SWORD
     icondata: 0
     settings:
       Build:
@@ -243,6 +249,12 @@ kits:
         enabled: true
       Boxing:
         description: This is the boxing kit type
+        enabled: false
+      Sumo:
+        description: This is the sumo kit type
+        enabled: false
+      Spleef:
+        description: This is the spleef kit type
         enabled: false
   Boxing:
     displayname: '&dBoxing'
@@ -325,7 +337,7 @@ kits:
         type: AIR
         damage: -1
         amount: 0
-    icon: IRON_SWORD
+    icon: DIAMOND_CHESTPLATE
     icondata: 0
     settings:
       Build:
@@ -337,9 +349,15 @@ kits:
       Boxing:
         description: This is the boxing kit type
         enabled: true
+      Sumo:
+        description: This is the sumo kit type
+        enabled: false
+      Spleef:
+        description: This is the spleef kit type
+        enabled: false
   Sumo:
     displayname: '&dSumo'
-    description: '&dSumo kit description'
+    description: '&7Knock off your rival!'
     enabled: true
     unrankedslot: 13
     rankedslot: 13
@@ -398,7 +416,7 @@ kits:
         type: AIR
         damage: -1
         amount: 0
-    icon: IRON_SWORD
+    icon: LEASH
     icondata: 0
     settings:
       Build:
@@ -411,5 +429,8 @@ kits:
         description: This is the boxing kit type
         enabled: false
       Sumo:
-        description: This is the boxing kit type
+        description: This is the sumo kit type
         enabled: true
+      Spleef:
+        description: This is the spleef kit type
+        enabled: false

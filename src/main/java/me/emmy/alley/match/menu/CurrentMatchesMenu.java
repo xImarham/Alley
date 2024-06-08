@@ -76,7 +76,7 @@ public class CurrentMatchesMenu extends PaginatedMenu {
          */
         @Override
         public ItemStack getButtonItem(Player player) {
-            return new ItemBuilder(match.getMatchKit().getIcon())
+            return new ItemBuilder(match.getMatchKit().getIcon()).durability(match.getMatchKit().getIconData())
                     .name("&d&l" + match.getParticipants().get(0).getPlayer().getUsername() + " &7vs &d&l" + match.getParticipants().get(1).getPlayer().getUsername())
                     .lore(Arrays.asList(
                             " &f● &dArena: &f" + match.getMatchArena().getName(),

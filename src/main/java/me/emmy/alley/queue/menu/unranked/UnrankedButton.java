@@ -23,7 +23,7 @@ public class UnrankedButton extends Button {
     @Override
     public ItemStack getButtonItem(Player player) {
         Kit kit = queue.getKit();
-        return new ItemBuilder(kit.getIcon()).name(kit.getDisplayName()).lore(Arrays.asList(
+        return new ItemBuilder(kit.getIcon()).name(kit.getDisplayName()).durability(kit.getIconData()).hideMeta().lore(Arrays.asList(
                 "&7" + kit.getDescription(),
                 "",
                 "&fIn Queue: &d" + queue.getProfiles().size(),

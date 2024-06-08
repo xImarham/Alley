@@ -32,7 +32,7 @@ public class FFAButton extends Button {
 
         return new ItemBuilder(match.getKit().getIcon())
                 .name("&d&l" + match.getName())
-                .durability(0)
+                .durability(match.getKit().getIconData())
                 .lore(lore)
                 .hideMeta()
                 .build();

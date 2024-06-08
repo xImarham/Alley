@@ -3,7 +3,7 @@ package me.emmy.alley.kit;
 import lombok.Getter;
 import me.emmy.alley.Alley;
 import me.emmy.alley.kit.settings.KitSetting;
-import me.emmy.alley.kit.settings.impl.KitSettingRankedImpl;
+import me.emmy.alley.kit.settings.impl.*;
 import me.emmy.alley.queue.Queue;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
@@ -36,7 +36,7 @@ public class KitRepository {
             ItemStack[] inventory = config.getList(key + ".items").toArray(new ItemStack[0]);
             ItemStack[] armor = config.getList(key + ".armor").toArray(new ItemStack[0]);
             Material icon = Material.matchMaterial(config.getString(key + ".icon"));
-            int iconData = config.getInt(key + ".iconData");
+            int iconData = config.getInt(key + ".icondata");
 
             Kit kit = new Kit(
                     name,
@@ -104,6 +104,7 @@ public class KitRepository {
     private void loadKitSettings(FileConfiguration config, String key, Kit kit) {
         ConfigurationSection settingsSection = config.getConfigurationSection(key + ".settings");
         if (settingsSection == null) {
+            applyDefaultSettings(config, key, kit);
             return;
         }
 
@@ -136,7 +137,30 @@ public class KitRepository {
         config.set(key + ".icon", kit.getIcon().name());
         config.set(key + ".icondata", kit.getIconData());
 
-        saveKitSettings(config, key, kit);
+        if (kit.getKitSettings() == null) {
+            applyDefaultSettings(config, key, kit);
+        } else {
+            saveKitSettings(config, key, kit);
+        }
+
+        Alley.getInstance().getConfigHandler().saveConfig(Alley.getInstance().getConfigHandler().getConfigFileByName("storage/kits.yml"), config);
+    }
+
+    private void applyDefaultSettings(FileConfiguration config, String key, Kit kit) {
+        KitSetting[] defaultSettings = new KitSetting[]{
+                new KitSettingBoxingImpl(),
+                new KitSettingBuildImpl(),
+                new KitSettingRankedImpl(),
+                new KitSettingSpleefImpl(),
+                new KitSettingSumoImpl(),
+        };
+
+        for (KitSetting setting : defaultSettings) {
+            kit.addKitSetting(setting);
+            String settingKey = key + ".settings." + setting.getName();
+            config.set(settingKey + ".description", setting.getDescription());
+            config.set(settingKey + ".enabled", setting.isEnabled());
+        }
 
         Alley.getInstance().getConfigHandler().saveConfig(Alley.getInstance().getConfigHandler().getConfigFileByName("storage/kits.yml"), config);
     }

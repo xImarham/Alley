@@ -2,6 +2,8 @@ package me.emmy.alley.kit.command.impl.manage;
 
 import me.emmy.alley.Alley;
 import me.emmy.alley.kit.Kit;
+import me.emmy.alley.kit.KitRepository;
+import me.emmy.alley.kit.settings.KitSettingRepository;
 import me.emmy.alley.locale.Locale;
 import me.emmy.alley.utils.chat.CC;
 import me.emmy.alley.utils.command.BaseCommand;
@@ -56,7 +58,7 @@ public class KitCreateCommand extends BaseCommand {
         return new Kit(
                 kitName,
                 "&d" + kitName,
-                "&d" + kitName + " kit description",
+                "&7" + kitName + " kit description",
                 true,
                 0,
                 0,

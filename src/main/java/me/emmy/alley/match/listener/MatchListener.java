@@ -6,6 +6,7 @@ import me.emmy.alley.cooldown.Cooldown;
 import me.emmy.alley.cooldown.CooldownRepository;
 import me.emmy.alley.kit.settings.impl.KitSettingBoxingImpl;
 import me.emmy.alley.kit.settings.impl.KitSettingBuildImpl;
+import me.emmy.alley.kit.settings.impl.KitSettingSpleefImpl;
 import me.emmy.alley.kit.settings.impl.KitSettingSumoImpl;
 import me.emmy.alley.match.AbstractMatch;
 import me.emmy.alley.match.enums.EnumMatchState;
@@ -17,6 +18,7 @@ import me.emmy.alley.utils.PlayerUtil;
 import me.emmy.alley.utils.chat.CC;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
@@ -132,13 +134,21 @@ public class MatchListener implements Listener {
     private void onBlockBreak(BlockBreakEvent event) {
         Player player = event.getPlayer();
         Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
-        switch (profile.getState()) {
-            case PLAYING:
-                event.setCancelled(!profile.getMatch().getMatchKit().isSettingEnabled(KitSettingBuildImpl.class));
-                break;
-            case SPECTATING:
-                event.setCancelled(true);
-                break;
+        if (profile.getState() == EnumProfileState.PLAYING) {
+            switch (profile.getMatch().getMatchState()) {
+                case STARTING:
+                case ENDING_MATCH:
+                    event.setCancelled(true);
+                    break;
+                case RUNNING:
+                    if (profile.getMatch().getMatchKit().isSettingEnabled(KitSettingSpleefImpl.class)) {
+                        Block block = event.getBlock();
+                        if (block.getType() == Material.SNOW_BLOCK) {
+                            event.setCancelled(false);
+                        }
+                    } else event.setCancelled(!profile.getMatch().getMatchKit().isSettingEnabled(KitSettingBuildImpl.class));
+                    break;
+            }
         }
     }
 
@@ -190,7 +200,7 @@ public class MatchListener implements Listener {
         Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
 
         if (profile != null && profile.getMatch() != null && profile.getState() == EnumProfileState.PLAYING && profile.getMatch().getMatchState() == EnumMatchState.RUNNING) {
-            if (profile.getMatch().getMatchKit().isSettingEnabled(KitSettingSumoImpl.class)) {
+            if (profile.getMatch().getMatchKit().isSettingEnabled(KitSettingSumoImpl.class) || profile.getMatch().getMatchKit().isSettingEnabled(KitSettingSpleefImpl.class)) {
                 if (player.getLocation().getBlock().getType() == Material.WATER || player.getLocation().getBlock().getType() == Material.STATIONARY_WATER) {
                     player.setHealth(0);
                 }
@@ -199,28 +209,30 @@ public class MatchListener implements Listener {
 
         if (profile != null && profile.getMatch() != null && profile.getState() == EnumProfileState.PLAYING) {
             AbstractMatch match = profile.getMatch();
-            if (match.getMatchState() == EnumMatchState.STARTING && match.getMatchKit().isSettingEnabled(KitSettingSumoImpl.class)) {
-                List<GameParticipant<MatchGamePlayerImpl>> participants = match.getParticipants();
-                if (participants.size() == 2) {
-                    GameParticipant<?> participantA = participants.get(0);
-                    GameParticipant<?> participantB = participants.get(1);
+            if (match.getMatchState() == EnumMatchState.STARTING) {
+                if (match.getMatchKit().isSettingEnabled(KitSettingSumoImpl.class) || match.getMatchKit().isSettingEnabled(KitSettingSpleefImpl.class)) {
+                    List<GameParticipant<MatchGamePlayerImpl>> participants = match.getParticipants();
+                    if (participants.size() == 2) {
+                        GameParticipant<?> participantA = participants.get(0);
+                        GameParticipant<?> participantB = participants.get(1);
 
-                    Player playerA = participantA.getPlayer().getPlayer();
-                    Player playerB = participantB.getPlayer().getPlayer();
+                        Player playerA = participantA.getPlayer().getPlayer();
+                        Player playerB = participantB.getPlayer().getPlayer();
 
-                    Location playerLocation = player.getLocation();
-                    Location locationA = match.getMatchArena().getPos1();
-                    Location locationB = match.getMatchArena().getPos2();
+                        Location playerLocation = player.getLocation();
+                        Location locationA = match.getMatchArena().getPos1();
+                        Location locationB = match.getMatchArena().getPos2();
 
-                    if (player.equals(playerA)) {
-                        if (playerLocation.getBlockX() != locationA.getBlockX() || playerLocation.getBlockZ() != locationA.getBlockZ()) {
-                            player.teleport(new Location(locationA.getWorld(), locationA.getX(), playerLocation.getY(), locationA.getZ(), playerLocation.getYaw(), playerLocation.getPitch()));
-                            CC.broadcast("&4" + playerA.getDisplayName() + " &cmoved | Teleporting back...");
-                        }
-                    } else if (player.equals(playerB)) {
-                        if (playerLocation.getBlockX() != locationB.getBlockX() || playerLocation.getBlockZ() != locationB.getBlockZ()) {
-                            player.teleport(new Location(locationB.getWorld(), locationB.getX(), playerLocation.getY(), locationB.getZ(), playerLocation.getYaw(), playerLocation.getPitch()));
-                            CC.broadcast("&4" + playerB.getDisplayName() + " &cmoved | Teleporting back...");
+                        if (player.equals(playerA)) {
+                            if (playerLocation.getBlockX() != locationA.getBlockX() || playerLocation.getBlockZ() != locationA.getBlockZ()) {
+                                player.teleport(new Location(locationA.getWorld(), locationA.getX(), playerLocation.getY(), locationA.getZ(), playerLocation.getYaw(), playerLocation.getPitch()));
+                                CC.broadcast("&4" + playerA.getDisplayName() + " &cmoved | Teleporting back...");
+                            }
+                        } else if (player.equals(playerB)) {
+                            if (playerLocation.getBlockX() != locationB.getBlockX() || playerLocation.getBlockZ() != locationB.getBlockZ()) {
+                                player.teleport(new Location(locationB.getWorld(), locationB.getX(), playerLocation.getY(), locationB.getZ(), playerLocation.getYaw(), playerLocation.getPitch()));
+                                CC.broadcast("&4" + playerB.getDisplayName() + " &cmoved | Teleporting back...");
+                            }
                         }
                     }
                 }
