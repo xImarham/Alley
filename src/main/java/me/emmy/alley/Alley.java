@@ -13,6 +13,10 @@ import me.emmy.alley.commands.admin.debug.StateCommand;
 import me.emmy.alley.commands.admin.essential.EnchantCommand;
 import me.emmy.alley.commands.admin.essential.RenameCommand;
 import me.emmy.alley.commands.admin.management.PlaytimeCommand;
+import me.emmy.alley.competition.impl.command.HostCommand;
+import me.emmy.alley.competition.impl.event.EventRepository;
+import me.emmy.alley.competition.impl.event.command.EventCommand;
+import me.emmy.alley.competition.impl.tournament.command.TournamentCommand;
 import me.emmy.alley.config.ConfigHandler;
 import me.emmy.alley.cooldown.CooldownRepository;
 import me.emmy.alley.database.MongoService;
@@ -142,6 +146,7 @@ public class Alley extends JavaPlugin {
     private MatchRepository matchRepository;
     private QueueRepository queueRepository;
     private PartyRepository partyRepository;
+    private EventRepository eventRepository;
     private KitRepository kitRepository;
     private FFARepository ffaRepository;
     private ConfigHandler configHandler;
@@ -238,6 +243,7 @@ public class Alley extends JavaPlugin {
             this.spawnHandler = new SpawnHandler();
             this.spawnHandler.loadSpawnLocation();
         });
+        Logger.logTime("EventRepository", () -> this.eventRepository = new EventRepository());
     }
 
     private void registerListeners() {
@@ -328,6 +334,12 @@ public class Alley extends JavaPlugin {
             //debugging
             new StateCommand();
             new FFAStateCommand();
+        });
+
+        Logger.logTime("Donator Command", () -> {
+            new HostCommand();
+            new TournamentCommand();
+            new EventCommand();
         });
 
         Logger.logTime("Player Commands", () -> {

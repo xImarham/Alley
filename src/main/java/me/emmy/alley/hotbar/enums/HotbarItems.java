@@ -20,7 +20,7 @@ public enum HotbarItems {
     KIT_EDITOR("&dKit Editor", Material.BOOK, 0, 2, "kiteditor", HotbarType.LOBBY, HotbarType.PARTY),
     PARTY("&dCreate Party", Material.NAME_TAG, 0, 4, "party create", HotbarType.LOBBY),
     LEADERBOARD("&dLeaderboard", Material.EMERALD, 0, 6, "leaderboards", HotbarType.LOBBY),
-    EVENTS("&dEvents", Material.EYE_OF_ENDER, 0, 7, "events", HotbarType.LOBBY),
+    EVENTS("&dEvents", Material.EYE_OF_ENDER, 0, 7, "host", HotbarType.LOBBY),
     SETTINGS("&dProfile Settings", Material.SKULL_ITEM, 0, 8, "profilemenu", HotbarType.LOBBY),
 
     DUO_UNRANKED_QUEUE("&dUnranked Duo Queue", Material.IRON_SWORD, 0, 0, "unrankedduo", HotbarType.PARTY),
