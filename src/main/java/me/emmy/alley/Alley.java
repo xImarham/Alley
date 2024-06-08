@@ -182,7 +182,7 @@ public class Alley extends JavaPlugin {
 
     private void checkDescription() {
         List<String> authors = getDescription().getAuthors();
-        List<String> expectedAuthors = Arrays.asList("Emma", "Remi");
+        List<String> expectedAuthors = Arrays.asList("Emmy", "Remi");
 
         Bukkit.getConsoleSender().sendMessage(CC.translate(prefix + "Expected authors: &a" + expectedAuthors + "&f, Retrieved authors: &c" + authors));
 

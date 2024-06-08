@@ -201,20 +201,28 @@ public class MatchListener implements Listener {
             AbstractMatch match = profile.getMatch();
             if (match.getMatchState() == EnumMatchState.STARTING && match.getMatchKit().isSettingEnabled(KitSettingSumoImpl.class)) {
                 List<GameParticipant<MatchGamePlayerImpl>> participants = match.getParticipants();
-                if (participants.size() == 2) { // Ensure there are exactly two participants
+                if (participants.size() == 2) {
                     GameParticipant<?> participantA = participants.get(0);
                     GameParticipant<?> participantB = participants.get(1);
 
                     Player playerA = participantA.getPlayer().getPlayer();
                     Player playerB = participantB.getPlayer().getPlayer();
 
-                    if (player.equals(playerA)) {
-                        playerA.teleport(match.getMatchArena().getPos1());
-                    } else if (player.equals(playerB)) {
-                        playerB.teleport(match.getMatchArena().getPos2());
-                    }
+                    Location playerLocation = player.getLocation();
+                    Location locationA = match.getMatchArena().getPos1();
+                    Location locationB = match.getMatchArena().getPos2();
 
-                    CC.broadcast("&cDenying movement...");
+                    if (player.equals(playerA)) {
+                        if (playerLocation.getBlockX() != locationA.getBlockX() || playerLocation.getBlockZ() != locationA.getBlockZ()) {
+                            player.teleport(new Location(locationA.getWorld(), locationA.getX(), playerLocation.getY(), locationA.getZ(), playerLocation.getYaw(), playerLocation.getPitch()));
+                            CC.broadcast("&4" + playerA.getDisplayName() + " &cmoved | Teleporting back...");
+                        }
+                    } else if (player.equals(playerB)) {
+                        if (playerLocation.getBlockX() != locationB.getBlockX() || playerLocation.getBlockZ() != locationB.getBlockZ()) {
+                            player.teleport(new Location(locationB.getWorld(), locationB.getX(), playerLocation.getY(), locationB.getZ(), playerLocation.getYaw(), playerLocation.getPitch()));
+                            CC.broadcast("&4" + playerB.getDisplayName() + " &cmoved | Teleporting back...");
+                        }
+                    }
                 }
             }
         }
