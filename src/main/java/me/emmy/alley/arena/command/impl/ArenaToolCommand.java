@@ -14,7 +14,7 @@ import org.bukkit.entity.Player;
  */
 public class ArenaToolCommand extends BaseCommand {
 
-    @Command(name = "arena.tool", permission = "alley.admin")
+    @Command(name = "arena.tool", aliases = "arena.wand", permission = "alley.admin")
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();

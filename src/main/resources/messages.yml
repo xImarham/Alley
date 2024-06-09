@@ -36,11 +36,27 @@ kit:
 party:
   chat-format: "&7[&dParty&7] &d{player}&7: &f{message}"
   already-in-party: "&cYou are already in a party."
+  not-leader: "&cYou are not the leader of the party."
   not-in-party: "&cYou are not in a party."
   created: "&aYou've created a new party!"
+  no-invite: "&cYou do not have a party invitation from &b{player}&c."
   disbanded: "&cYou've disbanded the party!"
+  joined: "&aYou have joined &b{player}&a's party."
   left: "&cYou've left the party!"
+  disabled-chat: "&cYou have party messages disabled. &7(To enable: /togglepartymessages)"
   target-disabled-invites: "&c{player} has party invites disabled."
+  info-command:
+    no-members-format: "&cNo members"
+    text:
+      - ""
+      - "&7&m------------&d&m------------&7&m------------"
+      - ""
+      - " &d&lParty Information"
+      - "  &f* Leader: &d{leader}"
+      - "  &f* Members: &d{members}"
+      - ""
+      - "&7&m------------&d&m------------&7&m------------"
+      - ""
 
 playtime:
   message: " \n&b{target}'s total playtime:\n &b{days} &fdays, &b{hours} &fhours, &b{minutes} &fminutes and &b{seconds} &fseconds.\n "

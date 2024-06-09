@@ -3,10 +3,6 @@ command:
   syntax-bypass-perm: "alley.owner"
   grant-cosmetic-permission-command: "permission set {player} {permission}"
 
-spawn-location:
-  world: world
-  x: 0.5
-  y: 73.0
-  z: 0.5
-  yaw: 90.0
-  pitch: 0.0
+spawn:
+  # The spawn location of the server
+  join-location: world:0.5:73.0:0.5:90.0:0.0

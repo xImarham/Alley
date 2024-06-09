@@ -2,10 +2,10 @@ package me.emmy.alley.spawn;
 
 import lombok.Getter;
 import me.emmy.alley.Alley;
+import me.emmy.alley.utils.LocationUtil;
 import me.emmy.alley.utils.chat.CC;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
@@ -14,54 +14,48 @@ import org.bukkit.entity.Player;
  * Project: Alley
  * Date: 17/05/2024 - 17:47
  */
-
 @Getter
 public class SpawnHandler {
 
-    private Location spawnLocation;
+    private Location joinLocation;
 
     /**
-     * Load the spawn location
+     * Load the spawn location from the settings.yml file
      */
     public void loadSpawnLocation() {
         FileConfiguration config = Alley.getInstance().getConfigHandler().getConfigByName("settings.yml");
 
-        World world = Bukkit.getWorld(config.getString("spawn-location.world"));
-        double x = config.getDouble("spawn-location.x");
-        double y = config.getDouble("spawn-location.y");
-        double z = config.getDouble("spawn-location.z");
-        float yaw = (float) config.getDouble("spawn-location.yaw");
-        float pitch = (float) config.getDouble("spawn-location.pitch");
+        Location location = LocationUtil.deserialize(config.getString("spawn.join-location"));
 
-        spawnLocation = new Location(world, x, y, z, yaw, pitch);
+        if (location == null) {
+            Bukkit.getConsoleSender().sendMessage(CC.translate("&4&l(!) SPAWN LOCATION IS NULL (!)"));
+            return;
+        }
+
+        joinLocation = new Location(location.getWorld(), location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
     }
 
     /**
-     * Set the spawn location
+     * Set the spawn location in the settings.yml file
      *
      * @param location the location to set
      */
     public void setSpawnLocation(Location location) {
-        this.spawnLocation = location;
+        this.joinLocation = location;
         FileConfiguration config = Alley.getInstance().getConfigHandler().getConfigByName("settings.yml");
 
-        config.set("spawn-location.world", location.getWorld().getName());
-        config.set("spawn-location.x", location.getX());
-        config.set("spawn-location.y", location.getY());
-        config.set("spawn-location.z", location.getZ());
-        config.set("spawn-location.yaw", location.getYaw());
-        config.set("spawn-location.pitch", location.getPitch());
+        config.set("spawn.join-location", LocationUtil.serialize(location));
 
         Alley.getInstance().getConfigHandler().saveConfig(Alley.getInstance().getConfigHandler().getConfigFileByName("settings.yml"), config);
     }
 
     /**
-     * Teleport a player to the spawn location
+     * Teleport the player to the spawn location
      *
      * @param player the player to teleport
      */
     public void teleportToSpawn(Player player) {
-        Location spawnLocation = getSpawnLocation();
+        Location spawnLocation = getJoinLocation();
         if (spawnLocation != null) {
             player.teleport(spawnLocation);
         } else {

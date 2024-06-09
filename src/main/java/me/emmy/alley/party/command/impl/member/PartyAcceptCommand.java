@@ -43,17 +43,17 @@ public class PartyAcceptCommand extends BaseCommand {
         Party party = partyRepository.getPartyByLeader(targetPlayer);
 
         if (party == null) {
-            player.sendMessage(CC.translate(Locale.NOT_IN_PARTY.getMessage()));
+            player.sendMessage(CC.translate(ErrorMessage.TARGET_HAS_NO_PARTY.replace("{player}", targetPlayer.getName())));
             return;
         }
 
         if (partyRequest == null || !partyRequest.getSender().equals(targetPlayer)) {
-            player.sendMessage(CC.translate("&cYou do not have a party invitation from " + targetPlayer.getName() + "."));
+            player.sendMessage(CC.translate(Locale.NO_PARTY_INVITE.getMessage().replace("{player}", targetPlayer.getName())));
             return;
         }
 
         partyRepository.joinParty(player, targetPlayer);
         partyRepository.removeRequest(partyRequest);
-        player.sendMessage(CC.translate("&aYou have joined " + targetPlayer.getName() + "'s party."));
+        player.sendMessage(CC.translate(Locale.JOINED_PARTY.getMessage().replace("{player}", targetPlayer.getName())));
     }
 }

@@ -5,7 +5,11 @@ import me.emmy.alley.utils.chat.CC;
 import me.emmy.alley.utils.command.BaseCommand;
 import me.emmy.alley.utils.command.Command;
 import me.emmy.alley.utils.command.CommandArgs;
+import me.emmy.alley.utils.command.Completer;
 import org.bukkit.entity.Player;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Remi
@@ -13,6 +17,18 @@ import org.bukkit.entity.Player;
  * @date 5/20/2024
  */
 public class ArenaSetSpawnCommand extends BaseCommand {
+
+    @Completer(name = "arena.setspawn")
+    public List<String> arenaSetSpawnCompleter(CommandArgs command) {
+        List<String> completion = new ArrayList<>();
+
+        if (command.getArgs().length == 1 && command.getPlayer().hasPermission("alley.admin")) {
+            Alley.getInstance().getArenaRepository().getArenas().forEach(arena -> completion.add(arena.getName()));
+        }
+
+        return completion;
+    }
+
     @Command(name = "arena.setspawn", permission = "alley.admin")
     @Override
     public void onCommand(CommandArgs command) {
@@ -20,7 +36,7 @@ public class ArenaSetSpawnCommand extends BaseCommand {
         String[] args = command.getArgs();
 
         if (args.length < 2) {
-            player.sendMessage(CC.translate("&cUsage: /arena setspawn <arenaName> <a/b>"));
+            player.sendMessage(CC.translate("&cUsage: /arena setspawn <arenaName> <pos1/pos2>"));
             return;
         }
 
@@ -32,17 +48,17 @@ public class ArenaSetSpawnCommand extends BaseCommand {
             return;
         }
 
-        if (!spawnType.equalsIgnoreCase("a") && !spawnType.equalsIgnoreCase("b")) {
-            player.sendMessage(CC.translate("&cInvalid spawn type! Valid types: A, B"));
+        if (!spawnType.equalsIgnoreCase("pos1") && !spawnType.equalsIgnoreCase("pos2")) {
+            player.sendMessage(CC.translate("&cInvalid spawn type! Valid types: pos1, pos2"));
             return;
         }
 
-        if (spawnType.equalsIgnoreCase("a")) {
+        if (spawnType.equalsIgnoreCase("pos1")) {
             Alley.getInstance().getArenaRepository().getArenaByName(arenaName).setPos1(player.getLocation());
-            player.sendMessage(CC.translate("&aSpawn A has been set for arena &b" + arenaName + "&a!"));
+            player.sendMessage(CC.translate("&aSpawn Position 1 has been set for arena &b" + arenaName + "&a!"));
         } else {
             Alley.getInstance().getArenaRepository().getArenaByName(arenaName).setPos2(player.getLocation());
-            player.sendMessage(CC.translate("&aSpawn B has been set for arena &b" + arenaName + "&a!"));
+            player.sendMessage(CC.translate("&aSpawn Position 2 has been set for arena &b" + arenaName + "&a!"));
         }
 
         Alley.getInstance().getArenaRepository().saveArena(Alley.getInstance().getArenaRepository().getArenaByName(arenaName));

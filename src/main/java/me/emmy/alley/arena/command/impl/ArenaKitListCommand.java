@@ -5,7 +5,11 @@ import me.emmy.alley.utils.chat.CC;
 import me.emmy.alley.utils.command.BaseCommand;
 import me.emmy.alley.utils.command.Command;
 import me.emmy.alley.utils.command.CommandArgs;
+import me.emmy.alley.utils.command.Completer;
 import org.bukkit.entity.Player;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Remi
@@ -13,6 +17,18 @@ import org.bukkit.entity.Player;
  * @date 5/20/2024
  */
 public class ArenaKitListCommand extends BaseCommand {
+
+    @Completer(name = "arena.kitlist")
+    public List<String> arenaKitListCompleter(CommandArgs command) {
+        List<String> completion = new ArrayList<>();
+
+        if (command.getArgs().length == 1 && command.getPlayer().hasPermission("alley.admin")) {
+            Alley.getInstance().getArenaRepository().getArenas().forEach(arena -> completion.add(arena.getName()));
+        }
+
+        return completion;
+    }
+
     @Command(name = "arena.kitlist", permission = "alley.admin")
     @Override
     public void onCommand(CommandArgs command) {

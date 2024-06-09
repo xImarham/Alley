@@ -27,6 +27,7 @@ public class KitStatButton extends Button {
 
         return new ItemBuilder(kit.getIcon())
                 .name("&d&l" + kit.getDisplayName())
+                .durability(kit.getIconData())
                 .lore(
                         "",
                         "&f● &dWins: &f" + profileKitData.getWins(),

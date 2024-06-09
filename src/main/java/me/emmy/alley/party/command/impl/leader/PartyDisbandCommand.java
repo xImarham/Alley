@@ -35,6 +35,6 @@ public class PartyDisbandCommand extends BaseCommand {
             return;
         }
 
-        player.sendMessage(CC.translate("&cYou're not the leader of the party"));
+        player.sendMessage(CC.translate(Locale.NOT_LEADER.getMessage()));
     }
 }

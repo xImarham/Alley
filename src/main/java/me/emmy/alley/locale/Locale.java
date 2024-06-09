@@ -27,12 +27,16 @@ public enum Locale {
     KIT_UNRANKEDSLOT_SET("messages.yml", "kit.unrankedslot-set"),
     KIT_RANKEDSLOT_SET("messages.yml", "kit.rankedslot-set"),
 
-    NOT_IN_PARTY("messages.yml", "party.not-in-party"),
-    ALREADY_IN_PARTY("messages.yml", "party.already-in-party"),
     PARTY_CREATED("messages.yml", "party.created"),
     PARTY_DISBANDED("messages.yml", "party.disbanded"),
+    NOT_IN_PARTY("messages.yml", "party.not-in-party"),
+    NOT_LEADER("messages.yml", "party.not-leader"),
+    ALREADY_IN_PARTY("messages.yml", "party.already-in-party"),
     PARTY_LEFT("messages.yml", "party.left"),
     PLAYER_DISABLED_PARTY_INVITES("messages.yml", "party.target-disabled-invites"),
+    DISABLED_PARTY_CHAT("messages.yml", "party.disabled-chat"),
+    NO_PARTY_INVITE("messages.yml", "party.no-invite"),
+    JOINED_PARTY("messages.yml", "party.joined"),
 
     TOGGLED_PARTY_INVITES("messages.yml", "player-settings.party-invites"),
     TOGGLED_PARTY_MESSAGES("messages.yml", "player-settings.party-messages"),

@@ -13,10 +13,9 @@ import org.bukkit.entity.Player;
  * Project: Practice
  * Date: 29/04/2024 - 18:45
  */
-
 public class SpawnItemsCommand extends BaseCommand {
     @Override
-    @Command(name = "spawnitems", aliases = {"lobbyitems"}, permission = "practice.admin")
+    @Command(name = "spawnitems", aliases = {"lobbyitems"}, permission = "alley.admin")
     public void onCommand(CommandArgs args) {
         Player player = args.getPlayer();
 

@@ -8,8 +8,10 @@ import me.emmy.alley.utils.chat.CC;
 import me.emmy.alley.utils.command.BaseCommand;
 import me.emmy.alley.utils.command.Command;
 import me.emmy.alley.utils.command.CommandArgs;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -36,24 +38,20 @@ public class PartyInfoCommand extends BaseCommand {
         UUID leaderUUID = party.getLeader().getUniqueId();
 
         String members = party.getMembers().stream()
-                .filter(uuid -> !uuid.equals(leaderUUID)) // Exclude the leader
+                .filter(uuid -> !uuid.equals(leaderUUID))
                 .map(uuid -> Alley.getInstance().getServer().getPlayer(uuid))
                 .filter(Objects::nonNull)
                 .map(Player::getName)
                 .collect(Collectors.joining(", "));
 
-        player.sendMessage(CC.translate(""));
-        player.sendMessage(CC.FLOWER_BAR);
-        player.sendMessage(CC.translate("&d&lParty Info"));
-        player.sendMessage(CC.translate(" &fLeader: &d" + Alley.getInstance().getServer().getPlayer(leaderUUID).getName()));
+        FileConfiguration config = Alley.getInstance().getConfigHandler().getConfigByName("messages.yml");
+        List<String> info = config.getStringList("party.info-command.text");
+        String noMembersFormat = CC.translate(config.getString("party.info-command.no-members-format"));
 
-        if (members.isEmpty()) {
-            player.sendMessage(CC.translate(" &fMembers: &cNo members."));
-        } else {
-            player.sendMessage(CC.translate(" &fMembers: &d" + members));
+        for (String line : info) {
+            player.sendMessage(CC.translate(line)
+                    .replace("{leader}", Alley.getInstance().getServer().getPlayer(leaderUUID).getName())
+                    .replace("{members}", members.isEmpty() ? noMembersFormat : members));
         }
-
-        player.sendMessage(CC.FLOWER_BAR);
-        player.sendMessage(CC.translate(""));
     }
 }

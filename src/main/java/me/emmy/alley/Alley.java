@@ -289,9 +289,9 @@ public class Alley extends JavaPlugin {
             new RenameCommand();
             new EnchantCommand();
 
-            new ArenaCenterCommand();
+            new ArenaSetCenterCommand();
             new ArenaCreateCommand();
-            new ArenaCuboidCommand();
+            new ArenaSetCuboidCommand();
             new ArenaTeleportCommand();
             new ArenaDeleteCommand();
             new ArenaAddKitCommand();

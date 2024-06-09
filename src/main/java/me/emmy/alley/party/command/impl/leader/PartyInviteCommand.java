@@ -40,7 +40,7 @@ public class PartyInviteCommand extends BaseCommand {
         }
 
         if (targetPlayer == command.getPlayer()) {
-            player.sendMessage(CC.translate("&cYou can't invite yourself."));
+            player.sendMessage(CC.translate(ErrorMessage.CANNOT_INVITE_SELF));
             return;
         }
 

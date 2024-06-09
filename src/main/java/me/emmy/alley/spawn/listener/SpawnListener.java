@@ -22,7 +22,6 @@ import org.bukkit.event.player.PlayerPickupItemEvent;
  * Project: Alley
  * Date: 25/05/2024 - 16:20
  */
-
 public class SpawnListener implements Listener {
 
     @EventHandler

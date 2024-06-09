@@ -12,7 +12,11 @@ import me.emmy.alley.utils.chat.CC;
 import me.emmy.alley.utils.command.BaseCommand;
 import me.emmy.alley.utils.command.Command;
 import me.emmy.alley.utils.command.CommandArgs;
+import me.emmy.alley.utils.command.Completer;
 import org.bukkit.entity.Player;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Remi
@@ -20,6 +24,34 @@ import org.bukkit.entity.Player;
  * @date 5/26/2024
  */
 public class MatchStartCommand extends BaseCommand {
+
+    @Completer(name = "match.start")
+    public List<String> matchStartCompleter(CommandArgs command) {
+        List<String> completion = new ArrayList<>();
+        Player player = command.getPlayer();
+
+        if (player.hasPermission("alley.admin")) {
+            switch (command.getArgs().length) {
+                case 1:
+                case 2:
+                    for (Player onlinePlayer : player.getServer().getOnlinePlayers()) {
+                        completion.add(onlinePlayer.getName());
+                    }
+                    break;
+                case 3:
+                    Alley.getInstance().getArenaRepository().getArenas().forEach(arena -> completion.add(arena.getName()));
+                    break;
+                case 4:
+                    Alley.getInstance().getKitRepository().getKits().forEach(kit -> completion.add(kit.getName()));
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        return completion;
+    }
+
     @Command(name = "match.start", permission = "alley.admin")
     @Override
     public void onCommand(CommandArgs command) {

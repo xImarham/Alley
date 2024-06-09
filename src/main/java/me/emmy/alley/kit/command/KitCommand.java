@@ -19,7 +19,6 @@ public class KitCommand extends BaseCommand {
         CommandSender sender = args.getSender();
 
         sender.sendMessage(" ");
-        sender.sendMessage(CC.FLOWER_BAR);
         sender.sendMessage(CC.translate("&d&lKit Commands Help:"));
         sender.sendMessage(CC.translate(" &f● &d/kit list &7| View all kits"));
         sender.sendMessage(CC.translate(" &f● &d/kit saveall &7| Save all kits"));
@@ -37,7 +36,6 @@ public class KitCommand extends BaseCommand {
         sender.sendMessage(CC.translate(" &f● &d/kit setunrankedslot &8(&7kitName&8) &8(&7slot&8) &7| Set unranked menu slot"));
         sender.sendMessage(CC.translate(" &f● &d/kit setsetting &8(&7kitName&8) &8(&7setting&8) &8(&7enabled&8) &7| Set kit setting"));
         sender.sendMessage(CC.translate(" &f● &d/kit setdisplayname &8(&7kitName&8) &8(&7displayname&8) &7| Set display-name of a kit"));
-        sender.sendMessage(CC.FLOWER_BAR);
         sender.sendMessage("");
     }
 }

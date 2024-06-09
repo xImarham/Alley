@@ -55,6 +55,7 @@ public class KitButton extends Button {
 
         return new ItemBuilder(kit.getIcon())
                 .name("&d&l" + kit.getDisplayName())
+                .durability(kit.getIconData())
                 .lore(lore)
                 .build();
     }

@@ -39,7 +39,7 @@ public class PartyChatCommand extends BaseCommand {
         }
 
         if (!profile.getProfileData().getProfileSettingData().isPartyMessagesEnabled()) {
-            player.sendMessage(CC.translate("&cYou have party messages disabled."));
+            player.sendMessage(CC.translate(Locale.DISABLED_PARTY_CHAT.getMessage()));
             return;
         }
 

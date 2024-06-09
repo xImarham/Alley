@@ -6,14 +6,30 @@ import me.emmy.alley.utils.chat.CC;
 import me.emmy.alley.utils.command.BaseCommand;
 import me.emmy.alley.utils.command.Command;
 import me.emmy.alley.utils.command.CommandArgs;
+import me.emmy.alley.utils.command.Completer;
 import org.bukkit.entity.Player;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Remi
  * @project Alley
  * @date 5/20/2024
  */
-public class ArenaCuboidCommand extends BaseCommand {
+public class ArenaSetCuboidCommand extends BaseCommand {
+
+    @Completer(name = "arena.setcuboid")
+    public List<String> arenaCuboidCompleter(CommandArgs command) {
+        List<String> completion = new ArrayList<>();
+
+        if (command.getArgs().length == 1 && command.getPlayer().hasPermission("alley.admin")) {
+            Alley.getInstance().getArenaRepository().getArenas().forEach(arena -> completion.add(arena.getName()));
+        }
+
+        return completion;
+    }
+
     @Command(name = "arena.setcuboid", permission = "alley.admin")
     @Override
     public void onCommand(CommandArgs command) {
