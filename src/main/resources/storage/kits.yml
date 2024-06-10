@@ -172,12 +172,6 @@ kits:
       Boxing:
         description: This is the boxing kit type
         enabled: false
-      Sumo:
-        description: This is the sumo kit type
-        enabled: false
-      Spleef:
-        description: This is the spleef kit type
-        enabled: false
   Classic:
     displayname: '&dClassic'
     description: '&7Old styled PvP.'
@@ -249,12 +243,6 @@ kits:
         enabled: true
       Boxing:
         description: This is the boxing kit type
-        enabled: false
-      Sumo:
-        description: This is the sumo kit type
-        enabled: false
-      Spleef:
-        description: This is the spleef kit type
         enabled: false
   Boxing:
     displayname: '&dBoxing'
@@ -349,12 +337,6 @@ kits:
       Boxing:
         description: This is the boxing kit type
         enabled: true
-      Sumo:
-        description: This is the sumo kit type
-        enabled: false
-      Spleef:
-        description: This is the spleef kit type
-        enabled: false
   Sumo:
     displayname: '&dSumo'
     description: '&7Knock off your rival!'
@@ -429,8 +411,92 @@ kits:
         description: This is the boxing kit type
         enabled: false
       Sumo:
-        description: This is the sumo kit type
+        description: This is the boxing kit type
+        enabled: true
+  Spleef:
+    displayname: '&dSpleef'
+    description: '&7Snowy!'
+    enabled: true
+    unrankedslot: 14
+    rankedslot: 14
+    editorslot: 14
+    items:
+      - ==: org.bukkit.inventory.ItemStack
+        type: DIAMOND_SPADE
+        meta:
+          ==: ItemMeta
+          meta-type: UNSPECIFIC
+          display-name: §f§lSnow Melting Tool
+          enchants:
+            DIG_SPEED: 10
+            DURABILITY: 10
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+    armor:
+      - ==: org.bukkit.inventory.ItemStack
+        type: AIR
+        damage: -1
+        amount: 0
+      - ==: org.bukkit.inventory.ItemStack
+        type: AIR
+        damage: -1
+        amount: 0
+      - ==: org.bukkit.inventory.ItemStack
+        type: AIR
+        damage: -1
+        amount: 0
+      - ==: org.bukkit.inventory.ItemStack
+        type: AIR
+        damage: -1
+        amount: 0
+    icon: DIAMOND_SPADE
+    icondata: 0
+    settings:
+      Boxing:
+        description: This is the boxing kit type
+        enabled: false
+      Build:
+        description: Allows you to build in matches
+        enabled: false
+      Ranked:
+        description: This is the ranked kit type
         enabled: true
       Spleef:
         description: This is the spleef kit type
+        enabled: true
+      Sumo:
+        description: This is the sumo kit type
         enabled: false

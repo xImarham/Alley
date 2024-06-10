@@ -47,7 +47,6 @@ public class ArenaCommand extends BaseCommand {
         CommandSender player = args.getPlayer();
 
         player.sendMessage(" ");
-        player.sendMessage(CC.FLOWER_BAR);
         player.sendMessage(CC.translate("&d&lArena Commands Help:"));
         player.sendMessage(CC.translate(" &f● &d/arena create &8(&7arenaName&8) &7| Create an arena"));
         player.sendMessage(CC.translate(" &f● &d/arena delete &8(&7arenaName&8) &7| Delete an arena"));
@@ -62,7 +61,6 @@ public class ArenaCommand extends BaseCommand {
         player.sendMessage(CC.translate(" &f● &d/arena toggle &8(&7arenaName&8) &7| Enable or Disable an Arena"));
         player.sendMessage(CC.translate(" &f● &d/arena tool &7| Get the Arena Selection tool"));
         player.sendMessage(CC.translate(" &f● &d/arena save &7| Save all arenas"));
-        player.sendMessage(CC.FLOWER_BAR);
         player.sendMessage("");
     }
 }

@@ -17,7 +17,7 @@ import org.bukkit.entity.Player;
 
 public class KitSetInvCommand extends BaseCommand {
     @Override
-    @Command(name = "kit.setinventory", permission = "practice.admin")
+    @Command(name = "kit.setinventory", aliases = "kit.setinv", permission = "practice.admin")
     public void onCommand(CommandArgs args) {
         Player sender = args.getPlayer();
 

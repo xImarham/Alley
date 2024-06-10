@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import me.emmy.alley.profile.Profile;
 import me.emmy.alley.profile.data.ProfileData;
+import me.emmy.alley.profile.data.impl.ProfileDivisionData;
 import org.bson.Document;
 
 /**

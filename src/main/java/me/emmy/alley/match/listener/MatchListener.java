@@ -8,6 +8,7 @@ import me.emmy.alley.kit.settings.impl.KitSettingBoxingImpl;
 import me.emmy.alley.kit.settings.impl.KitSettingBuildImpl;
 import me.emmy.alley.kit.settings.impl.KitSettingSpleefImpl;
 import me.emmy.alley.kit.settings.impl.KitSettingSumoImpl;
+import me.emmy.alley.locale.ErrorMessage;
 import me.emmy.alley.match.AbstractMatch;
 import me.emmy.alley.match.enums.EnumMatchState;
 import me.emmy.alley.match.player.GameParticipant;
@@ -15,12 +16,15 @@ import me.emmy.alley.match.player.impl.MatchGamePlayerImpl;
 import me.emmy.alley.profile.Profile;
 import me.emmy.alley.profile.enums.EnumProfileState;
 import me.emmy.alley.utils.PlayerUtil;
+import me.emmy.alley.utils.RayTracerUtil;
 import me.emmy.alley.utils.chat.CC;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
+import org.bukkit.entity.Snowball;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -29,12 +33,14 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 /**
  * @author Remi
@@ -42,6 +48,8 @@ import java.util.Optional;
  * @date 5/21/2024
  */
 public class MatchListener implements Listener {
+
+    private final Random random = new Random();
 
     @EventHandler
     private void onEntityDamage(EntityDamageEvent event) {
@@ -131,24 +139,49 @@ public class MatchListener implements Listener {
     }
 
     @EventHandler
+    public void onProjectileHit(ProjectileHitEvent event) {
+        if (event.getEntityType() == EntityType.SNOWBALL && event.getEntity().getShooter() instanceof Player) {
+            Player player = (Player) event.getEntity().getShooter();
+            Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
+
+            if (profile.getState() == EnumProfileState.PLAYING && profile.getMatch().getMatchState() == EnumMatchState.RUNNING &&
+                    profile.getMatch().getMatchKit().isSettingEnabled(KitSettingSpleefImpl.class)) {
+
+                Snowball snowball = (Snowball) event.getEntity();
+                Location hitLocation = RayTracerUtil.rayTrace(snowball.getLocation(), snowball.getVelocity().normalize());
+
+                if (hitLocation.getBlock().getType() == Material.SNOW || hitLocation.getBlock().getType() == Material.SNOW_BLOCK) {
+                    hitLocation.getBlock().setType(Material.AIR);
+                    player.sendMessage(CC.translate(ErrorMessage.DEBUG));
+                }
+            }
+        }
+    }
+
+    @EventHandler
     private void onBlockBreak(BlockBreakEvent event) {
         Player player = event.getPlayer();
         Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
-        if (profile.getState() == EnumProfileState.PLAYING) {
-            switch (profile.getMatch().getMatchState()) {
-                case STARTING:
-                case ENDING_MATCH:
-                    event.setCancelled(true);
-                    break;
-                case RUNNING:
-                    if (profile.getMatch().getMatchKit().isSettingEnabled(KitSettingSpleefImpl.class)) {
-                        Block block = event.getBlock();
-                        if (block.getType() == Material.SNOW_BLOCK) {
-                            event.setCancelled(false);
-                        }
-                    } else event.setCancelled(!profile.getMatch().getMatchKit().isSettingEnabled(KitSettingBuildImpl.class));
-                    break;
+
+        if (profile.getState() == EnumProfileState.PLAYING &&
+                profile.getMatch().getMatchState() == EnumMatchState.RUNNING &&
+                profile.getMatch().getMatchKit().isSettingEnabled(KitSettingSpleefImpl.class)) {
+
+            Block block = event.getBlock();
+            if (block.getType() == Material.SNOW_BLOCK) {
+                event.setCancelled(false);
+                event.getBlock().setType(Material.AIR);
+
+                int amount = random.nextInt(100) < 10 ? random.nextInt(3) + 2 : 0;
+                if (amount > 0) {
+                    ItemStack snowballs = new ItemStack(Material.SNOW_BALL, amount);
+                    player.getInventory().addItem(snowballs);
+                }
+            } else {
+                event.setCancelled(true);
             }
+        } else {
+            event.setCancelled(true);
         }
     }
 

@@ -10,6 +10,7 @@ import me.emmy.alley.profile.data.ProfileData;
 import me.emmy.alley.profile.division.AbstractDivision;
 import me.emmy.alley.profile.division.enums.EnumDivisionLevel;
 import me.emmy.alley.profile.division.enums.EnumDivisionTier;
+import me.emmy.alley.utils.chat.CC;
 
 import java.util.stream.Collectors;
 
@@ -27,7 +28,9 @@ public class ProfileDivisionData {
 
     public ProfileDivisionData() {
         this.globalElo = Profile.DEFAULT_ELO;
+        CC.broadcast("ProfileDivisionData constructor | globalelo");
         this.division = determineDivision(globalElo);
+        CC.broadcast("ProfileDivisionData constructor | division");
     }
 
     /**
@@ -81,6 +84,7 @@ public class ProfileDivisionData {
      * @return the division of the player
      */
     private String determineDivision(int elo) {
+        CC.broadcast("determineDivision | elo: " + elo);
         for (EnumDivisionTier tier : EnumDivisionTier.values()) {
             for (EnumDivisionLevel level : EnumDivisionLevel.values()) {
                 int[] eloRange = tier.getEloRangeForLevel(level);
