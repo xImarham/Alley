@@ -19,7 +19,6 @@ import java.util.List;
  * Project: Alley
  * Date: 19/05/2024 - 23:30
  */
-
 @Getter
 public class KitRepository {
     private final List<Kit> kits = new ArrayList<>();

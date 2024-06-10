@@ -11,6 +11,11 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Created by Emmy
+ * Project: Practice
+ * Date: 28/04/2024 - 21:49
+ */
 @Getter
 @Setter
 public class Kit {
