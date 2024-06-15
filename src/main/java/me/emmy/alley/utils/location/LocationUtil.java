@@ -1,4 +1,4 @@
-package me.emmy.alley.utils;
+package me.emmy.alley.utils.location;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;

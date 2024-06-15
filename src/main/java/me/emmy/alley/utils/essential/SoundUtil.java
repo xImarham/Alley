@@ -1,4 +1,4 @@
-package me.emmy.alley.utils;
+package me.emmy.alley.utils.essential;
 
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -8,7 +8,6 @@ import org.bukkit.entity.Player;
  * Project: Alley
  * Date: 25/05/2024 - 17:11
  */
-
 public class SoundUtil {
     public static void playFail(Player player) {
         player.playSound(player.getLocation(), Sound.NOTE_BASS, 20F, 0.1F);

@@ -1,9 +1,6 @@
-package me.emmy.alley.utils;
+package me.emmy.alley.utils.chat;
 
-import me.emmy.alley.Alley;
-import me.emmy.alley.utils.chat.CC;
 import org.bukkit.Bukkit;
-import org.bukkit.configuration.file.FileConfiguration;
 
 /**
  * @author Remi

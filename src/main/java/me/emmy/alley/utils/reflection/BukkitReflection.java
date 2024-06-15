@@ -1,4 +1,4 @@
-package me.emmy.alley.utils;
+package me.emmy.alley.utils.reflection;
 
 import lombok.NonNull;
 import org.bukkit.Bukkit;
@@ -6,13 +6,9 @@ import org.bukkit.Server;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.lang.invoke.MethodHandle;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.net.InetAddress;
-import java.net.URL;
 import java.util.Arrays;
 
 /**

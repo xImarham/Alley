@@ -1,4 +1,4 @@
-package me.emmy.alley.utils;
+package me.emmy.alley.utils.player;
 
 import me.emmy.alley.Alley;
 import org.bukkit.Bukkit;

@@ -1,4 +1,4 @@
-package me.emmy.alley.utils;
+package me.emmy.alley.utils.server;
 
 import me.emmy.alley.Alley;
 import me.emmy.alley.utils.chat.CC;

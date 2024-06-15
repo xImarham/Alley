@@ -1,4 +1,4 @@
-package me.emmy.alley.utils;
+package me.emmy.alley.utils.reflection;
 
 import org.bukkit.Bukkit;
 

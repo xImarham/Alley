@@ -1,6 +1,6 @@
 package me.emmy.alley.commands.admin.essential;
 
-import me.emmy.alley.utils.EnchantUtil;
+import me.emmy.alley.utils.essential.EnchantUtil;
 import me.emmy.alley.utils.chat.CC;
 import me.emmy.alley.utils.command.BaseCommand;
 import me.emmy.alley.utils.command.Command;

@@ -1,4 +1,4 @@
-package me.emmy.alley.utils.pagination;
+package me.emmy.alley.utils.menu.pagination;
 
 import lombok.Getter;
 import lombok.NonNull;
