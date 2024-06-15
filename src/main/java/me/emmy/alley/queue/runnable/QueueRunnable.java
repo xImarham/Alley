@@ -4,6 +4,7 @@ import lombok.Getter;
 import me.emmy.alley.Alley;
 import me.emmy.alley.arena.Arena;
 import me.emmy.alley.arena.ArenaType;
+import me.emmy.alley.hotbar.enums.HotbarType;
 import me.emmy.alley.match.AbstractMatch;
 import me.emmy.alley.match.impl.MatchRegularImpl;
 import me.emmy.alley.match.player.GameParticipant;
@@ -44,8 +45,10 @@ public class QueueRunnable implements Runnable {
         queue.getProfiles().forEach(profile -> {
             if (profile.getElapsedTime() >= 60000) {
                 queue.getProfiles().remove(profile);
+                queue.removePlayer(profile);
                 Player player = Alley.getInstance().getServer().getPlayer(profile.getUuid());
                 player.sendMessage(CC.translate("&cYou have been removed from the queue due to inactivity."));
+                Alley.getInstance().getHotbarRepository().applyHotbarItems(player, HotbarType.LOBBY);
             }
         });
 
