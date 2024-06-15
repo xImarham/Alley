@@ -3,7 +3,7 @@ package me.emmy.alley.kit.settings;
 import lombok.Getter;
 import lombok.Setter;
 import me.emmy.alley.kit.settings.impl.*;
-import me.emmy.alley.utils.chat.CC;
+import me.emmy.alley.utils.chat.Logger;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,7 +41,7 @@ public class KitSettingRepository {
             settings.add(instance);
             settingClasses.put(instance.getName(), clazz);
         } catch (Exception e) {
-            CC.sendError("Failed to register setting class " + clazz.getSimpleName() + "!");
+            Logger.logError("Failed to register setting class " + clazz.getSimpleName() + "!");
         }
     }
 
@@ -57,7 +57,7 @@ public class KitSettingRepository {
             try {
                 return clazz.getDeclaredConstructor().newInstance();
             } catch (Exception e) {
-                CC.sendError("Failed to create setting instance for " + name + "!");
+                Logger.logError("Failed to create setting instance for " + name + "!");
             }
         }
         return null;

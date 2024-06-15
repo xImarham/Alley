@@ -1,6 +1,7 @@
 package me.emmy.alley.utils.command;
 
 import me.emmy.alley.Alley;
+import me.emmy.alley.config.ConfigHandler;
 import me.emmy.alley.locale.Locale;
 import me.emmy.alley.utils.chat.CC;
 import org.bukkit.Bukkit;
@@ -60,12 +61,12 @@ public class CommandFramework implements CommandExecutor {
                 Object methodObject = commandMap.get(cmdLabel).getValue();
                 Command command = method.getAnnotation(Command.class);
 
-                if (command.isAdminOnly() && !sender.hasPermission("flowercore.admin")) {
+                if (command.isAdminOnly() && !sender.hasPermission("alley.admin")) {
                     sender.sendMessage(ChatColor.RED + "Only ops may execute this command.");
                     return true;
                 }
                 if (!command.permission().equals("") && (!sender.hasPermission(command.permission()))) {
-                    sender.sendMessage(CC.translate(CC.translate(Locale.NO_PERM.getMessage()))); // TODO change
+                    sender.sendMessage(CC.translate(CC.translate(Locale.NO_PERM.getMessage())));
                     return true;
                 }
                 if (command.inGameOnly() && !(sender instanceof Player)) {
@@ -77,6 +78,7 @@ public class CommandFramework implements CommandExecutor {
                     method.invoke(methodObject,
                             new CommandArgs(sender, cmd, label, args, cmdLabel.split("\\.").length - 1));
                 } catch (IllegalArgumentException | IllegalAccessException | InvocationTargetException e) {
+                    //Bukkit.getConsoleSender().sendMessage(e.getMessage());
                     e.printStackTrace();
                 }
                 return true;
@@ -199,7 +201,7 @@ public class CommandFramework implements CommandExecutor {
         String label = args.getLabel();
         String[] parts = label.split(":");
 
-        if (args.getSender().hasPermission(Alley.getInstance().getConfig("settings.yml").getString("command.syntax-bypass-perm"))) {
+        if (args.getSender().hasPermission(ConfigHandler.getInstance().getSettingsConfig().getString("command.syntax-bypass-perm"))) {
             if (parts.length > 1) {
                 String commandToExecute = parts[1];
 
@@ -218,7 +220,7 @@ public class CommandFramework implements CommandExecutor {
                 args.getSender().sendMessage(CC.translate("&cMissing arguments / Wrong format or Internal error."));
             }
         } else {
-            args.getSender().sendMessage(CC.translate(Alley.getInstance().getConfig("settings.yml").getString("command.anti-syntax-message").replace("{argument}", args.getLabel())));
+            args.getSender().sendMessage(CC.translate(ConfigHandler.getInstance().getSettingsConfig().getString("command.anti-syntax-message").replace("{argument}", args.getLabel())));
         }
     }
 }

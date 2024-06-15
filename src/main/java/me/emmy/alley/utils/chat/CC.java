@@ -58,15 +58,6 @@ public class CC {
     }
 
     /**
-     * Send an error message to the console.
-     *
-     * @param message The message to send.
-     */
-    public static void sendError(String message) {
-        Bukkit.getServer().getConsoleSender().sendMessage(CC.translate("&f[&cERROR&f] &c" + message + "!"));
-    }
-
-    /**
      * Broadcast a message to all players.
      *
      * @param text The message to send.

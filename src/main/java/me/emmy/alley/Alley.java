@@ -123,6 +123,8 @@ import me.emmy.alley.utils.command.CommandFramework;
 import me.emmy.alley.utils.menu.MenuListener;
 import me.emmy.alley.utils.server.ServerUtil;
 import org.bukkit.Bukkit;
+import org.bukkit.Difficulty;
+import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Entity;
@@ -180,6 +182,7 @@ public class Alley extends JavaPlugin {
         registerListeners();
         registerCommands();
         loadScoreboard();
+        setupWorld();
         loadTasks();
 
         long end = System.currentTimeMillis();
@@ -418,6 +421,15 @@ public class Alley extends JavaPlugin {
         Assemble assemble = new Assemble(this, new ScoreboardAdapter());
         assemble.setTicks(2);
         assemble.setAssembleStyle(AssembleStyle.MODERN);
+    }
+
+    private void setupWorld() {
+        for (World world : Bukkit.getWorlds()) {
+            world.setDifficulty(Difficulty.EASY);
+            world.setStorm(false);
+            world.setThundering(false);
+            world.setTime(6000);
+        }
     }
 
     private void loadTasks() {

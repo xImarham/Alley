@@ -1,6 +1,7 @@
 package me.emmy.alley.spawn.command;
 
 import me.emmy.alley.Alley;
+import me.emmy.alley.config.ConfigHandler;
 import me.emmy.alley.utils.chat.CC;
 import me.emmy.alley.utils.command.BaseCommand;
 import me.emmy.alley.utils.command.Command;
@@ -22,7 +23,7 @@ public class SetSpawnCommand extends BaseCommand {
         Location location = player.getLocation();
         Alley.getInstance().getSpawnHandler().setSpawnLocation(location);
 
-        String message = Alley.getInstance().getConfig("messages.yml").getString("spawn.spawn-set");
+        String message = ConfigHandler.getInstance().getMessagesConfig().getString("spawn.spawn-set");
         message = message.replace("{world}", location.getWorld().getName())
                 .replace("{x}", String.format("%.2f", location.getX()))
                 .replace("{y}", String.format("%.2f", location.getY()))

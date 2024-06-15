@@ -2,6 +2,7 @@ package me.emmy.alley.profile.shop.menu.impl;
 
 import lombok.AllArgsConstructor;
 import me.emmy.alley.Alley;
+import me.emmy.alley.config.ConfigHandler;
 import me.emmy.alley.profile.Profile;
 import me.emmy.alley.profile.cosmetic.impl.killeffects.AbstractKillEffect;
 import me.emmy.alley.profile.cosmetic.impl.soundeffect.AbstractSoundEffect;
@@ -76,7 +77,7 @@ public class ShopEffectButton extends Button {
         profile.getProfileData().setCoins(profile.getProfileData().getCoins() - cosmetic.getPrice());
 
 
-        FileConfiguration config = Alley.getInstance().getConfig("settings.yml");
+        FileConfiguration config = ConfigHandler.getInstance().getSettingsConfig();
         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), config.get("command.grant-cosmetic-permission-command").toString().replace("{player}", player.getName()).replace("%permission%", cosmetic.getPermission()));
 
         player.sendMessage(CC.translate("&aYou have successfully purchased the " + cosmetic.getName() + " cosmetic for &d" + cosmetic.getPrice() + " coins."));

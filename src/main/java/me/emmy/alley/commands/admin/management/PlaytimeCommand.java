@@ -1,6 +1,6 @@
 package me.emmy.alley.commands.admin.management;
 
-import me.emmy.alley.Alley;
+import me.emmy.alley.config.ConfigHandler;
 import me.emmy.alley.locale.ErrorMessage;
 import me.emmy.alley.utils.chat.CC;
 import me.emmy.alley.utils.command.BaseCommand;
@@ -54,7 +54,7 @@ public class PlaytimeCommand extends BaseCommand {
         int minutes = (int)((hoursPlayed - (double)(hours + days * 24)) * 60.0);
         int seconds = (int)((minutesPlayed - (double)(minutes + hours * 60 + days * 60 * 24)) * 60.0);
 
-        player.sendMessage(CC.translate(Alley.getInstance().getConfig("messages.yml").getString("playtime.message")
+        player.sendMessage(CC.translate(ConfigHandler.getInstance().getMessagesConfig().getString("playtime.message")
                 .replace("{days}", String.valueOf(days))
                 .replace("{hours}", String.valueOf(hours))
                 .replace("{minutes}", String.valueOf(minutes))

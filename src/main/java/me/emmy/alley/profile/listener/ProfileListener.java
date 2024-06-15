@@ -1,6 +1,7 @@
 package me.emmy.alley.profile.listener;
 
 import me.emmy.alley.Alley;
+import me.emmy.alley.config.ConfigHandler;
 import me.emmy.alley.hotbar.enums.HotbarType;
 import me.emmy.alley.profile.Profile;
 import me.emmy.alley.profile.ProfileRepository;
@@ -62,7 +63,7 @@ public class ProfileListener implements Listener {
 
         event.setJoinMessage(null);
 
-        FileConfiguration config = Alley.getInstance().getConfig("messages.yml");
+        FileConfiguration config = ConfigHandler.getInstance().getMessagesConfig();
         if (config.getBoolean("welcome-message.enabled")) {
             for (String message : config.getStringList("welcome-message.message")) {
                 player.sendMessage(CC.translate(message)

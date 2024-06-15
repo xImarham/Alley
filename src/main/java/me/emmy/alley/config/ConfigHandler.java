@@ -2,7 +2,7 @@ package me.emmy.alley.config;
 
 import lombok.Getter;
 import me.emmy.alley.Alley;
-import me.emmy.alley.utils.chat.CC;
+import me.emmy.alley.utils.chat.Logger;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -103,7 +103,7 @@ public class ConfigHandler {
             fileConfiguration.save(configFile);
             fileConfiguration.load(configFile);
         } catch (Exception e) {
-            CC.sendError("Error occurred while saving config: " + configFile.getName());
+            Logger.logError("Error occurred while saving config: " + configFile.getName());
         }
     }
 
