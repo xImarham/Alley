@@ -4,7 +4,7 @@ import me.emmy.alley.Alley;
 import me.emmy.alley.hotbar.enums.HotbarType;
 import me.emmy.alley.profile.Profile;
 import me.emmy.alley.profile.enums.EnumProfileState;
-import me.emmy.alley.utils.PlayerUtil;
+import me.emmy.alley.utils.player.PlayerUtil;
 import me.emmy.alley.utils.chat.CC;
 import me.emmy.alley.utils.command.BaseCommand;
 import me.emmy.alley.utils.command.Command;

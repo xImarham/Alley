@@ -8,24 +8,29 @@ import me.emmy.alley.arena.command.impl.*;
 import me.emmy.alley.arena.listener.ArenaListener;
 import me.emmy.alley.commands.AlleyCommand;
 import me.emmy.alley.commands.AlleyReloadCommand;
-import me.emmy.alley.commands.admin.debug.FFAStateCommand;
 import me.emmy.alley.commands.admin.debug.StateCommand;
 import me.emmy.alley.commands.admin.essential.EnchantCommand;
 import me.emmy.alley.commands.admin.essential.RenameCommand;
 import me.emmy.alley.commands.admin.management.PlaytimeCommand;
-import me.emmy.alley.competition.impl.command.HostCommand;
-import me.emmy.alley.competition.impl.event.EventRepository;
-import me.emmy.alley.competition.impl.event.command.EventCommand;
-import me.emmy.alley.competition.impl.tournament.command.TournamentCommand;
+import me.emmy.alley.commands.donator.HostCommand;
 import me.emmy.alley.config.ConfigHandler;
 import me.emmy.alley.cooldown.CooldownRepository;
 import me.emmy.alley.database.MongoService;
 import me.emmy.alley.database.profile.impl.MongoProfileImpl;
 import me.emmy.alley.ffa.FFARepository;
+import me.emmy.alley.ffa.combat.CombatManager;
 import me.emmy.alley.ffa.command.admin.*;
 import me.emmy.alley.ffa.command.player.FFAJoinCommand;
 import me.emmy.alley.ffa.command.player.FFALeaveCommand;
 import me.emmy.alley.ffa.listener.FFAListener;
+import me.emmy.alley.ffa.safezone.FFASpawnHandler;
+import me.emmy.alley.ffa.safezone.task.FFASpawnTask;
+import me.emmy.alley.host.impl.event.command.EventCommand;
+import me.emmy.alley.host.impl.tournament.Tournament;
+import me.emmy.alley.host.impl.tournament.command.TournamentCommand;
+import me.emmy.alley.host.impl.tournament.command.impl.TournamentHostCommand;
+import me.emmy.alley.host.impl.tournament.command.impl.TournamentJoinCommand;
+import me.emmy.alley.host.impl.tournament.command.impl.TournamentLeaveCommand;
 import me.emmy.alley.hotbar.HotbarRepository;
 import me.emmy.alley.hotbar.listener.HotbarListener;
 import me.emmy.alley.kit.KitRepository;
@@ -57,6 +62,7 @@ import me.emmy.alley.match.command.player.LeaveMatchCommand;
 import me.emmy.alley.match.command.player.LeaveSpectatorCommand;
 import me.emmy.alley.match.command.player.SpectateCommand;
 import me.emmy.alley.match.listener.MatchListener;
+import me.emmy.alley.match.player.visibility.PlayerVisibility;
 import me.emmy.alley.match.snapshot.SnapshotRepository;
 import me.emmy.alley.party.PartyRepository;
 import me.emmy.alley.party.PartyRequest;
@@ -109,16 +115,18 @@ import me.emmy.alley.spawn.command.SetSpawnCommand;
 import me.emmy.alley.spawn.command.SpawnCommand;
 import me.emmy.alley.spawn.command.SpawnItemsCommand;
 import me.emmy.alley.spawn.listener.SpawnListener;
-import me.emmy.alley.utils.Logger;
-import me.emmy.alley.utils.ServerUtil;
 import me.emmy.alley.utils.assemble.Assemble;
 import me.emmy.alley.utils.assemble.AssembleStyle;
 import me.emmy.alley.utils.chat.CC;
+import me.emmy.alley.utils.chat.Logger;
 import me.emmy.alley.utils.command.CommandFramework;
 import me.emmy.alley.utils.menu.MenuListener;
+import me.emmy.alley.utils.server.ServerUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -140,19 +148,22 @@ public class Alley extends JavaPlugin {
     private DivisionRepository divisionRepository;
     private ProfileRepository profileRepository;
     private ScoreboardHandler scoreboardHandler;
+    private PlayerVisibility playerVisibility;
     private HotbarRepository hotbarRepository;
     private CommandFramework commandFramework;
+    private FFASpawnHandler ffaSpawnHandler;
     private ArenaRepository arenaRepository;
     private MatchRepository matchRepository;
     private QueueRepository queueRepository;
     private PartyRepository partyRepository;
-    private EventRepository eventRepository;
+    private CombatManager combatManager;
     private KitRepository kitRepository;
     private FFARepository ffaRepository;
     private ConfigHandler configHandler;
     private SpawnHandler spawnHandler;
     private MongoService mongoService;
     private PartyRequest partyRequest;
+    private Tournament tournament;
 
     private String prefix = "§f[§dAlley§f] §r";
 
@@ -169,6 +180,7 @@ public class Alley extends JavaPlugin {
         registerListeners();
         registerCommands();
         loadScoreboard();
+        loadTasks();
 
         long end = System.currentTimeMillis();
         long timeTaken = end - start;
@@ -179,9 +191,17 @@ public class Alley extends JavaPlugin {
     @Override
     public void onDisable() {
         ServerUtil.disconnectPlayers();
+
         profileRepository.getProfiles().forEach((uuid, profile) -> profile.save());
         kitRepository.saveKits();
         ffaRepository.saveFFAMatches();
+
+        for (Entity entity : this.getServer().getWorld("world").getEntities()) {
+            if (entity.getType() == EntityType.DROPPED_ITEM) {
+                entity.remove();
+            }
+        }
+
         CC.pluginDisabled();
     }
 
@@ -243,18 +263,25 @@ public class Alley extends JavaPlugin {
             this.spawnHandler = new SpawnHandler();
             this.spawnHandler.loadSpawnLocation();
         });
-        Logger.logTime("EventRepository", () -> this.eventRepository = new EventRepository());
+        Logger.logTime("CombatManager", () -> this.combatManager = new CombatManager());
+        Logger.logTime("FFASpawnHandler", ()-> {
+            this.ffaSpawnHandler = new FFASpawnHandler();
+            this.ffaSpawnHandler.loadFFASpawn();
+        });
+        Logger.logTime("PlayerVisibility", () -> this.playerVisibility = new PlayerVisibility());
     }
 
     private void registerListeners() {
-        getServer().getPluginManager().registerEvents(new ProfileListener(), this);
-        getServer().getPluginManager().registerEvents(new HotbarListener(), this);
-        getServer().getPluginManager().registerEvents(new PartyListener(), this);
-        getServer().getPluginManager().registerEvents(new MatchListener(), this);
-        getServer().getPluginManager().registerEvents(new ArenaListener(), this);
-        getServer().getPluginManager().registerEvents(new MenuListener(), this);
-        getServer().getPluginManager().registerEvents(new SpawnListener(), this);
-        getServer().getPluginManager().registerEvents(new FFAListener(), this);
+        Arrays.asList(
+                new ProfileListener(),
+                new HotbarListener(),
+                new PartyListener(),
+                new MatchListener(),
+                new ArenaListener(),
+                new MenuListener(),
+                new SpawnListener(),
+                new FFAListener()
+        ).forEach(listener -> getServer().getPluginManager().registerEvents(listener, this));
     }
 
     private void registerCommands() {
@@ -267,6 +294,8 @@ public class Alley extends JavaPlugin {
             new SpawnCommand();
 
             new PlaytimeCommand();
+            new RenameCommand();
+            new EnchantCommand();
 
             new KitCommand();
             new KitSaveCommand();
@@ -286,9 +315,7 @@ public class Alley extends JavaPlugin {
             new KitSetIconCommand();
             new KitViewCommand();
 
-            new RenameCommand();
-            new EnchantCommand();
-
+            new ArenaSetSafeZoneCommand();
             new ArenaSetCenterCommand();
             new ArenaCreateCommand();
             new ArenaSetCuboidCommand();
@@ -333,13 +360,17 @@ public class Alley extends JavaPlugin {
 
             //debugging
             new StateCommand();
-            new FFAStateCommand();
         });
 
         Logger.logTime("Donator Command", () -> {
             new HostCommand();
-            new TournamentCommand();
+
             new EventCommand();
+
+            new TournamentCommand();
+            new TournamentHostCommand();
+            new TournamentJoinCommand();
+            new TournamentLeaveCommand();
         });
 
         Logger.logTime("Player Commands", () -> {
@@ -387,6 +418,10 @@ public class Alley extends JavaPlugin {
         Assemble assemble = new Assemble(this, new ScoreboardAdapter());
         assemble.setTicks(2);
         assemble.setAssembleStyle(AssembleStyle.MODERN);
+    }
+
+    private void loadTasks() {
+        new FFASpawnTask(ffaSpawnHandler.getCuboid(), Alley.getInstance()).runTaskTimer(Alley.getInstance(), 0, 20);
     }
 
     public FileConfiguration getConfig(String fileName) {

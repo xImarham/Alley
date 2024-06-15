@@ -15,8 +15,8 @@ import me.emmy.alley.match.player.GameParticipant;
 import me.emmy.alley.match.player.impl.MatchGamePlayerImpl;
 import me.emmy.alley.profile.Profile;
 import me.emmy.alley.profile.enums.EnumProfileState;
-import me.emmy.alley.utils.PlayerUtil;
-import me.emmy.alley.utils.RayTracerUtil;
+import me.emmy.alley.utils.player.PlayerUtil;
+import me.emmy.alley.utils.location.RayTracerUtil;
 import me.emmy.alley.utils.chat.CC;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -227,6 +227,13 @@ public class MatchListener implements Listener {
         }
     }
 
+    /**
+     * handles player move event:
+     * checks if player is in a match and if they are playing sumo or spleef
+     * and depending on that it checks if they moved away from arena pos1 and tps back
+     *
+     * @param event The PlayerMoveEvent.
+     */
     @EventHandler
     private void onPlayerMove(PlayerMoveEvent event) {
         Player player = event.getPlayer();
@@ -329,42 +336,43 @@ public class MatchListener implements Listener {
         }
     }
 
-
+    /**
+     * Prevents players from using ender pearls during the starting phase of a match.
+     * Prevents players from using ender pearls if they are on cooldown.
+     *
+     * @param event The PlayerInteractEvent.
+     */
     @EventHandler
     private void onPlayerInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
         Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
-        ItemStack item = player.getItemInHand();
+        ItemStack item = event.getItem();
 
-        if (profile.getState() == EnumProfileState.PLAYING) {
-            switch (item.getType()) {
-                case ENDER_PEARL:
-                    if (profile.getMatch().getMatchState() == EnumMatchState.STARTING) {
-                        event.setCancelled(true);
-                        player.updateInventory();
-                        player.sendMessage(CC.translate("&cYou cannot use ender pearls."));
-                        return;
-                    }
-
-                    Alley alley = Alley.getInstance();
-                    CooldownRepository cooldownRepository = alley.getCooldownRepository();
-
-                    Optional<Cooldown> optionalCooldown = Optional.ofNullable(cooldownRepository.getCooldown(player.getUniqueId(), "ENDERPEARL"));
-                    if (optionalCooldown.isPresent()) {
-                        Cooldown cooldown = optionalCooldown.get();
-                        if (cooldown.isActive()) {
-                            event.setCancelled(true);
-                            player.updateInventory();
-                            player.sendMessage(CC.translate("&cYou must wait " + cooldown.remainingTime() + " seconds before using another ender pearl."));
-                            return;
-                        }
-                        cooldown.resetCooldown();
-                    } else {
-                        Cooldown cooldown = new Cooldown(15 * 1000L, () -> player.sendMessage(CC.translate("&aYou can now use pearls again!")));
-                        cooldownRepository.addCooldown(player.getUniqueId(), "ENDERPEARL", cooldown);
-                    }
-                    break;
+        if (profile.getState() == EnumProfileState.PLAYING && item != null && item.getType() == Material.ENDER_PEARL) {
+            if (profile.getMatch().getMatchState() == EnumMatchState.STARTING) {
+                event.setCancelled(true);
+                player.updateInventory();
+                player.sendMessage(CC.translate("&cYou cannot use ender pearls during the starting phase."));
+                return;
             }
+
+            CooldownRepository cooldownRepository = Alley.getInstance().getCooldownRepository();
+            Optional<Cooldown> optionalCooldown = Optional.ofNullable(cooldownRepository.getCooldown(player.getUniqueId(), "ENDERPEARL"));
+
+            if (optionalCooldown.isPresent() && optionalCooldown.get().isActive()) {
+                event.setCancelled(true);
+                player.updateInventory();
+                player.sendMessage(CC.translate("&cYou must wait " + optionalCooldown.get().remainingTime() + " seconds before using another ender pearl."));
+                return;
+            }
+
+            Cooldown cooldown = optionalCooldown.orElseGet(() -> {
+                Cooldown newCooldown = new Cooldown(15 * 1000L, () -> player.sendMessage(CC.translate("&aYou can now use pearls again!")));
+                cooldownRepository.addCooldown(player.getUniqueId(), "ENDERPEARL", newCooldown);
+                return newCooldown;
+            });
+
+            cooldown.resetCooldown();
         }
     }
 
@@ -374,7 +382,9 @@ public class MatchListener implements Listener {
         if (event.getClickedInventory() == null) return;
 
         Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
-        if (profile.getState() == EnumProfileState.SPECTATING) event.setCancelled(true);
+        if (profile.getState() == EnumProfileState.SPECTATING) {
+            event.setCancelled(true);
+        }
     }
 
     @EventHandler

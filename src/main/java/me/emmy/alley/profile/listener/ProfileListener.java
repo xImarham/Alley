@@ -5,7 +5,7 @@ import me.emmy.alley.hotbar.enums.HotbarType;
 import me.emmy.alley.profile.Profile;
 import me.emmy.alley.profile.ProfileRepository;
 import me.emmy.alley.profile.enums.EnumProfileState;
-import me.emmy.alley.utils.PlayerUtil;
+import me.emmy.alley.utils.player.PlayerUtil;
 import me.emmy.alley.utils.chat.CC;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;

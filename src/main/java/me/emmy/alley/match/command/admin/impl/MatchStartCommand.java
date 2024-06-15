@@ -2,6 +2,7 @@ package me.emmy.alley.match.command.admin.impl;
 
 import me.emmy.alley.Alley;
 import me.emmy.alley.arena.Arena;
+import me.emmy.alley.arena.ArenaType;
 import me.emmy.alley.kit.Kit;
 import me.emmy.alley.match.AbstractMatch;
 import me.emmy.alley.match.impl.MatchRegularImpl;
@@ -39,7 +40,11 @@ public class MatchStartCommand extends BaseCommand {
                     }
                     break;
                 case 3:
-                    Alley.getInstance().getArenaRepository().getArenas().forEach(arena -> completion.add(arena.getName()));
+                    // all arenas:
+                    // Alley.getInstance().getArenaRepository().getArenas().forEach(arena -> completion.add(arena.getName()));
+
+                    //excluding FFA arenas
+                    Alley.getInstance().getArenaRepository().getArenas().stream().filter(arena -> arena.getType() != ArenaType.FFA).forEach(arena -> completion.add(arena.getName()));
                     break;
                 case 4:
                     Alley.getInstance().getKitRepository().getKits().forEach(kit -> completion.add(kit.getName()));

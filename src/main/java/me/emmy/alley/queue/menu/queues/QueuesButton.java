@@ -5,7 +5,7 @@ import me.emmy.alley.ffa.menu.FFAMenu;
 import me.emmy.alley.queue.menu.ranked.RankedMenu;
 import me.emmy.alley.queue.menu.unranked.UnrankedMenu;
 import me.emmy.alley.utils.menu.Button;
-import me.emmy.alley.utils.pagination.ItemBuilder;
+import me.emmy.alley.utils.menu.pagination.ItemBuilder;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;

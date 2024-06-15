@@ -7,6 +7,7 @@ import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoDatabase;
 import lombok.Getter;
 import me.emmy.alley.Alley;
+import me.emmy.alley.config.ConfigHandler;
 import me.emmy.alley.utils.chat.CC;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -43,7 +44,7 @@ public class MongoService {
                     .retryWrites(true)
                     .build();
 
-            String databaseName = Alley.getInstance().getConfigHandler().getConfigByName("database/database.yml").getString("mongo.database");
+            String databaseName = ConfigHandler.getInstance().getDatabaseConfig().getString("mongo.database");
             this.mongoClient = MongoClients.create(settings);
             this.mongoDatabase = mongoClient.getDatabase(databaseName);
             this.sendConnectionMessage();
@@ -52,8 +53,11 @@ public class MongoService {
         }
     }
 
+    /**
+     * Sends a connection message to the console.
+     */
     private void sendConnectionMessage() {
-        FileConfiguration config = Alley.getInstance().getConfigHandler().getConfigByName("database/database.yml");
+        FileConfiguration config = ConfigHandler.getInstance().getDatabaseConfig();
         String prefix = Alley.getInstance().getPrefix();
 
         Bukkit.getConsoleSender().sendMessage(CC.translate("&f[&dAlley&f] &fSuccessfully connected to MongoDB."));

@@ -1,14 +1,9 @@
 package me.emmy.alley.profile.shop.menu;
 
 import lombok.AllArgsConstructor;
-import me.emmy.alley.leaderboard.menu.leaderboard.LeaderboardMenu;
-import me.emmy.alley.leaderboard.menu.personal.StatisticsMenu;
-import me.emmy.alley.profile.cosmetic.menu.CosmeticsMenu;
-import me.emmy.alley.profile.division.menu.DivisionsMenu;
-import me.emmy.alley.profile.settings.playersettings.menu.SettingsMenu;
 import me.emmy.alley.profile.shop.menu.impl.ShopEffectMenu;
 import me.emmy.alley.utils.menu.Button;
-import me.emmy.alley.utils.pagination.ItemBuilder;
+import me.emmy.alley.utils.menu.pagination.ItemBuilder;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;

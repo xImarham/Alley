@@ -1,4 +1,4 @@
-package me.emmy.alley.competition.impl.event.menu;
+package me.emmy.alley.host.impl.event.menu;
 
 import me.emmy.alley.utils.menu.Button;
 import me.emmy.alley.utils.menu.Menu;

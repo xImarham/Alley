@@ -1,4 +1,4 @@
-package me.emmy.alley.competition.impl.event.command;
+package me.emmy.alley.host.impl.event.command;
 
 import me.emmy.alley.Alley;
 import me.emmy.alley.profile.enums.EnumProfileState;
@@ -24,14 +24,18 @@ public class EventCommand extends BaseCommand {
             return;
         }
 
-        player.sendMessage(CC.translate("&9Event Help"));
-        player.sendMessage(CC.translate(" &7- &9/event host"));
-        player.sendMessage(CC.translate(" &7- &9/event join"));
-        player.sendMessage(CC.translate(" &7- &9/event leave"));
+        player.sendMessage(" ");
+        player.sendMessage(CC.translate("&d&lEvent Commands Help:"));
+        player.sendMessage(CC.translate(" &f● &d/event host &7| Host an event"));
+        player.sendMessage(CC.translate(" &f● &d/event join &7| Join an event"));
+        player.sendMessage(CC.translate(" &f● &d/event leave &7| Leave an event"));
 
         if (player.hasPermission("alley.admin")) {
-            player.sendMessage(CC.translate(" &7- &c/event forcestart"));
-            player.sendMessage(CC.translate(" &7- &c/event cancel"));
+            player.sendMessage(" ");
+            player.sendMessage(CC.translate("&c&lEvent Admin Commands:"));
+            player.sendMessage(CC.translate(" &f● &c/event forcestart &7| Force start an event"));
+            player.sendMessage(CC.translate(" &f● &c/event cancel &7| Cancel an event"));
         }
+        player.sendMessage(" ");
     }
 }

@@ -145,7 +145,7 @@ public class KitRepository {
         Alley.getInstance().getConfigHandler().saveConfig(Alley.getInstance().getConfigHandler().getConfigFileByName("storage/kits.yml"), config);
     }
 
-    private void applyDefaultSettings(FileConfiguration config, String key, Kit kit) {
+    public void applyDefaultSettings(FileConfiguration config, String key, Kit kit) {
         KitSetting[] defaultSettings = new KitSetting[]{
                 new KitSettingBoxingImpl(),
                 new KitSettingBuildImpl(),

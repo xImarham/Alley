@@ -57,6 +57,10 @@ scoreboard:
       - " &rKit: &d{queued-kit}"
       - " &rType: &d{queued-type}"
       - " &rDuration: &d{queued-time}"
+    starting:
+        - "{sidebar}"
+        - "&d&lStarting Match..."
+        - " &rRival: &d{opponent}"
     playing:
       regular-match:
         - "{sidebar}"
@@ -79,6 +83,15 @@ scoreboard:
         - ""
         - " &rYour Ping: &d{player-ping}ms"
         - " &rTheir Ping: &d{opponent-ping}ms"
+    ending:
+      - "{sidebar}"
+      - "{end-result}"
+      - ""
+      - " &rWinner: &d{winner}"
+      - " &rDuration: &d{duration}"
+      - ""
+      - " &rYour Ping: &d{player-ping}ms"
+      - " &rTheir Ping: &d{opponent-ping}ms"
     spectating:
       - "{sidebar}"
       - "&d&lMatch"

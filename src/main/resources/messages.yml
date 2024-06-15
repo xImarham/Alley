@@ -58,6 +58,24 @@ party:
       - "&7&m------------&d&m------------&7&m------------"
       - ""
 
+tournament-broadcast:
+  player:
+    joined: "&a{player} has joined the tournament &f(&d{players}&f/&d{maxPlayers}&f)"
+    left: "&c{player} has left the tournament &f(&d{players}&f/&d{maxPlayers}&f)"
+  waiting:
+    clickable-format: " &a[CLICK TO JOIN]"
+    clickable-hover: "&aClick to join the tournament!"
+    message:
+      - ""
+      - "&d&lTOURNAMENT"
+      - " &f• &dHost: &f{host}"
+      - " &f• &dKit: &f{kit}"
+      - " &f• &dPlayers: &f{players}/{maxPlayers}"
+      - " &f• &dWaiting for &5{remaining} &dmore players."
+      - ""
+      - "[clickable]"
+      - ""
+
 playtime:
   message: " \n&b{target}'s total playtime:\n &b{days} &fdays, &b{hours} &fhours, &b{minutes} &fminutes and &b{seconds} &fseconds.\n "
 

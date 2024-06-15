@@ -2,8 +2,7 @@ package me.emmy.alley.kit.command.impl.manage;
 
 import me.emmy.alley.Alley;
 import me.emmy.alley.kit.Kit;
-import me.emmy.alley.kit.KitRepository;
-import me.emmy.alley.kit.settings.KitSettingRepository;
+import me.emmy.alley.kit.settings.impl.*;
 import me.emmy.alley.locale.Locale;
 import me.emmy.alley.utils.chat.CC;
 import me.emmy.alley.utils.command.BaseCommand;
@@ -26,7 +25,7 @@ public class KitCreateCommand extends BaseCommand {
         Player player = command.getPlayer();
         String[] args = command.getArgs();
 
-        if (command.length() < 1) {
+        if (args.length < 1) {
             player.sendMessage(CC.translate("&cUsage: /kit create (kit-name)"));
             return;
         }
@@ -38,15 +37,6 @@ public class KitCreateCommand extends BaseCommand {
             return;
         }
 
-        Kit kit = createKit(player, kitName);
-
-        Alley.getInstance().getKitRepository().getKits().add(kit);
-        Alley.getInstance().getKitRepository().saveKit(kit);
-
-        player.sendMessage(CC.translate(Locale.KIT_CREATED.getMessage().replace("{kit-name}", kitName)));
-    }
-
-    private Kit createKit(Player player, String kitName) {
         ItemStack[] inventory = player.getInventory().getContents();
         ItemStack[] armor = player.getInventory().getArmorContents();
         Material icon = Material.DIAMOND_SWORD;
@@ -55,7 +45,16 @@ public class KitCreateCommand extends BaseCommand {
             icon = player.getItemInHand().getType();
         }
 
-        return new Kit(
+        Kit kit = createKit(kitName, inventory, armor, icon);
+
+        Alley.getInstance().getKitRepository().getKits().add(kit);
+        Alley.getInstance().getKitRepository().saveKit(kit);
+
+        player.sendMessage(CC.translate(Locale.KIT_CREATED.getMessage().replace("{kit-name}", kitName)));
+    }
+
+    private Kit createKit(String kitName, ItemStack[] inventory, ItemStack[] armor, Material icon) {
+        Kit kit = new Kit(
                 kitName,
                 "&d" + kitName,
                 "&7" + kitName + " kit description",
@@ -68,5 +67,13 @@ public class KitCreateCommand extends BaseCommand {
                 icon,
                 (byte) 0
         );
+
+        kit.addKitSetting(new KitSettingBoxingImpl());
+        kit.addKitSetting(new KitSettingBuildImpl());
+        kit.addKitSetting(new KitSettingRankedImpl());
+        kit.addKitSetting(new KitSettingSpleefImpl());
+        kit.addKitSetting(new KitSettingSumoImpl());
+
+        return kit;
     }
 }

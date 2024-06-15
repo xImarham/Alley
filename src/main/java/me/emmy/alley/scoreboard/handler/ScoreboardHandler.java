@@ -3,7 +3,7 @@ package me.emmy.alley.scoreboard.handler;
 import lombok.Getter;
 import lombok.Setter;
 import me.emmy.alley.Alley;
-import me.emmy.alley.utils.TaskUtil;
+import me.emmy.alley.utils.task.TaskUtil;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.ArrayList;

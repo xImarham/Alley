@@ -6,7 +6,6 @@ import me.emmy.alley.Alley;
 import me.emmy.alley.arena.Arena;
 import me.emmy.alley.hotbar.enums.HotbarType;
 import me.emmy.alley.kit.Kit;
-import me.emmy.alley.kit.settings.impl.KitSettingSumoImpl;
 import me.emmy.alley.match.enums.EnumMatchState;
 import me.emmy.alley.match.impl.MatchRegularImpl;
 import me.emmy.alley.match.player.GameParticipant;
@@ -20,12 +19,10 @@ import me.emmy.alley.profile.cosmetic.impl.soundeffect.AbstractSoundEffect;
 import me.emmy.alley.profile.cosmetic.impl.soundeffect.SoundEffectRepository;
 import me.emmy.alley.profile.enums.EnumProfileState;
 import me.emmy.alley.queue.Queue;
-import me.emmy.alley.utils.PlayerUtil;
 import me.emmy.alley.utils.chat.CC;
+import me.emmy.alley.utils.player.PlayerUtil;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
@@ -104,11 +101,6 @@ public abstract class AbstractMatch {
                 PlayerUtil.reset(player);
                 player.getInventory().setArmorContents(getMatchKit().getArmor());
                 player.getInventory().setContents(getMatchKit().getInventory());
-
-                /*if (matchKit.getKitSettings().stream().anyMatch(setting -> setting instanceof KitSettingSumoImpl)) {
-                    denyMovement(player);
-                    CC.broadcast("&cPLAYER SETUP HAPPENING | DENYING MOVEMENT");
-                }*/
             }
         }
     }
@@ -124,9 +116,6 @@ public abstract class AbstractMatch {
                 removeSpectator(player, false);
             }
         });
-
-        Alley.getInstance().getMatchRepository().getMatches().remove(this);
-        matchRunnable.cancel();
     }
 
     /**
@@ -193,6 +182,31 @@ public abstract class AbstractMatch {
         Snapshot snapshot = new Snapshot(player, false);
         snapshots.add(snapshot);
 
+        if (getParticipants().size() == 2) {
+            GameParticipant<MatchGamePlayerImpl> participantA = getParticipants().get(0);
+            GameParticipant<MatchGamePlayerImpl> participantB = getParticipants().get(1);
+
+            String winner;
+            String loser;
+
+            if (participantA.getPlayers().stream().allMatch(MatchGamePlayerImpl::isDead) && !participantB.getPlayers().stream().allMatch(MatchGamePlayerImpl::isDead)) {
+                winner = participantB.getPlayers().get(0).getPlayer().getName();
+                loser = participantA.getPlayers().get(0).getPlayer().getName();
+            } else if (!participantA.getPlayers().stream().allMatch(MatchGamePlayerImpl::isDead) && participantB.getPlayers().stream().allMatch(MatchGamePlayerImpl::isDead)) {
+                winner = participantA.getPlayers().get(0).getPlayer().getName();
+                loser = participantB.getPlayers().get(0).getPlayer().getName();
+            } else {
+                winner = "No winner, it's a draw!";
+                loser = "No loser, it's a draw!";
+            }
+
+            sendMessage("");
+            sendMessage(CC.translate("&d&lMatch Results:"));
+            sendMessage(CC.translate(" &aWinner: &f" + winner));
+            sendMessage(CC.translate(" &cLoser: &f" + loser));
+            sendMessage("");
+        }
+
         if (canEndRound()) {
             matchState = EnumMatchState.ENDING_ROUND;
             handleRoundEnd();
@@ -249,6 +263,9 @@ public abstract class AbstractMatch {
      * @param message The message to notify.
      */
     private void notifySpectators(String message) {
+        if (getMatchSpectators() == null) {
+            return;
+        }
         matchSpectators.stream()
                 .map(uuid -> Alley.getInstance().getServer().getPlayer(uuid))
                 .filter(Objects::nonNull)
@@ -349,6 +366,8 @@ public abstract class AbstractMatch {
             player.sendMessage(CC.translate("&cThe arena is not set up for spectating"));
             return;
         }
+
+        Alley.getInstance().getPlayerVisibility().handle(player);
 
         player.teleport(matchArena.getCenter());
         player.spigot().setCollidesWithEntities(false);
@@ -472,24 +491,4 @@ public abstract class AbstractMatch {
      * @return True if the match can end.
      */
     public abstract boolean canEndMatch();
-
-
-    /*
-    public void allowMovement(Player player) {
-        player.setWalkSpeed(0.2F);
-        player.setFoodLevel(20);
-        player.setSprinting(true);
-        player.removePotionEffect(PotionEffectType.JUMP);
-    }
-
-    public void denyMovement(Player player) {
-        if (player.getAllowFlight()) {
-            player.setAllowFlight(false);
-        }
-        player.setWalkSpeed(0.0F);
-        player.setFoodLevel(0);
-        player.setSprinting(false);
-        player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, Integer.MAX_VALUE, 128));
-    }
-    */
 }
