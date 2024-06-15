@@ -1,4 +1,4 @@
-package me.emmy.alley.competition.impl.tournament.menu;
+package me.emmy.alley.host.impl.tournament.menu;
 
 import me.emmy.alley.utils.menu.Button;
 import org.bukkit.entity.Player;

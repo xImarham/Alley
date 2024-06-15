@@ -1,7 +1,7 @@
-package me.emmy.alley.competition.impl.command;
+package me.emmy.alley.commands.donator;
 
 import me.emmy.alley.Alley;
-import me.emmy.alley.competition.menu.CompetitionsMenu;
+import me.emmy.alley.host.HostMenu;
 import me.emmy.alley.profile.enums.EnumProfileState;
 import me.emmy.alley.utils.chat.CC;
 import me.emmy.alley.utils.command.BaseCommand;
@@ -25,6 +25,6 @@ public class HostCommand extends BaseCommand {
             return;
         }
 
-        new CompetitionsMenu().openMenu(player);
+        new HostMenu().openMenu(player);
     }
 }

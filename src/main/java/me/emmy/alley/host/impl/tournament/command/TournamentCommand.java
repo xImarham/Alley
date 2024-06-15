@@ -1,4 +1,4 @@
-package me.emmy.alley.competition.impl.tournament.command;
+package me.emmy.alley.host.impl.tournament.command;
 
 import me.emmy.alley.Alley;
 import me.emmy.alley.profile.enums.EnumProfileState;
@@ -25,15 +25,18 @@ public class TournamentCommand extends BaseCommand {
         }
 
         player.sendMessage("");
-        player.sendMessage(CC.translate("&c&lTournament Help"));
-        player.sendMessage(CC.translate(" &7- &c/tournament host"));
-        player.sendMessage(CC.translate(" &7- &c/tournament join"));
-        player.sendMessage(CC.translate(" &7- &c/tournament leave"));
+        player.sendMessage(CC.translate("&d&lTournament Commands Help"));
+        player.sendMessage(CC.translate(" &f● &d/tournament host &7| Host a tournament"));
+        player.sendMessage(CC.translate(" &f● &d/tournament join &7| Join a tournament"));
+        player.sendMessage(CC.translate(" &f● &d/tournament leave &7| Leave a tournament"));
 
         if (player.hasPermission("alley.admin")) {
-            player.sendMessage(CC.translate(" &7- &c/tournament forcestart"));
-            player.sendMessage(CC.translate(" &7- &c/tournament skipround"));
-            player.sendMessage(CC.translate(" &7- &9/tournament cancel"));
+            player.sendMessage(" ");
+            player.sendMessage(CC.translate("&c&lTournament Admin Commands:"));
+            player.sendMessage(CC.translate(" &f● &c/tournament forcestart &7| Force start a tournament"));
+            player.sendMessage(CC.translate(" &f● &c/tournament skipround &7| Skip a round in a tournament"));
+            player.sendMessage(CC.translate(" &f● &c/tournament cancel &7| Cancel a tournament"));
         }
+        player.sendMessage("");
     }
 }
