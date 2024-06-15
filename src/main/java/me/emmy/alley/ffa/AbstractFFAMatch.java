@@ -46,5 +46,6 @@ public abstract class AbstractFFAMatch {
     public abstract void join(Player player);
     public abstract void setupPlayer(Player player);
     public abstract void handleDeath(Player player, Player killer);
+    public abstract void handleRespawn(Player player);
     public abstract void leave(Player player);
 }

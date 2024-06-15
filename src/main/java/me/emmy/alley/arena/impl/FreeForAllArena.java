@@ -3,7 +3,7 @@ package me.emmy.alley.arena.impl;
 import me.emmy.alley.Alley;
 import me.emmy.alley.arena.Arena;
 import me.emmy.alley.arena.ArenaType;
-import me.emmy.alley.utils.LocationUtil;
+import me.emmy.alley.utils.location.LocationUtil;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
 
@@ -44,12 +44,10 @@ public class FreeForAllArena extends Arena {
         FileConfiguration config = Alley.getInstance().getConfigHandler().getConfigByName("storage/arenas.yml");
         config.set(name, null);
         config.set(name + ".type", getType().name());
-        config.set(name + ".minimum", LocationUtil.serialize(getMinimum()));
-        config.set(name + ".maximum", LocationUtil.serialize(getMaximum()));
+        config.set(name + ".safezone.pos1", LocationUtil.serialize(getMinimum()));
+        config.set(name + ".safezone.pos2", LocationUtil.serialize(getMaximum()));
         config.set(name + ".center", LocationUtil.serialize(getCenter()));
         config.set(name + ".pos1", LocationUtil.serialize(getPos1()));
-        config.set(name + ".pos2", LocationUtil.serialize(getPos2()));
-        config.set(name + ".kits", getKits());
         config.set(name + ".enabled", isEnabled());
         Alley.getInstance().getConfigHandler().saveConfig(Alley.getInstance().getConfigHandler().getConfigFileByName("storage/arenas.yml"), config);
     }

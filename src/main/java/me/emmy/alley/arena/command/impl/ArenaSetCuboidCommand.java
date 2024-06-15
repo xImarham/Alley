@@ -1,6 +1,7 @@
 package me.emmy.alley.arena.command.impl;
 
 import me.emmy.alley.Alley;
+import me.emmy.alley.arena.ArenaType;
 import me.emmy.alley.arena.selection.Selection;
 import me.emmy.alley.utils.chat.CC;
 import me.emmy.alley.utils.command.BaseCommand;
@@ -50,6 +51,11 @@ public class ArenaSetCuboidCommand extends BaseCommand {
         String arenaName = args[0];
         if (Alley.getInstance().getArenaRepository().getArenaByName(arenaName) == null) {
             player.sendMessage(CC.translate("&cAn arena with that name does not exist!"));
+            return;
+        }
+
+        if (Alley.getInstance().getArenaRepository().getArenaByName(arenaName).getType() == ArenaType.FFA) {
+            player.sendMessage(CC.translate("&cYou cannot set cuboids for Free-For-All arenas! You must use: &4/arena setsafezone pos1/pos2&c."));
             return;
         }
 

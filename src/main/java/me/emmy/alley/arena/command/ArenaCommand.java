@@ -36,6 +36,7 @@ public class ArenaCommand extends BaseCommand {
             completion.add("toggle");
             completion.add("tool");
             completion.add("save");
+            completion.add("setsafezone");
         }
 
         return completion;
@@ -54,13 +55,16 @@ public class ArenaCommand extends BaseCommand {
         player.sendMessage(CC.translate(" &f● &d/arena kitlist &7| List all kits for an arena"));
         player.sendMessage(CC.translate(" &f● &d/arena setcenter &8(&7arenaName&8) &7| Set center position"));
         player.sendMessage(CC.translate(" &f● &d/arena setcuboid &8(&7arenaName&8) &7| Set min and max position"));
-        player.sendMessage(CC.translate(" &f● &d/arena setspawn &8(&7arenaName&8) &8<&7a/b&8> &7| Set spawn positions"));
+        player.sendMessage(CC.translate(" &f● &d/arena setspawn &8(&7arenaName&8) &8<&7pos1/pos2&8> &7| Set spawn positions"));
         player.sendMessage(CC.translate(" &f● &d/arena removekit &8(&7arenaName&8) &8(&7kitName&8) &7| Remove arena kit"));
         player.sendMessage(CC.translate(" &f● &d/arena addkit &8(&7arenaName&8) &8(&7kitName&8) &7| Add a kit to an arena"));
         player.sendMessage(CC.translate(" &f● &d/arena teleport &8(&7arenaName&8) &7| Teleport to an arena"));
         player.sendMessage(CC.translate(" &f● &d/arena toggle &8(&7arenaName&8) &7| Enable or Disable an Arena"));
         player.sendMessage(CC.translate(" &f● &d/arena tool &7| Get the Arena Selection tool"));
         player.sendMessage(CC.translate(" &f● &d/arena save &7| Save all arenas"));
+        player.sendMessage("");
+        player.sendMessage(CC.translate("&d&lFFA Arena Help:"));
+        player.sendMessage(CC.translate(" &f● &d/arena setsafezone &8(&7arenaName&8) &8<&7pos1/pos2&8> &7| Set safezone positions"));
         player.sendMessage("");
     }
 }

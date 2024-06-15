@@ -12,7 +12,6 @@ import java.util.List;
  * Project: Alley
  * Date: 20/05/2024 - 16:42
  */
-
 @Getter
 @Setter
 public class Arena {

@@ -1,6 +1,7 @@
 package me.emmy.alley.arena.command.impl;
 
 import me.emmy.alley.Alley;
+import me.emmy.alley.arena.ArenaType;
 import me.emmy.alley.utils.chat.CC;
 import me.emmy.alley.utils.command.BaseCommand;
 import me.emmy.alley.utils.command.Command;
@@ -45,6 +46,11 @@ public class ArenaAddKitCommand extends BaseCommand {
 
         if (Alley.getInstance().getArenaRepository().getArenaByName(arenaName) == null) {
             player.sendMessage(CC.translate("&cAn arena with that name does not exist!"));
+            return;
+        }
+
+        if (Alley.getInstance().getArenaRepository().getArenaByName(arenaName).getType() == ArenaType.FFA) {
+            player.sendMessage(CC.translate("&cYou cannot add kits to Free-For-All arenas!"));
             return;
         }
 
