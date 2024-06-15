@@ -6,7 +6,7 @@ import me.emmy.alley.arena.impl.FreeForAllArena;
 import me.emmy.alley.arena.impl.SharedArena;
 import me.emmy.alley.arena.impl.StandAloneArena;
 import me.emmy.alley.kit.Kit;
-import me.emmy.alley.utils.LocationUtil;
+import me.emmy.alley.utils.location.LocationUtil;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -21,7 +21,6 @@ import java.util.stream.Collectors;
  * Project: Alley
  * Date: 20/05/2024 - 16:54
  */
-
 @Getter
 public class ArenaRepository {
 
@@ -61,8 +60,8 @@ public class ArenaRepository {
                 case FFA:
                     arena = new FreeForAllArena(
                             arenaName,
-                            minimum,
-                            maximum
+                            LocationUtil.deserialize(config.getString(name + ".safezone.pos1")),
+                            LocationUtil.deserialize(config.getString(name + ".safezone.pos2"))
                     );
                     break;
                 default:

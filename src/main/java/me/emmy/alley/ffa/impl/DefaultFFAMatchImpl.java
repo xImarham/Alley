@@ -8,9 +8,9 @@ import me.emmy.alley.hotbar.enums.HotbarType;
 import me.emmy.alley.kit.Kit;
 import me.emmy.alley.profile.Profile;
 import me.emmy.alley.profile.enums.EnumProfileState;
-import me.emmy.alley.utils.PlayerUtil;
-import me.emmy.alley.utils.TaskUtil;
+import me.emmy.alley.utils.player.PlayerUtil;
 import me.emmy.alley.utils.chat.CC;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 /**
@@ -31,6 +31,11 @@ public class DefaultFFAMatchImpl extends AbstractFFAMatch {
         super(name, arena, kit, maxPlayers);
     }
 
+    /**
+     * Join a player to the FFA match
+     *
+     * @param player The player
+     */
     @Override
     public void join(Player player) {
         if (getPlayers().size() >= getMaxPlayers()) {
@@ -47,6 +52,11 @@ public class DefaultFFAMatchImpl extends AbstractFFAMatch {
         setupPlayer(player);
     }
 
+    /**
+     * Leave a player from the FFA match
+     *
+     * @param player The player
+     */
     @Override
     public void leave(Player player) {
         getPlayers().remove(player);
@@ -63,8 +73,14 @@ public class DefaultFFAMatchImpl extends AbstractFFAMatch {
         Alley.getInstance().getHotbarRepository().applyHotbarItems(player, HotbarType.LOBBY);
     }
 
+    /**
+     * Setup a player for the FFA match
+     *
+     * @param player The player
+     */
     @Override
     public void setupPlayer(Player player) {
+        CC.broadcast("&aSetting up player");
         Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
         profile.setState(EnumProfileState.FFA);
         profile.setFfaMatch(this);
@@ -77,17 +93,49 @@ public class DefaultFFAMatchImpl extends AbstractFFAMatch {
         player.getInventory().setContents(kit.getInventory());
     }
 
+    /**
+     * Handle the respawn of a player
+     *
+     * @param player The player
+     */
+    public void handleRespawn(Player player) {
+        CC.broadcast("&aSetting up player after death");
+        Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
+        profile.setState(EnumProfileState.FFA);
+        profile.setFfaMatch(this);
+
+        Arena arena = getArena();
+
+        Bukkit.getScheduler().runTaskLater(Alley.getInstance(), () -> {
+            player.teleport(arena.getPos1());
+
+            Kit kit = getKit();
+            player.getInventory().clear();
+            player.getInventory().setArmorContents(kit.getArmor());
+            player.getInventory().setContents(kit.getInventory());
+            player.updateInventory();
+        }, 1L);
+    }
+
+    /**
+     * Handle the death of a player
+     *
+     * @param player The player
+     * @param killer The killer
+     */
     @Override
     public void handleDeath(Player player, Player killer) {
         if (killer == null) {
+            CC.broadcast("&aKiller == null");
             Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
             profile.getProfileData().getFfaData().get(getKit().getName()).incrementDeaths();
 
             getPlayers().forEach(online -> online.sendMessage(CC.translate("&c" + player.getName() + " has died.")));
-            setupPlayer(player);
+            handleRespawn(player);
             return;
         }
 
+        CC.broadcast("&aKiller != null");
         Profile killerProfile = Alley.getInstance().getProfileRepository().getProfile(killer.getUniqueId());
         if (killerProfile.getProfileData().getFfaData().get(getKit().getName()) != null) {
             killerProfile.getProfileData().getFfaData().get(getKit().getName()).incrementKills();
@@ -97,12 +145,6 @@ public class DefaultFFAMatchImpl extends AbstractFFAMatch {
         profile.getProfileData().getFfaData().get(getKit().getName()).incrementDeaths();
 
         getPlayers().forEach(online -> online.sendMessage(CC.translate("&c" + player.getName() + " has been killed by " + killer.getName() + ".")));
-
-        Arena arena = getArena();
-        player.teleport(arena.getPos1());
-
-        Kit kit = getKit();
-        player.getInventory().setArmorContents(kit.getArmor());
-        player.getInventory().setContents(kit.getInventory());
+        handleRespawn(player);
     }
 }
