@@ -9,7 +9,6 @@ import me.emmy.alley.arena.listener.ArenaListener;
 import me.emmy.alley.commands.AlleyCommand;
 import me.emmy.alley.commands.AlleyReloadCommand;
 import me.emmy.alley.commands.admin.debug.StateCommand;
-import me.emmy.alley.commands.admin.debug.TestCommand;
 import me.emmy.alley.commands.admin.essential.EnchantCommand;
 import me.emmy.alley.commands.admin.essential.RenameCommand;
 import me.emmy.alley.commands.admin.management.PlaytimeCommand;
@@ -418,7 +417,6 @@ public class Alley extends JavaPlugin {
             new InventoryCommand();
 
             new ShopCommand();
-            new TestCommand();
         });
     }
 
