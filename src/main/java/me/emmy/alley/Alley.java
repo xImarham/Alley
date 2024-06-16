@@ -8,6 +8,7 @@ import me.emmy.alley.arena.command.impl.*;
 import me.emmy.alley.arena.listener.ArenaListener;
 import me.emmy.alley.commands.AlleyCommand;
 import me.emmy.alley.commands.AlleyReloadCommand;
+import me.emmy.alley.commands.admin.debug.FFAStateCommand;
 import me.emmy.alley.commands.admin.debug.StateCommand;
 import me.emmy.alley.commands.admin.essential.EnchantCommand;
 import me.emmy.alley.commands.admin.essential.RenameCommand;
@@ -364,6 +365,7 @@ public class Alley extends JavaPlugin {
 
             //debugging
             new StateCommand();
+            new FFAStateCommand();
         });
 
         Logger.logTime("Donator Command", () -> {
@@ -436,7 +438,7 @@ public class Alley extends JavaPlugin {
     }
 
     private void loadTasks() {
-        new FFASpawnTask(ffaSpawnHandler.getCuboid(), Alley.getInstance()).runTaskTimer(Alley.getInstance(), 0, 20);
+        new FFASpawnTask(this.ffaSpawnHandler.getCuboid(), this).runTaskTimer(this, 0, 20);
     }
 
     public FileConfiguration getConfig(String fileName) {

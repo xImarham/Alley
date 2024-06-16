@@ -1,22 +1,13 @@
 package me.emmy.alley.match.snapshot.menu;
 
 import lombok.AllArgsConstructor;
-import me.emmy.alley.Alley;
-import me.emmy.alley.match.snapshot.Snapshot;
 import me.emmy.alley.utils.chat.CC;
-import me.emmy.alley.utils.item.ItemBuilder;
 import me.emmy.alley.utils.menu.Button;
 import me.emmy.alley.utils.menu.Menu;
-import me.emmy.alley.utils.menu.button.CommandButton;
-import me.emmy.alley.utils.menu.button.DisplayButton;
-import org.apache.commons.lang.StringEscapeUtils;
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.potion.PotionEffect;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 @AllArgsConstructor
 public class InventorySnapshotMenu extends Menu {
