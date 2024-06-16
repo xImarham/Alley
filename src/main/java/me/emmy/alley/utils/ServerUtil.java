@@ -1,4 +1,4 @@
-package me.emmy.alley.utils.server;
+package me.emmy.alley.utils;
 
 import me.emmy.alley.utils.chat.CC;
 import org.bukkit.Bukkit;

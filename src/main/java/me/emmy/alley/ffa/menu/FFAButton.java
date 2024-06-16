@@ -2,7 +2,7 @@ package me.emmy.alley.ffa.menu;
 
 import lombok.AllArgsConstructor;
 import me.emmy.alley.ffa.AbstractFFAMatch;
-import me.emmy.alley.utils.essential.SoundUtil;
+import me.emmy.alley.utils.SoundUtil;
 import me.emmy.alley.utils.menu.Button;
 import me.emmy.alley.utils.menu.pagination.ItemBuilder;
 import org.bukkit.entity.Player;

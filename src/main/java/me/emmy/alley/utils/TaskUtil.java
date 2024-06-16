@@ -1,4 +1,4 @@
-package me.emmy.alley.utils.task;
+package me.emmy.alley.utils;
 
 import lombok.experimental.UtilityClass;
 import me.emmy.alley.Alley;

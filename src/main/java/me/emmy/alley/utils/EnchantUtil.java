@@ -1,4 +1,4 @@
-package me.emmy.alley.utils.essential;
+package me.emmy.alley.utils;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,7 +1,7 @@
 package me.emmy.alley.cooldown;
 
 import lombok.Getter;
-import me.emmy.alley.utils.cooldown.MutableTriple;
+import me.emmy.alley.utils.MutableTriple;
 
 import java.util.ArrayList;
 import java.util.List;

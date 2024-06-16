@@ -1,4 +1,4 @@
-package me.emmy.alley.utils.cooldown;
+package me.emmy.alley.utils;
 
 import lombok.Getter;
 import lombok.Setter;

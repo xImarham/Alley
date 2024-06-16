@@ -20,7 +20,9 @@ import me.emmy.alley.profile.cosmetic.impl.soundeffect.SoundEffectRepository;
 import me.emmy.alley.profile.enums.EnumProfileState;
 import me.emmy.alley.queue.Queue;
 import me.emmy.alley.utils.chat.CC;
-import me.emmy.alley.utils.player.PlayerUtil;
+import me.emmy.alley.utils.PlayerUtil;
+import net.md_5.bungee.api.chat.*;
+import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
@@ -200,10 +202,23 @@ public abstract class AbstractMatch {
                 loser = "No loser, it's a draw!";
             }
 
+            TextComponent winnerComponent = new TextComponent(CC.translate(" &fWinner: &a" + winner));
+            winnerComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/inventory " + winner));
+            winnerComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(ChatColor.GREEN + "Click to view " + winner + "'s inventory").create()));
+
+            TextComponent loserComponent = new TextComponent(CC.translate(" &fLoser: &c" + loser));
+            loserComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/inventory " + loser));
+            loserComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(ChatColor.RED + "Click to view " + loser + "'s inventory").create()));
+
             sendMessage("");
-            sendMessage(CC.translate("&d&lMatch Results:"));
-            sendMessage(CC.translate(" &aWinner: &f" + winner));
-            sendMessage(CC.translate(" &cLoser: &f" + loser));
+            sendMessage(CC.MENU_BAR);
+            TextComponent message = new TextComponent(CC.translate("Match Results:"));
+            message.addExtra(new TextComponent("\n"));
+            message.addExtra(winnerComponent);
+            message.addExtra(new TextComponent("\n"));
+            message.addExtra(loserComponent);
+            sendSpigotMessage(message);
+            sendMessage(CC.MENU_BAR);
             sendMessage("");
         }
 
@@ -460,6 +475,22 @@ public abstract class AbstractMatch {
             Player player = Alley.getInstance().getServer().getPlayer(uuid);
             if (player != null) {
                 player.sendMessage(message);
+            }
+        });
+    }
+
+    public void sendSpigotMessage(BaseComponent message) {
+        getParticipants().forEach(gameParticipant -> gameParticipant.getPlayers().forEach(uuid -> {
+            Player player = Alley.getInstance().getServer().getPlayer(uuid.getUuid());
+            if (player != null) {
+                player.spigot().sendMessage(message);
+            }
+        }));
+
+        getMatchSpectators().forEach(uuid -> {
+            Player player = Alley.getInstance().getServer().getPlayer(uuid);
+            if (player != null) {
+                player.spigot().sendMessage(message);
             }
         });
     }

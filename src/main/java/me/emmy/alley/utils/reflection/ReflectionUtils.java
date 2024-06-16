@@ -603,4 +603,16 @@ public final class ReflectionUtils {
             return true;
         }
     }
+
+    public static String getVersion() {
+        return Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
+    }
+
+    public static Class<?> getCraftBukkitClassFromName(String name) {
+        try {
+            return Class.forName("org.bukkit.craftbukkit." + getVersion() + "." + name);
+        } catch (ClassNotFoundException exception) {
+            throw new RuntimeException(exception);
+        }
+    }
 }

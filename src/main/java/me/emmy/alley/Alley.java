@@ -9,6 +9,7 @@ import me.emmy.alley.arena.listener.ArenaListener;
 import me.emmy.alley.commands.AlleyCommand;
 import me.emmy.alley.commands.AlleyReloadCommand;
 import me.emmy.alley.commands.admin.debug.StateCommand;
+import me.emmy.alley.commands.admin.debug.TestCommand;
 import me.emmy.alley.commands.admin.essential.EnchantCommand;
 import me.emmy.alley.commands.admin.essential.RenameCommand;
 import me.emmy.alley.commands.admin.management.PlaytimeCommand;
@@ -64,6 +65,7 @@ import me.emmy.alley.match.command.player.SpectateCommand;
 import me.emmy.alley.match.listener.MatchListener;
 import me.emmy.alley.match.player.visibility.PlayerVisibility;
 import me.emmy.alley.match.snapshot.SnapshotRepository;
+import me.emmy.alley.match.snapshot.command.InventoryCommand;
 import me.emmy.alley.party.PartyRepository;
 import me.emmy.alley.party.PartyRequest;
 import me.emmy.alley.party.command.PartyCommand;
@@ -121,7 +123,7 @@ import me.emmy.alley.utils.chat.CC;
 import me.emmy.alley.utils.chat.Logger;
 import me.emmy.alley.utils.command.CommandFramework;
 import me.emmy.alley.utils.menu.MenuListener;
-import me.emmy.alley.utils.server.ServerUtil;
+import me.emmy.alley.utils.ServerUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Difficulty;
 import org.bukkit.World;
@@ -413,7 +415,10 @@ public class Alley extends JavaPlugin {
             new ProfileMenuCommand();
             new MatchSettingsCommand();
 
+            new InventoryCommand();
+
             new ShopCommand();
+            new TestCommand();
         });
     }
 

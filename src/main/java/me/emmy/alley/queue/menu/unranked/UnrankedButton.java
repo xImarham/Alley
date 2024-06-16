@@ -6,7 +6,7 @@ import me.emmy.alley.hotbar.enums.HotbarType;
 import me.emmy.alley.kit.Kit;
 import me.emmy.alley.profile.Profile;
 import me.emmy.alley.queue.Queue;
-import me.emmy.alley.utils.player.PlayerUtil;
+import me.emmy.alley.utils.PlayerUtil;
 import me.emmy.alley.utils.menu.Button;
 import me.emmy.alley.utils.menu.pagination.ItemBuilder;
 import org.bukkit.entity.Player;

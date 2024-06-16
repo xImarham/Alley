@@ -15,7 +15,7 @@ import me.emmy.alley.match.player.GameParticipant;
 import me.emmy.alley.match.player.impl.MatchGamePlayerImpl;
 import me.emmy.alley.profile.Profile;
 import me.emmy.alley.profile.enums.EnumProfileState;
-import me.emmy.alley.utils.player.PlayerUtil;
+import me.emmy.alley.utils.PlayerUtil;
 import me.emmy.alley.utils.location.RayTracerUtil;
 import me.emmy.alley.utils.chat.CC;
 import org.bukkit.Location;

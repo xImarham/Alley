@@ -1,4 +1,4 @@
-package me.emmy.alley.utils.essential;
+package me.emmy.alley.utils;
 
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
