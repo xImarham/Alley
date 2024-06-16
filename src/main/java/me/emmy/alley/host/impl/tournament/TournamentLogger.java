@@ -56,7 +56,7 @@ public class TournamentLogger {
                         .replace("{players}", String.valueOf(tournament.getPlayers().size()))
                         .replace("{maxPlayers}", String.valueOf(tournament.getMaxPlayers()))
                         .replace("{remaining}", String.valueOf(tournament.getMaxPlayers() - tournament.getPlayers().size()));
-                messages.add(new TextComponent(CC.translate(formattedMessage)));
+               messages.add(new TextComponent(CC.translate(formattedMessage)));
             }
         }
 
@@ -66,10 +66,10 @@ public class TournamentLogger {
     }
 
     private static @NotNull TextComponent getTextComponent() {
-        TextComponent clickableJoinMessage = new TextComponent(ConfigHandler.getInstance().getMessagesConfig().getString(CC.translate("tournament-broadcast.waiting.clickable-format")));
+        TextComponent clickableJoinMessage = new TextComponent(CC.translate(ConfigHandler.getInstance().getMessagesConfig().getString("tournament-broadcast.waiting.clickable-format")));
         clickableJoinMessage.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/tournament join"));
-        String hover = ConfigHandler.getInstance().getMessagesConfig().getString(CC.translate("tournament-broadcast.waiting.clickable-hover"));
-        BaseComponent[] hoverComponent = new ComponentBuilder(hover).create();
+        String hover = ConfigHandler.getInstance().getMessagesConfig().getString("tournament-broadcast.waiting.clickable-hover");
+        BaseComponent[] hoverComponent = new ComponentBuilder(CC.translate(hover)).create();
         clickableJoinMessage.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, hoverComponent));
         return clickableJoinMessage;
     }
