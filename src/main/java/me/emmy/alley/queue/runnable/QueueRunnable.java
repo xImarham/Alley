@@ -9,9 +9,12 @@ import me.emmy.alley.match.AbstractMatch;
 import me.emmy.alley.match.impl.MatchRegularImpl;
 import me.emmy.alley.match.player.GameParticipant;
 import me.emmy.alley.match.player.impl.MatchGamePlayerImpl;
+import me.emmy.alley.profile.enums.EnumProfileState;
 import me.emmy.alley.queue.Queue;
 import me.emmy.alley.queue.QueueProfile;
 import me.emmy.alley.utils.chat.CC;
+import me.emmy.alley.utils.chat.Logger;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -44,11 +47,19 @@ public class QueueRunnable implements Runnable {
         queue.getProfiles().forEach(QueueProfile::queueRange);
         queue.getProfiles().forEach(profile -> {
             if (profile.getElapsedTime() >= 60000) {
-                queue.getProfiles().remove(profile);
-                queue.removePlayer(profile);
-                Player player = Alley.getInstance().getServer().getPlayer(profile.getUuid());
-                player.sendMessage(CC.translate("&cYou have been removed from the queue due to inactivity."));
-                Alley.getInstance().getHotbarRepository().applyHotbarItems(player, HotbarType.LOBBY);
+
+                // remi, this check is mainly because of the "/match start" command which breaks
+                // the match if the player was queueing so you might just leave this as it is
+
+                if (queue.getProfile(profile.getUuid()).getState().equals(EnumProfileState.WAITING)) {
+                    queue.getProfiles().remove(profile);
+                    queue.removePlayer(profile);
+                    Player player = Alley.getInstance().getServer().getPlayer(profile.getUuid());
+                    player.sendMessage(CC.translate("&cYou have been removed from the queue due to inactivity."));
+                    Alley.getInstance().getHotbarRepository().applyHotbarItems(player, HotbarType.LOBBY);
+                } else {
+                    Logger.logError("&cPlayer &4" + Bukkit.getPlayer(profile.getUuid()) + "&c couldn't be removed from the queue because their state was changed.");
+                }
             }
         });
 
