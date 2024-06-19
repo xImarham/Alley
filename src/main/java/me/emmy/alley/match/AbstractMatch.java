@@ -120,6 +120,7 @@ public abstract class AbstractMatch {
         });
 
         Alley.getInstance().getMatchRepository().getMatches().remove(this);
+        matchRunnable.cancel();
     }
 
     /**
