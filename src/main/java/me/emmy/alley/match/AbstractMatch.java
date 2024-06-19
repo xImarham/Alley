@@ -118,6 +118,8 @@ public abstract class AbstractMatch {
                 removeSpectator(player, false);
             }
         });
+
+        Alley.getInstance().getMatchRepository().getMatches().remove(this);
     }
 
     /**
