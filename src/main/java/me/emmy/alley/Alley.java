@@ -18,6 +18,7 @@ import me.emmy.alley.config.ConfigHandler;
 import me.emmy.alley.cooldown.CooldownRepository;
 import me.emmy.alley.database.MongoService;
 import me.emmy.alley.database.profile.impl.MongoProfileImpl;
+import me.emmy.alley.essential.command.InvSeeCommand;
 import me.emmy.alley.ffa.FFARepository;
 import me.emmy.alley.ffa.combat.CombatManager;
 import me.emmy.alley.ffa.command.admin.*;
@@ -366,6 +367,8 @@ public class Alley extends JavaPlugin {
             //debugging
             new StateCommand();
             new FFAStateCommand();
+
+            new InvSeeCommand();
         });
 
         Logger.logTime("Donator Command", () -> {

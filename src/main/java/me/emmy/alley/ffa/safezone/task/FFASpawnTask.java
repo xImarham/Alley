@@ -19,7 +19,6 @@ import java.util.UUID;
  * Project: Alley
  * Date: -
  */
-
 public class FFASpawnTask extends BukkitRunnable {
 
     private final Cuboid cuboid;
