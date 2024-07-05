@@ -196,9 +196,9 @@ public class Alley extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        ServerUtil.disconnectPlayers();
-
         profileRepository.getProfiles().forEach((uuid, profile) -> profile.save());
+
+        ServerUtil.disconnectPlayers();
         kitRepository.saveKits();
         ffaRepository.saveFFAMatches();
 
