@@ -4,11 +4,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by Emmy
- * Project: Alley
- * Date: 28/05/2024 - 20:53
+ * @author Emmy
+ * @project Alley
+ * @date 28/05/2024 - 20:53
  */
-
 public class EnchantUtil {
 
     private static final Map<String, String> enchantment = new HashMap<>();

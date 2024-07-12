@@ -12,9 +12,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Emmy
- * Project: Practice
- * Date: 28/04/2024 - 21:49
+ * @author Emmy
+ * @project Practice
+ * @date 28/04/2024 - 21:49
  */
 @Getter
 @Setter

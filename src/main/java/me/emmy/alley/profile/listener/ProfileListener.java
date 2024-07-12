@@ -18,6 +18,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
+
 public class ProfileListener implements Listener {
     
     private final ProfileRepository profileRepository = Alley.getInstance().getProfileRepository();

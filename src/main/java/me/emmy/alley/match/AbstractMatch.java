@@ -33,6 +33,11 @@ import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+/**
+ * @author Remi
+ * @project Alley
+ * @date 5/21/2024
+ */
 @Getter
 @Setter
 public abstract class AbstractMatch {

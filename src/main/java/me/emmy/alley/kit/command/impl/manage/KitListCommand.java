@@ -8,11 +8,10 @@ import me.emmy.alley.utils.command.CommandArgs;
 import org.bukkit.command.CommandSender;
 
 /**
- * Created by Emmy
- * Project: Practice
- * Date: 28/04/2024 - 22:07
+ * @author Emmy
+ * @project Practice
+ * @date 28/04/2024 - 22:07
  */
-
 public class KitListCommand extends BaseCommand {
     @Override
     @Command(name = "kit.list", permission = "alley.admin")

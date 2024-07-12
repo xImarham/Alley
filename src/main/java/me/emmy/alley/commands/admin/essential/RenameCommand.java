@@ -14,12 +14,11 @@ import java.util.Arrays;
 import java.util.stream.Collectors;
 
 /**
- * Created by Emmy
- * Project: Alley
- * Date: 28/05/2024 - 20:16
+ * @author Emmy
+ * @project Alley
+ * @date 28/05/2024 - 20:16
  * I skidded this from FlowerCore !!!!!!!!!!!!!!!!!!!!
  */
-
 public class RenameCommand extends BaseCommand {
     @Override
     @Command(name = "rename", permission = "alley.admin")

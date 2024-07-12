@@ -7,9 +7,9 @@ import me.emmy.alley.utils.command.CommandArgs;
 import org.bukkit.entity.Player;
 
 /**
- * Created by Emmy
- * Project: alley
- * Date: 01/06/2024 - 00:14
+ * @author Emmy
+ * @project Alley
+ * @date 01/06/2024 - 00:14
  */
 public class FFACommand extends BaseCommand {
     @Override

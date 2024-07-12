@@ -2,6 +2,11 @@ package me.emmy.alley.match.enums;
 
 import lombok.Getter;
 
+/**
+ * @author Remi
+ * @project Alley
+ * @date 5/21/2024
+ */
 @Getter
 public enum EnumMatchState {
 

@@ -11,9 +11,9 @@ import org.bukkit.inventory.ItemStack;
 import java.util.List;
 
 /**
- * Created by Emmy
- * Project: Alley
- * Date: 15/06/2024 - 23:57
+ * @author Emmy
+ * @project Alley
+ * @date 15/06/2024 - 23:57
  */
 @AllArgsConstructor
 public class CommandButton extends Button {

@@ -11,11 +11,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 /**
- * Created by Emmy
- * Project: Alley
- * Date: 28/05/2024 - 20:28
+ * @author Emmy
+ * @project Alley
+ * @date 28/05/2024 - 20:28
  */
-
 public class EnchantCommand extends BaseCommand {
 
     @Override

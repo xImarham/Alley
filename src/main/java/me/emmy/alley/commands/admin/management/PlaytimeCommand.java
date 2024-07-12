@@ -11,12 +11,11 @@ import org.bukkit.Statistic;
 import org.bukkit.entity.Player;
 
 /**
- * Created by Emmy
- * Project: Alley
- * Date: 24/05/2024 - 18:45
- * Credit: dori
+ * @author Emmy
+ * @project Alley
+ * @date 24/05/2024 - 18:45
+ * @credit dori
  */
-
 public class PlaytimeCommand extends BaseCommand {
     @Override
     @Command(name = "playtime", permission = "alley.admin")

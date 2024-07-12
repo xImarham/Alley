@@ -1,9 +1,9 @@
 package me.emmy.alley.locale;
 
 /**
- * Created by Emmy
- * Project: Alley
- * Date: 19/04/2024 - 17:49
+ * @author Emmy
+ * @project Alley
+ * @date 19/04/2024 - 17:49
  */
 
 public class ErrorMessage {

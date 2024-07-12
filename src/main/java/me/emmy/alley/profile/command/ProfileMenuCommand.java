@@ -7,9 +7,9 @@ import me.emmy.alley.utils.command.CommandArgs;
 import org.bukkit.entity.Player;
 
 /**
- * Created by Emmy
- * Project: Alley
- * Date: 01/06/2024 - 22:43
+ * @author Emmy
+ * @project Alley
+ * @date 01/06/2024 - 22:43
  */
 public class ProfileMenuCommand extends BaseCommand {
     @Override

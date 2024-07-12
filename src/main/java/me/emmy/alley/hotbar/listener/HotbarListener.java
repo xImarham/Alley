@@ -14,6 +14,11 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
+/**
+ * @author Remi
+ * @project Alley
+ * @date 5/27/2024
+ */
 public class HotbarListener implements Listener {
 
     @EventHandler

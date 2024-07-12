@@ -21,9 +21,9 @@ import java.util.Arrays;
 import java.util.Map;
 
 /**
- * Created by Emmy
- * Project: Alley
- * Date: 25/05/2024 - 14:51
+ * @author Emmy
+ * @project Alley
+ * @date 25/05/2024 - 14:51
  */
 
 public class LeaderboardMenu extends Menu {

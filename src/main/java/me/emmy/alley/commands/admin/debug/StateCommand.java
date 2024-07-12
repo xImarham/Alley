@@ -9,9 +9,9 @@ import me.emmy.alley.utils.command.CommandArgs;
 import org.bukkit.entity.Player;
 
 /**
- * Created by Emmy
- * Project: alley
- * Date: 30/05/2024 - 12:15
+ * @author Emmy
+ * @project Alley
+ * @date 30/05/2024 - 12:15
  */
 public class StateCommand extends BaseCommand {
     @Override

@@ -9,6 +9,11 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
 
+/**
+ * @author Remi
+ * @project Alley
+ * @date 5/27/2024
+ */
 @Getter
 public class HotbarRepository {
 

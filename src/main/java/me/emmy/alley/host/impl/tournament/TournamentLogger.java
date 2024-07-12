@@ -13,9 +13,9 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Created by Emmy
- * Project: Alley
- * Date: 15/06/2024 - 17:08
+ * @author Emmy
+ * @project Alley
+ * @date 15/06/2024 - 17:08
  */
 public class TournamentLogger {
 

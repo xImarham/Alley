@@ -12,11 +12,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 /**
- * Created by Emmy
- * Project: Alley
- * Date: 29/05/2024 - 19:05
+ * @author Emmy
+ * @project Alley
+ * @date 29/05/2024 - 19:05
  */
-
 public class PartyKickCommand extends BaseCommand {
     @Override
     @Command(name = "party.kick", aliases = "p.kick")

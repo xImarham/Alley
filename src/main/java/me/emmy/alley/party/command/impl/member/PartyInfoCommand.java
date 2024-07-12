@@ -17,9 +17,9 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
- * Created by Emmy
- * Project: Alley
- * Date: 24/05/2024 - 19:17
+ * @author Emmy
+ * @project Alley
+ * @date 24/05/2024 - 19:17
  */
 public class PartyInfoCommand extends BaseCommand {
     @Override

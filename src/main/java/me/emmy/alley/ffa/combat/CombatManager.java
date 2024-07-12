@@ -14,7 +14,7 @@ import java.util.Set;
 
 /**
  * Created by Infames
- * Date: 23/07/2021 @ 20:08
+ * @date 23/07/2021 @ 20:08
  */
 @Getter
 public class CombatManager extends BukkitRunnable {

@@ -14,6 +14,11 @@ import org.bukkit.Bukkit;
 
 import java.util.UUID;
 
+/**
+ * @author Emmy
+ * @project Alley
+ * @date 19/05/2024 - 22:35
+ */
 @Getter
 @Setter
 public class Profile {

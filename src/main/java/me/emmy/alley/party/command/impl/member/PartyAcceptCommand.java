@@ -14,9 +14,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 /**
- * Created by Emmy
- * Project: Alley
- * Date: 25/05/2024 - 18:33
+ * @author Emmy
+ * @project Alley
+ * @date 25/05/2024 - 18:33
  */
 public class PartyAcceptCommand extends BaseCommand {
     @Override

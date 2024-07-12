@@ -4,11 +4,10 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * Created by Emmy
- * Project: Alley
- * Date: 25/05/2024 - 15:22
+ * @author Emmy
+ * @project Alley
+ * @date 25/05/2024 - 15:22
  */
-
 @Getter
 @Setter
 public class ProfileSettingData {

@@ -8,9 +8,9 @@ import me.emmy.alley.utils.command.CommandArgs;
 import org.bukkit.entity.Player;
 
 /**
- * Created by Emmy
- * Project: Alley
- * Date: 06/06/2024 - 17:34
+ * @author Emmy
+ * @project Alley
+ * @date 06/06/2024 - 17:34
  */
 public class AlleyReloadCommand extends BaseCommand {
     @Override

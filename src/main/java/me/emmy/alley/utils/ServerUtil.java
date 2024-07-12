@@ -4,9 +4,9 @@ import me.emmy.alley.utils.chat.CC;
 import org.bukkit.Bukkit;
 
 /**
- * Created by Emmy
- * Project: Alley
- * Date: 01/06/2024 - 13:48
+ * @author Emmy
+ * @project Alley
+ * @date 01/06/2024 - 13:48
  */
 public class ServerUtil {
     public static void disconnectPlayers() {

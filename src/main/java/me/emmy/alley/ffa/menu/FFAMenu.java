@@ -17,11 +17,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by Emmy
- * Project: Alley
- * Date: 23/05/2024 - 01:28
+ * @author Emmy
+ * @project Alley
+ * @date 23/05/2024 - 01:28
  */
-
 @AllArgsConstructor
 public class FFAMenu extends Menu {
 

@@ -8,9 +8,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 /**
- * Created by Emmy
- * Project: Alley
- * Date: 20/06/2024 - 01:15
+ * @author Emmy
+ * @project Alley
+ * @date 20/06/2024 - 01:15
  */
 public class InvSeeCommand extends BaseCommand {
     @Override

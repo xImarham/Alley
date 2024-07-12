@@ -5,9 +5,9 @@ import me.emmy.alley.Alley;
 import me.emmy.alley.utils.chat.CC;
 
 /**
- * Created by Emmy
- * Project: Alley
- * Date: 19/04/2024 - 17:41
+ * @author Emmy
+ * @project Alley
+ * @date 19/04/2024 - 17:41
  */
 
 @Getter

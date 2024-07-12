@@ -10,11 +10,10 @@ import me.emmy.alley.utils.command.CommandArgs;
 import org.bukkit.entity.Player;
 
 /**
- * Created by Emmy
- * Project: Alley
- * Date: 21/05/2024 - 00:15
+ * @author Emmy
+ * @project Alley
+ * @date 21/05/2024 - 00:15
  */
-
 public class KitSetEditorSlotCommand extends BaseCommand {
     @Override
     @Command(name = "kit.seteditorslot", permission = "alley.admin")

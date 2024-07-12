@@ -13,11 +13,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 /**
- * Created by Emmy
- * Project: Alley
- * Date: 20/05/2024 - 13:06
+ * @author Emmy
+ * @project Alley
+ * @date 20/05/2024 - 13:06
  */
-
 public class KitCreateCommand extends BaseCommand {
     @Override
     @Command(name = "kit.create", permission = "alley.admin")

@@ -13,9 +13,9 @@ import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
 
 /**
- * Created by Emmy
- * Project: Alley
- * Date: 12/06/2024 - 22:14
+ * @author Emmy
+ * @project Alley
+ * @date 12/06/2024 - 22:14
  */
 @Getter
 @Setter

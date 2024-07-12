@@ -1,16 +1,18 @@
 package me.emmy.alley.utils.location;
 
+import lombok.experimental.UtilityClass;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.util.Vector;
 
 /**
- * Created by Emmy
- * Project: Alley
- * Date: 10/06/2024 - 20:50
+ * @author Emmy
+ * @project Alley
+ * @date 10/06/2024 - 20:50
  */
+@UtilityClass
 public class RayTracerUtil {
-    public static Location rayTrace(Location startLocation, Vector direction) {
+    public Location rayTrace(Location startLocation, Vector direction) {
         Location currentLocation = startLocation.clone();
         while (currentLocation.getBlock().getType() == Material.AIR) {
             currentLocation.add(direction);

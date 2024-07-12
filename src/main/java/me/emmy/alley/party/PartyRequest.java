@@ -10,11 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Emmy
- * Project: Alley
- * Date: 25/05/2024 - 18:44
+ * @author Emmy
+ * @project Alley
+ * @date 25/05/2024 - 18:44
  */
-
 @Getter
 @Setter
 public class PartyRequest {

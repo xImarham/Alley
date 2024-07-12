@@ -10,9 +10,9 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
 /**
- * Created by Emmy
- * Project: Alley
- * Date: 17/05/2024 - 17:47
+ * @author Emmy
+ * @project Alley
+ * @date 17/05/2024 - 17:47
  */
 @Getter
 public class SpawnHandler {

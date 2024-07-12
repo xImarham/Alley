@@ -6,6 +6,11 @@ import me.emmy.alley.match.player.GameParticipant;
 import me.emmy.alley.match.player.impl.MatchGamePlayerImpl;
 import me.emmy.alley.queue.Queue;
 
+/**
+ * @author Remi
+ * @project Alley
+ * @date 5/21/2024
+ */
 public class MatchLivesRegularImpl extends MatchRegularImpl {
 
     /**

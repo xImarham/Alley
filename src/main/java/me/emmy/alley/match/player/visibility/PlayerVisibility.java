@@ -13,10 +13,10 @@ import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 
 /**
- * Created by Emmy
- * Project: Alley
- * Date: 13/06/2024 - 23:24
- * Credit: Joeleoli
+ * @author Emmy
+ * @project Alley
+ * @date 13/06/2024 - 23:24
+ * @credit joel evans
  */
 @Getter
 public class PlayerVisibility {

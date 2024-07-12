@@ -19,9 +19,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by Emmy
- * Project: Alley
- * Date: 23/05/2024 - 01:27
+ * @author Emmy
+ * @project Alley
+ * @date 23/05/2024 - 01:27
  */
 @AllArgsConstructor
 public class ProfileMenu extends Menu {
@@ -86,16 +86,16 @@ public class ProfileMenu extends Menu {
                 " &d● &fProgress: &dnull%"
         )));
 
-        String[] nextDivisionAndLevel = abstractDivision.getNextDivisionAndLevelArray();
+        /*String[] nextDivisionAndLevel = abstractDivision.getNextDivisionAndLevelArray();
         int eloNeeded = abstractDivision.getEloNeededForDivision(EnumDivisionTier.valueOf(nextDivisionAndLevel[0].toUpperCase()), EnumDivisionLevel.valueOf("LEVEL_" + nextDivisionAndLevel[1]));
-        String progressBar = abstractDivision.generateProgressBar(eloNeeded);
+        String progressBar = abstractDivision.generateProgressBar(eloNeeded);*/
         buttons.put(14, new ProfileButton("&d&lDivisions", new ItemStack(Material.FEATHER), Arrays.asList(
                 "",
-                " &d● &fCurrent Division: &d" + abstractDivision.getTier().getName(),
-                " &d● &fCurrent Level: &d" + abstractDivision.getLevel().getName(),
+                //" &d● &fCurrent Division: &d" + abstractDivision.getTier().getName(),
+                //" &d● &fCurrent Level: &d" + abstractDivision.getLevel().getName(),
                 "",
-                " &d● &fNext Division: &d" + abstractDivision.getNextDivisionAndLevel(),
-                " &d● &fProgress: &d" + progressBar,
+                //" &d● &fNext Division: &d" + abstractDivision.getNextDivisionAndLevel(),
+                " &d● &fProgress: &d" + "null",
                 "",
                 "&aClick to view all divisions!"
         )));

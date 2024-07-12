@@ -12,9 +12,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 /**
- * Created by Emmy
- * Project: Alley
- * Date: 15/06/2024 - 22:19
+ * @author Emmy
+ * @project Alley
+ * @date 15/06/2024 - 22:19
  */
 public class InventoryCommand extends BaseCommand {
     @Override

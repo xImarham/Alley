@@ -17,7 +17,11 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
+/**
+ * @author Emmy
+ * @project Alley
+ * @date 27/03/2024 - 14:27
+ */
 public class ScoreboardAdapter implements AssembleAdapter {
 
     @Override

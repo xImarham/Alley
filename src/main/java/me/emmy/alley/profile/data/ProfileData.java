@@ -10,11 +10,10 @@ import me.emmy.alley.profile.data.impl.*;
 import java.util.Map;
 
 /**
- * Created by Emmy
- * Project: Alley
- * Date: 21/05/2024 - 22:03
+ * @author Emmy
+ * @project Alley
+ * @date 21/05/2024 - 22:03
  */
-
 @Getter
 @Setter
 public class ProfileData {

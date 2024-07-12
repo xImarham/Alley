@@ -14,11 +14,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 /**
- * Created by Emmy
- * Project: Alley
- * Date: 25/05/2024 - 18:27
+ * @author Emmy
+ * @project Alley
+ * @date 25/05/2024 - 18:27
  */
-
 public class PartyInviteCommand extends BaseCommand {
     @Override
     @Command(name = "party.invite", aliases = "p.invite")

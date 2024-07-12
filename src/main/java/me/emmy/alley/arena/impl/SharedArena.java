@@ -8,11 +8,10 @@ import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
 
 /**
- * Created by Emmy
- * Project: Alley
- * Date: 20/05/2024 - 19:14
+ * @author Emmy
+ * @project Alley
+ * @date 20/05/2024 - 19:14
  */
-
 public class SharedArena extends Arena {
 
     /**

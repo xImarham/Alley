@@ -4,9 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- * Created by Emmy
- * Project: Alley
- * Date: 20/05/2024 - 19:34
+ * @author Emmy
+ * @project Alley
+ * @date 20/05/2024 - 19:34
  */
 @Getter
 @AllArgsConstructor

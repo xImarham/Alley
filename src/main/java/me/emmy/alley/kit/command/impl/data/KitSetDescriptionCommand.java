@@ -12,11 +12,10 @@ import org.bukkit.entity.Player;
 import java.util.Arrays;
 
 /**
- * Created by Emmy
- * Project: Practice
- * Date: 28/04/2024 - 22:46
+ * @author Emmy
+ * @project Practice
+ * @date 28/04/2024 - 22:46
  */
-
 public class KitSetDescriptionCommand extends BaseCommand {
     @Override
     @Command(name = "kit.description", aliases = "kit.setdesc",permission = "alley.admin")

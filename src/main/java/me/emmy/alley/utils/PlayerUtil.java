@@ -10,9 +10,9 @@ import org.bukkit.metadata.FixedMetadataValue;
 import java.util.UUID;
 
 /**
- * Created by Emmy
- * Project: Practice
- * Date: 29/04/2024 - 18:53
+ * @author Emmy
+ * @project Practice
+ * @date 29/04/2024 - 18:53
  */
 public class PlayerUtil {
 

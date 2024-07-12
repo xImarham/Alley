@@ -8,9 +8,9 @@ import java.util.Collections;
 import java.util.Map;
 
 /**
- * Created by Emmy
- * Project: Alley
- * Date: 08/06/2024 - 21:14
+ * @author Emmy
+ * @project Alley
+ * @date 08/06/2024 - 21:14
  */
 public class TournamentMenu extends Menu {
     @Override

@@ -13,9 +13,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 
 /**
- * Created by Emmy
- * Project: Alley
- * Date: 21/05/2024 - 21:40
+ * @author Emmy
+ * @project Alley
+ * @date 21/05/2024 - 21:40
  */
 @Getter
 public class MongoService {

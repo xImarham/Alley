@@ -11,9 +11,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by Emmy
- * Project: Alley
- * Discord: dsc.gg/emmiesa
+ * @author Emmy
+ * @project Alley
+ * @date 19/04/2024 - 17:39
  */
 @Getter
 public class ConfigHandler {

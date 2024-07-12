@@ -10,9 +10,9 @@ import me.emmy.alley.utils.command.CommandArgs;
 import org.bukkit.entity.Player;
 
 /**
- * Created by Emmy
- * Project: Alley
- * Date: 15/06/2024 - 19:07
+ * @author Emmy
+ * @project Alley
+ * @date 15/06/2024 - 19:07
  */
 public class TournamentLeaveCommand extends BaseCommand {
     @Override

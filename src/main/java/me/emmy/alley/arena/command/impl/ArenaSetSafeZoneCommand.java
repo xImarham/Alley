@@ -9,9 +9,9 @@ import me.emmy.alley.utils.command.CommandArgs;
 import org.bukkit.entity.Player;
 
 /**
- * Created by Emmy
- * Project: Alley
- * Date: 12/06/2024 - 21:56
+ * @author Emmy
+ * @project Alley
+ * @date 12/06/2024 - 21:56
  */
 public class ArenaSetSafeZoneCommand extends BaseCommand {
     @Override

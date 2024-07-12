@@ -13,9 +13,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Emmy
- * Project: alley
- * Date: 01/06/2024 - 00:08
+ * @author Emmy
+ * @project Alley
+ * @date 01/06/2024 - 00:08
  */
 public class ArenaTeleportCommand extends BaseCommand {
 

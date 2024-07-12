@@ -18,6 +18,11 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * @author Remi
+ * @project Alley
+ * @date 5/21/2024
+ */
 @Getter
 @Setter
 public class MatchRegularImpl extends AbstractMatch {

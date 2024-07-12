@@ -2,9 +2,9 @@ package me.emmy.alley.utils;
 
 
 /**
- * Created by Ryzeon
- * Project: FrozedHubDeluxe
- * Date: 10/11/2020 @ 13:30
+ * @author Ryzeon
+ * @project FrozedHubDeluxe
+ * @date 10/11/2020 @ 13:30
  */
 
 public class NumberUtils {

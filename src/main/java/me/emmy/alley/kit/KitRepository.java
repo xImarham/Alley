@@ -15,9 +15,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Emmy
- * Project: Alley
- * Date: 19/05/2024 - 23:30
+ * @author Emmy
+ * @project Alley
+ * @date 19/05/2024 - 23:30
  */
 @Getter
 public class KitRepository {

@@ -17,9 +17,9 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
 /**
- * Created by Emmy
- * Project: Alley
- * Date: 20/05/2024 - 16:54
+ * @author Emmy
+ * @project Alley
+ * @date 20/05/2024 - 16:54
  */
 @Getter
 public class ArenaRepository {

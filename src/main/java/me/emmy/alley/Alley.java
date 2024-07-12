@@ -118,19 +118,18 @@ import me.emmy.alley.spawn.command.SetSpawnCommand;
 import me.emmy.alley.spawn.command.SpawnCommand;
 import me.emmy.alley.spawn.command.SpawnItemsCommand;
 import me.emmy.alley.spawn.listener.SpawnListener;
+import me.emmy.alley.utils.ServerUtil;
 import me.emmy.alley.utils.assemble.Assemble;
 import me.emmy.alley.utils.assemble.AssembleStyle;
 import me.emmy.alley.utils.chat.CC;
 import me.emmy.alley.utils.chat.Logger;
 import me.emmy.alley.utils.command.CommandFramework;
 import me.emmy.alley.utils.menu.MenuListener;
-import me.emmy.alley.utils.ServerUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Difficulty;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -202,11 +201,17 @@ public class Alley extends JavaPlugin {
         kitRepository.saveKits();
         ffaRepository.saveFFAMatches();
 
-        for (Entity entity : this.getServer().getWorld("world").getEntities()) {
+        /*for (Entity entity : this.getServer().getWorld("world").getEntities()) {
             if (entity.getType() == EntityType.DROPPED_ITEM) {
                 entity.remove();
             }
-        }
+        }*/
+
+        Bukkit.getWorlds().forEach(world -> world.getEntities().forEach(entity -> {
+            if (entity.getType() == EntityType.DROPPED_ITEM) {
+                entity.remove();
+            }
+        }));
 
         CC.pluginDisabled();
     }

@@ -11,11 +11,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Emmy
- * Project: Practice
- * Date: 02/05/2024 - 19:02
+ * @author Emmy
+ * @project Practice
+ * @date 02/05/2024 - 19:02
  */
-
 public class ArenaCommand extends BaseCommand {
 
     @Completer(name = "arena", aliases = "arena")

@@ -15,9 +15,9 @@ import org.bukkit.inventory.ItemStack;
 import java.util.List;
 
 /**
- * Created by Emmy
- * Project: Alley
- * Date: 23/05/2024 - 01:27
+ * @author Emmy
+ * @project Alley
+ * @date 23/05/2024 - 01:27
  */
 @AllArgsConstructor
 public class ProfileButton extends Button {

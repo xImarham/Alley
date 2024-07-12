@@ -8,11 +8,10 @@ import me.emmy.alley.utils.command.CommandArgs;
 import org.bukkit.command.CommandSender;
 
 /**
- * Created by Emmy
- * Project: Alley
- * Date: 19/04/2024 - 17:39
+ * @author Emmy
+ * @project Alley
+ * @date 19/04/2024 - 17:39
  */
-
 public class AlleyCommand extends BaseCommand {
     @Override
     @Command(name = "alley", aliases = {"emmy", "ziue"}, inGameOnly = false)

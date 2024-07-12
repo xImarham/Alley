@@ -1,12 +1,14 @@
 package me.emmy.alley.utils.location;
 
+import lombok.experimental.UtilityClass;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 
+@UtilityClass
 public class LocationUtil {
 
-	public static Location[] getFaces(Location start) {
+	public Location[] getFaces(Location start) {
 		Location[] faces = new Location[4];
 		faces[0] = new Location(start.getWorld(), start.getX() + 1, start.getY(), start.getZ());
 		faces[1] = new Location(start.getWorld(), start.getX() - 1, start.getY(), start.getZ());
@@ -15,7 +17,7 @@ public class LocationUtil {
 		return faces;
 	}
 
-	public static String serialize(Location location) {
+	public String serialize(Location location) {
 		if (location == null) {
 			return "null";
 		}
@@ -24,7 +26,7 @@ public class LocationUtil {
 		       ":" + location.getYaw() + ":" + location.getPitch();
 	}
 
-	public static Location deserialize(String source) {
+	public Location deserialize(String source) {
 		if (source == null || source.equalsIgnoreCase("null")) {
 			return null;
 		}

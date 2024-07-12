@@ -6,9 +6,9 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
 /**
- * Created by Emmy
- * Project: FlowerHub
- * Date: 27/03/2024 - 14:56
+ * @author Emmy
+ * @project SurvivalGames
+ * @date 27/03/2024 - 14:56
  */
 @UtilityClass
 public class TaskUtil {

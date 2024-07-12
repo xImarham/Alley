@@ -7,7 +7,7 @@ import org.bukkit.event.player.PlayerEvent;
 
 /**
  * Created by Infames
- * Date: 23/07/2021 @ 20:07
+ * @date 23/07/2021 @ 20:07
  */
 @Getter
 public class CombatTagEvent extends PlayerEvent {

@@ -12,6 +12,11 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author Emmy
+ * @project Alley
+ * @date 23/05/2024 - 01:29
+ */
 @AllArgsConstructor
 public class FFAButton extends Button {
 
@@ -37,9 +42,7 @@ public class FFAButton extends Button {
 
     @Override
     public void clicked(Player player, int slot, ClickType clickType, int hotbarSlot) {
-        if (clickType == ClickType.MIDDLE || clickType == ClickType.RIGHT || clickType == ClickType.NUMBER_KEY || clickType == ClickType.DROP || clickType == ClickType.SHIFT_LEFT || clickType == ClickType.SHIFT_RIGHT) {
-            return;
-        }
+        if (clickType != ClickType.LEFT) return;
         SoundUtil.playSuccess(player);
         match.join(player);
     }

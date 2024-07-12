@@ -12,11 +12,10 @@ import org.bukkit.entity.Player;
 import java.util.UUID;
 
 /**
- * Created by Emmy
- * Project: Alley
- * Date: 22/05/2024 - 20:36
+ * @author Emmy
+ * @project Alley
+ * @date 22/05/2024 - 20:36
  */
-
 public class PartyLeaveCommand extends BaseCommand {
     @Override
     @Command(name = "party.leave", aliases = {"p.leave"})

@@ -15,9 +15,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by Emmy
- * Project: Alley
- * Date: 08/06/2024 - 21:19
+ * @author Emmy
+ * @project Alley
+ * @date 08/06/2024 - 21:19
  */
 public class HostMenu extends Menu {
     @Override

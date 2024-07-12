@@ -16,9 +16,9 @@ import org.bukkit.inventory.ItemStack;
 import java.util.Arrays;
 
 /**
- * Created by Emmy
- * Project: Alley
- * Date: 23/05/2024 - 01:28
+ * @author Emmy
+ * @project Alley
+ * @date 23/05/2024 - 01:28
  */
 
 @AllArgsConstructor

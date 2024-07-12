@@ -10,6 +10,11 @@ import org.bson.Document;
 import java.util.HashMap;
 import java.util.UUID;
 
+/**
+ * @author Remi
+ * @project Alley
+ * @date 5/20/2024
+ */
 @Getter
 @Setter
 public class ProfileRepository {

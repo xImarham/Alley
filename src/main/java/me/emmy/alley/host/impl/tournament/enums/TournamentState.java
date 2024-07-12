@@ -3,9 +3,9 @@ package me.emmy.alley.host.impl.tournament.enums;
 import lombok.Getter;
 
 /**
- * Created by Emmy
- * Project: Alley
- * Date: 14/06/2024 - 22:42
+ * @author Emmy
+ * @project Alley
+ * @date 14/06/2024 - 22:42
  */
 @Getter
 public enum TournamentState {

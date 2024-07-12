@@ -13,9 +13,9 @@ import me.emmy.alley.utils.command.CommandArgs;
 import org.bukkit.entity.Player;
 
 /**
- * Created by Emmy
- * Project: Practice
- * Date: 29/04/2024 - 19:01
+ * @author Emmy
+ * @project Practice
+ * @date 29/04/2024 - 19:01
  */
 public class SpawnCommand extends BaseCommand {
     @Override

@@ -14,8 +14,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by Emmy
- * Project: Alley
+ * @author Emmy
+ * @project Alley
  * Discord: dsc.gg/emmiesa
  */
 

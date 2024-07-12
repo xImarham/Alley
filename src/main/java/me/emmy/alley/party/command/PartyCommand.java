@@ -7,11 +7,10 @@ import me.emmy.alley.utils.command.CommandArgs;
 import org.bukkit.entity.Player;
 
 /**
- * Created by Emmy
- * Project: Alley
- * Date: 22/05/2024 - 20:32
+ * @author Emmy
+ * @project Alley
+ * @date 22/05/2024 - 20:32
  */
-
 public class PartyCommand extends BaseCommand {
     @Override
     @Command(name = "party", aliases = "p")

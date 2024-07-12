@@ -10,11 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Emmy
- * Project: Alley
- * Date: 27/03/2024 - 14:55
+ * @author Emmy
+ * @project Alley
+ * @date 27/03/2024 - 14:55
  */
-
 @Getter @Setter
 public class ScoreboardHandler {
 

@@ -10,11 +10,10 @@ import me.emmy.alley.utils.command.CommandArgs;
 import org.bukkit.entity.Player;
 
 /**
- * Created by Emmy
- * Project: Practice
- * Date: 28/04/2024 - 22:23
+ * @author Emmy
+ * @project Practice
+ * @date 28/04/2024 - 22:23
  */
-
 public class KitSetInvCommand extends BaseCommand {
     @Override
     @Command(name = "kit.setinventory", aliases = "kit.setinv", permission = "practice.admin")

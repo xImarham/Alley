@@ -11,11 +11,10 @@ import me.emmy.alley.utils.command.CommandArgs;
 import org.bukkit.entity.Player;
 
 /**
- * Created by Emmy
- * Project: Alley
- * Date: 22/05/2024 - 20:36
+ * @author Emmy
+ * @project Alley
+ * @date 22/05/2024 - 20:36
  */
-
 public class PartyDisbandCommand extends BaseCommand {
     @Override
     @Command(name = "party.disband", aliases = {"p.disband"})

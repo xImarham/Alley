@@ -2,6 +2,11 @@ package me.emmy.alley.profile.enums;
 
 import lombok.Getter;
 
+/**
+ * @author Emmy
+ * @project Alley
+ * @date 5/21/2024
+ */
 @Getter
 public enum EnumProfileState {
 

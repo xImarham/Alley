@@ -10,9 +10,9 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 /**
- * Created by Emmy
- * Project: FlowerCore
- * Discord: dsc.gg/emmiesa
+ * @author Emmy
+ * @project Practice
+ * @date 29/04/2024 - 18:41
  */
 public class SetSpawnCommand extends BaseCommand {
 

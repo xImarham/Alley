@@ -12,9 +12,9 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 /**
- * Created by Emmy
- * Project: Alley
- * Date: 15/06/2024 - 16:53
+ * @author Emmy
+ * @project Alley
+ * @date 15/06/2024 - 16:53
  */
 @Getter
 @Setter

@@ -18,9 +18,9 @@ import org.bukkit.event.player.PlayerItemDamageEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 
 /**
- * Created by Emmy
- * Project: Alley
- * Date: 25/05/2024 - 16:20
+ * @author Emmy
+ * @project Alley
+ * @date 25/05/2024 - 16:20
  */
 public class SpawnListener implements Listener {
 

@@ -14,11 +14,10 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * Created by Emmy
- * Project: Alley
- * Date: 21/05/2024 - 21:45
+ * @author Emmy
+ * @project Alley
+ * @date 21/05/2024 - 21:45
  */
-
 @Getter
 @Setter
 public class PartyRepository {
