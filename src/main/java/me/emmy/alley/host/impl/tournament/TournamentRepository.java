@@ -19,7 +19,7 @@ import java.util.Map;
  */
 @Getter
 @Setter
-public class Tournament {
+public class TournamentRepository {
 
     private final Map<Player, TournamentTeam> playerTeams = new HashMap<>();
     private List<Player> players;
@@ -34,7 +34,7 @@ public class Tournament {
 
     private boolean running = false;
 
-    public Tournament(Player host, Kit kit, int requiredPlayers, int maxPlayers) {
+    public TournamentRepository(Player host, Kit kit, int requiredPlayers, int maxPlayers) {
         this.host = host;
         this.kit = kit;
         this.requiredPlayers = requiredPlayers;

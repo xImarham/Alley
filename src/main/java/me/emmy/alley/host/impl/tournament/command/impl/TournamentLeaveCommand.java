@@ -1,8 +1,9 @@
 package me.emmy.alley.host.impl.tournament.command.impl;
 
 import me.emmy.alley.Alley;
-import me.emmy.alley.host.impl.tournament.Tournament;
+import me.emmy.alley.host.impl.tournament.TournamentRepository;
 import me.emmy.alley.host.impl.tournament.TournamentLogger;
+import me.emmy.alley.hotbar.enums.HotbarType;
 import me.emmy.alley.utils.chat.CC;
 import me.emmy.alley.utils.command.BaseCommand;
 import me.emmy.alley.utils.command.Command;
@@ -20,19 +21,20 @@ public class TournamentLeaveCommand extends BaseCommand {
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
 
-        Tournament tournament = Alley.getInstance().getTournament();
+        TournamentRepository tournamentRepository = Alley.getInstance().getTournamentRepository();
 
-        if (!tournament.isRunning()) {
+        if (!tournamentRepository.isRunning()) {
             player.sendMessage("There is no tournament running.");
             return;
         }
 
-        if (!tournament.isPlayerInTournament(player)) {
+        if (!tournamentRepository.isPlayerInTournament(player)) {
             player.sendMessage("You are not in the tournament.");
             return;
         }
 
-        tournament.getPlayers().remove(player);
+        Alley.getInstance().getHotbarRepository().applyHotbarItems(player, HotbarType.LOBBY);
+        tournamentRepository.getPlayers().remove(player);
         player.sendMessage(CC.translate("&cYou have left the tournament."));
         TournamentLogger.broadcastPlayerLeave(player);
     }

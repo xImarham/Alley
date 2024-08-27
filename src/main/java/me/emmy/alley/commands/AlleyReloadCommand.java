@@ -19,9 +19,9 @@ public class AlleyReloadCommand extends BaseCommand {
         Player player = command.getPlayer();
 
         player.sendMessage("");
-        player.sendMessage(CC.translate("&eReloading &d&lAlley&e..."));
+        player.sendMessage(CC.translate("&eReloading &b&lAlley&e..."));
         Alley.getInstance().getConfigHandler().reloadConfigs();
-        player.sendMessage(CC.translate("&d&lAlley &ehas been reloaded."));
+        player.sendMessage(CC.translate("&b&lAlley &ehas been reloaded."));
         player.sendMessage("");
     }
 }

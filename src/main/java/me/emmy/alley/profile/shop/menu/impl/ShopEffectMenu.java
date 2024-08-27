@@ -57,21 +57,21 @@ public class ShopEffectMenu extends Menu {
                 .count();
 
         buttons.put(0, new BackButton(new ShopMenu()));
-        buttons.put(3, new ShopButton("&d&lKill Effects", new ItemStack(Material.REDSTONE), Arrays.asList(
+        buttons.put(3, new ShopButton("&b&lKill Effects", new ItemStack(Material.REDSTONE), Arrays.asList(
                 "",
                 "&fPurchase kill effects",
                 "&fto use in games.",
                 "",
-                "&fYou own &d" + ownedKillEffects + " &fkill effects.",
+                "&fYou own &b" + ownedKillEffects + " &fkill effects.",
                 "",
                 "&aClick to view!"
         )));
-        buttons.put(5, new ShopButton("&d&lSound Effects", new ItemStack(Material.FEATHER), Arrays.asList(
+        buttons.put(5, new ShopButton("&b&lSound Effects", new ItemStack(Material.FEATHER), Arrays.asList(
                 "",
                 "&fPurchase sound effects",
                 "&fto use in games.",
                 "",
-                "&fYou own &d" + ownedSoundEffects + " &fsound effects.",
+                "&fYou own &b" + ownedSoundEffects + " &fsound effects.",
                 "",
                 "&aClick to view!"
         )));
@@ -80,7 +80,7 @@ public class ShopEffectMenu extends Menu {
                 .filter(cosmetic -> cosmetic.getIcon() != null)
                 .forEach(cosmetic -> buttons.put(cosmetic.getSlot(), new ShopEffectButton(cosmetic)));
 
-        addBorder(buttons, (byte) 6, 5);
+        addBorder(buttons, (byte) 15, 5);
         return buttons;
     }
 }

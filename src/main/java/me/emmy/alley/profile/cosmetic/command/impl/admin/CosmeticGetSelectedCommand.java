@@ -34,15 +34,13 @@ public class CosmeticGetSelectedCommand extends BaseCommand {
         }
 
         Profile profile = Alley.getInstance().getProfileRepository().getProfile(target.getUniqueId());
-        player.sendMessage(CC.FLOWER_BAR);
-        player.sendMessage(CC.translate("     &d&lSelected Cosmetics for " + target.getName()));
+        player.sendMessage(CC.translate("     &b&lSelected Cosmetics for " + target.getName()));
 
         ProfileCosmeticData cosmeticData = profile.getProfileData().getProfileCosmeticData();
         String killEffect = cosmeticData.getSelectedKillEffect();
         String soundEffect = cosmeticData.getSelectedSoundEffect();
 
-        player.sendMessage(CC.translate("      &f● &dKill Effect: &f" + killEffect));
-        player.sendMessage(CC.translate("      &f● &dSound Effect: &f" + soundEffect));
-        player.sendMessage(CC.FLOWER_BAR);
+        player.sendMessage(CC.translate("      &f● &bKill Effect: &f" + killEffect));
+        player.sendMessage(CC.translate("      &f● &bSound Effect: &f" + soundEffect));
     }
 }

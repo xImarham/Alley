@@ -31,10 +31,10 @@ public class MatchSettingsMenu extends Menu {
 
         buttons.put(0, new BackButton(new SettingsMenu()));
 
-        buttons.put(10, new MatchSettingsButton("&d&lClear inventory", Material.CHEST, (short) 0, Arrays.asList(
+        buttons.put(10, new MatchSettingsButton("&b&lClear inventory", Material.CHEST, (short) 0, Arrays.asList(
                 "",
                 "&fClear your inventory",
-                "&fafter every &dkill &fin",
+                "&fafter every &bkill &fin",
                 "&fa duel.",
                 "",
                 "&fStatus: &4null",
@@ -42,10 +42,10 @@ public class MatchSettingsMenu extends Menu {
                 "&aClick to toggle!"
         )));
 
-        buttons.put(11, new MatchSettingsButton("&d&lToggle Flight", Material.FEATHER, (short) 0, Arrays.asList(
+        buttons.put(11, new MatchSettingsButton("&b&lToggle Flight", Material.FEATHER, (short) 0, Arrays.asList(
                 "",
                 "&fStart flying upon ",
-                "&fyour opponents &ddeath",
+                "&fyour opponents &bdeath",
                 "&fin a duel.",
                 "",
                 "&fStatus: &4null",
@@ -53,15 +53,15 @@ public class MatchSettingsMenu extends Menu {
                 "&aClick to toggle!"
         )));
 
-        buttons.put(31, new MatchSettingsButton("&d&lCosmetics", Material.FIREWORK, (short) 0, Arrays.asList(
+        buttons.put(31, new MatchSettingsButton("&b&lCosmetics", Material.FIREWORK, (short) 0, Arrays.asList(
                 "",
-                "&fManage your &dcosmetics",
-                "&fand &dkill effects.",
+                "&fManage your &bcosmetics",
+                "&fand &bkill effects.",
                 "",
                 "&aClick to manage!"
         )));
 
-        addBorder(buttons, (byte) 6, 5);
+        addBorder(buttons, (byte) 15, 5);
 
         return buttons;
     }

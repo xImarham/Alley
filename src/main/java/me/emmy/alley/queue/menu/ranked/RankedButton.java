@@ -32,14 +32,14 @@ public class RankedButton extends Button {
         return new ItemBuilder(kit.getIcon()).name(kit.getDisplayName()).durability(kit.getIconData()).hideMeta().lore(Arrays.asList(
                 "&7" + kit.getDescription(),
                 "",
-                "&fIn Queue: &d" + queue.getProfiles().size(),
-                "&fIn Fights: &d" + queue.getQueueFightCount(),
+                "&fIn Queue: &b" + queue.getProfiles().size(),
+                "&fIn Fights: &b" + queue.getQueueFightCount(),
                 "",
-                "&fTotal Wins: &d" + Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId()).getProfileData().getKitData().get(kit.getName()).getWins(),
-                "&fTotal Losses: &d" + Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId()).getProfileData().getKitData().get(kit.getName()).getLosses(),
-                "&fElo: &d" + Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId()).getProfileData().getKitData().get(kit.getName()).getElo(),
+                "&fTotal Wins: &b" + Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId()).getProfileData().getKitData().get(kit.getName()).getWins(),
+                "&fTotal Losses: &b" + Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId()).getProfileData().getKitData().get(kit.getName()).getLosses(),
+                "&fElo: &b" + Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId()).getProfileData().getKitData().get(kit.getName()).getElo(),
                 "",
-                "&fClick to join the &d" + kit.getName() + " &fqueue!")
+                "&fClick to join the &b" + kit.getName() + " &fqueue!")
         ).hideMeta().build();
     }
 

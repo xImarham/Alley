@@ -19,6 +19,10 @@ public class SpawnHandler {
 
     private Location joinLocation;
 
+    public SpawnHandler() {
+        loadSpawnLocation();
+    }
+
     /**
      * Load the spawn location from the settings.yml file
      */

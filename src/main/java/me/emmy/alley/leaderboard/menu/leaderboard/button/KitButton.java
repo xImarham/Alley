@@ -38,23 +38,23 @@ public class KitButton extends Button {
         lore.add("");
         switch (leaderboardType) {
             case RANKED:
-                lore.add("&f● &dWins: &f" + profile.getProfileData().getRankedWins());
-                lore.add("&f● &dLosses: &f" + profile.getProfileData().getRankedLosses());
-                lore.add("&f● &dElo: &f" + profile.getProfileData().getProfileDivisionData().getGlobalElo());
+                lore.add("&f● &bWins: &f" + profile.getProfileData().getRankedWins());
+                lore.add("&f● &bLosses: &f" + profile.getProfileData().getRankedLosses());
+                lore.add("&f● &bElo: &f" + profile.getProfileData().getProfileDivisionData().getGlobalElo());
                 break;
             case UNRANKED:
-                lore.add("&f● &dWins: &f" + profile.getProfileData().getUnrankedWins());
-                lore.add("&f● &dLosses: &f" + profile.getProfileData().getUnrankedLosses());
+                lore.add("&f● &bWins: &f" + profile.getProfileData().getUnrankedWins());
+                lore.add("&f● &bLosses: &f" + profile.getProfileData().getUnrankedLosses());
                 break;
             case FFA:
-                lore.add("&f● &dKills: &f" + profile.getProfileData().getFfaData().values().stream().mapToInt(ProfileFFAData::getKills).sum());
-                lore.add("&f● &dDeaths: &f" + profile.getProfileData().getFfaData().values().stream().mapToInt(ProfileFFAData::getDeaths).sum());
+                lore.add("&f● &bKills: &f" + profile.getProfileData().getFfaData().values().stream().mapToInt(ProfileFFAData::getKills).sum());
+                lore.add("&f● &bDeaths: &f" + profile.getProfileData().getFfaData().values().stream().mapToInt(ProfileFFAData::getDeaths).sum());
                 break;
         }
         lore.add("");
 
         return new ItemBuilder(kit.getIcon())
-                .name("&d&l" + kit.getDisplayName())
+                .name("&b&l" + kit.getDisplayName())
                 .durability(kit.getIconData())
                 .lore(lore)
                 .build();

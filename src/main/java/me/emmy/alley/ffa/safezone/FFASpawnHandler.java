@@ -29,6 +29,13 @@ public class FFASpawnHandler {
 
     private Cuboid cuboid;
 
+    public FFASpawnHandler() {
+        loadFFASpawn();
+    }
+
+    /**
+     * Load the FFA spawn location from the arenas.yml file
+     */
     public void loadFFASpawn() {
         FileConfiguration config = ConfigHandler.getInstance().getArenasConfig();
         Arena arena = Alley.getInstance().getArenaRepository().getArenas().stream()

@@ -1,7 +1,7 @@
 package me.emmy.alley.host.impl.tournament.command.impl;
 
 import me.emmy.alley.Alley;
-import me.emmy.alley.host.impl.tournament.Tournament;
+import me.emmy.alley.host.impl.tournament.TournamentRepository;
 import me.emmy.alley.host.impl.tournament.TournamentLogger;
 import me.emmy.alley.utils.chat.CC;
 import me.emmy.alley.utils.command.BaseCommand;
@@ -45,15 +45,15 @@ public class TournamentHostCommand extends BaseCommand {
             return;
         }
 
-        Tournament currentTournament = Alley.getInstance().getTournament();
-        if (currentTournament != null && currentTournament.isRunning()) {
+        TournamentRepository currentTournamentRepository = Alley.getInstance().getTournamentRepository();
+        if (currentTournamentRepository != null && currentTournamentRepository.isRunning()) {
             player.sendMessage(CC.translate("&cThere is already a tournament running."));
             return;
         }
 
-        Tournament tournament = new Tournament(player, Alley.getInstance().getKitRepository().getKit(kitName), 8, maxPlayers);
-        Alley.getInstance().setTournament(tournament);
-        tournament.setRunning(true);
+        TournamentRepository tournamentRepository = new TournamentRepository(player, Alley.getInstance().getKitRepository().getKit(kitName), 8, maxPlayers);
+        Alley.getInstance().setTournamentRepository(tournamentRepository);
+        tournamentRepository.setRunning(true);
 
         TournamentLogger.broadcastWaiting();
     }

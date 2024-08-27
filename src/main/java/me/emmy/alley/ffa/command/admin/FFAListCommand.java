@@ -18,13 +18,11 @@ public class FFAListCommand extends BaseCommand {
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
         player.sendMessage("");
-        player.sendMessage(CC.FLOWER_BAR);
-        player.sendMessage(CC.translate("     &d&lFFA Match List &f(" + Alley.getInstance().getFfaRepository().getMatches().size() + "&f)"));
+        player.sendMessage(CC.translate("     &b&lFFA Match List &f(" + Alley.getInstance().getFfaRepository().getMatches().size() + "&f)"));
         if (Alley.getInstance().getFfaRepository().getMatches().isEmpty()) {
             player.sendMessage(CC.translate("      &f● &cNo Matches available."));
         }
-        Alley.getInstance().getFfaRepository().getMatches().forEach(match -> player.sendMessage(CC.translate("      &f● &d" + match.getKit().getDisplayName() + " &f(" + (match.getPlayers().size() + "/" + match.getMaxPlayers()) + "&f)")));
-        player.sendMessage(CC.FLOWER_BAR);
+        Alley.getInstance().getFfaRepository().getMatches().forEach(match -> player.sendMessage(CC.translate("      &f● &b" + match.getKit().getDisplayName() + " &f(" + (match.getPlayers().size() + "/" + match.getMaxPlayers()) + "&f)")));
         player.sendMessage("");
     }
 }

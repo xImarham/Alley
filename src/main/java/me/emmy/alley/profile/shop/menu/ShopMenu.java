@@ -48,27 +48,27 @@ public class ShopMenu extends Menu {
                 .count();
 
         buttons.put(0, new BackButton(new ProfileMenu()));
-        buttons.put(21, new ShopButton("&d&lKill Effects", new ItemStack(Material.REDSTONE), Arrays.asList(
+        buttons.put(21, new ShopButton("&b&lKill Effects", new ItemStack(Material.REDSTONE), Arrays.asList(
                 "",
                 "&fPurchase kill effects",
                 "&fto use in games.",
                 "",
-                "&fYou own &d" + ownedKillEffects + " &fkill effects.",
+                "&fYou own &b" + ownedKillEffects + " &fkill effects.",
                 "",
                 "&aClick to view!"
         )));
 
-        buttons.put(23, new ShopButton("&d&lSound Effects", new ItemStack(Material.FEATHER), Arrays.asList(
+        buttons.put(23, new ShopButton("&b&lSound Effects", new ItemStack(Material.FEATHER), Arrays.asList(
                 "",
                 "&fPurchase sound effects",
                 "&fto use in games.",
                 "",
-                "&fYou own &d" + ownedSoundEffects + " &fsound effects.",
+                "&fYou own &b" + ownedSoundEffects + " &fsound effects.",
                 "",
                 "&aClick to view!"
         )));
 
-        addBorder(buttons, (byte) 6, 5);
+        addBorder(buttons, (byte) 15, 5);
 
         return buttons;
     }

@@ -18,7 +18,7 @@ public class KillEffectButton extends Button {
     @Override
     public ItemStack getButtonItem(Player player) {
         return new ItemBuilder(Material.PAPER)
-                .name("&d&lKill Effects")
+                .name("&b&lKill Effects")
                 .lore(
                         "",
                         " &fAll of your kill effects are displayed here.",

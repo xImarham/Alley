@@ -34,15 +34,15 @@ public class ShopEffectButton extends Button {
         if (hasPermission) {
             lore = "&fYou already own this cosmetic.";
         } else {
-            lore = "&cClick to purchase this cosmetic for &d" + cosmetic.getPrice() + " coins.";
+            lore = "&cClick to purchase this cosmetic for &b" + cosmetic.getPrice() + " coins.";
         }
 
         return new ItemBuilder(cosmetic.getIcon())
-                .name("&d&l" + cosmetic.getName())
+                .name("&b&l" + cosmetic.getName())
                 .lore(
                         "",
-                        "&f● &dDescription: &f" + cosmetic.getDescription(),
-                        "&f● &dPrice: &f" + cosmetic.getPrice() + " coins",
+                        "&f● &bDescription: &f" + cosmetic.getDescription(),
+                        "&f● &bPrice: &f" + cosmetic.getPrice() + " coins",
                         "",
                         lore
 
@@ -80,6 +80,6 @@ public class ShopEffectButton extends Button {
         FileConfiguration config = ConfigHandler.getInstance().getSettingsConfig();
         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), config.get("command.grant-cosmetic-permission-command").toString().replace("{player}", player.getName()).replace("%permission%", cosmetic.getPermission()));
 
-        player.sendMessage(CC.translate("&aYou have successfully purchased the " + cosmetic.getName() + " cosmetic for &d" + cosmetic.getPrice() + " coins."));
+        player.sendMessage(CC.translate("&aYou have successfully purchased the " + cosmetic.getName() + " cosmetic for &b" + cosmetic.getPrice() + " coins."));
     }
 }

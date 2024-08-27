@@ -18,13 +18,11 @@ public class KitSettingsCommand extends BaseCommand {
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
         player.sendMessage("");
-        player.sendMessage(CC.FLOWER_BAR);
-        player.sendMessage(CC.translate("     &d&lKit Settings List &f(" + Alley.getInstance().getKitSettingRepository().getSettings().size() + "&f)"));
+        player.sendMessage(CC.translate("     &b&lKit Settings List &f(" + Alley.getInstance().getKitSettingRepository().getSettings().size() + "&f)"));
         if (Alley.getInstance().getKitSettingRepository().getSettings().isEmpty()) {
             player.sendMessage(CC.translate("      &f● &cNo Kit Settings available."));
         }
-        Alley.getInstance().getKitSettingRepository().getSettings().forEach(setting -> player.sendMessage(CC.translate("      &f● &d" + setting.getName())));
-        player.sendMessage(CC.FLOWER_BAR);
+        Alley.getInstance().getKitSettingRepository().getSettings().forEach(setting -> player.sendMessage(CC.translate("      &f● &b" + setting.getName())));
         player.sendMessage("");
     }
 }

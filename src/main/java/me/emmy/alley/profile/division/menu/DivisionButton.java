@@ -31,20 +31,20 @@ public class DivisionButton extends Button {
         int eloNeeded = division.getEloNeededForDivision(EnumDivisionTier.valueOf(nextDivisionAndLevel[0].toUpperCase()), EnumDivisionLevel.valueOf("LEVEL_" + nextDivisionAndLevel[1]));
         return new ItemBuilder(division.getIcon())
                 .durability(division.getDurability())
-                .name("&d&l" + division.getName())
+                .name("&b&l" + division.getName())
                 .lore(
                         "",
-                        "&d&lYour Progress",
-                        "&f● &dGlobal Elo: &f" + profile.getProfileData().getProfileDivisionData().getGlobalElo(),
-                        "&f● &dTier: &f" + abstractDivision.getTier().getName(),
-                        "&f● &dLevel: &f" + abstractDivision.getLevel().getName(),
+                        "&b&lYour Progress",
+                        "&f● &bGlobal Elo: &f" + profile.getProfileData().getProfileDivisionData().getGlobalElo(),
+                        "&f● &bTier: &f" + abstractDivision.getTier().getName(),
+                        "&f● &bLevel: &f" + abstractDivision.getLevel().getName(),
                         "",
-                        "&d&lDivision Information",
-                        "&f● &dTier: &f" + division.getTier().getName(),
-                        "&f● &dLevel: &f" + division.getLevel().getName(),
-                        "&f● &dElo Range: &f" + division.getEloMin() + " - " + division.getEloMax(),
-                        "&f● &dDescription: &f" + division.getDescription(),
-                        "&f● &dElo Required: &f" + eloNeeded,
+                        "&b&lDivision Information",
+                        "&f● &bTier: &f" + division.getTier().getName(),
+                        "&f● &bLevel: &f" + division.getLevel().getName(),
+                        "&f● &bElo Range: &f" + division.getEloMin() + " - " + division.getEloMax(),
+                        "&f● &bDescription: &f" + division.getDescription(),
+                        "&f● &bElo Required: &f" + eloNeeded,
                         ""
 
                 )

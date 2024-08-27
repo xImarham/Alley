@@ -1,6 +1,9 @@
 package me.emmy.alley.host.impl.tournament.command;
 
 import me.emmy.alley.Alley;
+import me.emmy.alley.host.impl.tournament.command.impl.TournamentHostCommand;
+import me.emmy.alley.host.impl.tournament.command.impl.TournamentJoinCommand;
+import me.emmy.alley.host.impl.tournament.command.impl.TournamentLeaveCommand;
 import me.emmy.alley.profile.enums.EnumProfileState;
 import me.emmy.alley.utils.chat.CC;
 import me.emmy.alley.utils.command.BaseCommand;
@@ -14,6 +17,12 @@ import org.bukkit.entity.Player;
  * @date 08/06/2024 - 21:48
  */
 public class TournamentCommand extends BaseCommand {
+
+    public TournamentCommand() {
+        new TournamentHostCommand();
+        new TournamentJoinCommand();
+        new TournamentLeaveCommand();
+    }
     @Override
     @Command(name = "tournament", permission = "alley.hosttournament")
     public void onCommand(CommandArgs command) {
@@ -25,10 +34,10 @@ public class TournamentCommand extends BaseCommand {
         }
 
         player.sendMessage("");
-        player.sendMessage(CC.translate("&d&lTournament Commands Help"));
-        player.sendMessage(CC.translate(" &f● &d/tournament host &7| Host a tournament"));
-        player.sendMessage(CC.translate(" &f● &d/tournament join &7| Join a tournament"));
-        player.sendMessage(CC.translate(" &f● &d/tournament leave &7| Leave a tournament"));
+        player.sendMessage(CC.translate("&b&lTournament Commands Help"));
+        player.sendMessage(CC.translate(" &f● &b/tournament host &7| Host a tournament"));
+        player.sendMessage(CC.translate(" &f● &b/tournament join &7| Join a tournament"));
+        player.sendMessage(CC.translate(" &f● &b/tournament leave &7| Leave a tournament"));
 
         if (player.hasPermission("alley.admin")) {
             player.sendMessage(" ");

@@ -49,7 +49,7 @@ public class HostMenu extends Menu {
                 ""
         )));
 
-        addBorder(buttons, (byte) 6, 3);
+        addGlass(buttons, (byte) 15);
 
         return buttons;
     }

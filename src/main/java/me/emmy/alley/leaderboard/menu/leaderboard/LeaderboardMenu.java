@@ -56,7 +56,7 @@ public class LeaderboardMenu extends Menu {
                     }
                 });
 
-        addBorder(buttons, (byte) 6, 5);
+        addBorder(buttons, (byte) 15, 5);
 
         return buttons;
     }

@@ -32,70 +32,70 @@ public class SettingsMenu extends Menu {
 
         buttons.put(0, new BackButton(new ProfileMenu()));
 
-        buttons.put(10, new SettingsButton("&d&lToggle Party Messages", Material.FEATHER, (short) 0, Arrays.asList(
+        buttons.put(10, new SettingsButton("&b&lToggle Party Messages", Material.FEATHER, (short) 0, Arrays.asList(
                 "",
                 "&fDecide whether you should",
-                "&fsee the &dparty chat",
+                "&fsee the &bparty chat",
                 "&fmessages or not.",
                 "",
-                " &d● &fStatus: &r" + (Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId()).getProfileData().getProfileSettingData().isPartyMessagesEnabled() ? "&aEnabled" : "&cDisabled"),
+                " &b● &fStatus: &r" + (Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId()).getProfileData().getProfileSettingData().isPartyMessagesEnabled() ? "&aEnabled" : "&cDisabled"),
                 "",
                 "&aClick to toggle!"
         )));
 
-        buttons.put(11, new SettingsButton("&d&lToggle Party Invites", Material.NAME_TAG, (short) 0, Arrays.asList(
+        buttons.put(11, new SettingsButton("&b&lToggle Party Invites", Material.NAME_TAG, (short) 0, Arrays.asList(
                 "",
                 "&fDecide whether you should",
-                "&freceive &dparty invites",
+                "&freceive &bparty invites",
                 "&for not.",
                 "",
-                " &d● &fStatus: &r" + (Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId()).getProfileData().getProfileSettingData().isPartyInvitesEnabled() ? "&aEnabled" : "&cDisabled"),
+                " &b● &fStatus: &r" + (Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId()).getProfileData().getProfileSettingData().isPartyInvitesEnabled() ? "&aEnabled" : "&cDisabled"),
                 "",
                 "&aClick to toggle!"
         )));
 
-        buttons.put(12, new SettingsButton("&d&lToggle Scoreboard", Material.CARPET, (short) 5, Arrays.asList(
+        buttons.put(12, new SettingsButton("&b&lToggle Scoreboard", Material.CARPET, (short) 5, Arrays.asList(
                 "",
                 "&fDecide whether you should",
-                "&fsee the &dscoreboard",
+                "&fsee the &bscoreboard",
                 "&for not.",
                 "",
-                " &d● &fStatus: &r" + (Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId()).getProfileData().getProfileSettingData().isScoreboardEnabled() ? "&aEnabled" : "&cDisabled"),
+                " &b● &fStatus: &r" + (Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId()).getProfileData().getProfileSettingData().isScoreboardEnabled() ? "&aEnabled" : "&cDisabled"),
                 "",
                 "&aClick to toggle!"
         )));
 
-        buttons.put(13, new SettingsButton("&d&lToggle Tablist", Material.ITEM_FRAME, (short) 0, Arrays.asList(
+        buttons.put(13, new SettingsButton("&b&lToggle Tablist", Material.ITEM_FRAME, (short) 0, Arrays.asList(
                 "",
                 "&fDecide whether you should",
-                "&fsee the &dtablist",
+                "&fsee the &btablist",
                 "&for not.",
                 "",
-                " &d● &fStatus: &r" + (Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId()).getProfileData().getProfileSettingData().isTablistEnabled() ? "&aEnabled" : "&cDisabled"),
+                " &b● &fStatus: &r" + (Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId()).getProfileData().getProfileSettingData().isTablistEnabled() ? "&aEnabled" : "&cDisabled"),
                 "",
                 "&aClick to toggle!"
         )));
 
-        buttons.put(14, new SettingsButton("&d&lWorld time", Material.WATCH, (short) 0, Arrays.asList(
+        buttons.put(14, new SettingsButton("&b&lWorld time", Material.WATCH, (short) 0, Arrays.asList(
                 "",
                 "&fChange your world time",
-                "&fto &dday&f, &dnight&f, or &dsunset&f.",
+                "&fto &bday&f, &bnight&f, or &bsunset&f.",
                 "",
-                " &d● &fStatus: &rnull",
+                " &b● &fStatus: &rnull",
                 "",
                 "&aClick to change!"
         )));
 
-        buttons.put(16, new SettingsButton("&d&lMatch Settings", Material.BOOK_AND_QUILL, (short) 0, Arrays.asList(
+        buttons.put(16, new SettingsButton("&b&lMatch Settings", Material.BOOK_AND_QUILL, (short) 0, Arrays.asList(
                 "",
                 "&fChange your match settings",
-                "&fsuch as &dmatch sounds&f, &dmatch particles&f,",
-                "&dmatch cosmetics&f, and &dmatch animations&f.",
+                "&fsuch as &bmatch sounds&f, &bmatch particles&f,",
+                "&bmatch cosmetics&f, and &bmatch animations&f.",
                 "",
                 "&aClick to view!"
         )));
 
-        addBorder(buttons, (byte) 6, 3);
+        addBorder(buttons, (byte) 15, 3);
 
         return buttons;
     }

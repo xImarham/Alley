@@ -55,7 +55,7 @@ public class StatisticsMenu extends Menu {
                 .filter(kit -> kit.getIcon() != null)
                 .forEach(kit -> buttons.put(kit.getUnrankedslot(), new KitStatButton(kit)));
 
-        addBorder(buttons, (byte) 6, 5);
+        addBorder(buttons, (byte) 15, 5);
 
         return buttons;
     }

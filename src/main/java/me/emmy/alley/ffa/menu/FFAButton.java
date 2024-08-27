@@ -26,14 +26,14 @@ public class FFAButton extends Button {
     public ItemStack getButtonItem(Player player) {
         List<String> lore = new ArrayList<>();
         lore.add("");
-        lore.add("&fPlaying: &d" + match.getPlayers().size() + "/" + match.getMaxPlayers());
-        lore.add("&fArena: &d" + match.getArena().getName());
-        lore.add("&fKit: &d" + match.getKit().getName());
+        lore.add("&fPlaying: &b" + match.getPlayers().size() + "/" + match.getMaxPlayers());
+        lore.add("&fArena: &b" + match.getArena().getName());
+        lore.add("&fKit: &b" + match.getKit().getName());
         lore.add("");
-        lore.add("&fClick to join the &d" + match.getName() + " &fqueue.");
+        lore.add("&fClick to join the &b" + match.getName() + " &fqueue.");
 
         return new ItemBuilder(match.getKit().getIcon())
-                .name("&d&l" + match.getName())
+                .name("&b&l" + match.getName())
                 .durability(match.getKit().getIconData())
                 .lore(lore)
                 .hideMeta()

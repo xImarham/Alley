@@ -59,6 +59,9 @@ public class CurrentMatchesMenu extends PaginatedMenu {
     @Override
     public Map<Integer, Button> getGlobalButtons(Player player) {
         final Map<Integer, Button> buttons = new HashMap<>();
+
+        addGlassHeader(buttons, (byte) 15);
+
         buttons.put(4, new RefreshButton());
         return buttons;
     }
@@ -76,11 +79,11 @@ public class CurrentMatchesMenu extends PaginatedMenu {
         @Override
         public ItemStack getButtonItem(Player player) {
             return new ItemBuilder(match.getMatchKit().getIcon()).durability(match.getMatchKit().getIconData())
-                    .name("&d&l" + match.getParticipants().get(0).getPlayer().getUsername() + " &7vs &d&l" + match.getParticipants().get(1).getPlayer().getUsername())
+                    .name("&b&l" + match.getParticipants().get(0).getPlayer().getUsername() + " &7vs &b&l" + match.getParticipants().get(1).getPlayer().getUsername())
                     .lore(Arrays.asList(
-                            " &f● &dArena: &f" + match.getMatchArena().getName(),
-                            " &f● &dKit: &f" + match.getMatchKit().getName(),
-                            " &f● &dQueue: &f" + (match.getMatchQueue() == null ? "None" : match.getMatchQueue().getQueueType()),
+                            " &f● &bArena: &f" + match.getMatchArena().getName(),
+                            " &f● &bKit: &f" + match.getMatchKit().getName(),
+                            " &f● &bQueue: &f" + (match.getMatchQueue() == null ? "None" : match.getMatchQueue().getQueueType()),
                             " ",
                             " &fTeleport to the match by clicking here."
                     ))
@@ -114,8 +117,8 @@ public class CurrentMatchesMenu extends PaginatedMenu {
         @Override
         public ItemStack getButtonItem(Player player) {
             return new ItemBuilder(Material.CARPET)
-                    .name("&d&lRefresh")
-                    .lore(" &f● &dPress to refresh the matches")
+                    .name("&b&lRefresh")
+                    .lore(" &f● &bPress to refresh the matches")
                     .durability(2)
                     .build();
         }

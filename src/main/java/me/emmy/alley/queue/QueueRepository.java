@@ -18,6 +18,10 @@ import java.util.List;
 public class QueueRepository {
     private final List<Queue> queues = new ArrayList<>();
 
+    public QueueRepository() {
+        initialize();
+    }
+
     public void initialize() {
         Alley.getInstance().getServer().getScheduler().runTaskTimer(Alley.getInstance(), new QueueRunnable(), 10L, 10L);
     }

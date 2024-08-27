@@ -37,10 +37,10 @@ public class CosmeticButton extends Button {
         }
 
         return new ItemBuilder(cosmetic.getIcon())
-                .name("&d&l" + cosmetic.getName())
+                .name("&b&l" + cosmetic.getName())
                 .lore(
                         "",
-                        "&f● &dDescription: &f" + cosmetic.getDescription(),
+                        "&f● &bDescription: &f" + cosmetic.getDescription(),
                         "",
                         lore
 

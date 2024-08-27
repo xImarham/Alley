@@ -22,6 +22,10 @@ public class FFARepository {
 
     private final List<AbstractFFAMatch> matches = new ArrayList<>();
 
+    public FFARepository() {
+        loadFFAMatches();
+    }
+
     /**
      * Load all FFA matches
      */

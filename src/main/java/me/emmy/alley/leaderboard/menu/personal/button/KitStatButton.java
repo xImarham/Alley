@@ -26,13 +26,13 @@ public class KitStatButton extends Button {
         ProfileKitData profileKitData = profile.getProfileData().getKitData().get(kit.getName());
 
         return new ItemBuilder(kit.getIcon())
-                .name("&d&l" + kit.getDisplayName())
+                .name("&b&l" + kit.getDisplayName())
                 .durability(kit.getIconData())
                 .lore(
                         "",
-                        "&f● &dWins: &f" + profileKitData.getWins(),
-                        "&f● &dLosses: &f" + profileKitData.getLosses(),
-                        "&f● &dElo: &f" + profileKitData.getElo(),
+                        "&f● &bWins: &f" + profileKitData.getWins(),
+                        "&f● &bLosses: &f" + profileKitData.getLosses(),
+                        "&f● &bElo: &f" + profileKitData.getElo(),
                         ""
                 )
                 .build();

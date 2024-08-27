@@ -17,7 +17,7 @@ public class SoundEffectButton extends Button {
     @Override
     public ItemStack getButtonItem(Player player) {
         return new ItemBuilder(Material.PAPER)
-                .name("&d&lSound Effects")
+                .name("&b&lSound Effects")
                 .lore(
                         "",
                         " &fAll of your sound effects are displayed here.",

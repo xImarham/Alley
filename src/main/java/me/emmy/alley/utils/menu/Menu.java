@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import me.emmy.alley.Alley;
 import me.emmy.alley.utils.chat.CC;
+import me.emmy.alley.utils.menu.button.PageGlassButton;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -93,6 +94,7 @@ public abstract class Menu {
     }
 
     /**
+     * Addition by Remi
      * Adds a border to the inventory.
      *
      * @param buttons the buttons
@@ -111,6 +113,34 @@ public abstract class Menu {
         for (int i = 0; i < rows; i++) {
             buttons.putIfAbsent(i * 9, Button.placeholder(Material.STAINED_GLASS_PANE, data, ""));
             buttons.putIfAbsent(i * 9 + 8, Button.placeholder(Material.STAINED_GLASS_PANE, data, ""));
+        }
+    }
+
+    /**
+     * Addition by Emmy
+     * Adds a glass header to the paginated menu.
+     *
+     * @param buttons the button
+     */
+    public void addGlassHeader(Map<Integer, Button> buttons, int durability) {
+        for (int i = 1; i < 9; i++) {
+            if (i != 8) {
+                buttons.put(i, new PageGlassButton(durability));
+            }
+        }
+    }
+
+    /**
+     * Addition by Emmy
+     * Refills glass to the empty slots of a menu.
+     *
+     * @param buttons the button
+     */
+    public void addGlass(Map<Integer, Button> buttons, int durability) {
+        for (int slot = 0; slot < getSize(); slot++) {
+            if (!buttons.containsKey(slot)) {
+                buttons.put(slot, new PageGlassButton(durability));
+            }
         }
     }
 

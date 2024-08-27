@@ -25,10 +25,10 @@ public class EventCommand extends BaseCommand {
         }
 
         player.sendMessage(" ");
-        player.sendMessage(CC.translate("&d&lEvent Commands Help:"));
-        player.sendMessage(CC.translate(" &f● &d/event host &7| Host an event"));
-        player.sendMessage(CC.translate(" &f● &d/event join &7| Join an event"));
-        player.sendMessage(CC.translate(" &f● &d/event leave &7| Leave an event"));
+        player.sendMessage(CC.translate("&b&lEvent Commands Help:"));
+        player.sendMessage(CC.translate(" &f● &b/event host &7| Host an event"));
+        player.sendMessage(CC.translate(" &f● &b/event join &7| Join an event"));
+        player.sendMessage(CC.translate(" &f● &b/event leave &7| Leave an event"));
 
         if (player.hasPermission("alley.admin")) {
             player.sendMessage(" ");

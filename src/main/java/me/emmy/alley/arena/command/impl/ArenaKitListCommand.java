@@ -47,13 +47,11 @@ public class ArenaKitListCommand extends BaseCommand {
         }
 
         player.sendMessage("");
-        player.sendMessage(CC.FLOWER_BAR);
-        player.sendMessage(CC.translate("     &d&l" + arenaName + " Kit List &f(" + Alley.getInstance().getArenaRepository().getArenaByName(arenaName).getKits().size() + "&f)"));
+        player.sendMessage(CC.translate("     &b&l" + arenaName + " Kit List &f(" + Alley.getInstance().getArenaRepository().getArenaByName(arenaName).getKits().size() + "&f)"));
         if (Alley.getInstance().getArenaRepository().getArenaByName(arenaName).getKits().isEmpty()) {
             player.sendMessage(CC.translate("      &f● &cNo Arena Kits available."));
         }
-        Alley.getInstance().getArenaRepository().getArenaByName(arenaName).getKits().forEach(kit -> player.sendMessage(CC.translate("      &f● &d" + kit)));
-        player.sendMessage(CC.FLOWER_BAR);
+        Alley.getInstance().getArenaRepository().getArenaByName(arenaName).getKits().forEach(kit -> player.sendMessage(CC.translate("      &f● &b" + kit)));
         player.sendMessage("");
     }
 }

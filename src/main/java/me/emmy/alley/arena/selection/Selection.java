@@ -20,7 +20,7 @@ import org.bukkit.metadata.FixedMetadataValue;
 public class Selection {
 
     public static final ItemStack SELECTION_TOOL = new ItemBuilder(Material.FEATHER)
-            .name("&dSelection Tool")
+            .name("&bSelection Tool")
             .lore("&7Use this tool to select the minimum and maximum locations.")
             .build();
 
@@ -54,7 +54,6 @@ public class Selection {
      * Gets the selection of the player.
      *
      * @param player The player to get the selection of.
-     * @return The selection of the player.
      */
     public static void removeSelection(Player player) {
         if (player.hasMetadata(SELECTION_METADATA)) {

@@ -9,5 +9,6 @@ public enum HotbarType {
     LOBBY,
     PARTY,
     QUEUE,
-    SPECTATOR;
+    SPECTATOR,
+    TOURNAMENT;
 }

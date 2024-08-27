@@ -26,6 +26,12 @@ public class ArenaRepository {
 
     private final List<Arena> arenas = new ArrayList<>();
 
+    public ArenaRepository() {
+        loadArenas();
+    }
+    /**
+     * Load all arenas from the arenas.yml file
+     */
     public void loadArenas() {
         FileConfiguration config = Alley.getInstance().getConfigHandler().getConfigByName("storage/arenas.yml");
 
@@ -100,6 +106,9 @@ public class ArenaRepository {
         }
     }
 
+    /**
+     * Save all arenas to the arenas.yml file
+     */
     public void saveArenas() {
         FileConfiguration config = Alley.getInstance().getConfigHandler().getConfigByName("storage/arenas.yml");
 

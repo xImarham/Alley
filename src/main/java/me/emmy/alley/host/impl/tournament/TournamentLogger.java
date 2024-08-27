@@ -19,8 +19,8 @@ import java.util.List;
  */
 public class TournamentLogger {
 
-    private static Tournament getTournament() {
-        return Alley.getInstance().getTournament();
+    private static TournamentRepository getTournament() {
+        return Alley.getInstance().getTournamentRepository();
     }
 
     public static void broadcastPlayerJoin(Player joinedPlayer) {
@@ -42,7 +42,7 @@ public class TournamentLogger {
     }
 
     public static void broadcastWaiting() {
-        Tournament tournament = getTournament();
+        TournamentRepository tournamentRepository = getTournament();
         List<String> list = ConfigHandler.getInstance().getMessagesConfig().getStringList("tournament-broadcast.waiting.message");
         List<BaseComponent> messages = new ArrayList<>();
 
@@ -51,11 +51,11 @@ public class TournamentLogger {
                 messages.add(getTextComponent());
             } else {
                 String formattedMessage = message
-                        .replace("{host}", tournament.getHost().getName())
-                        .replace("{kit}", tournament.getKit().getName())
-                        .replace("{players}", String.valueOf(tournament.getPlayers().size()))
-                        .replace("{maxPlayers}", String.valueOf(tournament.getMaxPlayers()))
-                        .replace("{remaining}", String.valueOf(tournament.getMaxPlayers() - tournament.getPlayers().size()));
+                        .replace("{host}", tournamentRepository.getHost().getName())
+                        .replace("{kit}", tournamentRepository.getKit().getName())
+                        .replace("{players}", String.valueOf(tournamentRepository.getPlayers().size()))
+                        .replace("{maxPlayers}", String.valueOf(tournamentRepository.getMaxPlayers()))
+                        .replace("{remaining}", String.valueOf(tournamentRepository.getMaxPlayers() - tournamentRepository.getPlayers().size()));
                messages.add(new TextComponent(CC.translate(formattedMessage)));
             }
         }
@@ -77,12 +77,12 @@ public class TournamentLogger {
     public static void broadcastStarting() {
         List<String> messages = Arrays.asList(
                 "",
-                "&d&lTOURNAMENT",
-                " &f• &dHost: &f" + getTournament().getHost().getName(),
-                " &f• &dKit: &f" + getTournament().getKit().getName(),
-                " &f• &dPlayers: &f" + getTournament().getPlayers().size() + "/" + getTournament().getMaxPlayers(),
+                "&b&lTOURNAMENT",
+                " &f• &bHost: &f" + getTournament().getHost().getName(),
+                " &f• &bKit: &f" + getTournament().getKit().getName(),
+                " &f• &bPlayers: &f" + getTournament().getPlayers().size() + "/" + getTournament().getMaxPlayers(),
                 "",
-                "&dTournament is starting in " + getTournament().getCountdown() + " seconds!",
+                "&bTournament is starting in " + getTournament().getCountdown() + " seconds!",
                 ""
         );
         messages.forEach(message -> Bukkit.broadcastMessage(CC.translate(message)));
@@ -91,11 +91,11 @@ public class TournamentLogger {
     public static void broadcastStartingRound() {
         List<String> messages = Arrays.asList(
                 "",
-                "&d&lTOURNAMENT",
-                " &f• &dHost: &f" + getTournament().getHost().getName(),
-                " &f• &dKit: &f" + getTournament().getKit().getName(),
+                "&b&lTOURNAMENT",
+                " &f• &bHost: &f" + getTournament().getHost().getName(),
+                " &f• &bKit: &f" + getTournament().getKit().getName(),
                 "",
-                "&dRound " + getTournament().getRound() + " is starting...",
+                "&bRound " + getTournament().getRound() + " is starting...",
                 ""
         );
         messages.forEach(message -> Bukkit.broadcastMessage(CC.translate(message)));
@@ -104,12 +104,12 @@ public class TournamentLogger {
     public static void broadcastSpectating() {
         List<String> messages = Arrays.asList(
                 "",
-                "&d&lTOURNAMENT",
-                " &f• &dYou are now spectating the tournament",
+                "&b&lTOURNAMENT",
+                " &f• &bYou are now spectating the tournament",
                 "",
-                " &f• &d" + getTournament().getPlayerTeams().get(0).getPlayerNames(),
+                " &f• &b" + getTournament().getPlayerTeams().get(0).getPlayerNames(),
                 " &bvs",
-                " &d• &d" + getTournament().getPlayerTeams().get(1).getPlayerNames(),
+                " &b• &b" + getTournament().getPlayerTeams().get(1).getPlayerNames(),
                 ""
         );
         messages.forEach(message -> Bukkit.broadcastMessage(CC.translate(message)));

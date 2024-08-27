@@ -37,13 +37,13 @@ public class DisplayTypeButton extends Button {
         List<String> lore = new ArrayList<>();
         lore.add("");
         for (EnumLeaderboardType type : EnumLeaderboardType.values()) {
-            lore.add((currentType == type ? "&f● &d" : "&f● &7") + type.getName());
+            lore.add((currentType == type ? "&f● &b" : "&f● &7") + type.getName());
         }
         lore.add("");
         lore.add("&fClick to change the display type.");
 
         return new ItemBuilder(Material.EYE_OF_ENDER)
-                .name("&d&lDisplay Type")
+                .name("&b&lDisplay Type")
                 .lore(lore)
                 .build();
     }

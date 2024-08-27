@@ -33,7 +33,7 @@ public class DivisionsMenu extends Menu {
             buttons.put(division.getSlot(), new DivisionButton(division));
         });
 
-        addBorder(buttons, (byte) 6, 5);
+        addBorder(buttons, (byte) 15, 5);
 
         return buttons;
     }

@@ -1,5 +1,7 @@
 package me.emmy.alley.profile.division.command;
 
+import me.emmy.alley.profile.division.command.impl.DivisionListCommand;
+import me.emmy.alley.profile.division.command.impl.DivisionMenuCommand;
 import me.emmy.alley.utils.chat.CC;
 import me.emmy.alley.utils.command.BaseCommand;
 import me.emmy.alley.utils.command.Command;
@@ -12,15 +14,22 @@ import org.bukkit.entity.Player;
  * @date 6/2/2024
  */
 public class DivisionCommand extends BaseCommand {
+
+    /**
+     * Register all Division subcommands in the constructor
+     */
+    public DivisionCommand() {
+        new DivisionMenuCommand();
+        new DivisionListCommand();
+    }
+
     @Command(name = "division", permission = "alley.admin")
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
         player.sendMessage(" ");
-        player.sendMessage(CC.FLOWER_BAR);
-        player.sendMessage(CC.translate("&d&lDivision Commands Help:"));
-        player.sendMessage(CC.translate(" &f● &d/division list &7| View all divisions"));
-        player.sendMessage(CC.FLOWER_BAR);
+        player.sendMessage(CC.translate("&b&lDivision Commands Help:"));
+        player.sendMessage(CC.translate(" &f● &b/division list &7| View all divisions"));
         player.sendMessage("");
     }
 }

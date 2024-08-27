@@ -55,7 +55,7 @@ public class KitCreateCommand extends BaseCommand {
     private Kit createKit(String kitName, ItemStack[] inventory, ItemStack[] armor, Material icon) {
         Kit kit = new Kit(
                 kitName,
-                "&d" + kitName,
+                "&b" + kitName,
                 "&7" + kitName + " kit description",
                 true,
                 0,

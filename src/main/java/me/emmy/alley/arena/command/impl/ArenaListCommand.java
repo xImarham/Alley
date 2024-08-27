@@ -21,20 +21,18 @@ public class ArenaListCommand extends BaseCommand {
         Player player = command.getPlayer();
 
         player.sendMessage("");
-        player.sendMessage(CC.FLOWER_BAR);
-        player.sendMessage(CC.translate("     &d&lArena List &f(" + Alley.getInstance().getArenaRepository().getArenas().size() + "&f)"));
+        player.sendMessage(CC.translate("     &b&lArena List &f(" + Alley.getInstance().getArenaRepository().getArenas().size() + "&f)"));
         if (Alley.getInstance().getArenaRepository().getArenas().isEmpty()) {
             player.sendMessage(CC.translate("      &f● &cNo Arenas available."));
         }
 
         Alley.getInstance().getArenaRepository().getArenas().stream().filter(arena -> arena.getType() != ArenaType.FFA).forEach(arena ->
-                player.sendMessage(CC.translate("      &f● &d" + arena.getName() + " &7(" + arena.getType().name() + ")" + (arena.isEnabled() ? " &aEnabled" : " &cDisabled"))))
+                player.sendMessage(CC.translate("      &f● &b" + arena.getName() + " &7(" + arena.getType().name() + ")" + (arena.isEnabled() ? " &aEnabled" : " &cDisabled"))))
         ;
         Alley.getInstance().getArenaRepository().getArenas().stream().filter(arena -> arena.getType() == ArenaType.FFA).forEach(arena ->
-                player.sendMessage(CC.translate("      &f● &d" + arena.getName() + " &7(" + arena.getType().name() + ")")))
+                player.sendMessage(CC.translate("      &f● &b" + arena.getName() + " &7(" + arena.getType().name() + ")")))
         ;
 
-        player.sendMessage(CC.FLOWER_BAR);
         player.sendMessage("");
     }
 }

@@ -2,22 +2,22 @@ no-permission: "&cI'm sorry, but it doesn't seem like you have permission to exe
 
 spawn:
   teleported: "&bTeleported you to spawn!"
-  spawn-set: "&aSuccessfully set the new spawn location of &dAlley Practice&a! \n &8- &7{world}: {x}, {y}, {z} (Yaw: {yaw}, Pitch: {pitch})"
+  spawn-set: "&aSuccessfully set the new spawn location of &bAlley Practice&a! \n &8- &7{world}: {x}, {y}, {z} (Yaw: {yaw}, Pitch: {pitch})"
 
 welcome-message:
   enabled: true
   message:
     - ""
-    - "&d&m------------&f&m------------&d&m------------"
+    - "&b&m------------&f&m------------&b&m------------"
     - ""
-    - " &fWelcome to the &dAlley Network&f, &d{player}&f!"
-    - "  &f* Season: &dI"
-    - "  &f* Author: &d{author}"
-    - "  &f* Version: &d{version}"
+    - " &fWelcome to the &bAlley Network&f, &b{player}&f!"
+    - "  &f* Season: &bI"
+    - "  &f* Author: &b{author}"
+    - "  &f* Version: &b{version}"
     - ""
-    - " &fFor more information, join &ddsc.gg/dulcy&f!"
+    - " &fFor more information, join &bdsc.gg/dulcy&f!"
     - ""
-    - "&d&m------------&f&m------------&d&m------------"
+    - "&b&m------------&f&m------------&b&m------------"
     - ""
 
 kit:
@@ -34,7 +34,7 @@ kit:
   rankedslot-set: "&aSuccessfully set the ranked slot of the &b{kit-name} &akit to &b{slot}&a!"
 
 party:
-  chat-format: "&7[&dParty&7] &d{player}&7: &f{message}"
+  chat-format: "&7[&bParty&7] &b{player}&7: &f{message}"
   already-in-party: "&cYou are already in a party."
   not-leader: "&cYou are not the leader of the party."
   not-in-party: "&cYou are not in a party."
@@ -49,29 +49,25 @@ party:
     no-members-format: "&cNo members"
     text:
       - ""
-      - "&7&m------------&d&m------------&7&m------------"
-      - ""
-      - " &d&lParty Information"
-      - "  &f* Leader: &d{leader}"
-      - "  &f* Members: &d{members}"
-      - ""
-      - "&7&m------------&d&m------------&7&m------------"
+      - " &b&lParty Information"
+      - "  &f* Leader: &b{leader}"
+      - "  &f* Members: &b{members}"
       - ""
 
 tournament-broadcast:
   player:
-    joined: "&a{player} has joined the tournament &f(&d{players}&f/&d{maxPlayers}&f)"
-    left: "&c{player} has left the tournament &f(&d{players}&f/&d{maxPlayers}&f)"
+    joined: "&a{player} has joined the tournament &f(&b{players}&f/&b{maxPlayers}&f)"
+    left: "&c{player} has left the tournament &f(&b{players}&f/&b{maxPlayers}&f)"
   waiting:
     clickable-format: " &a[CLICK TO JOIN]"
     clickable-hover: "&aClick to join the tournament!"
     message:
       - ""
-      - "&d&lTOURNAMENT"
-      - " &f• &dHost: &f{host}"
-      - " &f• &dKit: &f{kit}"
-      - " &f• &dPlayers: &f{players}/{maxPlayers}"
-      - " &f• &dWaiting for &5{remaining} &dmore players."
+      - "&b&lTOURNAMENT"
+      - " &f• &bHost: &f{host}"
+      - " &f• &bKit: &f{kit}"
+      - " &f• &bPlayers: &f{players}/{maxPlayers}"
+      - " &f• &bWaiting for &b{remaining} &fmore players."
       - ""
       - "[clickable]"
       - ""

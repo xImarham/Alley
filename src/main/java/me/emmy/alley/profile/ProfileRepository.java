@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import me.emmy.alley.Alley;
 import me.emmy.alley.database.profile.IProfile;
+import me.emmy.alley.database.profile.impl.MongoProfileImpl;
 import org.bson.Document;
 
 import java.util.HashMap;
@@ -22,6 +23,10 @@ public class ProfileRepository {
     private final HashMap<UUID, Profile> profiles = new HashMap<>();
     public MongoCollection<Document> collection;
     public IProfile iProfile;
+
+    public ProfileRepository() {
+        setIProfile(new MongoProfileImpl());
+    }
 
     /**
      * Gets a profile by UUID.

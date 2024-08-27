@@ -23,6 +23,13 @@ import java.util.List;
 public class KitRepository {
     private final List<Kit> kits = new ArrayList<>();
 
+    public KitRepository() {
+        loadKits();
+    }
+
+    /**
+     * Method to load all kits from the kits.yml file.
+     */
     public void loadKits() {
         FileConfiguration config = Alley.getInstance().getConfigHandler().getConfigByName("storage/kits.yml");
         ConfigurationSection kitsSection = config.getConfigurationSection("kits");
@@ -58,6 +65,9 @@ public class KitRepository {
         }
     }
 
+    /**
+     * Method to save all kits to the kits.yml file.
+     */
     public void saveKits() {
         for (Kit kit : kits) {
             FileConfiguration config = Alley.getInstance().getConfigHandler().getConfigByName("storage/kits.yml");
@@ -121,6 +131,11 @@ public class KitRepository {
         }
     }
 
+    /**
+     * Method to save a kit to the kits.yml file.
+     *
+     * @param kit The kit to save.
+     */
     public void saveKit(Kit kit) {
         FileConfiguration config = Alley.getInstance().getConfigHandler().getConfigByName("storage/kits.yml");
         String key = "kits." + kit.getName();
@@ -145,6 +160,13 @@ public class KitRepository {
         Alley.getInstance().getConfigHandler().saveConfig(Alley.getInstance().getConfigHandler().getConfigFileByName("storage/kits.yml"), config);
     }
 
+    /**
+     * Method to apply the default settings to a kit.
+     *
+     * @param config The configuration file.
+     * @param key    The path key.
+     * @param kit    The kit.
+     */
     public void applyDefaultSettings(FileConfiguration config, String key, Kit kit) {
         KitSetting[] defaultSettings = new KitSetting[]{
                 new KitSettingBoxingImpl(),
@@ -164,6 +186,11 @@ public class KitRepository {
         Alley.getInstance().getConfigHandler().saveConfig(Alley.getInstance().getConfigHandler().getConfigFileByName("storage/kits.yml"), config);
     }
 
+    /**
+     * Method to add a kit to the queue.
+     *
+     * @param kit The kit to add.
+     */
     private void addKitToQueue(Kit kit) {
         if (!kit.isEnabled()) return;
         new Queue(kit, false);
@@ -173,6 +200,11 @@ public class KitRepository {
         }
     }
 
+    /**
+     * Method to create a new kit.
+     *
+     * @param name The name of the kit.
+     */
     public void deleteKit(Kit kit) {
         FileConfiguration config = Alley.getInstance().getConfigHandler().getConfigByName("storage/kits.yml");
         File file = Alley.getInstance().getConfigHandler().getConfigFileByName("storage/kits.yml");
@@ -183,6 +215,12 @@ public class KitRepository {
         Alley.getInstance().getConfigHandler().saveConfig(file, config);
     }
 
+    /**
+     * Method to get a kit by name.
+     *
+     * @param name The name of the kit.
+     * @return The kit.
+     */
     public Kit getKit(String name) {
         return kits.stream()
                 .filter(kit -> kit.getName().equalsIgnoreCase(name))

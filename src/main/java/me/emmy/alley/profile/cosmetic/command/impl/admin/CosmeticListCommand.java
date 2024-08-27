@@ -23,7 +23,6 @@ public class CosmeticListCommand extends BaseCommand {
         Map<String, ICosmeticRepository<?>> repositories = Alley.getInstance().getCosmeticRepository().getCosmeticRepositories();
 
         player.sendMessage("");
-        player.sendMessage(CC.FLOWER_BAR);
 
         if (repositories.isEmpty()) {
             player.sendMessage(CC.translate("      &f● &cNo Cosmetics available."));
@@ -32,12 +31,11 @@ public class CosmeticListCommand extends BaseCommand {
         repositories.forEach((name, repository) -> {
             int size = repository.getCosmetics().size();
             if (size != 0) {
-                player.sendMessage(CC.translate("     &d&l" + name + " &f(" + size + "&f)"));
-                repository.getCosmetics().forEach(cosmetic -> player.sendMessage(CC.translate("      &f● &d" + cosmetic.getName())));
+                player.sendMessage(CC.translate("     &b&l" + name + " &f(" + size + "&f)"));
+                repository.getCosmetics().forEach(cosmetic -> player.sendMessage(CC.translate("      &f● &b" + cosmetic.getName())));
             }
         });
 
-        player.sendMessage(CC.FLOWER_BAR);
         player.sendMessage("");
     }
 }
