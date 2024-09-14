@@ -3,16 +3,12 @@ package me.emmy.alley.ffa.menu;
 import lombok.AllArgsConstructor;
 import me.emmy.alley.Alley;
 import me.emmy.alley.ffa.AbstractFFAMatch;
-import me.emmy.alley.kit.Kit;
-import me.emmy.alley.leaderboard.menu.personal.button.KitStatButton;
-import me.emmy.alley.queue.menu.queues.QueuesMenu;
+import me.emmy.alley.queue.menu.QueuesMenu;
 import me.emmy.alley.utils.menu.Button;
 import me.emmy.alley.utils.menu.Menu;
 import me.emmy.alley.utils.menu.button.BackButton;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 

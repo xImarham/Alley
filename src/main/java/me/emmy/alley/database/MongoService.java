@@ -47,22 +47,11 @@ public class MongoService {
             String databaseName = ConfigHandler.getInstance().getDatabaseConfig().getString("mongo.database");
             this.mongoClient = MongoClients.create(settings);
             this.mongoDatabase = mongoClient.getDatabase(databaseName);
-            this.sendConnectionMessage();
+            Bukkit.getConsoleSender().sendMessage(CC.translate("&f[&bAlley&f] &fSuccessfully connected to MongoDB."));
         } catch (Exception e) {
-            Bukkit.getConsoleSender().sendMessage(CC.translate("&f[&bAlley&f] &cMongoDB failed to create a connection."));
+            FileConfiguration config = ConfigHandler.getInstance().getDatabaseConfig();
+            Bukkit.getConsoleSender().sendMessage(CC.translate("&f[&bAlley&f] &cFailed to connect to MongoDB. &7(Connection String: " + config.getString("mongo.uri") + ", Database: " + config.getString("mongo.database") + ")"));
+            System.exit(2);
         }
-    }
-
-    /**
-     * Sends a connection message to the console.
-     */
-    private void sendConnectionMessage() {
-        FileConfiguration config = ConfigHandler.getInstance().getDatabaseConfig();
-        String prefix = Alley.getInstance().getPrefix();
-
-        Bukkit.getConsoleSender().sendMessage(CC.translate("&f[&bAlley&f] &fSuccessfully connected to MongoDB."));
-        Bukkit.getConsoleSender().sendMessage(CC.translate(prefix + "&fMongo Database"));
-        Bukkit.getConsoleSender().sendMessage(CC.translate(prefix + " > Host: &b" + config.getString("mongo.uri")));
-        Bukkit.getConsoleSender().sendMessage(CC.translate(prefix + " > Database: &b" + config.getString("mongo.database")));
     }
 }

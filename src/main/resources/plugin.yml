@@ -3,4 +3,4 @@ version: '${project.version}'
 main: me.emmy.alley.Alley
 authors: ["Emmy", "Remi"]
 description: '${project.description}'
-website: dsc.gg/dulcy
+website: https://discord.gg/eT4B65k5E4

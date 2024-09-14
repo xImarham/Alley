@@ -2,9 +2,11 @@ package me.emmy.alley.utils.chat;
 
 import lombok.experimental.UtilityClass;
 import me.emmy.alley.Alley;
+import me.emmy.alley.config.ConfigHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 
+import javax.naming.PartialResultException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -79,21 +81,26 @@ public class CC {
      */
     public void pluginEnabled(long timeTaken) {
         Bukkit.getConsoleSender().sendMessage(" ");
-        Bukkit.getConsoleSender().sendMessage(CC.translate("&8&m-----------------------------------------------"));
-        Bukkit.getConsoleSender().sendMessage(CC.translate(" &f| Plugin: &b" + Alley.getInstance().getDescription().getName() + " &bPractice"));
-        Bukkit.getConsoleSender().sendMessage(CC.translate(" &f| Authors: &b" + Alley.getInstance().getDescription().getAuthors().toString().replace("[", "").replace("]", "")));
+        Bukkit.getConsoleSender().sendMessage(CC.translate("        &b&l" + Alley.getInstance().getDescription().getName() + " &bPractice"));
         Bukkit.getConsoleSender().sendMessage(" ");
-        Bukkit.getConsoleSender().sendMessage(CC.translate(" &f| Version: &b" + Alley.getInstance().getDescription().getVersion()));
-        Bukkit.getConsoleSender().sendMessage(CC.translate(" &f| Link: &b" + Alley.getInstance().getDescription().getWebsite()));
+        Bukkit.getConsoleSender().sendMessage(CC.translate("    &fAuthors: &b" + Alley.getInstance().getDescription().getAuthors().toString().replace("[", "").replace("]", "")));
         Bukkit.getConsoleSender().sendMessage(" ");
-        Bukkit.getConsoleSender().sendMessage(CC.translate(" &f| Arenas: &b" + Alley.getInstance().getArenaRepository().getArenas().size()));
-        Bukkit.getConsoleSender().sendMessage(CC.translate(" &f| Kits: &b" + Alley.getInstance().getKitRepository().getKits().size()));
-        Bukkit.getConsoleSender().sendMessage(CC.translate(" &f| FFA Arenas: &b" + Alley.getInstance().getFfaRepository().getMatches().size()));
+        Bukkit.getConsoleSender().sendMessage(CC.translate("    &fVersion: &b" + Alley.getInstance().getDescription().getVersion()));
+        Bukkit.getConsoleSender().sendMessage(CC.translate("    &fDiscord: &b" + Alley.getInstance().getDescription().getWebsite()));
+        Bukkit.getConsoleSender().sendMessage(CC.translate("    &fDescription: &b" + Alley.getInstance().getDescription().getDescription()));
         Bukkit.getConsoleSender().sendMessage(" ");
-        Bukkit.getConsoleSender().sendMessage(CC.translate(" &f| Spigot: &b" + Bukkit.getName()));
+        Bukkit.getConsoleSender().sendMessage(CC.translate("    &fArenas: &b" + Alley.getInstance().getArenaRepository().getArenas().size()));
+        Bukkit.getConsoleSender().sendMessage(CC.translate("    &fKits: &b" + Alley.getInstance().getKitRepository().getKits().size()));
+        Bukkit.getConsoleSender().sendMessage(CC.translate("    &fFFA Arenas: &b" + Alley.getInstance().getFfaRepository().getMatches().size()));
         Bukkit.getConsoleSender().sendMessage(" ");
-        Bukkit.getConsoleSender().sendMessage(CC.translate(" &f| Load time: &b" + (timeTaken) + " &bms"));
-        Bukkit.getConsoleSender().sendMessage(CC.translate("&8&m-----------------------------------------------"));
+        Bukkit.getConsoleSender().sendMessage(CC.translate("    &fSpigot: &b" + Bukkit.getName()));
+        Bukkit.getConsoleSender().sendMessage(CC.translate("    &fVersion: &b" + Alley.getInstance().getBukkitVersionExact()));
+        Bukkit.getConsoleSender().sendMessage(" ");
+        Bukkit.getConsoleSender().sendMessage(CC.translate("    &bMongoDB &f| &bStatus: &aConnected"));
+        Bukkit.getConsoleSender().sendMessage(CC.translate("     &fHost: &b" + ConfigHandler.getInstance().getDatabaseConfig().getString("mongo.uri")));
+        Bukkit.getConsoleSender().sendMessage(CC.translate("     &fDatabase: &b" + ConfigHandler.getInstance().getDatabaseConfig().getString("mongo.database")));
+        Bukkit.getConsoleSender().sendMessage(" ");
+        Bukkit.getConsoleSender().sendMessage(CC.translate("    &fLoaded in &b" + timeTaken + " &bms"));
         Bukkit.getConsoleSender().sendMessage(" ");
     }
 
@@ -102,7 +109,7 @@ public class CC {
      */
     public void pluginDisabled() {
         Bukkit.getConsoleSender().sendMessage(" ");
-        Bukkit.getConsoleSender().sendMessage(CC.translate("&8[&bAlley&8] &fDisabled &bAlley Practice&f!"));
+        Bukkit.getConsoleSender().sendMessage(CC.translate("&8[&bAlley&8] &cDisabled."));
         Bukkit.getConsoleSender().sendMessage(" ");
     }
 }

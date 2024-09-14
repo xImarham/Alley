@@ -2,20 +2,25 @@ package me.emmy.alley.profile.menu;
 
 import lombok.AllArgsConstructor;
 import me.emmy.alley.Alley;
+import me.emmy.alley.leaderboard.menu.personal.StatisticsMenu;
 import me.emmy.alley.profile.Profile;
-import me.emmy.alley.profile.data.impl.ProfileKitData;
 import me.emmy.alley.profile.division.AbstractDivision;
 import me.emmy.alley.profile.division.enums.EnumDivisionLevel;
 import me.emmy.alley.profile.division.enums.EnumDivisionTier;
+import me.emmy.alley.profile.division.menu.DivisionsMenu;
+import me.emmy.alley.profile.settings.playersettings.menu.SettingsMenu;
 import me.emmy.alley.utils.menu.Button;
 import me.emmy.alley.utils.menu.Menu;
+import me.emmy.alley.utils.menu.pagination.ItemBuilder;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -83,7 +88,15 @@ public class ProfileMenu extends Menu {
                 " &b● &fLevel: &b" + abstractDivision.getLevel().getName(),
                 "",
                 " &b● &fNext level: &b" + abstractDivision.getNextDivisionAndLevel(),
-                " &b● &fProgress: &bnull%"
+                " &b● &fProgress: &b" + "null"
+        )));
+
+        buttons.put(13, new ProfileButton("&b&lChallenges", new ItemStack(Material.BEACON), Arrays.asList(
+                "",
+                "&fView your current challenges",
+                "&fand complete them for rewards.",
+                "",
+                "&aClick to view!"
         )));
 
         String[] nextDivisionAndLevel = abstractDivision.getNextDivisionAndLevelArray();
@@ -100,7 +113,14 @@ public class ProfileMenu extends Menu {
                 "&aClick to view all divisions!"
         )));
 
-        buttons.put(15, new ProfileButton("&b&lProfile Settings", new ItemStack(Material.ANVIL), Arrays.asList(
+        buttons.put(15, new ProfileButton("&c&lEmpty", new ItemStack(Material.REDSTONE_BLOCK), Arrays.asList(
+                "",
+                "&fThis slot is empty.",
+                "",
+                "&aClick for nothing to happen!"
+        )));
+
+        buttons.put(16, new ProfileButton("&b&lProfile Settings", new ItemStack(Material.ANVIL), Arrays.asList(
                 "",
                 "&fCustomize your profile settings",
                 "&fto your preference.",
@@ -108,54 +128,63 @@ public class ProfileMenu extends Menu {
                 "&aClick to view!"
         )));
 
-        buttons.put(16, new ProfileButton("&b&lChallenges", new ItemStack(Material.BEACON), Arrays.asList(
-                "",
-                "&fView your current challenges",
-                "&fand complete them for rewards.",
-                "",
-                "&aClick to view!"
-        )));
-
-        buttons.put(20, new ProfileButton("&b&lLeaderboards", new ItemStack(Material.EYE_OF_ENDER), Arrays.asList(
-                "",
-                "&fView the leaderboards",
-                "&fwhere the best players",
-                "&fhave taken their place.",
-                "",
-                " &b&lTop Elo:",
-                "  &b1. &fnull",
-                "  &b2. &fnull",
-                "  &b3. &fnull",
-                "",
-                " &b&lTop 3 Unranked Wins:",
-                "  &b1. &fnull",
-                "  &b2. &fnull",
-                "  &b3. &fnull",
-                "",
-                " &b&lTop 3 Ranked Wins:",
-                "  &b1. &fnull",
-                "  &b2. &fnull",
-                "  &b3. &fnull",
-                "",
-                "&aClick to see the leaderboards!"
-        )));
-
-        buttons.put(24, new ProfileButton("&b&lCoin Shop", new ItemStack(Material.EMERALD), Arrays.asList(
-                "",
-                "&fPurchase cosmetics,",
-                "&fthemes, and more with",
-                "&fthe coins you earn.",
-                "",
-                "&aClick to view!"
-        )));
-
-        addBorder(buttons, (byte) 15, 5);
+        addBorder(buttons, (byte) 15, 3);
 
         return buttons;
     }
 
     @Override
     public int getSize() {
-        return 9 * 5;
+        return 9 * 3;
+    }
+
+    @AllArgsConstructor
+    public static class ProfileButton extends Button {
+
+        private String displayName;
+        private ItemStack itemStack;
+        private List<String> lore;
+
+        @Override
+        public ItemStack getButtonItem(Player player) {
+            return new ItemBuilder(itemStack)
+                    .name(displayName)
+                    .lore(lore)
+                    .hideMeta()
+                    .build();
+        }
+
+        @Override
+        public void clicked(Player player, int slot, ClickType clickType, int hotbarSlot) {
+            if (clickType == ClickType.MIDDLE || clickType == ClickType.RIGHT || clickType == ClickType.NUMBER_KEY || clickType == ClickType.DROP || clickType == ClickType.SHIFT_LEFT || clickType == ClickType.SHIFT_RIGHT) {
+                return;
+            }
+
+            Material material = itemStack.getType();
+
+            switch (material) {
+                case PAPER:
+                    new StatisticsMenu().openMenu(player);
+                    break;
+                case BOOK:
+                    player.performCommand("matchhistory");
+                    break;
+                case SKULL_ITEM:
+                    break;
+                case ANVIL:
+                    new SettingsMenu().openMenu(player);
+                    break;
+                case FEATHER:
+                    new DivisionsMenu().openMenu(player);
+                    break;
+                case BEACON:
+                    player.performCommand("challenges");
+                    break;
+                case ENDER_CHEST:
+                    player.performCommand("themes");
+                    break;
+            }
+            playNeutral(player);
+        }
     }
 }

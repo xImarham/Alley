@@ -6,7 +6,7 @@ import me.emmy.alley.leaderboard.menu.personal.StatisticsMenu;
 import me.emmy.alley.match.menu.CurrentMatchesMenu;
 import me.emmy.alley.profile.Profile;
 import me.emmy.alley.profile.settings.playersettings.menu.SettingsMenu;
-import me.emmy.alley.queue.menu.queues.QueuesMenu;
+import me.emmy.alley.queue.menu.QueuesMenu;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

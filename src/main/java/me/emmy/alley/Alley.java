@@ -32,6 +32,7 @@ import me.emmy.alley.kit.KitRepository;
 import me.emmy.alley.kit.command.KitCommand;
 import me.emmy.alley.kit.settings.KitSettingRepository;
 import me.emmy.alley.leaderboard.command.LeaderboardCommand;
+import me.emmy.alley.match.AbstractMatch;
 import me.emmy.alley.match.MatchRepository;
 import me.emmy.alley.match.command.admin.MatchCommand;
 import me.emmy.alley.match.command.player.CurrentMatchesCommand;
@@ -47,11 +48,15 @@ import me.emmy.alley.party.PartyRequest;
 import me.emmy.alley.party.command.PartyCommand;
 import me.emmy.alley.party.listener.PartyListener;
 import me.emmy.alley.profile.ProfileRepository;
+import me.emmy.alley.profile.command.ChallengesCommand;
+import me.emmy.alley.profile.command.MatchHistoryCommand;
 import me.emmy.alley.profile.command.ProfileMenuCommand;
+import me.emmy.alley.profile.command.ThemesCommand;
 import me.emmy.alley.profile.cosmetic.command.CosmeticCommand;
 import me.emmy.alley.profile.cosmetic.repository.CosmeticRepository;
 import me.emmy.alley.profile.division.DivisionRepository;
 import me.emmy.alley.profile.division.command.DivisionCommand;
+import me.emmy.alley.profile.enums.EnumProfileState;
 import me.emmy.alley.profile.listener.ProfileListener;
 import me.emmy.alley.profile.settings.matchsettings.command.MatchSettingsCommand;
 import me.emmy.alley.profile.settings.playersettings.command.SettingsCommand;
@@ -206,14 +211,14 @@ public class Alley extends JavaPlugin {
         Logger.logTime("DivisionRepository", () -> this.divisionRepository = new DivisionRepository());
         Logger.logTime("MongoService", () -> this.mongoService = new MongoService(registerDatabase()));
         Logger.logTime("HotbarRepository", () -> this.hotbarRepository = new HotbarRepository());
-        Logger.logTime("profiles", () -> this.profileRepository.loadProfiles());
+        Logger.logTime("Profiles", () -> this.profileRepository.loadProfiles());
         Logger.logTime("CooldownRepository", () -> this.cooldownRepository = new CooldownRepository());
         Logger.logTime("SnapshotRepository", () -> this.snapshotRepository = new SnapshotRepository());
         Logger.logTime("MatchRepository", () -> this.matchRepository = new MatchRepository());
         Logger.logTime("PartyRepository", () -> this.partyRepository = new PartyRepository());
         Logger.logTime("SpawnHandler", () -> this.spawnHandler = new SpawnHandler());
         Logger.logTime("CombatManager", () -> this.combatManager = new CombatManager());
-        Logger.logTime("FFASpawnHandler", ()-> this.ffaSpawnHandler = new FFASpawnHandler());
+        Logger.logTime("FFASpawnHandler", () -> this.ffaSpawnHandler = new FFASpawnHandler());
         Logger.logTime("PlayerVisibility", () -> this.playerVisibility = new PlayerVisibility());
     }
 
@@ -289,12 +294,15 @@ public class Alley extends JavaPlugin {
             new CurrentMatchesCommand();
             new LeaveQueueCommand();
             new QueuesCommand();
-            new ProfileMenuCommand();
             new MatchSettingsCommand();
 
             new InventoryCommand();
 
             new ShopCommand();
+            new ChallengesCommand();
+            new ProfileMenuCommand();
+            new MatchHistoryCommand();
+            new ThemesCommand();
         });
     }
 
@@ -317,8 +325,54 @@ public class Alley extends JavaPlugin {
         new FFASpawnTask(this.ffaSpawnHandler.getCuboid(), this).runTaskTimer(this, 0, 20);
     }
 
+    /**
+     * Get the configuration file by name
+     *
+     * @param fileName the name of the file
+     * @return the file configuration
+     */
     public FileConfiguration getConfig(String fileName) {
         File configFile = new File(getDataFolder(), fileName);
         return YamlConfiguration.loadConfiguration(configFile);
+    }
+
+    /**
+     * Get the exact bukkit version
+     *
+     * @return the exact bukkit version
+     */
+    public String getBukkitVersionExact() {
+        String version = Bukkit.getServer().getVersion();
+        version = version.split("MC: ")[1];
+        version = version.split("\\)")[0];
+        return version;
+    }
+
+    /**
+     * Get the player count of a specific queue type (Unranked, FFA, Ranked)
+     *
+     * @param queue the queue
+     * @return the player count
+     */
+    public int getPlayerCountOfGameType(String queue) {
+        switch (queue) {
+            case "Unranked":
+                return (int) matchRepository.getMatches().stream()
+                        .filter(match -> !match.isRanked())
+                        .distinct()
+                        .count();
+            case "Ranked":
+                return (int) matchRepository.getMatches().stream()
+                        .filter(AbstractMatch::isRanked)
+                        .distinct()
+                        .count();
+            case "FFA":
+                return (int) profileRepository.getProfiles().values().stream()
+                        .filter(profile -> profile.getState().equals(EnumProfileState.FFA))
+                        .count();
+            case "Bots":
+                return 0;
+        }
+        return 0;
     }
 }

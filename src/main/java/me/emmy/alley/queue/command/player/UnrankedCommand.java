@@ -3,7 +3,7 @@ package me.emmy.alley.queue.command.player;
 import me.emmy.alley.Alley;
 import me.emmy.alley.profile.Profile;
 import me.emmy.alley.profile.enums.EnumProfileState;
-import me.emmy.alley.queue.menu.unranked.UnrankedMenu;
+import me.emmy.alley.queue.menu.UnrankedMenu;
 import me.emmy.alley.utils.chat.CC;
 import me.emmy.alley.utils.command.BaseCommand;
 import me.emmy.alley.utils.command.Command;

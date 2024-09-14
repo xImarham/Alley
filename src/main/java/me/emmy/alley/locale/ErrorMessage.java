@@ -11,6 +11,7 @@ import me.emmy.alley.utils.chat.CC;
 @UtilityClass
 public class ErrorMessage {
     public String DEBUG = CC.translate("&4(&cDebug&4) &fSomething has happened.");
+    public String DEBUG_STILL_IN_DEVELOPMENT = CC.translate("&cThis is still in development.");
     public String DEBUG_CMD = "&4(Debug) This command cannot be used currently because It's still in development.";
     public String PLAYER_NOT_ONLINE = "&cNo player matching &4{player} &cis connected to this server.";
     public String PROFILE_NOT_FOUND = "&cProfile not found!";

@@ -10,14 +10,11 @@ import me.emmy.alley.leaderboard.menu.leaderboard.button.KitButton;
 import me.emmy.alley.leaderboard.menu.leaderboard.enums.EnumLeaderboardType;
 import me.emmy.alley.profile.Profile;
 import me.emmy.alley.profile.menu.ProfileMenu;
-import me.emmy.alley.queue.menu.queues.QueuesMenu;
 import me.emmy.alley.utils.menu.Button;
 import me.emmy.alley.utils.menu.Menu;
 import me.emmy.alley.utils.menu.button.BackButton;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
-import java.util.Arrays;
 import java.util.Map;
 
 /**
