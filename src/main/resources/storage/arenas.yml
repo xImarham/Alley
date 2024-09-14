@@ -39,3 +39,13 @@ arenas:
     kits:
       - Spleef
     enabled: true
+  parkour:
+    type: SHARED
+    minimum: world:174.0:36.0:-286.0:0.0:0.0
+    maximum: world:196.0:3.0:-203.0:0.0:0.0
+    center: world:184.53760683599373:31.880688392375927:-240.33149317478808:178.8924:20.13456
+    pos1: world:190.5:17.0:-272.5:-0.082240306:0.1484447
+    pos2: world:178.5:17.0:-272.5:359.96387:0.26067865
+    kits:
+      - Parkour
+    enabled: true

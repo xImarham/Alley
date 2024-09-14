@@ -11,13 +11,13 @@ A modern Practice core made by Emmy and Remi...
 - Party System
 - Kit System
 - FFA System
+- Elo System
+- Leaderboard System
 - Tournament System
 
 ### Untouched:
 - Arena Restoring System
-- Leaderboard System
 - Events System
-- Elo System
 
 ### In future to be added
 - Coin shop maybe?

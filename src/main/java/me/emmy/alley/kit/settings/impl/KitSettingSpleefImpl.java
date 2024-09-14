@@ -1,7 +1,7 @@
 package me.emmy.alley.kit.settings.impl;
 
 import me.emmy.alley.kit.settings.KitSetting;
-import me.emmy.alley.kit.settings.KitSettingData;
+import me.emmy.alley.kit.settings.annotation.KitSettingData;
 
 /**
  * @author Emmy

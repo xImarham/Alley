@@ -2,6 +2,7 @@ package me.emmy.alley.kit.settings;
 
 import lombok.Getter;
 import lombok.Setter;
+import me.emmy.alley.kit.settings.annotation.KitSettingData;
 
 /**
  * @author Remi

@@ -3,10 +3,11 @@ package me.emmy.alley.match.runnable;
 import lombok.Getter;
 import lombok.Setter;
 import me.emmy.alley.Alley;
-import me.emmy.alley.kit.settings.impl.KitSettingSumoImpl;
 import me.emmy.alley.match.AbstractMatch;
 import me.emmy.alley.match.enums.EnumMatchState;
+import me.emmy.alley.utils.SoundUtil;
 import me.emmy.alley.utils.chat.CC;
+import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitRunnable;
 
 /**
@@ -40,9 +41,10 @@ public class MatchRunnable extends BukkitRunnable {
                     Alley.getInstance().getServer().getScheduler().runTask(Alley.getInstance(), match::handleRoundStart);
                     match.setMatchState(EnumMatchState.RUNNING);
                     match.sendMessage(CC.translate("&aMatch has started. Good luck!"));
-
+                    playSoundStarted();
                 } else {
                     match.sendMessage(CC.translate("&aMatch is starting in " + stage + " seconds."));
+                    playSoundStarting();
                 }
                 break;
             case ENDING_ROUND:
@@ -59,5 +61,25 @@ public class MatchRunnable extends BukkitRunnable {
                 }
                 break;
         }
+    }
+
+    /**
+     * Play the sound during match countdown.
+     */
+    private void playSoundStarting() {
+        Bukkit.getOnlinePlayers().stream()
+                .filter(player -> match.getParticipants().stream().anyMatch(participant -> participant.containsPlayer(player.getUniqueId())))
+                .forEach(SoundUtil::playNeutral)
+        ;
+    }
+
+    /**
+     * Play the sound for the match when it started.
+     */
+    private void playSoundStarted() {
+        Bukkit.getOnlinePlayers().stream()
+                .filter(player -> match.getParticipants().stream().anyMatch(participant -> participant.containsPlayer(player.getUniqueId())))
+                .forEach(SoundUtil::playSuccess)
+        ;
     }
 }

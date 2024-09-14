@@ -49,8 +49,8 @@ public class KitCommand extends BaseCommand {
     }
     @Override
     @Command(name = "kit", permission = "alley.admin")
-    public void onCommand(CommandArgs args) {
-        CommandSender sender = args.getSender();
+    public void onCommand(CommandArgs command) {
+        CommandSender sender = command.getSender();
 
         sender.sendMessage(" ");
         sender.sendMessage(CC.translate("&b&lKit Commands Help:"));

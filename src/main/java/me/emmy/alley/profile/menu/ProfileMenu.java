@@ -80,22 +80,22 @@ public class ProfileMenu extends Menu {
         buttons.put(4, new ProfileButton("&b&lYour Profile", skullItem, Arrays.asList(
                 "",
                 " &b● &fCoins: &b" + profile.getProfileData().getCoins(),
-                " &b● &fLevel: &bnull",
+                " &b● &fLevel: &b" + abstractDivision.getLevel().getName(),
                 "",
-                " &b● &fNext level: &bnull",
+                " &b● &fNext level: &b" + abstractDivision.getNextDivisionAndLevel(),
                 " &b● &fProgress: &bnull%"
         )));
 
-        /*String[] nextDivisionAndLevel = abstractDivision.getNextDivisionAndLevelArray();
+        String[] nextDivisionAndLevel = abstractDivision.getNextDivisionAndLevelArray();
         int eloNeeded = abstractDivision.getEloNeededForDivision(EnumDivisionTier.valueOf(nextDivisionAndLevel[0].toUpperCase()), EnumDivisionLevel.valueOf("LEVEL_" + nextDivisionAndLevel[1]));
-        String progressBar = abstractDivision.generateProgressBar(eloNeeded);*/
+        String progressBar = abstractDivision.generateProgressBar(eloNeeded);
         buttons.put(14, new ProfileButton("&b&lDivisions", new ItemStack(Material.FEATHER), Arrays.asList(
                 "",
-                //" &b● &fCurrent Division: &b" + abstractDivision.getTier().getName(),
-                //" &b● &fCurrent Level: &b" + abstractDivision.getLevel().getName(),
+                " &b● &fCurrent Division: &b" + abstractDivision.getTier().getName(),
+                " &b● &fCurrent Level: &b" + abstractDivision.getLevel().getName(),
                 "",
-                //" &b● &fNext Division: &b" + abstractDivision.getNextDivisionAndLevel(),
-                " &b● &fProgress: &b" + "null",
+                " &b● &fNext Division: &b" + abstractDivision.getNextDivisionAndLevel(),
+                " &b● &fProgress: &b" + progressBar,
                 "",
                 "&aClick to view all divisions!"
         )));

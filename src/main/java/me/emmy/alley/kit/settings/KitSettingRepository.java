@@ -28,6 +28,8 @@ public class KitSettingRepository {
         registerSetting(KitSettingBoxingImpl.class);
         registerSetting(KitSettingSumoImpl.class);
         registerSetting(KitSettingSpleefImpl.class);
+        //registerSetting(KitSettingDenyMovementImpl.class);
+        registerSetting(KitSettingParkourImpl.class);
     }
 
     /**

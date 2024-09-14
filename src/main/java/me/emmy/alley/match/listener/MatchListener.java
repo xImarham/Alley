@@ -4,10 +4,7 @@ import me.emmy.alley.Alley;
 import me.emmy.alley.arena.Arena;
 import me.emmy.alley.cooldown.Cooldown;
 import me.emmy.alley.cooldown.CooldownRepository;
-import me.emmy.alley.kit.settings.impl.KitSettingBoxingImpl;
-import me.emmy.alley.kit.settings.impl.KitSettingBuildImpl;
-import me.emmy.alley.kit.settings.impl.KitSettingSpleefImpl;
-import me.emmy.alley.kit.settings.impl.KitSettingSumoImpl;
+import me.emmy.alley.kit.settings.impl.*;
 import me.emmy.alley.locale.ErrorMessage;
 import me.emmy.alley.match.AbstractMatch;
 import me.emmy.alley.match.enums.EnumMatchState;
@@ -18,26 +15,25 @@ import me.emmy.alley.profile.enums.EnumProfileState;
 import me.emmy.alley.utils.PlayerUtil;
 import me.emmy.alley.utils.location.RayTracerUtil;
 import me.emmy.alley.utils.chat.CC;
+import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Projectile;
-import org.bukkit.entity.Snowball;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.entity.ProjectileHitEvent;
+import org.bukkit.event.entity.*;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -181,9 +177,34 @@ public class MatchListener implements Listener {
                 event.setCancelled(true);
             }
         } else {
+            Bukkit.getConsoleSender().sendMessage(ErrorMessage.DEBUG);
+            if (player.getGameMode() == GameMode.CREATIVE) return;
+
             event.setCancelled(true);
         }
     }
+
+    /*@EventHandler
+    private void onEntityInteract(EntityInteractEvent event) {
+        if (event.getEntity() instanceof Player) {
+            Player winner = (Player) event.getEntity();
+            Profile profile = Alley.getInstance().getProfileRepository().getProfile(winner.getUniqueId());
+            if (profile.getState() == EnumProfileState.PLAYING) {
+                if (profile.getMatch() == null) {
+                    return;
+                }
+
+                if (profile.getMatch().getMatchKit().isSettingEnabled(KitSettingParkourImpl.class)) {
+                    if (event.getBlock().equals(Material.STONE_PLATE)) {
+                        for (GameParticipant<MatchGamePlayerImpl> participant : profile.getMatch().getParticipants()) {
+                            Player loser = participant.getPlayer().getPlayer();
+                                loser.setHealth(0);
+                        }
+                    }
+                }
+            }
+        }
+    }*/
 
     @EventHandler
     private void onBlockPlace(BlockPlaceEvent event) {
@@ -313,14 +334,34 @@ public class MatchListener implements Listener {
     @EventHandler
     private void onPlayerDeath(PlayerDeathEvent event) {
         Player player = event.getEntity();
+        Player killer = player.getKiller();
         Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
 
         if (profile.getState() == EnumProfileState.PLAYING) {
             event.setDeathMessage(null);
+
+            List<Item> droppedItems = new ArrayList<>();
+            for (ItemStack drop : event.getDrops()) {
+                if (drop != null && drop.getType() != Material.AIR) {
+                    droppedItems.add(player.getWorld().dropItemNaturally(player.getLocation(), drop));
+                }
+            }
             event.getDrops().clear();
+
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    for (Item item : droppedItems) {
+                        if (item != null && item.isValid()) {
+                            item.remove();
+                        }
+                    }
+                }
+            }.runTaskLater(Alley.getInstance(), 100L);
 
             Alley.getInstance().getServer().getScheduler().runTaskLater(Alley.getInstance(), () -> player.spigot().respawn(), 1L);
             profile.getMatch().handleDeath(player);
+            profile.getMatch().createSnapshot(player, killer);
         }
     }
 
@@ -347,6 +388,23 @@ public class MatchListener implements Listener {
         Player player = event.getPlayer();
         Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
         ItemStack item = event.getItem();
+
+        if (event.getAction() == Action.PHYSICAL) {
+            if (event.getClickedBlock() != null && event.getClickedBlock().getType() == Material.STONE_PLATE) {
+
+                player.sendMessage("You stepped on a stone pressure plate!");
+
+                if (profile != null && profile.getState() == EnumProfileState.PLAYING) {
+                    if (profile.getMatch() != null && profile.getMatch().getMatchKit().isSettingEnabled(KitSettingParkourImpl.class)) {
+
+                        for (GameParticipant<MatchGamePlayerImpl> participant : profile.getMatch().getParticipants()) {
+                            Player loser = participant.getPlayer().getPlayer();
+                            loser.setHealth(0);
+                        }
+                    }
+                }
+            }
+        }
 
         if (profile.getState() == EnumProfileState.PLAYING && item != null && item.getType() == Material.ENDER_PEARL) {
             if (profile.getMatch().getMatchState() == EnumMatchState.STARTING) {
@@ -412,6 +470,16 @@ public class MatchListener implements Listener {
             if (match.getMatchState() == EnumMatchState.STARTING || match.getMatchState() == EnumMatchState.RUNNING) {
                 match.handleDisconnect(player);
             }
+        }
+    }
+
+    @EventHandler
+    private void onPlayerDropItem(PlayerDropItemEvent event) {
+        Player player = event.getPlayer();
+        Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
+
+        if (profile.getState() == EnumProfileState.PLAYING) {
+            event.getItemDrop().remove();
         }
     }
 }

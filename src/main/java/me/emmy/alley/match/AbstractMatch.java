@@ -6,6 +6,7 @@ import me.emmy.alley.Alley;
 import me.emmy.alley.arena.Arena;
 import me.emmy.alley.hotbar.enums.HotbarType;
 import me.emmy.alley.kit.Kit;
+import me.emmy.alley.locale.ErrorMessage;
 import me.emmy.alley.match.enums.EnumMatchState;
 import me.emmy.alley.match.impl.MatchRegularImpl;
 import me.emmy.alley.match.player.GameParticipant;
@@ -169,6 +170,20 @@ public abstract class AbstractMatch {
         PlayerUtil.reset(player);
     }
 
+    public void createSnapshot(Player loser, Player winner) {
+
+        //For self match testing purposes during development, usually its not considered a match if the player is the winner and loser
+        if (winner != null) {
+            Snapshot winnerSnapshot = new Snapshot(winner, true);
+            snapshots.add(winnerSnapshot);
+        }
+
+        if (loser != null) {
+            Snapshot loserSnapshot = new Snapshot(loser, false);
+            snapshots.add(loserSnapshot);
+        }
+    }
+
     /**
      * Handles the death of a player.
      *
@@ -188,9 +203,6 @@ public abstract class AbstractMatch {
         notifyParticipants(player.getName() + " has died");
 
         player.setVelocity(new Vector());
-
-        Snapshot snapshot = new Snapshot(player, false);
-        snapshots.add(snapshot);
 
         if (getParticipants().size() == 2) {
             GameParticipant<MatchGamePlayerImpl> participantA = getParticipants().get(0);
@@ -301,6 +313,7 @@ public abstract class AbstractMatch {
      * @param player The player that respawned.
      */
     public void handleRespawn(Player player) {
+        player.sendMessage(ErrorMessage.DEBUG);
 
     }
 

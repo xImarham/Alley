@@ -84,7 +84,12 @@ public class ProfileDivisionData {
      * @return the division of the player
      */
     private String determineDivision(int elo) {
-        CC.broadcast("determineDivision | elo: " + elo);
+
+        if (elo == Profile.DEFAULT_ELO) {
+            CC.broadcast("Player has default elo value, returning bronze level 1");
+            return Alley.getInstance().getDivisionRepository().getDivision(EnumDivisionTier.BRONZE, EnumDivisionLevel.LEVEL_1);
+        }
+
         for (EnumDivisionTier tier : EnumDivisionTier.values()) {
             for (EnumDivisionLevel level : EnumDivisionLevel.values()) {
                 int[] eloRange = tier.getEloRangeForLevel(level);
@@ -93,6 +98,7 @@ public class ProfileDivisionData {
                 }
             }
         }
+
         return null;
     }
 

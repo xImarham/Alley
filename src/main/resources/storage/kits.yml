@@ -172,6 +172,9 @@ kits:
       Boxing:
         description: This is the boxing kit type
         enabled: false
+      Parkour:
+        description: This is the parkour kit type
+        enabled: false
   Classic:
     displayname: '&bClassic'
     description: '&7Old styled PvP.'
@@ -243,6 +246,9 @@ kits:
         enabled: true
       Boxing:
         description: This is the boxing kit type
+        enabled: false
+      Parkour:
+        description: This is the parkour kit type
         enabled: false
   Boxing:
     displayname: '&bBoxing'
@@ -337,6 +343,9 @@ kits:
       Boxing:
         description: This is the boxing kit type
         enabled: true
+      Parkour:
+        description: This is the parkour kit type
+        enabled: false
   Sumo:
     displayname: '&bSumo'
     description: '&7Knock off your rival!'
@@ -413,6 +422,9 @@ kits:
       Sumo:
         description: This is the boxing kit type
         enabled: true
+      Parkour:
+        description: This is the parkour kit type
+        enabled: false
   Spleef:
     displayname: '&bSpleef'
     description: '&7Snowy!'
@@ -500,3 +512,88 @@ kits:
       Sumo:
         description: This is the sumo kit type
         enabled: false
+      Parkour:
+        description: This is the parkour kit type
+        enabled: false
+  Parkour:
+    displayname: '&bParkour'
+    description: Classic parkour lol.
+    enabled: true
+    unrankedslot: 15
+    rankedslot: 15
+    editorslot: 15
+    items:
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+    armor:
+      - ==: org.bukkit.inventory.ItemStack
+        type: AIR
+        damage: -1
+        amount: 0
+      - ==: org.bukkit.inventory.ItemStack
+        type: AIR
+        damage: -1
+        amount: 0
+      - ==: org.bukkit.inventory.ItemStack
+        type: AIR
+        damage: -1
+        amount: 0
+      - ==: org.bukkit.inventory.ItemStack
+        type: AIR
+        damage: -1
+        amount: 0
+    icon: SAPLING
+    icondata: 0
+    settings:
+      Boxing:
+        description: This is the boxing kit type
+        enabled: false
+      Build:
+        description: Allows you to build in matches
+        enabled: false
+      Ranked:
+        description: This is the ranked kit type
+        enabled: true
+      Spleef:
+        description: This is the spleef kit type
+        enabled: false
+      Sumo:
+        description: This is the sumo kit type
+        enabled: false
+      Parkour:
+        description: This is the parkour kit type
+        enabled: true

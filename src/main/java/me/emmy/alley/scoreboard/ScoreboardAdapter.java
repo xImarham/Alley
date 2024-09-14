@@ -1,6 +1,5 @@
 package me.emmy.alley.scoreboard;
 
-import me.clip.placeholderapi.PlaceholderAPI;
 import me.emmy.alley.Alley;
 import me.emmy.alley.kit.settings.impl.KitSettingBoxingImpl;
 import me.emmy.alley.match.enums.EnumMatchState;
@@ -60,39 +59,33 @@ public class ScoreboardAdapter implements AssembleAdapter {
             switch (profile.getState()) {
                 case LOBBY:
                     for (String line : Alley.getInstance().getConfigHandler().getConfigByName("providers/scoreboard.yml").getStringList("scoreboard.lines.lobby")) {
-                        String replacedLine = PlaceholderAPI.setPlaceholders(player, line);
-                        replacedLine = replacedLine
+                        toReturn.add(CC.translate(line)
                                 .replaceAll("\\{sidebar}", Alley.getInstance().getConfigHandler().getConfigByName("providers/scoreboard.yml").getString("scoreboard.sidebar-format"))
                                 .replaceAll("\\{online}", String.valueOf(Bukkit.getOnlinePlayers().size()))
                                 .replaceAll("\\{playing}", String.valueOf(Alley.getInstance().getProfileRepository().getProfiles().values().stream().filter(profile1 -> profile1.getState() == EnumProfileState.PLAYING).count()))
-                                .replaceAll("\\{in-queue}", String.valueOf(Alley.getInstance().getProfileRepository().getProfiles().values().stream().filter(profile1 -> profile1.getState() == EnumProfileState.WAITING).count()));
-                        toReturn.add(CC.translate(replacedLine));
+                                .replaceAll("\\{in-queue}", String.valueOf(Alley.getInstance().getProfileRepository().getProfiles().values().stream().filter(profile1 -> profile1.getState() == EnumProfileState.WAITING).count())));
                     }
 
                     if (profile.getParty() != null) {
                         for (String line : Alley.getInstance().getConfigHandler().getConfigByName("providers/scoreboard.yml").getStringList("scoreboard.lines.party-addition")) {
-                            String replacedLine = PlaceholderAPI.setPlaceholders(player, line);
-                            replacedLine = replacedLine
+                            toReturn.add(CC.translate(line)
                                     .replaceAll("\\{sidebar}", Alley.getInstance().getConfigHandler().getConfigByName("providers/scoreboard.yml").getString("scoreboard.sidebar-format"))
                                     .replaceAll("\\{party-size}", String.valueOf(profile.getParty().getMembers().size()))
-                                    .replaceAll("\\{party-leader}", profile.getParty().getLeader().getName());
-                            toReturn.add(CC.translate(replacedLine));
+                                    .replaceAll("\\{party-leader}", profile.getParty().getLeader().getName()));
                         }
                     }
 
                     break;
                 case WAITING:
                     for (String line : Alley.getInstance().getConfigHandler().getConfigByName("providers/scoreboard.yml").getStringList("scoreboard.lines.waiting")) {
-                        String replacedLine = PlaceholderAPI.setPlaceholders(player, line);
-                        replacedLine = replacedLine
+                        toReturn.add(CC.translate(line)
                                 .replaceAll("\\{sidebar}", Alley.getInstance().getConfigHandler().getConfigByName("providers/scoreboard.yml").getString("scoreboard.sidebar-format"))
                                 .replaceAll("\\{online}", String.valueOf(Bukkit.getOnlinePlayers().size()))
                                 .replaceAll("\\{playing}", String.valueOf(Alley.getInstance().getProfileRepository().getProfiles().values().stream().filter(profile1 -> profile1.getState() == EnumProfileState.PLAYING).count()))
                                 .replaceAll("\\{in-queue}", String.valueOf(Alley.getInstance().getProfileRepository().getProfiles().values().stream().filter(profile1 -> profile1.getState() == EnumProfileState.WAITING).count()))
                                 .replaceAll("\\{queued-type}", Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId()).getQueueProfile().getQueue().getQueueType())
                                 .replaceAll("\\{queued-time}", String.valueOf(Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId()).getQueueProfile().getFormattedElapsedTime()))
-                                .replaceAll("\\{queued-kit}", String.valueOf(Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId()).getQueueProfile().getQueue().getKit().getName()));
-                        toReturn.add(CC.translate(replacedLine));
+                                .replaceAll("\\{queued-kit}", String.valueOf(Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId()).getQueueProfile().getQueue().getKit().getName())));
                     }
                     break;
                 case PLAYING:
@@ -113,21 +106,18 @@ public class ScoreboardAdapter implements AssembleAdapter {
 
                     if (profile.getMatch().getMatchState() == EnumMatchState.STARTING) {
                         for (String line : Alley.getInstance().getConfigHandler().getConfigByName("providers/scoreboard.yml").getStringList("scoreboard.lines.starting")) {
-                            String replacedLine = PlaceholderAPI.setPlaceholders(player, line);
-                            replacedLine = replacedLine
+                            toReturn.add(CC.translate(line)
                                     .replaceAll("\\{sidebar}", Alley.getInstance().getConfigHandler().getConfigByName("providers/scoreboard.yml").getString("scoreboard.sidebar-format"))
                                     .replaceAll("\\{opponent}", opponent.getPlayer().getUsername())
                                     .replaceAll("\\{opponent-ping}", String.valueOf(BukkitReflection.getPing(opponent.getPlayer().getPlayer())))
                                     .replaceAll("\\{player-ping}", String.valueOf(BukkitReflection.getPing(player)))
                                     .replaceAll("\\{duration}", profile.getMatch().getDuration())
                                     .replaceAll("\\{arena}", profile.getMatch().getMatchArena().getDisplayName())
-                                    .replaceAll("\\{kit}", profile.getMatch().getMatchKit().getDisplayName());
-                            toReturn.add(CC.translate(replacedLine));
+                                    .replaceAll("\\{kit}", profile.getMatch().getMatchKit().getDisplayName()));
                         }
                     } else if (profile.getMatch().getMatchState() == EnumMatchState.ENDING_MATCH) {
                         for (String line : Alley.getInstance().getConfigHandler().getConfigByName("providers/scoreboard.yml").getStringList("scoreboard.lines.ending")) {
-                            String replacedLine = PlaceholderAPI.setPlaceholders(player, line);
-                            replacedLine = replacedLine
+                            toReturn.add(CC.translate(line)
                                     .replaceAll("\\{sidebar}", Alley.getInstance().getConfigHandler().getConfigByName("providers/scoreboard.yml").getString("scoreboard.sidebar-format"))
                                     .replaceAll("\\{opponent}", opponent.getPlayer().getUsername())
                                     .replaceAll("\\{opponent-ping}", String.valueOf(BukkitReflection.getPing(opponent.getPlayer().getPlayer())))
@@ -136,13 +126,11 @@ public class ScoreboardAdapter implements AssembleAdapter {
                                     .replaceAll("\\{arena}", profile.getMatch().getMatchArena().getDisplayName())
                                     .replaceAll("\\{kit}", profile.getMatch().getMatchKit().getDisplayName())
                                     .replaceAll("\\{winner}", opponent.getPlayer().isDead() ? you.getPlayer().getUsername() : opponent.getPlayer().getUsername())
-                                    .replaceAll("\\{end-result}", opponent.getPlayer().isDead() ? "&a&lVICTORY!" : "&c&lDEFEAT!");
-                            toReturn.add(CC.translate(replacedLine));
+                                    .replaceAll("\\{end-result}", opponent.getPlayer().isDead() ? "&a&lVICTORY!" : "&c&lDEFEAT!"));
                         }
                     } else if (profile.getMatch().getMatchKit().isSettingEnabled(KitSettingBoxingImpl.class)) {
                         for (String line : Alley.getInstance().getConfigHandler().getConfigByName("providers/scoreboard.yml").getStringList("scoreboard.lines.playing.boxing-match")) {
-                            String replacedLine = PlaceholderAPI.setPlaceholders(player, line);
-                            replacedLine = replacedLine
+                            toReturn.add(CC.translate(line)
                                     .replaceAll("\\{sidebar}", Alley.getInstance().getConfigHandler().getConfigByName("providers/scoreboard.yml").getString("scoreboard.sidebar-format"))
                                     .replaceAll("\\{opponent}", opponent.getPlayer().getUsername())
                                     .replaceAll("\\{opponent-ping}", String.valueOf(BukkitReflection.getPing(opponent.getPlayer().getPlayer())))
@@ -153,28 +141,24 @@ public class ScoreboardAdapter implements AssembleAdapter {
                                     .replaceAll("\\{player-ping}", String.valueOf(BukkitReflection.getPing(player)))
                                     .replaceAll("\\{duration}", profile.getMatch().getDuration())
                                     .replaceAll("\\{arena}", profile.getMatch().getMatchArena().getDisplayName())
-                                    .replaceAll("\\{kit}", profile.getMatch().getMatchKit().getDisplayName());
-                            toReturn.add(CC.translate(replacedLine));
+                                    .replaceAll("\\{kit}", profile.getMatch().getMatchKit().getDisplayName()));
                         }
                     } else {
                         for (String line : Alley.getInstance().getConfigHandler().getConfigByName("providers/scoreboard.yml").getStringList("scoreboard.lines.playing.regular-match")) {
-                            String replacedLine = PlaceholderAPI.setPlaceholders(player, line);
-                            replacedLine = replacedLine
+                            toReturn.add(CC.translate(line)
                                     .replaceAll("\\{sidebar}", Alley.getInstance().getConfigHandler().getConfigByName("providers/scoreboard.yml").getString("scoreboard.sidebar-format"))
                                     .replaceAll("\\{opponent}", opponent.getPlayer().getUsername())
                                     .replaceAll("\\{opponent-ping}", String.valueOf(BukkitReflection.getPing(opponent.getPlayer().getPlayer())))
                                     .replaceAll("\\{player-ping}", String.valueOf(BukkitReflection.getPing(player)))
                                     .replaceAll("\\{duration}", profile.getMatch().getDuration())
                                     .replaceAll("\\{arena}", profile.getMatch().getMatchArena().getDisplayName())
-                                    .replaceAll("\\{kit}", profile.getMatch().getMatchKit().getDisplayName());
-                            toReturn.add(CC.translate(replacedLine));
+                                    .replaceAll("\\{kit}", profile.getMatch().getMatchKit().getDisplayName()));
                         }
                     }
                     break;
                 case SPECTATING:
                     for (String line : Alley.getInstance().getConfigHandler().getConfigByName("providers/scoreboard.yml").getStringList("scoreboard.lines.spectating")) {
-                        String replacedLine = PlaceholderAPI.setPlaceholders(player, line);
-                        replacedLine = replacedLine
+                        toReturn.add(CC.translate(line)
                                 .replaceAll("\\{sidebar}", Alley.getInstance().getConfigHandler().getConfigByName("providers/scoreboard.yml").getString("scoreboard.sidebar-format"))
                                 .replaceAll("\\{player1}", profile.getMatch().getParticipants().get(0).getPlayer().getUsername())
                                 .replaceAll("\\{player2}", profile.getMatch().getParticipants().get(1).getPlayer().getUsername())
@@ -182,31 +166,26 @@ public class ScoreboardAdapter implements AssembleAdapter {
                                 .replaceAll("\\{player2-ping}", String.valueOf(BukkitReflection.getPing(profile.getMatch().getParticipants().get(1).getPlayer().getPlayer())))
                                 .replaceAll("\\{duration}", profile.getMatch().getDuration())
                                 .replaceAll("\\{arena}", profile.getMatch().getMatchArena().getDisplayName())
-                                .replaceAll("\\{kit}", profile.getMatch().getMatchKit().getDisplayName());
-                        toReturn.add(CC.translate(replacedLine));
+                                .replaceAll("\\{kit}", profile.getMatch().getMatchKit().getDisplayName()));
                     }
                     break;
                 case FFA:
                     for (String line : Alley.getInstance().getConfigHandler().getConfigByName("providers/scoreboard.yml").getStringList("scoreboard.lines.ffa")) {
-                        String replacedLine = PlaceholderAPI.setPlaceholders(player, line);
-                        replacedLine = replacedLine
+                        toReturn.add(CC.translate(line)
                                 .replaceAll("\\{sidebar}", Alley.getInstance().getConfigHandler().getConfigByName("providers/scoreboard.yml").getString("scoreboard.sidebar-format"))
                                 .replaceAll("\\{kit}", profile.getFfaMatch().getKit().getDisplayName())
                                 .replaceAll("\\{players}", String.valueOf(profile.getFfaMatch().getPlayers().size()))
                                 .replaceAll("\\{zone}", Alley.getInstance().getFfaSpawnHandler().getCuboid().isIn(player) ? "Spawn" : "Warzone")
                                 .replaceAll("\\{kills}", String.valueOf(profile.getProfileData().getFfaData().get(profile.getFfaMatch().getKit().getName()).getKills()))
                                 .replaceAll("\\{deaths}", String.valueOf(profile.getProfileData().getFfaData().get(profile.getFfaMatch().getKit().getName()).getDeaths()))
-                                .replaceAll("\\{ping}", String.valueOf(BukkitReflection.getPing(player)));
-                        toReturn.add(CC.translate(replacedLine));
+                                .replaceAll("\\{ping}", String.valueOf(BukkitReflection.getPing(player))));
                     }
                     break;
             }
+
             List<String> footer = Alley.getInstance().getConfigHandler().getConfigByName("providers/scoreboard.yml").getStringList("scoreboard.footer-addition");
             for (String line : footer) {
-                String replacedLine = PlaceholderAPI.setPlaceholders(player, line);
-                replacedLine = replacedLine
-                        .replaceAll("\\{sidebar}", Alley.getInstance().getConfigHandler().getConfigByName("providers/scoreboard.yml").getString("scoreboard.sidebar-format"));
-                toReturn.add(CC.translate(replacedLine));
+                toReturn.add(CC.translate(line).replaceAll("\\{sidebar}", Alley.getInstance().getConfigHandler().getConfigByName("providers/scoreboard.yml").getString("scoreboard.sidebar-format")));
             }
             return toReturn;
         }

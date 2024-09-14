@@ -6,8 +6,8 @@ import me.emmy.alley.kit.settings.annotation.KitSettingData;
 /**
  * @author Emmy
  * @project Alley
- * @date 07/06/2024 - 19:31
+ * @date 27/08/2024 - 19:10
  */
-@KitSettingData(name = "Sumo", description = "This is the sumo kit type", enabled = false)
-public class KitSettingSumoImpl extends KitSetting {
+@KitSettingData(name = "Parkour", description = "This is the parkour kit type", enabled = false)
+public class KitSettingParkourImpl extends KitSetting {
 }
