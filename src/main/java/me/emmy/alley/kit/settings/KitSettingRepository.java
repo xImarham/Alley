@@ -3,7 +3,7 @@ package me.emmy.alley.kit.settings;
 import lombok.Getter;
 import lombok.Setter;
 import me.emmy.alley.kit.settings.impl.*;
-import me.emmy.alley.utils.chat.Logger;
+import me.emmy.alley.util.chat.Logger;
 
 import java.util.ArrayList;
 import java.util.HashMap;

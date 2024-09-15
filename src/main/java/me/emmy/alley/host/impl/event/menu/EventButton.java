@@ -1,6 +1,6 @@
 package me.emmy.alley.host.impl.event.menu;
 
-import me.emmy.alley.utils.menu.Button;
+import me.emmy.alley.api.menu.Button;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 

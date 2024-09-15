@@ -7,8 +7,8 @@ import me.emmy.alley.profile.Profile;
 import me.emmy.alley.profile.division.AbstractDivision;
 import me.emmy.alley.profile.division.enums.EnumDivisionLevel;
 import me.emmy.alley.profile.division.enums.EnumDivisionTier;
-import me.emmy.alley.utils.item.ItemBuilder;
-import me.emmy.alley.utils.menu.Button;
+import me.emmy.alley.util.item.ItemBuilder;
+import me.emmy.alley.api.menu.Button;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 

@@ -2,7 +2,7 @@ package me.emmy.alley.party;
 
 import lombok.Getter;
 import lombok.Setter;
-import me.emmy.alley.utils.chat.CC;
+import me.emmy.alley.util.chat.CC;
 import net.md_5.bungee.api.chat.*;
 import org.bukkit.entity.Player;
 

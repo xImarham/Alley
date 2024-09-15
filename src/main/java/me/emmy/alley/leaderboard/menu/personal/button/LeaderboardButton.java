@@ -1,9 +1,8 @@
 package me.emmy.alley.leaderboard.menu.personal.button;
 
 import me.emmy.alley.leaderboard.menu.leaderboard.LeaderboardMenu;
-import me.emmy.alley.leaderboard.menu.personal.StatisticsMenu;
-import me.emmy.alley.utils.item.ItemBuilder;
-import me.emmy.alley.utils.menu.Button;
+import me.emmy.alley.util.item.ItemBuilder;
+import me.emmy.alley.api.menu.Button;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;

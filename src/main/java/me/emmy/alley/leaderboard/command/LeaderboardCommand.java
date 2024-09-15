@@ -1,10 +1,9 @@
 package me.emmy.alley.leaderboard.command;
 
-import me.emmy.alley.leaderboard.menu.leaderboard.LeaderboardMenu;
 import me.emmy.alley.leaderboard.menu.personal.StatisticsMenu;
-import me.emmy.alley.utils.command.BaseCommand;
-import me.emmy.alley.utils.command.Command;
-import me.emmy.alley.utils.command.CommandArgs;
+import me.emmy.alley.api.command.BaseCommand;
+import me.emmy.alley.api.command.Command;
+import me.emmy.alley.api.command.CommandArgs;
 import org.bukkit.entity.Player;
 
 /**

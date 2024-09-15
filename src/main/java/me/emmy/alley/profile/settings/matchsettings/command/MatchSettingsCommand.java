@@ -1,9 +1,9 @@
 package me.emmy.alley.profile.settings.matchsettings.command;
 
 import me.emmy.alley.profile.settings.matchsettings.menu.MatchSettingsMenu;
-import me.emmy.alley.utils.command.BaseCommand;
-import me.emmy.alley.utils.command.Command;
-import me.emmy.alley.utils.command.CommandArgs;
+import me.emmy.alley.api.command.BaseCommand;
+import me.emmy.alley.api.command.Command;
+import me.emmy.alley.api.command.CommandArgs;
 import org.bukkit.entity.Player;
 
 /**

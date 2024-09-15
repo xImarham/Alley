@@ -10,7 +10,7 @@ import me.emmy.alley.match.player.GameParticipant;
 import me.emmy.alley.match.player.impl.MatchGamePlayerImpl;
 import me.emmy.alley.profile.Profile;
 import me.emmy.alley.queue.Queue;
-import me.emmy.alley.utils.elo.EloManager;
+import me.emmy.alley.util.elo.EloManager;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;

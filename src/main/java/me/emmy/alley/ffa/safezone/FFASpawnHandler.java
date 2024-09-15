@@ -7,8 +7,8 @@ import me.emmy.alley.arena.Arena;
 import me.emmy.alley.arena.ArenaType;
 import me.emmy.alley.config.ConfigHandler;
 import me.emmy.alley.ffa.safezone.cuboid.Cuboid;
-import me.emmy.alley.utils.chat.CC;
-import me.emmy.alley.utils.location.LocationUtil;
+import me.emmy.alley.util.chat.CC;
+import me.emmy.alley.util.location.LocationUtil;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
 

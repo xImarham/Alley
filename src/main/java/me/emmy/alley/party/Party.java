@@ -7,7 +7,7 @@ import me.emmy.alley.hotbar.enums.HotbarType;
 import me.emmy.alley.party.enums.EnumPartyState;
 import me.emmy.alley.profile.Profile;
 import me.emmy.alley.profile.enums.EnumProfileState;
-import me.emmy.alley.utils.chat.CC;
+import me.emmy.alley.util.chat.CC;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;

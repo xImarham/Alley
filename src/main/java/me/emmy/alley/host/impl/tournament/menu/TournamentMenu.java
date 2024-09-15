@@ -1,7 +1,7 @@
 package me.emmy.alley.host.impl.tournament.menu;
 
-import me.emmy.alley.utils.menu.Button;
-import me.emmy.alley.utils.menu.Menu;
+import me.emmy.alley.api.menu.Button;
+import me.emmy.alley.api.menu.Menu;
 import org.bukkit.entity.Player;
 
 import java.util.Collections;

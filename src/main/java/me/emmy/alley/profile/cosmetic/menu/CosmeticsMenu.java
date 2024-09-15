@@ -1,19 +1,16 @@
 package me.emmy.alley.profile.cosmetic.menu;
 
-import com.sun.org.apache.xerces.internal.impl.xpath.regex.Match;
 import lombok.AllArgsConstructor;
 import me.emmy.alley.Alley;
 import me.emmy.alley.profile.cosmetic.menu.button.SoundEffectButton;
 import me.emmy.alley.profile.cosmetic.menu.button.CosmeticButton;
 import me.emmy.alley.profile.cosmetic.menu.button.KillEffectButton;
 import me.emmy.alley.profile.settings.matchsettings.menu.MatchSettingsMenu;
-import me.emmy.alley.utils.menu.Button;
-import me.emmy.alley.utils.menu.Menu;
-import me.emmy.alley.utils.menu.button.BackButton;
-import org.bukkit.Material;
+import me.emmy.alley.api.menu.Button;
+import me.emmy.alley.api.menu.Menu;
+import me.emmy.alley.api.menu.button.BackButton;
 import org.bukkit.entity.Player;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 

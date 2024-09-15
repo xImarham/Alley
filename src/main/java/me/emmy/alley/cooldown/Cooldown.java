@@ -1,7 +1,7 @@
 package me.emmy.alley.cooldown;
 
 import lombok.Getter;
-import me.emmy.alley.utils.TaskUtil;
+import me.emmy.alley.util.TaskUtil;
 import org.bukkit.scheduler.BukkitTask;
 
 /**

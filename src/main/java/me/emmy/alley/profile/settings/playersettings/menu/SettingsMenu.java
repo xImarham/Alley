@@ -3,9 +3,9 @@ package me.emmy.alley.profile.settings.playersettings.menu;
 import lombok.AllArgsConstructor;
 import me.emmy.alley.Alley;
 import me.emmy.alley.profile.menu.ProfileMenu;
-import me.emmy.alley.utils.menu.Button;
-import me.emmy.alley.utils.menu.Menu;
-import me.emmy.alley.utils.menu.button.BackButton;
+import me.emmy.alley.api.menu.Button;
+import me.emmy.alley.api.menu.Menu;
+import me.emmy.alley.api.menu.button.BackButton;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 

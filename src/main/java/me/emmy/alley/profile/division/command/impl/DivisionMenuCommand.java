@@ -1,11 +1,9 @@
 package me.emmy.alley.profile.division.command.impl;
 
-import me.emmy.alley.Alley;
 import me.emmy.alley.profile.division.menu.DivisionsMenu;
-import me.emmy.alley.utils.chat.CC;
-import me.emmy.alley.utils.command.BaseCommand;
-import me.emmy.alley.utils.command.Command;
-import me.emmy.alley.utils.command.CommandArgs;
+import me.emmy.alley.api.command.BaseCommand;
+import me.emmy.alley.api.command.Command;
+import me.emmy.alley.api.command.CommandArgs;
 import org.bukkit.entity.Player;
 
 /**

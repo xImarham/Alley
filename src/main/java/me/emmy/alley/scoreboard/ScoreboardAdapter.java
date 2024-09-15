@@ -7,9 +7,10 @@ import me.emmy.alley.match.player.GameParticipant;
 import me.emmy.alley.match.player.impl.MatchGamePlayerImpl;
 import me.emmy.alley.profile.Profile;
 import me.emmy.alley.profile.enums.EnumProfileState;
-import me.emmy.alley.utils.assemble.AssembleAdapter;
-import me.emmy.alley.utils.chat.CC;
-import me.emmy.alley.utils.reflection.BukkitReflection;
+import me.emmy.alley.util.AnimationUtil;
+import me.emmy.alley.api.assemble.AssembleAdapter;
+import me.emmy.alley.util.chat.CC;
+import me.emmy.alley.util.reflection.BukkitReflection;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -85,6 +86,7 @@ public class ScoreboardAdapter implements AssembleAdapter {
                                 .replaceAll("\\{in-queue}", String.valueOf(Alley.getInstance().getProfileRepository().getProfiles().values().stream().filter(profile1 -> profile1.getState() == EnumProfileState.WAITING).count()))
                                 .replaceAll("\\{queued-type}", Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId()).getQueueProfile().getQueue().getQueueType())
                                 .replaceAll("\\{queued-time}", String.valueOf(Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId()).getQueueProfile().getFormattedElapsedTime()))
+                                .replaceAll("\\{dot-animation}", AnimationUtil.getDots())
                                 .replaceAll("\\{queued-kit}", String.valueOf(Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId()).getQueueProfile().getQueue().getKit().getName())));
                     }
                     break;
@@ -113,6 +115,7 @@ public class ScoreboardAdapter implements AssembleAdapter {
                                     .replaceAll("\\{player-ping}", String.valueOf(BukkitReflection.getPing(player)))
                                     .replaceAll("\\{duration}", profile.getMatch().getDuration())
                                     .replaceAll("\\{arena}", profile.getMatch().getMatchArena().getDisplayName())
+                                    .replaceAll("\\{dot-animation}", AnimationUtil.getDots())
                                     .replaceAll("\\{kit}", profile.getMatch().getMatchKit().getDisplayName()));
                         }
                     } else if (profile.getMatch().getMatchState() == EnumMatchState.ENDING_MATCH) {

@@ -5,10 +5,10 @@ import me.emmy.alley.arena.Arena;
 import me.emmy.alley.arena.ArenaType;
 import me.emmy.alley.kit.Kit;
 import me.emmy.alley.locale.Locale;
-import me.emmy.alley.utils.chat.CC;
-import me.emmy.alley.utils.command.BaseCommand;
-import me.emmy.alley.utils.command.Command;
-import me.emmy.alley.utils.command.CommandArgs;
+import me.emmy.alley.util.chat.CC;
+import me.emmy.alley.api.command.BaseCommand;
+import me.emmy.alley.api.command.Command;
+import me.emmy.alley.api.command.CommandArgs;
 import org.bukkit.entity.Player;
 
 /**

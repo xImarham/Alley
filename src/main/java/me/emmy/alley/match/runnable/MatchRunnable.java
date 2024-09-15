@@ -5,8 +5,8 @@ import lombok.Setter;
 import me.emmy.alley.Alley;
 import me.emmy.alley.match.AbstractMatch;
 import me.emmy.alley.match.enums.EnumMatchState;
-import me.emmy.alley.utils.SoundUtil;
-import me.emmy.alley.utils.chat.CC;
+import me.emmy.alley.util.SoundUtil;
+import me.emmy.alley.util.chat.CC;
 import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitRunnable;
 

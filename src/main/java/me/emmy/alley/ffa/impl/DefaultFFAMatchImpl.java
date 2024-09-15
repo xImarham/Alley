@@ -7,8 +7,8 @@ import me.emmy.alley.hotbar.enums.HotbarType;
 import me.emmy.alley.kit.Kit;
 import me.emmy.alley.profile.Profile;
 import me.emmy.alley.profile.enums.EnumProfileState;
-import me.emmy.alley.utils.PlayerUtil;
-import me.emmy.alley.utils.chat.CC;
+import me.emmy.alley.util.PlayerUtil;
+import me.emmy.alley.util.chat.CC;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 

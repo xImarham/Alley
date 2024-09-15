@@ -2,7 +2,7 @@ package me.emmy.alley.host.impl.tournament;
 
 import me.emmy.alley.Alley;
 import me.emmy.alley.config.ConfigHandler;
-import me.emmy.alley.utils.chat.CC;
+import me.emmy.alley.util.chat.CC;
 import net.md_5.bungee.api.chat.*;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;

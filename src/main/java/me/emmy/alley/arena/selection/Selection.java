@@ -3,7 +3,7 @@ package me.emmy.alley.arena.selection;
 import lombok.Data;
 import lombok.Getter;
 import me.emmy.alley.Alley;
-import me.emmy.alley.utils.menu.pagination.ItemBuilder;
+import me.emmy.alley.api.menu.pagination.ItemBuilder;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;

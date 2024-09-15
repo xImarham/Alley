@@ -3,7 +3,7 @@ package me.emmy.alley.party.listener;
 import me.emmy.alley.Alley;
 import me.emmy.alley.party.Party;
 import me.emmy.alley.profile.Profile;
-import me.emmy.alley.utils.chat.CC;
+import me.emmy.alley.util.chat.CC;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

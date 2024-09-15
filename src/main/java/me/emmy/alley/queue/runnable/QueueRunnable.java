@@ -12,8 +12,8 @@ import me.emmy.alley.match.player.impl.MatchGamePlayerImpl;
 import me.emmy.alley.profile.enums.EnumProfileState;
 import me.emmy.alley.queue.Queue;
 import me.emmy.alley.queue.QueueProfile;
-import me.emmy.alley.utils.chat.CC;
-import me.emmy.alley.utils.chat.Logger;
+import me.emmy.alley.util.chat.CC;
+import me.emmy.alley.util.chat.Logger;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -46,7 +46,7 @@ public class QueueRunnable implements Runnable {
     public void processQueue(Queue queue) {
         queue.getProfiles().forEach(QueueProfile::queueRange);
         queue.getProfiles().forEach(profile -> {
-            if (profile.getElapsedTime() >= 60000) {
+            if (profile.getElapsedTime() >= 300000) {
 
                 // remi, this check is mainly because of the "/match start" command which breaks
                 // the match if the player was queueing so you might just leave this as it is

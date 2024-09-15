@@ -2,7 +2,7 @@ package me.emmy.alley.profile.cosmetic.impl.killeffects.impl;
 
 import me.emmy.alley.profile.cosmetic.impl.killeffects.AbstractKillEffect;
 import me.emmy.alley.profile.cosmetic.impl.killeffects.annotation.KillEffectData;
-import me.emmy.alley.utils.particle.ParticleEffect;
+import me.emmy.alley.util.particle.ParticleEffect;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;

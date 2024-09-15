@@ -1,7 +1,7 @@
 package me.emmy.alley.queue;
 
 import lombok.Data;
-import me.emmy.alley.utils.chat.CC;
+import me.emmy.alley.util.chat.CC;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 

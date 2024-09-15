@@ -1,7 +1,7 @@
 package me.emmy.alley.arena.listener;
 
 import me.emmy.alley.arena.selection.Selection;
-import me.emmy.alley.utils.chat.CC;
+import me.emmy.alley.util.chat.CC;
 import org.bukkit.Difficulty;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;

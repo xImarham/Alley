@@ -16,10 +16,10 @@ import me.emmy.alley.kit.command.impl.settings.KitSetSettingCommand;
 import me.emmy.alley.kit.command.impl.settings.KitSettingsCommand;
 import me.emmy.alley.kit.command.impl.storage.KitSaveAllCommand;
 import me.emmy.alley.kit.command.impl.storage.KitSaveCommand;
-import me.emmy.alley.utils.chat.CC;
-import me.emmy.alley.utils.command.BaseCommand;
-import me.emmy.alley.utils.command.Command;
-import me.emmy.alley.utils.command.CommandArgs;
+import me.emmy.alley.util.chat.CC;
+import me.emmy.alley.api.command.BaseCommand;
+import me.emmy.alley.api.command.Command;
+import me.emmy.alley.api.command.CommandArgs;
 import org.bukkit.command.CommandSender;
 
 /**

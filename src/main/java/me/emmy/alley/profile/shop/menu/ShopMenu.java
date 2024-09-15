@@ -1,15 +1,13 @@
 package me.emmy.alley.profile.shop.menu;
 
-import me.emmy.alley.Alley;
-import me.emmy.alley.profile.Profile;
 import me.emmy.alley.profile.cosmetic.impl.killeffects.AbstractKillEffect;
 import me.emmy.alley.profile.cosmetic.impl.killeffects.KillEffectRepository;
 import me.emmy.alley.profile.cosmetic.impl.soundeffect.AbstractSoundEffect;
 import me.emmy.alley.profile.cosmetic.impl.soundeffect.SoundEffectRepository;
 import me.emmy.alley.profile.menu.ProfileMenu;
-import me.emmy.alley.utils.menu.Button;
-import me.emmy.alley.utils.menu.Menu;
-import me.emmy.alley.utils.menu.button.BackButton;
+import me.emmy.alley.api.menu.Button;
+import me.emmy.alley.api.menu.Menu;
+import me.emmy.alley.api.menu.button.BackButton;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;

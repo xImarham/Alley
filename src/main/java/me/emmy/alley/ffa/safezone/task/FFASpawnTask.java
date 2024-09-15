@@ -5,7 +5,7 @@ import me.emmy.alley.ffa.enums.EnumFFAState;
 import me.emmy.alley.ffa.safezone.cuboid.Cuboid;
 import me.emmy.alley.profile.Profile;
 import me.emmy.alley.profile.enums.EnumProfileState;
-import me.emmy.alley.utils.chat.CC;
+import me.emmy.alley.util.chat.CC;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;

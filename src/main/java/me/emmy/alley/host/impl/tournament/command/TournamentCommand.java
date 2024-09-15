@@ -5,10 +5,10 @@ import me.emmy.alley.host.impl.tournament.command.impl.TournamentHostCommand;
 import me.emmy.alley.host.impl.tournament.command.impl.TournamentJoinCommand;
 import me.emmy.alley.host.impl.tournament.command.impl.TournamentLeaveCommand;
 import me.emmy.alley.profile.enums.EnumProfileState;
-import me.emmy.alley.utils.chat.CC;
-import me.emmy.alley.utils.command.BaseCommand;
-import me.emmy.alley.utils.command.Command;
-import me.emmy.alley.utils.command.CommandArgs;
+import me.emmy.alley.util.chat.CC;
+import me.emmy.alley.api.command.BaseCommand;
+import me.emmy.alley.api.command.Command;
+import me.emmy.alley.api.command.CommandArgs;
 import org.bukkit.entity.Player;
 
 /**

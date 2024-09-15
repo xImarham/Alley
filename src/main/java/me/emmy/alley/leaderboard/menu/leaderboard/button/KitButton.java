@@ -6,8 +6,8 @@ import me.emmy.alley.kit.Kit;
 import me.emmy.alley.leaderboard.menu.leaderboard.enums.EnumLeaderboardType;
 import me.emmy.alley.profile.Profile;
 import me.emmy.alley.profile.data.impl.ProfileFFAData;
-import me.emmy.alley.utils.item.ItemBuilder;
-import me.emmy.alley.utils.menu.Button;
+import me.emmy.alley.util.item.ItemBuilder;
+import me.emmy.alley.api.menu.Button;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 

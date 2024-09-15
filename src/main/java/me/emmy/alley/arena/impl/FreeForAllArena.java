@@ -3,7 +3,7 @@ package me.emmy.alley.arena.impl;
 import me.emmy.alley.Alley;
 import me.emmy.alley.arena.Arena;
 import me.emmy.alley.arena.ArenaType;
-import me.emmy.alley.utils.location.LocationUtil;
+import me.emmy.alley.util.location.LocationUtil;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
 

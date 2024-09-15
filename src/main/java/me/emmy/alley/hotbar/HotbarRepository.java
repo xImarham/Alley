@@ -3,7 +3,7 @@ package me.emmy.alley.hotbar;
 import lombok.Getter;
 import me.emmy.alley.hotbar.enums.HotbarItems;
 import me.emmy.alley.hotbar.enums.HotbarType;
-import me.emmy.alley.utils.item.ItemBuilder;
+import me.emmy.alley.util.item.ItemBuilder;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 

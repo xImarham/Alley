@@ -9,11 +9,11 @@ import me.emmy.alley.match.impl.MatchRegularImpl;
 import me.emmy.alley.match.player.GameParticipant;
 import me.emmy.alley.match.player.impl.MatchGamePlayerImpl;
 import me.emmy.alley.queue.Queue;
-import me.emmy.alley.utils.chat.CC;
-import me.emmy.alley.utils.command.BaseCommand;
-import me.emmy.alley.utils.command.Command;
-import me.emmy.alley.utils.command.CommandArgs;
-import me.emmy.alley.utils.command.Completer;
+import me.emmy.alley.util.chat.CC;
+import me.emmy.alley.api.command.BaseCommand;
+import me.emmy.alley.api.command.Command;
+import me.emmy.alley.api.command.CommandArgs;
+import me.emmy.alley.api.command.Completer;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;

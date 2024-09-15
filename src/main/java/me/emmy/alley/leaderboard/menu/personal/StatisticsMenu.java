@@ -7,9 +7,9 @@ import me.emmy.alley.leaderboard.menu.personal.button.GlobalStatButton;
 import me.emmy.alley.leaderboard.menu.personal.button.KitStatButton;
 import me.emmy.alley.leaderboard.menu.personal.button.LeaderboardButton;
 import me.emmy.alley.profile.menu.ProfileMenu;
-import me.emmy.alley.utils.menu.Button;
-import me.emmy.alley.utils.menu.Menu;
-import me.emmy.alley.utils.menu.button.BackButton;
+import me.emmy.alley.api.menu.Button;
+import me.emmy.alley.api.menu.Menu;
+import me.emmy.alley.api.menu.button.BackButton;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;

@@ -3,9 +3,9 @@ package me.emmy.alley.ffa.command.player;
 import me.emmy.alley.Alley;
 import me.emmy.alley.ffa.FFARepository;
 import me.emmy.alley.kit.Kit;
-import me.emmy.alley.utils.command.BaseCommand;
-import me.emmy.alley.utils.command.Command;
-import me.emmy.alley.utils.command.CommandArgs;
+import me.emmy.alley.api.command.BaseCommand;
+import me.emmy.alley.api.command.Command;
+import me.emmy.alley.api.command.CommandArgs;
 import org.bukkit.entity.Player;
 
 /**

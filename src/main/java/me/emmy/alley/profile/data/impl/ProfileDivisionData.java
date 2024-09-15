@@ -6,11 +6,10 @@ import lombok.var;
 import me.emmy.alley.Alley;
 import me.emmy.alley.kit.settings.impl.KitSettingRankedImpl;
 import me.emmy.alley.profile.Profile;
-import me.emmy.alley.profile.data.ProfileData;
 import me.emmy.alley.profile.division.AbstractDivision;
 import me.emmy.alley.profile.division.enums.EnumDivisionLevel;
 import me.emmy.alley.profile.division.enums.EnumDivisionTier;
-import me.emmy.alley.utils.chat.CC;
+import me.emmy.alley.util.chat.CC;
 
 import java.util.stream.Collectors;
 

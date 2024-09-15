@@ -1,7 +1,7 @@
 package me.emmy.alley.locale;
 
 import lombok.experimental.UtilityClass;
-import me.emmy.alley.utils.chat.CC;
+import me.emmy.alley.util.chat.CC;
 
 /**
  * @author Emmy

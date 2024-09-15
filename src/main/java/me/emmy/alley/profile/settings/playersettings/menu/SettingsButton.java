@@ -2,8 +2,8 @@ package me.emmy.alley.profile.settings.playersettings.menu;
 
 import lombok.AllArgsConstructor;
 import me.emmy.alley.profile.settings.matchsettings.menu.MatchSettingsMenu;
-import me.emmy.alley.utils.menu.Button;
-import me.emmy.alley.utils.menu.pagination.ItemBuilder;
+import me.emmy.alley.api.menu.Button;
+import me.emmy.alley.api.menu.pagination.ItemBuilder;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
