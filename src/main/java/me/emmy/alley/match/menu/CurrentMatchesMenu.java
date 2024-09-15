@@ -88,6 +88,7 @@ public class CurrentMatchesMenu extends PaginatedMenu {
                             " &fTeleport to the match by clicking here."
                     ))
                     .durability(match.getMatchKit().getIconData())
+                    .hideMeta()
                     .build();
         }
 
