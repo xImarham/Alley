@@ -360,16 +360,16 @@ public class Alley extends JavaPlugin {
                 return (int) matchRepository.getMatches().stream()
                         .filter(match -> !match.isRanked())
                         .distinct()
-                        .count();
+                        .count() * 2; //* 2 because there are 2 players in a regular match, so we double the amount of matches
             case "Ranked":
                 return (int) matchRepository.getMatches().stream()
                         .filter(AbstractMatch::isRanked)
                         .distinct()
-                        .count();
+                        .count() * 2; //same applies here
             case "FFA":
                 return (int) profileRepository.getProfiles().values().stream()
                         .filter(profile -> profile.getState().equals(EnumProfileState.FFA))
-                        .count();
+                        .count(); //not needed, because we can just get every profile that is in the FFA state
             case "Bots":
                 return 0;
         }

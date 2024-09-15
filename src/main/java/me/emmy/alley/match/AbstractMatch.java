@@ -23,6 +23,7 @@ import me.emmy.alley.queue.Queue;
 import me.emmy.alley.util.chat.CC;
 import me.emmy.alley.util.PlayerUtil;
 import net.md_5.bungee.api.chat.*;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
@@ -171,17 +172,11 @@ public abstract class AbstractMatch {
     }
 
     public void createSnapshot(Player loser, Player winner) {
+        Snapshot winnerSnapshot = new Snapshot(winner, true);
+        snapshots.add(winnerSnapshot);
 
-        //For self match testing purposes during development, usually its not considered a match if the player is the winner and loser
-        if (winner != null) {
-            Snapshot winnerSnapshot = new Snapshot(winner, true);
-            snapshots.add(winnerSnapshot);
-        }
-
-        if (loser != null) {
-            Snapshot loserSnapshot = new Snapshot(loser, false);
-            snapshots.add(loserSnapshot);
-        }
+        Snapshot loserSnapshot = new Snapshot(loser, false);
+        snapshots.add(loserSnapshot);
     }
 
     /**
@@ -229,6 +224,8 @@ public abstract class AbstractMatch {
             TextComponent loserComponent = new TextComponent(CC.translate(" &fLoser: &c" + loser));
             loserComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/inventory " + loser));
             loserComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(ChatColor.RED + "Click to view " + loser + "'s inventory").create()));
+
+            this.createSnapshot(Bukkit.getPlayer(loser), Bukkit.getPlayer(winner));
 
             sendMessage("");
             sendMessage(CC.MENU_BAR);
@@ -407,7 +404,6 @@ public abstract class AbstractMatch {
 
         player.teleport(matchArena.getCenter());
         player.spigot().setCollidesWithEntities(false);
-        player.setGameMode(GameMode.CREATIVE);
         player.setAllowFlight(true);
         player.setFlying(true);
 
@@ -425,6 +421,8 @@ public abstract class AbstractMatch {
         Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
         profile.setState(EnumProfileState.LOBBY);
         profile.setMatch(null);
+        player.setAllowFlight(false);
+        player.setFlying(false);
         resetPlayerState(player);
         teleportPlayerToSpawn(player);
         matchSpectators.remove(player.getUniqueId());

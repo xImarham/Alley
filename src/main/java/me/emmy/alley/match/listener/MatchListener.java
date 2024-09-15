@@ -105,6 +105,11 @@ public class MatchListener implements Listener {
                 return;
             }
 
+            if (attackerProfile.getState() == EnumProfileState.SPECTATING) {
+                event.setCancelled(true);
+                return;
+            }
+
             if (damagedprofile.getState() == EnumProfileState.PLAYING) {
                 AbstractMatch match = attackerProfile.getMatch();
                 if (damagedprofile.getMatch().getMatchState() != EnumMatchState.RUNNING) {
@@ -158,6 +163,11 @@ public class MatchListener implements Listener {
     private void onBlockBreak(BlockBreakEvent event) {
         Player player = event.getPlayer();
         Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
+
+        if (profile.getState() == EnumProfileState.SPECTATING) {
+            event.setCancelled(true);
+            return;
+        }
 
         if (profile.getState() == EnumProfileState.PLAYING &&
                 profile.getMatch().getMatchState() == EnumMatchState.RUNNING &&
@@ -361,7 +371,6 @@ public class MatchListener implements Listener {
 
             Alley.getInstance().getServer().getScheduler().runTaskLater(Alley.getInstance(), () -> player.spigot().respawn(), 1L);
             profile.getMatch().handleDeath(player);
-            profile.getMatch().createSnapshot(player, killer);
         }
     }
 
@@ -369,6 +378,11 @@ public class MatchListener implements Listener {
     public void onEntityDamageByEntityMonitor(EntityDamageByEntityEvent event) {
         if (event.getEntity() instanceof Player && event.getDamager() instanceof Player) {
             Profile profile = Alley.getInstance().getProfileRepository().getProfile(event.getEntity().getUniqueId());
+            if (profile.getState() == EnumProfileState.SPECTATING) {
+                event.setCancelled(true);
+                return;
+            }
+
             if (profile.getState() == EnumProfileState.PLAYING) {
                 Player player = (Player) event.getEntity();
                 Player damager = (Player) event.getDamager();
@@ -389,22 +403,28 @@ public class MatchListener implements Listener {
         Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
         ItemStack item = event.getItem();
 
-        if (event.getAction() == Action.PHYSICAL) {
-            if (event.getClickedBlock() != null && event.getClickedBlock().getType() == Material.STONE_PLATE) {
-
-                player.sendMessage("You stepped on a stone pressure plate!");
-
-                if (profile != null && profile.getState() == EnumProfileState.PLAYING) {
-                    if (profile.getMatch() != null && profile.getMatch().getMatchKit().isSettingEnabled(KitSettingParkourImpl.class)) {
-
-                        for (GameParticipant<MatchGamePlayerImpl> participant : profile.getMatch().getParticipants()) {
-                            Player loser = participant.getPlayer().getPlayer();
-                            loser.setHealth(0);
-                        }
-                    }
-                }
-            }
+        if (event.getAction() != Action.PHYSICAL) {
+            return;
         }
+
+        Block clickedBlock = event.getClickedBlock();
+        if (clickedBlock == null || clickedBlock.getType() != Material.STONE_PLATE) {
+            return;
+        }
+
+        AbstractMatch match = profile.getMatch();
+        if (match == null || !match.getMatchKit().isSettingEnabled(KitSettingParkourImpl.class)) {
+            return;
+        }
+
+        Bukkit.broadcastMessage(player.getName() + " stepped on a stone pressure plate and won the match!");
+        match.getParticipants().forEach(participant -> {
+            Player participantPlayer = participant.getPlayer().getPlayer();
+            if (participantPlayer != null && !participantPlayer.getUniqueId().equals(player.getUniqueId())) {
+                match.handleDeath(participantPlayer);
+            }
+        });
+
 
         if (profile.getState() == EnumProfileState.PLAYING && item != null && item.getType() == Material.ENDER_PEARL) {
             if (profile.getMatch().getMatchState() == EnumMatchState.STARTING) {
@@ -477,6 +497,11 @@ public class MatchListener implements Listener {
     private void onPlayerDropItem(PlayerDropItemEvent event) {
         Player player = event.getPlayer();
         Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
+
+        if (profile.getState() == EnumProfileState.SPECTATING) {
+            event.setCancelled(true);
+            return;
+        }
 
         if (profile.getState() == EnumProfileState.PLAYING) {
             event.getItemDrop().remove();
