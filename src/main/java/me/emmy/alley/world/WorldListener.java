@@ -25,7 +25,7 @@ import org.bukkit.event.world.WorldLoadEvent;
 public class WorldListener implements Listener {
 
     @EventHandler
-    public void onArrowShoot(EntityShootBowEvent event) {
+    private void onArrowShoot(EntityShootBowEvent event) {
         if (event.getProjectile() instanceof Arrow) {
             new ArrowCleanUpTask().runTaskLater(Alley.getInstance(), 20L);
         }

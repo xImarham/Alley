@@ -29,14 +29,14 @@ public class QueuesMenu extends Menu {
 
     @Override
     public String getTitle(Player player) {
-        return "Select a Queue";
+        return "&b&lSolo Unranked Queue";
     }
 
     @Override
     public Map<Integer, Button> getButtons(Player player) {
         Map<Integer, Button> buttons = new HashMap<>();
 
-        buttons.put(10, new QueuesButton("&bUnranked Queue", Material.IRON_SWORD, (short) 0, Arrays.asList(
+        buttons.put(11, new QueuesButton("&b&lSolos", Material.IRON_SWORD, 0, Arrays.asList(
                 "&7Casual 1v1s with",
                 "&7no loss penalty.",
                 "",
@@ -45,17 +45,7 @@ public class QueuesMenu extends Menu {
                 "&aClick to select a kit!"
         )));
 
-        buttons.put(12, new QueuesButton("&bRanked Queue", Material.DIAMOND_SWORD, (short) 0, Arrays.asList(
-                "&7Competitive 1v1s with",
-                "&7elo and leaderboards.",
-                "",
-                "&bPlayers: &f" + Alley.getInstance().getPlayerCountOfGameType("Ranked"),
-                "",
-                "&cCurrently being recoded."
-                //"&aClick to select a kit!"
-        )));
-
-        buttons.put(14, new QueuesButton("&bBot Queue", Material.SKULL_ITEM, (short) 3, Arrays.asList(
+        buttons.put(13, new QueuesButton("&b&lBots", Material.GOLD_SWORD, 0, Arrays.asList(
                 "&7Practice against bots",
                 "&7to improve your skills.",
                 "",
@@ -64,7 +54,7 @@ public class QueuesMenu extends Menu {
                 "&cCurrently in development."
         )));
 
-        buttons.put(16, new QueuesButton("&bFFA Arena", Material.GOLD_AXE, (short) 0, Arrays.asList(
+        buttons.put(15, new QueuesButton("&b&lFFA", Material.GOLD_AXE, 0, Arrays.asList(
                 "&7Free for all with",
                 "&7infinity respawns.",
                 "",
@@ -88,14 +78,14 @@ public class QueuesMenu extends Menu {
 
         private String displayName;
         private Material material;
-        private short data;
+        private int durability;
         private List<String> lore;
 
         @Override
         public ItemStack getButtonItem(Player player) {
             return new ItemBuilder(material)
                     .name(displayName)
-                    .durability(data)
+                    .durability(durability)
                     .lore(lore)
                     .hideMeta()
                     .build();
@@ -111,17 +101,11 @@ public class QueuesMenu extends Menu {
                 case IRON_SWORD:
                     new UnrankedMenu().openMenu(player);
                     break;
-                case DIAMOND_SWORD:
-                    player.sendMessage(CC.translate("&cRanked queues are currently disabled for normal players."));
-                    if (player.isOp()) {
-                        new RankedMenu().openMenu(player);
-                    }
-                    break;
                 case GOLD_AXE:
                     new FFAMenu().openMenu(player);
                     break;
-                case SKULL_ITEM:
-                    //new BotMenu().openMenu(player);
+                case GOLD_SWORD:
+                    //new BotQueueMenu().openMenu(player);
                     player.sendMessage(CC.translate(ErrorMessage.DEBUG_STILL_IN_DEVELOPMENT));
                     break;
             }

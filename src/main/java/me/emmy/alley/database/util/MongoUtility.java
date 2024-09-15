@@ -116,8 +116,20 @@ public class MongoUtility {
             profileData.setRankedWins(profileDataDocument.getInteger("rankedWins", 0));
             profileData.setRankedLosses(profileDataDocument.getInteger("rankedLosses", 0));
 
-            profileData.setKitData(parseKitData((Document) profileDataDocument.get("kitData")));
-            profileData.setFfaData(parseFFAData((Document) profileDataDocument.get("ffaData")));
+            Map<String, ProfileKitData> existingKitData = profileData.getKitData();
+            Map<String, ProfileKitData> newKitData = parseKitData((Document) profileDataDocument.get("kitData"));
+            for (Map.Entry<String, ProfileKitData> entry : newKitData.entrySet()) {
+                existingKitData.putIfAbsent(entry.getKey(), entry.getValue());
+            }
+            profileData.setKitData(existingKitData);
+
+            Map<String, ProfileFFAData> existingFFAData = profileData.getFfaData();
+            Map<String, ProfileFFAData> newFFAData = parseFFAData((Document) profileDataDocument.get("ffaData"));
+            for (Map.Entry<String, ProfileFFAData> entry : newFFAData.entrySet()) {
+                existingFFAData.putIfAbsent(entry.getKey(), entry.getValue());
+            }
+            profileData.setFfaData(existingFFAData);
+
             profileData.setProfileSettingData(parseProfileSettingData((Document) profileDataDocument.get("profileSettingData")));
             profileData.setProfileCosmeticData(parseProfileCosmeticData((Document) profileDataDocument.get("profileCosmeticData")));
             profileData.setProfileDivisionData(parseProfileDivisionData((Document) profileDataDocument.get("profileDivisionData")));

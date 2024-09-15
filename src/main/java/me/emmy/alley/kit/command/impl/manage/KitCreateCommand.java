@@ -1,6 +1,7 @@
 package me.emmy.alley.kit.command.impl.manage;
 
 import me.emmy.alley.Alley;
+import me.emmy.alley.database.util.MongoUtility;
 import me.emmy.alley.kit.Kit;
 import me.emmy.alley.kit.settings.impl.*;
 import me.emmy.alley.locale.Locale;
@@ -48,8 +49,9 @@ public class KitCreateCommand extends BaseCommand {
 
         Alley.getInstance().getKitRepository().getKits().add(kit);
         Alley.getInstance().getKitRepository().saveKit(kit);
-
+        Alley.getInstance().getProfileRepository().loadProfiles();
         player.sendMessage(CC.translate(Locale.KIT_CREATED.getMessage().replace("{kit-name}", kitName)));
+        player.sendMessage(CC.translate("&7Additionally, all profiles have been reloaded."));
     }
 
     private Kit createKit(String kitName, ItemStack[] inventory, ItemStack[] armor, Material icon) {

@@ -35,6 +35,7 @@ import me.emmy.alley.hotbar.listener.HotbarListener;
 import me.emmy.alley.kit.KitRepository;
 import me.emmy.alley.kit.command.KitCommand;
 import me.emmy.alley.kit.settings.KitSettingRepository;
+import me.emmy.alley.kiteditor.command.KitEditorCommand;
 import me.emmy.alley.leaderboard.command.LeaderboardCommand;
 import me.emmy.alley.match.AbstractMatch;
 import me.emmy.alley.match.MatchRepository;
@@ -304,6 +305,7 @@ public class Alley extends JavaPlugin {
             new ProfileMenuCommand();
             new MatchHistoryCommand();
             new ThemesCommand();
+            new KitEditorCommand();
         });
     }
 

@@ -56,5 +56,7 @@ public class FFACreateCommand extends BaseCommand {
 
         Alley.getInstance().getFfaRepository().createFFAMatch(arena, kit, maxPlayers);
         player.sendMessage(CC.translate("&aSuccessfully created the FFA match."));
+        Alley.getInstance().getProfileRepository().loadProfiles();
+        player.sendMessage(CC.translate("&7Additionally, all profiles have been reloaded."));
     }
 }

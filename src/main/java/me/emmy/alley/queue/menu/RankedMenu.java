@@ -29,14 +29,14 @@ public class RankedMenu extends Menu {
 
     @Override
     public String getTitle(Player player) {
-        return "Ranked Queue";
+        return "&b&lSolo Ranked Queue";
     }
 
     @Override
     public Map<Integer, Button> getButtons(Player player) {
         Map<Integer, Button> buttons = new HashMap<>();
 
-        buttons.put(0, new BackButton(new QueuesMenu()));
+        //buttons.put(0, new BackButton(new QueuesMenu()));
 
         for (Queue queue : Alley.getInstance().getQueueRepository().getQueues()) {
             if (queue.isRanked()) {
