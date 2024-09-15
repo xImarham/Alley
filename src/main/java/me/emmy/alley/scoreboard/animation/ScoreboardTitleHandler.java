@@ -1,4 +1,4 @@
-package me.emmy.alley.scoreboard;
+package me.emmy.alley.scoreboard.animation;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -15,7 +15,7 @@ import java.util.List;
  * @date 27/03/2024 - 14:55
  */
 @Getter @Setter
-public class ScoreboardHandler {
+public class ScoreboardTitleHandler {
 
     FileConfiguration scoreboardConfig = Alley.getInstance().getConfigHandler().getConfigByName("providers/scoreboard.yml");
 
@@ -24,7 +24,7 @@ public class ScoreboardHandler {
     private long ticks;
     private List<String> animation;
 
-    public ScoreboardHandler(){
+    public ScoreboardTitleHandler(){
         text = scoreboardConfig.getString("scoreboard.title.text", "null");
         animated = scoreboardConfig.getBoolean("scoreboard.title.animated");
         ticks = scoreboardConfig.getLong("scoreboard.title.ticks");

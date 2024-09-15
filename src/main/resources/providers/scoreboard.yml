@@ -72,7 +72,7 @@ scoreboard:
         - "&fOpponent: &b{opponent}"
         - "&rDuration: &b{duration}"
         - ""
-        - "&fHits: &b{hits}"
+        - "&fHits: &b{difference}"
         - " &fYou: &b{player-hits}"
         - " &fThem: &b{opponent-hits}"
         - " &f{combo}"
@@ -92,9 +92,12 @@ scoreboard:
       - "{sidebar}"
       - "&b&lSpectating"
       - " &fDuration: &b{duration}"
+      - " &fArena: &b{arena}"
+      - " &fKit: &b{kit}"
       - ""
-      - " &9{Player1} &bvs &c{Player2}"
-      -  "&9{ping1}ms &b/ &c{ping2}ms"
+      - " &9{playerA} &f(&b{pingA}ms&f)"
+      - "  &bvs"
+      - " &c{playerB} &f(&b{pingB}ms&f)"
     ffa:
       - "{sidebar}"
       - "&fPlaying FFA"
@@ -107,3 +110,8 @@ scoreboard:
       - " &fPlayers: &b{players}"
       - ""
       - "&fYour Ping: &b{ping}ms"
+
+boxing-placeholder:
+  positive-difference: "&a(+{difference})"
+  negative-difference: "&c({difference})"
+  no-difference: "&a(+0)"

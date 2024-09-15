@@ -1,6 +1,7 @@
 package me.emmy.alley.scoreboard;
 
 import me.emmy.alley.Alley;
+import me.emmy.alley.config.ConfigHandler;
 import me.emmy.alley.kit.settings.impl.KitSettingBoxingImpl;
 import me.emmy.alley.match.enums.EnumMatchState;
 import me.emmy.alley.match.player.GameParticipant;
@@ -12,6 +13,7 @@ import me.emmy.alley.api.assemble.AssembleAdapter;
 import me.emmy.alley.util.chat.CC;
 import me.emmy.alley.util.reflection.BukkitReflection;
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -22,11 +24,11 @@ import java.util.List;
  * @project Alley
  * @date 27/03/2024 - 14:27
  */
-public class ScoreboardAdapter implements AssembleAdapter {
+public class ScoreboardVisualizer implements AssembleAdapter {
 
     @Override
     public String getTitle(Player player) {
-        return CC.translate(Alley.getInstance().getScoreboardHandler().getText()
+        return CC.translate(Alley.getInstance().getSbTitleHandler().getText()
                 .replaceAll("%server-name%", Bukkit.getServerName())
         );
     }
@@ -137,7 +139,7 @@ public class ScoreboardAdapter implements AssembleAdapter {
                                     .replaceAll("\\{sidebar}", Alley.getInstance().getConfigHandler().getConfigByName("providers/scoreboard.yml").getString("scoreboard.sidebar-format"))
                                     .replaceAll("\\{opponent}", opponent.getPlayer().getUsername())
                                     .replaceAll("\\{opponent-ping}", String.valueOf(BukkitReflection.getPing(opponent.getPlayer().getPlayer())))
-                                    .replaceAll("\\{hits}", "null")
+                                    .replaceAll("\\{difference}", getBoxingHitDifference(player, opponent))
                                     .replaceAll("\\{player-hits}", String.valueOf(profile.getMatch().getGamePlayer(player).getData().getHits()))
                                     .replaceAll("\\{opponent-hits}", String.valueOf(profile.getMatch().getGamePlayer(opponent.getPlayer().getPlayer()).getData().getHits()))
                                     .replaceAll("\\{combo}", profile.getMatch().getGamePlayer(player).getData().getCombo() == 0 ? "No Combo" : profile.getMatch().getGamePlayer(player).getData().getCombo() + " Combo")
@@ -163,10 +165,10 @@ public class ScoreboardAdapter implements AssembleAdapter {
                     for (String line : Alley.getInstance().getConfigHandler().getConfigByName("providers/scoreboard.yml").getStringList("scoreboard.lines.spectating")) {
                         toReturn.add(CC.translate(line)
                                 .replaceAll("\\{sidebar}", Alley.getInstance().getConfigHandler().getConfigByName("providers/scoreboard.yml").getString("scoreboard.sidebar-format"))
-                                .replaceAll("\\{player1}", profile.getMatch().getParticipants().get(0).getPlayer().getUsername())
-                                .replaceAll("\\{player2}", profile.getMatch().getParticipants().get(1).getPlayer().getUsername())
-                                .replaceAll("\\{player1-ping}", String.valueOf(BukkitReflection.getPing(profile.getMatch().getParticipants().get(0).getPlayer().getPlayer())))
-                                .replaceAll("\\{player2-ping}", String.valueOf(BukkitReflection.getPing(profile.getMatch().getParticipants().get(1).getPlayer().getPlayer())))
+                                .replaceAll("\\{playerA}", profile.getMatch().getParticipants().get(0).getPlayer().getUsername())
+                                .replaceAll("\\{playerB}", profile.getMatch().getParticipants().get(1).getPlayer().getUsername())
+                                .replaceAll("\\{pingA}", String.valueOf(BukkitReflection.getPing(profile.getMatch().getParticipants().get(0).getPlayer().getPlayer())))
+                                .replaceAll("\\{pingB}", String.valueOf(BukkitReflection.getPing(profile.getMatch().getParticipants().get(1).getPlayer().getPlayer())))
                                 .replaceAll("\\{duration}", profile.getMatch().getDuration())
                                 .replaceAll("\\{arena}", profile.getMatch().getMatchArena().getDisplayName())
                                 .replaceAll("\\{kit}", profile.getMatch().getMatchKit().getDisplayName()));
@@ -193,5 +195,35 @@ public class ScoreboardAdapter implements AssembleAdapter {
             return toReturn;
         }
         return null;
+    }
+
+    /**
+     * Get the difference in hits between the player and the opponent.
+     *
+     * @param player   The player to get the hits from.
+     * @param opponent The opponent to get the hits from.
+     * @return The difference in hits between the player and the opponent.
+     */
+    private String getBoxingHitDifference(Player player, GameParticipant<MatchGamePlayerImpl> opponent) {
+        Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
+        if (profile.getMatch().getMatchKit().isSettingEnabled(KitSettingBoxingImpl.class)) {
+            int playerHits = profile.getMatch().getGamePlayer(player).getData().getHits();
+            int opponentHits = profile.getMatch().getGamePlayer(opponent.getPlayer().getPlayer()).getData().getHits();
+            int difference = playerHits - opponentHits;
+
+            FileConfiguration config = ConfigHandler.getInstance().getScoreboardConfig();
+            String positiveDifference = config.getString("boxing-placeholder.positive-difference", "&a(+{difference})");
+            String negativeDifference = config.getString("boxing-placeholder.negative-difference", "&c({difference})");
+            String zeroDifference = config.getString("boxing-placeholder.no-difference", "&a(+0)");
+
+            if (difference > 0) {
+                return CC.translate(positiveDifference.replace("{difference}", String.valueOf(difference)));
+            } else if (difference < 0) {
+                return CC.translate(negativeDifference.replace("{difference}", String.valueOf(difference)));
+            } else {
+                return CC.translate(zeroDifference);
+            }
+        }
+        return "null";
     }
 }

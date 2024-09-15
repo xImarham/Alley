@@ -403,6 +403,10 @@ public class MatchListener implements Listener {
         Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
         ItemStack item = event.getItem();
 
+        if (profile.getState() != EnumProfileState.PLAYING) {
+            return;
+        }
+
         if (event.getAction() != Action.PHYSICAL) {
             return;
         }
