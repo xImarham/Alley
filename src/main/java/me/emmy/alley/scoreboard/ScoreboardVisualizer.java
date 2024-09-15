@@ -26,6 +26,12 @@ import java.util.List;
  */
 public class ScoreboardVisualizer implements AssembleAdapter {
 
+    /**
+     * Get the title of the scoreboard.
+     *
+     * @param player The player to get the title for.
+     * @return The title of the scoreboard.
+     */
     @Override
     public String getTitle(Player player) {
         return CC.translate(Alley.getInstance().getSbTitleHandler().getText()
@@ -33,6 +39,12 @@ public class ScoreboardVisualizer implements AssembleAdapter {
         );
     }
 
+    /**
+     * Get the lines of the scoreboard.
+     *
+     * @param player The player to get the lines for.
+     * @return The lines of the scoreboard.
+     */
     @Override
     public List<String> getLines(Player player) {
         if (Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId()).getProfileData().getProfileSettingData().isScoreboardEnabled()) {

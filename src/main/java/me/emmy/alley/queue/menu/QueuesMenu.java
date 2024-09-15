@@ -51,7 +51,8 @@ public class QueuesMenu extends Menu {
                 "",
                 "&bPlayers: &f" + Alley.getInstance().getPlayerCountOfGameType("Ranked"),
                 "",
-                "&aClick to select a kit!"
+                "&cCurrently being recoded."
+                //"&aClick to select a kit!"
         )));
 
         buttons.put(14, new QueuesButton("&bBot Queue", Material.SKULL_ITEM, (short) 3, Arrays.asList(
@@ -111,7 +112,10 @@ public class QueuesMenu extends Menu {
                     new UnrankedMenu().openMenu(player);
                     break;
                 case DIAMOND_SWORD:
-                    new RankedMenu().openMenu(player);
+                    player.sendMessage(CC.translate("&cRanked queues are currently disabled for normal players."));
+                    if (player.isOp()) {
+                        new RankedMenu().openMenu(player);
+                    }
                     break;
                 case GOLD_AXE:
                     new FFAMenu().openMenu(player);
