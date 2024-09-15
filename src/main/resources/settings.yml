@@ -6,3 +6,8 @@ command:
 spawn:
   # The spawn location of the server
   join-location: world:0.5:73.0:0.5:90.0:0.0
+
+# Each time a match starts, the original arena will be copied to this world
+# The match will be played there, then the copied arena will be deleted
+# In which would you have the original arena at, is irrelevant.
+arena-world: Arenas
