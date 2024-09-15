@@ -85,7 +85,7 @@ public class CurrentMatchesMenu extends PaginatedMenu {
                             " &f● &bKit: &f" + match.getMatchKit().getName(),
                             " &f● &bQueue: &f" + (match.getMatchQueue() == null ? "None" : match.getMatchQueue().getQueueType()),
                             " ",
-                            " &fTeleport to the match by clicking here."
+                            "&aClick to spectate!"
                     ))
                     .durability(match.getMatchKit().getIconData())
                     .hideMeta()
@@ -134,8 +134,9 @@ public class CurrentMatchesMenu extends PaginatedMenu {
          */
         @Override
         public void clicked(Player player, int slot, ClickType clickType, int hotbarButton) {
-            playNeutral(player);
+            if (clickType != ClickType.LEFT) return;
             new CurrentMatchesMenu().openMenu(player);
+            playNeutral(player);
         }
     }
 }

@@ -45,15 +45,15 @@ public class MatchInfoCommand extends BaseCommand {
         
         sender.sendMessage(CC.translate(" &f&l● &fPlayers:"));
         profile.getMatch().getParticipants().forEach(participant -> 
-                sender.sendMessage(CC.translate("&c- " + participant.getPlayer().getPlayer().getName()))
+                sender.sendMessage(CC.translate("   &f* &c" + participant.getPlayer().getPlayer().getName()))
         );
         
         sender.sendMessage(CC.translate(" &f&l● &fSpectators:"));
         if (profile.getMatch().getMatchSpectators().isEmpty()) {
-            sender.sendMessage(CC.translate("&c- None"));
+            sender.sendMessage(CC.translate("   &f* &cNone"));
         } else {
             profile.getMatch().getMatchSpectators().forEach(spectator -> 
-                    sender.sendMessage(CC.translate("&c- " + Bukkit.getPlayer(spectator).getName()))
+                    sender.sendMessage(CC.translate("   &f* &c" + Bukkit.getPlayer(spectator).getName()))
             );
         }
         sender.sendMessage(CC.translate(" &f&l● &fKit: &c" + profile.getMatch().getMatchKit().getName()));
