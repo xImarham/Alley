@@ -50,6 +50,7 @@ public class StandAloneArena extends Arena {
         config.set(name + ".pos2", LocationUtil.serialize(getPos2()));
         config.set(name + ".kits", getKits());
         config.set(name + ".enabled", isEnabled());
+        config.set(name + ".displayName", getDisplayName());
         Alley.getInstance().getConfigHandler().saveConfig(Alley.getInstance().getConfigHandler().getConfigFileByName("storage/arenas.yml"), config);
     }
 

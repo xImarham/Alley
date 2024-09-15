@@ -36,6 +36,7 @@ public class ArenaCommand extends BaseCommand {
         new ArenaSetSpawnCommand();
         new ArenaToggleCommand();
         new ArenaToolCommand();
+        new ArenaSetDisplayNameCommand();
     }
 
     @Completer(name = "arena", aliases = "arena")

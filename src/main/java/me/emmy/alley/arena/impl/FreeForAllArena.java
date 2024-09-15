@@ -48,6 +48,7 @@ public class FreeForAllArena extends Arena {
         config.set(name + ".center", LocationUtil.serialize(getCenter()));
         config.set(name + ".pos1", LocationUtil.serialize(getPos1()));
         config.set(name + ".enabled", isEnabled());
+        config.set(name + ".displayName", getDisplayName());
         Alley.getInstance().getConfigHandler().saveConfig(Alley.getInstance().getConfigHandler().getConfigFileByName("storage/arenas.yml"), config);
     }
 

@@ -2,6 +2,10 @@ package me.emmy.alley;
 
 import lombok.Getter;
 import lombok.Setter;
+import me.emmy.alley.api.assemble.Assemble;
+import me.emmy.alley.api.assemble.AssembleStyle;
+import me.emmy.alley.api.command.CommandFramework;
+import me.emmy.alley.api.menu.MenuListener;
 import me.emmy.alley.arena.ArenaRepository;
 import me.emmy.alley.arena.command.ArenaCommand;
 import me.emmy.alley.arena.listener.ArenaListener;
@@ -35,6 +39,7 @@ import me.emmy.alley.leaderboard.command.LeaderboardCommand;
 import me.emmy.alley.match.AbstractMatch;
 import me.emmy.alley.match.MatchRepository;
 import me.emmy.alley.match.command.admin.MatchCommand;
+import me.emmy.alley.match.command.admin.impl.MatchInfoCommand;
 import me.emmy.alley.match.command.player.CurrentMatchesCommand;
 import me.emmy.alley.match.command.player.LeaveMatchCommand;
 import me.emmy.alley.match.command.player.LeaveSpectatorCommand;
@@ -77,20 +82,16 @@ import me.emmy.alley.queue.command.player.LeaveQueueCommand;
 import me.emmy.alley.queue.command.player.QueuesCommand;
 import me.emmy.alley.queue.command.player.RankedCommand;
 import me.emmy.alley.queue.command.player.UnrankedCommand;
-import me.emmy.alley.scoreboard.ScoreboardAdapter;
-import me.emmy.alley.scoreboard.ScoreboardHandler;
+import me.emmy.alley.scoreboard.ScoreboardVisualizer;
+import me.emmy.alley.scoreboard.animation.ScoreboardTitleHandler;
 import me.emmy.alley.spawn.SpawnHandler;
 import me.emmy.alley.spawn.command.SetSpawnCommand;
 import me.emmy.alley.spawn.command.SpawnCommand;
 import me.emmy.alley.spawn.command.SpawnItemsCommand;
 import me.emmy.alley.spawn.listener.SpawnListener;
 import me.emmy.alley.util.ServerUtil;
-import me.emmy.alley.api.assemble.Assemble;
-import me.emmy.alley.api.assemble.AssembleStyle;
 import me.emmy.alley.util.chat.CC;
 import me.emmy.alley.util.chat.Logger;
-import me.emmy.alley.api.command.CommandFramework;
-import me.emmy.alley.api.menu.MenuListener;
 import org.bukkit.Bukkit;
 import org.bukkit.Difficulty;
 import org.bukkit.World;
@@ -120,13 +121,13 @@ public class Alley extends JavaPlugin {
     private MongoService mongoService;
     private ArenaRepository arenaRepository;
     private QueueRepository queueRepository;
-    private ScoreboardHandler scoreboardHandler;
     private ConfigHandler configHandler;
     private MatchRepository matchRepository;
     private PartyRepository partyRepository;
     private CooldownRepository cooldownRepository;
     private CombatManager combatManager;
     private KitRepository kitRepository;
+    private ScoreboardTitleHandler sbTitleHandler;
     private PartyRequest partyRequest;
     private KitSettingRepository kitSettingRepository;
     private TournamentRepository tournamentRepository;
@@ -191,7 +192,7 @@ public class Alley extends JavaPlugin {
 
     private void registerHandlers() {
         configHandler = new ConfigHandler();
-        scoreboardHandler = new ScoreboardHandler();
+        sbTitleHandler = new ScoreboardTitleHandler();
     }
 
     private String registerDatabase() {
@@ -253,6 +254,7 @@ public class Alley extends JavaPlugin {
             //debugging
             new StateCommand();
             new FFAStateCommand();
+            new MatchInfoCommand();
 
             //essential
             new InvSeeCommand();
@@ -307,7 +309,7 @@ public class Alley extends JavaPlugin {
     }
 
     private void loadScoreboard() {
-        Assemble assemble = new Assemble(this, new ScoreboardAdapter());
+        Assemble assemble = new Assemble(this, new ScoreboardVisualizer());
         assemble.setTicks(2);
         assemble.setAssembleStyle(AssembleStyle.MODERN);
     }

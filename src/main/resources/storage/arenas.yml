@@ -11,6 +11,7 @@ arenas:
       - Classic
       - Boxing
     enabled: true
+    displayName: "&bAlley"
   freeforall:
     type: FFA
     safezone:
@@ -19,16 +20,11 @@ arenas:
     center: world:71.50894760211064:70.36445617881311:0.4270320098049262:-271.73105:9.332395
     pos1: world:71.50894760211064:66.0:0.4270320098049262:-271.73105:9.332395
     enabled: false
-  sumo:
-    type: SHARED
-    minimum: world:-192.0:54.0:-74.0:0.0:0.0
-    maximum: world:-164.0:75.0:-102.0:0.0:0.0
-    center: 'null'
-    pos1: world:-176.5:64.0:-85.5:89.44315:4.5679226
-    pos2: world:-182.5:64.0:-85.5:270.20016:2.0706754
-    kits:
-      - Sumo
-    enabled: true
+    minimum: world:61.0:65.0:-16.0:0.0:0.0
+    maximum: world:96.0:81.0:16.0:0.0:0.0
+    kits: []
+    pos2: 'null'
+    displayName: "&bFree For All"
   spleef:
     type: SHARED
     minimum: world:96.0:20.0:-416.0:0.0:0.0
@@ -39,6 +35,7 @@ arenas:
     kits:
       - Spleef
     enabled: true
+    displayName: "&bSpleef"
   parkour:
     type: SHARED
     minimum: world:174.0:36.0:-286.0:0.0:0.0
@@ -49,3 +46,28 @@ arenas:
     kits:
       - Parkour
     enabled: true
+    displayName: "&bParkour"
+  test2:
+    type: SHARED
+    minimum: world:-144.0:63.0:37.0:0.0:0.0
+    maximum: world:-216.0:105.0:-65.0:0.0:0.0
+    center: world:-182.77894515744552:71.7573638514769:-18.237011308812264:179.77335:0.48864555
+    pos1: world:-182.7377445122285:64.0:-58.97829248528204:0.12094644:0.14219098
+    pos2: world:-182.7582827674734:64.0:32.38059801221057:179.77335:0.48864555
+    kits:
+      - NoDebuff
+      - Boxing
+      - Classic
+    enabled: true
+    displayName: "&bTest 2"
+  sumo:
+    type: SHARED
+    minimum: world:-192.0:54.0:-74.0:0.0:0.0
+    maximum: world:-164.0:75.0:-102.0:0.0:0.0
+    center: world:-179.36105853043588:66.59186763998764:-85.89702841020674:87.458916:4.0009975
+    pos1: world:-176.5:64.0:-85.5:89.44315:4.5679226
+    pos2: world:-182.5:64.0:-85.5:270.20016:2.0706754
+    kits:
+      - Sumo
+    enabled: true
+    displayName: "&bSumo"
