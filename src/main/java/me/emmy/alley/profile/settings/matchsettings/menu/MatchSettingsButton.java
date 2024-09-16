@@ -41,9 +41,6 @@ public class MatchSettingsButton extends Button {
         }
 
         switch (material) {
-            case FIREWORK:
-                new CosmeticsMenu("KillEffect").openMenu(player);
-                break;
             case CHEST:
                 //matchsetting clear inventory
                 break;

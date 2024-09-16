@@ -33,7 +33,7 @@ public class CosmeticsMenu extends Menu {
     public Map<Integer, Button> getButtons(Player player) {
         final Map<Integer, Button> buttons = new HashMap<>();
 
-        buttons.put(0, new BackButton(new MatchSettingsMenu()));
+        //buttons.put(0, new BackButton(new MatchSettingsMenu()));
         buttons.put(3, new KillEffectButton());
         buttons.put(5, new SoundEffectButton());
 

@@ -2,6 +2,7 @@ package me.emmy.alley.profile.data.impl;
 
 import lombok.Getter;
 import lombok.Setter;
+import me.emmy.alley.Alley;
 
 /**
  * @author Remi

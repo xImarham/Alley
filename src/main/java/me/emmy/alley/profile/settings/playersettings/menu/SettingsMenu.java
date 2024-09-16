@@ -30,7 +30,7 @@ public class SettingsMenu extends Menu {
     public Map<Integer, Button> getButtons(Player player) {
         Map<Integer, Button> buttons = new HashMap<>();
 
-        buttons.put(0, new BackButton(new ProfileMenu()));
+        //buttons.put(0, new BackButton(new ProfileMenu()));
 
         buttons.put(10, new SettingsButton("&b&lToggle Party Messages", Material.FEATHER, (short) 0, Arrays.asList(
                 "",
@@ -84,15 +84,6 @@ public class SettingsMenu extends Menu {
                 " &b● &fStatus: &rnull",
                 "",
                 "&aClick to change!"
-        )));
-
-        buttons.put(16, new SettingsButton("&b&lMatch Settings", Material.BOOK_AND_QUILL, (short) 0, Arrays.asList(
-                "",
-                "&fChange your match settings",
-                "&fsuch as &bmatch sounds&f, &bmatch particles&f,",
-                "&bmatch cosmetics&f, and &bmatch animations&f.",
-                "",
-                "&aClick to view!"
         )));
 
         addBorder(buttons, (byte) 15, 3);

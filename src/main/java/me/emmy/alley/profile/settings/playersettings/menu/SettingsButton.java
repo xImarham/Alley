@@ -58,9 +58,6 @@ public class SettingsButton extends Button {
             case WATCH:
                 player.performCommand("toggleworldtime");
                 break;
-            case BOOK_AND_QUILL:
-                new MatchSettingsMenu().openMenu(player);
-                break;
         }
         playNeutral(player);
     }

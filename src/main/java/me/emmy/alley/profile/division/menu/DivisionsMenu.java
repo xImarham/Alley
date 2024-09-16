@@ -25,7 +25,7 @@ public class DivisionsMenu extends Menu {
     public Map<Integer, Button> getButtons(Player player) {
         final Map<Integer, Button> buttons = new HashMap<>();
 
-        buttons.put(0, new BackButton(new ProfileMenu()));
+        //buttons.put(0, new BackButton(new ProfileMenu()));
 
         Alley.getInstance().getDivisionRepository().getDivisions().forEach(division -> {
             buttons.put(division.getSlot(), new DivisionButton(division));

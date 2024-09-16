@@ -12,9 +12,9 @@ import org.bukkit.entity.Player;
  * @date 19/05/2024 - 11:27
  */
 
-public class SettingsCommand extends BaseCommand {
+public class PracticeSettingsCommand extends BaseCommand {
     @Override
-    @Command(name = "settings")
+    @Command(name = "practicesettings")
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
 

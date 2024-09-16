@@ -32,7 +32,6 @@ public class MongoUtility {
         document.put("uuid", profile.getUuid().toString());
         document.put("name", profile.getName());
 
-        // Manually setting ProfileData
         Document profileDataDocument = new Document();
         ProfileData profileData = profile.getProfileData();
 
@@ -42,7 +41,6 @@ public class MongoUtility {
         profileDataDocument.put("rankedWins", profileData.getRankedWins());
         profileDataDocument.put("rankedLosses", profileData.getRankedLosses());
 
-        // Add individual data maps
         profileDataDocument.put("kitData", convertKitData(profileData.getKitData()));
         profileDataDocument.put("ffaData", convertFFAData(profileData.getFfaData()));
         profileDataDocument.put("profileSettingData", convertProfileSettingData(profileData.getProfileSettingData()));

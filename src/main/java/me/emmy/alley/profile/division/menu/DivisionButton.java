@@ -27,8 +27,7 @@ public class DivisionButton extends Button {
     public ItemStack getButtonItem(Player player) {
         Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
         AbstractDivision abstractDivision = Alley.getInstance().getDivisionRepository().getDivision(profile.getProfileData().getProfileDivisionData().getDivision());
-        String[] nextDivisionAndLevel = division.getNextDivisionAndLevelArray();
-        int eloNeeded = division.getEloNeededForDivision(EnumDivisionTier.valueOf(nextDivisionAndLevel[0].toUpperCase()), EnumDivisionLevel.valueOf("LEVEL_" + nextDivisionAndLevel[1]));
+        int eloNeeded = division.getEloMin() - profile.getProfileData().getProfileDivisionData().getGlobalElo();
         return new ItemBuilder(division.getIcon())
                 .durability(division.getDurability())
                 .name("&b&l" + division.getName())
@@ -38,6 +37,8 @@ public class DivisionButton extends Button {
                         "&f● &bGlobal Elo: &f" + profile.getProfileData().getProfileDivisionData().getGlobalElo(),
                         "&f● &bTier: &f" + abstractDivision.getTier().getName(),
                         "&f● &bLevel: &f" + abstractDivision.getLevel().getName(),
+                        "&f● &bNext Division: &f" + abstractDivision.getNextDivisionAndLevel(),
+                        "&f● &bProgress: &f" + abstractDivision.generateProgressBar(profile.getProfileData().getProfileDivisionData().getGlobalElo()),
                         "",
                         "&b&lDivision Information",
                         "&f● &bTier: &f" + division.getTier().getName(),

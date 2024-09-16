@@ -25,4 +25,13 @@ public enum EnumDivisionLevel {
     EnumDivisionLevel(String name) {
         this.name = name;
     }
+
+    /**
+     * Get the next level as an integer
+     *
+     * @return the next level as an int
+     */
+    public String getLevelInt() {
+        return this.name.replace("Level ", "");
+    }
 }

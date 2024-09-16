@@ -194,28 +194,6 @@ public class MatchListener implements Listener {
         }
     }
 
-    /*@EventHandler
-    private void onEntityInteract(EntityInteractEvent event) {
-        if (event.getEntity() instanceof Player) {
-            Player winner = (Player) event.getEntity();
-            Profile profile = Alley.getInstance().getProfileRepository().getProfile(winner.getUniqueId());
-            if (profile.getState() == EnumProfileState.PLAYING) {
-                if (profile.getMatch() == null) {
-                    return;
-                }
-
-                if (profile.getMatch().getMatchKit().isSettingEnabled(KitSettingParkourImpl.class)) {
-                    if (event.getBlock().equals(Material.STONE_PLATE)) {
-                        for (GameParticipant<MatchGamePlayerImpl> participant : profile.getMatch().getParticipants()) {
-                            Player loser = participant.getPlayer().getPlayer();
-                                loser.setHealth(0);
-                        }
-                    }
-                }
-            }
-        }
-    }*/
-
     @EventHandler
     private void onBlockPlace(BlockPlaceEvent event) {
         Player player = event.getPlayer();
@@ -281,7 +259,7 @@ public class MatchListener implements Listener {
         if (profile != null && profile.getMatch() != null && profile.getState() == EnumProfileState.PLAYING) {
             AbstractMatch match = profile.getMatch();
             if (match.getMatchState() == EnumMatchState.STARTING) {
-                if (match.getMatchKit().isSettingEnabled(KitSettingSumoImpl.class) || match.getMatchKit().isSettingEnabled(KitSettingSpleefImpl.class)) {
+                if (match.getMatchKit().isSettingEnabled(KitSettingSumoImpl.class) || match.getMatchKit().isSettingEnabled(KitSettingSpleefImpl.class) || match.getMatchKit().isSettingEnabled(KitSettingParkourImpl.class)) {
                     List<GameParticipant<MatchGamePlayerImpl>> participants = match.getParticipants();
                     if (participants.size() == 2) {
                         GameParticipant<?> participantA = participants.get(0);
@@ -310,7 +288,9 @@ public class MatchListener implements Listener {
             }
         }
 
+        assert profile != null;
         if (profile.getState() == EnumProfileState.SPECTATING || profile.getState() == EnumProfileState.PLAYING) {
+            if (profile.getMatch() == null) return;
             Arena arena = profile.getMatch().getMatchArena();
             Location corner1 = arena.getMinimum();
             Location corner2 = arena.getMaximum();
@@ -344,7 +324,6 @@ public class MatchListener implements Listener {
     @EventHandler
     private void onPlayerDeath(PlayerDeathEvent event) {
         Player player = event.getEntity();
-        Player killer = player.getKiller();
         Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
 
         if (profile.getState() == EnumProfileState.PLAYING) {
@@ -403,33 +382,24 @@ public class MatchListener implements Listener {
         Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
         ItemStack item = event.getItem();
 
-        if (profile.getState() != EnumProfileState.PLAYING) {
-            return;
-        }
-
-        if (event.getAction() != Action.PHYSICAL) {
-            return;
-        }
-
-        Block clickedBlock = event.getClickedBlock();
-        if (clickedBlock == null || clickedBlock.getType() != Material.STONE_PLATE) {
-            return;
-        }
-
-        AbstractMatch match = profile.getMatch();
-        if (match == null || !match.getMatchKit().isSettingEnabled(KitSettingParkourImpl.class)) {
-            return;
-        }
-
-        Bukkit.broadcastMessage(player.getName() + " stepped on a stone pressure plate and won the match!");
-        match.getParticipants().forEach(participant -> {
-            Player participantPlayer = participant.getPlayer().getPlayer();
-            if (participantPlayer != null && !participantPlayer.getUniqueId().equals(player.getUniqueId())) {
-                match.handleDeath(participantPlayer);
+        if (event.getAction() == Action.PHYSICAL) {
+            if (event.getClickedBlock() != null && event.getClickedBlock().getType() == Material.STONE_PLATE) {
+                player.sendMessage("You stepped on a stone pressure plate!");
+                if (profile != null && profile.getState() == EnumProfileState.PLAYING) {
+                    if (profile.getMatch() != null && profile.getMatch().getMatchKit().isSettingEnabled(KitSettingParkourImpl.class)) {
+                        Bukkit.broadcastMessage(player.getName() + " stepped on a stone pressure plate and won the match!");
+                        profile.getMatch().getParticipants().forEach(participant -> {
+                            Player participantPlayer = participant.getPlayer().getPlayer();
+                            if (participantPlayer != null && !participantPlayer.getUniqueId().equals(player.getUniqueId())) {
+                                profile.getMatch().handleDeath(participantPlayer);
+                            }
+                        });
+                    }
+                }
             }
-        });
+        }
 
-
+        assert profile != null;
         if (profile.getState() == EnumProfileState.PLAYING && item != null && item.getType() == Material.ENDER_PEARL) {
             if (profile.getMatch().getMatchState() == EnumMatchState.STARTING) {
                 event.setCancelled(true);

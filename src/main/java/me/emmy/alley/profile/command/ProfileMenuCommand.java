@@ -13,7 +13,7 @@ import org.bukkit.entity.Player;
  */
 public class ProfileMenuCommand extends BaseCommand {
     @Override
-    @Command(name = "profilemenu", aliases = {"profilesettings"})
+    @Command(name = "profilemenu")
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
 

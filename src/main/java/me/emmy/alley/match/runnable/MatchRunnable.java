@@ -43,7 +43,7 @@ public class MatchRunnable extends BukkitRunnable {
                     match.sendMessage(CC.translate("&aMatch has started. Good luck!"));
                     playSoundStarted();
                 } else {
-                    match.sendMessage(CC.translate("&aMatch is starting in " + stage + " seconds."));
+                    match.sendMessage(CC.translate("&a" + stage + "..."));
                     playSoundStarting();
                 }
                 break;

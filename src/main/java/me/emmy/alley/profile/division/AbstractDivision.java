@@ -54,6 +54,14 @@ public class AbstractDivision {
         return nextDivisionAndLevel.replace("Level ", "");
     }
 
+    public EnumDivisionTier getNextDivision() {
+        return this.tier.getNextDivision();
+    }
+
+    public EnumDivisionLevel getNextLevel() {
+        return this.tier.getNextLevel(this.level);
+    }
+
     /**
      * Get the elo needed to reach the target division and level
      *
@@ -78,9 +86,9 @@ public class AbstractDivision {
         StringBuilder builder = new StringBuilder();
         for (int i = 0; i < progressBarLength; i++) {
             if (i < progress) {
-                builder.append("§a|");
+                builder.append("§a§l┃");
             } else {
-                builder.append("§7|");
+                builder.append("§7§l┃");
             }
         }
         return builder.toString();

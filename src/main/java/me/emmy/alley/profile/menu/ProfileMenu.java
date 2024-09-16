@@ -4,14 +4,13 @@ import lombok.AllArgsConstructor;
 import me.emmy.alley.Alley;
 import me.emmy.alley.leaderboard.menu.personal.StatisticsMenu;
 import me.emmy.alley.profile.Profile;
+import me.emmy.alley.profile.data.impl.ProfileFFAData;
 import me.emmy.alley.profile.division.AbstractDivision;
-import me.emmy.alley.profile.division.enums.EnumDivisionLevel;
-import me.emmy.alley.profile.division.enums.EnumDivisionTier;
-import me.emmy.alley.profile.division.menu.DivisionsMenu;
-import me.emmy.alley.profile.settings.playersettings.menu.SettingsMenu;
 import me.emmy.alley.api.menu.Button;
 import me.emmy.alley.api.menu.Menu;
 import me.emmy.alley.api.menu.pagination.ItemBuilder;
+import me.emmy.alley.profile.division.enums.EnumDivisionLevel;
+import me.emmy.alley.profile.division.enums.EnumDivisionTier;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
@@ -42,38 +41,6 @@ public class ProfileMenu extends Menu {
         Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
         AbstractDivision abstractDivision = Alley.getInstance().getDivisionRepository().getDivision(profile.getProfileData().getProfileDivisionData().getDivision());
 
-        buttons.put(10, new ProfileButton("&b&lYour Statistics", new ItemStack(Material.PAPER), Arrays.asList(
-                "",
-                "&b&lGlobal",
-                " &b● &fWins: &b" + profile.getProfileData().getTotalWins(),
-                " &b● &fLosses: &b" + profile.getProfileData().getTotalLosses(),
-                " &b● &fElo: &b" + profile.getProfileData().getProfileDivisionData().getGlobalElo(),
-                "",
-                "&b&lRanked",
-                " &b● &fWins: &b" + profile.getProfileData().getRankedWins(),
-                " &b● &fLosses: &b" + profile.getProfileData().getRankedLosses(),
-                "",
-                "&b&lUnranked",
-                " &b● &fWins: &b" + profile.getProfileData().getUnrankedWins(),
-                " &b● &fLosses: &b" + profile.getProfileData().getUnrankedLosses(),
-                "",
-                "&aClick to view!"
-        )));
-
-        buttons.put(11, new ProfileButton("&b&lMatch History", new ItemStack(Material.BOOK), Arrays.asList(
-                "",
-                "&fView your match history.",
-                "",
-                "&aClick to view!"
-        )));
-
-        buttons.put(12, new ProfileButton("&b&lThemes", new ItemStack(Material.ENDER_CHEST), Arrays.asList(
-                "",
-                "&fCustomize your profile theme.",
-                "",
-                "&aClick to view!"
-        )));
-
         ItemStack skullItem = new ItemStack(Material.SKULL_ITEM, 1, (short) 3);
         SkullMeta skullMeta = (SkullMeta) skullItem.getItemMeta();
 
@@ -82,48 +49,37 @@ public class ProfileMenu extends Menu {
             skullItem.setItemMeta(skullMeta);
         }
 
-        buttons.put(4, new ProfileButton("&b&lYour Profile", skullItem, Arrays.asList(
-                "",
-                " &b● &fCoins: &b" + profile.getProfileData().getCoins(),
-                " &b● &fLevel: &b" + abstractDivision.getLevel().getName(),
-                "",
-                " &b● &fNext level: &b" + abstractDivision.getNextDivisionAndLevel(),
-                " &b● &fProgress: &b" + "null"
-        )));
-
-        buttons.put(13, new ProfileButton("&b&lChallenges", new ItemStack(Material.BEACON), Arrays.asList(
-                "",
-                "&fView your current challenges",
-                "&fand complete them for rewards.",
-                "",
-                "&aClick to view!"
-        )));
-
         String[] nextDivisionAndLevel = abstractDivision.getNextDivisionAndLevelArray();
         int eloNeeded = abstractDivision.getEloNeededForDivision(EnumDivisionTier.valueOf(nextDivisionAndLevel[0].toUpperCase()), EnumDivisionLevel.valueOf("LEVEL_" + nextDivisionAndLevel[1]));
-        String progressBar = abstractDivision.generateProgressBar(eloNeeded);
-        buttons.put(14, new ProfileButton("&b&lDivisions", new ItemStack(Material.FEATHER), Arrays.asList(
+
+        buttons.put(4, new ProfileButton("&b&lYour Profile", skullItem, Arrays.asList(
+                " &b&l● &fCoins: &b" + profile.getProfileData().getCoins(),
+                " &b&l● &fDivision: &b" + abstractDivision.getTier().getName(),
+                " &b&l● &fLevel: &b" + abstractDivision.getLevel().getLevelInt(),
+                " &b&l● &fProgress: &b" + abstractDivision.generateProgressBar(eloNeeded),
                 "",
-                " &b● &fCurrent Division: &b" + abstractDivision.getTier().getName(),
-                " &b● &fCurrent Level: &b" + abstractDivision.getLevel().getName(),
-                "",
-                " &b● &fNext Division: &b" + abstractDivision.getNextDivisionAndLevel(),
-                " &b● &fProgress: &b" + progressBar,
-                "",
-                "&aClick to view all divisions!"
+                " &b&l● &fNext Division: &b" + abstractDivision.getNextDivisionAndLevel(),
+                ""
         )));
 
-        buttons.put(15, new ProfileButton("&c&lEmpty", new ItemStack(Material.REDSTONE_BLOCK), Arrays.asList(
+        buttons.put(10, new ProfileButton("&b&lYour Statistics", new ItemStack(Material.PAPER), Arrays.asList(
                 "",
-                "&fThis slot is empty.",
+                "&b&lGlobal",
+                " &b&l● &fWins: &b" + profile.getProfileData().getTotalWins(),
+                " &b&l● &fLosses: &b" + profile.getProfileData().getTotalLosses(),
+                " &b&l● &fElo: &b" + profile.getProfileData().getProfileDivisionData().getGlobalElo(),
                 "",
-                "&aClick for nothing to happen!"
-        )));
-
-        buttons.put(16, new ProfileButton("&b&lProfile Settings", new ItemStack(Material.ANVIL), Arrays.asList(
+                "&b&lRanked",
+                " &b&l● &fWins: &b" + profile.getProfileData().getRankedWins(),
+                " &b&l● &fLosses: &b" + profile.getProfileData().getRankedLosses(),
                 "",
-                "&fCustomize your profile settings",
-                "&fto your preference.",
+                "&b&lUnranked",
+                " &b&l● &fWins: &b" + profile.getProfileData().getUnrankedWins(),
+                " &b&l● &fLosses: &b" + profile.getProfileData().getUnrankedLosses(),
+                "",
+                "&b&lFFA",
+                " &b&l● &fKills: &b" + profile.getProfileData().getFfaData().values().stream().mapToInt(ProfileFFAData::getKills).sum(),
+                " &b&l● &fDeaths: &b" + profile.getProfileData().getFfaData().values().stream().mapToInt(ProfileFFAData::getDeaths).sum(),
                 "",
                 "&aClick to view!"
         )));
@@ -166,24 +122,10 @@ public class ProfileMenu extends Menu {
                 case PAPER:
                     new StatisticsMenu().openMenu(player);
                     break;
-                case BOOK:
-                    player.performCommand("matchhistory");
-                    break;
                 case SKULL_ITEM:
                     break;
-                case ANVIL:
-                    new SettingsMenu().openMenu(player);
-                    break;
-                case FEATHER:
-                    new DivisionsMenu().openMenu(player);
-                    break;
-                case BEACON:
-                    player.performCommand("challenges");
-                    break;
-                case ENDER_CHEST:
-                    player.performCommand("themes");
-                    break;
             }
+
             playNeutral(player);
         }
     }

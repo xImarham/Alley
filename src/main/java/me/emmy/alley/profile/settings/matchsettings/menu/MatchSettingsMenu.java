@@ -29,7 +29,7 @@ public class MatchSettingsMenu extends Menu {
     public Map<Integer, Button> getButtons(Player player) {
         Map<Integer, Button> buttons = new HashMap<>();
 
-        buttons.put(0, new BackButton(new SettingsMenu()));
+        //buttons.put(0, new BackButton(new SettingsMenu()));
 
         buttons.put(10, new MatchSettingsButton("&b&lClear inventory", Material.CHEST, (short) 0, Arrays.asList(
                 "",
@@ -53,22 +53,14 @@ public class MatchSettingsMenu extends Menu {
                 "&aClick to toggle!"
         )));
 
-        buttons.put(31, new MatchSettingsButton("&b&lCosmetics", Material.FIREWORK, (short) 0, Arrays.asList(
-                "",
-                "&fManage your &bcosmetics",
-                "&fand &bkill effects.",
-                "",
-                "&aClick to manage!"
-        )));
-
-        addBorder(buttons, (byte) 15, 5);
+        addBorder(buttons, (byte) 15, 3);
 
         return buttons;
     }
 
     @Override
     public int getSize() {
-        return 9 * 5;
+        return 9 * 3;
     }
 }
 

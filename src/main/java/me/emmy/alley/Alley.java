@@ -65,7 +65,7 @@ import me.emmy.alley.profile.division.command.DivisionCommand;
 import me.emmy.alley.profile.enums.EnumProfileState;
 import me.emmy.alley.profile.listener.ProfileListener;
 import me.emmy.alley.profile.settings.matchsettings.command.MatchSettingsCommand;
-import me.emmy.alley.profile.settings.playersettings.command.SettingsCommand;
+import me.emmy.alley.profile.settings.playersettings.command.PracticeSettingsCommand;
 import me.emmy.alley.profile.settings.playersettings.command.toggle.TogglePartyInvitesCommand;
 import me.emmy.alley.profile.settings.playersettings.command.toggle.TogglePartyMessagesCommand;
 import me.emmy.alley.profile.settings.playersettings.command.toggle.ToggleScoreboardCommand;
@@ -288,7 +288,7 @@ public class Alley extends JavaPlugin {
 
             new UnrankedCommand();
             new RankedCommand();
-            new SettingsCommand();
+            new PracticeSettingsCommand();
             new LeaderboardCommand();
             new SpectateCommand();
             new LeaveSpectatorCommand();

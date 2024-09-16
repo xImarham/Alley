@@ -42,7 +42,7 @@ public class StatisticsMenu extends Menu {
     public Map<Integer, Button> getButtons(Player player) {
         final Map<Integer, Button> buttons = new HashMap<>();
 
-        buttons.put(0, new BackButton(new ProfileMenu()));
+        //buttons.put(0, new BackButton(new ProfileMenu()));
         buttons.put(2, new StatisticsButton());
         buttons.put(4, new GlobalStatButton());
         buttons.put(6, new LeaderboardButton());
