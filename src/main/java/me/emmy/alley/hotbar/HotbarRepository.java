@@ -6,6 +6,7 @@ import me.emmy.alley.hotbar.enums.HotbarType;
 import me.emmy.alley.util.item.ItemBuilder;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.SkullMeta;
 
 import java.util.*;
 
@@ -60,7 +61,14 @@ public class HotbarRepository {
     public void applyHotbarItems(Player player, HotbarType type) {
         player.getInventory().clear();
         for (HotbarItem item : hotbarItemsByType.get(type)) {
-            player.getInventory().setItem(item.getSlot(), item.getItemStack());
+            ItemStack itemStack = item.getItemStack();
+            if (item.getHotbarItems() == HotbarItems.PROFILE) {
+                SkullMeta meta = (SkullMeta) itemStack.getItemMeta();
+                meta.setOwner(player.getName());
+                itemStack.setItemMeta(meta);
+            }
+            itemStack.setDurability((short) item.getHotbarItems().getDurability());
+            player.getInventory().setItem(item.getSlot(), itemStack);
         }
     }
 
@@ -75,6 +83,7 @@ public class HotbarRepository {
         return new HotbarItem(type, hotbarItem,
                 new ItemBuilder(hotbarItem.getMaterial())
                         .name(hotbarItem.getName())
+                        .hideMeta()
                         .build(),
                 hotbarItem.getSlot());
     }

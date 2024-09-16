@@ -18,29 +18,37 @@ public enum HotbarItems {
     // Example of how you can have one hotbar item in 2 specific states:
     // EXAMPLE_ITEM("&bEmmy is smart", Material.ZIUES_SKULL, 0, 2, "alley", HotbarType.LOBBY, HotbarType.QUEUE)
 
-    QUEUES("&bQueues", Material.IRON_SWORD, 0, 0, "queues", HotbarType.LOBBY),
-    RANKED_QUEUE("&bRanked Queue", Material.DIAMOND_SWORD, 0, 1, "ranked", HotbarType.LOBBY),
-    KIT_EDITOR("&bKit Editor", Material.BOOK, 0, 2, "kiteditor", HotbarType.LOBBY),
-    CURRENT_MATCHES("&bCurrent Matches", Material.COMPASS, 0, 3, "currentmatches", HotbarType.LOBBY),
-    PARTY("&bCreate Party", Material.NAME_TAG, 0, 5, "party create", HotbarType.LOBBY),
-    LEADERBOARD("&bLeaderboard", Material.EMERALD, 0, 6, "leaderboards", HotbarType.LOBBY),
-    EVENTS("&bEvents", Material.EYE_OF_ENDER, 0, 7, "host", HotbarType.LOBBY),
-    SETTINGS("&bProfile Settings", Material.SKULL_ITEM, 0, 8, "profilemenu", HotbarType.LOBBY),
+    UNRANKED_QUEUES("&bUnranked Queues &7(Right Click)", Material.IRON_SWORD, 0, 0, "queues", HotbarType.LOBBY),
+    RANKED_QUEUES("&bRanked Queues &7(Right Click)", Material.DIAMOND_SWORD, 0, 1, "ranked", HotbarType.LOBBY),
+    KIT_EDITOR("&bKit Editor &7(Right Click)", Material.BOOK, 0, 2, "kiteditor", HotbarType.LOBBY),
+    CURRENT_MATCHES("&bCurrent Matches &7(Right Click)", Material.COMPASS, 0, 3, "currentmatches", HotbarType.LOBBY),
+    PARTY("&bCreate Party &7(Right Click)", Material.NAME_TAG, 0, 5, "party create", HotbarType.LOBBY),
+    LEADERBOARD("&bLeaderboards &7(Right Click)", Material.EMERALD, 0, 6, "leaderboards", HotbarType.LOBBY),
+    EVENTS("&bEvents &7(Right Click)", Material.EYE_OF_ENDER, 0, 7, "host", HotbarType.LOBBY),
+    OPTIONS_ENABLE("&bToggle Hotbar Items &7(&bCurrent: &aLobby&7)", Material.INK_SACK, 10, 8, "", HotbarType.LOBBY),
 
-    DUO_UNRANKED_QUEUE("&bUnranked Duo Queue", Material.IRON_SWORD, 0, 0, "unrankedduo", HotbarType.PARTY),
-    KIT_EDITOR_PARTY("&bKit Editor", Material.BOOK, 0, 1, "kiteditor", HotbarType.PARTY),
-    START_PARTY_EVENT("&bStart Party Event", Material.IRON_AXE, 0, 4, "party event", HotbarType.PARTY),
-    FIGHT_OTHER_PARTY("&bFight Other Party", Material.DIAMOND_AXE, 0, 5, "party duel", HotbarType.PARTY),
-    PARTY_INFO("&bParty Info", Material.PAPER, 0, 7, "party info", HotbarType.PARTY),
-    PARTY_LEAVE("&cLeave Party", Material.REDSTONE, 0, 8, "party leave", HotbarType.PARTY),
+    OPTIONS_DISABLE("&bToggle Hotbar Items &7(&bCurrent: &cSettings&7)", Material.INK_SACK, 1, 8, "", HotbarType.SETTINGS),
+    PROFILE_SETTINGS("&bSettings &7(Right Click)", Material.ANVIL, 0, 0, "practicesettings", HotbarType.SETTINGS),
+    MATCH_SETTINGS("&bMatch Settings &7(Right Click)", Material.BOOK, 0, 1, "matchsettings", HotbarType.SETTINGS),
+    THEMES("&bThemes &7(Right Click)", Material.PAINTING, 0, 2, "themes", HotbarType.SETTINGS),
+    DIVISIONS("&bDivisions &7(Right Click)", Material.DIAMOND, 0, 3, "divisions", HotbarType.SETTINGS),
+    COSMETICS("&bCosmetics &7(Right Click)", Material.NETHER_STAR, 0, 4, "cosmetics", HotbarType.SETTINGS),
+    PROFILE("&bYour Profile &7(Right Click)", Material.SKULL_ITEM, 3, 6, "profilemenu", HotbarType.SETTINGS),
 
-    KIT_EDITOR_QUEUE("&bKit Editor", Material.BOOK, 0, 0, "kiteditor", HotbarType.QUEUE),
-    LEAVE_QUEUE("&cLeave Queue", Material.REDSTONE, 0, 8, "leavequeue", HotbarType.QUEUE),
+    DUO_UNRANKED_QUEUE("&bUnranked Duo Queue &7(Right Click)", Material.IRON_SWORD, 0, 0, "unrankedduo", HotbarType.PARTY),
+    KIT_EDITOR_PARTY("&bKit Editor &7(Right Click)", Material.BOOK, 0, 1, "kiteditor", HotbarType.PARTY),
+    START_PARTY_EVENT("&bStart Party Event &7(Right Click)", Material.IRON_AXE, 0, 4, "party event", HotbarType.PARTY),
+    FIGHT_OTHER_PARTY("&bFight Other Party &7(Right Click)", Material.DIAMOND_AXE, 0, 5, "party duel", HotbarType.PARTY),
+    PARTY_INFO("&bParty Info &7(Right Click)", Material.PAPER, 0, 7, "party info", HotbarType.PARTY),
+    PARTY_LEAVE("&cLeave Party &7(Right Click)", Material.REDSTONE, 0, 8, "party leave", HotbarType.PARTY),
 
-    STOP_WATCHING("&cStop Watching", Material.REDSTONE, 0, 8, "leavespectator", HotbarType.SPECTATOR),
+    KIT_EDITOR_QUEUE("&bKit Editor &7(Right Click)", Material.BOOK, 0, 0, "kiteditor", HotbarType.QUEUE),
+    LEAVE_QUEUE("&cLeave Queue &7(Right Click)", Material.REDSTONE, 0, 8, "leavequeue", HotbarType.QUEUE),
 
-    TOURNAMENT_LEAVE("&cLeave Tournament", Material.REDSTONE, 0, 8, "tournament leave", HotbarType.TOURNAMENT),
-    TOURNAMENT_INFO("&bTournament Info", Material.PAPER, 0, 0, "tournament info", HotbarType.TOURNAMENT),
+    STOP_WATCHING("&cStop Watching &7(Right Click)", Material.REDSTONE, 0, 8, "leavespectator", HotbarType.SPECTATOR),
+
+    TOURNAMENT_LEAVE("&cLeave Tournament &7(Right Click)", Material.REDSTONE, 0, 8, "tournament leave", HotbarType.TOURNAMENT),
+    TOURNAMENT_INFO("&bTournament Info &7(Right Click)", Material.PAPER, 0, 0, "tournament info", HotbarType.TOURNAMENT),
 
     ;
 
@@ -48,7 +56,7 @@ public enum HotbarItems {
     private final Set<HotbarType> types;
     private final String command;
     private final String name;
-    private final int data;
+    private final int durability;
     private final int slot;
 
     /**
@@ -56,14 +64,14 @@ public enum HotbarItems {
      *
      * @param name     The name of the item
      * @param material The material of the item
-     * @param data     The data of the item
+     * @param durability     The data of the item
      * @param slot     The slot of the item
      * @param command  The command of the item
      * @param types    The types of the item
      */
-    HotbarItems(String name, Material material, int data, int slot, String command, HotbarType... types) {
+    HotbarItems(String name, Material material, int durability, int slot, String command, HotbarType... types) {
         this.name = name;
-        this.data = data;
+        this.durability = durability;
         this.slot = slot;
         this.types = new HashSet<>();
         Collections.addAll(this.types, types);
