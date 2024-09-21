@@ -186,11 +186,6 @@ public class MatchListener implements Listener {
             } else {
                 event.setCancelled(true);
             }
-        } else {
-            Bukkit.getConsoleSender().sendMessage(ErrorMessage.DEBUG);
-            if (player.getGameMode() == GameMode.CREATIVE) return;
-
-            event.setCancelled(true);
         }
     }
 

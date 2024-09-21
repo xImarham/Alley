@@ -41,10 +41,10 @@ public class MatchRunnable extends BukkitRunnable {
                     Alley.getInstance().getServer().getScheduler().runTask(Alley.getInstance(), match::handleRoundStart);
                     match.setMatchState(EnumMatchState.RUNNING);
                     match.sendMessage(CC.translate("&aMatch has started. Good luck!"));
-                    playSoundStarted();
+                    this.playSoundStarted();
                 } else {
                     match.sendMessage(CC.translate("&a" + stage + "..."));
-                    playSoundStarting();
+                    this.playSoundStarting();
                 }
                 break;
             case ENDING_ROUND:

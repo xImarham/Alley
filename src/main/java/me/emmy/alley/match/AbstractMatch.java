@@ -26,6 +26,7 @@ import net.md_5.bungee.api.chat.*;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
@@ -284,7 +285,7 @@ public abstract class AbstractMatch {
         getParticipants().forEach(gameParticipant -> gameParticipant.getPlayers().forEach(uuid -> {
             Player player = Alley.getInstance().getServer().getPlayer(uuid.getUuid());
             if (player != null) {
-                player.sendMessage(message);
+                player.sendMessage(CC.translate(message));
             }
         }));
     }
@@ -301,7 +302,7 @@ public abstract class AbstractMatch {
         matchSpectators.stream()
                 .map(uuid -> Alley.getInstance().getServer().getPlayer(uuid))
                 .filter(Objects::nonNull)
-                .forEach(player -> player.sendMessage(message));
+                .forEach(player -> player.sendMessage(CC.translate(message)));
     }
 
     /**
@@ -310,8 +311,16 @@ public abstract class AbstractMatch {
      * @param player The player that respawned.
      */
     public void handleRespawn(Player player) {
-        player.sendMessage(ErrorMessage.DEBUG);
+        PlayerUtil.reset(player);
 
+        Location spawnLocation = getParticipants().get(0).containsPlayer(player.getUniqueId()) ? getMatchArena().getPos1() : getMatchArena().getPos2();
+        player.teleport(spawnLocation);
+
+        player.getInventory().setArmorContents(getMatchKit().getArmor());
+        player.getInventory().setContents(getMatchKit().getInventory());
+
+        notifyParticipants("&b" + player.getName() + " &ahas respawned");
+        notifySpectators("&b" + player.getName() + " &ahas respawned");
     }
 
     /**
