@@ -1,4 +1,4 @@
-package me.emmy.alley.arena.command.impl;
+package me.emmy.alley.arena.command.impl.manage;
 
 import me.emmy.alley.Alley;
 import me.emmy.alley.arena.ArenaType;
@@ -14,7 +14,7 @@ import org.bukkit.entity.Player;
  * @date 5/20/2024
  */
 public class ArenaListCommand extends BaseCommand {
-    @Command(name = "arena.list", permission = "alley.admin")
+    @Command(name = "arena.list", aliases = {"arenas"},  permission = "alley.admin")
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();

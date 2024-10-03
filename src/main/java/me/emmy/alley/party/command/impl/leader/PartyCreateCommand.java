@@ -3,6 +3,7 @@ package me.emmy.alley.party.command.impl.leader;
 import me.emmy.alley.Alley;
 import me.emmy.alley.locale.Locale;
 import me.emmy.alley.party.PartyRepository;
+import me.emmy.alley.profile.enums.EnumProfileState;
 import me.emmy.alley.util.chat.CC;
 import me.emmy.alley.api.command.BaseCommand;
 import me.emmy.alley.api.command.Command;
@@ -24,6 +25,11 @@ public class PartyCreateCommand extends BaseCommand {
         UUID playerUUID = player.getUniqueId();
 
         PartyRepository partyRepository = Alley.getInstance().getPartyRepository();
+
+        if (Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId()).getState() != EnumProfileState.LOBBY) {
+            player.sendMessage(CC.translate("&cYou must be at spawn in order to execute this command :v"));
+            return;
+        }
 
         if (partyRepository.getPartyByLeader(player) != null) {
             player.sendMessage(CC.translate(Locale.ALREADY_IN_PARTY.getMessage()));

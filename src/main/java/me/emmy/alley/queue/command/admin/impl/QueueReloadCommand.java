@@ -1,4 +1,4 @@
-package me.emmy.alley.queue.command.admin;
+package me.emmy.alley.queue.command.admin.impl;
 
 import me.emmy.alley.Alley;
 import me.emmy.alley.kit.settings.impl.KitSettingRankedImpl;
@@ -15,7 +15,7 @@ import org.bukkit.entity.Player;
  * @date 5/26/2024
  */
 public class QueueReloadCommand extends BaseCommand {
-    @Command(name = "queue.reload", permission = "alley.admin")
+    @Command(name = "queue.reload", aliases = {"reloadqueue", "reloadqueues"}, permission = "alley.admin")
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();

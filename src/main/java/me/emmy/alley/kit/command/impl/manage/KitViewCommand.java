@@ -34,12 +34,12 @@ public class KitViewCommand extends BaseCommand {
         }
 
         player.sendMessage("");
-        player.sendMessage(CC.translate("     &b&lKit " + kit.getName() +  " &f(" + (kit.isEnabled() ? "&aEnabled" : "&cDisabled") + "&f)"));
-        player.sendMessage(CC.translate("      &f● &bDisplay Name: &f" + kit.getDisplayName()));
-        player.sendMessage(CC.translate("      &f● &bName: &f" + kit.getName()));
-        player.sendMessage(CC.translate("      &f● &bDescription: &f" + kit.getDescription()));
-        player.sendMessage(CC.translate("      &f● &bSettings: &f"));
-        kit.getKitSettings().forEach(setting -> player.sendMessage(CC.translate("        &f● &b" + setting.getName() + " &f(" + (setting.isEnabled() ? "&aEnabled" : "&cDisabled") + "&f)")));
+        player.sendMessage(CC.translate("&b&lKit " + kit.getName() +  " &f(" + (kit.isEnabled() ? "&aEnabled" : "&cDisabled") + "&f)"));
+        player.sendMessage(CC.translate(" &f● &bDisplay Name: &f" + kit.getDisplayName()));
+        player.sendMessage(CC.translate(" &f● &bName: &f" + kit.getName()));
+        player.sendMessage(CC.translate(" &f● &bDescription: &f" + kit.getDescription()));
+        player.sendMessage(CC.translate("   &f● &bSettings: &f"));
+        kit.getKitSettings().forEach(setting -> player.sendMessage(CC.translate("    &f● &b" + setting.getName() + " &f(" + (setting.isEnabled() ? "&aEnabled" : "&cDisabled") + "&f)")));
         player.sendMessage("");
     }
 }

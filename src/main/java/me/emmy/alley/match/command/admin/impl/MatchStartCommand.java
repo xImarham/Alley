@@ -4,7 +4,9 @@ import me.emmy.alley.Alley;
 import me.emmy.alley.arena.Arena;
 import me.emmy.alley.arena.ArenaType;
 import me.emmy.alley.kit.Kit;
+import me.emmy.alley.kit.settings.impl.KitSettingLivesImpl;
 import me.emmy.alley.match.AbstractMatch;
+import me.emmy.alley.match.impl.MatchLivesRegularImpl;
 import me.emmy.alley.match.impl.MatchRegularImpl;
 import me.emmy.alley.match.player.GameParticipant;
 import me.emmy.alley.match.player.impl.MatchGamePlayerImpl;
@@ -64,7 +66,7 @@ public class MatchStartCommand extends BaseCommand {
         String[] args = command.getArgs();
 
         if (args.length != 4) {
-            player.sendMessage(CC.translate("&cUsage: /match start <player1> <player2> <arena> <kit>"));
+            player.sendMessage(CC.translate("&6Usage: &e/match start &b<player1> <player2> <arena> <kit>"));
             return;
         }
 
@@ -98,8 +100,13 @@ public class MatchStartCommand extends BaseCommand {
 
         for (Queue queue : Alley.getInstance().getQueueRepository().getQueues()) {
             if (queue.getKit().equals(kit) && !queue.isRanked()) {
-                AbstractMatch match = new MatchRegularImpl(queue, kit, arena, false, participantA, participantB);
-                match.startMatch();
+                if (queue.getKit().isSettingEnabled(KitSettingLivesImpl.class)) {
+                    AbstractMatch match = new MatchLivesRegularImpl(queue, kit, arena, true, participantA, participantB);
+                    match.startMatch();
+                } else {
+                    AbstractMatch match = new MatchRegularImpl(queue, kit, arena, false, participantA, participantB);
+                    match.startMatch();
+                }
             }
         }
     }

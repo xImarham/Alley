@@ -1,4 +1,4 @@
-package me.emmy.alley.queue.command.admin;
+package me.emmy.alley.queue.command.admin.impl;
 
 import me.emmy.alley.Alley;
 import me.emmy.alley.hotbar.enums.HotbarType;
@@ -18,15 +18,16 @@ import org.bukkit.entity.Player;
  * @project Alley
  * @date 5/26/2024
  */
-public class ForceQueueCommand extends BaseCommand {
-    @Command(name = "queue.force", permission = "alley.admin")
+public class QueueForceCommand extends BaseCommand {
+    @Command(name = "queue.force", aliases = {"forcequeue"}, permission = "alley.admin")
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
         String[] args = command.getArgs();
 
         if (args.length != 3) {
-            player.sendMessage(CC.translate("&cUsage: /queue force <player> <kit> <ranked>"));
+            player.sendMessage(CC.translate("&6Usage: &e/queue force &b<player> <kit> <ranked>"));
+            player.sendMessage(CC.translate("&7Example: /queue force hmRemi Boxing true"));
             return;
         }
 
@@ -44,6 +45,7 @@ public class ForceQueueCommand extends BaseCommand {
             player.sendMessage(CC.translate("&cKit not found."));
             return;
         }
+
         Profile profile = Alley.getInstance().getProfileRepository().getProfile(target.getUniqueId());
         for (Queue queue : Alley.getInstance().getQueueRepository().getQueues()) {
             if (queue.getKit().equals(kit) && queue.isRanked() == ranked) {

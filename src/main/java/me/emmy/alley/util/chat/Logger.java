@@ -2,6 +2,8 @@ package me.emmy.alley.util.chat;
 
 import lombok.experimental.UtilityClass;
 import me.emmy.alley.Alley;
+import me.emmy.alley.config.ConfigHandler;
+import me.emmy.alley.util.Symbol;
 import org.bukkit.Bukkit;
 
 /**
@@ -11,6 +13,12 @@ import org.bukkit.Bukkit;
  */
 @UtilityClass
 public class Logger {
+
+    public void debug(String message) {
+        if (ConfigHandler.getInstance().getSettingsConfig().getBoolean("debugging")) {
+            Bukkit.getConsoleSender().sendMessage(CC.translate("&c" + Symbol.ARROW_R.getSymbol() + " &4&lAlley Debug &c" + Symbol.ARROW_L.getSymbol() + " &7&o" + message));
+        }
+    }
 
     /**
      * Log the time it takes to run a task.
@@ -41,46 +49,5 @@ public class Logger {
      */
     public void logError(String message) {
         Bukkit.getServer().getConsoleSender().sendMessage(CC.translate("&8[&4Alley&8] &cERROR: " + message + "!"));
-    }
-
-    /**
-     * Log an error to the console and broadcast in chat.
-     *
-     * @param message the error message to log
-     */
-    public void broadcastError(String message) {
-        Bukkit.getServer().getConsoleSender().sendMessage(CC.translate("&8[&4Alley&8] &cERROR: " + message + "!"));
-        Bukkit.broadcastMessage(CC.translate("&8[&4Alley&8] &cERROR: " + message + "!"));
-    }
-
-    /**
-     * Log an exception to the console.
-     *
-     * @param exception the exception to log
-     */
-    public void logException(Exception exception) {
-        logError("&cAn exception occurred: " + exception.getMessage());
-    }
-
-    /**
-     * Log an exception to the console and broadcast in chat.
-     *
-     * @param exception the exception to log
-     */
-    public void broadcastException(Exception exception) {
-        broadcastError("&cAn exception occurred: " + exception.getMessage());
-    }
-
-    /**
-     * Log an exception to the console with the stack trace.
-     *
-     * @param exception the exception to log
-     */
-    public void logExceptionWithStackTrace(Exception exception) {
-        logError("&cAn exception occurred: " + exception.getMessage());
-        logError("&cStack trace:");
-        logError("");
-        exception.printStackTrace();
-        logError("");
     }
 }

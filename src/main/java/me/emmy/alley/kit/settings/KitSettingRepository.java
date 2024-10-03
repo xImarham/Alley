@@ -2,6 +2,7 @@ package me.emmy.alley.kit.settings;
 
 import lombok.Getter;
 import lombok.Setter;
+import me.emmy.alley.kit.Kit;
 import me.emmy.alley.kit.settings.impl.*;
 import me.emmy.alley.util.chat.Logger;
 
@@ -28,8 +29,9 @@ public class KitSettingRepository {
         registerSetting(KitSettingBoxingImpl.class);
         registerSetting(KitSettingSumoImpl.class);
         registerSetting(KitSettingSpleefImpl.class);
-        //registerSetting(KitSettingDenyMovementImpl.class);
+        registerSetting(KitSettingDenyMovementImpl.class);
         registerSetting(KitSettingParkourImpl.class);
+        registerSetting(KitSettingLivesImpl.class);
     }
 
     /**
@@ -83,6 +85,17 @@ public class KitSettingRepository {
      */
     public KitSetting getSettingByClass(Class<? extends KitSetting> clazz) {
         return settings.stream().filter(setting -> setting.getClass().equals(clazz)).findFirst().orElse(null);
+    }
+
+    /**
+     * Method to apply all settings to a kit.
+     *
+     * @param kit The kit to apply the settings to.
+     */
+    public void applyAllSettingsToKit(Kit kit) {
+        for (KitSetting setting : settings) {
+            kit.addKitSetting(setting);
+        }
     }
 }
 

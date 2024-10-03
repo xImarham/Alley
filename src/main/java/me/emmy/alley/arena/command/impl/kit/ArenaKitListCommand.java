@@ -1,4 +1,4 @@
-package me.emmy.alley.arena.command.impl;
+package me.emmy.alley.arena.command.impl.kit;
 
 import me.emmy.alley.Alley;
 import me.emmy.alley.util.chat.CC;
@@ -16,10 +16,10 @@ import java.util.List;
  * @project Alley
  * @date 5/20/2024
  */
-public class ArenaDeleteCommand extends BaseCommand {
+public class ArenaKitListCommand extends BaseCommand {
 
-    @Completer(name = "arena.delete")
-    public List<String> arenaDeleteCompleter(CommandArgs command) {
+    @Completer(name = "arena.kitlist")
+    public List<String> arenaKitListCompleter(CommandArgs command) {
         List<String> completion = new ArrayList<>();
 
         if (command.getArgs().length == 1 && command.getPlayer().hasPermission("alley.admin")) {
@@ -29,14 +29,14 @@ public class ArenaDeleteCommand extends BaseCommand {
         return completion;
     }
 
-    @Command(name = "arena.delete", permission = "alley.admin")
+    @Command(name = "arena.kitlist", permission = "alley.admin")
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
         String[] args = command.getArgs();
 
         if (args.length < 1) {
-            player.sendMessage(CC.translate("&cUsage: /arena delete <arenaName>"));
+            player.sendMessage(CC.translate("&6Usage: &e/arena kitlist &b<arenaName>"));
             return;
         }
 
@@ -46,7 +46,12 @@ public class ArenaDeleteCommand extends BaseCommand {
             return;
         }
 
-        player.sendMessage(CC.translate("&aArena &b" + arenaName + "&a has been deleted!"));
-        Alley.getInstance().getArenaRepository().deleteArena(Alley.getInstance().getArenaRepository().getArenaByName(arenaName));
+        player.sendMessage("");
+        player.sendMessage(CC.translate("     &b&l" + arenaName + " Kit List &f(" + Alley.getInstance().getArenaRepository().getArenaByName(arenaName).getKits().size() + "&f)"));
+        if (Alley.getInstance().getArenaRepository().getArenaByName(arenaName).getKits().isEmpty()) {
+            player.sendMessage(CC.translate("      &f● &cNo Arena Kits available."));
+        }
+        Alley.getInstance().getArenaRepository().getArenaByName(arenaName).getKits().forEach(kit -> player.sendMessage(CC.translate("      &f● &b" + kit)));
+        player.sendMessage("");
     }
 }

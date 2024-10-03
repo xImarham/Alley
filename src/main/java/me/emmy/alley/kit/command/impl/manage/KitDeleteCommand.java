@@ -31,5 +31,13 @@ public class KitDeleteCommand extends BaseCommand {
 
         Alley.getInstance().getKitRepository().deleteKit(kit);
         player.sendMessage(CC.translate(Locale.KIT_DELETED.getMessage().replace("{kit-name}", kitName)));
+
+        Alley.getInstance().getArenaRepository().getArenas().forEach(arena -> {
+            if (arena.getKits().contains(kitName)) {
+                arena.getKits().remove(kitName);
+                arena.saveArena();
+            }
+        });
+        player.sendMessage(CC.translate("&7Additionally, the kit has been removed from all arenas it was added to."));
     }
 }

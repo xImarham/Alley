@@ -1,11 +1,16 @@
 package me.emmy.alley.match.impl;
 
 import lombok.Getter;
+import me.emmy.alley.Alley;
 import me.emmy.alley.arena.Arena;
 import me.emmy.alley.kit.Kit;
 import me.emmy.alley.match.player.GameParticipant;
 import me.emmy.alley.match.player.impl.MatchGamePlayerImpl;
 import me.emmy.alley.queue.Queue;
+import me.emmy.alley.util.TaskUtil;
+import me.emmy.alley.util.chat.Logger;
+import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -50,7 +55,7 @@ public class MatchLivesRegularImpl extends MatchRegularImpl {
 
     @Override
     public boolean canEndRound() {
-        return true;
+        return participantA.isAllDead() || participantB.isAllDead();
     }
 
     @Override
@@ -67,6 +72,20 @@ public class MatchLivesRegularImpl extends MatchRegularImpl {
         lives.put(participant, lives.get(participant) - 1);
         if (lives.get(participant) <= 0) {
             determineWinnerAndLoser();
+        }
+    }
+
+    @Override
+    public void handleDeath(Player player) {
+        GameParticipant<MatchGamePlayerImpl> participant = participantA.containsPlayer(player.getUniqueId()) ? participantA : participantB;
+        Logger.debug("Reducing life of " + participant.getPlayer().getPlayer().getName());
+        reduceLife(participant);
+
+        if (lives.get(participant) > 0) {
+            TaskUtil.runTaskLater(() -> super.handleRespawn(player), 5L);
+        } else {
+            Logger.debug("super Handling death of " + participant.getPlayer().getPlayer().getName());
+            super.handleDeath(player);
         }
     }
 

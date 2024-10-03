@@ -46,7 +46,6 @@ import me.emmy.alley.match.command.player.LeaveMatchCommand;
 import me.emmy.alley.match.command.player.LeaveSpectatorCommand;
 import me.emmy.alley.match.command.player.SpectateCommand;
 import me.emmy.alley.match.listener.MatchListener;
-import me.emmy.alley.match.player.visibility.PlayerVisibility;
 import me.emmy.alley.match.snapshot.SnapshotRepository;
 import me.emmy.alley.match.snapshot.command.InventoryCommand;
 import me.emmy.alley.party.PartyRepository;
@@ -77,8 +76,9 @@ import me.emmy.alley.profile.settings.playersettings.command.worldtime.SunsetCom
 import me.emmy.alley.profile.shop.command.ShopCommand;
 import me.emmy.alley.profile.shop.command.admin.SetCoinsCommand;
 import me.emmy.alley.queue.QueueRepository;
-import me.emmy.alley.queue.command.admin.ForceQueueCommand;
-import me.emmy.alley.queue.command.admin.QueueReloadCommand;
+import me.emmy.alley.queue.command.admin.QueueCommand;
+import me.emmy.alley.queue.command.admin.impl.QueueForceCommand;
+import me.emmy.alley.queue.command.admin.impl.QueueReloadCommand;
 import me.emmy.alley.queue.command.player.LeaveQueueCommand;
 import me.emmy.alley.queue.command.player.QueuesCommand;
 import me.emmy.alley.queue.command.player.RankedCommand;
@@ -115,7 +115,6 @@ public class Alley extends JavaPlugin {
     private CommandFramework commandFramework;
     private CosmeticRepository cosmeticRepository;
     private ProfileRepository profileRepository;
-    private PlayerVisibility playerVisibility;
     private DivisionRepository divisionRepository;
     private FFASpawnHandler ffaSpawnHandler;
     private MongoService mongoService;
@@ -219,7 +218,6 @@ public class Alley extends JavaPlugin {
         Logger.logTime("SpawnHandler", () -> this.spawnHandler = new SpawnHandler());
         Logger.logTime("CombatManager", () -> this.combatManager = new CombatManager());
         Logger.logTime("FFASpawnHandler", () -> this.ffaSpawnHandler = new FFASpawnHandler());
-        Logger.logTime("PlayerVisibility", () -> this.playerVisibility = new PlayerVisibility());
     }
 
     private void registerListeners() {
@@ -244,12 +242,10 @@ public class Alley extends JavaPlugin {
             new KitCommand();
             new ArenaCommand();
             new MatchCommand();
+            new QueueCommand();
             new FFACommand();
             new CosmeticCommand();
             new DivisionCommand();
-
-            new ForceQueueCommand();
-            new QueueReloadCommand();
 
             //debugging
             new StateCommand();

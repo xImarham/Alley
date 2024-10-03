@@ -10,6 +10,8 @@ arenas:
     displayName: '&bFree For All'
     minimum: world:-5.364354912130865:70.0:-42.30000001192093:179.9862:90.0
     maximum: world:-7.699999988079071:77.20000004768372:-44.30000001192093:183.60805:88.897705
+    kits: []
+    pos2: 'null'
   Grass:
     type: STANDALONE
     minimum: world:98.0:62.0:707.0:0.0:0.0
@@ -22,6 +24,7 @@ arenas:
       - NoDebuff
       - Classic
     enabled: true
+    displayName: '&bGrass'
   Sakura:
     type: STANDALONE
     minimum: world:24.0:23.0:1743.0:0.0:0.0
@@ -34,3 +37,67 @@ arenas:
       - Boxing
       - Classic
     enabled: true
+    displayName: '&bSakura'
+  Sierra:
+    type: SHARED
+    minimum: world:-860.0:94.0:-65.0:0.0:0.0
+    maximum: world:-760.0:195.0:35.0:0.0:0.0
+    center: world:-809.5:110.0:-14.5:89.84051:28.142046
+    pos1: world:-809.5:95.0:-58.5:359.98828:0.04781547
+    pos2: world:-809.5:95.0:29.5:179.9522:0.016314777
+    kits:
+      - NoDebuff
+      - Boxing
+      - Classic
+    enabled: true
+    displayName: '&bSierra'
+  Tsunami:
+    type: SHARED
+    minimum: world:-1402.0:123.0:158.0:0.0:0.0
+    maximum: world:-1500.0:97.0:59.0:0.0:0.0
+    center: world:-1451.4753691394417:114.27882189466052:108.73081215352558:88.835785:23.428143
+    pos1: world:-1451.5:98.0:152.5:179.95226:0.016310373
+    pos2: world:-1451.5:98.0:65.5:0.04876709:0.026770303
+    kits:
+      - NoDebuff
+      - Boxing
+      - Classic
+    enabled: true
+    displayName: '&bTsunami'
+  Winter:
+    type: SHARED
+    minimum: world:-2165.0:234.0:149.0:0.0:0.0
+    maximum: world:-2065.0:139.0:249.0:0.0:0.0
+    center: world:-2114.955735927626:156.73726338908645:198.94320202765778:90.95846:22.535734
+    pos1: world:-2114.5:140.0:242.5:180.034:0.016320808
+    pos2: world:-2114.5:140.0:155.5:0.02998109:0.038710322
+    kits:
+      - NoDebuff
+      - Boxing
+      - Classic
+    enabled: true
+    displayName: '&bWinter'
+  test2:
+    type: FFA
+    safezone:
+      pos1: world:21.0:70.0:-36.0:0.0:0.0
+      pos2: world:21.0:70.0:-40.0:0.0:0.0
+    center: 'null'
+    pos1: 'null'
+    enabled: false
+    displayName: '&btest2'
+    minimum: world:21.0:70.0:-36.0:0.0:0.0
+    maximum: world:21.0:70.0:-40.0:0.0:0.0
+    kits: []
+    pos2: 'null'
+  Candy:
+    type: STANDALONE
+    minimum: world:-2970.0:93.0:235.0:0.0:0.0
+    maximum: world:-2902.0:0.0:307.0:0.0:0.0
+    center: world:-2926.5:50.0:271.5:269.29163:54.220776
+    pos1: world:-2926.5:42.0:265.5:0.0:0.0
+    pos2: world:-2926.5:42.0:277.5:179.9695:0.04780883
+    kits:
+      - BattleRush
+    enabled: true
+    displayName: '&bCandy'

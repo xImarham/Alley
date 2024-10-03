@@ -39,7 +39,6 @@ public class StandAloneArena extends Arena {
     @Override
     public void saveArena() {
         String name = "arenas." + getName();
-
         FileConfiguration config = Alley.getInstance().getConfigHandler().getConfigByName("storage/arenas.yml");
         config.set(name, null);
         config.set(name + ".type", getType().name());

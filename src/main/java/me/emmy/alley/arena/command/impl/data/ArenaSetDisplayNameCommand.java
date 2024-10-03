@@ -1,4 +1,4 @@
-package me.emmy.alley.arena.command.impl;
+package me.emmy.alley.arena.command.impl.data;
 
 import me.emmy.alley.Alley;
 import me.emmy.alley.api.command.BaseCommand;
@@ -22,7 +22,7 @@ public class ArenaSetDisplayNameCommand extends BaseCommand {
         String[] args = command.getArgs();
 
         if (args.length < 2) {
-            sender.sendMessage(CC.translate("&cUsage: /arena setdisplayname <arena> <displayname>"));
+            sender.sendMessage(CC.translate("&6Usage: &e/arena setdisplayname &b<arenaName> <displayName>"));
             return;
         }
 

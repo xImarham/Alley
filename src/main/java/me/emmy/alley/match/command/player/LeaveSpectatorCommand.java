@@ -15,7 +15,7 @@ import org.bukkit.entity.Player;
  * @date 5/21/2024
  */
 public class LeaveSpectatorCommand extends BaseCommand {
-    @Command(name = "leavespectator", aliases = {"leavespec", "stopwatching"})
+    @Command(name = "leavespectator", aliases = {"unspec"})
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();

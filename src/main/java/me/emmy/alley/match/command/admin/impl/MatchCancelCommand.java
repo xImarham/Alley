@@ -22,7 +22,7 @@ public class MatchCancelCommand extends BaseCommand {
         String[] args = command.getArgs();
 
         if (args.length != 1) {
-            player.sendMessage(CC.translate("&cUsage: /match cancel <player>"));
+            player.sendMessage(CC.translate("&6Usage: &e/match cancel &b<player>"));
             return;
         }
 

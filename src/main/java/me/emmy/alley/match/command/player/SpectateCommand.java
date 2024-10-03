@@ -16,14 +16,14 @@ import org.bukkit.entity.Player;
  * @date 5/21/2024
  */
 public class SpectateCommand extends BaseCommand {
-    @Command(name = "spectate", aliases = {"spec", "watch"})
+    @Command(name = "spectate", aliases = {"spec"})
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
         String[] args = command.getArgs();
 
         if (args.length == 0) {
-            player.sendMessage(CC.translate("&cUsage: /spectate <player>"));
+            player.sendMessage(CC.translate("&6Usage: &e/spectate &b<player>"));
             return;
         }
 

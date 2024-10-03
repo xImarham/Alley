@@ -1,4 +1,4 @@
-package me.emmy.alley.arena.command.impl;
+package me.emmy.alley.arena.command.impl.manage;
 
 import me.emmy.alley.Alley;
 import me.emmy.alley.arena.Arena;
@@ -37,7 +37,7 @@ public class ArenaTeleportCommand extends BaseCommand {
         String[] args = command.getArgs();
 
         if (args.length < 1) {
-            player.sendMessage(CC.translate("&cUsage: /arena teleport (arenaName)"));
+            player.sendMessage(CC.translate("&6Usage: &e/arena teleport &b<arenaName>"));
             return;
         }
 

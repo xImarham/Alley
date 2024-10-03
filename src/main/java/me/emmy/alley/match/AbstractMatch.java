@@ -6,6 +6,7 @@ import me.emmy.alley.Alley;
 import me.emmy.alley.arena.Arena;
 import me.emmy.alley.hotbar.enums.HotbarType;
 import me.emmy.alley.kit.Kit;
+import me.emmy.alley.kit.settings.impl.KitSettingLivesImpl;
 import me.emmy.alley.locale.ErrorMessage;
 import me.emmy.alley.match.enums.EnumMatchState;
 import me.emmy.alley.match.impl.MatchRegularImpl;
@@ -22,6 +23,7 @@ import me.emmy.alley.profile.enums.EnumProfileState;
 import me.emmy.alley.queue.Queue;
 import me.emmy.alley.util.chat.CC;
 import me.emmy.alley.util.PlayerUtil;
+import me.emmy.alley.util.chat.Logger;
 import net.md_5.bungee.api.chat.*;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -200,6 +202,28 @@ public abstract class AbstractMatch {
 
         player.setVelocity(new Vector());
 
+        if (canEndRound()) {
+            Logger.debug("Can the round end? " + canEndRound());
+            matchState = EnumMatchState.ENDING_ROUND;
+            Logger.debug("Handling round end");
+            handleRoundEnd();
+
+            if (canEndMatch()) {
+                Logger.debug("Can the match end? " + canEndMatch());
+                Player killer = PlayerUtil.getLastAttacker(player);
+                if (killer != null) {
+                    handleEffects(player, killer);
+                }
+                matchState = EnumMatchState.ENDING_MATCH;
+            }
+            Logger.debug("Setting stage to 4");
+            getMatchRunnable().setStage(4);
+        } else {
+            Logger.debug("Can the round end? " + canEndRound());
+            Logger.debug("Handling respawn for " + player.getName());
+            handleRespawn(player);
+        }
+
         if (getParticipants().size() == 2) {
             GameParticipant<MatchGamePlayerImpl> participantA = getParticipants().get(0);
             GameParticipant<MatchGamePlayerImpl> participantB = getParticipants().get(1);
@@ -238,22 +262,6 @@ public abstract class AbstractMatch {
             sendSpigotMessage(message);
             sendMessage(CC.MENU_BAR);
             sendMessage("");
-        }
-
-        if (canEndRound()) {
-            matchState = EnumMatchState.ENDING_ROUND;
-            handleRoundEnd();
-
-            if (canEndMatch()) {
-                Player killer = PlayerUtil.getLastAttacker(player);
-                if (killer != null) {
-                    handleEffects(player, killer);
-                }
-                matchState = EnumMatchState.ENDING_MATCH;
-            }
-            getMatchRunnable().setStage(4);
-        } else {
-            handleRespawn(player);
         }
     }
 
@@ -311,6 +319,7 @@ public abstract class AbstractMatch {
      * @param player The player that respawned.
      */
     public void handleRespawn(Player player) {
+        Logger.debug("Handling respawn for " + player.getName());
         PlayerUtil.reset(player);
 
         Location spawnLocation = getParticipants().get(0).containsPlayer(player.getUniqueId()) ? getMatchArena().getPos1() : getMatchArena().getPos2();
@@ -408,8 +417,6 @@ public abstract class AbstractMatch {
             player.sendMessage(CC.translate("&cThe arena is not set up for spectating"));
             return;
         }
-
-        Alley.getInstance().getPlayerVisibility().handle(player);
 
         player.teleport(matchArena.getCenter());
         player.spigot().setCollidesWithEntities(false);

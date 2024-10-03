@@ -45,7 +45,7 @@ public class Party {
      * Disbands the party.
      */
     public void disbandParty() {
-        this.notifyParty("&cThe party has been disbanded.");
+        this.notifyPartyExcludeLeader("&cThe party has been disbanded.");
         this.unregisterParty();
         this.resetAllPlayers();
     }
@@ -173,6 +173,14 @@ public class Party {
      */
     public void notifyParty(String message) {
         this.getPlayersInParty().forEach(player -> {
+            if (getProfile(player).getProfileData().getProfileSettingData().isPartyMessagesEnabled()) {
+                player.sendMessage(CC.translate(message));
+            }
+        });
+    }
+
+    public void notifyPartyExcludeLeader(String message) {
+        this.getPlayersInParty().stream().filter(player -> !player.equals(this.leader)).forEach(player -> {
             if (getProfile(player).getProfileData().getProfileSettingData().isPartyMessagesEnabled()) {
                 player.sendMessage(CC.translate(message));
             }

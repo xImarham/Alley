@@ -14,7 +14,7 @@ import org.bukkit.command.CommandSender;
  */
 public class KitListCommand extends BaseCommand {
     @Override
-    @Command(name = "kit.list", permission = "alley.admin")
+    @Command(name = "kit.list", aliases = {"kits"}, permission = "alley.admin")
     public void onCommand(CommandArgs command) {
         CommandSender sender = command.getSender();
 

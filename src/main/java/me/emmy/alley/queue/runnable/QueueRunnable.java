@@ -5,7 +5,9 @@ import me.emmy.alley.Alley;
 import me.emmy.alley.arena.Arena;
 import me.emmy.alley.arena.ArenaType;
 import me.emmy.alley.hotbar.enums.HotbarType;
+import me.emmy.alley.kit.settings.impl.KitSettingLivesImpl;
 import me.emmy.alley.match.AbstractMatch;
+import me.emmy.alley.match.impl.MatchLivesRegularImpl;
 import me.emmy.alley.match.impl.MatchRegularImpl;
 import me.emmy.alley.match.player.GameParticipant;
 import me.emmy.alley.match.player.impl.MatchGamePlayerImpl;
@@ -129,7 +131,11 @@ public class QueueRunnable implements Runnable {
      * @return The match type.
      */
     private @NotNull AbstractMatch getMatchType(Queue queue, GameParticipantList gameParticipantList, Arena arena) {
-        return new MatchRegularImpl(queue, queue.getKit(), arena, queue.isRanked(), gameParticipantList.getParticipantA(), gameParticipantList.getParticipantB());
+        if (queue.getKit().isSettingEnabled(KitSettingLivesImpl.class)) {
+            return new MatchLivesRegularImpl(queue, queue.getKit(), arena, queue.isRanked(), gameParticipantList.getParticipantA(), gameParticipantList.getParticipantB());
+        } else {
+            return new MatchRegularImpl(queue, queue.getKit(), arena, queue.isRanked(), gameParticipantList.getParticipantA(), gameParticipantList.getParticipantB());
+        }
     }
 
     /**

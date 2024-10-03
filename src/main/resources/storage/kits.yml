@@ -175,6 +175,18 @@ kits:
       Parkour:
         description: This is the parkour kit type
         enabled: false
+      Sumo:
+        description: This is the sumo kit type
+        enabled: false
+      Spleef:
+        description: This is the spleef kit type
+        enabled: false
+      DenyMovement:
+        description: This denies the player movement during countdown.
+        enabled: false
+      Lives:
+        description: This kit setting enabled best of 3 type matches, such as Battle Rush.
+        enabled: false
   Classic:
     displayname: '&bClassic'
     description: '&7Old styled PvP.'
@@ -249,6 +261,18 @@ kits:
         enabled: false
       Parkour:
         description: This is the parkour kit type
+        enabled: false
+      Sumo:
+        description: This is the sumo kit type
+        enabled: false
+      Spleef:
+        description: This is the spleef kit type
+        enabled: false
+      DenyMovement:
+        description: This denies the player movement during countdown.
+        enabled: false
+      Lives:
+        description: This kit setting enabled best of 3 type matches, such as Battle Rush.
         enabled: false
   Boxing:
     displayname: '&bBoxing'
@@ -346,6 +370,18 @@ kits:
       Parkour:
         description: This is the parkour kit type
         enabled: false
+      Sumo:
+        description: This is the sumo kit type
+        enabled: false
+      Spleef:
+        description: This is the spleef kit type
+        enabled: false
+      DenyMovement:
+        description: This denies the player movement during countdown.
+        enabled: false
+      Lives:
+        description: This kit setting enabled best of 3 type matches, such as Battle Rush.
+        enabled: false
   Sumo:
     displayname: '&bSumo'
     description: '&7Knock off your rival!'
@@ -424,6 +460,15 @@ kits:
         enabled: true
       Parkour:
         description: This is the parkour kit type
+        enabled: false
+      DenyMovement:
+        description: This denies the player movement during countdown.
+        enabled: true
+      Spleef:
+        description: This is the spleef kit type
+        enabled: false
+      Lives:
+        description: This kit setting enabled best of 3 type matches, such as Battle Rush.
         enabled: false
   Spleef:
     displayname: '&bSpleef'
@@ -515,6 +560,12 @@ kits:
       Parkour:
         description: This is the parkour kit type
         enabled: false
+      DenyMovement:
+        description: This denies the player movement during countdown.
+        enabled: true
+      Lives:
+        description: This kit setting enabled best of 3 type matches, such as Battle Rush.
+        enabled: false
   Parkour:
     displayname: '&bParkour'
     description: Classic parkour lol.
@@ -596,4 +647,102 @@ kits:
         enabled: false
       Parkour:
         description: This is the parkour kit type
+        enabled: true
+      DenyMovement:
+        description: This denies the player movement during countdown.
+        enabled: true
+      Lives:
+        description: This kit setting enabled best of 3 type matches, such as Battle Rush.
+        enabled: false
+  BattleRush:
+    displayname: '&bBattleRush'
+    description: '&7BattleRush kit description'
+    enabled: true
+    unrankedslot: 16
+    rankedslot: 16
+    editorslot: 16
+    items:
+      - ==: org.bukkit.inventory.ItemStack
+        type: WOOL
+        damage: 11
+        amount: 64
+      - ==: org.bukkit.inventory.ItemStack
+        type: SHEARS
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+    armor:
+      - ==: org.bukkit.inventory.ItemStack
+        type: AIR
+        damage: -1
+        amount: 0
+      - ==: org.bukkit.inventory.ItemStack
+        type: AIR
+        damage: -1
+        amount: 0
+      - ==: org.bukkit.inventory.ItemStack
+        type: AIR
+        damage: -1
+        amount: 0
+      - ==: org.bukkit.inventory.ItemStack
+        type: AIR
+        damage: -1
+        amount: 0
+    icon: WATER_LILY
+    icondata: 0
+    settings:
+      Boxing:
+        description: This is the boxing kit type
+        enabled: false
+      Build:
+        description: Allows you to build in matches
+        enabled: false
+      Ranked:
+        description: This is the ranked kit type
+        enabled: true
+      Spleef:
+        description: This is the spleef kit type
+        enabled: false
+      Sumo:
+        description: This is the sumo kit type
+        enabled: false
+      DenyMovement:
+        description: This denies the player movement during countdown.
+        enabled: false
+      Parkour:
+        description: This is the parkour kit type
+        enabled: false
+      Lives:
+        description: This kit setting enabled best of 3 type matches, such as Battle Rush.
         enabled: true

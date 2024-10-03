@@ -8,6 +8,6 @@ import me.emmy.alley.kit.settings.annotation.KitSettingData;
  * @project Alley
  * @date 27/08/2024 - 19:08
  */
-@KitSettingData(name = "DenyMovement", description = "This denies the player movement during countdown", enabled = false)
+@KitSettingData(name = "DenyMovement", description = "This denies the player movement during countdown.", enabled = false)
 public class KitSettingDenyMovementImpl extends KitSetting {
 }

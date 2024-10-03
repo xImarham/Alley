@@ -69,11 +69,7 @@ public class KitCreateCommand extends BaseCommand {
                 (byte) 0
         );
 
-        kit.addKitSetting(new KitSettingBoxingImpl());
-        kit.addKitSetting(new KitSettingBuildImpl());
-        kit.addKitSetting(new KitSettingRankedImpl());
-        kit.addKitSetting(new KitSettingSpleefImpl());
-        kit.addKitSetting(new KitSettingSumoImpl());
+        Alley.getInstance().getKitSettingRepository().applyAllSettingsToKit(kit);
 
         return kit;
     }

@@ -3,7 +3,9 @@ package me.emmy.alley.spawn.listener;
 import me.emmy.alley.Alley;
 import me.emmy.alley.profile.Profile;
 import me.emmy.alley.profile.enums.EnumProfileState;
+import me.emmy.alley.util.chat.CC;
 import me.emmy.alley.util.chat.Logger;
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -72,6 +74,8 @@ public class SpawnListener implements Listener {
     public void onBlockBreak(BlockBreakEvent event) {
         Player player = event.getPlayer();
         Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
+
+        Bukkit.getConsoleSender().sendMessage(CC.translate("&c" + player.getName() + " tried to break a block in the lobby"));
 
         if (player.getGameMode() != GameMode.CREATIVE
                 && (profile.getState().equals(EnumProfileState.LOBBY)

@@ -1,4 +1,4 @@
-package me.emmy.alley.arena.command.impl;
+package me.emmy.alley.arena.command.impl.data;
 
 import me.emmy.alley.Alley;
 import me.emmy.alley.arena.ArenaType;
@@ -38,7 +38,7 @@ public class ArenaSetCuboidCommand extends BaseCommand {
         String[] args = command.getArgs();
 
         if (args.length < 1) {
-            player.sendMessage(CC.translate("&cUsage: /arena setcuboid <arenaName>"));
+            player.sendMessage(CC.translate("&6Usage: &e/arena setcuboid &b<arenaName>"));
             return;
         }
 

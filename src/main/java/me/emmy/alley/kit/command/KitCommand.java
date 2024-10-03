@@ -1,5 +1,6 @@
 package me.emmy.alley.kit.command;
 
+import me.emmy.alley.api.command.Completer;
 import me.emmy.alley.kit.command.impl.data.KitSetDescriptionCommand;
 import me.emmy.alley.kit.command.impl.data.KitSetDisplayNameCommand;
 import me.emmy.alley.kit.command.impl.data.KitSetIconCommand;
@@ -21,6 +22,9 @@ import me.emmy.alley.api.command.BaseCommand;
 import me.emmy.alley.api.command.Command;
 import me.emmy.alley.api.command.CommandArgs;
 import org.bukkit.command.CommandSender;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Emmy
@@ -47,6 +51,33 @@ public class KitCommand extends BaseCommand {
         new KitSetIconCommand();
         new KitViewCommand();
     }
+
+    @Completer(name = "kit")
+    public List<String> arenaCompleter(CommandArgs command) {
+        List<String> completion = new ArrayList<>();
+
+        if (command.getArgs().length == 1 && command.getPlayer().hasPermission("alley.admin")) {
+            completion.add("list");
+            completion.add("saveall");
+            completion.add("settings");
+            completion.add("save");
+            completion.add("view");
+            completion.add("delete");
+            completion.add("create");
+            completion.add("seticon");
+            completion.add("setinv");
+            completion.add("getinv");
+            completion.add("setdesc");
+            completion.add("seteditorslot");
+            completion.add("setrankedslot");
+            completion.add("setunrankedslot");
+            completion.add("setsetting");
+            completion.add("setdisplayname");
+        }
+
+        return completion;
+    }
+
     @Override
     @Command(name = "kit", permission = "alley.admin")
     public void onCommand(CommandArgs command) {

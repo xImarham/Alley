@@ -1,4 +1,4 @@
-package me.emmy.alley.arena.command.impl;
+package me.emmy.alley.arena.command.impl.kit;
 
 import me.emmy.alley.Alley;
 import me.emmy.alley.util.chat.CC;
@@ -36,7 +36,7 @@ public class ArenaRemoveKitCommand extends BaseCommand {
         String[] args = command.getArgs();
 
         if (args.length < 2) {
-            player.sendMessage(CC.translate("&cUsage: /arena removekit <arenaName> <kitName>"));
+            player.sendMessage(CC.translate("&6Usage: &e/arena removekit &b<arenaName> <kitName>"));
             return;
         }
 

@@ -1,4 +1,4 @@
-package me.emmy.alley.arena.command.impl;
+package me.emmy.alley.arena.command.impl.manage;
 
 import me.emmy.alley.Alley;
 import me.emmy.alley.util.chat.CC;
@@ -16,10 +16,10 @@ import java.util.List;
  * @project Alley
  * @date 5/20/2024
  */
-public class ArenaSetCenterCommand extends BaseCommand {
+public class ArenaDeleteCommand extends BaseCommand {
 
-    @Completer(name = "arena.setcenter")
-    public List<String> arenaSetCenterCompleter(CommandArgs command) {
+    @Completer(name = "arena.delete")
+    public List<String> arenaDeleteCompleter(CommandArgs command) {
         List<String> completion = new ArrayList<>();
 
         if (command.getArgs().length == 1 && command.getPlayer().hasPermission("alley.admin")) {
@@ -29,15 +29,14 @@ public class ArenaSetCenterCommand extends BaseCommand {
         return completion;
     }
 
-
-    @Command(name = "arena.setcenter", permission = "alley.admin")
+    @Command(name = "arena.delete", permission = "alley.admin")
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
         String[] args = command.getArgs();
 
         if (args.length < 1) {
-            player.sendMessage(CC.translate("&cUsage: /arena setcenter <arenaName>"));
+            player.sendMessage(CC.translate("&6Usage: &e/arena delete &b<arenaName>"));
             return;
         }
 
@@ -47,8 +46,7 @@ public class ArenaSetCenterCommand extends BaseCommand {
             return;
         }
 
-        Alley.getInstance().getArenaRepository().getArenaByName(arenaName).setCenter(player.getLocation());
-        Alley.getInstance().getArenaRepository().saveArena(Alley.getInstance().getArenaRepository().getArenaByName(arenaName));
-        player.sendMessage(CC.translate("&aCenter has been set for arena &b" + arenaName + "&a!"));
+        player.sendMessage(CC.translate("&aArena &b" + arenaName + "&a has been deleted!"));
+        Alley.getInstance().getArenaRepository().deleteArena(Alley.getInstance().getArenaRepository().getArenaByName(arenaName));
     }
 }

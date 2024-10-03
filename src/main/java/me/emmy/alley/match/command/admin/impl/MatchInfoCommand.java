@@ -23,7 +23,7 @@ public class MatchInfoCommand extends BaseCommand {
         String[] args = command.getArgs();
 
         if (args.length == 0) {
-            sender.sendMessage(CC.translate("&cUsage: /match info <player>"));
+            sender.sendMessage(CC.translate("&6Usage: &e/match info &b<player>"));
             return;
         }
 
@@ -40,6 +40,9 @@ public class MatchInfoCommand extends BaseCommand {
             return;
         }
 
+        sender.sendMessage("");
+        sender.sendMessage("&4&lSORRY FOR THIS UGLY LOOKING MESSAGE, I'M TOO LAZY TO MAKE IT LOOK GOOD. I JUST CAN'T BE ASKED TO DO IT.");
+        sender.sendMessage("&7Definitely not made by Emmy.");
         sender.sendMessage("");
         sender.sendMessage(CC.translate("&c&lMatch Information"));
         

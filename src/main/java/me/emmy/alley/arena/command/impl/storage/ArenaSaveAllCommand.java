@@ -1,4 +1,4 @@
-package me.emmy.alley.arena.command.impl;
+package me.emmy.alley.arena.command.impl.storage;
 
 import me.emmy.alley.Alley;
 import me.emmy.alley.arena.Arena;
@@ -13,8 +13,8 @@ import org.bukkit.entity.Player;
  * @project Alley
  * @date 5/20/2024
  */
-public class ArenaSaveCommand extends BaseCommand {
-    @Command(name = "arena.save", permission = "alley.admin")
+public class ArenaSaveAllCommand extends BaseCommand {
+    @Command(name = "arena.saveall", permission = "alley.admin")
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();

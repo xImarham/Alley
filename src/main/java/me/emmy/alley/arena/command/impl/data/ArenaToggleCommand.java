@@ -1,4 +1,4 @@
-package me.emmy.alley.arena.command.impl;
+package me.emmy.alley.arena.command.impl.data;
 
 import me.emmy.alley.Alley;
 import me.emmy.alley.arena.ArenaType;
@@ -37,7 +37,7 @@ public class ArenaToggleCommand extends BaseCommand {
         String[] args = command.getArgs();
 
         if (args.length < 1) {
-            player.sendMessage(CC.translate("&cUsage: /arena toggle <arenaName>"));
+            player.sendMessage(CC.translate("&6Usage: &e/arena toggle &b<arenaName>"));
             return;
         }
 

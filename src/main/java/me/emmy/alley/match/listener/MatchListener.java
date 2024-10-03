@@ -7,16 +7,17 @@ import me.emmy.alley.cooldown.CooldownRepository;
 import me.emmy.alley.kit.settings.impl.*;
 import me.emmy.alley.locale.ErrorMessage;
 import me.emmy.alley.match.AbstractMatch;
+import me.emmy.alley.match.MatchUtility;
 import me.emmy.alley.match.enums.EnumMatchState;
 import me.emmy.alley.match.player.GameParticipant;
 import me.emmy.alley.match.player.impl.MatchGamePlayerImpl;
 import me.emmy.alley.profile.Profile;
 import me.emmy.alley.profile.enums.EnumProfileState;
 import me.emmy.alley.util.PlayerUtil;
+import me.emmy.alley.util.chat.Logger;
 import me.emmy.alley.util.location.RayTracerUtil;
 import me.emmy.alley.util.chat.CC;
 import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -164,24 +165,34 @@ public class MatchListener implements Listener {
         Player player = event.getPlayer();
         Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
 
+        Bukkit.getConsoleSender().sendMessage(CC.translate("&c" + player.getName() + " tried to break a block."));
+
         if (profile.getState() == EnumProfileState.SPECTATING) {
+            Bukkit.getConsoleSender().sendMessage(CC.translate("&cSpectators cannot break blocks."));
             event.setCancelled(true);
             return;
         }
 
-        if (profile.getState() == EnumProfileState.PLAYING &&
-                profile.getMatch().getMatchState() == EnumMatchState.RUNNING &&
-                profile.getMatch().getMatchKit().isSettingEnabled(KitSettingSpleefImpl.class)) {
+        if (profile.getState() == EnumProfileState.PLAYING) {
+            if (profile.getMatch().getMatchState() == EnumMatchState.RUNNING &&
+                    profile.getMatch().getMatchKit().isSettingEnabled(KitSettingSpleefImpl.class)) {
 
-            Block block = event.getBlock();
-            if (block.getType() == Material.SNOW_BLOCK) {
-                event.setCancelled(false);
-                event.getBlock().setType(Material.AIR);
+                Bukkit.getConsoleSender().sendMessage(CC.translate("&cThe player is playing spleef!"));
 
-                int amount = random.nextInt(100) < 10 ? random.nextInt(3) + 2 : 0;
-                if (amount > 0) {
-                    ItemStack snowballs = new ItemStack(Material.SNOW_BALL, amount);
-                    player.getInventory().addItem(snowballs);
+                Block block = event.getBlock();
+                if (block.getType() == Material.SNOW_BLOCK) {
+                    Bukkit.getConsoleSender().sendMessage(CC.translate("&cSnow block broken!"));
+                    event.setCancelled(false);
+                    event.getBlock().setType(Material.AIR);
+
+                    int amount = random.nextInt(100) < 10 ? random.nextInt(3) + 2 : 0;
+                    if (amount > 0) {
+                        ItemStack snowballs = new ItemStack(Material.SNOW_BALL, amount);
+                        player.getInventory().addItem(snowballs);
+                    }
+                } else {
+                    Bukkit.getConsoleSender().sendMessage(CC.translate("&cCanceled block break event."));
+                    event.setCancelled(true);
                 }
             } else {
                 event.setCancelled(true);
@@ -243,66 +254,45 @@ public class MatchListener implements Listener {
         Player player = event.getPlayer();
         Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
 
-        if (profile != null && profile.getMatch() != null && profile.getState() == EnumProfileState.PLAYING && profile.getMatch().getMatchState() == EnumMatchState.RUNNING) {
-            if (profile.getMatch().getMatchKit().isSettingEnabled(KitSettingSumoImpl.class) || profile.getMatch().getMatchKit().isSettingEnabled(KitSettingSpleefImpl.class)) {
-                if (player.getLocation().getBlock().getType() == Material.WATER || player.getLocation().getBlock().getType() == Material.STATIONARY_WATER) {
-                    player.setHealth(0);
-                }
-            }
-        }
-
-        if (profile != null && profile.getMatch() != null && profile.getState() == EnumProfileState.PLAYING) {
-            AbstractMatch match = profile.getMatch();
-            if (match.getMatchState() == EnumMatchState.STARTING) {
-                if (match.getMatchKit().isSettingEnabled(KitSettingSumoImpl.class) || match.getMatchKit().isSettingEnabled(KitSettingSpleefImpl.class) || match.getMatchKit().isSettingEnabled(KitSettingParkourImpl.class)) {
-                    List<GameParticipant<MatchGamePlayerImpl>> participants = match.getParticipants();
-                    if (participants.size() == 2) {
-                        GameParticipant<?> participantA = participants.get(0);
-                        GameParticipant<?> participantB = participants.get(1);
-
-                        Player playerA = participantA.getPlayer().getPlayer();
-                        Player playerB = participantB.getPlayer().getPlayer();
-
-                        Location playerLocation = player.getLocation();
-                        Location locationA = match.getMatchArena().getPos1();
-                        Location locationB = match.getMatchArena().getPos2();
-
-                        if (player.equals(playerA)) {
-                            if (playerLocation.getBlockX() != locationA.getBlockX() || playerLocation.getBlockZ() != locationA.getBlockZ()) {
-                                player.teleport(new Location(locationA.getWorld(), locationA.getX(), playerLocation.getY(), locationA.getZ(), playerLocation.getYaw(), playerLocation.getPitch()));
-                                CC.broadcast("&4" + playerA.getDisplayName() + " &cmoved | Teleporting back...");
-                            }
-                        } else if (player.equals(playerB)) {
-                            if (playerLocation.getBlockX() != locationB.getBlockX() || playerLocation.getBlockZ() != locationB.getBlockZ()) {
-                                player.teleport(new Location(locationB.getWorld(), locationB.getX(), playerLocation.getY(), locationB.getZ(), playerLocation.getYaw(), playerLocation.getPitch()));
-                                CC.broadcast("&4" + playerB.getDisplayName() + " &cmoved | Teleporting back...");
-                            }
-                        }
+        if (profile != null && profile.getMatch() != null) {
+            if (profile.getState() == EnumProfileState.PLAYING && profile.getMatch().getMatchState() == EnumMatchState.RUNNING) {
+                if (profile.getMatch().getMatchKit().isSettingEnabled(KitSettingSumoImpl.class) || profile.getMatch().getMatchKit().isSettingEnabled(KitSettingSpleefImpl.class)) {
+                    if (player.getLocation().getBlock().getType() == Material.WATER || player.getLocation().getBlock().getType() == Material.STATIONARY_WATER) {
+                        player.setHealth(0);
                     }
                 }
             }
-        }
 
-        assert profile != null;
-        if (profile.getState() == EnumProfileState.SPECTATING || profile.getState() == EnumProfileState.PLAYING) {
-            if (profile.getMatch() == null) return;
-            Arena arena = profile.getMatch().getMatchArena();
-            Location corner1 = arena.getMinimum();
-            Location corner2 = arena.getMaximum();
+            if (profile.getState() == EnumProfileState.PLAYING) {
+                AbstractMatch match = profile.getMatch();
+                if (match.getMatchState() == EnumMatchState.STARTING) {
+                    if (match.getMatchKit().isSettingEnabled(KitSettingDenyMovementImpl.class)) {
+                        List<GameParticipant<MatchGamePlayerImpl>> participants = match.getParticipants();
+                        MatchUtility.denyPlayerMovement(participants, player, match);
+                    }
+                }
+            }
 
-            double minX = Math.min(corner1.getX(), corner2.getX());
-            double maxX = Math.max(corner1.getX(), corner2.getX());
-            double minY = Math.min(corner1.getY(), corner2.getY());
-            double maxY = Math.max(corner1.getY(), corner2.getY());
-            double minZ = Math.min(corner1.getZ(), corner2.getZ());
-            double maxZ = Math.max(corner1.getZ(), corner2.getZ());
+            if (profile.getState() == EnumProfileState.SPECTATING || profile.getState() == EnumProfileState.PLAYING) {
+                if (profile.getMatch() == null) return;
+                Arena arena = profile.getMatch().getMatchArena();
+                Location corner1 = arena.getMinimum();
+                Location corner2 = arena.getMaximum();
 
-            Location to = event.getTo();
+                double minX = Math.min(corner1.getX(), corner2.getX());
+                double maxX = Math.max(corner1.getX(), corner2.getX());
+                double minY = Math.min(corner1.getY(), corner2.getY());
+                double maxY = Math.max(corner1.getY(), corner2.getY());
+                double minZ = Math.min(corner1.getZ(), corner2.getZ());
+                double maxZ = Math.max(corner1.getZ(), corner2.getZ());
 
-            boolean withinBounds = to.getX() >= minX && to.getX() <= maxX && to.getY() >= minY && to.getY() <= maxY && to.getZ() >= minZ && to.getZ() <= maxZ;
-            if (!withinBounds) {
-                player.teleport(event.getFrom());
-                player.sendMessage(CC.translate("&cYou cannot leave the arena."));
+                Location to = event.getTo();
+
+                boolean withinBounds = to.getX() >= minX && to.getX() <= maxX && to.getY() >= minY && to.getY() <= maxY && to.getZ() >= minZ && to.getZ() <= maxZ;
+                if (!withinBounds) {
+                    player.teleport(event.getFrom());
+                    player.sendMessage(CC.translate("&cYou cannot leave the arena."));
+                }
             }
         }
     }
@@ -440,6 +430,8 @@ public class MatchListener implements Listener {
         Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
 
         if (profile.getState() == EnumProfileState.PLAYING) {
+            Logger.log("Manually setting " + player.getName() + " to LOBBY state because they disconnected.");
+            profile.setState(EnumProfileState.LOBBY);
             AbstractMatch match = profile.getMatch();
 
             if (match.getMatchState() == EnumMatchState.STARTING || match.getMatchState() == EnumMatchState.RUNNING) {

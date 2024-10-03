@@ -1,4 +1,4 @@
-package me.emmy.alley.arena.command.impl;
+package me.emmy.alley.arena.command.impl.data;
 
 import me.emmy.alley.arena.selection.Selection;
 import me.emmy.alley.util.chat.CC;

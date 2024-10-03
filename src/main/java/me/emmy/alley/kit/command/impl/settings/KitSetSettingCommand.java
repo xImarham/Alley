@@ -14,14 +14,14 @@ import org.bukkit.entity.Player;
  * @date 5/21/2024
  */
 public class KitSetSettingCommand extends BaseCommand {
-    @Command(name = "kit.setting", aliases = {"kit.setsetting"}, permission = "alley.admin")
+    @Command(name = "kit.setsetting", aliases = {"kit.setting"}, permission = "alley.admin")
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
         String[] args = command.getArgs();
 
         if (args.length != 3) {
-            player.sendMessage(CC.translate("&cUsage: /kit setting <kit> <setting> <enabled>"));
+            player.sendMessage(CC.translate("&6Usage: &e/kit setsetting &b<kit> <setting> <true/false>"));
             return;
         }
 

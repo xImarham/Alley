@@ -15,9 +15,6 @@ import org.bukkit.command.CommandSender;
  */
 public class MatchCommand extends BaseCommand {
 
-    /**
-     * Register all Match subcommands in the constructor
-     */
     public MatchCommand() {
         new MatchStartCommand();
         new MatchCancelCommand();
@@ -32,6 +29,7 @@ public class MatchCommand extends BaseCommand {
         sender.sendMessage(CC.translate("&b&lMatch Commands Help:"));
         sender.sendMessage(CC.translate(" &f● &b/match start &8(&7p1&8) &8(&7p2&8) &8(&7arena&8) &8(&7kit&8) &7| Start a match"));
         sender.sendMessage(CC.translate(" &f● &b/match cancel &8(&7player&8) &7| Cancel a match"));
+        sender.sendMessage(CC.translate(" &f● &b/match info &8(&7player&8) &7| Get match info of a player"));
         sender.sendMessage("");
     }
 }

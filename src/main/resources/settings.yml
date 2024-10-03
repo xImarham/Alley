@@ -1,3 +1,5 @@
+debugging: true
+
 command:
   anti-syntax-message: "&cYou cannot execute {argument}."
   syntax-bypass-perm: "alley.owner"
@@ -7,7 +9,10 @@ spawn:
   # The spawn location of the server
   join-location: world:0.5:73.0:0.5:90.0:0.0
 
-# Each time a match starts, the original arena will be copied to this world
-# The match will be played there, then the copied arena will be deleted
-# In which would you have the original arena at, is irrelevant.
-arena-world: Arenas
+arena:
+  # When creating an arena, the following displayname for each
+  # arena type will be set. {arena} represents the arena name.
+  default-display-name:
+    shared: "&b{arena}"
+    standalone: "&b{arena}"
+    ffa: "&b{arena}"

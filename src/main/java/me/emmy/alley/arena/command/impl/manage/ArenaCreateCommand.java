@@ -1,4 +1,4 @@
-package me.emmy.alley.arena.command.impl;
+package me.emmy.alley.arena.command.impl.manage;
 
 import me.emmy.alley.Alley;
 import me.emmy.alley.arena.Arena;
@@ -7,13 +7,16 @@ import me.emmy.alley.arena.impl.FreeForAllArena;
 import me.emmy.alley.arena.impl.SharedArena;
 import me.emmy.alley.arena.impl.StandAloneArena;
 import me.emmy.alley.arena.selection.Selection;
+import me.emmy.alley.config.ConfigHandler;
 import me.emmy.alley.util.chat.CC;
 import me.emmy.alley.api.command.BaseCommand;
 import me.emmy.alley.api.command.Command;
 import me.emmy.alley.api.command.CommandArgs;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
 import java.util.Arrays;
+import java.util.Objects;
 
 /**
  * @author Remi
@@ -29,7 +32,7 @@ public class ArenaCreateCommand extends BaseCommand {
         String[] args = command.getArgs();
 
         if (args.length < 2) {
-            player.sendMessage(CC.translate("&cUsage: /arena create <arenaName> <type>"));
+            player.sendMessage(CC.translate("&6Usage: &e/arena create &b<arenaName> <type>"));
             return;
         }
 
@@ -70,7 +73,24 @@ public class ArenaCreateCommand extends BaseCommand {
                 return;
         }
 
+        arena.setDisplayName(Objects.requireNonNull(getDefaultDisplayName(arenaType)).replace("{arena}", arenaName));
+
         arena.createArena();
         player.sendMessage(CC.translate("&aSuccessfully created a new arena named &b" + arenaName + "&a with type &b" + arenaType.name() + "&a!"));
+    }
+
+    private String getDefaultDisplayName(ArenaType arenaType) {
+        FileConfiguration config = ConfigHandler.getInstance().getSettingsConfig();
+
+        switch (arenaType) {
+            case SHARED:
+                return config.getString("arena.default-display-name.shared");
+            case STANDALONE:
+                return config.getString("arena.default-display-name.standalone");
+            case FFA:
+                return config.getString("arena.default-display-name.ffa");
+        }
+
+        return null;
     }
 }

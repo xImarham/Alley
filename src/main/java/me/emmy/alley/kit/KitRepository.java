@@ -5,6 +5,8 @@ import me.emmy.alley.Alley;
 import me.emmy.alley.kit.settings.KitSetting;
 import me.emmy.alley.kit.settings.impl.*;
 import me.emmy.alley.queue.Queue;
+import me.emmy.alley.util.chat.CC;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -59,9 +61,9 @@ public class KitRepository {
             );
 
             loadKitSettings(config, key, kit);
+            addMissingKitSettings(kit, config, key);
             kits.add(kit);
             addKitToQueue(kit);
-
         }
     }
 
@@ -72,7 +74,6 @@ public class KitRepository {
         for (Kit kit : kits) {
             FileConfiguration config = Alley.getInstance().getConfigHandler().getConfigByName("storage/kits.yml");
             String key = "kits." + kit.getName();
-
             config.set(key + ".displayname", kit.getDisplayName());
             config.set(key + ".description", kit.getDescription());
             config.set(key + ".enabled", kit.isEnabled());
@@ -131,6 +132,16 @@ public class KitRepository {
         }
     }
 
+    private void addMissingKitSettings(Kit kit, FileConfiguration config, String key) {
+        Alley.getInstance().getKitSettingRepository().getSettings().forEach(setting -> {
+            if (kit.getKitSettings().stream().noneMatch(kitSetting -> kitSetting.getName().equals(setting.getName()))) {
+                kit.addKitSetting(setting);
+                Bukkit.getConsoleSender().sendMessage(CC.translate("&cAdded missing setting " + setting.getName() + " to kit " + kit.getName() + ". Now saving it into the kits config..."));
+                saveKitSettings(config, key, kit);
+            }
+        });
+    }
+
     /**
      * Method to save a kit to the kits.yml file.
      *
@@ -168,20 +179,12 @@ public class KitRepository {
      * @param kit    The kit.
      */
     public void applyDefaultSettings(FileConfiguration config, String key, Kit kit) {
-        KitSetting[] defaultSettings = new KitSetting[]{
-                new KitSettingBoxingImpl(),
-                new KitSettingBuildImpl(),
-                new KitSettingRankedImpl(),
-                new KitSettingSpleefImpl(),
-                new KitSettingSumoImpl(),
-        };
-
-        for (KitSetting setting : defaultSettings) {
+        Alley.getInstance().getKitSettingRepository().getSettings().forEach(setting -> {
             kit.addKitSetting(setting);
             String settingKey = key + ".settings." + setting.getName();
             config.set(settingKey + ".description", setting.getDescription());
             config.set(settingKey + ".enabled", setting.isEnabled());
-        }
+        });
 
         Alley.getInstance().getConfigHandler().saveConfig(Alley.getInstance().getConfigHandler().getConfigFileByName("storage/kits.yml"), config);
     }
@@ -200,10 +203,11 @@ public class KitRepository {
         }
     }
 
+    //deletes a kit
     /**
-     * Method to create a new kit.
+     * Method to delete a kit.
      *
-     * @param name The name of the kit.
+     * @param kit The kit to delete.
      */
     public void deleteKit(Kit kit) {
         FileConfiguration config = Alley.getInstance().getConfigHandler().getConfigByName("storage/kits.yml");

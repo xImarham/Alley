@@ -21,5 +21,6 @@ public class StateCommand extends BaseCommand {
 
         Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
         player.sendMessage(CC.translate("&cYour current state is &4" + profile.getState().getName()));
+        player.sendMessage(CC.translate(profile.getMatch() != null ? "&cYou are in a match:" + profile.getMatch().getMatchState().getName() : "&cYou are not in a match."));
     }
 }
