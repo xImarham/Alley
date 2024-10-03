@@ -185,7 +185,7 @@ kits:
         description: This denies the player movement during countdown.
         enabled: false
       Lives:
-        description: This kit setting enabled best of 3 type matches, such as Battle Rush.
+        description: This kit setting enables best of 3 type matches, such as Battle Rush.
         enabled: false
   Classic:
     displayname: '&bClassic'
@@ -272,7 +272,7 @@ kits:
         description: This denies the player movement during countdown.
         enabled: false
       Lives:
-        description: This kit setting enabled best of 3 type matches, such as Battle Rush.
+        description: This kit setting enables best of 3 type matches, such as Battle Rush.
         enabled: false
   Boxing:
     displayname: '&bBoxing'
@@ -380,7 +380,7 @@ kits:
         description: This denies the player movement during countdown.
         enabled: false
       Lives:
-        description: This kit setting enabled best of 3 type matches, such as Battle Rush.
+        description: This kit setting enables best of 3 type matches, such as Battle Rush.
         enabled: false
   Sumo:
     displayname: '&bSumo'
@@ -468,7 +468,7 @@ kits:
         description: This is the spleef kit type
         enabled: false
       Lives:
-        description: This kit setting enabled best of 3 type matches, such as Battle Rush.
+        description: This kit setting enables best of 3 type matches, such as Battle Rush.
         enabled: false
   Spleef:
     displayname: '&bSpleef'
@@ -564,7 +564,7 @@ kits:
         description: This denies the player movement during countdown.
         enabled: true
       Lives:
-        description: This kit setting enabled best of 3 type matches, such as Battle Rush.
+        description: This kit setting enables best of 3 type matches, such as Battle Rush.
         enabled: false
   Parkour:
     displayname: '&bParkour'
@@ -652,7 +652,7 @@ kits:
         description: This denies the player movement during countdown.
         enabled: true
       Lives:
-        description: This kit setting enabled best of 3 type matches, such as Battle Rush.
+        description: This kit setting enables best of 3 type matches, such as Battle Rush.
         enabled: false
   BattleRush:
     displayname: '&bBattleRush'
@@ -744,5 +744,5 @@ kits:
         description: This is the parkour kit type
         enabled: false
       Lives:
-        description: This kit setting enabled best of 3 type matches, such as Battle Rush.
+        description: This kit setting enables best of 3 type matches, such as Battle Rush.
         enabled: true

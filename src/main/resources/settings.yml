@@ -2,7 +2,9 @@ debugging: true
 
 command:
   anti-syntax-message: "&cYou cannot execute {argument}."
+  # Allows you to execute for example alley:alley (syntax)
   syntax-bypass-perm: "alley.owner"
+  # The dispatched/executed command by console when the players buys a cosmetic
   grant-cosmetic-permission-command: "permission set {player} {permission}"
 
 spawn:
