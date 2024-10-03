@@ -44,13 +44,13 @@ public class MatchLivesRegularImpl extends MatchRegularImpl {
         super(queue, kit, arena, ranked, participantA, participantB);
         this.participantA = participantA;
         this.participantB = participantB;
-        lives.put(participantA, 3);
-        lives.put(participantB, 3);
+        this.lives.put(participantA, 3);
+        this.lives.put(participantB, 3);
     }
 
     @Override
     public boolean canStartRound() {
-        return lives.get(participantA) > 0 && lives.get(participantB) > 0;
+        return this.lives.get(participantA) > 0 && this.lives.get(participantB) > 0;
     }
 
     @Override
@@ -60,7 +60,7 @@ public class MatchLivesRegularImpl extends MatchRegularImpl {
 
     @Override
     public boolean canEndMatch() {
-        return lives.get(participantA) <= 0 || lives.get(participantB) <= 0;
+        return this.lives.get(participantA) <= 0 || this.lives.get(participantB) <= 0;
     }
 
     /**
@@ -69,8 +69,8 @@ public class MatchLivesRegularImpl extends MatchRegularImpl {
      * @param participant The participant whose lives are to be reduced.
      */
     public void reduceLife(GameParticipant<MatchGamePlayerImpl> participant) {
-        lives.put(participant, lives.get(participant) - 1);
-        if (lives.get(participant) <= 0) {
+        this.lives.put(participant, this.lives.get(participant) - 1);
+        if (this.lives.get(participant) <= 0) {
             determineWinnerAndLoser();
         }
     }
@@ -81,7 +81,7 @@ public class MatchLivesRegularImpl extends MatchRegularImpl {
         Logger.debug("Reducing life of " + participant.getPlayer().getPlayer().getName());
         reduceLife(participant);
 
-        if (lives.get(participant) > 0) {
+        if (this.lives.get(participant) > 0) {
             TaskUtil.runTaskLater(() -> super.handleRespawn(player), 5L);
         } else {
             Logger.debug("super Handling death of " + participant.getPlayer().getPlayer().getName());
@@ -93,10 +93,10 @@ public class MatchLivesRegularImpl extends MatchRegularImpl {
      * Determines the winner and loser of the match.
      */
     private void determineWinnerAndLoser() {
-        if (lives.get(participantA) <= 0) {
+        if (this.lives.get(participantA) <= 0) {
             winner = participantB;
             loser = participantA;
-        } else if (lives.get(participantB) <= 0) {
+        } else if (this.lives.get(participantB) <= 0) {
             winner = participantA;
             loser = participantB;
         }

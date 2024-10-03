@@ -49,10 +49,6 @@ public class QueueRunnable implements Runnable {
         queue.getProfiles().forEach(QueueProfile::queueRange);
         queue.getProfiles().forEach(profile -> {
             if (profile.getElapsedTime() >= 300000) {
-
-                // remi, this check is mainly because of the "/match start" command which breaks
-                // the match if the player was queueing so you might just leave this as it is
-
                 if (queue.getProfile(profile.getUuid()).getState().equals(EnumProfileState.WAITING)) {
                     queue.getProfiles().remove(profile);
                     queue.removePlayer(profile);

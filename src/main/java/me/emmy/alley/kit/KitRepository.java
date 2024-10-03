@@ -150,7 +150,6 @@ public class KitRepository {
     public void saveKit(Kit kit) {
         FileConfiguration config = Alley.getInstance().getConfigHandler().getConfigByName("storage/kits.yml");
         String key = "kits." + kit.getName();
-
         config.set(key + ".displayname", kit.getDisplayName());
         config.set(key + ".description", kit.getDescription());
         config.set(key + ".enabled", kit.isEnabled());
