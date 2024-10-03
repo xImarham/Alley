@@ -132,6 +132,13 @@ public class KitRepository {
         }
     }
 
+    /**
+     * Handle creation in config for each kit that has missing settings.
+     *
+     * @param kit    The kit.
+     * @param config The configuration file.
+     * @param key    The path key.
+     */
     private void addMissingKitSettings(Kit kit, FileConfiguration config, String key) {
         Alley.getInstance().getKitSettingRepository().getSettings().forEach(setting -> {
             if (kit.getKitSettings().stream().noneMatch(kitSetting -> kitSetting.getName().equals(setting.getName()))) {
