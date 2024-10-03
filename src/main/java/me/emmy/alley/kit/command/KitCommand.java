@@ -8,6 +8,7 @@ import me.emmy.alley.kit.command.impl.data.inventory.KitGetInvCommand;
 import me.emmy.alley.kit.command.impl.data.inventory.KitSetInvCommand;
 import me.emmy.alley.kit.command.impl.data.slot.KitSetEditorSlotCommand;
 import me.emmy.alley.kit.command.impl.data.slot.KitSetRankedSlotCommand;
+import me.emmy.alley.kit.command.impl.data.slot.KitSetSlotAllCommand;
 import me.emmy.alley.kit.command.impl.data.slot.KitSetUnrankedSlotCommand;
 import me.emmy.alley.kit.command.impl.manage.KitCreateCommand;
 import me.emmy.alley.kit.command.impl.manage.KitDeleteCommand;
@@ -44,8 +45,9 @@ public class KitCommand extends BaseCommand {
         new KitSetDescriptionCommand();
         new KitSetDisplayNameCommand();
         new KitSetEditorSlotCommand();
-        new KitSetUnrankedSlotCommand();
         new KitSetRankedSlotCommand();
+        new KitSetSlotAllCommand();
+        new KitSetUnrankedSlotCommand();
         new KitSetSettingCommand();
         new KitSettingsCommand();
         new KitSetIconCommand();
@@ -70,6 +72,7 @@ public class KitCommand extends BaseCommand {
             completion.add("setdesc");
             completion.add("seteditorslot");
             completion.add("setrankedslot");
+            completion.add("setslotall");
             completion.add("setunrankedslot");
             completion.add("setsetting");
             completion.add("setdisplayname");
@@ -99,6 +102,7 @@ public class KitCommand extends BaseCommand {
         sender.sendMessage(CC.translate(" &f● &b/kit seteditorslot &8(&7kitName&8) &8(&7slot&8) &7| Set editor menu slot"));
         sender.sendMessage(CC.translate(" &f● &b/kit setrankedslot &8(&7kitName&8) &8(&7slot&8) &7| Set ranked menu slot"));
         sender.sendMessage(CC.translate(" &f● &b/kit setunrankedslot &8(&7kitName&8) &8(&7slot&8) &7| Set unranked menu slot"));
+        sender.sendMessage(CC.translate(" &f● &b/kit setslotall &8(&7kitName&8) &8(&7slot&8) &7| Set all menu slots"));
         sender.sendMessage(CC.translate(" &f● &b/kit setsetting &8(&7kitName&8) &8(&7setting&8) &8(&7enabled&8) &7| Set kit setting"));
         sender.sendMessage(CC.translate(" &f● &b/kit setdisplayname &8(&7kitName&8) &8(&7displayname&8) &7| Set display-name of a kit"));
         sender.sendMessage("");

@@ -32,6 +32,7 @@ kit:
   editorslot-set: "&aSuccessfully set the editor slot of the &b{kit-name} &akit to &b{slot}&a!"
   unrankedslot-set: "&aSuccessfully set the unranked slot of the &b{kit-name} &akit to &b{slot}&a!"
   rankedslot-set: "&aSuccessfully set the ranked slot of the &b{kit-name} &akit to &b{slot}&a!"
+  slots-set: "&aSuccessfully set all slots of the &b{kit-name} &akit to &b{slot}&a!"
 
 party:
   chat-format: "&7[&bParty&7] &b{player}&7: &f{message}"
