@@ -9,11 +9,6 @@ import lombok.Getter;
  */
 @Getter
 public enum Symbol {
-
-    /*
-     * Usage: Symbol.ARROW_R.getSymbol()
-     */
-
     ARROW_R("»"),
     ARROW_L("«"),
     STAR_FILLED("★"),

@@ -7,11 +7,7 @@ package me.emmy.alley.util;
  * @date 5/27/2024
  */
 public interface Triple<A, B, C> {
-
     A getA();
-
     B getB();
-
     C getC();
-
 }

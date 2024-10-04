@@ -15,7 +15,6 @@ import java.util.List;
  */
 @UtilityClass
 public class MatchUtility {
-
     /**
      * Intentionally made to deny player movement during a match countdown.
      *

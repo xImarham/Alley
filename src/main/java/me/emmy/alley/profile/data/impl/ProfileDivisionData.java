@@ -20,7 +20,6 @@ import java.util.stream.Collectors;
 @Getter
 @Setter
 public class ProfileDivisionData {
-
     private String division;
     private int globalElo;
 

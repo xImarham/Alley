@@ -11,7 +11,6 @@ import org.bukkit.entity.Player;
  */
 @UtilityClass
 public class SoundUtil {
-
     /**
      * Play a custom sound to the player
      *

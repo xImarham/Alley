@@ -1,6 +1,7 @@
 package me.emmy.alley.util;
 
 import io.netty.buffer.Unpooled;
+import lombok.experimental.UtilityClass;
 import me.emmy.alley.util.reflection.ReflectionUtils;
 import net.minecraft.server.v1_8_R3.*;
 import org.bukkit.Material;
@@ -12,9 +13,15 @@ import org.bukkit.inventory.ItemStack;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 
+@UtilityClass
 public class BookUtils {
-
-    public static void openBook(Player player, ItemStack book) {
+    /**
+     * Opens a book for a player.
+     *
+     * @param player the player
+     * @param book   the book
+     */
+    public void openBook(Player player, ItemStack book) {
         try {
             if (book.getType() != Material.WRITTEN_BOOK) {
                 throw new IllegalArgumentException("ItemStack must be a written book");
@@ -36,7 +43,15 @@ public class BookUtils {
         }
     }
 
-    public static ItemStack createBook(String title, String author, String[] pages) {
+    /**
+     * Creates a book ItemStack with the given title, author, and pages.
+     *
+     * @param title  the title of the book
+     * @param author the author of the book
+     * @param pages  the pages of the book
+     * @return the book ItemStack
+     */
+    public ItemStack createBook(String title, String author, String[] pages) {
         ItemStack bookItem = new ItemStack(Material.WRITTEN_BOOK, 1);
         Class<?> craftItemStack = ReflectionUtils.getCraftBukkitClassFromName("inventory.CraftItemStack");
         net.minecraft.server.v1_8_R3.ItemStack itemStackCopy = CraftItemStack.asNMSCopy(bookItem);
@@ -51,5 +66,4 @@ public class BookUtils {
         itemStackCopy.setTag(nbt);
         return CraftItemStack.asBukkitCopy(itemStackCopy);
     }
-
 }

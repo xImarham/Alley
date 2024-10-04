@@ -27,32 +27,43 @@ public class TournamentTeam {
     private Player leader;
     private Party party;
 
+    /**
+     * Instantiates a new Tournament team.
+     *
+     * @param leader the leader
+     * @param party  the party
+     */
     public TournamentTeam(Player leader, Party party) {
         this.leader = leader;
         this.party = party;
         this.players = new ArrayList<>();
     }
 
+    /**
+     * Gets players.
+     *
+     * @return the players
+     */
     public Stream<Player> getPlayers() {
         return this.players.stream();
     }
 
+    /**
+     * Remove a player from the tournament team.
+     *
+     * @param player the player
+     */
     public void removePlayer(Player player) {
         this.alivePlayers.remove(player);
         this.deadPlayers.add(player);
     }
 
-    public void respawnPlayer(Player player) {
-
-        //for an admin command (/respawn <player>)
-
-        this.players.add(player);
-        this.alivePlayers.add(player);
-    }
-
+    /**
+     * Get alive players.
+     *
+     * @return the stream
+     */
     public Stream<Player> alivePlayers() {
         return this.alivePlayers.stream();
     }
-
-
 }

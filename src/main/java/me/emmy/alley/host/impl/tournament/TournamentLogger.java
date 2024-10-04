@@ -1,5 +1,6 @@
 package me.emmy.alley.host.impl.tournament;
 
+import lombok.experimental.UtilityClass;
 import me.emmy.alley.Alley;
 import me.emmy.alley.config.ConfigHandler;
 import me.emmy.alley.util.chat.CC;
@@ -17,31 +18,41 @@ import java.util.List;
  * @project Alley
  * @date 15/06/2024 - 17:08
  */
+@UtilityClass
 public class TournamentLogger {
-
-    private static TournamentRepository getTournament() {
+    private TournamentRepository getTournament() {
         return Alley.getInstance().getTournamentRepository();
     }
 
-    public static void broadcastPlayerJoin(Player joinedPlayer) {
+    /**
+     * broadcast of a player joining the tournament
+     *
+     * @param player the player
+     */
+    public void broadcastPlayerJoin(Player player) {
         String message = CC.translate(ConfigHandler.getInstance().getMessagesConfig().getString("tournament-broadcast.player.joined")
-                .replace("{player}", joinedPlayer.getName())
+                .replace("{player}", player.getName())
                 .replace("{players}", String.valueOf(getTournament().getPlayers().size()))
                 .replace("{maxPlayers}", String.valueOf(getTournament().getMaxPlayers()))
         );
         getTournament().notifyPlayers(message);
     }
 
-    public static void broadcastPlayerLeave(Player leftPlayer) {
+    /**
+     * broadcast of a player leaving the tournament
+     *
+     * @param player the player
+     */
+    public void broadcastPlayerLeave(Player player) {
         String message = CC.translate(ConfigHandler.getInstance().getMessagesConfig().getString("tournament-broadcast.player.left")
-                .replace("{player}", leftPlayer.getName())
+                .replace("{player}", player.getName())
                 .replace("{players}", String.valueOf(getTournament().getPlayers().size()))
                 .replace("{maxPlayers}", String.valueOf(getTournament().getMaxPlayers()))
         );
         getTournament().notifyPlayers(message);
     }
 
-    public static void broadcastWaiting() {
+    public void broadcastWaiting() {
         TournamentRepository tournamentRepository = getTournament();
         List<String> list = ConfigHandler.getInstance().getMessagesConfig().getStringList("tournament-broadcast.waiting.message");
         List<BaseComponent> messages = new ArrayList<>();
@@ -65,7 +76,7 @@ public class TournamentLogger {
         }
     }
 
-    private static @NotNull TextComponent getTextComponent() {
+    private @NotNull TextComponent getTextComponent() {
         TextComponent clickableJoinMessage = new TextComponent(CC.translate(ConfigHandler.getInstance().getMessagesConfig().getString("tournament-broadcast.waiting.clickable-format")));
         clickableJoinMessage.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/tournament join"));
         String hover = ConfigHandler.getInstance().getMessagesConfig().getString("tournament-broadcast.waiting.clickable-hover");
@@ -74,7 +85,7 @@ public class TournamentLogger {
         return clickableJoinMessage;
     }
 
-    public static void broadcastStarting() {
+    public void broadcastStarting() {
         List<String> messages = Arrays.asList(
                 "",
                 "&b&lTOURNAMENT",
@@ -88,7 +99,7 @@ public class TournamentLogger {
         messages.forEach(message -> Bukkit.broadcastMessage(CC.translate(message)));
     }
 
-    public static void broadcastStartingRound() {
+    public void broadcastStartingRound() {
         List<String> messages = Arrays.asList(
                 "",
                 "&b&lTOURNAMENT",
@@ -101,7 +112,7 @@ public class TournamentLogger {
         messages.forEach(message -> Bukkit.broadcastMessage(CC.translate(message)));
     }
 
-    public static void broadcastSpectating() {
+    public void broadcastSpectating() {
         List<String> messages = Arrays.asList(
                 "",
                 "&b&lTOURNAMENT",

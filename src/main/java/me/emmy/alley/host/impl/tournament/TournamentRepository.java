@@ -20,7 +20,6 @@ import java.util.Map;
 @Getter
 @Setter
 public class TournamentRepository {
-
     private final Map<Player, TournamentTeam> playerTeams = new HashMap<>();
     private List<Player> players;
     private TournamentState state;
@@ -34,6 +33,14 @@ public class TournamentRepository {
 
     private boolean running = false;
 
+    /**
+     * Instantiates a new Tournament repository.
+     *
+     * @param host           the host
+     * @param kit            the kit
+     * @param requiredPlayers the required players
+     * @param maxPlayers     the max players
+     */
     public TournamentRepository(Player host, Kit kit, int requiredPlayers, int maxPlayers) {
         this.host = host;
         this.kit = kit;
@@ -43,38 +50,30 @@ public class TournamentRepository {
         this.state = TournamentState.WAITING;
     }
 
-    public void join(Player player) {
-
-    }
-
+    /**
+     * Handle teams.
+     *
+     * @param team the team
+     */
     public void handleTeams(TournamentTeam team) {
         team.getPlayers().forEach(player -> playerTeams.put(player, team));
     }
 
-    public void setupPlayer(Player player) {
-
-    }
-
-    public void handleDeath(Player player, Player killer) {
-
-    }
-
-    public void handleRoundEnd(Player player) {
-
-    }
-
-    public void handleRoundStart() {
-
-    }
-
-    public void leave(Player player) {
-
-    }
-
+    /**
+     * Is player in tournament boolean.
+     *
+     * @param player the player
+     * @return the boolean
+     */
     public boolean isPlayerInTournament(Player player) {
         return players.contains(player);
     }
 
+    /**
+     * Notify players in the tournament.
+     *
+     * @param message the message
+     */
     public void notifyPlayers(String message) {
         players.forEach(player -> player.sendMessage(CC.translate(message)));
     }

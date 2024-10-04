@@ -270,7 +270,6 @@ public class Alley extends JavaPlugin {
         });
 
         Logger.logTime("Player Commands", () -> {
-
             new DayCommand();
             new NightCommand();
             new SunsetCommand();

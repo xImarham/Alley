@@ -12,11 +12,16 @@ import java.util.regex.Pattern;
 
 @UtilityClass
 public final class TimeUtil {
+    private final String HOUR_FORMAT = "%02d:%02d:%02d";
+    private final String MINUTE_FORMAT = "%02d:%02d";
 
-    private static final String HOUR_FORMAT = "%02d:%02d:%02d";
-    private static final String MINUTE_FORMAT = "%02d:%02d";
-
-    public static String millisToTimer(long millis) {
+    /**
+     * Converts milliseconds to a timer format.
+     *
+     * @param millis the milliseconds to convert.
+     * @return the formatted time.
+     */
+    public String millisToTimer(long millis) {
         long seconds = millis / 1000L;
 
         if (seconds > 3600L) {
@@ -27,17 +32,22 @@ public final class TimeUtil {
     }
 
     /**
-     * Return the amount of seconds from milliseconds.
-     * Note: We explicitly use 1000.0F (float) instead of 1000L (long).
+     * Converts milliseconds to a seconds format.
      *
-     * @param millis the amount of time in milliseconds
-     * @return the seconds
+     * @param millis the milliseconds to convert.
+     * @return the formatted time.
      */
-    public static String millisToSeconds(long millis) {
+    public String millisToSeconds(long millis) {
         return new DecimalFormat("#0.0").format(millis / 1000.0F);
     }
 
-    public static String dateToString(Date date, String secondaryColor) {
+    /**
+     * Converts a date to a string.
+     *
+     * @param date the date to convert.
+     * @return the formatted date.
+     */
+    public String dateToString(Date date, String secondaryColor) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
 
@@ -45,11 +55,23 @@ public final class TimeUtil {
                 "(hh:mm aa zz)").format(date);
     }
 
-    public static Timestamp addDuration(long duration) {
+    /**
+     * Adds a duration to the current time.
+     *
+     * @param duration the duration to add.
+     * @return the new timestamp.
+     */
+    public Timestamp addDuration(long duration) {
         return truncateTimestamp(new Timestamp(System.currentTimeMillis() + duration));
     }
 
-    public static Timestamp truncateTimestamp(Timestamp timestamp) {
+    /**
+     * Truncates a timestamp to the year 2037.
+     *
+     * @param timestamp the timestamp to truncate.
+     * @return the truncated timestamp.
+     */
+    public Timestamp truncateTimestamp(Timestamp timestamp) {
         if (timestamp.toLocalDateTime().getYear() > 2037) {
             timestamp.setYear(2037);
         }
@@ -57,19 +79,42 @@ public final class TimeUtil {
         return timestamp;
     }
 
-    public static Timestamp addDuration(Timestamp timestamp) {
+    /**
+     * Adds a duration to the current time.
+     *
+     * @param timestamp the duration to add.
+     * @return the new timestamp.
+     */
+    public Timestamp addDuration(Timestamp timestamp) {
         return truncateTimestamp(new Timestamp(System.currentTimeMillis() + timestamp.getTime()));
     }
 
-    public static Timestamp fromMillis(long millis) {
+    /**
+     * Converts milliseconds to a timestamp.
+     *
+     * @param millis the milliseconds to convert.
+     * @return the timestamp.
+     */
+    public Timestamp fromMillis(long millis) {
         return new Timestamp(millis);
     }
 
-    public static Timestamp getCurrentTimestamp() {
+    /**
+     * Gets the current timestamp.
+     *
+     * @return the current timestamp.
+     */
+    public Timestamp getCurrentTimestamp() {
         return new Timestamp(System.currentTimeMillis());
     }
 
-    public static String millisToRoundedTime(long millis) {
+    /**
+     * Converts a timestamp to a date.
+     *
+     * @param timestamp the timestamp to convert.
+     * @return the date.
+     */
+    public String millisToRoundedTime(long millis) {
         millis += 1L;
 
         long seconds = millis / 1000L;
@@ -97,7 +142,13 @@ public final class TimeUtil {
         }
     }
 
-    public static long parseTime(String time) {
+    /**
+     * Parses a time string to milliseconds.
+     *
+     * @param time the time string to parse.
+     * @return the parsed time.
+     */
+    public long parseTime(String time) {
         long totalTime = 0L;
         boolean found = false;
         Matcher matcher = Pattern.compile("\\d+\\D+").matcher(time);
@@ -141,5 +192,4 @@ public final class TimeUtil {
 
         return !found ? -1 : totalTime * 1000;
     }
-
 }

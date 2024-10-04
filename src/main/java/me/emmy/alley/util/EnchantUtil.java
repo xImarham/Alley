@@ -9,7 +9,6 @@ import java.util.Map;
  * @date 28/05/2024 - 20:53
  */
 public class EnchantUtil {
-
     private static final Map<String, String> enchantment = new HashMap<>();
 
     static {
@@ -23,8 +22,13 @@ public class EnchantUtil {
         enchantment.put("infinity", "ARROW_INFINITE");
     }
 
+    /**
+     * Get the enchantment key based on the enchantment name.
+     *
+     * @param key The enchantment name.
+     * @return The enchantment key.
+     */
     public static String getEnchantment(String key) {
         return enchantment.get(key.toLowerCase());
     }
 }
-

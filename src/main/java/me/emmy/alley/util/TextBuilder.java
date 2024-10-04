@@ -5,7 +5,6 @@ import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 
 public class TextBuilder {
-
     private final TextComponent textComponent;
 
     public TextBuilder() {
@@ -45,5 +44,4 @@ public class TextBuilder {
     public TextComponent build() {
         return this.textComponent;
     }
-
 }

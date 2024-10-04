@@ -12,7 +12,6 @@ import java.util.List;
  */
 @UtilityClass
 public class AnimationUtil {
-
     private final List<String> DOTS = Arrays.asList(".", "..", "...");
     private int dotIndex = 0;
     private long lastUpdateTime = System.currentTimeMillis();

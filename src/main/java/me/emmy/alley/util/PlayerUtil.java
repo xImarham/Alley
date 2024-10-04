@@ -12,12 +12,11 @@ import java.util.UUID;
 
 /**
  * @author Emmy
- * @project Practice
+ * @project Alley
  * @date 29/04/2024 - 18:53
  */
 @UtilityClass
 public class PlayerUtil {
-
     /**
      * Set the last attacker of a player
      *
@@ -48,7 +47,6 @@ public class PlayerUtil {
      * @param player the player to reset
      */
     public void reset(Player player) {
-        //From Praxi
         player.setHealth(20.0D);
         player.setSaturation(20.0F);
         player.setFallDistance(0.0F);
@@ -63,7 +61,6 @@ public class PlayerUtil {
         player.getInventory().setArmorContents(new ItemStack[4]);
         player.getInventory().setContents(new ItemStack[36]);
         player.getActivePotionEffects().forEach(effect -> player.removePotionEffect(effect.getType()));
-        //player.getInventory().setHeldItemSlot(0);
         player.updateInventory();
     }
 }

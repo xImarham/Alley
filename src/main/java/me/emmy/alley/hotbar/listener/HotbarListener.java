@@ -26,7 +26,6 @@ import java.util.UUID;
  * @date 5/27/2024
  */
 public class HotbarListener implements Listener {
-
     private final Map<UUID, Long> lastInteraction = new HashMap<>();
     private static final long COOLDOWN_TIME = 300;
 

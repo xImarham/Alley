@@ -56,7 +56,6 @@ public class HostMenu extends Menu {
 
     @AllArgsConstructor
     public static class HostButton extends Button {
-
         private String displayName;
         private ItemStack itemStack;
         private List<String> lore;

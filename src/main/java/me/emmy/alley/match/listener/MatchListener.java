@@ -164,24 +164,19 @@ public class MatchListener implements Listener {
     private void onBlockBreak(BlockBreakEvent event) {
         Player player = event.getPlayer();
         Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
+        switch (profile.getState()) {
+            case PLAYING:
+                if (profile.getMatch().getMatchKit().isSettingEnabled(KitSettingBuildImpl.class)) {
+                    return;
+                }
 
-        Bukkit.getConsoleSender().sendMessage(CC.translate("&c" + player.getName() + " tried to break a block."));
+                if (profile.getMatch().getMatchKit().isSettingEnabled(KitSettingSpleefImpl.class)) {
+                    Block block = event.getBlock();
+                    if (block.getType() != Material.SNOW_BLOCK) {
+                        event.setCancelled(true);
+                        return;
+                    }
 
-        if (profile.getState() == EnumProfileState.SPECTATING) {
-            Bukkit.getConsoleSender().sendMessage(CC.translate("&cSpectators cannot break blocks."));
-            event.setCancelled(true);
-            return;
-        }
-
-        if (profile.getState() == EnumProfileState.PLAYING) {
-            if (profile.getMatch().getMatchState() == EnumMatchState.RUNNING &&
-                    profile.getMatch().getMatchKit().isSettingEnabled(KitSettingSpleefImpl.class)) {
-
-                Bukkit.getConsoleSender().sendMessage(CC.translate("&cThe player is playing spleef!"));
-
-                Block block = event.getBlock();
-                if (block.getType() == Material.SNOW_BLOCK) {
-                    Bukkit.getConsoleSender().sendMessage(CC.translate("&cSnow block broken!"));
                     event.setCancelled(false);
                     event.getBlock().setType(Material.AIR);
 
@@ -190,13 +185,14 @@ public class MatchListener implements Listener {
                         ItemStack snowballs = new ItemStack(Material.SNOW_BALL, amount);
                         player.getInventory().addItem(snowballs);
                     }
-                } else {
-                    Bukkit.getConsoleSender().sendMessage(CC.translate("&cCanceled block break event."));
-                    event.setCancelled(true);
+                    return;
                 }
-            } else {
+
                 event.setCancelled(true);
-            }
+                break;
+            case SPECTATING:
+                event.setCancelled(true);
+                break;
         }
     }
 

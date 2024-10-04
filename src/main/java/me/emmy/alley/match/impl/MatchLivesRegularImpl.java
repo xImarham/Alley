@@ -21,7 +21,6 @@ import java.util.Map;
  * @date 5/21/2024
  */
 public class MatchLivesRegularImpl extends MatchRegularImpl {
-
     private final Map<GameParticipant<MatchGamePlayerImpl>, Integer> lives = new HashMap<>();
 
     private final GameParticipant<MatchGamePlayerImpl> participantA;

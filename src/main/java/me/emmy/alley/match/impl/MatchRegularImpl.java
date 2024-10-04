@@ -26,7 +26,6 @@ import java.util.List;
 @Getter
 @Setter
 public class MatchRegularImpl extends AbstractMatch {
-
     private final GameParticipant<MatchGamePlayerImpl> participantA;
     private final GameParticipant<MatchGamePlayerImpl> participantB;
 
