@@ -74,7 +74,11 @@ public class SpawnListener implements Listener {
     public void onBlockBreak(BlockBreakEvent event) {
         Player player = event.getPlayer();
         Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
-        if (profile.getState().equals(EnumProfileState.LOBBY)) {
+        if (profile.getState().equals(EnumProfileState.LOBBY) || profile.getState().equals(EnumProfileState.EDITING) || profile.getState().equals(EnumProfileState.WAITING)) {
+            if (player.getGameMode() == GameMode.CREATIVE) {
+                Bukkit.getConsoleSender().sendMessage(CC.translate("&c" + player.getName() + " broke a block but is in creative."));
+                return;
+            }
             Bukkit.getConsoleSender().sendMessage(CC.translate("&c" + player.getName() + " tried to break a block in the lobby"));
             event.setCancelled(true);
         }

@@ -15,7 +15,6 @@ import java.util.UUID;
 @Getter
 @Setter
 public class GameParticipant<T extends GamePlayer> {
-
     private T player;
     private boolean eliminated;
 

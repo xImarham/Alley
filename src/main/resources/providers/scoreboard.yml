@@ -79,6 +79,17 @@ scoreboard:
         - ""
         - "&fYour Ping: &b{player-ping}ms"
         - "&fTheir Ping: &b{opponent-ping}ms"
+      lives-match:
+        - "{sidebar}"
+        - "&fOpponent: &b{opponent}"
+        - "&fDuration: &b{duration}"
+        - ""
+        - "&f&lLives"
+        - "&f&l● &fYou: &b{player-lives}"
+        - "&f&l● &fThem: &b{opponent-lives}"
+        - ""
+        - "&fYour Ping: &b{player-ping}ms"
+        - "&fTheir Ping: &b{opponent-ping}ms"
     ending:
       - "{sidebar}"
       - "{end-result}"

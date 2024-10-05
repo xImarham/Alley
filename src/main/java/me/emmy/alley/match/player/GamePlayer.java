@@ -19,9 +19,9 @@ import java.util.UUID;
 @Getter
 @Setter
 public class GamePlayer {
-
     private UUID uuid;
     private String username;
+
     private boolean disconnected;
     private boolean dead;
 

@@ -1,6 +1,8 @@
 package me.emmy.alley.match.command.player;
 
 import me.emmy.alley.Alley;
+import me.emmy.alley.kit.settings.KitSetting;
+import me.emmy.alley.kit.settings.impl.KitSettingLivesImpl;
 import me.emmy.alley.profile.Profile;
 import me.emmy.alley.profile.enums.EnumProfileState;
 import me.emmy.alley.util.chat.CC;
@@ -23,6 +25,11 @@ public class LeaveMatchCommand extends BaseCommand {
 
         if (profile.getState() != EnumProfileState.PLAYING) {
             player.sendMessage(CC.translate("&cYou are not in a match."));
+            return;
+        }
+
+        if (profile.getMatch().getMatchKit().isSettingEnabled(KitSettingLivesImpl.class)) {
+            profile.getMatch().getGamePlayer(player).getData().setLives(0);
             return;
         }
 

@@ -185,7 +185,7 @@ kits:
         description: This denies the player movement during countdown.
         enabled: false
       Lives:
-        description: This kit setting enables best of 3 type matches, such as Battle Rush.
+        description: This kit setting enables best of 3 type matches, such as Pearl Fight.
         enabled: false
   Classic:
     displayname: '&bClassic'
@@ -272,7 +272,7 @@ kits:
         description: This denies the player movement during countdown.
         enabled: false
       Lives:
-        description: This kit setting enables best of 3 type matches, such as Battle Rush.
+        description: This kit setting enables best of 3 type matches, such as Pearl Fight.
         enabled: false
   Boxing:
     displayname: '&bBoxing'
@@ -380,7 +380,7 @@ kits:
         description: This denies the player movement during countdown.
         enabled: false
       Lives:
-        description: This kit setting enables best of 3 type matches, such as Battle Rush.
+        description: This kit setting enables best of 3 type matches, such as Pearl Fight.
         enabled: false
   Sumo:
     displayname: '&bSumo'
@@ -468,7 +468,7 @@ kits:
         description: This is the spleef kit type
         enabled: false
       Lives:
-        description: This kit setting enables best of 3 type matches, such as Battle Rush.
+        description: This kit setting enables best of 3 type matches, such as Pearl Fight.
         enabled: false
   Spleef:
     displayname: '&bSpleef'
@@ -564,7 +564,7 @@ kits:
         description: This denies the player movement during countdown.
         enabled: true
       Lives:
-        description: This kit setting enables best of 3 type matches, such as Battle Rush.
+        description: This kit setting enables best of 3 type matches, such as Pearl Fight.
         enabled: false
   Parkour:
     displayname: '&bParkour'
@@ -652,7 +652,7 @@ kits:
         description: This denies the player movement during countdown.
         enabled: true
       Lives:
-        description: This kit setting enables best of 3 type matches, such as Battle Rush.
+        description: This kit setting enables best of 3 type matches, such as Pearl Fight.
         enabled: false
   BattleRush:
     displayname: '&bBattleRush'
@@ -744,5 +744,207 @@ kits:
         description: This is the parkour kit type
         enabled: false
       Lives:
-        description: This kit setting enables best of 3 type matches, such as Battle Rush.
+        description: This kit setting enables best of 3 type matches, such as Pearl Fight.
+        enabled: true
+  PearlFight:
+    displayname: '&bPearlFight'
+    description: '&7PearlFight kit description'
+    enabled: true
+    unrankedslot: 19
+    rankedslot: 19
+    editorslot: 19
+    items:
+      - ==: org.bukkit.inventory.ItemStack
+        type: STICK
+        meta:
+          ==: ItemMeta
+          meta-type: UNSPECIFIC
+          display-name: §b§lKnockback Stick
+          enchants:
+            KNOCKBACK: 1
+          repair-cost: 1
+      - ==: org.bukkit.inventory.ItemStack
+        type: ENDER_PEARL
+        amount: 16
+      - ==: org.bukkit.inventory.ItemStack
+        type: WOOL
+        damage: 11
+        amount: 64
+      - ==: org.bukkit.inventory.ItemStack
+        type: SHEARS
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+    armor:
+      - ==: org.bukkit.inventory.ItemStack
+        type: AIR
+        damage: -1
+        amount: 0
+      - ==: org.bukkit.inventory.ItemStack
+        type: AIR
+        damage: -1
+        amount: 0
+      - ==: org.bukkit.inventory.ItemStack
+        type: AIR
+        damage: -1
+        amount: 0
+      - ==: org.bukkit.inventory.ItemStack
+        type: AIR
+        damage: -1
+        amount: 0
+    icon: ENDER_PEARL
+    icondata: 0
+    settings:
+      Build:
+        description: Allows you to build in matches
+        enabled: false
+      Ranked:
+        description: This is the ranked kit type
+        enabled: true
+      Boxing:
+        description: This is the boxing kit type
+        enabled: false
+      Sumo:
+        description: This is the sumo kit type
+        enabled: false
+      Spleef:
+        description: This is the spleef kit type
+        enabled: false
+      DenyMovement:
+        description: This denies the player movement during countdown.
+        enabled: true
+      Parkour:
+        description: This is the parkour kit type
+        enabled: false
+      Lives:
+        description: This kit setting enables best of 3 type matches, such as Pearl Fight.
+        enabled: true
+  StickFight:
+    displayname: '&bStickFight'
+    description: '&7StickFight kit description'
+    enabled: true
+    unrankedslot: 20
+    rankedslot: 20
+    editorslot: 20
+    items:
+      - ==: org.bukkit.inventory.ItemStack
+        type: STICK
+        meta:
+          ==: ItemMeta
+          meta-type: UNSPECIFIC
+          display-name: §b§lKnockback Stick
+          enchants:
+            KNOCKBACK: 1
+          repair-cost: 1
+      - ==: org.bukkit.inventory.ItemStack
+        type: WOOL
+        damage: 11
+        amount: 64
+      - ==: org.bukkit.inventory.ItemStack
+        type: SHEARS
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+    armor:
+      - ==: org.bukkit.inventory.ItemStack
+        type: AIR
+        damage: -1
+        amount: 0
+      - ==: org.bukkit.inventory.ItemStack
+        type: AIR
+        damage: -1
+        amount: 0
+      - ==: org.bukkit.inventory.ItemStack
+        type: AIR
+        damage: -1
+        amount: 0
+      - ==: org.bukkit.inventory.ItemStack
+        type: AIR
+        damage: -1
+        amount: 0
+    icon: STICK
+    icondata: 0
+    settings:
+      Build:
+        description: Allows you to build in matches
+        enabled: false
+      Ranked:
+        description: This is the ranked kit type
+        enabled: true
+      Boxing:
+        description: This is the boxing kit type
+        enabled: false
+      Sumo:
+        description: This is the sumo kit type
+        enabled: false
+      Spleef:
+        description: This is the spleef kit type
+        enabled: false
+      DenyMovement:
+        description: This denies the player movement during countdown.
+        enabled: true
+      Parkour:
+        description: This is the parkour kit type
+        enabled: false
+      Lives:
+        description: This kit setting enables best of 3 type matches, such as Pearl Fight.
         enabled: true

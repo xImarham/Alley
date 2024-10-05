@@ -20,6 +20,7 @@ public class EnchantUtil {
         enchantment.put("punch", "ARROW_KNOCKBACK");
         enchantment.put("flame", "ARROW_FIRE");
         enchantment.put("infinity", "ARROW_INFINITE");
+        enchantment.put("knockback", "KNOCKBACK");
     }
 
     /**

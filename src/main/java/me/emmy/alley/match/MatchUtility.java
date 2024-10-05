@@ -3,6 +3,7 @@ package me.emmy.alley.match;
 import lombok.experimental.UtilityClass;
 import me.emmy.alley.match.player.GameParticipant;
 import me.emmy.alley.match.player.impl.MatchGamePlayerImpl;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 

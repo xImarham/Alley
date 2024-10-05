@@ -13,7 +13,11 @@ import org.bukkit.Bukkit;
  */
 @UtilityClass
 public class Logger {
-
+    /**
+     * Log a debug message to the console based on the boolean value in the settings.yml.
+     *
+     * @param message the debug message to log
+     */
     public void debug(String message) {
         if (ConfigHandler.getInstance().getSettingsConfig().getBoolean("debugging")) {
             Bukkit.getConsoleSender().sendMessage(CC.translate("&c" + Symbol.ARROW_R.getSymbol() + " &4&lAlley Debug &c" + Symbol.ARROW_L.getSymbol() + " &7&o" + message));

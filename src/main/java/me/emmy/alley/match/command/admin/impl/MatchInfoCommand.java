@@ -40,12 +40,7 @@ public class MatchInfoCommand extends BaseCommand {
             return;
         }
 
-        sender.sendMessage("");
-        sender.sendMessage("&4&lSORRY FOR THIS UGLY LOOKING MESSAGE, I'M TOO LAZY TO MAKE IT LOOK GOOD. I JUST CAN'T BE ASKED TO DO IT.");
-        sender.sendMessage("&7Definitely not made by Emmy.");
-        sender.sendMessage("");
         sender.sendMessage(CC.translate("&c&lMatch Information"));
-        
         sender.sendMessage(CC.translate(" &f&l● &fPlayers:"));
         profile.getMatch().getParticipants().forEach(participant -> 
                 sender.sendMessage(CC.translate("   &f* &c" + participant.getPlayer().getPlayer().getName()))

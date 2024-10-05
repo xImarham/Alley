@@ -17,7 +17,6 @@ import java.util.List;
 @Getter
 @Setter
 public class PartyRequest {
-
     private final List<PartyRequest> partyRequest = new ArrayList<>();
 
     private final Player sender;

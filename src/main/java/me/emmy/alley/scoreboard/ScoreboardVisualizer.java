@@ -1,15 +1,16 @@
 package me.emmy.alley.scoreboard;
 
 import me.emmy.alley.Alley;
+import me.emmy.alley.api.assemble.AssembleAdapter;
 import me.emmy.alley.config.ConfigHandler;
 import me.emmy.alley.kit.settings.impl.KitSettingBoxingImpl;
+import me.emmy.alley.kit.settings.impl.KitSettingLivesImpl;
 import me.emmy.alley.match.enums.EnumMatchState;
 import me.emmy.alley.match.player.GameParticipant;
 import me.emmy.alley.match.player.impl.MatchGamePlayerImpl;
 import me.emmy.alley.profile.Profile;
 import me.emmy.alley.profile.enums.EnumProfileState;
 import me.emmy.alley.util.AnimationUtil;
-import me.emmy.alley.api.assemble.AssembleAdapter;
 import me.emmy.alley.util.chat.CC;
 import me.emmy.alley.util.reflection.BukkitReflection;
 import org.bukkit.Bukkit;
@@ -156,6 +157,19 @@ public class ScoreboardVisualizer implements AssembleAdapter {
                                     .replaceAll("\\{opponent-hits}", String.valueOf(profile.getMatch().getGamePlayer(opponent.getPlayer().getPlayer()).getData().getHits()))
                                     .replaceAll("\\{combo}", profile.getMatch().getGamePlayer(player).getData().getCombo() == 0 ? "No Combo" : profile.getMatch().getGamePlayer(player).getData().getCombo() + " Combo")
                                     .replaceAll("\\{player-ping}", String.valueOf(BukkitReflection.getPing(player)))
+                                    .replaceAll("\\{duration}", profile.getMatch().getDuration())
+                                    .replaceAll("\\{arena}", profile.getMatch().getMatchArena().getDisplayName())
+                                    .replaceAll("\\{kit}", profile.getMatch().getMatchKit().getDisplayName()));
+                        }
+                    } else if (profile.getMatch().getMatchKit().isSettingEnabled(KitSettingLivesImpl.class)) {
+                        for (String line : Alley.getInstance().getConfigHandler().getConfigByName("providers/scoreboard.yml").getStringList("scoreboard.lines.playing.lives-match")) {
+                            toReturn.add(CC.translate(line)
+                                    .replaceAll("\\{sidebar}", Alley.getInstance().getConfigHandler().getConfigByName("providers/scoreboard.yml").getString("scoreboard.sidebar-format"))
+                                    .replaceAll("\\{opponent}", opponent.getPlayer().getUsername())
+                                    .replaceAll("\\{opponent-ping}", String.valueOf(BukkitReflection.getPing(opponent.getPlayer().getPlayer())))
+                                    .replaceAll("\\{player-ping}", String.valueOf(BukkitReflection.getPing(player)))
+                                    .replaceAll("\\{player-lives}", String.valueOf(profile.getMatch().getGamePlayer(player).getData().getLives()))
+                                    .replaceAll("\\{opponent-lives}", String.valueOf(profile.getMatch().getGamePlayer(opponent.getPlayer().getPlayer()).getData().getLives()))
                                     .replaceAll("\\{duration}", profile.getMatch().getDuration())
                                     .replaceAll("\\{arena}", profile.getMatch().getMatchArena().getDisplayName())
                                     .replaceAll("\\{kit}", profile.getMatch().getMatchKit().getDisplayName()));
