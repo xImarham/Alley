@@ -25,3 +25,8 @@ arena:
     shared: "&b{arena}"
     standalone: "&b{arena}"
     ffa: "&b{arena}"
+
+kit:
+  # The default name and description that's going to be set when creating a kit.
+  default-name: "&b&l{kit}"
+  default-description: "&7{description} kit description."

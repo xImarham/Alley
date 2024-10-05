@@ -1,6 +1,7 @@
 package me.emmy.alley.kit.command.impl.manage;
 
 import me.emmy.alley.Alley;
+import me.emmy.alley.config.ConfigHandler;
 import me.emmy.alley.database.util.MongoUtility;
 import me.emmy.alley.kit.Kit;
 import me.emmy.alley.kit.settings.impl.*;
@@ -57,8 +58,8 @@ public class KitCreateCommand extends BaseCommand {
     private Kit createKit(String kitName, ItemStack[] inventory, ItemStack[] armor, Material icon) {
         Kit kit = new Kit(
                 kitName,
-                "&b" + kitName,
-                "&7" + kitName + " kit description",
+                ConfigHandler.getInstance().getSettingsConfig().getString("kit.default-name").replace("{kit-name}", kitName),
+                ConfigHandler.getInstance().getSettingsConfig().getString("kit.default-description").replace("{kit-name}", kitName),
                 true,
                 0,
                 0,
