@@ -19,7 +19,6 @@ import java.util.Map;
 @Getter
 @Setter
 public class KitSettingRepository {
-
     private final List<KitSetting> settings = new ArrayList<>();
     private final Map<String, Class<? extends KitSetting>> settingClasses = new HashMap<>();
 
@@ -98,4 +97,3 @@ public class KitSettingRepository {
         }
     }
 }
-

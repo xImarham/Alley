@@ -2,8 +2,9 @@ package me.emmy.alley.kit;
 
 import lombok.Getter;
 import me.emmy.alley.Alley;
+import me.emmy.alley.config.ConfigHandler;
 import me.emmy.alley.kit.settings.KitSetting;
-import me.emmy.alley.kit.settings.impl.*;
+import me.emmy.alley.kit.settings.impl.KitSettingRankedImpl;
 import me.emmy.alley.queue.Queue;
 import me.emmy.alley.util.chat.CC;
 import org.bukkit.Bukkit;
@@ -223,6 +224,35 @@ public class KitRepository {
         config.set("kits." + kit.getName(), null);
 
         Alley.getInstance().getConfigHandler().saveConfig(file, config);
+    }
+
+    /**
+     * Method to create a kit.
+     *
+     * @param kitName  The name of the kit.
+     * @param inventory The inventory of the kit.
+     * @param armor     The armor of the kit.
+     * @param icon      The icon of the kit.
+     * @return The created kit.
+     */
+    public Kit createKit(String kitName, ItemStack[] inventory, ItemStack[] armor, Material icon) {
+        Kit kit = new Kit(
+                kitName,
+                ConfigHandler.getInstance().getSettingsConfig().getString("kit.default-name").replace("{kit-name}", kitName),
+                ConfigHandler.getInstance().getSettingsConfig().getString("kit.default-description").replace("{kit-name}", kitName),
+                true,
+                0,
+                0,
+                0,
+                inventory,
+                armor,
+                icon,
+                (byte) 0
+        );
+
+        Alley.getInstance().getKitSettingRepository().applyAllSettingsToKit(kit);
+
+        return kit;
     }
 
     /**

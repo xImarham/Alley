@@ -20,8 +20,8 @@ import org.bukkit.inventory.ItemStack;
  * @date 20/05/2024 - 13:06
  */
 public class KitCreateCommand extends BaseCommand {
-    @Override
     @Command(name = "kit.create", permission = "alley.admin")
+    @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
         String[] args = command.getArgs();
@@ -46,32 +46,12 @@ public class KitCreateCommand extends BaseCommand {
             icon = player.getItemInHand().getType();
         }
 
-        Kit kit = createKit(kitName, inventory, armor, icon);
+        Kit kit = Alley.getInstance().getKitRepository().createKit(kitName, inventory, armor, icon);
 
         Alley.getInstance().getKitRepository().getKits().add(kit);
         Alley.getInstance().getKitRepository().saveKit(kit);
         Alley.getInstance().getProfileRepository().loadProfiles();
         player.sendMessage(CC.translate(Locale.KIT_CREATED.getMessage().replace("{kit-name}", kitName)));
         player.sendMessage(CC.translate("&7Additionally, all profiles have been reloaded."));
-    }
-
-    private Kit createKit(String kitName, ItemStack[] inventory, ItemStack[] armor, Material icon) {
-        Kit kit = new Kit(
-                kitName,
-                ConfigHandler.getInstance().getSettingsConfig().getString("kit.default-name").replace("{kit-name}", kitName),
-                ConfigHandler.getInstance().getSettingsConfig().getString("kit.default-description").replace("{kit-name}", kitName),
-                true,
-                0,
-                0,
-                0,
-                inventory,
-                armor,
-                icon,
-                (byte) 0
-        );
-
-        Alley.getInstance().getKitSettingRepository().applyAllSettingsToKit(kit);
-
-        return kit;
     }
 }
