@@ -2,7 +2,7 @@ package me.emmy.alley.queue.menu;
 
 import lombok.AllArgsConstructor;
 import me.emmy.alley.Alley;
-import me.emmy.alley.ffa.menu.FFAMenu;
+import me.emmy.alley.game.ffa.menu.FFAMenu;
 import me.emmy.alley.locale.ErrorMessage;
 import me.emmy.alley.util.chat.CC;
 import me.emmy.alley.api.menu.Button;

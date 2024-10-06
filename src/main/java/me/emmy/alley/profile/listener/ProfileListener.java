@@ -40,7 +40,7 @@ public class ProfileListener implements Listener {
         Profile profile = new Profile(event.getPlayer().getUniqueId());
         profile.load();
 
-        profileRepository.getProfiles().put(event.getPlayer().getUniqueId(), profile);
+        profileRepository.addProfile(profile);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)

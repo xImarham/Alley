@@ -31,11 +31,10 @@ public class Cooldown {
         return calculateEndTime() > System.currentTimeMillis() && cooldownTask != null;
     }
 
-    public Cooldown resetCooldown() {
+    public void resetCooldown() {
         startTime = System.currentTimeMillis();
         cancelExistingTask();
         startNewCooldownTask();
-        return this;
     }
 
     public void cancelCooldown() {

@@ -2,7 +2,7 @@ package me.emmy.alley.profile.menu;
 
 import lombok.AllArgsConstructor;
 import me.emmy.alley.Alley;
-import me.emmy.alley.leaderboard.menu.personal.StatisticsMenu;
+import me.emmy.alley.visual.leaderboard.menu.personal.StatisticsMenu;
 import me.emmy.alley.profile.Profile;
 import me.emmy.alley.profile.data.impl.ProfileFFAData;
 import me.emmy.alley.profile.division.AbstractDivision;

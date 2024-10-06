@@ -52,4 +52,13 @@ public class ProfileRepository {
             Alley.getInstance().getProfileRepository().getProfiles().put(uuid, profile);
         }
     }
+
+    /**
+     * Adds a profile to the repository.
+     *
+     * @param profile The profile to add.
+     */
+    public void addProfile(Profile profile) {
+        profiles.put(profile.getUuid(), profile);
+    }
 }

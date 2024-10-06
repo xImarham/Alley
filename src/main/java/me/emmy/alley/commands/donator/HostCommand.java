@@ -1,7 +1,7 @@
 package me.emmy.alley.commands.donator;
 
 import me.emmy.alley.Alley;
-import me.emmy.alley.host.HostMenu;
+import me.emmy.alley.game.host.HostMenu;
 import me.emmy.alley.profile.enums.EnumProfileState;
 import me.emmy.alley.util.chat.CC;
 import me.emmy.alley.api.command.BaseCommand;
