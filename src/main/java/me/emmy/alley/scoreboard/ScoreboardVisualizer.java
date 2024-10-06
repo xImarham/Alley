@@ -121,7 +121,7 @@ public class ScoreboardVisualizer implements AssembleAdapter {
                         return null;
                     }
 
-                    if (profile.getMatch().getMatchState() == EnumMatchState.STARTING) {
+                    if (profile.getMatch().getState() == EnumMatchState.STARTING) {
                         for (String line : Alley.getInstance().getConfigHandler().getConfigByName("providers/scoreboard.yml").getStringList("scoreboard.lines.starting")) {
                             toReturn.add(CC.translate(line)
                                     .replaceAll("\\{sidebar}", Alley.getInstance().getConfigHandler().getConfigByName("providers/scoreboard.yml").getString("scoreboard.sidebar-format"))
@@ -133,7 +133,7 @@ public class ScoreboardVisualizer implements AssembleAdapter {
                                     .replaceAll("\\{dot-animation}", AnimationUtil.getDots())
                                     .replaceAll("\\{kit}", profile.getMatch().getKit().getDisplayName()));
                         }
-                    } else if (profile.getMatch().getMatchState() == EnumMatchState.ENDING_MATCH) {
+                    } else if (profile.getMatch().getState() == EnumMatchState.ENDING_MATCH) {
                         for (String line : Alley.getInstance().getConfigHandler().getConfigByName("providers/scoreboard.yml").getStringList("scoreboard.lines.ending")) {
                             toReturn.add(CC.translate(line)
                                     .replaceAll("\\{sidebar}", Alley.getInstance().getConfigHandler().getConfigByName("providers/scoreboard.yml").getString("scoreboard.sidebar-format"))

@@ -35,11 +35,11 @@ public class MatchRunnable extends BukkitRunnable {
     @Override
     public void run() {
         stage--;
-        switch (match.getMatchState()) {
+        switch (match.getState()) {
             case STARTING:
                 if (stage == 0) {
                     Alley.getInstance().getServer().getScheduler().runTask(Alley.getInstance(), match::handleRoundStart);
-                    match.setMatchState(EnumMatchState.RUNNING);
+                    match.setState(EnumMatchState.RUNNING);
                     match.sendMessage(CC.translate("&aMatch has started. Good luck!"));
                     this.playSoundStarted();
                 } else {
@@ -50,8 +50,8 @@ public class MatchRunnable extends BukkitRunnable {
             case ENDING_ROUND:
                 if (stage == 0) {
                     if (match.canStartRound()) {
-                        match.setMatchState(EnumMatchState.STARTING);
-                        match.getMatchRunnable().setStage(4);
+                        match.setState(EnumMatchState.STARTING);
+                        match.getRunnable().setStage(4);
                     }
                 }
                 break;

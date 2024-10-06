@@ -45,9 +45,9 @@ import java.util.concurrent.CopyOnWriteArrayList;
 @Setter
 public abstract class AbstractMatch {
     private final List<UUID> matchSpectators = new CopyOnWriteArrayList<>();
-    private EnumMatchState matchState = EnumMatchState.STARTING;
-    private MatchRunnable matchRunnable;
+    private EnumMatchState state = EnumMatchState.STARTING;
     private List<Snapshot> snapshots;
+    private MatchRunnable runnable;
     private final Queue queue;
     private final Arena arena;
     private final Kit kit;
@@ -74,9 +74,9 @@ public abstract class AbstractMatch {
      * Starts the match by setting the state and updating player profiles.
      */
     public void startMatch() {
-        matchState = EnumMatchState.STARTING;
-        matchRunnable = new MatchRunnable(this);
-        matchRunnable.runTaskTimer(Alley.getInstance(), 0L, 20L);
+        state = EnumMatchState.STARTING;
+        runnable = new MatchRunnable(this);
+        runnable.runTaskTimer(Alley.getInstance(), 0L, 20L);
         getParticipants().forEach(this::initializeParticipant);
         startTime = System.currentTimeMillis();
     }
@@ -128,7 +128,7 @@ public abstract class AbstractMatch {
         });
 
         Alley.getInstance().getMatchRepository().getMatches().remove(this);
-        matchRunnable.cancel();
+        runnable.cancel();
     }
 
     /**
@@ -186,7 +186,7 @@ public abstract class AbstractMatch {
      * @param player The player that died.
      */
     public void handleDeath(Player player) {
-        if (!(matchState == EnumMatchState.STARTING || matchState == EnumMatchState.RUNNING)) return;
+        if (!(state == EnumMatchState.STARTING || state == EnumMatchState.RUNNING)) return;
 
         MatchGamePlayerImpl gamePlayer = getGamePlayer(player);
         if (gamePlayer.isDead()) {
@@ -213,7 +213,7 @@ public abstract class AbstractMatch {
      */
     private void handleRoundOrRespawn(Player player) {
         if (canEndRound()) {
-            matchState = EnumMatchState.ENDING_ROUND;
+            state = EnumMatchState.ENDING_ROUND;
             handleRoundEnd();
 
             if (canEndMatch()) {
@@ -221,9 +221,9 @@ public abstract class AbstractMatch {
                 if (killer != null) {
                     handleEffects(player, killer);
                 }
-                matchState = EnumMatchState.ENDING_MATCH;
+                state = EnumMatchState.ENDING_MATCH;
             }
-            getMatchRunnable().setStage(4);
+            getRunnable().setStage(4);
         } else {
             handleRespawn(player);
         }
@@ -361,7 +361,7 @@ public abstract class AbstractMatch {
      * @param player The player that disconnected.
      */
     public void handleDisconnect(Player player) {
-        if (!(matchState == EnumMatchState.STARTING || matchState == EnumMatchState.RUNNING)) return;
+        if (!(state == EnumMatchState.STARTING || state == EnumMatchState.RUNNING)) return;
 
         MatchGamePlayerImpl gamePlayer = getGamePlayer(player);
         if (gamePlayer != null) {
@@ -473,8 +473,8 @@ public abstract class AbstractMatch {
      * @return The duration of the match.
      */
     public String getDuration() {
-        if (matchState == EnumMatchState.STARTING) return EnumMatchState.STARTING.getDescription();
-        if (matchState == EnumMatchState.ENDING_MATCH) return EnumMatchState.ENDING_MATCH.getDescription();
+        if (state == EnumMatchState.STARTING) return EnumMatchState.STARTING.getDescription();
+        if (state == EnumMatchState.ENDING_MATCH) return EnumMatchState.ENDING_MATCH.getDescription();
         else return getFormattedElapsedTime();
     }
 

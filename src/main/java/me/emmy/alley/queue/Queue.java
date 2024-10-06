@@ -47,7 +47,7 @@ public class Queue {
      */
     public int getQueueFightCount() {
         return Alley.getInstance().getMatchRepository().getMatches().stream()
-                .filter(match -> match.getQueue() != null && (match.getMatchState() == EnumMatchState.STARTING || match.getMatchState() == EnumMatchState.RUNNING)).flatMap(match -> match.getParticipants().stream())
+                .filter(match -> match.getQueue() != null && (match.getState() == EnumMatchState.STARTING || match.getState() == EnumMatchState.RUNNING)).flatMap(match -> match.getParticipants().stream())
                 .mapToInt(participant -> participant.getPlayers().size())
                 .sum();
     }

@@ -116,7 +116,7 @@ public class MatchLivesRegularImpl extends MatchRegularImpl {
                     handleRespawn(player);
                     return;
                 }
-                if (getMatchState() == EnumMatchState.ENDING_MATCH) {
+                if (getState() == EnumMatchState.ENDING_MATCH) {
                     cancel();
                     return;
                 }
