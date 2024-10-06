@@ -64,10 +64,13 @@ public class ArenaRepository {
                     );
                     break;
                 case FFA:
+                    Location safeZonePos1 = LocationUtil.deserialize(config.getString(name + ".safezone.pos1"));
+                    Location safeZonePos2 = LocationUtil.deserialize(config.getString(name + ".safezone.pos2"));
+
                     arena = new FreeForAllArena(
                             arenaName,
-                            LocationUtil.deserialize(config.getString(name + ".safezone.pos1")),
-                            LocationUtil.deserialize(config.getString(name + ".safezone.pos2"))
+                            safeZonePos1,
+                            safeZonePos2
                     );
                     break;
                 default:
@@ -174,11 +177,20 @@ public class ArenaRepository {
      * @return the arena
      */
     public Arena getRandomArena(Kit kit) {
-        List<Arena> availableArenas = arenas.stream().filter(arena -> arena.getKits().contains(kit.getName())).filter(Arena::isEnabled).collect(Collectors.toList());
+        List<Arena> availableArenas = arenas.stream()
+                .filter(arena -> arena.getKits().contains(kit.getName()))
+                .filter(Arena::isEnabled)
+                .filter(arena -> !(arena instanceof StandAloneArena) || !((StandAloneArena) arena).isActive())
+                .collect(Collectors.toList());
+
         if (availableArenas.isEmpty()) {
             return null;
         }
 
-        return availableArenas.get(ThreadLocalRandom.current().nextInt(availableArenas.size()));
+        Arena selectedArena = availableArenas.get(ThreadLocalRandom.current().nextInt(availableArenas.size()));
+        if (selectedArena instanceof StandAloneArena) {
+            ((StandAloneArena) selectedArena).setActive(true);
+        }
+        return selectedArena;
     }
 }

@@ -22,7 +22,7 @@ import lombok.Getter;
  */
 @Getter
 @Setter
-public class Arena {
+public abstract class Arena {
     private String name;
     private String displayName;
     private Location pos1;
@@ -47,7 +47,7 @@ public class Arena {
         this.maximum = maximum;
     }
 
-    public void createArena() {}
-    public void saveArena() {}
-    public void deleteArena() {}
+    public abstract void saveArena();
+    public abstract void createArena();
+    public abstract void deleteArena();
 }

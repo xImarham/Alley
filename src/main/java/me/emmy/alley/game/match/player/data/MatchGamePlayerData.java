@@ -12,7 +12,6 @@ import me.emmy.alley.config.ConfigHandler;
 @Getter
 @Setter
 public class MatchGamePlayerData {
-
     private int longestCombo;
     private int combo;
     private int hits;

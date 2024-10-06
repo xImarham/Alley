@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import me.emmy.alley.Alley;
 import me.emmy.alley.arena.Arena;
+import me.emmy.alley.arena.impl.StandAloneArena;
 import me.emmy.alley.hotbar.enums.HotbarType;
 import me.emmy.alley.kit.Kit;
 import me.emmy.alley.kit.settings.impl.KitSettingLivesImpl;
@@ -74,6 +75,10 @@ public abstract class AbstractMatch {
      * Starts the match by setting the state and updating player profiles.
      */
     public void startMatch() {
+        if (arena instanceof StandAloneArena) {
+            ((StandAloneArena) arena).setActive(true);
+        }
+
         state = EnumMatchState.STARTING;
         runnable = new MatchRunnable(this);
         runnable.runTaskTimer(Alley.getInstance(), 0L, 20L);
@@ -129,6 +134,10 @@ public abstract class AbstractMatch {
 
         Alley.getInstance().getMatchRepository().getMatches().remove(this);
         runnable.cancel();
+
+        if (arena instanceof StandAloneArena) {
+            ((StandAloneArena) arena).setActive(false);
+        }
     }
 
     /**

@@ -55,8 +55,6 @@ public class SharedArena extends Arena {
 
     @Override
     public void deleteArena() {
-        super.deleteArena();
-
         FileConfiguration config = Alley.getInstance().getConfigHandler().getConfigByName("storage/arenas.yml");
         config.set("arenas." + getName(), null);
 

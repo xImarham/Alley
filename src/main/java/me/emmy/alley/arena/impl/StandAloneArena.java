@@ -1,5 +1,7 @@
 package me.emmy.alley.arena.impl;
 
+import lombok.Getter;
+import lombok.Setter;
 import me.emmy.alley.Alley;
 import me.emmy.alley.arena.Arena;
 import me.emmy.alley.arena.ArenaType;
@@ -12,7 +14,10 @@ import org.bukkit.configuration.file.FileConfiguration;
  * @project Alley
  * @date 20/05/2024 - 19:14
  */
+@Setter
+@Getter
 public class StandAloneArena extends Arena {
+    private boolean active = false;
 
     /**
      * Constructor for the StandAloneArena class.
@@ -55,8 +60,6 @@ public class StandAloneArena extends Arena {
 
     @Override
     public void deleteArena() {
-        super.deleteArena();
-
         FileConfiguration config = Alley.getInstance().getConfigHandler().getConfigByName("storage/arenas.yml");
         config.set("arenas." + getName(), null);
 
