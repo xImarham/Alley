@@ -9,9 +9,11 @@ import me.emmy.alley.match.player.GameParticipant;
 import me.emmy.alley.match.player.data.MatchGamePlayerData;
 import me.emmy.alley.match.player.impl.MatchGamePlayerImpl;
 import me.emmy.alley.queue.Queue;
+import me.emmy.alley.util.PlayerUtil;
 import me.emmy.alley.util.TaskUtil;
 import me.emmy.alley.util.chat.CC;
 import me.emmy.alley.util.chat.Logger;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -79,7 +81,7 @@ public class MatchLivesRegularImpl extends MatchRegularImpl {
         reduceLife(participant);
 
         if (participant.getPlayer().getData().getLives() > 0) {
-            TaskUtil.runTaskLater(() -> startRespawnProcess(participant, player), 5L);
+            TaskUtil.runTaskLater(() -> startRespawnProcess(player), 5L);
         } else {
             Logger.debug("Counting down for " + participant.getPlayer().getPlayer().getName());
             super.handleDeath(player);
@@ -102,17 +104,16 @@ public class MatchLivesRegularImpl extends MatchRegularImpl {
     /**
      * Starts the respawn process for a participant.
      *
-     * @param participant The participant to start the respawn process for.
      * @param player      The player to start the respawn process for.
      */
-    private void startRespawnProcess(GameParticipant<MatchGamePlayerImpl> participant, Player player) {
+    private void startRespawnProcess(Player player) {
         new BukkitRunnable() {
             int count = 3;
             @Override
             public void run() {
                 if (count == 0) {
                     cancel();
-                    superRespawn(participant, player);
+                    handleRespawn(player);
                     return;
                 }
                 if (getMatchState() == EnumMatchState.ENDING_MATCH) {
@@ -125,14 +126,18 @@ public class MatchLivesRegularImpl extends MatchRegularImpl {
         }.runTaskTimer(Alley.getInstance(), 0L, 20L);
     }
 
-    /**
-     * Handles the death of a participant.
-     *
-     * @param participant The participant whose death is to be handled.
-     * @param player      The player whose death is to be handled.
-     */
-    private void superRespawn(GameParticipant<MatchGamePlayerImpl> participant, Player player) {
-        Logger.debug("super Handling death of " + participant.getPlayer().getPlayer().getName());
-        super.handleRespawn(player);
+    @Override
+    public void handleRespawn(Player player) {
+        Logger.debug("Handling respawn for " + player.getName());
+        PlayerUtil.reset(player);
+
+        Location spawnLocation = getParticipants().get(0).containsPlayer(player.getUniqueId()) ? getArena().getPos1() : getArena().getPos2();
+        player.teleport(spawnLocation);
+
+        player.getInventory().setArmorContents(getKit().getArmor());
+        player.getInventory().setContents(getKit().getInventory());
+
+        notifyParticipants("&b" + player.getName() + " &ahas respawned");
+        notifySpectators("&b" + player.getName() + " &ahas respawned");
     }
 }

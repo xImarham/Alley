@@ -15,7 +15,6 @@ import me.emmy.alley.match.player.impl.MatchGamePlayerImpl;
 import me.emmy.alley.profile.Profile;
 import me.emmy.alley.profile.enums.EnumProfileState;
 import me.emmy.alley.util.PlayerUtil;
-import me.emmy.alley.util.TaskUtil;
 import me.emmy.alley.util.chat.Logger;
 import me.emmy.alley.util.location.RayTracerUtil;
 import me.emmy.alley.util.chat.CC;
@@ -68,13 +67,13 @@ public class MatchListener implements Listener {
                 return;
             }
 
-            if (profile.getMatch().getMatchKit().isSettingEnabled(KitSettingBoxingImpl.class)) {
+            if (profile.getMatch().getKit().isSettingEnabled(KitSettingBoxingImpl.class)) {
                 event.setDamage(0);
                 player.setHealth(20.0);
                 player.updateInventory();
             }
 
-            if (profile.getMatch().getMatchKit().isSettingEnabled(KitSettingSumoImpl.class)) {
+            if (profile.getMatch().getKit().isSettingEnabled(KitSettingSumoImpl.class)) {
                 event.setDamage(0);
                 player.setHealth(20.0);
                 player.updateInventory();
@@ -134,7 +133,7 @@ public class MatchListener implements Listener {
                 attackerProfile.getMatch().getGamePlayer(attacker).getData().handleAttack();
                 damagedprofile.getMatch().getGamePlayer(damaged).getData().resetCombo();
 
-                if (match.getMatchKit().isSettingEnabled(KitSettingBoxingImpl.class)) {
+                if (match.getKit().isSettingEnabled(KitSettingBoxingImpl.class)) {
                     if (match.getGamePlayer(attacker).getData().getHits() >= 100) {
                         match.handleDeath(damaged);
                     }
@@ -150,7 +149,7 @@ public class MatchListener implements Listener {
             Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
 
             if (profile.getState() == EnumProfileState.PLAYING && profile.getMatch().getMatchState() == EnumMatchState.RUNNING &&
-                    profile.getMatch().getMatchKit().isSettingEnabled(KitSettingSpleefImpl.class)) {
+                    profile.getMatch().getKit().isSettingEnabled(KitSettingSpleefImpl.class)) {
 
                 Snowball snowball = (Snowball) event.getEntity();
                 Location hitLocation = RayTracerUtil.rayTrace(snowball.getLocation(), snowball.getVelocity().normalize());
@@ -169,11 +168,11 @@ public class MatchListener implements Listener {
         Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
         switch (profile.getState()) {
             case PLAYING:
-                if (profile.getMatch().getMatchKit().isSettingEnabled(KitSettingBuildImpl.class)) {
+                if (profile.getMatch().getKit().isSettingEnabled(KitSettingBuildImpl.class)) {
                     return;
                 }
 
-                if (profile.getMatch().getMatchKit().isSettingEnabled(KitSettingSpleefImpl.class)) {
+                if (profile.getMatch().getKit().isSettingEnabled(KitSettingSpleefImpl.class)) {
                     Block block = event.getBlock();
                     if (block.getType() != Material.SNOW_BLOCK) {
                         event.setCancelled(true);
@@ -205,7 +204,7 @@ public class MatchListener implements Listener {
         Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
         switch (profile.getState()) {
             case PLAYING:
-                event.setCancelled(!profile.getMatch().getMatchKit().isSettingEnabled(KitSettingBuildImpl.class));
+                event.setCancelled(!profile.getMatch().getKit().isSettingEnabled(KitSettingBuildImpl.class));
                 break;
             case SPECTATING:
                 event.setCancelled(true);
@@ -219,7 +218,7 @@ public class MatchListener implements Listener {
         Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
         if (profile.getState() == EnumProfileState.SPECTATING || profile.getState() == EnumProfileState.PLAYING) {
             if (event.getCause() == PlayerTeleportEvent.TeleportCause.ENDER_PEARL) {
-                Arena arena = profile.getMatch().getMatchArena();
+                Arena arena = profile.getMatch().getArena();
                 Location corner1 = arena.getMinimum();
                 Location corner2 = arena.getMaximum();
 
@@ -256,13 +255,13 @@ public class MatchListener implements Listener {
 
         if (profile != null && profile.getMatch() != null) {
             if (profile.getState() == EnumProfileState.PLAYING && profile.getMatch().getMatchState() == EnumMatchState.RUNNING) {
-                if (profile.getMatch().getMatchKit().isSettingEnabled(KitSettingSumoImpl.class) || profile.getMatch().getMatchKit().isSettingEnabled(KitSettingSpleefImpl.class)) {
+                if (profile.getMatch().getKit().isSettingEnabled(KitSettingSumoImpl.class) || profile.getMatch().getKit().isSettingEnabled(KitSettingSpleefImpl.class)) {
                     if (player.getLocation().getBlock().getType() == Material.WATER || player.getLocation().getBlock().getType() == Material.STATIONARY_WATER) {
                         player.setHealth(0);
                     }
                 }
 
-                if (profile.getMatch().getMatchKit().isSettingEnabled(KitSettingLivesImpl.class)) {
+                if (profile.getMatch().getKit().isSettingEnabled(KitSettingLivesImpl.class)) {
                     if (player.getLocation().getY() <= ConfigHandler.getInstance().getSettingsConfig().getInt("game.death-y-level")) {
                         if (player.getGameMode() == GameMode.SPECTATOR) return;
                         if (player.getGameMode() == GameMode.CREATIVE) return;
@@ -276,7 +275,7 @@ public class MatchListener implements Listener {
 
             if (profile.getState() == EnumProfileState.PLAYING) {
                 if (match.getMatchState() == EnumMatchState.STARTING) {
-                    if (match.getMatchKit().isSettingEnabled(KitSettingDenyMovementImpl.class)) {
+                    if (match.getKit().isSettingEnabled(KitSettingDenyMovementImpl.class)) {
                         List<GameParticipant<MatchGamePlayerImpl>> participants = match.getParticipants();
                         MatchUtility.denyPlayerMovement(participants, player, match);
                     }
@@ -285,7 +284,7 @@ public class MatchListener implements Listener {
 
             if (profile.getState() == EnumProfileState.SPECTATING || profile.getState() == EnumProfileState.PLAYING) {
                 if (profile.getMatch() == null) return;
-                Arena arena = profile.getMatch().getMatchArena();
+                Arena arena = profile.getMatch().getArena();
                 Location corner1 = arena.getMinimum();
                 Location corner2 = arena.getMaximum();
 
@@ -389,7 +388,7 @@ public class MatchListener implements Listener {
             if (event.getClickedBlock() != null && event.getClickedBlock().getType() == Material.STONE_PLATE) {
                 player.sendMessage("You stepped on a stone pressure plate!");
                 if (profile != null && profile.getState() == EnumProfileState.PLAYING) {
-                    if (profile.getMatch() != null && profile.getMatch().getMatchKit().isSettingEnabled(KitSettingParkourImpl.class)) {
+                    if (profile.getMatch() != null && profile.getMatch().getKit().isSettingEnabled(KitSettingParkourImpl.class)) {
                         Bukkit.broadcastMessage(player.getName() + " stepped on a stone pressure plate and won the match!");
                         profile.getMatch().getParticipants().forEach(participant -> {
                             Player participantPlayer = participant.getPlayer().getPlayer();
@@ -453,7 +452,7 @@ public class MatchListener implements Listener {
             AbstractMatch match = profile.getMatch();
 
             if (match.getMatchState() == EnumMatchState.STARTING || match.getMatchState() == EnumMatchState.RUNNING) {
-                if (profile.getMatch().getMatchKit().isSettingEnabled(KitSettingLivesImpl.class)) {
+                if (profile.getMatch().getKit().isSettingEnabled(KitSettingLivesImpl.class)) {
                     profile.getMatch().getGamePlayer(player).getData().setLives(0);
                     return;
                 }
@@ -471,7 +470,7 @@ public class MatchListener implements Listener {
             AbstractMatch match = profile.getMatch();
 
             if (match.getMatchState() == EnumMatchState.STARTING || match.getMatchState() == EnumMatchState.RUNNING) {
-                if (profile.getMatch().getMatchKit().isSettingEnabled(KitSettingLivesImpl.class)) {
+                if (profile.getMatch().getKit().isSettingEnabled(KitSettingLivesImpl.class)) {
                     profile.getMatch().getGamePlayer(player).getData().setLives(0);
                     return;
                 }

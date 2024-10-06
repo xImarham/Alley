@@ -6,8 +6,6 @@ import me.emmy.alley.Alley;
 import me.emmy.alley.arena.Arena;
 import me.emmy.alley.hotbar.enums.HotbarType;
 import me.emmy.alley.kit.Kit;
-import me.emmy.alley.kit.settings.impl.KitSettingLivesImpl;
-import me.emmy.alley.locale.ErrorMessage;
 import me.emmy.alley.match.enums.EnumMatchState;
 import me.emmy.alley.match.impl.MatchRegularImpl;
 import me.emmy.alley.match.player.GameParticipant;
@@ -27,8 +25,6 @@ import me.emmy.alley.util.chat.Logger;
 import net.md_5.bungee.api.chat.*;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
@@ -50,23 +46,23 @@ public abstract class AbstractMatch {
     private EnumMatchState matchState = EnumMatchState.STARTING;
     private MatchRunnable matchRunnable;
     private List<Snapshot> snapshots;
-    private final Queue matchQueue;
-    private final Arena matchArena;
-    private final Kit matchKit;
+    private final Queue queue;
+    private final Arena arena;
+    private final Kit kit;
     private long startTime;
     private boolean ranked;
 
     /**
      * Constructor for the AbstractMatch class.
      *
-     * @param matchQueue The queue of the match.
-     * @param matchKit   The kit of the match.
-     * @param matchArena The matchArena of the match.
+     * @param queue The queue of the match.
+     * @param kit   The kit of the match.
+     * @param arena The matchArena of the match.
      */
-    public AbstractMatch(Queue matchQueue, Kit matchKit, Arena matchArena, boolean ranked) {
-        this.matchQueue = matchQueue;
-        this.matchKit = matchKit;
-        this.matchArena = matchArena;
+    public AbstractMatch(Queue queue, Kit kit, Arena arena, boolean ranked) {
+        this.queue = queue;
+        this.kit = kit;
+        this.arena = arena;
         this.ranked = ranked;
         this.snapshots = new ArrayList<>();
         Alley.getInstance().getMatchRepository().getMatches().add(this);
@@ -111,8 +107,8 @@ public abstract class AbstractMatch {
             gamePlayer.setDead(false);
             if (!gamePlayer.isDisconnected()) {
                 PlayerUtil.reset(player);
-                player.getInventory().setArmorContents(getMatchKit().getArmor());
-                player.getInventory().setContents(getMatchKit().getInventory());
+                player.getInventory().setArmorContents(getKit().getArmor());
+                player.getInventory().setContents(getKit().getInventory());
             }
         }
     }
@@ -289,7 +285,7 @@ public abstract class AbstractMatch {
      *
      * @param message The message to notify.
      */
-    private void notifyParticipants(String message) {
+    protected void notifyParticipants(String message) {
         getParticipants().forEach(gameParticipant -> gameParticipant.getPlayers().forEach(uuid -> {
             Player player = Alley.getInstance().getServer().getPlayer(uuid.getUuid());
             if (player != null) {
@@ -303,7 +299,7 @@ public abstract class AbstractMatch {
      *
      * @param message The message to notify.
      */
-    private void notifySpectators(String message) {
+    protected void notifySpectators(String message) {
         if (getMatchSpectators() == null) {
             return;
         }
@@ -318,19 +314,7 @@ public abstract class AbstractMatch {
      *
      * @param player The player that respawned.
      */
-    public void handleRespawn(Player player) {
-        Logger.debug("Handling respawn for " + player.getName());
-        PlayerUtil.reset(player);
-
-        Location spawnLocation = getParticipants().get(0).containsPlayer(player.getUniqueId()) ? getMatchArena().getPos1() : getMatchArena().getPos2();
-        player.teleport(spawnLocation);
-
-        player.getInventory().setArmorContents(getMatchKit().getArmor());
-        player.getInventory().setContents(getMatchKit().getInventory());
-
-        notifyParticipants("&b" + player.getName() + " &ahas respawned");
-        notifySpectators("&b" + player.getName() + " &ahas respawned");
-    }
+    public abstract void handleRespawn(Player player);
 
     /**
      * Handles the disconnect of a player.
@@ -348,7 +332,6 @@ public abstract class AbstractMatch {
             }
         }
     }
-
 
     /**
      * Handles the start of a round.
@@ -413,12 +396,12 @@ public abstract class AbstractMatch {
         profile.setMatch(this);
         Alley.getInstance().getHotbarRepository().applyHotbarItems(player, HotbarType.SPECTATOR);
 
-        if (matchArena.getCenter() == null) {
+        if (arena.getCenter() == null) {
             player.sendMessage(CC.translate("&cThe arena is not set up for spectating"));
             return;
         }
 
-        player.teleport(matchArena.getCenter());
+        player.teleport(arena.getCenter());
         player.spigot().setCollidesWithEntities(false);
         player.setAllowFlight(true);
         player.setFlying(true);

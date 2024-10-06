@@ -10,6 +10,7 @@ import me.emmy.alley.match.player.GameParticipant;
 import me.emmy.alley.match.player.impl.MatchGamePlayerImpl;
 import me.emmy.alley.profile.Profile;
 import me.emmy.alley.queue.Queue;
+import me.emmy.alley.util.PlayerUtil;
 import me.emmy.alley.util.elo.EloManager;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -50,7 +51,7 @@ public class MatchRegularImpl extends AbstractMatch {
     public void setupPlayer(Player player) {
         super.setupPlayer(player);
 
-        Location spawnLocation = participantA.containsPlayer(player.getUniqueId()) ? getMatchArena().getPos1() : getMatchArena().getPos2();
+        Location spawnLocation = participantA.containsPlayer(player.getUniqueId()) ? getArena().getPos1() : getArena().getPos2();
         player.teleport(spawnLocation);
     }
 
@@ -137,8 +138,8 @@ public class MatchRegularImpl extends AbstractMatch {
      */
     private void handleWinner(int elo) {
         Profile winnerProfile = Alley.getInstance().getProfileRepository().getProfile(winner.getPlayer().getUuid());
-        winnerProfile.getProfileData().getKitData().get(getMatchKit().getName()).setElo(elo);
-        winnerProfile.getProfileData().getKitData().get(getMatchKit().getName()).incrementWins();
+        winnerProfile.getProfileData().getKitData().get(getKit().getName()).setElo(elo);
+        winnerProfile.getProfileData().getKitData().get(getKit().getName()).incrementWins();
         winnerProfile.getProfileData().getProfileDivisionData().updateEloAndDivision(winnerProfile);
     }
 
@@ -149,8 +150,8 @@ public class MatchRegularImpl extends AbstractMatch {
      */
     private void handleLoser(int elo) {
         Profile loserProfile = Alley.getInstance().getProfileRepository().getProfile(loser.getPlayer().getUuid());
-        loserProfile.getProfileData().getKitData().get(getMatchKit().getName()).setElo(elo);
-        loserProfile.getProfileData().getKitData().get(getMatchKit().getName()).incrementLosses();
+        loserProfile.getProfileData().getKitData().get(getKit().getName()).setElo(elo);
+        loserProfile.getProfileData().getKitData().get(getKit().getName()).incrementLosses();
         loserProfile.getProfileData().getProfileDivisionData().updateEloAndDivision(loserProfile);
     }
 
@@ -167,5 +168,12 @@ public class MatchRegularImpl extends AbstractMatch {
     @Override
     public boolean canEndMatch() {
         return true;
+    }
+
+    @Override
+    public void handleRespawn(Player player) {
+        player.spigot().respawn();
+        PlayerUtil.reset(player);
+
     }
 }

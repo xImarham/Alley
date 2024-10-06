@@ -3,7 +3,6 @@ package me.emmy.alley.match;
 import lombok.experimental.UtilityClass;
 import me.emmy.alley.match.player.GameParticipant;
 import me.emmy.alley.match.player.impl.MatchGamePlayerImpl;
-import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -32,8 +31,8 @@ public class MatchUtility {
             Player playerB = participantB.getPlayer().getPlayer();
 
             Location playerLocation = player.getLocation();
-            Location locationA = match.getMatchArena().getPos1();
-            Location locationB = match.getMatchArena().getPos2();
+            Location locationA = match.getArena().getPos1();
+            Location locationB = match.getArena().getPos2();
 
             if (player.equals(playerA)) {
                 if (playerLocation.getBlockX() != locationA.getBlockX() || playerLocation.getBlockZ() != locationA.getBlockZ()) {
