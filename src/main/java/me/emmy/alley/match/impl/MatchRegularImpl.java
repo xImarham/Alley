@@ -174,6 +174,5 @@ public class MatchRegularImpl extends AbstractMatch {
     public void handleRespawn(Player player) {
         player.spigot().respawn();
         PlayerUtil.reset(player);
-
     }
 }

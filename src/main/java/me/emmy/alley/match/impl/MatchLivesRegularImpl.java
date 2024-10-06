@@ -128,7 +128,6 @@ public class MatchLivesRegularImpl extends MatchRegularImpl {
 
     @Override
     public void handleRespawn(Player player) {
-        Logger.debug("Handling respawn for " + player.getName());
         PlayerUtil.reset(player);
 
         Location spawnLocation = getParticipants().get(0).containsPlayer(player.getUniqueId()) ? getArena().getPos1() : getArena().getPos2();

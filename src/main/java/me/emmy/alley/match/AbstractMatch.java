@@ -6,6 +6,7 @@ import me.emmy.alley.Alley;
 import me.emmy.alley.arena.Arena;
 import me.emmy.alley.hotbar.enums.HotbarType;
 import me.emmy.alley.kit.Kit;
+import me.emmy.alley.kit.settings.impl.KitSettingLivesImpl;
 import me.emmy.alley.match.enums.EnumMatchState;
 import me.emmy.alley.match.impl.MatchRegularImpl;
 import me.emmy.alley.match.player.GameParticipant;
@@ -17,11 +18,12 @@ import me.emmy.alley.profile.cosmetic.impl.killeffects.AbstractKillEffect;
 import me.emmy.alley.profile.cosmetic.impl.killeffects.KillEffectRepository;
 import me.emmy.alley.profile.cosmetic.impl.soundeffect.AbstractSoundEffect;
 import me.emmy.alley.profile.cosmetic.impl.soundeffect.SoundEffectRepository;
+import me.emmy.alley.profile.cosmetic.interfaces.ICosmeticRepository;
+import me.emmy.alley.profile.cosmetic.repository.CosmeticRepository;
 import me.emmy.alley.profile.enums.EnumProfileState;
 import me.emmy.alley.queue.Queue;
-import me.emmy.alley.util.chat.CC;
 import me.emmy.alley.util.PlayerUtil;
-import me.emmy.alley.util.chat.Logger;
+import me.emmy.alley.util.chat.CC;
 import net.md_5.bungee.api.chat.*;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -191,73 +193,111 @@ public abstract class AbstractMatch {
             return;
         }
 
-        gamePlayer.setDead(true);
-
+        setParticipantAsDead(player, gamePlayer);
         notifySpectators(player.getName() + " has died");
         notifyParticipants(player.getName() + " has died");
 
         player.setVelocity(new Vector());
 
+        handleRoundOrRespawn(player);
+
+        if (getParticipants().size() == 2) {
+            handleFinalMatchResult();
+        }
+    }
+
+    /**
+     * Handles the round or respawn of a player.
+     *
+     * @param player The player to handle the round or respawn of.
+     */
+    private void handleRoundOrRespawn(Player player) {
         if (canEndRound()) {
-            Logger.debug("Can the round end? " + canEndRound());
             matchState = EnumMatchState.ENDING_ROUND;
-            Logger.debug("Handling round end");
             handleRoundEnd();
 
             if (canEndMatch()) {
-                Logger.debug("Can the match end? " + canEndMatch());
                 Player killer = PlayerUtil.getLastAttacker(player);
                 if (killer != null) {
                     handleEffects(player, killer);
                 }
                 matchState = EnumMatchState.ENDING_MATCH;
             }
-            Logger.debug("Setting stage to 4");
             getMatchRunnable().setStage(4);
         } else {
-            Logger.debug("Can the round end? " + canEndRound());
-            Logger.debug("Handling respawn for " + player.getName());
             handleRespawn(player);
         }
+    }
 
-        if (getParticipants().size() == 2) {
-            GameParticipant<MatchGamePlayerImpl> participantA = getParticipants().get(0);
-            GameParticipant<MatchGamePlayerImpl> participantB = getParticipants().get(1);
+    private void handleFinalMatchResult() {
+        GameParticipant<MatchGamePlayerImpl> participantA = getParticipants().get(0);
+        GameParticipant<MatchGamePlayerImpl> participantB = getParticipants().get(1);
 
-            String winner;
-            String loser;
+        String winner;
+        String loser;
 
-            if (participantA.getPlayers().stream().allMatch(MatchGamePlayerImpl::isDead) && !participantB.getPlayers().stream().allMatch(MatchGamePlayerImpl::isDead)) {
-                winner = participantB.getPlayers().get(0).getPlayer().getName();
-                loser = participantA.getPlayers().get(0).getPlayer().getName();
-            } else if (!participantA.getPlayers().stream().allMatch(MatchGamePlayerImpl::isDead) && participantB.getPlayers().stream().allMatch(MatchGamePlayerImpl::isDead)) {
-                winner = participantA.getPlayers().get(0).getPlayer().getName();
-                loser = participantB.getPlayers().get(0).getPlayer().getName();
+        if (isParticipantDead(participantA) && !isParticipantDead(participantB)) {
+            winner = participantB.getPlayers().get(0).getPlayer().getName();
+            loser = participantA.getPlayers().get(0).getPlayer().getName();
+        } else if (!isParticipantDead(participantA) && isParticipantDead(participantB)) {
+            winner = participantA.getPlayers().get(0).getPlayer().getName();
+            loser = participantB.getPlayers().get(0).getPlayer().getName();
+        } else {
+            winner = "No winner, it's a draw!";
+            loser = "No loser, it's a draw!";
+        }
+
+        sendMatchResultMessage(winner, loser);
+    }
+
+    /**
+     * Checks if a participant is dead.
+     *
+     * @param participant The participant to check.
+     * @return True if the participant is dead.
+     */
+    private boolean isParticipantDead(GameParticipant<MatchGamePlayerImpl> participant) {
+        return participant.getPlayers().stream().allMatch(MatchGamePlayerImpl::isDead);
+    }
+
+    /**
+     * Sends a match result message to the winner and loser.
+     *
+     * @param winner The winner of the match.
+     * @param loser  The loser of the match.
+     */
+    private void sendMatchResultMessage(String winner, String loser) {
+        TextComponent winnerComponent = new TextComponent(CC.translate(" &fWinner: &a" + winner));
+        winnerComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/inventory " + winner));
+        winnerComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(ChatColor.GREEN + "Click to view " + winner + "'s inventory").create()));
+
+        TextComponent loserComponent = new TextComponent(CC.translate(" &fLoser: &c" + loser));
+        loserComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/inventory " + loser));
+        loserComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(ChatColor.RED + "Click to view " + loser + "'s inventory").create()));
+
+        this.createSnapshot(Bukkit.getPlayer(loser), Bukkit.getPlayer(winner));
+
+        sendMessage("");
+        sendMessage(CC.MENU_BAR);
+        TextComponent message = new TextComponent(CC.translate("Match Results:"));
+        message.addExtra(new TextComponent("\n"));
+        message.addExtra(winnerComponent);
+        message.addExtra(new TextComponent("\n"));
+        message.addExtra(loserComponent);
+        sendSpigotMessage(message);
+        sendMessage(CC.MENU_BAR);
+        sendMessage("");
+    }
+
+    private void setParticipantAsDead(Player player, MatchGamePlayerImpl gamePlayer) {
+        if (getKit().isSettingEnabled(KitSettingLivesImpl.class)) {
+            if (getParticipant(player).getPlayer().getData().getLives() <= 0) {
+                gamePlayer.setDead(true);
             } else {
-                winner = "No winner, it's a draw!";
-                loser = "No loser, it's a draw!";
+                getParticipant(player).getPlayers().forEach(participant -> participant.setDead(false));
             }
-
-            TextComponent winnerComponent = new TextComponent(CC.translate(" &fWinner: &a" + winner));
-            winnerComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/inventory " + winner));
-            winnerComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(ChatColor.GREEN + "Click to view " + winner + "'s inventory").create()));
-
-            TextComponent loserComponent = new TextComponent(CC.translate(" &fLoser: &c" + loser));
-            loserComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/inventory " + loser));
-            loserComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(ChatColor.RED + "Click to view " + loser + "'s inventory").create()));
-
-            this.createSnapshot(Bukkit.getPlayer(loser), Bukkit.getPlayer(winner));
-
-            sendMessage("");
-            sendMessage(CC.MENU_BAR);
-            TextComponent message = new TextComponent(CC.translate("Match Results:"));
-            message.addExtra(new TextComponent("\n"));
-            message.addExtra(winnerComponent);
-            message.addExtra(new TextComponent("\n"));
-            message.addExtra(loserComponent);
-            sendSpigotMessage(message);
-            sendMessage(CC.MENU_BAR);
-            sendMessage("");
+        } else {
+            gamePlayer.setDead(true);
         }
     }
 
@@ -270,18 +310,24 @@ public abstract class AbstractMatch {
     private void handleEffects(Player player, Player killer) {
         Profile profile = Alley.getInstance().getProfileRepository().getProfile(killer.getUniqueId());
         String selectedKillEffectName = profile.getProfileData().getProfileCosmeticData().getSelectedKillEffect();
-        KillEffectRepository killEffectRepository = new KillEffectRepository();
-        AbstractKillEffect selectedKillEffect = killEffectRepository.getByName(selectedKillEffectName);
-        selectedKillEffect.spawnEffect(player);
-
         String selectedSoundEffectName = profile.getProfileData().getProfileCosmeticData().getSelectedSoundEffect();
-        SoundEffectRepository soundEffectRepository = new SoundEffectRepository();
-        AbstractSoundEffect selectedSoundEffect = soundEffectRepository.getByName(selectedSoundEffectName);
-        selectedSoundEffect.spawnEffect(killer);
+
+        CosmeticRepository cosmeticRepository = Alley.getInstance().getCosmeticRepository();
+        for (ICosmeticRepository<?> repository : cosmeticRepository.getCosmeticRepositories().values()) {
+            if (repository instanceof KillEffectRepository) {
+                KillEffectRepository killEffectRepository = (KillEffectRepository) repository;
+                AbstractKillEffect killEffect = killEffectRepository.getByName(selectedKillEffectName);
+                killEffect.spawnEffect(player);
+            } else if (repository instanceof SoundEffectRepository) {
+                SoundEffectRepository soundEffectRepository = (SoundEffectRepository) repository;
+                AbstractSoundEffect soundEffect = soundEffectRepository.getByName(selectedSoundEffectName);
+                soundEffect.spawnEffect(killer);
+            }
+        }
     }
 
     /**
-     * Notifies the participants of a message.
+     * Notifies the participants with a message.
      *
      * @param message The message to notify.
      */
@@ -295,7 +341,7 @@ public abstract class AbstractMatch {
     }
 
     /**
-     * Notifies the spectators of a message.
+     * Notifies the spectators with a message.
      *
      * @param message The message to notify.
      */
@@ -308,13 +354,6 @@ public abstract class AbstractMatch {
                 .filter(Objects::nonNull)
                 .forEach(player -> player.sendMessage(CC.translate(message)));
     }
-
-    /**
-     * Handles the respawn of a player.
-     *
-     * @param player The player that respawned.
-     */
-    public abstract void handleRespawn(Player player);
 
     /**
      * Handles the disconnect of a player.
@@ -346,11 +385,6 @@ public abstract class AbstractMatch {
      */
     public void handleRoundEnd() {
         startTime = System.currentTimeMillis() - startTime;
-        if (!canEndMatch()) {
-            matchState = EnumMatchState.ENDING_ROUND;
-            matchRunnable.setStage(3);
-        }
-
         getParticipants().forEach(gameParticipant -> {
             if (gameParticipant.isAllDead()) {
                 gameParticipant.getPlayers().forEach(gamePlayer -> {
@@ -367,6 +401,8 @@ public abstract class AbstractMatch {
         if (match.getParticipantA().getPlayers().size() == 1 && match.getParticipantB().getPlayers().size() == 1) {
             updateSnapshots(match);
         }
+
+        // Todo: send round end messages to players
     }
 
     /**
@@ -512,6 +548,20 @@ public abstract class AbstractMatch {
             }
         });
     }
+
+    public GameParticipant<MatchGamePlayerImpl> getParticipant(Player player) {
+        return getParticipants().stream()
+                .filter(gameParticipant -> gameParticipant.containsPlayer(player.getUniqueId()))
+                .findFirst()
+                .orElse(null);
+    }
+
+    /**
+     * Handles the respawn of a player.
+     *
+     * @param player The player that respawned.
+     */
+    public abstract void handleRespawn(Player player);
 
     /**
      * Gets the participants of the match.
