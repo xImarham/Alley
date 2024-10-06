@@ -1,6 +1,5 @@
 package me.emmy.alley.game.match.player.data;
 
-import jdk.nashorn.internal.runtime.regexp.joni.Config;
 import lombok.Getter;
 import lombok.Setter;
 import me.emmy.alley.config.ConfigHandler;
