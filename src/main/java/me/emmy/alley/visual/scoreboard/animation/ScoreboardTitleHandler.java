@@ -44,5 +44,4 @@ public class ScoreboardTitleHandler {
             if (i == animation.size()) i = 0;
         }, ticks, ticks);
     }
-
 }

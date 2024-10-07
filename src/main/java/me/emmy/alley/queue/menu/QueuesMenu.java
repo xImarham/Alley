@@ -23,7 +23,6 @@ import java.util.Map;
  * @project Alley
  * @date 23/05/2024 - 01:28
  */
-
 @AllArgsConstructor
 public class QueuesMenu extends Menu {
 
@@ -75,7 +74,6 @@ public class QueuesMenu extends Menu {
 
     @AllArgsConstructor
     public static class QueuesButton extends Button {
-
         private String displayName;
         private Material material;
         private int durability;

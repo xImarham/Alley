@@ -24,7 +24,6 @@ import java.util.Map;
  * @project Alley
  * @date 23/05/2024 - 01:28
  */
-
 public class RankedMenu extends Menu {
 
     @Override

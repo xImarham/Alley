@@ -22,7 +22,6 @@ import java.util.UUID;
 @Getter
 @Setter
 public class Profile {
-
     private EnumLeaderboardType leaderboardType = EnumLeaderboardType.RANKED;
     public static final int DEFAULT_COINS = 100;
     public static final int DEFAULT_ELO = 1000;

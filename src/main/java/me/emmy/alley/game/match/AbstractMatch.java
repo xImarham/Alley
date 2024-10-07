@@ -542,6 +542,11 @@ public abstract class AbstractMatch {
         });
     }
 
+    /**
+     * Sends a spigot (clickable) message to all participants.
+     *
+     * @param message The message to send.
+     */
     public void sendSpigotMessage(BaseComponent message) {
         getParticipants().forEach(gameParticipant -> gameParticipant.getPlayers().forEach(uuid -> {
             Player player = Alley.getInstance().getServer().getPlayer(uuid.getUuid());

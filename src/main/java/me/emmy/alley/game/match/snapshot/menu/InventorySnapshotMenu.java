@@ -9,6 +9,11 @@ import org.bukkit.entity.Player;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * @author Emmy
+ * @project Alley
+ * @date 07/10/2024 - 21:16
+ */
 @AllArgsConstructor
 public class InventorySnapshotMenu extends Menu {
 

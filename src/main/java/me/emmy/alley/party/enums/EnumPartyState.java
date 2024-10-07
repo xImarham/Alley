@@ -9,4 +9,3 @@ public enum EnumPartyState {
     ACTIVE,
     DISBANDED
 }
-

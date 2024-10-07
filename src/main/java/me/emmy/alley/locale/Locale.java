@@ -46,6 +46,12 @@ public enum Locale {
 
     private final String configName, configString;
 
+    /**
+     * Constructor for the Locale class.
+     *
+     * @param configName   The name of the config.
+     * @param configString The string of the config.
+     */
     Locale(String configName, String configString) {
         this.configName = configName;
         this.configString = configString;

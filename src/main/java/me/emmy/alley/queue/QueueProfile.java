@@ -14,7 +14,6 @@ import java.util.UUID;
  */
 @Data
 public class QueueProfile {
-
     private final int TICK_THRESHOLD = 6;
     private final int RANGE_INCREMENT = 10;
     private final int MAX_RANGE = 50;

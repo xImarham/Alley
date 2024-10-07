@@ -15,7 +15,6 @@ import java.util.UUID;
 @Getter
 @Setter
 public class Snapshot {
-
     private final String username;
     private final UUID uuid;
     private double health;

@@ -2,9 +2,7 @@ package me.emmy.alley.kit;
 
 import lombok.Getter;
 import lombok.Setter;
-import me.emmy.alley.Alley;
 import me.emmy.alley.kit.settings.KitSetting;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
@@ -19,12 +17,12 @@ import java.util.List;
 @Getter
 @Setter
 public class Kit {
-
     private final List<KitSetting> kitSettings;
 
     private String name;
     private String displayName;
     private String description;
+
     private boolean enabled;
 
     private int unrankedslot;
@@ -33,6 +31,7 @@ public class Kit {
 
     private ItemStack[] inventory;
     private ItemStack[] armor;
+
     private Material icon;
     private int iconData;
 

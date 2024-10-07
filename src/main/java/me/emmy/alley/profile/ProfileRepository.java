@@ -19,7 +19,6 @@ import java.util.UUID;
 @Getter
 @Setter
 public class ProfileRepository {
-
     private final HashMap<UUID, Profile> profiles = new HashMap<>();
     public MongoCollection<Document> collection;
     public IProfile iProfile;

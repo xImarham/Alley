@@ -18,7 +18,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 @Getter
 @Setter
 public class MatchRunnable extends BukkitRunnable {
-
     private final AbstractMatch match;
     private int stage;
 

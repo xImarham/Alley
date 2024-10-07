@@ -22,7 +22,6 @@ import java.util.UUID;
 @Getter
 @Setter
 public class Queue {
-
     private final LinkedList<QueueProfile> profiles = new LinkedList<>();
     private final UUID uuid = UUID.randomUUID();
     private final boolean ranked;

@@ -30,10 +30,6 @@ import java.util.Optional;
  * @date 5/21/2024
  */
 public class QueueRunnable implements Runnable {
-
-    /**
-     * Method to run the queue runnable.
-     */
     @Override
     public void run() {
         Alley.getInstance().getQueueRepository().getQueues()

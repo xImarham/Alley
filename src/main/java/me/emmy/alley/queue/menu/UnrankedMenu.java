@@ -22,9 +22,8 @@ import java.util.Map;
 /**
  * @author Emmy
  * @project Alley
- * Discord: dsc.gg/emmiesa
+ * @date 23/05/2024 - 10:28
  */
-
 public class UnrankedMenu extends Menu {
 
     @Override
