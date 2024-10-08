@@ -25,7 +25,6 @@ import java.util.Map;
  * @date 23/05/2024 - 10:28
  */
 public class UnrankedMenu extends Menu {
-
     @Override
     public String getTitle(Player player) {
         return "Unranked Queue";

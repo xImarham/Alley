@@ -98,6 +98,8 @@ public class HotbarRepository {
         return hotbarItemsByType.values().stream()
                 .flatMap(List::stream)
                 .filter(i -> i.getItemStack().isSimilar(item))
+                //.filter(i -> i.getItemStack().equals(item))
+                //.filter(i -> i.getItemStack().getDurability() == item.getDurability())
                 .findFirst()
                 .orElse(null);
     }

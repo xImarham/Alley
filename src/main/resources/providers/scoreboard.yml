@@ -72,7 +72,7 @@ scoreboard:
         - "&fOpponent: &b{opponent}"
         - "&rDuration: &b{duration}"
         - ""
-        - "&fHits: &b{difference}"
+        - "&f&lHits: &b{difference}"
         - " &fYou: &b{player-hits}"
         - " &fThem: &b{opponent-hits}"
         - " &f{combo}"

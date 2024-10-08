@@ -1,10 +1,10 @@
-package me.emmy.alley.queue.menu;
+package me.emmy.alley.party.menu.event.impl;
 
 import lombok.AllArgsConstructor;
-import me.emmy.alley.queue.Queue;
 import me.emmy.alley.api.menu.Button;
 import me.emmy.alley.api.menu.Menu;
 import me.emmy.alley.api.menu.button.BackButton;
+import me.emmy.alley.party.menu.event.PartyEventMenu;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
@@ -13,31 +13,30 @@ import java.util.Map;
 /**
  * @author Emmy
  * @project Alley
- * @date 14/09/2024 - 23:58
+ * @date 08/10/2024 - 18:39
  */
 @AllArgsConstructor
-public class BotQueueMenu extends Menu {
-
-    private final Queue queue;
+public class PartyEventFFAMenu extends Menu {
+    private final BackButton backButton = new BackButton(new PartyEventMenu());
 
     @Override
     public String getTitle(Player player) {
-        return "Bot Queue";
+        return "&c&lStill in development";
     }
 
     @Override
     public Map<Integer, Button> getButtons(Player player) {
-        Map<Integer, Button> buttons = new HashMap<>();
+        final Map<Integer, Button> buttons = new HashMap<>();
 
-        buttons.put(0, new BackButton(new QueuesMenu()));
+        buttons.put(0, backButton);
 
-        addBorder(buttons, (byte) 15, 5);
+        addGlass(buttons, 15);
 
         return buttons;
     }
 
     @Override
     public int getSize() {
-        return 9 * 5;
+        return 3 * 9;
     }
 }

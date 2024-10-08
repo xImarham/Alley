@@ -3,13 +3,13 @@ package me.emmy.alley.hotbar.listener;
 import me.emmy.alley.Alley;
 import me.emmy.alley.hotbar.HotbarItem;
 import me.emmy.alley.hotbar.enums.HotbarType;
-import me.emmy.alley.party.menu.PartyEventMenu;
+import me.emmy.alley.party.menu.duel.DuelOtherPartyMenu;
+import me.emmy.alley.party.menu.event.PartyEventMenu;
 import me.emmy.alley.visual.leaderboard.menu.personal.StatisticsMenu;
 import me.emmy.alley.game.match.menu.CurrentMatchesMenu;
 import me.emmy.alley.profile.Profile;
 import me.emmy.alley.queue.menu.QueuesMenu;
 import me.emmy.alley.queue.menu.RankedMenu;
-import me.emmy.alley.util.chat.CC;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -81,8 +81,13 @@ public class HotbarListener implements Listener {
                                 break;
                             case OPTIONS_DISABLE:
                                 Alley.getInstance().getHotbarRepository().applyHotbarItems(player, HotbarType.LOBBY);
+                                break;
                             case START_PARTY_EVENT:
                                 new PartyEventMenu().openMenu(player);
+                                break;
+                            case FIGHT_OTHER_PARTY:
+                                new DuelOtherPartyMenu().openMenu(player);
+                                break;
                         }
                         break;
                 }

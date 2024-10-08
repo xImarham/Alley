@@ -37,8 +37,8 @@ public enum HotbarItems {
 
     DUO_UNRANKED_QUEUE("&bUnranked Duo Queue &7(Right Click)", Material.IRON_SWORD, 0, 0, "unrankedduo", HotbarType.PARTY),
     KIT_EDITOR_PARTY("&bKit Editor &7(Right Click)", Material.BOOK, 0, 1, "kiteditor", HotbarType.PARTY),
-    START_PARTY_EVENT("&bStart Party Event &7(Right Click)", Material.IRON_AXE, 0, 4, "party event", HotbarType.PARTY),
-    FIGHT_OTHER_PARTY("&bFight Other Party &7(Right Click)", Material.DIAMOND_AXE, 0, 5, "party duel", HotbarType.PARTY),
+    START_PARTY_EVENT("&bStart Party Event &7(Right Click)", Material.IRON_AXE, 0, 4, "", HotbarType.PARTY),
+    FIGHT_OTHER_PARTY("&bFight Other Party &7(Right Click)", Material.DIAMOND_AXE, 0, 5, "", HotbarType.PARTY),
     PARTY_INFO("&bParty Info &7(Right Click)", Material.PAPER, 0, 7, "party info", HotbarType.PARTY),
     PARTY_LEAVE("&cLeave Party &7(Right Click)", Material.REDSTONE, 0, 8, "party leave", HotbarType.PARTY),
 

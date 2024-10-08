@@ -1,10 +1,10 @@
-package me.emmy.alley.party.menu;
+package me.emmy.alley.party.menu.event;
 
 import lombok.AllArgsConstructor;
 import me.emmy.alley.api.menu.Button;
 import me.emmy.alley.api.menu.Menu;
-import me.emmy.alley.party.menu.impl.PartyEventFFAMenu;
-import me.emmy.alley.party.menu.impl.PartyEventSplitMenu;
+import me.emmy.alley.party.menu.event.impl.PartyEventFFAMenu;
+import me.emmy.alley.party.menu.event.impl.PartyEventSplitMenu;
 import me.emmy.alley.util.item.ItemBuilder;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -29,7 +29,7 @@ public class PartyEventMenu extends Menu {
     public Map<Integer, Button> getButtons(Player player) {
         final Map<Integer, Button> buttons = new HashMap<>();
 
-        buttons.put(1, new PartyEventButton(
+        buttons.put(11, new PartyEventButton(
                 Material.DIAMOND_SWORD, 0,
                 "&b&lTeam split",
                 Arrays.asList(
@@ -37,22 +37,22 @@ public class PartyEventMenu extends Menu {
                         "&f2 teams and fight",
                         "&fagainst each other.",
                         "",
-                        "&bClick to select a kit."
+                        "&aClick to select a kit."
                 )
         ));
 
-        buttons.put(4, new PartyEventButton(
+        buttons.put(13, new PartyEventButton(
                 Material.GOLD_AXE, 0,
                 "&b&lFree for all",
                 Arrays.asList(
                         "&fEvery player fights",
                         "&fagainst each other.",
                         "",
-                        "&bClick to select a kit."
+                        "&aClick to select a kit."
                 )
         ));
 
-        buttons.put(7, new PartyEventButton(
+        buttons.put(15, new PartyEventButton(
                 Material.REDSTONE, 0,
                 "&cBest of 3 Sumo",
                 Arrays.asList(
@@ -63,7 +63,14 @@ public class PartyEventMenu extends Menu {
                 )
         ));
 
+        addGlass(buttons, 15);
+
         return buttons;
+    }
+
+    @Override
+    public int getSize() {
+        return 3 * 9;
     }
 
     @AllArgsConstructor
@@ -79,6 +86,7 @@ public class PartyEventMenu extends Menu {
                     .name(name)
                     .lore(lore)
                     .durability(durability)
+                    .hideMeta()
                     .build();
         }
 
