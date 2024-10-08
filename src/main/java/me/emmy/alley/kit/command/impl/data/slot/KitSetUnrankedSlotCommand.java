@@ -22,7 +22,7 @@ public class KitSetUnrankedSlotCommand extends BaseCommand {
         String[] args = command.getArgs();
 
         if (command.length() < 2) {
-            player.sendMessage(CC.translate("&cUsage: /kit setunrankedslot (kit-name) (slot)"));
+            player.sendMessage(CC.translate("&6Usage: &e/kit setunrankedslot &b<kitName> <slot>"));
             return;
         }
 

@@ -8,6 +8,8 @@ import me.emmy.alley.kit.KitRepository;
 import me.emmy.alley.util.chat.CC;
 import org.bukkit.command.CommandSender;
 
+import java.util.Arrays;
+
 /**
  * @author Emmy
  * @project Alley
@@ -27,7 +29,7 @@ public class KitSetDisclaimerCommand extends BaseCommand {
 
         KitRepository kitRepository = Alley.getInstance().getKitRepository();
         String kitName = args[0];
-        String disclaimer = args[1];
+        String disclaimer = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
 
         if (kitRepository.getKit(kitName) == null) {
             sender.sendMessage(CC.translate("&cA kit with that name does not exist!"));

@@ -21,7 +21,7 @@ public class KitSetInvCommand extends BaseCommand {
         Player sender = args.getPlayer();
 
         if (args.length() < 1) {
-            sender.sendMessage(CC.translate("&cUsage: /kit setinventory (kitName)"));
+            sender.sendMessage(CC.translate("&6Usage: &e/kit setinventory &b<kitName>"));
             return;
         }
 

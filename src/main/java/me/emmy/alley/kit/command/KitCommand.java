@@ -11,10 +11,7 @@ import me.emmy.alley.kit.command.impl.data.slot.KitSetEditorSlotCommand;
 import me.emmy.alley.kit.command.impl.data.slot.KitSetRankedSlotCommand;
 import me.emmy.alley.kit.command.impl.data.slot.KitSetSlotAllCommand;
 import me.emmy.alley.kit.command.impl.data.slot.KitSetUnrankedSlotCommand;
-import me.emmy.alley.kit.command.impl.manage.KitCreateCommand;
-import me.emmy.alley.kit.command.impl.manage.KitDeleteCommand;
-import me.emmy.alley.kit.command.impl.manage.KitListCommand;
-import me.emmy.alley.kit.command.impl.manage.KitViewCommand;
+import me.emmy.alley.kit.command.impl.manage.*;
 import me.emmy.alley.kit.command.impl.settings.KitSetSettingCommand;
 import me.emmy.alley.kit.command.impl.settings.KitSettingsCommand;
 import me.emmy.alley.kit.command.impl.storage.KitSaveAllCommand;
@@ -54,6 +51,7 @@ public class KitCommand extends BaseCommand {
         new KitSettingsCommand();
         new KitSetIconCommand();
         new KitViewCommand();
+        new KitViewSettingsCommand();
     }
 
     @Completer(name = "kit")
@@ -65,6 +63,7 @@ public class KitCommand extends BaseCommand {
             completion.add("settings");
             completion.add("save");
             completion.add("view");
+            completion.add("viewsettings");
             completion.add("delete");
             completion.add("create");
             completion.add("seticon");
@@ -94,6 +93,7 @@ public class KitCommand extends BaseCommand {
         sender.sendMessage(CC.translate(" &f● &b/kit settings &7| View all kit settings"));
         sender.sendMessage(CC.translate(" &f● &b/kit save &8(&7kitName&8) &7| Save a kit"));
         sender.sendMessage(CC.translate(" &f● &b/kit view &8(&7kitName&8) &7| View a kit"));
+        sender.sendMessage(CC.translate(" &f● &b/kit viewsettings &8(&7kitName&8) &7| View kit settings"));
         sender.sendMessage(CC.translate(" &f● &b/kit delete &8(&7kitName&8) &7| Delete a kit"));
         sender.sendMessage(CC.translate(" &f● &b/kit create &8(&7kitName&8) &7| Create a kit"));
         sender.sendMessage(CC.translate(" &f● &b/kit seticon &8(&7kitName&8) &7| Set icon of a kit"));

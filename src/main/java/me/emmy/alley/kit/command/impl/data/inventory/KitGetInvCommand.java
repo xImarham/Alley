@@ -22,7 +22,7 @@ public class KitGetInvCommand extends BaseCommand {
         String[] args = command.getArgs();
 
         if (command.length() < 1) {
-            sender.sendMessage(CC.translate("&cUsage: /kit getinventory (kitName)"));
+            sender.sendMessage(CC.translate("&6Usage: &e/kit getinventory &b<kitName>"));
             return;
         }
 

@@ -22,7 +22,7 @@ public class KitSetSlotAllCommand extends BaseCommand {
         String[] args = command.getArgs();
 
         if (args.length <1) {
-            sender.sendMessage(CC.translate("&cUsage: /kit setslotall (kit-name) (slot)"));
+            sender.sendMessage(CC.translate("&6Usage: &e/kit setslotall &b<kitName> <slot>"));
             return;
         }
 

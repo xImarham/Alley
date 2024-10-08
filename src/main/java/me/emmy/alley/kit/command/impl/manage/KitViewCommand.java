@@ -1,35 +1,37 @@
 package me.emmy.alley.kit.command.impl.manage;
 
 import me.emmy.alley.Alley;
-import me.emmy.alley.kit.Kit;
-import me.emmy.alley.util.chat.CC;
 import me.emmy.alley.api.command.BaseCommand;
 import me.emmy.alley.api.command.Command;
 import me.emmy.alley.api.command.CommandArgs;
+import me.emmy.alley.config.ConfigHandler;
+import me.emmy.alley.kit.Kit;
+import me.emmy.alley.util.chat.CC;
+import net.md_5.bungee.api.chat.*;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 /**
- * @author Remi
+ * @author Emmy
  * @project Alley
- * @date 5/26/2024
+ * @date 08/10/2024 - 19:56
  */
 public class KitViewCommand extends BaseCommand {
-    @Command(name = "kit.view", permission = "alley.admin")
+    @Command(name = "kit.view", permission = "alley.admin.view")
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
         String[] args = command.getArgs();
 
-        if (args.length != 1) {
-            player.sendMessage(CC.translate("&cUsage: /kit view <kit>"));
+        if (args.length < 1) {
+            player.sendMessage(CC.translate("&6Usage: &e/kit view &b<kitName>"));
             return;
         }
 
-        String kitName = args[0];
-        Kit kit = Alley.getInstance().getKitRepository().getKit(kitName);
-
+        Kit kit = Alley.getInstance().getKitRepository().getKit(args[0]);
         if (kit == null) {
-            player.sendMessage(CC.translate("&cKit not found."));
+            player.sendMessage(CC.translate("&cA kit with that name does not exist!"));
             return;
         }
 
@@ -37,9 +39,26 @@ public class KitViewCommand extends BaseCommand {
         player.sendMessage(CC.translate("&b&lKit " + kit.getName() +  " &f(" + (kit.isEnabled() ? "&aEnabled" : "&cDisabled") + "&f)"));
         player.sendMessage(CC.translate(" &f● &bDisplay Name: &f" + kit.getDisplayName()));
         player.sendMessage(CC.translate(" &f● &bName: &f" + kit.getName()));
+        player.sendMessage(CC.translate(" &f● &bIcon: &f" + kit.getIcon().name().toLowerCase() + " &7(" + kit.getIconData() + ")"));
+        player.sendMessage(CC.translate(" &f● &bDisclaimer: &f" + kit.getDisclaimer()));
         player.sendMessage(CC.translate(" &f● &bDescription: &f" + kit.getDescription()));
-        player.sendMessage(CC.translate("   &f● &bSettings: &f"));
-        kit.getKitSettings().forEach(setting -> player.sendMessage(CC.translate("    &f● &b" + setting.getName() + " &f(" + (setting.isEnabled() ? "&aEnabled" : "&cDisabled") + "&f)")));
         player.sendMessage("");
+        player.spigot().sendMessage(sendClickable(kit));
+        player.sendMessage("");
+    }
+
+    /**
+     * Sends a clickable message to the player to view the kit settings
+     *
+     * @param kit the kit to view the settings of
+     * @return the clickable message
+     */
+    private @NotNull TextComponent sendClickable(Kit kit) {
+        TextComponent clickableMessage = new TextComponent(CC.translate("  &a(Click here to view the kit settings)"));
+        clickableMessage.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/kit viewsettings " + kit.getName()));
+        String hover = CC.translate("&7Click to view the settings of the kit &b" + kit.getName());
+        BaseComponent[] hoverComponent = new ComponentBuilder(hover).create();
+        clickableMessage.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, hoverComponent));
+        return clickableMessage;
     }
 }

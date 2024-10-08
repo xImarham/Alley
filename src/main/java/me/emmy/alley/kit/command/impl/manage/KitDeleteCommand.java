@@ -17,7 +17,7 @@ public class KitDeleteCommand extends BaseCommand {
         String[] args = command.getArgs();
 
         if (args.length < 1) {
-            player.sendMessage(CC.translate("&cUsage: /kit delete (kit-name)"));
+            player.sendMessage(CC.translate("&6Usage: &e/kit delete &b<kitName>"));
             return;
         }
 
