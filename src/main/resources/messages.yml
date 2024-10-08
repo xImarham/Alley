@@ -73,6 +73,16 @@ tournament-broadcast:
       - "[clickable]"
       - ""
 
+match:
+  started:
+    kit-disclaimer:
+      enabled: true
+      format:
+        - ""
+        - "&3&l{kit-name}"
+        - " &f• &b{kit-disclaimer}"
+        - ""
+
 playtime:
   message: " \n&b{target}'s total playtime:\n &b{days} &fdays, &b{hours} &fhours, &b{minutes} &fminutes and &b{seconds} &fseconds.\n "
 

@@ -24,7 +24,7 @@ public class KitSetDisplayNameCommand extends BaseCommand {
         String[] args = command.getArgs();
 
         if (command.length() < 2) {
-            player.sendMessage(CC.translate("&cUsage: /kit setdisplayname (kitName) (displayName)"));
+            player.sendMessage(CC.translate("&6Usage: &e/kit displayname &b<kitName> <displayName>"));
             return;
         }
 

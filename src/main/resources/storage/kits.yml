@@ -187,6 +187,7 @@ kits:
       Lives:
         description: This kit setting enables best of 3 type matches, such as Pearl Fight.
         enabled: false
+    disclaimer: '&7NoDebuff kit disclaimer'
   Classic:
     displayname: '&bClassic'
     description: '&7Old styled PvP.'
@@ -274,6 +275,7 @@ kits:
       Lives:
         description: This kit setting enables best of 3 type matches, such as Pearl Fight.
         enabled: false
+    disclaimer: '&7Classic kit disclaimer'
   Boxing:
     displayname: '&bBoxing'
     description: '&71st to 100 Hits, wins!'
@@ -382,6 +384,7 @@ kits:
       Lives:
         description: This kit setting enables best of 3 type matches, such as Pearl Fight.
         enabled: false
+    disclaimer: '&7Boxing kit disclaimer'
   Sumo:
     displayname: '&bSumo'
     description: '&7Knock off your rival!'
@@ -470,6 +473,7 @@ kits:
       Lives:
         description: This kit setting enables best of 3 type matches, such as Pearl Fight.
         enabled: false
+    disclaimer: '&7Sumo kit disclaimer'
   Spleef:
     displayname: '&bSpleef'
     description: '&7Snowy!'
@@ -566,6 +570,7 @@ kits:
       Lives:
         description: This kit setting enables best of 3 type matches, such as Pearl Fight.
         enabled: false
+    disclaimer: '&7Spleef kit disclaimer'
   Parkour:
     displayname: '&bParkour'
     description: Classic parkour lol.
@@ -654,6 +659,7 @@ kits:
       Lives:
         description: This kit setting enables best of 3 type matches, such as Pearl Fight.
         enabled: false
+    disclaimer: '&7Parkour kit disclaimer'
   BattleRush:
     displayname: '&bBattleRush'
     description: '&7BattleRush kit description'
@@ -746,6 +752,7 @@ kits:
       Lives:
         description: This kit setting enables best of 3 type matches, such as Pearl Fight.
         enabled: true
+    disclaimer: '&7BattleRush kit disclaimer'
   PearlFight:
     displayname: '&bPearlFight'
     description: '&7PearlFight kit description'
@@ -848,6 +855,7 @@ kits:
       Lives:
         description: This kit setting enables best of 3 type matches, such as Pearl Fight.
         enabled: true
+    disclaimer: '&7PearlFight kit disclaimer'
   StickFight:
     displayname: '&bStickFight'
     description: '&7StickFight kit description'
@@ -948,3 +956,4 @@ kits:
       Lives:
         description: This kit setting enables best of 3 type matches, such as Pearl Fight.
         enabled: true
+    disclaimer: '&7StickFight kit disclaimer'

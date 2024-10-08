@@ -46,6 +46,7 @@ public class KitRepository {
             ItemStack[] armor = config.getList(key + ".armor").toArray(new ItemStack[0]);
             Material icon = Material.matchMaterial(config.getString(key + ".icon"));
             int iconData = config.getInt(key + ".icondata");
+            String disclaimer = config.getString(key + ".disclaimer");
 
             Kit kit = new Kit(
                     name,
@@ -58,7 +59,8 @@ public class KitRepository {
                     inventory,
                     armor,
                     icon,
-                    iconData
+                    iconData,
+                    disclaimer
             );
 
             loadKitSettings(config, key, kit);
@@ -85,6 +87,7 @@ public class KitRepository {
             config.set(key + ".armor", kit.getArmor());
             config.set(key + ".icon", kit.getIcon().name());
             config.set(key + ".icondata", kit.getIconData());
+            config.set(key + ".disclaimer", kit.getDisclaimer());
             saveKitSettings(config, key, kit);
             Alley.getInstance().getConfigHandler().saveConfig(Alley.getInstance().getConfigHandler().getConfigFileByName("storage/kits.yml"), config);
         }
@@ -168,6 +171,7 @@ public class KitRepository {
         config.set(key + ".armor", kit.getArmor());
         config.set(key + ".icon", kit.getIcon().name());
         config.set(key + ".icondata", kit.getIconData());
+        config.set(key + ".disclaimer", kit.getDisclaimer());
 
         if (kit.getKitSettings() == null) {
             applyDefaultSettings(config, key, kit);
@@ -247,7 +251,8 @@ public class KitRepository {
                 inventory,
                 armor,
                 icon,
-                (byte) 0
+                (byte) 0,
+                kitName + " kit disclaimer."
         );
 
         Alley.getInstance().getKitSettingRepository().applyAllSettingsToKit(kit);

@@ -2,6 +2,7 @@ package me.emmy.alley.kit.command;
 
 import me.emmy.alley.api.command.Completer;
 import me.emmy.alley.kit.command.impl.data.KitSetDescriptionCommand;
+import me.emmy.alley.kit.command.impl.data.KitSetDisclaimerCommand;
 import me.emmy.alley.kit.command.impl.data.KitSetDisplayNameCommand;
 import me.emmy.alley.kit.command.impl.data.KitSetIconCommand;
 import me.emmy.alley.kit.command.impl.data.inventory.KitGetInvCommand;
@@ -43,6 +44,7 @@ public class KitCommand extends BaseCommand {
         new KitGetInvCommand();
         new KitSetInvCommand();
         new KitSetDescriptionCommand();
+        new KitSetDisclaimerCommand();
         new KitSetDisplayNameCommand();
         new KitSetEditorSlotCommand();
         new KitSetRankedSlotCommand();
@@ -55,9 +57,8 @@ public class KitCommand extends BaseCommand {
     }
 
     @Completer(name = "kit")
-    public List<String> arenaCompleter(CommandArgs command) {
+    public List<String> kitCompleter(CommandArgs command) {
         List<String> completion = new ArrayList<>();
-
         if (command.getArgs().length == 1 && command.getPlayer().hasPermission("alley.admin")) {
             completion.add("list");
             completion.add("saveall");
@@ -70,6 +71,7 @@ public class KitCommand extends BaseCommand {
             completion.add("setinv");
             completion.add("getinv");
             completion.add("setdesc");
+            completion.add("setdisclaimer");
             completion.add("seteditorslot");
             completion.add("setrankedslot");
             completion.add("setslotall");
@@ -81,11 +83,10 @@ public class KitCommand extends BaseCommand {
         return completion;
     }
 
-    @Override
     @Command(name = "kit", permission = "alley.admin")
+    @Override
     public void onCommand(CommandArgs command) {
         CommandSender sender = command.getSender();
-
         sender.sendMessage(" ");
         sender.sendMessage(CC.translate("&b&lKit Commands Help:"));
         sender.sendMessage(CC.translate(" &f● &b/kit list &7| View all kits"));
@@ -99,6 +100,7 @@ public class KitCommand extends BaseCommand {
         sender.sendMessage(CC.translate(" &f● &b/kit setinv &8(&7kitName&8) &7| Set inventory of a kit"));
         sender.sendMessage(CC.translate(" &f● &b/kit getinv &8(&7kitName&8) &7| Get inventory of a kit"));
         sender.sendMessage(CC.translate(" &f● &b/kit setdesc &8(&7kitName&8) &8(&7description&8) &7| Set desc of a kit"));
+        sender.sendMessage(CC.translate(" &f● &b/kit setdisclaimer &8(&7kitName&8) &8(&7disclaimer&8) &7| Set disclaimer of a kit"));
         sender.sendMessage(CC.translate(" &f● &b/kit seteditorslot &8(&7kitName&8) &8(&7slot&8) &7| Set editor menu slot"));
         sender.sendMessage(CC.translate(" &f● &b/kit setrankedslot &8(&7kitName&8) &8(&7slot&8) &7| Set ranked menu slot"));
         sender.sendMessage(CC.translate(" &f● &b/kit setunrankedslot &8(&7kitName&8) &8(&7slot&8) &7| Set unranked menu slot"));

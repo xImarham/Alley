@@ -377,6 +377,10 @@ public class MatchListener implements Listener {
     private void handleParkourInteraction(PlayerInteractEvent event) {
         Player player = event.getPlayer();
         Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
+        if (profile.getState() != EnumProfileState.PLAYING) {
+            return;
+        }
+
         if (!profile.getMatch().getKit().isSettingEnabled(KitSettingParkourImpl.class)) {
             return;
         }
@@ -384,6 +388,7 @@ public class MatchListener implements Listener {
         if (event.getAction() != Action.PHYSICAL || event.getClickedBlock() == null || event.getClickedBlock().getType() != Material.STONE_PLATE) {
             return;
         }
+
         if (profile.getState() == EnumProfileState.PLAYING) {
             profile.getMatch().getParticipants().forEach(participant -> {
                 Player participantPlayer = participant.getPlayer().getPlayer();

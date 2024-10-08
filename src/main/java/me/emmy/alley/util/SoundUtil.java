@@ -47,7 +47,7 @@ public class SoundUtil {
      *
      * @param player the player to play the sound to
      */
-    public void playerClickSound(Player player) {
+    public void playClick(Player player) {
         player.playSound(player.getLocation(), Sound.CLICK, 20F, 15F);
     }
 
@@ -61,11 +61,20 @@ public class SoundUtil {
     }
 
     /**
-     * Play a high tone sound to the player (Explode)
+     * Play an Explode sound to the player (Explosion)
      *
      * @param player the player to play the sound to
      */
-    public void playHightoneExplode(Player player) {
+    public void playExplode(Player player) {
         player.playSound(player.getLocation(), Sound.EXPLODE, 2.0F, 1.5F);
+    }
+
+    /**
+     * Play a blast sound to the player (Firework Blast)
+     *
+     * @param player the player to play the sound to
+     */
+    public void playBlast(Player player) {
+        player.playSound(player.getLocation(), Sound.FIREWORK_BLAST, 20F, 15F);
     }
 }
