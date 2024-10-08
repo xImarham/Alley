@@ -3,6 +3,7 @@ package me.emmy.alley.hotbar.listener;
 import me.emmy.alley.Alley;
 import me.emmy.alley.hotbar.HotbarItem;
 import me.emmy.alley.hotbar.enums.HotbarType;
+import me.emmy.alley.party.menu.PartyEventMenu;
 import me.emmy.alley.visual.leaderboard.menu.personal.StatisticsMenu;
 import me.emmy.alley.game.match.menu.CurrentMatchesMenu;
 import me.emmy.alley.profile.Profile;
@@ -80,6 +81,8 @@ public class HotbarListener implements Listener {
                                 break;
                             case OPTIONS_DISABLE:
                                 Alley.getInstance().getHotbarRepository().applyHotbarItems(player, HotbarType.LOBBY);
+                            case START_PARTY_EVENT:
+                                new PartyEventMenu().openMenu(player);
                         }
                         break;
                 }
