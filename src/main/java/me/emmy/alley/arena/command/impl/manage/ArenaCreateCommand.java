@@ -6,7 +6,7 @@ import me.emmy.alley.arena.ArenaType;
 import me.emmy.alley.arena.impl.FreeForAllArena;
 import me.emmy.alley.arena.impl.SharedArena;
 import me.emmy.alley.arena.impl.StandAloneArena;
-import me.emmy.alley.arena.selection.Selection;
+import me.emmy.alley.arena.selection.ArenaSelection;
 import me.emmy.alley.config.ConfigHandler;
 import me.emmy.alley.util.chat.CC;
 import me.emmy.alley.api.command.BaseCommand;
@@ -52,8 +52,8 @@ public class ArenaCreateCommand extends BaseCommand {
             return;
         }
 
-        Selection selection = Selection.createSelection(player);
-        if (!selection.hasSelection()) {
+        ArenaSelection arenaSelection = ArenaSelection.createSelection(player);
+        if (!arenaSelection.hasSelection()) {
             player.sendMessage(CC.translate("&cYou must select the minimum and maximum locations for the arena."));
             return;
         }
@@ -61,13 +61,13 @@ public class ArenaCreateCommand extends BaseCommand {
         Arena arena;
         switch (arenaType) {
             case SHARED:
-                arena = new SharedArena(arenaName, selection.getMinimum(), selection.getMaximum());
+                arena = new SharedArena(arenaName, arenaSelection.getMinimum(), arenaSelection.getMaximum());
                 break;
             case STANDALONE:
-                arena = new StandAloneArena(arenaName, selection.getMinimum(), selection.getMaximum());
+                arena = new StandAloneArena(arenaName, arenaSelection.getMinimum(), arenaSelection.getMaximum());
                 break;
             case FFA:
-                arena = new FreeForAllArena(arenaName, selection.getMinimum(), selection.getMaximum());
+                arena = new FreeForAllArena(arenaName, arenaSelection.getMinimum(), arenaSelection.getMaximum());
                 break;
             default:
                 return;

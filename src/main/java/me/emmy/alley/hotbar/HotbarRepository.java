@@ -17,7 +17,6 @@ import java.util.*;
  */
 @Getter
 public class HotbarRepository {
-
     private final Map<HotbarType, List<HotbarItem>> hotbarItemsByType;
 
     /**

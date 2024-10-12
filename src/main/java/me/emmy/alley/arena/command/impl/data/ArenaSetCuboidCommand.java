@@ -2,7 +2,7 @@ package me.emmy.alley.arena.command.impl.data;
 
 import me.emmy.alley.Alley;
 import me.emmy.alley.arena.ArenaType;
-import me.emmy.alley.arena.selection.Selection;
+import me.emmy.alley.arena.selection.ArenaSelection;
 import me.emmy.alley.util.chat.CC;
 import me.emmy.alley.api.command.BaseCommand;
 import me.emmy.alley.api.command.Command;
@@ -42,8 +42,8 @@ public class ArenaSetCuboidCommand extends BaseCommand {
             return;
         }
 
-        Selection selection = Selection.createSelection(player);
-        if (!selection.hasSelection()) {
+        ArenaSelection arenaSelection = ArenaSelection.createSelection(player);
+        if (!arenaSelection.hasSelection()) {
             player.sendMessage(CC.translate("&cYou must select the minimum and maximum locations for the arena."));
             return;
         }
@@ -59,8 +59,8 @@ public class ArenaSetCuboidCommand extends BaseCommand {
             return;
         }
 
-        Alley.getInstance().getArenaRepository().getArenaByName(arenaName).setMinimum(selection.getMinimum());
-        Alley.getInstance().getArenaRepository().getArenaByName(arenaName).setMaximum(selection.getMaximum());
+        Alley.getInstance().getArenaRepository().getArenaByName(arenaName).setMinimum(arenaSelection.getMinimum());
+        Alley.getInstance().getArenaRepository().getArenaByName(arenaName).setMaximum(arenaSelection.getMaximum());
         player.sendMessage(CC.translate("&aCuboid has been set for arena &b" + arenaName + "&a!"));
 
         Alley.getInstance().getArenaRepository().saveArena(Alley.getInstance().getArenaRepository().getArenaByName(arenaName));

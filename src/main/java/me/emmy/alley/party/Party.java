@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 import me.emmy.alley.Alley;
 import me.emmy.alley.hotbar.enums.HotbarType;
-import me.emmy.alley.party.enums.EnumPartyState;
 import me.emmy.alley.profile.Profile;
 import me.emmy.alley.profile.enums.EnumProfileState;
 import me.emmy.alley.util.chat.CC;
@@ -25,8 +24,7 @@ public class Party {
     private Player leader;
     private boolean shared;
     private List<UUID> members;
-    private EnumPartyState state;
-    private String chatFormat = Alley.getInstance().getConfigHandler().getConfigByName("messages.yml").getString("party.chat-format");
+    private String chatFormat = Alley.getInstance().getConfigHandler().getConfig("messages.yml").getString("party.chat-format");
 
     /**
      * Constructor for the Party class.
@@ -36,7 +34,6 @@ public class Party {
     public Party(Player leader) {
         this.leader = leader;
         this.members = new ArrayList<>();
-        this.state = EnumPartyState.ACTIVE;
         this.addMember(leader);
         this.registerParty();
     }

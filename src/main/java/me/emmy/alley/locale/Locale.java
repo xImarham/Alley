@@ -58,6 +58,6 @@ public enum Locale {
     }
 
     public String getMessage() {
-        return CC.translate(Alley.getInstance().getConfigHandler().getConfigByName(configName).getString(configString));
+        return CC.translate(Alley.getInstance().getConfigHandler().getConfig(configName).getString(configString));
     }
 }

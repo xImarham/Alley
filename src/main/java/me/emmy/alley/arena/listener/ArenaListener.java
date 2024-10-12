@@ -1,20 +1,14 @@
 package me.emmy.alley.arena.listener;
 
-import me.emmy.alley.arena.selection.Selection;
+import me.emmy.alley.arena.selection.ArenaSelection;
 import me.emmy.alley.util.chat.CC;
-import org.bukkit.Difficulty;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.*;
-import org.bukkit.event.entity.CreatureSpawnEvent;
-import org.bukkit.event.entity.ExplosionPrimeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.weather.WeatherChangeEvent;
-import org.bukkit.event.world.ChunkUnloadEvent;
-import org.bukkit.event.world.WorldLoadEvent;
 import org.bukkit.inventory.ItemStack;
 
 /**
@@ -28,18 +22,18 @@ public class ArenaListener implements Listener {
     private void onPlayerInteractEvent(PlayerInteractEvent event) {
         if (event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
             ItemStack itemStack = event.getItem();
-            if (itemStack != null && itemStack.equals(Selection.SELECTION_TOOL)) {
+            if (itemStack != null && itemStack.equals(ArenaSelection.SELECTION_TOOL)) {
                 Player player = event.getPlayer();
                 Block clickedBlock = event.getClickedBlock();
                 int locationType = 0;
 
-                Selection selection = Selection.createSelection(player);
+                ArenaSelection arenaSelection = ArenaSelection.createSelection(player);
 
                 if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
-                    selection.setMaximum(clickedBlock.getLocation());
+                    arenaSelection.setMaximum(clickedBlock.getLocation());
                     locationType = 2;
                 } else if (event.getAction() == Action.LEFT_CLICK_BLOCK) {
-                    selection.setMinimum(clickedBlock.getLocation());
+                    arenaSelection.setMinimum(clickedBlock.getLocation());
                     locationType = 1;
                 }
 

@@ -17,7 +17,7 @@ import java.util.List;
 @Getter @Setter
 public class ScoreboardTitleHandler {
 
-    FileConfiguration scoreboardConfig = Alley.getInstance().getConfigHandler().getConfigByName("providers/scoreboard.yml");
+    FileConfiguration scoreboardConfig = Alley.getInstance().getConfigHandler().getConfig("providers/scoreboard.yml");
 
     private String text;
     private boolean animated;

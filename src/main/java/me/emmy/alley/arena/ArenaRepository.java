@@ -33,7 +33,7 @@ public class ArenaRepository {
      * Load all arenas from the arenas.yml file
      */
     public void loadArenas() {
-        FileConfiguration config = Alley.getInstance().getConfigHandler().getConfigByName("storage/arenas.yml");
+        FileConfiguration config = Alley.getInstance().getConfigHandler().getConfig("storage/arenas.yml");
 
         ConfigurationSection arenasConfig = config.getConfigurationSection("arenas");
         if (arenasConfig == null) {
@@ -113,7 +113,7 @@ public class ArenaRepository {
      * Save all arenas to the arenas.yml file
      */
     public void saveArenas() {
-        FileConfiguration config = Alley.getInstance().getConfigHandler().getConfigByName("storage/arenas.yml");
+        FileConfiguration config = Alley.getInstance().getConfigHandler().getConfig("storage/arenas.yml");
 
         for (Arena arena : arenas) {
             String name = "arenas." + arena.getName();
@@ -129,7 +129,7 @@ public class ArenaRepository {
             config.set(name + ".enabled", arena.isEnabled());
         }
 
-        Alley.getInstance().getConfigHandler().saveConfig(Alley.getInstance().getConfigHandler().getConfigFileByName("storage/arenas.yml"), config);
+        Alley.getInstance().getConfigHandler().saveConfig(Alley.getInstance().getConfigHandler().getConfigFile("storage/arenas.yml"), config);
     }
 
     /**

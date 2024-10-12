@@ -45,13 +45,13 @@ public class ConfigHandler {
 
         instance = this;
 
-        settingsConfig = getConfigByName("settings.yml");
-        messagesConfig = getConfigByName("messages.yml");
-        databaseConfig = getConfigByName("database/database.yml");
-        ffaConfig = getConfigByName("storage/ffa.yml");
-        kitsConfig = getConfigByName("storage/kits.yml");
-        arenasConfig = getConfigByName("storage/arenas.yml");
-        scoreboardConfig = getConfigByName("providers/scoreboard.yml");
+        settingsConfig = getConfig("settings.yml");
+        messagesConfig = getConfig("messages.yml");
+        databaseConfig = getConfig("database/database.yml");
+        ffaConfig = getConfig("storage/ffa.yml");
+        kitsConfig = getConfig("storage/kits.yml");
+        arenasConfig = getConfig("storage/arenas.yml");
+        scoreboardConfig = getConfig("providers/scoreboard.yml");
     }
 
     /**
@@ -110,11 +110,11 @@ public class ConfigHandler {
     /**
      * Get a file configuration by its name.
      *
-     * @param fileName The name of the file.
+     * @param configName The name of the config file.
      * @return The file configuration.
      */
-    public FileConfiguration getConfigByName(String fileName) {
-        return fileConfigurations.get(fileName);
+    public FileConfiguration getConfig(String configName) {
+        return fileConfigurations.get(configName);
     }
 
     /**
@@ -123,7 +123,7 @@ public class ConfigHandler {
      * @param fileName The name of the file.
      * @return The file.
      */
-    public File getConfigFileByName(String fileName) {
+    public File getConfigFile(String fileName) {
         return configFiles.get(fileName);
     }
 }

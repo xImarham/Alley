@@ -17,8 +17,7 @@ import org.bukkit.metadata.FixedMetadataValue;
  */
 @Data
 @Getter
-public class Selection {
-
+public class ArenaSelection {
     public static final ItemStack SELECTION_TOOL = new ItemBuilder(Material.FEATHER)
             .name("&bSelection Tool")
             .lore("&7Use this tool to select the minimum and maximum locations.")
@@ -29,7 +28,7 @@ public class Selection {
     private Location minimum;
     private Location maximum;
 
-    public Selection() {
+    public ArenaSelection() {
 
     }
 
@@ -39,15 +38,15 @@ public class Selection {
      * @param player The player to create the selection for.
      * @return The selection created.
      */
-    public static Selection createSelection(Player player) {
+    public static ArenaSelection createSelection(Player player) {
         if (player.hasMetadata(SELECTION_METADATA)) {
-            return (Selection) player.getMetadata(SELECTION_METADATA).get(0).value();
+            return (ArenaSelection) player.getMetadata(SELECTION_METADATA).get(0).value();
         }
 
-        Selection selection = new Selection();
+        ArenaSelection arenaSelection = new ArenaSelection();
 
-        player.setMetadata(SELECTION_METADATA, new FixedMetadataValue(Alley.getInstance(), selection));
-        return selection;
+        player.setMetadata(SELECTION_METADATA, new FixedMetadataValue(Alley.getInstance(), arenaSelection));
+        return arenaSelection;
     }
 
     /**

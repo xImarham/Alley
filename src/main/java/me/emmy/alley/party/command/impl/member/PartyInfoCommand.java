@@ -44,7 +44,7 @@ public class PartyInfoCommand extends BaseCommand {
                 .map(Player::getName)
                 .collect(Collectors.joining(", "));
 
-        FileConfiguration config = Alley.getInstance().getConfigHandler().getConfigByName("messages.yml");
+        FileConfiguration config = Alley.getInstance().getConfigHandler().getConfig("messages.yml");
         List<String> info = config.getStringList("party.info-command.text");
         String noMembersFormat = CC.translate(config.getString("party.info-command.no-members-format"));
 
