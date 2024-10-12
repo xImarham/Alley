@@ -20,10 +20,6 @@ import java.util.List;
  */
 @UtilityClass
 public class TournamentLogger {
-    private TournamentRepository getTournament() {
-        return Alley.getInstance().getTournamentRepository();
-    }
-
     /**
      * broadcast of a player joining the tournament
      *
@@ -32,10 +28,10 @@ public class TournamentLogger {
     public void broadcastPlayerJoin(Player player) {
         String message = CC.translate(ConfigHandler.getInstance().getMessagesConfig().getString("tournament-broadcast.player.joined")
                 .replace("{player}", player.getName())
-                .replace("{players}", String.valueOf(getTournament().getPlayers().size()))
-                .replace("{maxPlayers}", String.valueOf(getTournament().getMaxPlayers()))
+                .replace("{players}", "0")
+                .replace("{maxPlayers}", "0")
         );
-        getTournament().notifyPlayers(message);
+        //getTournament().notifyPlayers(message);
     }
 
     /**
@@ -46,14 +42,14 @@ public class TournamentLogger {
     public void broadcastPlayerLeave(Player player) {
         String message = CC.translate(ConfigHandler.getInstance().getMessagesConfig().getString("tournament-broadcast.player.left")
                 .replace("{player}", player.getName())
-                .replace("{players}", String.valueOf(getTournament().getPlayers().size()))
-                .replace("{maxPlayers}", String.valueOf(getTournament().getMaxPlayers()))
+                .replace("{players}", "0")
+                .replace("{maxPlayers}", "0")
         );
-        getTournament().notifyPlayers(message);
+        //getTournament().notifyPlayers(message);
     }
 
     public void broadcastWaiting() {
-        TournamentRepository tournamentRepository = getTournament();
+       // TournamentRepository tournamentRepository = getTournament();
         List<String> list = ConfigHandler.getInstance().getMessagesConfig().getStringList("tournament-broadcast.waiting.message");
         List<BaseComponent> messages = new ArrayList<>();
 
@@ -62,11 +58,11 @@ public class TournamentLogger {
                 messages.add(getTextComponent());
             } else {
                 String formattedMessage = message
-                        .replace("{host}", tournamentRepository.getHost().getName())
-                        .replace("{kit}", tournamentRepository.getKit().getName())
-                        .replace("{players}", String.valueOf(tournamentRepository.getPlayers().size()))
-                        .replace("{maxPlayers}", String.valueOf(tournamentRepository.getMaxPlayers()))
-                        .replace("{remaining}", String.valueOf(tournamentRepository.getMaxPlayers() - tournamentRepository.getPlayers().size()));
+                        .replace("{host}", "0")
+                        .replace("{kit}", "0")
+                        .replace("{players}", "0")
+                        .replace("{maxPlayers}", "0")
+                        .replace("{remaining}", "0");
                messages.add(new TextComponent(CC.translate(formattedMessage)));
             }
         }
@@ -89,11 +85,11 @@ public class TournamentLogger {
         List<String> messages = Arrays.asList(
                 "",
                 "&b&lTOURNAMENT",
-                " &f• &bHost: &f" + getTournament().getHost().getName(),
-                " &f• &bKit: &f" + getTournament().getKit().getName(),
-                " &f• &bPlayers: &f" + getTournament().getPlayers().size() + "/" + getTournament().getMaxPlayers(),
+                " &f• &bHost: &f" + "null",
+                " &f• &bKit: &f" + "null",
+                " &f• &bPlayers: &f" + "null",
                 "",
-                "&bTournament is starting in " + getTournament().getCountdown() + " seconds!",
+                "&bTournament is starting in " + "null" + " seconds!",
                 ""
         );
         messages.forEach(message -> Bukkit.broadcastMessage(CC.translate(message)));
@@ -103,10 +99,10 @@ public class TournamentLogger {
         List<String> messages = Arrays.asList(
                 "",
                 "&b&lTOURNAMENT",
-                " &f• &bHost: &f" + getTournament().getHost().getName(),
-                " &f• &bKit: &f" + getTournament().getKit().getName(),
+                " &f• &bHost: &f" + "null",
+                " &f• &bKit: &f" + "null",
                 "",
-                "&bRound " + getTournament().getRound() + " is starting...",
+                "&bRound " + "null" + " is starting...",
                 ""
         );
         messages.forEach(message -> Bukkit.broadcastMessage(CC.translate(message)));
@@ -118,9 +114,9 @@ public class TournamentLogger {
                 "&b&lTOURNAMENT",
                 " &f• &bYou are now spectating the tournament",
                 "",
-                " &f• &b" + getTournament().getPlayerTeams().get(0).getPlayerNames(),
+                " &f• &b" + "null",
                 " &bvs",
-                " &b• &b" + getTournament().getPlayerTeams().get(1).getPlayerNames(),
+                " &b• &b" + "null",
                 ""
         );
         messages.forEach(message -> Bukkit.broadcastMessage(CC.translate(message)));

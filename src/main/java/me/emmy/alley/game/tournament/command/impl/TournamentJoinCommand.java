@@ -1,13 +1,11 @@
 package me.emmy.alley.game.tournament.command.impl;
 
-import me.emmy.alley.Alley;
-import me.emmy.alley.game.tournament.TournamentRepository;
-import me.emmy.alley.game.tournament.TournamentLogger;
-import me.emmy.alley.hotbar.enums.HotbarType;
-import me.emmy.alley.util.chat.CC;
 import me.emmy.alley.api.command.BaseCommand;
 import me.emmy.alley.api.command.Command;
 import me.emmy.alley.api.command.CommandArgs;
+import me.emmy.alley.game.tournament.TournamentLogger;
+import me.emmy.alley.locale.ErrorMessage;
+import me.emmy.alley.util.chat.CC;
 import org.bukkit.entity.Player;
 
 /**
@@ -16,12 +14,12 @@ import org.bukkit.entity.Player;
  * @date 15/06/2024 - 18:32
  */
 public class TournamentJoinCommand extends BaseCommand {
-    @Override
     @Command(name = "tournament.join")
+    @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
 
-        TournamentRepository tournamentRepository = Alley.getInstance().getTournamentRepository();
+        /*TournamentRepository tournamentRepository = Alley.getInstance().getTournamentRepository();
         if (!tournamentRepository.isRunning()) {
             player.sendMessage(CC.translate("&cThere is no tournament running."));
             return;
@@ -38,7 +36,9 @@ public class TournamentJoinCommand extends BaseCommand {
         }
 
         Alley.getInstance().getHotbarRepository().applyHotbarItems(player, HotbarType.TOURNAMENT);
-        tournamentRepository.getPlayers().add(player);
-        TournamentLogger.broadcastPlayerJoin(player);
+        tournamentRepository.getPlayers().add(player);*/
+
+        player.sendMessage(CC.translate(ErrorMessage.DEBUG_CMD));
+        //TournamentLogger.broadcastPlayerJoin(player);
     }
 }

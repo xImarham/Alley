@@ -23,16 +23,22 @@ import lombok.Getter;
 @Getter
 @Setter
 public abstract class Arena {
+    private List<String> kits = new ArrayList<>();
+
     private String name;
     private String displayName;
+
+    private ArenaType type;
+
+    private boolean enabled;
+
     private Location pos1;
     private Location pos2;
+
     private Location center;
+
     private Location minimum;
     private Location maximum;
-    private ArenaType type;
-    private List<String> kits = new ArrayList<>();
-    private boolean enabled;
 
     /**
      * Constructor for the Arena class.

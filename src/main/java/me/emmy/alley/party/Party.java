@@ -179,6 +179,11 @@ public class Party {
         });
     }
 
+    /**
+     * Notifies the party members excluding the leader based on their profile settings.
+     *
+     * @param message The message to send.
+     */
     public void notifyPartyExcludeLeader(String message) {
         this.getPlayersInParty().stream().filter(player -> !player.equals(this.leader)).forEach(player -> {
             if (getProfile(player).getProfileData().getProfileSettingData().isPartyMessagesEnabled()) {

@@ -28,7 +28,7 @@ public class QueuesMenu extends Menu {
 
     @Override
     public String getTitle(Player player) {
-        return "&b&lSolo Unranked Queue";
+        return "&b&lSolo Unranked Queues";
     }
 
     @Override

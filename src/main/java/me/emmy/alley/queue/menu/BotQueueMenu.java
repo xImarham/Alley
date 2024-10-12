@@ -22,7 +22,7 @@ public class BotQueueMenu extends Menu {
 
     @Override
     public String getTitle(Player player) {
-        return "Bot Queue";
+        return "&b&lBot Queue";
     }
 
     @Override

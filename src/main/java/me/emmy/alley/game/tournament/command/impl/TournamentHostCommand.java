@@ -1,12 +1,12 @@
 package me.emmy.alley.game.tournament.command.impl;
 
 import me.emmy.alley.Alley;
-import me.emmy.alley.game.tournament.TournamentRepository;
-import me.emmy.alley.game.tournament.TournamentLogger;
-import me.emmy.alley.util.chat.CC;
 import me.emmy.alley.api.command.BaseCommand;
 import me.emmy.alley.api.command.Command;
 import me.emmy.alley.api.command.CommandArgs;
+import me.emmy.alley.game.tournament.TournamentLogger;
+import me.emmy.alley.locale.ErrorMessage;
+import me.emmy.alley.util.chat.CC;
 import org.bukkit.entity.Player;
 
 /**
@@ -15,13 +15,13 @@ import org.bukkit.entity.Player;
  * @date 14/06/2024 - 23:06
  */
 public class TournamentHostCommand extends BaseCommand {
-    @Override
     @Command(name = "tournament.host", permission = "alley.host.tournament")
+    @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
         String[] args = command.getArgs();
 
-        if (args.length < 2) {
+        /*if (args.length < 2) {
             player.sendMessage(CC.translate("&cUsage: /tournament host <kit> <maxPlayers>"));
             return;
         }
@@ -53,8 +53,9 @@ public class TournamentHostCommand extends BaseCommand {
 
         TournamentRepository tournamentRepository = new TournamentRepository(player, Alley.getInstance().getKitRepository().getKit(kitName), 8, maxPlayers);
         Alley.getInstance().setTournamentRepository(tournamentRepository);
-        tournamentRepository.setRunning(true);
+        tournamentRepository.setRunning(true);*/
 
-        TournamentLogger.broadcastWaiting();
+        player.sendMessage(CC.translate(ErrorMessage.DEBUG_CMD));
+        //TournamentLogger.broadcastWaiting();
     }
 }

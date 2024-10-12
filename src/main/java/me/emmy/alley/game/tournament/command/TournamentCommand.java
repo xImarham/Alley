@@ -4,6 +4,7 @@ import me.emmy.alley.Alley;
 import me.emmy.alley.game.tournament.command.impl.TournamentHostCommand;
 import me.emmy.alley.game.tournament.command.impl.TournamentJoinCommand;
 import me.emmy.alley.game.tournament.command.impl.TournamentLeaveCommand;
+import me.emmy.alley.locale.ErrorMessage;
 import me.emmy.alley.profile.enums.EnumProfileState;
 import me.emmy.alley.util.chat.CC;
 import me.emmy.alley.api.command.BaseCommand;
@@ -33,7 +34,7 @@ public class TournamentCommand extends BaseCommand {
             return;
         }
 
-        player.sendMessage("");
+        /*player.sendMessage("");
         player.sendMessage(CC.translate("&b&lTournament Commands Help"));
         player.sendMessage(CC.translate(" &f● &b/tournament host &7| Host a tournament"));
         player.sendMessage(CC.translate(" &f● &b/tournament join &7| Join a tournament"));
@@ -46,6 +47,8 @@ public class TournamentCommand extends BaseCommand {
             player.sendMessage(CC.translate(" &f● &c/tournament skipround &7| Skip a round in a tournament"));
             player.sendMessage(CC.translate(" &f● &c/tournament cancel &7| Cancel a tournament"));
         }
-        player.sendMessage("");
+        player.sendMessage("");*/
+
+        player.sendMessage(CC.translate(ErrorMessage.DEBUG_CMD));
     }
 }

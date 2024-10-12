@@ -27,7 +27,7 @@ import java.util.Map;
 public class UnrankedMenu extends Menu {
     @Override
     public String getTitle(Player player) {
-        return "Unranked Queue";
+        return "&b&lUnranked Queue";
     }
 
     @Override

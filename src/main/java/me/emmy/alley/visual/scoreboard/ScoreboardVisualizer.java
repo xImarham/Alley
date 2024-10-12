@@ -129,7 +129,7 @@ public class ScoreboardVisualizer implements AssembleAdapter {
                                     .replaceAll("\\{opponent-ping}", String.valueOf(BukkitReflection.getPing(opponent.getPlayer().getPlayer())))
                                     .replaceAll("\\{player-ping}", String.valueOf(BukkitReflection.getPing(player)))
                                     .replaceAll("\\{duration}", profile.getMatch().getDuration())
-                                    .replaceAll("\\{arena}", profile.getMatch().getArena().getDisplayName())
+                                    .replaceAll("\\{arena}", profile.getMatch().getArena().getDisplayName() == null ? "&c&lNULL" : profile.getMatch().getArena().getDisplayName())
                                     .replaceAll("\\{dot-animation}", AnimationUtil.getDots())
                                     .replaceAll("\\{kit}", profile.getMatch().getKit().getDisplayName()));
                         }
@@ -141,8 +141,8 @@ public class ScoreboardVisualizer implements AssembleAdapter {
                                     .replaceAll("\\{opponent-ping}", String.valueOf(BukkitReflection.getPing(opponent.getPlayer().getPlayer())))
                                     .replaceAll("\\{player-ping}", String.valueOf(BukkitReflection.getPing(player)))
                                     .replaceAll("\\{duration}", profile.getMatch().getDuration())
-                                    .replaceAll("\\{arena}", profile.getMatch().getArena().getDisplayName())
-                                    .replaceAll("\\{kit}", profile.getMatch().getKit().getDisplayName())
+                                    .replaceAll("\\{arena}", profile.getMatch().getArena().getDisplayName() == null ? "&c&lNULL" : profile.getMatch().getArena().getDisplayName())
+                                    .replaceAll("\\{kit}", profile.getMatch().getKit().getDisplayName() == null ? "&c&lNULL" : profile.getMatch().getKit().getDisplayName())
                                     .replaceAll("\\{winner}", opponent.getPlayer().isDead() ? you.getPlayer().getUsername() : opponent.getPlayer().getUsername())
                                     .replaceAll("\\{end-result}", opponent.getPlayer().isDead() ? "&a&lVICTORY!" : "&c&lDEFEAT!"));
                         }
@@ -158,7 +158,7 @@ public class ScoreboardVisualizer implements AssembleAdapter {
                                     .replaceAll("\\{combo}", profile.getMatch().getGamePlayer(player).getData().getCombo() == 0 ? "No Combo" : profile.getMatch().getGamePlayer(player).getData().getCombo() + " Combo")
                                     .replaceAll("\\{player-ping}", String.valueOf(BukkitReflection.getPing(player)))
                                     .replaceAll("\\{duration}", profile.getMatch().getDuration())
-                                    .replaceAll("\\{arena}", profile.getMatch().getArena().getDisplayName())
+                                    .replaceAll("\\{arena}", profile.getMatch().getArena().getDisplayName() == null ? "&c&lNULL" : profile.getMatch().getArena().getDisplayName())
                                     .replaceAll("\\{kit}", profile.getMatch().getKit().getDisplayName()));
                         }
                     } else if (profile.getMatch().getKit().isSettingEnabled(KitSettingLivesImpl.class)) {
@@ -171,7 +171,7 @@ public class ScoreboardVisualizer implements AssembleAdapter {
                                     .replaceAll("\\{player-lives}", String.valueOf(profile.getMatch().getGamePlayer(player).getData().getLives()))
                                     .replaceAll("\\{opponent-lives}", String.valueOf(profile.getMatch().getGamePlayer(opponent.getPlayer().getPlayer()).getData().getLives()))
                                     .replaceAll("\\{duration}", profile.getMatch().getDuration())
-                                    .replaceAll("\\{arena}", profile.getMatch().getArena().getDisplayName())
+                                    .replaceAll("\\{arena}", profile.getMatch().getArena().getDisplayName() == null ? "&c&lNULL" : profile.getMatch().getArena().getDisplayName())
                                     .replaceAll("\\{kit}", profile.getMatch().getKit().getDisplayName()));
                         }
                     } else {
@@ -182,7 +182,7 @@ public class ScoreboardVisualizer implements AssembleAdapter {
                                     .replaceAll("\\{opponent-ping}", String.valueOf(BukkitReflection.getPing(opponent.getPlayer().getPlayer())))
                                     .replaceAll("\\{player-ping}", String.valueOf(BukkitReflection.getPing(player)))
                                     .replaceAll("\\{duration}", profile.getMatch().getDuration())
-                                    .replaceAll("\\{arena}", profile.getMatch().getArena().getDisplayName())
+                                    .replaceAll("\\{arena}", profile.getMatch().getArena().getDisplayName() == null ? "&c&lNULL" : profile.getMatch().getArena().getDisplayName())
                                     .replaceAll("\\{kit}", profile.getMatch().getKit().getDisplayName()));
                         }
                     }
@@ -196,7 +196,7 @@ public class ScoreboardVisualizer implements AssembleAdapter {
                                 .replaceAll("\\{pingA}", String.valueOf(BukkitReflection.getPing(profile.getMatch().getParticipants().get(0).getPlayer().getPlayer())))
                                 .replaceAll("\\{pingB}", String.valueOf(BukkitReflection.getPing(profile.getMatch().getParticipants().get(1).getPlayer().getPlayer())))
                                 .replaceAll("\\{duration}", profile.getMatch().getDuration())
-                                .replaceAll("\\{arena}", profile.getMatch().getArena().getDisplayName())
+                                .replaceAll("\\{arena}", profile.getMatch().getArena().getDisplayName() == null ? "&c&lNULL" : profile.getMatch().getArena().getDisplayName())
                                 .replaceAll("\\{kit}", profile.getMatch().getKit().getDisplayName()));
                     }
                     break;

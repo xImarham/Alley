@@ -1,13 +1,10 @@
 package me.emmy.alley.game.tournament.command.impl;
 
-import me.emmy.alley.Alley;
-import me.emmy.alley.game.tournament.TournamentRepository;
-import me.emmy.alley.game.tournament.TournamentLogger;
-import me.emmy.alley.hotbar.enums.HotbarType;
-import me.emmy.alley.util.chat.CC;
 import me.emmy.alley.api.command.BaseCommand;
 import me.emmy.alley.api.command.Command;
 import me.emmy.alley.api.command.CommandArgs;
+import me.emmy.alley.locale.ErrorMessage;
+import me.emmy.alley.util.chat.CC;
 import org.bukkit.entity.Player;
 
 /**
@@ -16,12 +13,12 @@ import org.bukkit.entity.Player;
  * @date 15/06/2024 - 19:07
  */
 public class TournamentLeaveCommand extends BaseCommand {
-    @Override
     @Command(name = "tournament.leave")
+    @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
 
-        TournamentRepository tournamentRepository = Alley.getInstance().getTournamentRepository();
+        /*TournamentRepository tournamentRepository = Alley.getInstance().getTournamentRepository();
 
         if (!tournamentRepository.isRunning()) {
             player.sendMessage("There is no tournament running.");
@@ -35,7 +32,9 @@ public class TournamentLeaveCommand extends BaseCommand {
 
         Alley.getInstance().getHotbarRepository().applyHotbarItems(player, HotbarType.LOBBY);
         tournamentRepository.getPlayers().remove(player);
-        player.sendMessage(CC.translate("&cYou have left the tournament."));
-        TournamentLogger.broadcastPlayerLeave(player);
+        player.sendMessage(CC.translate("&cYou have left the tournament."));*/
+
+        player.sendMessage(CC.translate(ErrorMessage.DEBUG_CMD));
+        //TournamentLogger.broadcastPlayerLeave(player);
     }
 }
