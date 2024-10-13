@@ -21,6 +21,10 @@ import me.emmy.alley.config.ConfigHandler;
 import me.emmy.alley.cooldown.CooldownRepository;
 import me.emmy.alley.database.MongoService;
 import me.emmy.alley.essential.command.InvSeeCommand;
+import me.emmy.alley.essential.command.troll.FakeExplosionCommand;
+import me.emmy.alley.essential.command.troll.LaunchCommand;
+import me.emmy.alley.essential.command.troll.PushCommand;
+import me.emmy.alley.essential.command.troll.StrikeCommand;
 import me.emmy.alley.essential.spawn.SpawnHandler;
 import me.emmy.alley.essential.spawn.command.SetSpawnCommand;
 import me.emmy.alley.essential.spawn.command.SpawnCommand;
@@ -67,16 +71,13 @@ import me.emmy.alley.profile.division.DivisionRepository;
 import me.emmy.alley.profile.division.command.DivisionCommand;
 import me.emmy.alley.profile.enums.EnumProfileState;
 import me.emmy.alley.profile.listener.ProfileListener;
-import me.emmy.alley.profile.settings.matchsettings.command.MatchSettingsCommand;
-import me.emmy.alley.profile.settings.playersettings.command.PracticeSettingsCommand;
-import me.emmy.alley.profile.settings.playersettings.command.toggle.TogglePartyInvitesCommand;
-import me.emmy.alley.profile.settings.playersettings.command.toggle.TogglePartyMessagesCommand;
-import me.emmy.alley.profile.settings.playersettings.command.toggle.ToggleScoreboardCommand;
-import me.emmy.alley.profile.settings.playersettings.command.toggle.ToggleTablistCommand;
-import me.emmy.alley.profile.settings.playersettings.command.worldtime.CurrentTimeCommand;
-import me.emmy.alley.profile.settings.playersettings.command.worldtime.DayCommand;
-import me.emmy.alley.profile.settings.playersettings.command.worldtime.NightCommand;
-import me.emmy.alley.profile.settings.playersettings.command.worldtime.SunsetCommand;
+import me.emmy.alley.profile.settings.command.MatchSettingsCommand;
+import me.emmy.alley.profile.settings.command.PracticeSettingsCommand;
+import me.emmy.alley.profile.settings.command.toggle.TogglePartyInvitesCommand;
+import me.emmy.alley.profile.settings.command.toggle.TogglePartyMessagesCommand;
+import me.emmy.alley.profile.settings.command.toggle.ToggleScoreboardCommand;
+import me.emmy.alley.profile.settings.command.toggle.ToggleTablistCommand;
+import me.emmy.alley.profile.settings.command.worldtime.*;
 import me.emmy.alley.profile.shop.command.ShopCommand;
 import me.emmy.alley.profile.shop.command.admin.SetCoinsCommand;
 import me.emmy.alley.queue.QueueRepository;
@@ -149,6 +150,7 @@ public class Alley extends JavaPlugin {
         registerCommands();
         loadScoreboard();
         loadTasks();
+        ServerUtil.setupWorld();
 
         long end = System.currentTimeMillis();
         long timeTaken = end - start;
@@ -260,6 +262,12 @@ public class Alley extends JavaPlugin {
             new SetSpawnCommand();
             new SpawnCommand();
             new SetCoinsCommand();
+
+            //troll
+            new FakeExplosionCommand();
+            new LaunchCommand();
+            new PushCommand();
+            new StrikeCommand();
         });
 
         Logger.logTime("Donator Command", () -> {
@@ -272,11 +280,12 @@ public class Alley extends JavaPlugin {
             new DayCommand();
             new NightCommand();
             new SunsetCommand();
-            new CurrentTimeCommand();
+            new ResetTimeCommand();
             new TogglePartyInvitesCommand();
             new TogglePartyMessagesCommand();
             new ToggleScoreboardCommand();
             new ToggleTablistCommand();
+            new ToggleWorldTimeCommand();
 
             new PartyCommand();
 

@@ -2,11 +2,8 @@ package me.emmy.alley.database.util;
 
 import me.emmy.alley.profile.Profile;
 import me.emmy.alley.profile.data.ProfileData;
-import me.emmy.alley.profile.data.impl.ProfileCosmeticData;
-import me.emmy.alley.profile.data.impl.ProfileDivisionData;
-import me.emmy.alley.profile.data.impl.ProfileFFAData;
-import me.emmy.alley.profile.data.impl.ProfileKitData;
-import me.emmy.alley.profile.data.impl.ProfileSettingData;
+import me.emmy.alley.profile.data.impl.*;
+import me.emmy.alley.profile.enums.EnumWorldTimeType;
 import org.bson.Document;
 
 import java.util.HashMap;
@@ -76,6 +73,7 @@ public class MongoUtility {
 
     private static Document convertProfileSettingData(ProfileSettingData settingData) {
         Document settingDocument = new Document();
+        settingDocument.put("time", settingData.getTime());
         settingDocument.put("scoreboardEnabled", settingData.isScoreboardEnabled());
         settingDocument.put("tablistEnabled", settingData.isTablistEnabled());
         settingDocument.put("partyInvitesEnabled", settingData.isPartyInvitesEnabled());
@@ -163,6 +161,7 @@ public class MongoUtility {
 
     private static ProfileSettingData parseProfileSettingData(Document settingDocument) {
         ProfileSettingData settingData = new ProfileSettingData();
+        settingData.setTime(settingDocument.get("time", EnumWorldTimeType.DEFAULT.getName()));
         settingData.setScoreboardEnabled(settingDocument.getBoolean("scoreboardEnabled", true));
         settingData.setTablistEnabled(settingDocument.getBoolean("tablistEnabled", true));
         settingData.setPartyInvitesEnabled(settingDocument.getBoolean("partyInvitesEnabled", true));

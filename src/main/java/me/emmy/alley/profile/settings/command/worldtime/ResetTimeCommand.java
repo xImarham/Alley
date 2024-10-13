@@ -1,5 +1,7 @@
-package me.emmy.alley.profile.settings.playersettings.command.worldtime;
+package me.emmy.alley.profile.settings.command.worldtime;
 
+import me.emmy.alley.Alley;
+import me.emmy.alley.profile.Profile;
 import me.emmy.alley.util.chat.CC;
 import me.emmy.alley.api.command.BaseCommand;
 import me.emmy.alley.api.command.Command;
@@ -11,13 +13,14 @@ import org.bukkit.entity.Player;
  * @project Alley
  * @date 02/06/2024 - 10:59
  */
-public class CurrentTimeCommand extends BaseCommand {
+public class ResetTimeCommand extends BaseCommand {
     @Override
-    @Command(name = "currenttime")
+    @Command(name = "resettime", aliases = "currenttime")
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
+        Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
 
-        player.resetPlayerTime();
+        profile.getProfileData().getProfileSettingData().setTimeDefault(player);
         player.sendMessage(CC.translate("&aYou have reset your world time."));
     }
 }

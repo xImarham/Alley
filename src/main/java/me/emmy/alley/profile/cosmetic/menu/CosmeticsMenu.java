@@ -5,10 +5,8 @@ import me.emmy.alley.Alley;
 import me.emmy.alley.profile.cosmetic.menu.button.SoundEffectButton;
 import me.emmy.alley.profile.cosmetic.menu.button.CosmeticButton;
 import me.emmy.alley.profile.cosmetic.menu.button.KillEffectButton;
-import me.emmy.alley.profile.settings.matchsettings.menu.MatchSettingsMenu;
 import me.emmy.alley.api.menu.Button;
 import me.emmy.alley.api.menu.Menu;
-import me.emmy.alley.api.menu.button.BackButton;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;

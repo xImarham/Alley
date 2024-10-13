@@ -1,6 +1,6 @@
-package me.emmy.alley.profile.settings.playersettings.command;
+package me.emmy.alley.profile.settings.command;
 
-import me.emmy.alley.profile.settings.playersettings.menu.SettingsMenu;
+import me.emmy.alley.profile.settings.menu.SettingsMenu;
 import me.emmy.alley.api.command.BaseCommand;
 import me.emmy.alley.api.command.Command;
 import me.emmy.alley.api.command.CommandArgs;

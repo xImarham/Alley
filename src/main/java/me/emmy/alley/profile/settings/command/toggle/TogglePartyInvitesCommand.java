@@ -1,4 +1,4 @@
-package me.emmy.alley.profile.settings.playersettings.command.toggle;
+package me.emmy.alley.profile.settings.command.toggle;
 
 import me.emmy.alley.Alley;
 import me.emmy.alley.locale.Locale;

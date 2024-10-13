@@ -64,6 +64,8 @@ public class ProfileListener implements Listener {
 
         event.setJoinMessage(null);
 
+        profile.getProfileData().getProfileSettingData().setTimeBasedOnProfileSetting(player);
+
         FileConfiguration config = ConfigHandler.getInstance().getMessagesConfig();
         if (config.getBoolean("welcome-message.enabled")) {
             for (String message : config.getStringList("welcome-message.message")) {

@@ -1,5 +1,7 @@
-package me.emmy.alley.profile.settings.playersettings.command.worldtime;
+package me.emmy.alley.profile.settings.command.worldtime;
 
+import me.emmy.alley.Alley;
+import me.emmy.alley.profile.Profile;
 import me.emmy.alley.util.chat.CC;
 import me.emmy.alley.api.command.BaseCommand;
 import me.emmy.alley.api.command.Command;
@@ -13,11 +15,12 @@ import org.bukkit.entity.Player;
  */
 public class SunsetCommand extends BaseCommand {
     @Override
-    @Command(name = "sunset")
+    @Command(name = "sunset", aliases = "sunrise")
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
+        Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
 
-        player.setPlayerTime(12000, false);
+        profile.getProfileData().getProfileSettingData().setTimeSunset(player);
         player.sendMessage(CC.translate("&aYou have set the time to sunset."));
     }
 }
