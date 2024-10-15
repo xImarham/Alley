@@ -1,4 +1,4 @@
-package me.emmy.alley.commands.donator;
+package me.emmy.alley.command.donator;
 
 import me.emmy.alley.Alley;
 import me.emmy.alley.game.host.HostMenu;

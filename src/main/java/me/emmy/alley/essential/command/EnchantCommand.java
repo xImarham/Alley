@@ -1,4 +1,4 @@
-package me.emmy.alley.commands.admin.essential;
+package me.emmy.alley.essential.command;
 
 import me.emmy.alley.util.EnchantUtil;
 import me.emmy.alley.util.chat.CC;

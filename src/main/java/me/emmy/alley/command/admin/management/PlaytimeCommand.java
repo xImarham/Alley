@@ -1,4 +1,4 @@
-package me.emmy.alley.commands.admin.management;
+package me.emmy.alley.command.admin.management;
 
 import me.emmy.alley.config.ConfigHandler;
 import me.emmy.alley.locale.ErrorMessage;

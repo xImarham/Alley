@@ -1,4 +1,4 @@
-package me.emmy.alley.commands;
+package me.emmy.alley.command;
 
 import me.emmy.alley.Alley;
 import me.emmy.alley.util.chat.CC;

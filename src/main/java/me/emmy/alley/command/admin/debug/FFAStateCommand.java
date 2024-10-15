@@ -1,4 +1,4 @@
-package me.emmy.alley.commands.admin.debug;
+package me.emmy.alley.command.admin.debug;
 
 import me.emmy.alley.Alley;
 import me.emmy.alley.profile.Profile;
