@@ -31,6 +31,7 @@ public class KitSettingRepository {
         registerSetting(KitSettingDenyMovementImpl.class);
         registerSetting(KitSettingParkourImpl.class);
         registerSetting(KitSettingLivesImpl.class);
+        registerSetting(KitSettingNoDamageImpl.class);
     }
 
     /**

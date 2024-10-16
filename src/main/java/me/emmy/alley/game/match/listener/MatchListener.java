@@ -74,6 +74,12 @@ public class MatchListener implements Listener {
                 player.updateInventory();
             }
 
+            if (profile.getMatch().getKit().isSettingEnabled(KitSettingNoDamageImpl.class)) {
+                event.setDamage(0);
+                player.setHealth(20.0);
+                player.updateInventory();
+            }
+
             if (profile.getMatch().getKit().isSettingEnabled(KitSettingSumoImpl.class)) {
                 event.setDamage(0);
                 player.setHealth(20.0);

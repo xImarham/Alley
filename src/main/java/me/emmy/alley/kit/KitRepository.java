@@ -42,8 +42,19 @@ public class KitRepository {
 
         for (String name : kitsSection.getKeys(false)) {
             String key = "kits." + name;
+
             ItemStack[] inventory = config.getList(key + ".items").toArray(new ItemStack[0]);
             ItemStack[] armor = config.getList(key + ".armor").toArray(new ItemStack[0]);
+
+            /* According to IntelliJ, an object is expected here. So this is the 'correct' way to do it.
+             *
+             * List<?> itemList = config.getList(key + ".items");
+             * ItemStack[] inventory = itemList.stream().filter(ItemStack.class::isInstance).map(ItemStack.class::cast).toArray(ItemStack[]::new);
+             *
+             * List<?> armorList = config.getList(key + ".armor");
+             * ItemStack[] armor = armorList.stream().filter(ItemStack.class::isInstance).map(ItemStack.class::cast).toArray(ItemStack[]::new);
+             */
+
             Material icon = Material.matchMaterial(config.getString(key + ".icon"));
             int iconData = config.getInt(key + ".icondata");
             String disclaimer = config.getString(key + ".disclaimer");
@@ -75,7 +86,7 @@ public class KitRepository {
      */
     public void saveKits() {
         for (Kit kit : kits) {
-            FileConfiguration config = Alley.getInstance().getConfigHandler().getConfig("storage/kits.yml");
+            FileConfiguration config = ConfigHandler.getInstance().getKitsConfig();
             String key = "kits." + kit.getName();
             config.set(key + ".displayname", kit.getDisplayName());
             config.set(key + ".description", kit.getDescription());
@@ -159,7 +170,7 @@ public class KitRepository {
      * @param kit The kit to save.
      */
     public void saveKit(Kit kit) {
-        FileConfiguration config = Alley.getInstance().getConfigHandler().getConfig("storage/kits.yml");
+        FileConfiguration config = ConfigHandler.getInstance().getKitsConfig();
         String key = "kits." + kit.getName();
         config.set(key + ".displayname", kit.getDisplayName());
         config.set(key + ".description", kit.getDescription());
@@ -179,7 +190,7 @@ public class KitRepository {
             saveKitSettings(config, key, kit);
         }
 
-        Alley.getInstance().getConfigHandler().saveConfig(Alley.getInstance().getConfigHandler().getConfigFile("storage/kits.yml"), config);
+        Alley.getInstance().getConfigHandler().saveConfig(ConfigHandler.getInstance().getConfigFile("storage/kits.yml"), config);
     }
 
     /**
@@ -197,7 +208,7 @@ public class KitRepository {
             config.set(settingKey + ".enabled", setting.isEnabled());
         });
 
-        Alley.getInstance().getConfigHandler().saveConfig(Alley.getInstance().getConfigHandler().getConfigFile("storage/kits.yml"), config);
+        Alley.getInstance().getConfigHandler().saveConfig(ConfigHandler.getInstance().getConfigFile("storage/kits.yml"), config);
     }
 
     /**
@@ -221,8 +232,8 @@ public class KitRepository {
      * @param kit The kit to delete.
      */
     public void deleteKit(Kit kit) {
-        FileConfiguration config = Alley.getInstance().getConfigHandler().getConfig("storage/kits.yml");
-        File file = Alley.getInstance().getConfigHandler().getConfigFile("storage/kits.yml");
+        FileConfiguration config = ConfigHandler.getInstance().getKitsConfig();
+        File file = ConfigHandler.getInstance().getConfigFile("storage/kits.yml");
 
         kits.remove(kit);
         config.set("kits." + kit.getName(), null);
