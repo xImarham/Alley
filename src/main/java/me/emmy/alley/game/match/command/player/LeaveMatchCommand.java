@@ -29,6 +29,7 @@ public class LeaveMatchCommand extends BaseCommand {
 
         if (profile.getMatch().getKit().isSettingEnabled(KitSettingLivesImpl.class)) {
             profile.getMatch().getGamePlayer(player).getData().setLives(0);
+            profile.getMatch().handleDeath(player);
             return;
         }
 

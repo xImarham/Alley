@@ -189,7 +189,7 @@ public class MatchListener implements Listener {
                     event.setCancelled(false);
                     event.getBlock().setType(Material.AIR);
 
-                    int amount = random.nextInt(100) < 10 ? random.nextInt(3) + 2 : 0;
+                    int amount = random.nextInt(100) < 50 ? random.nextInt(3) + 2 : 0;
                     if (amount > 0) {
                         ItemStack snowballs = new ItemStack(Material.SNOW_BALL, amount);
                         player.getInventory().addItem(snowballs);
@@ -254,13 +254,6 @@ public class MatchListener implements Listener {
         }
     }
 
-    /**
-     * handles player move event:
-     * checks if player is in a match and if they are playing sumo or spleef
-     * and depending on that it checks if they moved away from arena pos1 and tps back
-     *
-     * @param event The PlayerMoveEvent.
-     */
     @EventHandler
     private void onPlayerMove(PlayerMoveEvent event) {
         Player player = event.getPlayer();
@@ -474,6 +467,7 @@ public class MatchListener implements Listener {
             if (match.getState() == EnumMatchState.STARTING || match.getState() == EnumMatchState.RUNNING) {
                 if (profile.getMatch().getKit().isSettingEnabled(KitSettingLivesImpl.class)) {
                     profile.getMatch().getGamePlayer(player).getData().setLives(0);
+                    profile.getMatch().handleDeath(player);
                     return;
                 }
                 match.handleDisconnect(player);
@@ -492,6 +486,7 @@ public class MatchListener implements Listener {
             if (match.getState() == EnumMatchState.STARTING || match.getState() == EnumMatchState.RUNNING) {
                 if (profile.getMatch().getKit().isSettingEnabled(KitSettingLivesImpl.class)) {
                     profile.getMatch().getGamePlayer(player).getData().setLives(0);
+                    profile.getMatch().handleDeath(player);
                     return;
                 }
                 match.handleDisconnect(player);
