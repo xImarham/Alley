@@ -30,10 +30,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.entity.ProjectileHitEvent;
+import org.bukkit.event.entity.*;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
@@ -72,7 +69,8 @@ public class MatchListener implements Listener {
 
             if (profile.getMatch().getKit().isSettingEnabled(KitSettingBoxingImpl.class)
                     || profile.getMatch().getKit().isSettingEnabled(KitSettingSumoImpl.class)
-                    || profile.getMatch().getKit().isSettingEnabled(KitSettingSpleefImpl.class)) {
+                    || profile.getMatch().getKit().isSettingEnabled(KitSettingSpleefImpl.class)
+                    || profile.getMatch().getKit().isSettingEnabled(KitSettingNoDamageImpl.class)) {
                 event.setDamage(0);
                 player.setHealth(20.0);
                 player.updateInventory();
@@ -506,6 +504,22 @@ public class MatchListener implements Listener {
 
         if (profile.getState() == EnumProfileState.PLAYING) {
             event.getItemDrop().remove();
+        }
+    }
+
+    @EventHandler
+    private void onHunger(FoodLevelChangeEvent event) {
+        if (event.getEntity() instanceof Player) {
+            Player player = (Player) event.getEntity();
+            Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
+
+            if (profile.getState() != EnumProfileState.PLAYING) {
+                return;
+            }
+
+            if (profile.getMatch().getKit().isSettingEnabled(KitSettingNoHungerImpl.class)) {
+                event.setCancelled(true);
+            }
         }
     }
 }
