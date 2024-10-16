@@ -16,11 +16,13 @@ import me.emmy.alley.profile.Profile;
 import me.emmy.alley.profile.enums.EnumProfileState;
 import me.emmy.alley.util.PlayerUtil;
 import me.emmy.alley.util.chat.CC;
+import me.emmy.alley.util.chat.Logger;
 import me.emmy.alley.util.location.RayTracerUtil;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -68,19 +70,9 @@ public class MatchListener implements Listener {
                 return;
             }
 
-            if (profile.getMatch().getKit().isSettingEnabled(KitSettingBoxingImpl.class)) {
-                event.setDamage(0);
-                player.setHealth(20.0);
-                player.updateInventory();
-            }
-
-            if (profile.getMatch().getKit().isSettingEnabled(KitSettingNoDamageImpl.class)) {
-                event.setDamage(0);
-                player.setHealth(20.0);
-                player.updateInventory();
-            }
-
-            if (profile.getMatch().getKit().isSettingEnabled(KitSettingSumoImpl.class)) {
+            if (profile.getMatch().getKit().isSettingEnabled(KitSettingBoxingImpl.class)
+                    || profile.getMatch().getKit().isSettingEnabled(KitSettingSumoImpl.class)
+                    || profile.getMatch().getKit().isSettingEnabled(KitSettingSpleefImpl.class)) {
                 event.setDamage(0);
                 player.setHealth(20.0);
                 player.updateInventory();
@@ -176,6 +168,15 @@ public class MatchListener implements Listener {
         switch (profile.getState()) {
             case PLAYING:
                 if (profile.getMatch().getKit().isSettingEnabled(KitSettingBuildImpl.class)) {
+                    BlockState blockState = event.getBlock().getState();
+
+                    if (profile.getMatch().getPlacedBlocks().containsKey(blockState)) {
+                        Logger.debug("Block removed from placed blocks map.");
+                        profile.getMatch().removeBlockFromPlacedBlocksMap(blockState);
+                    } else {
+                        Logger.debug("Cannot break block.");
+                        event.setCancelled(true);
+                    }
                     return;
                 }
 
@@ -211,7 +212,14 @@ public class MatchListener implements Listener {
         Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
         switch (profile.getState()) {
             case PLAYING:
-                event.setCancelled(!profile.getMatch().getKit().isSettingEnabled(KitSettingBuildImpl.class));
+                if (profile.getMatch().getState() == EnumMatchState.STARTING) return;
+                if (profile.getMatch().getState() == EnumMatchState.ENDING_MATCH) return;
+
+                if (profile.getMatch().getKit().isSettingEnabled(KitSettingBuildImpl.class)) {
+                    profile.getMatch().addBlockToPlacedBlocksMap(event.getBlock().getState(), event.getBlockPlaced().getLocation());
+                    return;
+                }
+                event.setCancelled(true);
                 break;
             case SPECTATING:
                 event.setCancelled(true);
@@ -406,7 +414,7 @@ public class MatchListener implements Listener {
     }
 
     @EventHandler
-    private void onPlayerInteract(PlayerInteractEvent event) {
+    private void onPlayerPearl(PlayerInteractEvent event) {
         Player player = event.getPlayer();
         Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
         ItemStack item = event.getItem();
@@ -417,6 +425,10 @@ public class MatchListener implements Listener {
                 event.setCancelled(true);
                 player.updateInventory();
                 player.sendMessage(CC.translate("&cYou cannot use ender pearls during the starting phase."));
+                return;
+            }
+
+            if (profile.getMatch().getKit().isSettingEnabled(KitSettingLivesImpl.class)) {
                 return;
             }
 

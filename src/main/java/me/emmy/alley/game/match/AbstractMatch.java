@@ -25,16 +25,17 @@ import me.emmy.alley.profile.enums.EnumProfileState;
 import me.emmy.alley.queue.Queue;
 import me.emmy.alley.util.PlayerUtil;
 import me.emmy.alley.util.chat.CC;
+import me.emmy.alley.util.chat.Logger;
 import net.md_5.bungee.api.chat.*;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.block.BlockState;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
@@ -46,6 +47,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 @Setter
 public abstract class AbstractMatch {
     private final List<UUID> matchSpectators = new CopyOnWriteArrayList<>();
+    private Map<BlockState, Location> placedBlocks = new HashMap<>();
     private EnumMatchState state = EnumMatchState.STARTING;
     private List<Snapshot> snapshots;
     private MatchRunnable runnable;
@@ -124,6 +126,9 @@ public abstract class AbstractMatch {
      * Ends the match.
      */
     public void endMatch() {
+        placedBlocks.forEach((blockState, location) -> location.getBlock().setType(Material.AIR));
+        placedBlocks.clear();
+
         getParticipants().forEach(this::finalizeParticipant);
         getMatchSpectators().forEach(uuid -> {
             Player player = Alley.getInstance().getServer().getPlayer(uuid);
@@ -138,6 +143,27 @@ public abstract class AbstractMatch {
         if (arena instanceof StandAloneArena) {
             ((StandAloneArena) arena).setActive(false);
         }
+    }
+
+    /**
+     * Adds a block to the placed blocks map with the intention to handle block placement and removal.
+     *
+     * @param blockState The block state to add.
+     * @param location   The location of the block.
+     */
+    public void addBlockToPlacedBlocksMap(BlockState blockState, Location location) {
+        Logger.debug("Adding block to placed blocks map: " + blockState.getType().name() + " at " + location.toString());
+        placedBlocks.put(blockState, location);
+    }
+
+    /**
+     * Removes a block from the placed blocks map.
+     *
+     * @param blockState The block state to remove.
+     */
+    public void removeBlockFromPlacedBlocksMap(BlockState blockState) {
+        Logger.debug("Removing block from placed blocks map: " + blockState.getType().name() + " at " + blockState.getLocation().toString());
+        placedBlocks.remove(blockState);
     }
 
     /**
