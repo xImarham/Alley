@@ -166,8 +166,15 @@ public abstract class AbstractMatch {
      * @param player The player to teleport.
      */
     private void teleportPlayerToSpawn(Player player) {
+        Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
         Alley.getInstance().getSpawnHandler().teleportToSpawn(player);
-        Alley.getInstance().getHotbarRepository().applyHotbarItems(player, HotbarType.LOBBY);
+
+        if (profile.getParty() == null) {
+            Alley.getInstance().getHotbarRepository().applyHotbarItems(player, HotbarType.LOBBY);
+            return;
+        }
+
+        Alley.getInstance().getHotbarRepository().applyHotbarItems(player, HotbarType.PARTY);
     }
 
     /**
