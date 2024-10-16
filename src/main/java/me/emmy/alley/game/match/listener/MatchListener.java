@@ -211,7 +211,7 @@ public class MatchListener implements Listener {
         Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
         switch (profile.getState()) {
             case PLAYING:
-                if (profile.getMatch().getState() == EnumMatchState.STARTING) return;
+                if (profile.getMatch().getState() == EnumMatchState.STARTING) event.setCancelled(true);
                 if (profile.getMatch().getState() == EnumMatchState.ENDING_MATCH) return;
 
                 if (profile.getMatch().getKit().isSettingEnabled(KitSettingBuildImpl.class)) {
