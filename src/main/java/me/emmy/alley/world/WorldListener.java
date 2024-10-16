@@ -3,13 +3,11 @@ package me.emmy.alley.world;
 import me.emmy.alley.Alley;
 import me.emmy.alley.task.ArrowCleanUpTask;
 import org.bukkit.Difficulty;
+import org.bukkit.Material;
 import org.bukkit.entity.Arrow;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockBurnEvent;
-import org.bukkit.event.block.BlockIgniteEvent;
-import org.bukkit.event.block.BlockSpreadEvent;
-import org.bukkit.event.block.LeavesDecayEvent;
+import org.bukkit.event.block.*;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.ExplosionPrimeEvent;
@@ -77,5 +75,12 @@ public class WorldListener implements Listener {
     private void onWorldLoad(WorldLoadEvent event) {
         event.getWorld().getEntities().clear();
         event.getWorld().setDifficulty(Difficulty.HARD);
+    }
+
+    @EventHandler
+    public void onBlockPhysics(BlockPhysicsEvent event) {
+        if (event.getChangedType() == Material.GRASS && event.getBlock().getType() == Material.DIRT) {
+            event.setCancelled(true);
+        }
     }
 }
