@@ -32,6 +32,7 @@ import me.emmy.alley.essential.spawn.command.SpawnItemsCommand;
 import me.emmy.alley.essential.spawn.listener.SpawnListener;
 import me.emmy.alley.game.duel.DuelRepository;
 import me.emmy.alley.game.duel.DuelRequest;
+import me.emmy.alley.game.duel.command.AcceptCommand;
 import me.emmy.alley.game.duel.command.DuelCommand;
 import me.emmy.alley.game.event.EventRepository;
 import me.emmy.alley.game.event.command.EventCommand;
@@ -296,6 +297,7 @@ public class Alley extends JavaPlugin {
 
             new PartyCommand();
 
+            new AcceptCommand();
             new DuelCommand();
             new UnrankedCommand();
             new RankedCommand();

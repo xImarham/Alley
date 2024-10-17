@@ -7,11 +7,13 @@ import me.emmy.alley.api.menu.Menu;
 import me.emmy.alley.game.duel.DuelRequest;
 import me.emmy.alley.kit.Kit;
 import me.emmy.alley.kit.settings.impl.KitSettingRankedImpl;
+import me.emmy.alley.util.chat.CC;
 import me.emmy.alley.util.item.ItemBuilder;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -23,7 +25,6 @@ import java.util.Map;
  */
 @AllArgsConstructor
 public class DuelMenu extends Menu {
-
     private final Player targetPlayer;
 
     @Override
@@ -44,7 +45,6 @@ public class DuelMenu extends Menu {
 
     @AllArgsConstructor
     private static class DuelButton extends Button {
-
         private Player targetPlayer;
         private Kit kit;
 
@@ -52,8 +52,13 @@ public class DuelMenu extends Menu {
         public ItemStack getButtonItem(Player player) {
             return new ItemBuilder(kit.getIcon())
                     .name("&b" + kit.getName())
-                    .lore(Collections.singletonList("&7Click to duel " + player.getName() + " with this kit."))
+                    .lore(Arrays.asList(
+                            kit.getDescription(),
+                            "",
+                            "&7Click to send a duel request to " + targetPlayer.getName() + ".",
+                            ""))
                     .durability(kit.getIconData())
+                    .hideMeta()
                     .build();
         }
 
@@ -61,7 +66,14 @@ public class DuelMenu extends Menu {
         public void clicked(Player player, ClickType clickType) {
             if (clickType != ClickType.LEFT) return;
 
+            if (player.hasPermission("alley.duel.arena.selector")) {
+                new DuelArenaSelectorMenu(targetPlayer, kit).openMenu(player);
+                return;
+            }
+
             Alley.getInstance().getDuelRepository().sendDuelRequest(player, targetPlayer, kit);
+            player.sendMessage(CC.translate("&aYou have sent a duel request to " + targetPlayer.getName() + " in the " + Alley.getInstance().getDuelRepository().getDuelRequest(player, targetPlayer).getArena().getName() + " arena with the " + kit.getName() + " kit."));
+            player.closeInventory();
         }
     }
 }

@@ -214,6 +214,12 @@ public abstract class AbstractMatch {
         PlayerUtil.reset(player);
     }
 
+    /**
+     * Creates a snapshot of the match.
+     *
+     * @param loser  The loser of the match.
+     * @param winner The winner of the match.
+     */
     public void createSnapshot(Player loser, Player winner) {
         Snapshot winnerSnapshot = new Snapshot(winner, true);
         snapshots.add(winnerSnapshot);
@@ -397,6 +403,22 @@ public abstract class AbstractMatch {
                 .forEach(player -> player.sendMessage(CC.translate(message)));
     }
 
+    public void handleLeaving(Player player) {
+        if (!(state == EnumMatchState.STARTING || state == EnumMatchState.RUNNING)) return;
+
+        MatchGamePlayerImpl gamePlayer = getGamePlayer(player);
+        if (gamePlayer != null) {
+            if (!gamePlayer.isDead()) {
+                if (this.kit.isSettingEnabled(KitSettingLivesImpl.class)) {
+                    getParticipant(player).getPlayer().getData().setLives(0);
+                    handleDeath(player);
+                } else {
+                    handleDeath(player);
+                }
+            }
+        }
+    }
+
     /**
      * Handles the disconnect of a player.
      *
@@ -409,11 +431,7 @@ public abstract class AbstractMatch {
         if (gamePlayer != null) {
             gamePlayer.setDisconnected(true);
             if (!gamePlayer.isDead()) {
-                if (this.kit.isSettingEnabled(KitSettingLivesImpl.class)) {
-                    getParticipant(player).getPlayer().getData().setLives(0);
-                } else {
-                    handleDeath(player);
-                }
+                handleDeath(player);
             }
         }
     }

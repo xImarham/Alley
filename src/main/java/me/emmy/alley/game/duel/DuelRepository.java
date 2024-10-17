@@ -3,7 +3,15 @@ package me.emmy.alley.game.duel;
 import lombok.Getter;
 import lombok.Setter;
 import me.emmy.alley.Alley;
+import me.emmy.alley.arena.Arena;
+import me.emmy.alley.game.match.AbstractMatch;
+import me.emmy.alley.game.match.impl.MatchLivesRegularImpl;
+import me.emmy.alley.game.match.impl.MatchRegularImpl;
+import me.emmy.alley.game.match.player.GameParticipant;
+import me.emmy.alley.game.match.player.impl.MatchGamePlayerImpl;
 import me.emmy.alley.kit.Kit;
+import me.emmy.alley.kit.settings.impl.KitSettingLivesImpl;
+import me.emmy.alley.queue.Queue;
 import me.emmy.alley.util.chat.CC;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -11,6 +19,7 @@ import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.entity.Player;
 
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,7 +39,7 @@ public class DuelRepository {
      * @param duelRequest the duel
      */
     public void addDuelRequest(DuelRequest duelRequest) {
-        duelRequests.add(duelRequest);
+        this.duelRequests.add(duelRequest);
     }
 
     /**
@@ -39,19 +48,19 @@ public class DuelRepository {
      * @param duelRequest the duel
      */
     public void removeDuelRequest(DuelRequest duelRequest) {
-        duelRequests.remove(duelRequest);
+        this.duelRequests.remove(duelRequest);
     }
 
     /**
-     * Get duel request.
+     * Get a duel request by the sender and target.
      *
      * @param sender the sender
      * @param target the target
      * @return the duel request
      */
     public DuelRequest getDuelRequest(Player sender, Player target) {
-        for (DuelRequest duelRequest : duelRequests) {
-            if (duelRequest.getSender().equals(sender) && duelRequest.getTarget().equals(target)) {
+        for (DuelRequest duelRequest : this.duelRequests) {
+            if (duelRequest.getSender().equals(sender) && duelRequest.getTarget().equals(target) || (duelRequest.getSender().equals(target) && duelRequest.getTarget().equals(sender))) {
                 return duelRequest;
             }
         }
@@ -63,18 +72,81 @@ public class DuelRepository {
      *
      * @param sender the sender
      * @param target the target
+     * @param kit    the kit
      */
     public void sendDuelRequest(Player sender, Player target, Kit kit) {
-        DuelRequest duelRequest = new DuelRequest(sender, target, kit, Alley.getInstance().getArenaRepository().getRandomArena(kit));
+        Arena arena = Alley.getInstance().getArenaRepository().getRandomArena(kit);
+        DuelRequest duelRequest = new DuelRequest(sender, target, kit, arena);
         this.addDuelRequest(duelRequest);
 
-        TextComponent invitation = new TextComponent(CC.translate("&b" + sender.getName() + " &ahas challenged you to a duel! [CLICK TO ACCEPT]"));
+        TextComponent invitation = new TextComponent(CC.translate(" &a(CLICK TO ACCEPT)"));
         invitation.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/accept " + sender.getName()));
 
         String hover = CC.translate("&aClick to accept " + sender.getName() + "&a's duel challenge.");
         TextComponent hoverComponent = new TextComponent(hover);
         invitation.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new BaseComponent[]{hoverComponent}));
 
+        target.sendMessage("");
+        target.sendMessage(CC.translate("&b&lDuel Request"));
+        target.sendMessage(CC.translate("&f * From: &b" + sender.getName()));
+        target.sendMessage(CC.translate("&f * Arena: &b" + arena.getName()));
+        target.sendMessage(CC.translate("&f * Kit: &b" + kit.getName()));
         target.spigot().sendMessage(invitation);
+        target.sendMessage("");
+    }
+
+    /**
+     * Send duel request to the target player.
+     *
+     * @param sender the sender
+     * @param target the target
+     * @param kit    the kit
+     * @param arena  the arena
+     */
+    public void sendDuelRequest(Player sender, Player target, Kit kit, Arena arena) {
+        DuelRequest duelRequest = new DuelRequest(sender, target, kit, arena);
+        this.addDuelRequest(duelRequest);
+
+        TextComponent invitation = new TextComponent(CC.translate(" &a(CLICK TO ACCEPT)"));
+        invitation.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/accept " + sender.getName()));
+
+        String hover = CC.translate("&aClick to accept " + sender.getName() + "&a's duel challenge.");
+        TextComponent hoverComponent = new TextComponent(hover);
+        invitation.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new BaseComponent[]{hoverComponent}));
+
+        target.sendMessage("");
+        target.sendMessage(CC.translate("&b&lDuel Request"));
+        target.sendMessage(CC.translate("&f * From: &b" + sender.getName()));
+        target.sendMessage(CC.translate("&f * Arena: &b" + arena.getName()));
+        target.sendMessage(CC.translate("&f * Kit: &b" + kit.getName()));
+        target.spigot().sendMessage(invitation);
+        target.sendMessage("");
+    }
+
+    /**
+     * Accept a pending duel request.
+     *
+     * @param duelRequest the duel
+     */
+    public void acceptPendingRequest(DuelRequest duelRequest) {
+        MatchGamePlayerImpl playerA = new MatchGamePlayerImpl(duelRequest.getSender().getUniqueId(), duelRequest.getSender().getName());
+        MatchGamePlayerImpl playerB = new MatchGamePlayerImpl(duelRequest.getTarget().getUniqueId(), duelRequest.getTarget().getName());
+
+        GameParticipant<MatchGamePlayerImpl> participantA = new GameParticipant<>(playerA);
+        GameParticipant<MatchGamePlayerImpl> participantB = new GameParticipant<>(playerB);
+
+        for (Queue queue : Alley.getInstance().getQueueRepository().getQueues()) {
+            if (queue.getKit().equals(duelRequest.getKit()) && !queue.isRanked()) {
+                if (queue.getKit().isSettingEnabled(KitSettingLivesImpl.class)) {
+                    AbstractMatch match = new MatchLivesRegularImpl(queue, duelRequest.getKit(), duelRequest.getArena(), false, participantA, participantB);
+                    match.startMatch();
+                } else {
+                    AbstractMatch match = new MatchRegularImpl(queue, duelRequest.getKit(), duelRequest.getArena(), false, participantA, participantB);
+                    match.startMatch();
+                }
+            }
+        }
+
+        this.removeDuelRequest(duelRequest);
     }
 }
