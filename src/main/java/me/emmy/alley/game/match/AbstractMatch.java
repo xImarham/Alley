@@ -409,7 +409,11 @@ public abstract class AbstractMatch {
         if (gamePlayer != null) {
             gamePlayer.setDisconnected(true);
             if (!gamePlayer.isDead()) {
-                handleDeath(player);
+                if (this.kit.isSettingEnabled(KitSettingLivesImpl.class)) {
+                    getParticipant(player).getPlayer().getData().setLives(0);
+                } else {
+                    handleDeath(player);
+                }
             }
         }
     }

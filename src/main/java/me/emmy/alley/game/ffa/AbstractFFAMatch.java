@@ -18,7 +18,6 @@ import java.util.List;
 @Getter
 @Setter
 public abstract class AbstractFFAMatch {
-
     private EnumFFAState state = EnumFFAState.SPAWN;
 
     private final String name;
@@ -28,7 +27,7 @@ public abstract class AbstractFFAMatch {
     private List<Player> players;
 
     /**
-     * Constructor for the AbstractFFAMatch class
+     * Constructor for the AbstractFFAMatch class.
      *
      * @param name The name of the match
      * @param arena The arena the match is being played in

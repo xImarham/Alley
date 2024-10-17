@@ -3,8 +3,10 @@ package me.emmy.alley.game.ffa;
 import lombok.Getter;
 import me.emmy.alley.Alley;
 import me.emmy.alley.arena.Arena;
+import me.emmy.alley.config.ConfigHandler;
 import me.emmy.alley.game.ffa.impl.DefaultFFAMatchImpl;
 import me.emmy.alley.kit.Kit;
+import me.emmy.alley.util.chat.Logger;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -19,19 +21,17 @@ import java.util.List;
  */
 @Getter
 public class FFARepository {
-
     private final List<AbstractFFAMatch> matches = new ArrayList<>();
 
     public FFARepository() {
-        loadFFAMatches();
+        this.loadFFAMatches();
     }
 
     /**
      * Load all FFA matches
      */
     public void loadFFAMatches() {
-        FileConfiguration config = Alley.getInstance().getConfigHandler().getConfig("storage/ffa.yml");
-
+        FileConfiguration config = ConfigHandler.getInstance().getFfaConfig();
         ConfigurationSection ffaConfig = config.getConfigurationSection("ffa");
         if (ffaConfig == null) {
             return;
@@ -42,12 +42,14 @@ public class FFARepository {
 
             Kit kit = Alley.getInstance().getKitRepository().getKit(kitName);
             if (kit == null) {
+                Logger.logError("FFA Match (" + name + ") kit not found: " + kitName);
                 continue;
             }
 
             String arenaName = config.getString(name + ".arena");
             Arena arena = Alley.getInstance().getArenaRepository().getArenaByName(arenaName);
             if (arena == null) {
+                Logger.logError("FFA Match (" + name + ") arena not found: " + arenaName);
                 continue;
             }
 
@@ -70,12 +72,11 @@ public class FFARepository {
      */
     public void saveFFAMatch(AbstractFFAMatch match) {
         String name = "ffa." + match.getKit().getName();
-
-        FileConfiguration config = Alley.getInstance().getConfigHandler().getConfig("storage/ffa.yml");
+        FileConfiguration config = ConfigHandler.getInstance().getFfaConfig();
         config.set(name, null);
         config.set(name + ".arena", match.getArena().getName());
         config.set(name + ".maxPlayers", match.getMaxPlayers());
-        Alley.getInstance().getConfigHandler().saveConfig(Alley.getInstance().getConfigHandler().getConfigFile("storage/ffa.yml"), config);
+        ConfigHandler.getInstance().saveConfig(ConfigHandler.getInstance().getConfigFile("storage/ffa.yml"), config);
     }
 
     /**
@@ -88,7 +89,7 @@ public class FFARepository {
     public void createFFAMatch(Arena arena, Kit kit, int maxPlayers) {
         DefaultFFAMatchImpl match = new DefaultFFAMatchImpl(kit.getName(), arena, kit, maxPlayers);
         matches.add(match);
-        Alley.getInstance().getFfaRepository().saveFFAMatch(match);
+        this.saveFFAMatch(match);
     }
 
     /**
