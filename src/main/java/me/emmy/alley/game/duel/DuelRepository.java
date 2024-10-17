@@ -22,7 +22,7 @@ import java.util.List;
 @Getter
 @Setter
 public class DuelRepository {
-    private List<DuelRequest> duelRequestRequests = new ArrayList<>();
+    private List<DuelRequest> duelRequests = new ArrayList<>();
 
     /**
      * Add duel request to the list of duel requests.
@@ -30,7 +30,7 @@ public class DuelRepository {
      * @param duelRequest the duel
      */
     public void addDuelRequest(DuelRequest duelRequest) {
-        duelRequestRequests.add(duelRequest);
+        duelRequests.add(duelRequest);
     }
 
     /**
@@ -39,7 +39,7 @@ public class DuelRepository {
      * @param duelRequest the duel
      */
     public void removeDuelRequest(DuelRequest duelRequest) {
-        duelRequestRequests.remove(duelRequest);
+        duelRequests.remove(duelRequest);
     }
 
     /**
@@ -50,7 +50,7 @@ public class DuelRepository {
      * @return the duel request
      */
     public DuelRequest getDuelRequest(Player sender, Player target) {
-        for (DuelRequest duelRequest : duelRequestRequests) {
+        for (DuelRequest duelRequest : duelRequests) {
             if (duelRequest.getSender().equals(sender) && duelRequest.getTarget().equals(target)) {
                 return duelRequest;
             }
