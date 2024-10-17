@@ -92,7 +92,7 @@ import me.emmy.alley.util.chat.Logger;
 import me.emmy.alley.visual.leaderboard.command.LeaderboardCommand;
 import me.emmy.alley.visual.scoreboard.ScoreboardVisualizer;
 import me.emmy.alley.visual.scoreboard.animation.ScoreboardTitleHandler;
-import me.emmy.alley.visual.tablist.impl.TablistUpdateTask;
+import me.emmy.alley.visual.tablist.task.TablistUpdateTask;
 import me.emmy.alley.world.WorldListener;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;

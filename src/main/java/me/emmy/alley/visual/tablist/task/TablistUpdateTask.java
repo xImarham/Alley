@@ -1,7 +1,7 @@
-package me.emmy.alley.visual.tablist.impl;
+package me.emmy.alley.visual.tablist.task;
 
 import me.emmy.alley.visual.tablist.ITablist;
-import me.emmy.alley.visual.tablist.TablistVisualizer;
+import me.emmy.alley.visual.tablist.impl.TablistVisualizer;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;

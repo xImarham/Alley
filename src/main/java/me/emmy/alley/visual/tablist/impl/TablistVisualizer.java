@@ -1,9 +1,10 @@
-package me.emmy.alley.visual.tablist;
+package me.emmy.alley.visual.tablist.impl;
 
 import me.emmy.alley.Alley;
 import me.emmy.alley.config.ConfigHandler;
 import me.emmy.alley.util.chat.CC;
 import me.emmy.alley.util.chat.Logger;
+import me.emmy.alley.visual.tablist.ITablist;
 import net.minecraft.server.v1_8_R3.ChatComponentText;
 import net.minecraft.server.v1_8_R3.PacketPlayOutPlayerListHeaderFooter;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
