@@ -8,17 +8,20 @@ welcome-message:
   enabled: true
   message:
     - ""
-    - "&b&m------------&f&m------------&b&m------------"
+    - "&b&lEU Practice"
+    - " &7Unranked, Ranked, Duels,"
+    - " &7Events, Tournaments, Bot Fights, FFA,"
+    - " &7and more!"
     - ""
-    - " &fWelcome to the &bAlley Network&f, &b{player}&f!"
-    - "  &f* Season: &bI"
-    - "  &f* Author: &b{author}"
-    - "  &f* Version: &b{version}"
+    - "&b&lSocials"
+    - " &f&l● &bWebsite: &falley.club"
+    - " &f&l● &bStore: &fstore.alley.club"
+    - " &f&l● &bDiscord: &fdiscord.alley.club"
     - ""
-    - " &fFor more information, join &bdsc.gg/dulcy&f!"
-    - ""
-    - "&b&m------------&f&m------------&b&m------------"
-    - ""
+    - "&b&lPlugin Info"
+    - " &f&l● &bAuthor: &f{author}"
+    - " &f&l● &bVersion: &f{version}"
+    -
 
 kit:
   not-found: "&cThere is no kit with that name!"
@@ -51,8 +54,8 @@ party:
     text:
       - ""
       - " &b&lParty Information"
-      - "  &f* Leader: &b{leader}"
-      - "  &f* Members: &b{members}"
+      - "  &f&l● &fLeader: &b{leader}"
+      - "  &f&l● &fMembers: &b{members}"
       - ""
 
 tournament-broadcast:

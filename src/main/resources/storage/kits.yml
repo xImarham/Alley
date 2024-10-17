@@ -187,7 +187,10 @@ kits:
       Lives:
         description: This kit setting enables best of 3 type matches, such as Pearl Fight.
         enabled: false
-    disclaimer: '&7NoDebuff kit disclaimer'
+      NoDamage:
+        description: Prevent the player from taking damage
+        enabled: false
+    disclaimer: '&7Eliminate your opponents! (Diamond Gear, Health Potions)'
   Classic:
     displayname: '&bClassic'
     description: '&7Old styled PvP.'
@@ -275,7 +278,10 @@ kits:
       Lives:
         description: This kit setting enables best of 3 type matches, such as Pearl Fight.
         enabled: false
-    disclaimer: '&7Classic kit disclaimer'
+      NoDamage:
+        description: Prevent the player from taking damage
+        enabled: false
+    disclaimer: '&7Eliminate your opponents! (Diamond Gear, Fishing Rod, Bow)'
   Boxing:
     displayname: '&bBoxing'
     description: '&71st to 100 Hits, wins!'
@@ -384,7 +390,10 @@ kits:
       Lives:
         description: This kit setting enables best of 3 type matches, such as Pearl Fight.
         enabled: false
-    disclaimer: '&7Boxing kit disclaimer'
+      NoDamage:
+        description: Prevent the player from taking damage
+        enabled: false
+    disclaimer: '&7First to 100 hits wins!'
   Sumo:
     displayname: '&bSumo'
     description: '&7Knock off your rival!'
@@ -473,7 +482,10 @@ kits:
       Lives:
         description: This kit setting enables best of 3 type matches, such as Pearl Fight.
         enabled: false
-    disclaimer: '&7Sumo kit disclaimer'
+      NoDamage:
+        description: Prevent the player from taking damage
+        enabled: false
+    disclaimer: '&7Throw your opponents off the surface!'
   Spleef:
     displayname: '&bSpleef'
     description: '&7Snowy!'
@@ -570,7 +582,10 @@ kits:
       Lives:
         description: This kit setting enables best of 3 type matches, such as Pearl Fight.
         enabled: false
-    disclaimer: '&7Spleef kit disclaimer'
+      NoDamage:
+        description: Prevent the player from taking damage
+        enabled: false
+    disclaimer: '&7Break the snow blocks and make your opponents fall!'
   Parkour:
     displayname: '&bParkour'
     description: Classic parkour lol.
@@ -659,7 +674,10 @@ kits:
       Lives:
         description: This kit setting enables best of 3 type matches, such as Pearl Fight.
         enabled: false
-    disclaimer: '&7Parkour kit disclaimer'
+      NoDamage:
+        description: Prevent the player from taking damage
+        enabled: false
+    disclaimer: '&7Complete the parkour faster than your opponent to win!'
   BattleRush:
     displayname: '&bBattleRush'
     description: '&7BattleRush kit description'
@@ -745,14 +763,17 @@ kits:
         enabled: false
       DenyMovement:
         description: This denies the player movement during countdown.
-        enabled: false
+        enabled: true
       Parkour:
         description: This is the parkour kit type
         enabled: false
       Lives:
         description: This kit setting enables best of 3 type matches, such as Pearl Fight.
         enabled: true
-    disclaimer: '&7BattleRush kit disclaimer'
+      NoDamage:
+        description: Prevent the player from taking damage
+        enabled: false
+    disclaimer: '&7Enter your opponents goal to get the most points!'
   PearlFight:
     displayname: '&bPearlFight'
     description: '&7PearlFight kit description'
@@ -833,7 +854,7 @@ kits:
     settings:
       Build:
         description: Allows you to build in matches
-        enabled: false
+        enabled: true
       Ranked:
         description: This is the ranked kit type
         enabled: true
@@ -855,7 +876,10 @@ kits:
       Lives:
         description: This kit setting enables best of 3 type matches, such as Pearl Fight.
         enabled: true
-    disclaimer: '&7PearlFight kit disclaimer'
+      NoDamage:
+        description: Prevent the player from taking damage
+        enabled: true
+    disclaimer: '&7Hit your opponents off the map! (Kockback Stick, Blocks)'
   StickFight:
     displayname: '&bStickFight'
     description: '&7StickFight kit description'
@@ -934,7 +958,7 @@ kits:
     settings:
       Build:
         description: Allows you to build in matches
-        enabled: false
+        enabled: true
       Ranked:
         description: This is the ranked kit type
         enabled: true
@@ -956,4 +980,7 @@ kits:
       Lives:
         description: This kit setting enables best of 3 type matches, such as Pearl Fight.
         enabled: true
-    disclaimer: '&7StickFight kit disclaimer'
+      NoDamage:
+        description: Prevent the player from taking damage
+        enabled: false
+    disclaimer: '&7Knock your opponent off! (Knockback Stick, Blocks)'

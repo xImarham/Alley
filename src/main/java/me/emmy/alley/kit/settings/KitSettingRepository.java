@@ -33,6 +33,8 @@ public class KitSettingRepository {
         registerSetting(KitSettingLivesImpl.class);
         registerSetting(KitSettingNoDamageImpl.class);
         registerSetting(KitSettingNoHungerImpl.class);
+        registerSetting(KitSettingBattleRushImpl.class);
+        registerSetting(KitSettingStickFightImpl.class);
     }
 
     /**

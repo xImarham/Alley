@@ -17,7 +17,6 @@ import java.util.Map;
  */
 @Getter
 public class ConfigHandler {
-
     @Getter private static ConfigHandler instance;
 
     private final Map<String, File> configFiles = new HashMap<>();
@@ -30,9 +29,13 @@ public class ConfigHandler {
     private final FileConfiguration kitsConfig;
     private final FileConfiguration arenasConfig;
     private final FileConfiguration scoreboardConfig;
+    private final FileConfiguration tablistConfig;
 
     private final String[] configFileNames = {
-            "settings.yml", "messages.yml", "database/database.yml", "storage/ffa.yml", "storage/kits.yml", "storage/arenas.yml", "providers/scoreboard.yml"
+            "settings.yml", "messages.yml",
+            "database/database.yml",
+            "storage/ffa.yml", "storage/kits.yml", "storage/arenas.yml",
+            "providers/scoreboard.yml", "providers/tablist.yml"
     };
 
     /**
@@ -52,6 +55,7 @@ public class ConfigHandler {
         kitsConfig = getConfig("storage/kits.yml");
         arenasConfig = getConfig("storage/arenas.yml");
         scoreboardConfig = getConfig("providers/scoreboard.yml");
+        tablistConfig = getConfig("providers/tablist.yml");
     }
 
     /**
@@ -59,6 +63,7 @@ public class ConfigHandler {
      *
      * @param fileName The name of the file.
      */
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     private void loadConfig(String fileName) {
         File configFile = new File(Alley.getInstance().getDataFolder(), fileName);
         configFiles.put(fileName, configFile);
@@ -77,18 +82,6 @@ public class ConfigHandler {
     public void reloadConfigs() {
         for (String fileName : configFileNames) {
             loadConfig(fileName);
-        }
-    }
-
-    /**
-     * Save all configurations.
-     */
-    public void saveConfigs() {
-        for (Map.Entry<String, FileConfiguration> entry : fileConfigurations.entrySet()) {
-            String fileName = entry.getKey();
-            FileConfiguration config = entry.getValue();
-            File configFile = configFiles.get(fileName);
-            saveConfig(configFile, config);
         }
     }
 

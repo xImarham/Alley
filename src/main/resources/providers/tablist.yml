@@ -1,0 +1,6 @@
+tablist:
+  enabled: true
+  header:
+    - "&b&lAlley Network &7- &fEU Practice"
+  footer:
+    - "&fBuy ranks and more at &bstore.alley.club"

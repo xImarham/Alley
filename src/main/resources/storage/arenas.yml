@@ -13,7 +13,7 @@ arenas:
     kits: []
     pos2: 'null'
   Grass:
-    type: STANDALONE
+    type: SHARED
     minimum: world:98.0:62.0:707.0:0.0:0.0
     maximum: world:196.0:113.0:609.0:0.0:0.0
     center: world:147.5:79.0:658.5:179.87427:22.032005
@@ -26,7 +26,7 @@ arenas:
     enabled: true
     displayName: '&bGrass'
   Sakura:
-    type: STANDALONE
+    type: SHARED
     minimum: world:24.0:23.0:1743.0:0.0:0.0
     maximum: world:124.0:124.0:1843.0:0.0:0.0
     center: world:74.5:36.0:1793.5:180.03716:17.143097
@@ -77,19 +77,6 @@ arenas:
       - Classic
     enabled: true
     displayName: '&bWinter'
-  test2:
-    type: FFA
-    safezone:
-      pos1: world:21.0:70.0:-36.0:0.0:0.0
-      pos2: world:21.0:70.0:-40.0:0.0:0.0
-    center: 'null'
-    pos1: 'null'
-    enabled: false
-    displayName: '&btest2'
-    minimum: world:21.0:70.0:-36.0:0.0:0.0
-    maximum: world:21.0:70.0:-40.0:0.0:0.0
-    kits: []
-    pos2: 'null'
   Candy:
     type: STANDALONE
     minimum: world:-2970.0:93.0:235.0:0.0:0.0
@@ -101,3 +88,36 @@ arenas:
       - BattleRush
     enabled: true
     displayName: '&bCandy'
+  sumotest:
+    type: SHARED
+    minimum: world:81.0:88.0:-47.0:0.0:0.0
+    maximum: world:65.0:73.0:-34.0:0.0:0.0
+    center: world:74.54260056439696:82.6373530232308:-40.511442367800846:88.04684:18.157907
+    pos1: world:75.72719625015503:79.0:-40.238775548522874:88.04684:18.157907
+    pos2: world:72.11958002673884:79.0:-39.77846869133588:-111.00702:8.457183
+    kits:
+      - Sumo
+    enabled: true
+    displayName: '&bsumotest'
+  Ancient:
+    type: STANDALONE
+    minimum: world:49922.0:51.0:50048.0:0.0:0.0
+    maximum: world:49976.0:0.0:50069.0:0.0:0.0
+    center: world:49950.43745342483:35.15095593880672:50059.43753697091:89.940895:39.417587
+    pos1: world:49964.5:25.0:50059.5:90.00357:0.0478681
+    pos2: world:49936.498319551196:25.0:50059.566260065985:-89.96338:0.079245344
+    kits:
+      - StickFight
+    enabled: true
+    displayName: '&bAncient'
+  Forgotten:
+    type: STANDALONE
+    minimum: world:49431.0:0.0:50037.0:0.0:0.0
+    maximum: world:49394.0:43.0:50101.0:0.0:0.0
+    center: world:49413.43490580051:21.444463450779246:50070.445677310214:-178.85468:10.913939
+    pos1: world:49413.5:20.0:50083.5:179.9796:0.047816116
+    pos2: world:49415.5:20.0:50056.5:0.010060379:0.04780436
+    kits:
+      - PearlFight
+    enabled: true
+    displayName: '&bForgotten'

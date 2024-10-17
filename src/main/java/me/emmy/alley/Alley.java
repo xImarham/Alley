@@ -92,6 +92,7 @@ import me.emmy.alley.util.chat.Logger;
 import me.emmy.alley.visual.leaderboard.command.LeaderboardCommand;
 import me.emmy.alley.visual.scoreboard.ScoreboardVisualizer;
 import me.emmy.alley.visual.scoreboard.animation.ScoreboardTitleHandler;
+import me.emmy.alley.visual.tablist.impl.TablistUpdateTask;
 import me.emmy.alley.world.WorldListener;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -149,6 +150,7 @@ public class Alley extends JavaPlugin {
         registerListeners();
         registerCommands();
         loadScoreboard();
+        loadTablist();
         loadTasks();
         ServerUtil.setupWorld();
 
@@ -316,6 +318,12 @@ public class Alley extends JavaPlugin {
         Assemble assemble = new Assemble(this, new ScoreboardVisualizer());
         assemble.setTicks(2);
         assemble.setAssembleStyle(AssembleStyle.MODERN);
+    }
+
+    private void loadTablist() {
+        if (configHandler.getTablistConfig().getBoolean("tablist.enabled")) {
+            new TablistUpdateTask().runTaskTimer(this, 0L, 20L);
+        }
     }
 
     private void loadTasks() {
