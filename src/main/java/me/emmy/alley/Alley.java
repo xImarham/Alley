@@ -30,6 +30,9 @@ import me.emmy.alley.essential.spawn.command.SetSpawnCommand;
 import me.emmy.alley.essential.spawn.command.SpawnCommand;
 import me.emmy.alley.essential.spawn.command.SpawnItemsCommand;
 import me.emmy.alley.essential.spawn.listener.SpawnListener;
+import me.emmy.alley.game.duel.DuelRepository;
+import me.emmy.alley.game.duel.DuelRequest;
+import me.emmy.alley.game.duel.command.DuelCommand;
 import me.emmy.alley.game.event.EventRepository;
 import me.emmy.alley.game.event.command.EventCommand;
 import me.emmy.alley.game.ffa.FFARepository;
@@ -134,6 +137,7 @@ public class Alley extends JavaPlugin {
     private SpawnHandler spawnHandler;
     private HotbarRepository hotbarRepository;
     private EventRepository eventRepository;
+    private DuelRepository duelRepository;
 
     private String prefix = "§f[§bAlley§f] §r";
 
@@ -221,6 +225,7 @@ public class Alley extends JavaPlugin {
         Logger.logTime("CombatManager", () -> this.combatManager = new CombatManager());
         Logger.logTime("FFASpawnHandler", () -> this.ffaSpawnHandler = new FFASpawnHandler());
         Logger.logTime("EventRepository", () -> this.eventRepository = new EventRepository());
+        Logger.logTime("DuelRepository", () -> this.duelRepository = new DuelRepository());
     }
 
     private void registerListeners() {
@@ -291,6 +296,7 @@ public class Alley extends JavaPlugin {
 
             new PartyCommand();
 
+            new DuelCommand();
             new UnrankedCommand();
             new RankedCommand();
             new PracticeSettingsCommand();
