@@ -21,7 +21,7 @@ welcome-message:
     - "&b&lPlugin Info"
     - " &f&l● &bAuthor: &f{author}"
     - " &f&l● &bVersion: &f{version}"
-    -
+    - ""
 
 kit:
   not-found: "&cThere is no kit with that name!"
