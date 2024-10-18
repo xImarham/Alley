@@ -3,8 +3,7 @@ package me.emmy.alley.game.duel.command;
 import me.emmy.alley.api.command.BaseCommand;
 import me.emmy.alley.api.command.Command;
 import me.emmy.alley.api.command.CommandArgs;
-import me.emmy.alley.game.duel.DuelRequest;
-import me.emmy.alley.game.duel.menu.DuelMenu;
+import me.emmy.alley.game.duel.menu.DuelKitSelectorMenu;
 import me.emmy.alley.util.chat.CC;
 import org.bukkit.entity.Player;
 
@@ -36,6 +35,6 @@ public class DuelCommand extends BaseCommand {
             return;
         }
 
-        new DuelMenu(target).openMenu(player);
+        new DuelKitSelectorMenu(target).openMenu(player);
     }
 }

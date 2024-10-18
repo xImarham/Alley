@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import me.emmy.alley.Alley;
 import me.emmy.alley.api.menu.Button;
 import me.emmy.alley.api.menu.Menu;
-import me.emmy.alley.game.duel.DuelRequest;
 import me.emmy.alley.kit.Kit;
 import me.emmy.alley.kit.settings.impl.KitSettingRankedImpl;
 import me.emmy.alley.util.chat.CC;
@@ -14,7 +13,6 @@ import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,7 +22,7 @@ import java.util.Map;
  * @date 17/10/2024 - 20:11
  */
 @AllArgsConstructor
-public class DuelMenu extends Menu {
+public class DuelKitSelectorMenu extends Menu {
     private final Player targetPlayer;
 
     @Override
