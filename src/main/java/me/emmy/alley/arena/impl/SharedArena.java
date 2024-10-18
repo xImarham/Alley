@@ -13,7 +13,6 @@ import org.bukkit.configuration.file.FileConfiguration;
  * @date 20/05/2024 - 19:14
  */
 public class SharedArena extends Arena {
-
     /**
      * Constructor for the SharedArena class.
      *

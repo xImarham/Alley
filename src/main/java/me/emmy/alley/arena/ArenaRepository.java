@@ -23,7 +23,6 @@ import java.util.stream.Collectors;
  */
 @Getter
 public class ArenaRepository {
-
     private final List<Arena> arenas = new ArrayList<>();
 
     public ArenaRepository() {

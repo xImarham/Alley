@@ -13,7 +13,6 @@ import org.bukkit.configuration.file.FileConfiguration;
  * @date 20/05/2024 - 19:15
  */
 public class FreeForAllArena extends Arena {
-
     /**
      * Constructor for the FreeForAllArena class.
      *

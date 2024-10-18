@@ -19,7 +19,6 @@ import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.entity.Player;
 
-import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -79,20 +78,14 @@ public class DuelRepository {
         DuelRequest duelRequest = new DuelRequest(sender, target, kit, arena);
         this.addDuelRequest(duelRequest);
 
-        TextComponent invitation = new TextComponent(CC.translate(" &a(CLICK TO ACCEPT)"));
+        TextComponent invitation = new TextComponent(CC.translate(" &a(Click To Accept)"));
         invitation.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/accept " + sender.getName()));
 
         String hover = CC.translate("&aClick to accept " + sender.getName() + "&a's duel challenge.");
         TextComponent hoverComponent = new TextComponent(hover);
         invitation.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new BaseComponent[]{hoverComponent}));
 
-        target.sendMessage("");
-        target.sendMessage(CC.translate("&b&lDuel Request"));
-        target.sendMessage(CC.translate("&f * From: &b" + sender.getName()));
-        target.sendMessage(CC.translate("&f * Arena: &b" + arena.getName()));
-        target.sendMessage(CC.translate("&f * Kit: &b" + kit.getName()));
-        target.spigot().sendMessage(invitation);
-        target.sendMessage("");
+        this.sendInvite(sender, target, kit, arena, invitation);
     }
 
     /**
@@ -107,18 +100,32 @@ public class DuelRepository {
         DuelRequest duelRequest = new DuelRequest(sender, target, kit, arena);
         this.addDuelRequest(duelRequest);
 
-        TextComponent invitation = new TextComponent(CC.translate(" &a(CLICK TO ACCEPT)"));
+        TextComponent invitation = new TextComponent(CC.translate(" &a(Click To Accept)"));
         invitation.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/accept " + sender.getName()));
 
         String hover = CC.translate("&aClick to accept " + sender.getName() + "&a's duel challenge.");
         TextComponent hoverComponent = new TextComponent(hover);
         invitation.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new BaseComponent[]{hoverComponent}));
 
+        this.sendInvite(sender, target, kit, arena, invitation);
+    }
+
+    /**
+     * Send invite to the target player.
+     *
+     * @param sender      the sender
+     * @param target      the target
+     * @param kit         the kit
+     * @param arena       the arena
+     * @param invitation  the invitation
+     */
+    private void sendInvite(Player sender, Player target, Kit kit, Arena arena, TextComponent invitation) {
         target.sendMessage("");
         target.sendMessage(CC.translate("&b&lDuel Request"));
-        target.sendMessage(CC.translate("&f * From: &b" + sender.getName()));
-        target.sendMessage(CC.translate("&f * Arena: &b" + arena.getName()));
-        target.sendMessage(CC.translate("&f * Kit: &b" + kit.getName()));
+        target.sendMessage(CC.translate("&f&l ● &fFrom: &b" + sender.getName()));
+        target.sendMessage(CC.translate("&f&l ● &fArena: &b" + arena.getName()));
+        target.sendMessage(CC.translate("&f&l ● &fKit: &b" + kit.getName()));
+        target.sendMessage("");
         target.spigot().sendMessage(invitation);
         target.sendMessage("");
     }
