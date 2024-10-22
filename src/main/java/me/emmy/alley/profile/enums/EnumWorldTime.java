@@ -17,7 +17,7 @@ public enum EnumWorldTime {
     private final String name;
 
     /**
-     * Constructor for the EnumWorldTimeType enum.
+     * Constructor for the EnumWorldTime enum.
      *
      * @param name The name of the world time type.
      */
@@ -26,9 +26,9 @@ public enum EnumWorldTime {
     }
 
     /**
-     * Get an EnumWorldTimeType by its name.
+     * Get an EnumWorldTime by its name.
      *
-     * @param name The name of the EnumWorldTimeType.
+     * @param name The name of the EnumWorldTime.
      * @return The EnumWorldTimeType with the given name.
      */
     public static EnumWorldTime getByName(String name) {
@@ -37,6 +37,6 @@ public enum EnumWorldTime {
                 return worldTimeType;
             }
         }
-        return EnumWorldTime.DEFAULT;
+        return null;
     }
 }
