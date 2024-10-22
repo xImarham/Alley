@@ -44,17 +44,21 @@ public enum EnumChatChannel {
     }
 
     /**
-     * Check if a chat channel exists.
+     * Get the exact chat channel.
      *
-     * @param chatChannel The chat channel to check.
-     * @return True if the chat channel exists, otherwise false.
+     * @param chatChannel The chat channel to get.
+     * @return The exact chat channel.
      */
-    public static boolean doesExist(String chatChannel) {
+    public static String getExactChatChannel(String chatChannel, boolean upperCase) {
         for (EnumChatChannel enumChatChannel : EnumChatChannel.values()) {
             if (enumChatChannel.getName().equalsIgnoreCase(chatChannel)) {
-                return true;
+                if (upperCase) {
+                    return enumChatChannel.toString().toUpperCase();
+                } else {
+                    return enumChatChannel.getName();
+                }
             }
         }
-        return false;
+        return null;
     }
 }

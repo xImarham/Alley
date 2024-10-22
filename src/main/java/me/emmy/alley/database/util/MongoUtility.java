@@ -74,12 +74,12 @@ public class MongoUtility {
 
     private static Document convertProfileSettingData(ProfileSettingData settingData) {
         Document settingDocument = new Document();
-        settingDocument.put("chatChannel", settingData.getChatChannel());
-        settingDocument.put("time", settingData.getTime());
+        settingDocument.put("partyMessagesEnabled", settingData.isPartyMessagesEnabled());
+        settingDocument.put("partyInvitesEnabled", settingData.isPartyInvitesEnabled());
         settingDocument.put("scoreboardEnabled", settingData.isScoreboardEnabled());
         settingDocument.put("tablistEnabled", settingData.isTablistEnabled());
-        settingDocument.put("partyInvitesEnabled", settingData.isPartyInvitesEnabled());
-        settingDocument.put("partyMessagesEnabled", settingData.isPartyMessagesEnabled());
+        settingDocument.put("chatChannel", settingData.getChatChannel());
+        settingDocument.put("time", settingData.getTime());
         return settingDocument;
     }
 
@@ -163,12 +163,12 @@ public class MongoUtility {
 
     private static ProfileSettingData parseProfileSettingData(Document settingDocument) {
         ProfileSettingData settingData = new ProfileSettingData();
-        settingData.setChatChannel(settingDocument.get("chatChannel", EnumChatChannel.GLOBAL.getName()));
-        settingData.setTime(settingDocument.get("time", EnumWorldTimeType.DEFAULT.getName()));
+        settingData.setPartyMessagesEnabled(settingDocument.getBoolean("partyMessagesEnabled", true));
+        settingData.setPartyInvitesEnabled(settingDocument.getBoolean("partyInvitesEnabled", true));
         settingData.setScoreboardEnabled(settingDocument.getBoolean("scoreboardEnabled", true));
         settingData.setTablistEnabled(settingDocument.getBoolean("tablistEnabled", true));
-        settingData.setPartyInvitesEnabled(settingDocument.getBoolean("partyInvitesEnabled", true));
-        settingData.setPartyMessagesEnabled(settingDocument.getBoolean("partyMessagesEnabled", true));
+        settingData.setChatChannel(settingDocument.get("chatChannel", EnumChatChannel.GLOBAL.toString()));
+        settingData.setTime(settingDocument.get("time", EnumWorldTimeType.DEFAULT.getName()));
         return settingData;
     }
 

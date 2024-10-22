@@ -9,6 +9,8 @@ import me.emmy.alley.profile.enums.EnumChatChannel;
 import me.emmy.alley.util.chat.CC;
 import org.bukkit.entity.Player;
 
+import java.util.Arrays;
+
 /**
  * @author Emmy
  * @project Alley
@@ -23,23 +25,22 @@ public class ChatCommand extends BaseCommand {
 
         if (args.length < 1) {
             player.sendMessage(CC.translate("&6Usage: &e/chat &b<chat-channel>"));
-            player.sendMessage(CC.translate("&7Available chat channels: " + EnumChatChannel.getChatChannelsSorted()));
+            player.sendMessage(CC.translate("&cAvailable chat channels: " + EnumChatChannel.getChatChannelsSorted()));
             return;
         }
 
         Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
-        if (EnumChatChannel.doesExist(args[0])) {
-            player.sendMessage(CC.translate("&cThe chat channel &e" + args[0] + " &cdoes not exist."));
+        if (EnumChatChannel.getExactChatChannel(args[0], true) == null) {
+            player.sendMessage(CC.translate("&cThe chat channel &b" + args[0] + " &cdoes not exist."));
             return;
         }
 
-        if (profile.getProfileData().getProfileSettingData().getChatChannel().equals(args[0])) {
+        if (profile.getProfileData().getProfileSettingData().getChatChannel().equalsIgnoreCase(args[0])) {
             player.sendMessage(CC.translate("&cYou're already in the " + args[0] + " chat channel."));
             return;
         }
 
-        EnumChatChannel chatChannel = EnumChatChannel.valueOf(args[0].toUpperCase());
-        profile.getProfileData().getProfileSettingData().setChatChannel(chatChannel.getName());
-        player.sendMessage(CC.translate("&aSet your chat channel to &b" + chatChannel.getName() + "&a."));
+        profile.getProfileData().getProfileSettingData().setChatChannel(EnumChatChannel.getExactChatChannel(args[0], true));
+        player.sendMessage(CC.translate("&aSet your chat channel to &b" + args[0] + "&a."));
     }
 }

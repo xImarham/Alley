@@ -28,16 +28,16 @@ public class PartyChatCommand extends BaseCommand {
 
         Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
         String message = Arrays.stream(args).map(argument -> argument + " ").collect(Collectors.joining());
-        EnumChatChannel chatChannel = EnumChatChannel.valueOf(profile.getProfileData().getProfileSettingData().getChatChannel());
 
         if (args.length == 0) {
-            if (chatChannel == EnumChatChannel.PARTY) {
-                profile.getProfileData().getProfileSettingData().setChatChannel(EnumChatChannel.GLOBAL.getName());
+            if (profile.getProfileData().getProfileSettingData().getChatChannel().equals(EnumChatChannel.PARTY.toString())) {
+                profile.getProfileData().getProfileSettingData().setChatChannel(EnumChatChannel.GLOBAL.toString());
                 player.sendMessage(CC.translate("&aSet your chat channel to &bglobal&a."));
             } else {
-                profile.getProfileData().getProfileSettingData().setChatChannel(EnumChatChannel.PARTY.getName());
+                profile.getProfileData().getProfileSettingData().setChatChannel(EnumChatChannel.PARTY.toString());
                 player.sendMessage(CC.translate("&aSet your chat channel to &bparty&a."));
             }
+            return;
         }
 
         if (profile.getParty() == null) {

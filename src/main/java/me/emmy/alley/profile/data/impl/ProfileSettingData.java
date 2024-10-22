@@ -29,7 +29,7 @@ public class ProfileSettingData {
         this.partyInvitesEnabled = true;
         this.scoreboardEnabled = true;
         this.tablistEnabled = true;
-        this.chatChannel = EnumChatChannel.GLOBAL.getName();
+        this.chatChannel = EnumChatChannel.GLOBAL.toString();
         this.time = EnumWorldTimeType.DEFAULT.getName();
     }
 
