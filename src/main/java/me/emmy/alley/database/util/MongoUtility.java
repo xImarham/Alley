@@ -4,7 +4,7 @@ import me.emmy.alley.profile.Profile;
 import me.emmy.alley.profile.data.ProfileData;
 import me.emmy.alley.profile.data.impl.*;
 import me.emmy.alley.profile.enums.EnumChatChannel;
-import me.emmy.alley.profile.enums.EnumWorldTimeType;
+import me.emmy.alley.profile.enums.EnumWorldTime;
 import org.bson.Document;
 
 import java.util.HashMap;
@@ -168,7 +168,7 @@ public class MongoUtility {
         settingData.setScoreboardEnabled(settingDocument.getBoolean("scoreboardEnabled", true));
         settingData.setTablistEnabled(settingDocument.getBoolean("tablistEnabled", true));
         settingData.setChatChannel(settingDocument.get("chatChannel", EnumChatChannel.GLOBAL.toString()));
-        settingData.setTime(settingDocument.get("time", EnumWorldTimeType.DEFAULT.getName()));
+        settingData.setTime(settingDocument.get("time", EnumWorldTime.DEFAULT.getName()));
         return settingData;
     }
 

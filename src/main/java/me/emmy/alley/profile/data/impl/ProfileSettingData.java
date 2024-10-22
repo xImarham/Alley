@@ -3,7 +3,7 @@ package me.emmy.alley.profile.data.impl;
 import lombok.Getter;
 import lombok.Setter;
 import me.emmy.alley.profile.enums.EnumChatChannel;
-import me.emmy.alley.profile.enums.EnumWorldTimeType;
+import me.emmy.alley.profile.enums.EnumWorldTime;
 import org.bukkit.entity.Player;
 
 /**
@@ -30,7 +30,7 @@ public class ProfileSettingData {
         this.scoreboardEnabled = true;
         this.tablistEnabled = true;
         this.chatChannel = EnumChatChannel.GLOBAL.toString();
-        this.time = EnumWorldTimeType.DEFAULT.getName();
+        this.time = EnumWorldTime.DEFAULT.getName();
     }
 
     /**
@@ -39,7 +39,7 @@ public class ProfileSettingData {
      * @param player The player to set the world time for.
      */
     public void setTimeDefault(Player player) {
-        this.time = EnumWorldTimeType.DEFAULT.getName();
+        this.time = EnumWorldTime.DEFAULT.getName();
         player.resetPlayerTime();
     }
 
@@ -49,7 +49,7 @@ public class ProfileSettingData {
      * @param player The player to set the world time for.
      */
     public void setTimeDay(Player player) {
-        this.time = EnumWorldTimeType.DAY.getName();
+        this.time = EnumWorldTime.DAY.getName();
         player.setPlayerTime(6000L, false);
     }
 
@@ -59,7 +59,7 @@ public class ProfileSettingData {
      * @param player The player to set the world time for.
      */
     public void setTimeSunset(Player player) {
-        this.time = EnumWorldTimeType.SUNSET.getName();
+        this.time = EnumWorldTime.SUNSET.getName();
         player.setPlayerTime(12000, false);
     }
 
@@ -69,7 +69,7 @@ public class ProfileSettingData {
      * @param player The player to set the world time for.
      */
     public void setTimeNight(Player player) {
-        this.time = EnumWorldTimeType.NIGHT.getName();
+        this.time = EnumWorldTime.NIGHT.getName();
         player.setPlayerTime(18000L, false);
     }
 
@@ -78,8 +78,8 @@ public class ProfileSettingData {
      *
      * @return The world time based on the profile setting.
      */
-    public EnumWorldTimeType getWorldTime() {
-        return EnumWorldTimeType.getByName(this.time);
+    public EnumWorldTime getWorldTime() {
+        return EnumWorldTime.getByName(this.time);
     }
 
     /**
@@ -105,18 +105,18 @@ public class ProfileSettingData {
     }
 
     public boolean isDayTime() {
-        return this.time.equals(EnumWorldTimeType.DAY.getName());
+        return this.time.equals(EnumWorldTime.DAY.getName());
     }
 
     public boolean isSunsetTime() {
-        return this.time.equals(EnumWorldTimeType.SUNSET.getName());
+        return this.time.equals(EnumWorldTime.SUNSET.getName());
     }
 
     public boolean isNightTime() {
-        return this.time.equals(EnumWorldTimeType.NIGHT.getName());
+        return this.time.equals(EnumWorldTime.NIGHT.getName());
     }
 
     public boolean isDefaultTime() {
-        return this.time.equals(EnumWorldTimeType.DEFAULT.getName());
+        return this.time.equals(EnumWorldTime.DEFAULT.getName());
     }
 }

@@ -8,7 +8,7 @@ import lombok.Getter;
  * @date 13/10/2024 - 10:17
  */
 @Getter
-public enum EnumWorldTimeType {
+public enum EnumWorldTime {
     DAY("DAY"),
     SUNSET("SUNSET"),
     NIGHT("NIGHT"),
@@ -21,7 +21,7 @@ public enum EnumWorldTimeType {
      *
      * @param name The name of the world time type.
      */
-    EnumWorldTimeType(String name) {
+    EnumWorldTime(String name) {
         this.name = name;
     }
 
@@ -31,12 +31,12 @@ public enum EnumWorldTimeType {
      * @param name The name of the EnumWorldTimeType.
      * @return The EnumWorldTimeType with the given name.
      */
-    public static EnumWorldTimeType getByName(String name) {
-        for (EnumWorldTimeType worldTimeType : values()) {
+    public static EnumWorldTime getByName(String name) {
+        for (EnumWorldTime worldTimeType : values()) {
             if (worldTimeType.getName().equalsIgnoreCase(name)) {
                 return worldTimeType;
             }
         }
-        return EnumWorldTimeType.DEFAULT;
+        return EnumWorldTime.DEFAULT;
     }
 }
