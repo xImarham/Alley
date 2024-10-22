@@ -31,7 +31,6 @@ import me.emmy.alley.essential.spawn.command.SpawnCommand;
 import me.emmy.alley.essential.spawn.command.SpawnItemsCommand;
 import me.emmy.alley.essential.spawn.listener.SpawnListener;
 import me.emmy.alley.game.duel.DuelRepository;
-import me.emmy.alley.game.duel.DuelRequest;
 import me.emmy.alley.game.duel.command.AcceptCommand;
 import me.emmy.alley.game.duel.command.DuelCommand;
 import me.emmy.alley.game.event.EventRepository;
@@ -61,7 +60,6 @@ import me.emmy.alley.kit.command.KitCommand;
 import me.emmy.alley.kit.editor.command.KitEditorCommand;
 import me.emmy.alley.kit.settings.KitSettingRepository;
 import me.emmy.alley.party.PartyRepository;
-import me.emmy.alley.party.PartyRequest;
 import me.emmy.alley.party.command.PartyCommand;
 import me.emmy.alley.party.listener.PartyListener;
 import me.emmy.alley.profile.ProfileRepository;
@@ -146,7 +144,6 @@ public class Alley extends JavaPlugin {
 
         checkDescription();
         registerHandlers();
-        registerDatabase();
         registerManagers();
         registerListeners();
         registerCommands();
@@ -196,11 +193,6 @@ public class Alley extends JavaPlugin {
         sbTitleHandler = new ScoreboardTitleHandler();
     }
 
-    private String registerDatabase() {
-        FileConfiguration config = configHandler.getConfig("database/database.yml");
-        return config.getString("mongo.uri");
-    }
-
     private void registerManagers() {
         Logger.logTime("CommandFramework", () -> this.commandFramework = new CommandFramework(this));
         Logger.logTime("QueueRepository", () -> this.queueRepository = new QueueRepository());
@@ -211,7 +203,7 @@ public class Alley extends JavaPlugin {
         Logger.logTime("CosmeticRepository", () -> this.cosmeticRepository = new CosmeticRepository());
         Logger.logTime("ProfileRepository", () -> this.profileRepository = new ProfileRepository());
         Logger.logTime("DivisionRepository", () -> this.divisionRepository = new DivisionRepository());
-        Logger.logTime("MongoService", () -> this.mongoService = new MongoService(registerDatabase()));
+        Logger.logTime("MongoService", () -> this.mongoService = new MongoService(configHandler.getDatabaseConfig().getString("mongo.uri")));
         Logger.logTime("HotbarRepository", () -> this.hotbarRepository = new HotbarRepository());
         Logger.logTime("Profiles", () -> this.profileRepository.loadProfiles());
         Logger.logTime("CooldownRepository", () -> this.cooldownRepository = new CooldownRepository());
