@@ -4,6 +4,7 @@ import me.emmy.alley.Alley;
 import me.emmy.alley.locale.Locale;
 import me.emmy.alley.party.Party;
 import me.emmy.alley.profile.Profile;
+import me.emmy.alley.profile.enums.EnumChatChannel;
 import me.emmy.alley.util.chat.CC;
 import me.emmy.alley.api.command.BaseCommand;
 import me.emmy.alley.api.command.Command;
@@ -25,13 +26,19 @@ public class PartyChatCommand extends BaseCommand {
         Player player = command.getPlayer();
         String[] args = command.getArgs();
 
-        if (args.length == 0) {
-            player.sendMessage("Usage: /party chat (message)");
-            return;
-        }
-
         Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
         String message = Arrays.stream(args).map(argument -> argument + " ").collect(Collectors.joining());
+        EnumChatChannel chatChannel = EnumChatChannel.valueOf(profile.getProfileData().getProfileSettingData().getChatChannel());
+
+        if (args.length == 0) {
+            if (chatChannel == EnumChatChannel.PARTY) {
+                profile.getProfileData().getProfileSettingData().setChatChannel(EnumChatChannel.GLOBAL.getName());
+                player.sendMessage(CC.translate("&aSet your chat channel to &bglobal&a."));
+            } else {
+                profile.getProfileData().getProfileSettingData().setChatChannel(EnumChatChannel.PARTY.getName());
+                player.sendMessage(CC.translate("&aSet your chat channel to &bparty&a."));
+            }
+        }
 
         if (profile.getParty() == null) {
             player.sendMessage(CC.translate(Locale.NOT_IN_PARTY.getMessage()));

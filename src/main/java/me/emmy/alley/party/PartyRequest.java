@@ -6,9 +6,6 @@ import me.emmy.alley.util.chat.CC;
 import net.md_5.bungee.api.chat.*;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * @author Emmy
  * @project Alley
@@ -17,8 +14,6 @@ import java.util.List;
 @Getter
 @Setter
 public class PartyRequest {
-    private final List<PartyRequest> partyRequest = new ArrayList<>();
-
     private final Player sender;
     private final Player target;
 

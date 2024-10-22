@@ -65,10 +65,7 @@ import me.emmy.alley.party.PartyRequest;
 import me.emmy.alley.party.command.PartyCommand;
 import me.emmy.alley.party.listener.PartyListener;
 import me.emmy.alley.profile.ProfileRepository;
-import me.emmy.alley.profile.command.ChallengesCommand;
-import me.emmy.alley.profile.command.MatchHistoryCommand;
-import me.emmy.alley.profile.command.ProfileMenuCommand;
-import me.emmy.alley.profile.command.ThemesCommand;
+import me.emmy.alley.profile.command.*;
 import me.emmy.alley.profile.cosmetic.command.CosmeticCommand;
 import me.emmy.alley.profile.cosmetic.repository.CosmeticRepository;
 import me.emmy.alley.profile.division.DivisionRepository;
@@ -131,7 +128,6 @@ public class Alley extends JavaPlugin {
     private CombatManager combatManager;
     private KitRepository kitRepository;
     private ScoreboardTitleHandler sbTitleHandler;
-    private PartyRequest partyRequest;
     private KitSettingRepository kitSettingRepository;
     private SnapshotRepository snapshotRepository;
     private FFARepository ffaRepository;
@@ -285,6 +281,7 @@ public class Alley extends JavaPlugin {
         });
 
         Logger.logTime("Player Commands", () -> {
+            new ChatCommand();
             new DayCommand();
             new NightCommand();
             new SunsetCommand();

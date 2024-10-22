@@ -2,6 +2,7 @@ package me.emmy.alley.profile.data.impl;
 
 import lombok.Getter;
 import lombok.Setter;
+import me.emmy.alley.profile.enums.EnumChatChannel;
 import me.emmy.alley.profile.enums.EnumWorldTimeType;
 import org.bukkit.entity.Player;
 
@@ -13,21 +14,23 @@ import org.bukkit.entity.Player;
 @Getter
 @Setter
 public class ProfileSettingData {
-    private String time;
+    private boolean partyMessagesEnabled;
+    private boolean partyInvitesEnabled;
     private boolean scoreboardEnabled;
     private boolean tablistEnabled;
-    private boolean partyInvitesEnabled;
-    private boolean partyMessagesEnabled;
+    private String chatChannel;
+    private String time;
 
     /**
      * Constructor for the ProfileSettingData class.
      */
     public ProfileSettingData() {
-        this.time = EnumWorldTimeType.DEFAULT.getName();
+        this.partyMessagesEnabled = true;
+        this.partyInvitesEnabled = true;
         this.scoreboardEnabled = true;
         this.tablistEnabled = true;
-        this.partyInvitesEnabled = true;
-        this.partyMessagesEnabled = true;
+        this.chatChannel = EnumChatChannel.GLOBAL.getName();
+        this.time = EnumWorldTimeType.DEFAULT.getName();
     }
 
     /**

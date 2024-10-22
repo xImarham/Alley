@@ -14,9 +14,9 @@ import java.util.List;
  * @project Alley
  * @date 27/03/2024 - 14:55
  */
-@Getter @Setter
+@Getter
+@Setter
 public class ScoreboardTitleHandler {
-
     FileConfiguration scoreboardConfig = Alley.getInstance().getConfigHandler().getConfig("providers/scoreboard.yml");
 
     private String text;

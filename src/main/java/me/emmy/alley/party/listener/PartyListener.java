@@ -3,6 +3,7 @@ package me.emmy.alley.party.listener;
 import me.emmy.alley.Alley;
 import me.emmy.alley.party.Party;
 import me.emmy.alley.profile.Profile;
+import me.emmy.alley.profile.enums.EnumChatChannel;
 import me.emmy.alley.util.chat.CC;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -20,6 +21,23 @@ public class PartyListener implements Listener {
     @EventHandler
     private void onAsyncPlayerChatEvent(AsyncPlayerChatEvent event) {
         Profile profile = Alley.getInstance().getProfileRepository().getProfile(event.getPlayer().getUniqueId());
+        
+        if (profile.getProfileData().getProfileSettingData().getChatChannel().equals(EnumChatChannel.PARTY.getName())) {
+            event.setCancelled(true);
+            if (profile.getParty() == null) {
+                event.getPlayer().sendMessage(CC.translate("&cYou're not in a party."));
+                return;
+            }
+
+            if (!profile.getProfileData().getProfileSettingData().isPartyMessagesEnabled()) {
+                event.getPlayer().sendMessage(CC.translate("&cYou have party messages disabled."));
+                return;
+            }
+
+            Party party = Alley.getInstance().getPartyRepository().getPartyByMember(event.getPlayer().getUniqueId());
+            profile.getParty().notifyParty(party.getChatFormat().replace("{player}", event.getPlayer().getName()).replace("{message}", event.getMessage()));
+            return;
+        }
 
         if (event.getMessage().startsWith("#") || event.getMessage().startsWith("!")) {
             if (profile.getParty() == null) {
