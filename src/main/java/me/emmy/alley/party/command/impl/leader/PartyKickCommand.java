@@ -44,6 +44,5 @@ public class PartyKickCommand extends BaseCommand {
         }
 
         party.kickPlayer(targetPlayer);
-
     }
 }

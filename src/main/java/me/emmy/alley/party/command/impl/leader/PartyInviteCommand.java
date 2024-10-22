@@ -4,6 +4,7 @@ import me.emmy.alley.Alley;
 import me.emmy.alley.locale.ErrorMessage;
 import me.emmy.alley.locale.Locale;
 import me.emmy.alley.party.Party;
+import me.emmy.alley.party.PartyRepository;
 import me.emmy.alley.party.PartyRequest;
 import me.emmy.alley.profile.Profile;
 import me.emmy.alley.util.chat.CC;
@@ -56,7 +57,8 @@ public class PartyInviteCommand extends BaseCommand {
         }
 
         PartyRequest request = new PartyRequest(player, targetPlayer);
-        Alley.getInstance().getPartyRepository().addRequest(request);
-        request.sendRequest(party, targetPlayer);
+        PartyRepository partyRepository = Alley.getInstance().getPartyRepository();
+        partyRepository.addRequest(request);
+        partyRepository.sendRequest(party, targetPlayer);
     }
 }
