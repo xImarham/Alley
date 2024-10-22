@@ -19,6 +19,8 @@ public class DuelRequest {
     private Kit kit;
     private Arena arena;
 
+    private long expireTime = 30000L;
+
     /**
      * Instantiates a new Duel request.
      *
@@ -30,5 +32,14 @@ public class DuelRequest {
         this.target = target;
         this.kit = kit;
         this.arena = arena;
+    }
+
+    /**
+     * Check if the duel request has expired.
+     *
+     * @return true if the duel request has expired, false otherwise
+     */
+    public boolean hasExpired() {
+        return System.currentTimeMillis() - expireTime >= 0;
     }
 }

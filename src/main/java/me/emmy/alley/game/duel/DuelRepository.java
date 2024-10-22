@@ -18,6 +18,7 @@ import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +32,7 @@ import java.util.List;
 @Setter
 public class DuelRepository {
     private List<DuelRequest> duelRequests = new ArrayList<>();
+    private long expireTime = 30000L;
 
     /**
      * Add duel request to the list of duel requests.
@@ -155,5 +157,30 @@ public class DuelRepository {
         }
 
         this.removeDuelRequest(duelRequest);
+    }
+
+    /**
+     * Remove duel requests if they have expired.
+     */
+    public void expireDuelRequestsAsynchronously() {
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (duelRequests.isEmpty()) return;
+
+                duelRequests.removeIf(DuelRequest::hasExpired);
+                notifyRequestIndividuals();
+            }
+        }.runTaskTimerAsynchronously(Alley.getInstance(), 40L, 40L);
+    }
+
+    /**
+     * Notify the individuals that their duel request has expired.
+     */
+    private void notifyRequestIndividuals() {
+        this.duelRequests.forEach(duelRequest -> {
+            duelRequest.getSender().sendMessage(CC.translate("&cYour duel request to " + duelRequest.getTarget().getName() + " has expired."));
+            duelRequest.getTarget().sendMessage(CC.translate("&cThe duel request from " + duelRequest.getSender().getName() + " has expired."));
+        });
     }
 }

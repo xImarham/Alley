@@ -142,14 +142,15 @@ public class Alley extends JavaPlugin {
 
         long start = System.currentTimeMillis();
 
-        checkDescription();
-        registerHandlers();
-        registerManagers();
-        registerListeners();
-        registerCommands();
-        loadScoreboard();
-        loadTablist();
-        loadTasks();
+        this.checkDescription();
+        this.registerHandlers();
+        this.registerManagers();
+        this.registerListeners();
+        this.registerCommands();
+        this.loadScoreboard();
+        this.loadTablist();
+        this.runTasks();
+
         ServerUtil.setupWorld();
 
         long end = System.currentTimeMillis();
@@ -323,8 +324,9 @@ public class Alley extends JavaPlugin {
         }
     }
 
-    private void loadTasks() {
+    private void runTasks() {
         new FFASpawnTask(this.ffaSpawnHandler.getCuboid(), this).runTaskTimer(this, 0, 20);
+        duelRepository.expireDuelRequestsAsynchronously();
     }
 
     /**
