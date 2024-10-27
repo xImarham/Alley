@@ -10,6 +10,11 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.UUID;
 
+/**
+ * @author Emmy
+ * @project Alley
+ * @date 07/10/2024
+ */
 @AllArgsConstructor
 public class InventorySnapshotArmorButton extends Button {
     private final UUID target;
