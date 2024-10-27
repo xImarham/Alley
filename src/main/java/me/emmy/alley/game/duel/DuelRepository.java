@@ -32,14 +32,12 @@ import java.util.List;
 @Setter
 public class DuelRepository {
     private final List<DuelRequest> duelRequests;
-    private long expireTime;
 
     /**
-     * Constructor for the DuelRepository class which initializes the duel requests and the expiry time.
+     * Constructor for the DuelRepository class which initializes the duel requests.
      */
     public DuelRepository() {
         this.duelRequests = new ArrayList<>();
-        this.expireTime = 30000L;
     }
 
     /**
