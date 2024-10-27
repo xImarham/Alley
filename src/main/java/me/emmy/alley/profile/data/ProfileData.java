@@ -17,7 +17,6 @@ import java.util.Map;
 @Getter
 @Setter
 public class ProfileData {
-
     private Map<String, ProfileKitData> kitData;
     private Map<String, ProfileFFAData> ffaData;
     private ProfileSettingData profileSettingData;
