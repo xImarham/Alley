@@ -17,8 +17,8 @@ import org.bukkit.entity.Player;
  * @date 15/06/2024 - 22:19
  */
 public class InventoryCommand extends BaseCommand {
-    @Override
     @Command(name = "inventory")
+    @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
         String[] args = command.getArgs();
@@ -41,6 +41,6 @@ public class InventoryCommand extends BaseCommand {
             return;
         }
 
-        new InventorySnapshotMenu(targetPlayer).openMenu(player);
+        new InventorySnapshotMenu(targetPlayer.getUniqueId()).openMenu(player);
     }
 }

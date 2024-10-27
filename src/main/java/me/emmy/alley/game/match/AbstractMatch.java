@@ -5,15 +5,16 @@ import lombok.Setter;
 import me.emmy.alley.Alley;
 import me.emmy.alley.arena.Arena;
 import me.emmy.alley.arena.impl.StandAloneArena;
-import me.emmy.alley.hotbar.enums.HotbarType;
-import me.emmy.alley.kit.Kit;
-import me.emmy.alley.kit.settings.impl.KitSettingLivesImpl;
+import me.emmy.alley.config.ConfigHandler;
 import me.emmy.alley.game.match.enums.EnumMatchState;
 import me.emmy.alley.game.match.impl.MatchRegularImpl;
 import me.emmy.alley.game.match.player.GameParticipant;
 import me.emmy.alley.game.match.player.impl.MatchGamePlayerImpl;
 import me.emmy.alley.game.match.runnable.MatchRunnable;
 import me.emmy.alley.game.match.snapshot.Snapshot;
+import me.emmy.alley.hotbar.enums.HotbarType;
+import me.emmy.alley.kit.Kit;
+import me.emmy.alley.kit.settings.impl.KitSettingLivesImpl;
 import me.emmy.alley.profile.Profile;
 import me.emmy.alley.profile.cosmetic.impl.killeffects.AbstractKillEffect;
 import me.emmy.alley.profile.cosmetic.impl.killeffects.KillEffectRepository;
@@ -27,11 +28,11 @@ import me.emmy.alley.util.PlayerUtil;
 import me.emmy.alley.util.chat.CC;
 import me.emmy.alley.util.chat.Logger;
 import net.md_5.bungee.api.chat.*;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.BlockState;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
@@ -222,9 +223,11 @@ public abstract class AbstractMatch {
      */
     public void createSnapshot(Player loser, Player winner) {
         Snapshot winnerSnapshot = new Snapshot(winner, true);
+        winnerSnapshot.setOpponent(loser.getUniqueId());
         snapshots.add(winnerSnapshot);
 
         Snapshot loserSnapshot = new Snapshot(loser, false);
+        loserSnapshot.setOpponent(winner.getUniqueId());
         snapshots.add(loserSnapshot);
     }
 
@@ -314,27 +317,77 @@ public abstract class AbstractMatch {
      * @param winner The winner of the match.
      * @param loser  The loser of the match.
      */
+    /**
+     * Sends a match result message to the winner and loser.
+     *
+     * @param winner The winner of the match.
+     * @param loser  The loser of the match.
+     */
     private void sendMatchResultMessage(String winner, String loser) {
-        TextComponent winnerComponent = new TextComponent(CC.translate(" &fWinner: &a" + winner));
+
+        //TODO: Make end match result configurable through config file
+
+        /*
+        try {
+            FileConfiguration config = ConfigHandler.getInstance().getMessagesConfig();
+            List<String> messageLines = config.getStringList("match.ended.match-result");
+
+            for (String line : messageLines) {
+                TextComponent lineComponent = new TextComponent();
+
+                String processedLine = line.replace("%winner%", winner).replace("%loser%", loser);
+
+                if (processedLine.contains("%winner%") && processedLine.contains("%loser%")) {
+                    String[] parts = processedLine.split("(?=%winner%)|(?=%loser%)");
+
+                    for (String part : parts) {
+                        TextComponent partComponent = new TextComponent(CC.translate(part));
+
+                        if (part.contains("%winner%")) {
+                            partComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/inventory " + winner));
+                            partComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(ChatColor.GREEN + "Click to view " + winner + "'s inventory").create()));
+                        } else if (part.contains("%loser%")) {
+                            partComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/inventory " + loser));
+                            partComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(ChatColor.RED + "Click to view " + loser + "'s inventory").create()));
+                        }
+
+                        lineComponent.addExtra(partComponent);
+                    }
+                } else {
+                    lineComponent.addExtra(new TextComponent(CC.translate(processedLine)));
+                }
+
+                sendSpigotMessage(lineComponent);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+         */
+
+        TextComponent winnerComponent = new TextComponent(CC.translate(" &aWinner: &f" + winner));
         winnerComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/inventory " + winner));
         winnerComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(ChatColor.GREEN + "Click to view " + winner + "'s inventory").create()));
 
-        TextComponent loserComponent = new TextComponent(CC.translate(" &fLoser: &c" + loser));
+        TextComponent loserComponent = new TextComponent(CC.translate(" &cLoser: &f" + loser));
         loserComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/inventory " + loser));
         loserComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(ChatColor.RED + "Click to view " + loser + "'s inventory").create()));
 
         sendMessage("");
-        sendMessage(CC.MENU_BAR);
-        TextComponent message = new TextComponent(CC.translate("Match Results:"));
+        TextComponent message = new TextComponent(CC.translate("&b&lEnd Match Results: &7(click to view)"));
         message.addExtra(new TextComponent("\n"));
         message.addExtra(winnerComponent);
         message.addExtra(new TextComponent("\n"));
         message.addExtra(loserComponent);
         sendSpigotMessage(message);
-        sendMessage(CC.MENU_BAR);
         sendMessage("");
     }
 
+    /**
+     * Sets a participant as dead.
+     *
+     * @param player     The player to set as dead.
+     * @param gamePlayer The game player to set as dead.
+     */
     private void setParticipantAsDead(Player player, MatchGamePlayerImpl gamePlayer) {
         if (getKit().isSettingEnabled(KitSettingLivesImpl.class)) {
             if (getParticipant(player).getPlayer().getData().getLives() <= 0) {
@@ -463,8 +516,6 @@ public abstract class AbstractMatch {
         if (match.getParticipantA().getPlayers().size() == 1 && match.getParticipantB().getPlayers().size() == 1) {
             updateSnapshots(match);
         }
-
-        // Todo: send round end messages to players
     }
 
     /**

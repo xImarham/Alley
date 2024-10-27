@@ -25,6 +25,12 @@ public class Snapshot {
     private final ItemStack[] armor;
     private final ItemStack[] inventory;
 
+    /**
+     * Constructor for the Snapshot.
+     *
+     * @param player the player to create the snapshot for
+     * @param alive  whether the player is alive or not
+     */
     public Snapshot(Player player, boolean alive) {
         this.uuid = player.getUniqueId();
         this.username = player.getName();

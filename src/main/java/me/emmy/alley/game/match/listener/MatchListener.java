@@ -337,11 +337,11 @@ public class MatchListener implements Listener {
         Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
         Player killer = PlayerUtil.getLastAttacker(player);
         if (killer != null) {
+            ActionBarUtil.sendMessage(killer, "&c&lKILL! &f" + player.getName(), 3);
             profile.getMatch().getParticipants()
                     .forEach(participant -> participant.getPlayer().getPlayer().sendMessage(CC.translate("&c" + player.getName() + " &fwas killed by &c" + killer.getName() + "&f.")));
         }
 
-        ActionBarUtil.sendMessage(killer, "&c&lKILL! &f" + player.getName(), 3);
 
         if (profile.getState() == EnumProfileState.PLAYING) {
             event.setDeathMessage(null);
