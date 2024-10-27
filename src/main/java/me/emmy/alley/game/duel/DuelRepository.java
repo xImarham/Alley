@@ -31,8 +31,16 @@ import java.util.List;
 @Getter
 @Setter
 public class DuelRepository {
-    private final List<DuelRequest> duelRequests = new ArrayList<>();
-    private long expireTime = 30000L;
+    private final List<DuelRequest> duelRequests;
+    private long expireTime;
+
+    /**
+     * Constructor for the DuelRepository class which initializes the duel requests and the expiry time.
+     */
+    public DuelRepository() {
+        this.duelRequests = new ArrayList<>();
+        this.expireTime = 30000L;
+    }
 
     /**
      * Add duel request to the list of duel requests.

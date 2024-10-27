@@ -1,6 +1,7 @@
 package me.emmy.alley.cooldown;
 
 import lombok.Getter;
+import me.emmy.alley.cooldown.enums.EnumCooldownType;
 import me.emmy.alley.util.MutableTriple;
 
 import java.util.ArrayList;
@@ -14,21 +15,20 @@ import java.util.UUID;
  */
 @Getter
 public class CooldownRepository {
-
-    private final List<MutableTriple<UUID, String, Cooldown>> cooldowns;
+    private final List<MutableTriple<UUID, EnumCooldownType, Cooldown>> cooldowns;
 
     public CooldownRepository() {
         this.cooldowns = new ArrayList<>();
     }
 
-    public void addCooldown(UUID uuid, String key, Cooldown cooldown) {
-        cooldowns.removeIf(triple -> triple.getA().equals(uuid) && triple.getB().equals(key));
-        cooldowns.add(new MutableTriple<>(uuid, key, cooldown));
+    public void addCooldown(UUID uuid, EnumCooldownType type, Cooldown cooldown) {
+        cooldowns.removeIf(triple -> triple.getA().equals(uuid) && triple.getB().equals(type));
+        cooldowns.add(new MutableTriple<>(uuid, type, cooldown));
     }
 
-    public Cooldown getCooldown(UUID uuid, String key) {
+    public Cooldown getCooldown(UUID uuid, EnumCooldownType type) {
         return cooldowns.stream()
-                .filter(triple -> triple.getA().equals(uuid) && triple.getB().equals(key))
+                .filter(triple -> triple.getA().equals(uuid) && triple.getB().equals(type))
                 .map(MutableTriple::getC)
                 .findFirst()
                 .orElse(null);

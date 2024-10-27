@@ -3,6 +3,7 @@ package me.emmy.alley.game.ffa.listener;
 import me.emmy.alley.Alley;
 import me.emmy.alley.cooldown.Cooldown;
 import me.emmy.alley.cooldown.CooldownRepository;
+import me.emmy.alley.cooldown.enums.EnumCooldownType;
 import me.emmy.alley.game.ffa.combat.CombatTagEvent;
 import me.emmy.alley.game.ffa.safezone.FFASpawnHandler;
 import me.emmy.alley.profile.Profile;
@@ -224,7 +225,7 @@ public class FFAListener implements Listener {
                 }
 
                 CooldownRepository cooldownRepository = Alley.getInstance().getCooldownRepository();
-                Optional<Cooldown> optionalCooldown = Optional.ofNullable(cooldownRepository.getCooldown(player.getUniqueId(), "ENDERPEARL"));
+                Optional<Cooldown> optionalCooldown = Optional.ofNullable(cooldownRepository.getCooldown(player.getUniqueId(), EnumCooldownType.ENDER_PEARL));
 
                 if (optionalCooldown.isPresent() && optionalCooldown.get().isActive()) {
                     event.setCancelled(true);
@@ -234,8 +235,8 @@ public class FFAListener implements Listener {
                 }
 
                 Cooldown cooldown = optionalCooldown.orElseGet(() -> {
-                    Cooldown newCooldown = new Cooldown(15 * 1000L, () -> player.sendMessage(CC.translate("&aYou can now use pearls again!")));
-                    cooldownRepository.addCooldown(player.getUniqueId(), "ENDERPEARL", newCooldown);
+                    Cooldown newCooldown = new Cooldown(EnumCooldownType.ENDER_PEARL, () -> player.sendMessage(CC.translate("&aYou can now use pearls again!")));
+                    cooldownRepository.addCooldown(player.getUniqueId(), EnumCooldownType.ENDER_PEARL, newCooldown);
                     return newCooldown;
                 });
 

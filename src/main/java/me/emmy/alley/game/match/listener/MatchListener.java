@@ -5,13 +5,14 @@ import me.emmy.alley.arena.Arena;
 import me.emmy.alley.config.ConfigHandler;
 import me.emmy.alley.cooldown.Cooldown;
 import me.emmy.alley.cooldown.CooldownRepository;
-import me.emmy.alley.kit.settings.impl.*;
-import me.emmy.alley.locale.ErrorMessage;
+import me.emmy.alley.cooldown.enums.EnumCooldownType;
 import me.emmy.alley.game.match.AbstractMatch;
 import me.emmy.alley.game.match.MatchUtility;
 import me.emmy.alley.game.match.enums.EnumMatchState;
 import me.emmy.alley.game.match.player.GameParticipant;
 import me.emmy.alley.game.match.player.impl.MatchGamePlayerImpl;
+import me.emmy.alley.kit.settings.impl.*;
+import me.emmy.alley.locale.ErrorMessage;
 import me.emmy.alley.profile.Profile;
 import me.emmy.alley.profile.enums.EnumProfileState;
 import me.emmy.alley.util.PlayerUtil;
@@ -409,21 +410,24 @@ public class MatchListener implements Listener {
         Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
         ItemStack item = event.getItem();
 
-        assert profile != null;
+        if (profile.getMatch() == null) {
+            return;
+        }
+
+        if (profile.getMatch().getState() == EnumMatchState.STARTING && item != null && item.getType() == Material.ENDER_PEARL) {
+            event.setCancelled(true);
+            player.updateInventory();
+            player.sendMessage(CC.translate("&cYou cannot use ender pearls during the starting phase."));
+            return;
+        }
+
+        if (profile.getMatch().getKit().isSettingEnabled(KitSettingLivesImpl.class)) {
+            return;
+        }
+
         if (profile.getState() == EnumProfileState.PLAYING && item != null && item.getType() == Material.ENDER_PEARL) {
-            if (profile.getMatch().getState() == EnumMatchState.STARTING) {
-                event.setCancelled(true);
-                player.updateInventory();
-                player.sendMessage(CC.translate("&cYou cannot use ender pearls during the starting phase."));
-                return;
-            }
-
-            if (profile.getMatch().getKit().isSettingEnabled(KitSettingLivesImpl.class)) {
-                return;
-            }
-
             CooldownRepository cooldownRepository = Alley.getInstance().getCooldownRepository();
-            Optional<Cooldown> optionalCooldown = Optional.ofNullable(cooldownRepository.getCooldown(player.getUniqueId(), "ENDERPEARL"));
+            Optional<Cooldown> optionalCooldown = Optional.ofNullable(cooldownRepository.getCooldown(player.getUniqueId(), EnumCooldownType.ENDER_PEARL));
 
             if (optionalCooldown.isPresent() && optionalCooldown.get().isActive()) {
                 event.setCancelled(true);
@@ -433,8 +437,8 @@ public class MatchListener implements Listener {
             }
 
             Cooldown cooldown = optionalCooldown.orElseGet(() -> {
-                Cooldown newCooldown = new Cooldown(15 * 1000L, () -> player.sendMessage(CC.translate("&aYou can now use pearls again!")));
-                cooldownRepository.addCooldown(player.getUniqueId(), "ENDERPEARL", newCooldown);
+                Cooldown newCooldown = new Cooldown(EnumCooldownType.ENDER_PEARL, () -> player.sendMessage(CC.translate("&aYou can now use pearls again!")));
+                cooldownRepository.addCooldown(player.getUniqueId(), EnumCooldownType.ENDER_PEARL, newCooldown);
                 return newCooldown;
             });
 

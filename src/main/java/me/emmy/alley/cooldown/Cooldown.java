@@ -1,6 +1,7 @@
 package me.emmy.alley.cooldown;
 
 import lombok.Getter;
+import me.emmy.alley.cooldown.enums.EnumCooldownType;
 import me.emmy.alley.util.TaskUtil;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -11,20 +12,19 @@ import org.bukkit.scheduler.BukkitTask;
  */
 @Getter
 public class Cooldown {
-
-    private final long cooldownDuration;
+    private final EnumCooldownType type;
     private final Runnable actionToRun;
     private long startTime;
     private BukkitTask cooldownTask;
 
-    public Cooldown(long cooldownDuration, Runnable actionToRun) {
-        this.cooldownDuration = cooldownDuration;
+    public Cooldown(EnumCooldownType type, Runnable actionToRun) {
+        this.type = type;
         this.actionToRun = actionToRun;
         this.startTime = 0L;
     }
 
     public long calculateEndTime() {
-        return startTime + cooldownDuration;
+        return startTime + type.getCooldownDuration();
     }
 
     public boolean isActive() {
@@ -57,6 +57,6 @@ public class Cooldown {
         cooldownTask = TaskUtil.runLaterAsync(() -> {
             actionToRun.run();
             cancelExistingTask();
-        }, cooldownDuration / 50L);
+        }, type.getCooldownDuration() / 50L);
     }
 }
