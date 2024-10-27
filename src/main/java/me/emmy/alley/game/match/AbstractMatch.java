@@ -243,7 +243,7 @@ public abstract class AbstractMatch {
 
         setParticipantAsDead(player, gamePlayer);
         notifySpectators(player.getName() + " has died");
-        notifyParticipants(player.getName() + " has died");
+        //notifyParticipants(player.getName() + " has died");
 
         player.setVelocity(new Vector());
 
@@ -322,8 +322,6 @@ public abstract class AbstractMatch {
         TextComponent loserComponent = new TextComponent(CC.translate(" &fLoser: &c" + loser));
         loserComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/inventory " + loser));
         loserComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(ChatColor.RED + "Click to view " + loser + "'s inventory").create()));
-
-        this.createSnapshot(Bukkit.getPlayer(loser), Bukkit.getPlayer(winner));
 
         sendMessage("");
         sendMessage(CC.MENU_BAR);

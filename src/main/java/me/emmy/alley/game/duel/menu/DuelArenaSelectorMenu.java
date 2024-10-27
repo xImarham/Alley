@@ -57,21 +57,20 @@ public class DuelArenaSelectorMenu extends Menu {
 
         @Override
         public ItemStack getButtonItem(Player player) {
-            return new ItemBuilder(Material.PAPER)
-                    .name("&b" + arena.getName())
+            return new ItemBuilder(Material.PAPER).name("&b" + arena.getName()).durability(0).hideMeta()
                     .lore(Arrays.asList(
                             "",
                             "&7Click to send a duel request to " + targetPlayer.getName() + " in the " + arena.getName() + " arena.",
                             "")
                     )
-                    .build();
+                    .hideMeta().build();
         }
 
         @Override
         public void clicked(Player player, ClickType clickType) {
+            player.closeInventory();
             Alley.getInstance().getDuelRepository().sendDuelRequest(player, targetPlayer, kit, arena);
             player.sendMessage(CC.translate("&aYou have sent a duel request to " + targetPlayer.getName() + " in the " + arena.getName() + " arena with the " + kit.getName() + " kit."));
-            player.closeInventory();
         }
     }
 }

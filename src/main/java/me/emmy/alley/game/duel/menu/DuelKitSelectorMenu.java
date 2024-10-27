@@ -35,6 +35,7 @@ public class DuelKitSelectorMenu extends Menu {
         Map<Integer, Button> buttons = new HashMap<>();
 
         Alley.getInstance().getKitRepository().getKits().stream()
+                .filter(Kit::isEnabled)
                 .filter(kit -> kit.isSettingEnabled(KitSettingRankedImpl.class))
                 .forEach(kit -> buttons.put(buttons.size(), new DuelButton(targetPlayer, kit)));
 
@@ -48,16 +49,13 @@ public class DuelKitSelectorMenu extends Menu {
 
         @Override
         public ItemStack getButtonItem(Player player) {
-            return new ItemBuilder(kit.getIcon())
-                    .name("&b" + kit.getName())
+            return new ItemBuilder(kit.getIcon()).name(kit.getDisplayName() == null ? "&b&l" + kit.getName() : kit.getDisplayName()).durability(kit.getIconData()).hideMeta()
                     .lore(Arrays.asList(
-                            kit.getDescription(),
+                            "&7" + kit.getDescription(),
                             "",
-                            "&7Click to send a duel request to " + targetPlayer.getName() + ".",
-                            ""))
-                    .durability(kit.getIconData())
-                    .hideMeta()
-                    .build();
+                            "&aClick to send a duel request to " + targetPlayer.getName() + "!"
+                    ))
+                    .hideMeta().build();
         }
 
         @Override
@@ -69,9 +67,9 @@ public class DuelKitSelectorMenu extends Menu {
                 return;
             }
 
+            player.closeInventory();
             Alley.getInstance().getDuelRepository().sendDuelRequest(player, targetPlayer, kit);
             player.sendMessage(CC.translate("&aYou have sent a duel request to " + targetPlayer.getName() + " in the " + Alley.getInstance().getDuelRepository().getDuelRequest(player, targetPlayer).getArena().getName() + " arena with the " + kit.getName() + " kit."));
-            player.closeInventory();
         }
     }
 }

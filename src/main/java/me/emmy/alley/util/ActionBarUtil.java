@@ -2,6 +2,7 @@ package me.emmy.alley.util;
 
 import lombok.experimental.UtilityClass;
 import me.emmy.alley.Alley;
+import me.emmy.alley.util.chat.CC;
 import me.emmy.alley.util.chat.Logger;
 import net.minecraft.server.v1_8_R3.IChatBaseComponent;
 import net.minecraft.server.v1_8_R3.PacketPlayOutChat;
@@ -22,9 +23,9 @@ public class ActionBarUtil {
      * @param player The player.
      * @param message The message.
      */
-    private void sendMessage(Player player, String message, int durationSeconds) {
+    public void sendMessage(Player player, String message, int durationSeconds) {
         try {
-            IChatBaseComponent chatBaseComponent = IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + message + "\"}");
+            IChatBaseComponent chatBaseComponent = IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + CC.translate(message) + "\"}");
             PacketPlayOutChat packet = new PacketPlayOutChat(chatBaseComponent, (byte) 2);
             ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
 

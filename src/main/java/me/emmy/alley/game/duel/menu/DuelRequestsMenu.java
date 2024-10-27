@@ -26,7 +26,7 @@ public class DuelRequestsMenu extends PaginatedMenu {
 
     @Override
     public String getPrePaginatedTitle(Player player) {
-        return "&b&lYour Duel Requests";
+        return "&b&lDuel Requests";
     }
 
     @Override
@@ -35,14 +35,14 @@ public class DuelRequestsMenu extends PaginatedMenu {
 
         addGlassHeader(buttons, 15);
 
+        buttons.put(4, new RefreshDuelRequestsButton());
+
         return buttons;
     }
 
     @Override
     public Map<Integer, Button> getAllPagesButtons(Player player) {
         Map<Integer, Button> buttons = new HashMap<>();
-
-        int slot = 10;
 
         Alley.getInstance().getDuelRepository().getDuelRequests()
                 .stream()
@@ -58,19 +58,16 @@ public class DuelRequestsMenu extends PaginatedMenu {
         private DuelRequest duelRequest;
         @Override
         public ItemStack getButtonItem(Player player) {
-            return new ItemBuilder(Material.PAPER)
-                    .name("&fRequest from " + duelRequest.getSender().getName())
+            return new ItemBuilder(Material.PAPER).name("&b&l" + duelRequest.getSender().getName()).durability(0).hideMeta()
                     .lore(Arrays.asList(
-                            "&fArena: &f" + duelRequest.getArena().getDisplayName(),
                             "&fKit: &f" + duelRequest.getKit().getDisplayName(),
-                            " &7" + duelRequest.getKit().getDescription(),
+                            "&fArena: &f" + duelRequest.getArena().getDisplayName(),
                             "",
                             "&fExpires in: &b" + duelRequest.getRemainingTimeFormatted(),
                             "",
                             "&aClick to accept!"
-                            ))
-                    .hideMeta()
-                    .build();
+                    ))
+                    .hideMeta().build();
         }
 
         @Override
@@ -83,6 +80,12 @@ public class DuelRequestsMenu extends PaginatedMenu {
                 return;
             }
 
+            if (duelRequest.getArena() == null) {
+                player.sendMessage(CC.translate("&cThis duel request has no setup arena."));
+                new DuelRequestsMenu().openMenu(player);
+                return;
+            }
+
             if (Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId()).getMatch() != null) {
                 player.sendMessage(CC.translate("&cYou are already in a match."));
                 return;
@@ -90,6 +93,26 @@ public class DuelRequestsMenu extends PaginatedMenu {
 
             Alley.getInstance().getDuelRepository().acceptPendingRequest(duelRequest);
             player.closeInventory();
+        }
+    }
+
+    @AllArgsConstructor
+    private static class RefreshDuelRequestsButton extends Button {
+
+        @Override
+        public ItemStack getButtonItem(Player player) {
+            return new ItemBuilder(Material.EMERALD)
+                    .name("&a&lRefresh")
+                    .lore("&aClick to refresh the duel requests.")
+                    .hideMeta()
+                    .build();
+        }
+
+        @Override
+        public void clicked(Player player, ClickType clickType) {
+            if (clickType != ClickType.LEFT) return;
+
+            new DuelRequestsMenu().openMenu(player);
         }
     }
 }

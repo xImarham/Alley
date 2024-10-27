@@ -15,10 +15,12 @@ import me.emmy.alley.kit.settings.impl.*;
 import me.emmy.alley.locale.ErrorMessage;
 import me.emmy.alley.profile.Profile;
 import me.emmy.alley.profile.enums.EnumProfileState;
+import me.emmy.alley.util.ActionBarUtil;
 import me.emmy.alley.util.PlayerUtil;
 import me.emmy.alley.util.chat.CC;
 import me.emmy.alley.util.chat.Logger;
 import me.emmy.alley.util.location.RayTracerUtil;
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -333,6 +335,13 @@ public class MatchListener implements Listener {
     private void onPlayerDeath(PlayerDeathEvent event) {
         Player player = event.getEntity();
         Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
+        Player killer = PlayerUtil.getLastAttacker(player);
+        if (killer != null) {
+            profile.getMatch().getParticipants()
+                    .forEach(participant -> participant.getPlayer().getPlayer().sendMessage(CC.translate("&c" + player.getName() + " &fwas killed by &c" + killer.getName() + "&f.")));
+        }
+
+        ActionBarUtil.sendMessage(killer, "&c&lKILL! &f" + player.getName(), 3);
 
         if (profile.getState() == EnumProfileState.PLAYING) {
             event.setDeathMessage(null);
@@ -357,6 +366,7 @@ public class MatchListener implements Listener {
             }.runTaskLater(Alley.getInstance(), 100L);
 
             Alley.getInstance().getServer().getScheduler().runTaskLater(Alley.getInstance(), () -> player.spigot().respawn(), 1L);
+            profile.getMatch().createSnapshot(player, killer);
             profile.getMatch().handleDeath(player);
         }
     }

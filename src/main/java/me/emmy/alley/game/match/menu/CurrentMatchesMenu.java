@@ -78,8 +78,7 @@ public class CurrentMatchesMenu extends PaginatedMenu {
          */
         @Override
         public ItemStack getButtonItem(Player player) {
-            return new ItemBuilder(match.getKit().getIcon()).durability(match.getKit().getIconData())
-                    .name("&b&l" + match.getParticipants().get(0).getPlayer().getUsername() + " &7vs &b&l" + match.getParticipants().get(1).getPlayer().getUsername())
+            return new ItemBuilder(match.getKit().getIcon()).name("&b&l" + match.getParticipants().get(0).getPlayer().getUsername() + " &7vs &b&l" + match.getParticipants().get(1).getPlayer().getUsername()).durability(match.getKit().getIconData()).hideMeta()
                     .lore(Arrays.asList(
                             " &f● &bArena: &f" + match.getArena().getName(),
                             " &f● &bKit: &f" + match.getKit().getName(),
@@ -87,9 +86,7 @@ public class CurrentMatchesMenu extends PaginatedMenu {
                             " ",
                             "&aClick to spectate!"
                     ))
-                    .durability(match.getKit().getIconData())
-                    .hideMeta()
-                    .build();
+                    .hideMeta().build();
         }
 
         /**
