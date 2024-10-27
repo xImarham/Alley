@@ -31,7 +31,7 @@ import java.util.List;
 @Getter
 @Setter
 public class DuelRepository {
-    private List<DuelRequest> duelRequests = new ArrayList<>();
+    private final List<DuelRequest> duelRequests = new ArrayList<>();
     private long expireTime = 30000L;
 
     /**
@@ -168,17 +168,29 @@ public class DuelRepository {
             public void run() {
                 if (duelRequests.isEmpty()) return;
 
-                duelRequests.removeIf(DuelRequest::hasExpired);
-                notifyRequestIndividuals();
+                List<DuelRequest> expiredRequests = new ArrayList<>();
+                synchronized (duelRequests) {
+                    duelRequests.removeIf(duelRequest -> {
+                        if (duelRequest.hasExpired()) {
+                            expiredRequests.add(duelRequest);
+                            return true;
+                        }
+                        return false;
+                    });
+                }
+
+                notifyRequestIndividuals(expiredRequests);
             }
         }.runTaskTimerAsynchronously(Alley.getInstance(), 40L, 40L);
     }
 
     /**
-     * Notify the individuals that their duel request has expired.
+     * Notify the sender and target that the duel request has expired.
+     *
+     * @param expiredRequests the expired requests
      */
-    private void notifyRequestIndividuals() {
-        this.duelRequests.forEach(duelRequest -> {
+    private void notifyRequestIndividuals(List<DuelRequest> expiredRequests) {
+        expiredRequests.forEach(duelRequest -> {
             duelRequest.getSender().sendMessage(CC.translate("&cYour duel request to " + duelRequest.getTarget().getName() + " has expired."));
             duelRequest.getTarget().sendMessage(CC.translate("&cThe duel request from " + duelRequest.getSender().getName() + " has expired."));
         });

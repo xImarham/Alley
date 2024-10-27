@@ -1,9 +1,12 @@
 package me.emmy.alley.game.duel.command;
 
+import me.emmy.alley.Alley;
 import me.emmy.alley.api.command.BaseCommand;
 import me.emmy.alley.api.command.Command;
 import me.emmy.alley.api.command.CommandArgs;
 import me.emmy.alley.game.duel.menu.DuelKitSelectorMenu;
+import me.emmy.alley.profile.Profile;
+import me.emmy.alley.profile.enums.EnumProfileState;
 import me.emmy.alley.util.chat.CC;
 import org.bukkit.entity.Player;
 
@@ -32,6 +35,13 @@ public class DuelCommand extends BaseCommand {
 
         if (target == player) {
             player.sendMessage(CC.translate("&cYou cannot duel yourself."));
+            return;
+        }
+
+        Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
+
+        if (profile.getState() != EnumProfileState.LOBBY) {
+            player.sendMessage(CC.translate("&cYou must be in the lobby to duel a player."));
             return;
         }
 
