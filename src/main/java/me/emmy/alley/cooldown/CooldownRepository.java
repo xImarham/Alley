@@ -21,11 +21,25 @@ public class CooldownRepository {
         this.cooldowns = new ArrayList<>();
     }
 
+    /**
+     * Add a cooldown to the repository.
+     *
+     * @param uuid     the uuid of the player
+     * @param type     the type of cooldown
+     * @param cooldown the cooldown
+     */
     public void addCooldown(UUID uuid, EnumCooldownType type, Cooldown cooldown) {
         cooldowns.removeIf(triple -> triple.getA().equals(uuid) && triple.getB().equals(type));
         cooldowns.add(new MutableTriple<>(uuid, type, cooldown));
     }
 
+    /**
+     * Get a cooldown from the repository by the player's uuid and the type of cooldown.
+     *
+     * @param uuid the uuid of the player
+     * @param type the type of cooldown
+     * @return the cooldown
+     */
     public Cooldown getCooldown(UUID uuid, EnumCooldownType type) {
         return cooldowns.stream()
                 .filter(triple -> triple.getA().equals(uuid) && triple.getB().equals(type))

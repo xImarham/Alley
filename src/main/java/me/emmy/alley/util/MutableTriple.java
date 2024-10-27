@@ -15,6 +15,13 @@ public class MutableTriple<A, B,C> {
     private B b;
     private C c;
 
+    /**
+     * Constructor for the MutableTriple class.
+     *
+     * @param a the first object
+     * @param b the second object
+     * @param c the third object
+     */
     public MutableTriple(A a, B b, C c) {
         this.a = a;
         this.b = b;
