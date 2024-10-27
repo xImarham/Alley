@@ -20,7 +20,6 @@ import me.emmy.alley.util.PlayerUtil;
 import me.emmy.alley.util.chat.CC;
 import me.emmy.alley.util.chat.Logger;
 import me.emmy.alley.util.location.RayTracerUtil;
-import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -340,8 +339,8 @@ public class MatchListener implements Listener {
             ActionBarUtil.sendMessage(killer, "&c&lKILL! &f" + player.getName(), 3);
             profile.getMatch().getParticipants()
                     .forEach(participant -> participant.getPlayer().getPlayer().sendMessage(CC.translate("&c" + player.getName() + " &fwas killed by &c" + killer.getName() + "&f.")));
+            profile.getMatch().createSnapshot(player, killer);
         }
-
 
         if (profile.getState() == EnumProfileState.PLAYING) {
             event.setDeathMessage(null);
@@ -366,7 +365,6 @@ public class MatchListener implements Listener {
             }.runTaskLater(Alley.getInstance(), 100L);
 
             Alley.getInstance().getServer().getScheduler().runTaskLater(Alley.getInstance(), () -> player.spigot().respawn(), 1L);
-            profile.getMatch().createSnapshot(player, killer);
             profile.getMatch().handleDeath(player);
         }
     }
