@@ -329,6 +329,7 @@ public class Alley extends JavaPlugin {
     private void runTasks() {
         new FFASpawnTask(this.ffaSpawnHandler.getCuboid(), this).runTaskTimer(this, 0, 20);
         duelRepository.expireDuelRequestsAsynchronously();
+        partyRepository.expirePartyInvitesAsynchronously();
     }
 
     /**
