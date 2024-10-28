@@ -1,7 +1,6 @@
 package me.emmy.alley.game.ffa.combat;
 
 import lombok.Getter;
-import me.emmy.alley.Alley;
 import me.emmy.alley.util.chat.CC;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -13,19 +12,24 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Created by Infames
+ * @author Infames
  * @date 23/07/2021 @ 20:08
  */
 @Getter
-public class CombatManager extends BukkitRunnable {
-
-    private final Alley plugin = Alley.getInstance();
-
+public class CombatEventManager extends BukkitRunnable {
     private final Set<Player> combatSet = new HashSet<>();
     private final Map<Player, Integer> timeMap = new HashMap<>();
 
     private int count = 0;
 
+    //Set combat to player and set time to 16
+
+    /**
+     * Set combat to player and set time to 16
+     *
+     * @param player the player
+     * @param b the boolean
+     */
     public void setCombatSet(Player player, boolean b) {
         if (b) {
             combatSet.add(player);
@@ -36,15 +40,32 @@ public class CombatManager extends BukkitRunnable {
         }
     }
 
+    /**
+     * Set combat time
+     *
+     * @param player the player
+     * @param time the time
+     */
     public void setCombatTime(Player player, int time) {
         timeMap.remove(player);
         timeMap.put(player, time);
     }
 
+    /**
+     * Check if a player is in combat or not
+     *
+     * @param player the player
+     * @return the boolean
+     */
     public boolean isCombat(Player player) {
         return combatSet.contains(player);
     }
 
+    /**
+     * Get the combat time of a player
+     *
+     * @return the set
+     */
     public int getCombatTime(Player player) {
         return timeMap.get(player);
     }

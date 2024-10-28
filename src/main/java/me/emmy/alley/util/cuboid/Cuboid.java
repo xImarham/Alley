@@ -1,4 +1,4 @@
-package me.emmy.alley.game.ffa.safezone.cuboid;
+package me.emmy.alley.util.cuboid;
 
 import org.bukkit.Location;
 import org.bukkit.World;

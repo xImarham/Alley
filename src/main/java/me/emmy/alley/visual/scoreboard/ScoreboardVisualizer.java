@@ -35,7 +35,7 @@ public class ScoreboardVisualizer implements AssembleAdapter {
      */
     @Override
     public String getTitle(Player player) {
-        return CC.translate(Alley.getInstance().getSbTitleHandler().getText()
+        return CC.translate(Alley.getInstance().getScoreboardTitleHandler().getText()
                 .replaceAll("%server-name%", Bukkit.getServerName())
         );
     }
@@ -206,7 +206,7 @@ public class ScoreboardVisualizer implements AssembleAdapter {
                                 .replaceAll("\\{sidebar}", Alley.getInstance().getConfigHandler().getConfig("providers/scoreboard.yml").getString("scoreboard.sidebar-format"))
                                 .replaceAll("\\{kit}", profile.getFfaMatch().getKit().getDisplayName())
                                 .replaceAll("\\{players}", String.valueOf(profile.getFfaMatch().getPlayers().size()))
-                                .replaceAll("\\{zone}", Alley.getInstance().getFfaSpawnHandler().getCuboid().isIn(player) ? "Spawn" : "Warzone")
+                                .replaceAll("\\{zone}", Alley.getInstance().getFfaCuboidService().getCuboid().isIn(player) ? "Spawn" : "Warzone")
                                 .replaceAll("\\{kills}", String.valueOf(profile.getProfileData().getFfaData().get(profile.getFfaMatch().getKit().getName()).getKills()))
                                 .replaceAll("\\{deaths}", String.valueOf(profile.getProfileData().getFfaData().get(profile.getFfaMatch().getKit().getName()).getDeaths()))
                                 .replaceAll("\\{ping}", String.valueOf(BukkitReflection.getPing(player))));

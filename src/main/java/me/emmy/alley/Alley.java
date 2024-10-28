@@ -32,11 +32,11 @@ import me.emmy.alley.game.duel.command.DuelRequestsCommand;
 import me.emmy.alley.game.event.EventRepository;
 import me.emmy.alley.game.event.command.EventCommand;
 import me.emmy.alley.game.ffa.FFARepository;
-import me.emmy.alley.game.ffa.combat.CombatManager;
+import me.emmy.alley.game.ffa.combat.CombatEventManager;
 import me.emmy.alley.game.ffa.command.admin.FFACommand;
 import me.emmy.alley.game.ffa.listener.FFAListener;
-import me.emmy.alley.game.ffa.safezone.FFASpawnHandler;
-import me.emmy.alley.game.ffa.safezone.task.FFASpawnTask;
+import me.emmy.alley.game.ffa.spawn.FFACuboidService;
+import me.emmy.alley.game.ffa.spawn.FFASpawnTask;
 import me.emmy.alley.game.match.AbstractMatch;
 import me.emmy.alley.game.match.MatchRepository;
 import me.emmy.alley.game.match.command.admin.MatchCommand;
@@ -111,7 +111,7 @@ public class Alley extends JavaPlugin {
     private CosmeticRepository cosmeticRepository;
     private ProfileRepository profileRepository;
     private DivisionRepository divisionRepository;
-    private FFASpawnHandler ffaSpawnHandler;
+    private FFACuboidService ffaCuboidService;
     private MongoService mongoService;
     private ArenaRepository arenaRepository;
     private QueueRepository queueRepository;
@@ -119,9 +119,9 @@ public class Alley extends JavaPlugin {
     private MatchRepository matchRepository;
     private PartyRepository partyRepository;
     private CooldownRepository cooldownRepository;
-    private CombatManager combatManager;
+    private CombatEventManager combatEventManager;
     private KitRepository kitRepository;
-    private ScoreboardTitleHandler sbTitleHandler;
+    private ScoreboardTitleHandler scoreboardTitleHandler;
     private KitSettingRepository kitSettingRepository;
     private SnapshotRepository snapshotRepository;
     private FFARepository ffaRepository;
@@ -187,7 +187,7 @@ public class Alley extends JavaPlugin {
 
     private void registerHandlers() {
         configHandler = new ConfigHandler();
-        sbTitleHandler = new ScoreboardTitleHandler();
+        scoreboardTitleHandler = new ScoreboardTitleHandler();
     }
 
     private void registerManagers() {
@@ -208,8 +208,8 @@ public class Alley extends JavaPlugin {
         Logger.logTime("MatchRepository", () -> this.matchRepository = new MatchRepository());
         Logger.logTime("PartyRepository", () -> this.partyRepository = new PartyRepository());
         Logger.logTime("SpawnService", () -> this.spawnService = new SpawnService());
-        Logger.logTime("CombatManager", () -> this.combatManager = new CombatManager());
-        Logger.logTime("FFASpawnHandler", () -> this.ffaSpawnHandler = new FFASpawnHandler());
+        Logger.logTime("CombatEventManager", () -> this.combatEventManager = new CombatEventManager());
+        Logger.logTime("FFACuboidService", () -> this.ffaCuboidService = new FFACuboidService());
         Logger.logTime("EventRepository", () -> this.eventRepository = new EventRepository());
         Logger.logTime("DuelRepository", () -> this.duelRepository = new DuelRepository());
     }
@@ -321,15 +321,15 @@ public class Alley extends JavaPlugin {
     }
 
     private void loadTablist() {
-        if (configHandler.getTablistConfig().getBoolean("tablist.enabled")) {
+        if (this.configHandler.getTablistConfig().getBoolean("tablist.enabled")) {
             new TablistUpdateTask().runTaskTimer(this, 0L, 20L);
         }
     }
 
     private void runTasks() {
-        new FFASpawnTask(this.ffaSpawnHandler.getCuboid(), this).runTaskTimer(this, 0, 20);
-        duelRepository.expireDuelRequestsAsynchronously();
-        partyRepository.expirePartyInvitesAsynchronously();
+        new FFASpawnTask(this.ffaCuboidService.getCuboid(), this).runTaskTimerAsynchronously(this, 0L, 20L);
+        this.duelRepository.expireDuelRequestsAsynchronously();
+        this.partyRepository.expirePartyInvitesAsynchronously();
     }
 
     /**

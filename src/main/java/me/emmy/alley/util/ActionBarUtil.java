@@ -18,7 +18,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 @UtilityClass
 public class ActionBarUtil {
     /**
-     * Method to send an action bar message to a player.
+     * Method to send an action bar message to a player in an specific interval.
      *
      * @param player The player.
      * @param message The message.

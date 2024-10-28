@@ -1,8 +1,8 @@
-package me.emmy.alley.game.ffa.safezone.task;
+package me.emmy.alley.game.ffa.spawn;
 
 import me.emmy.alley.Alley;
 import me.emmy.alley.game.ffa.enums.EnumFFAState;
-import me.emmy.alley.game.ffa.safezone.cuboid.Cuboid;
+import me.emmy.alley.util.cuboid.Cuboid;
 import me.emmy.alley.profile.Profile;
 import me.emmy.alley.profile.enums.EnumProfileState;
 import me.emmy.alley.util.chat.CC;
@@ -20,11 +20,16 @@ import java.util.UUID;
  * @date 12/06/2024 - 22:26
  */
 public class FFASpawnTask extends BukkitRunnable {
-
     private final Cuboid cuboid;
     private final Alley plugin;
     private final Map<UUID, EnumFFAState> playerStates;
 
+    /**
+     * Constructor for the FFASpawnTask class.
+     *
+     * @param cuboid The cuboid of the safezone.
+     * @param plugin The instance of the plugin.
+     */
     public FFASpawnTask(Cuboid cuboid, Alley plugin) {
         this.cuboid = cuboid;
         this.plugin = plugin;
@@ -35,12 +40,16 @@ public class FFASpawnTask extends BukkitRunnable {
     public void run() {
         for (Player player : Bukkit.getOnlinePlayers()) {
             Profile profile = plugin.getProfileRepository().getProfile(player.getUniqueId());
-
             if (profile != null && profile.getState() == EnumProfileState.FFA) {
                 EnumFFAState currentState = playerStates.getOrDefault(player.getUniqueId(), EnumFFAState.FIGHTING);
                 boolean isInSpawn = cuboid.isIn(player);
 
                 if (isInSpawn && currentState != EnumFFAState.SPAWN) {
+                    /*if (Alley.getInstance().getCombatEventManager().isCombat(player)) {
+                        Alley.getInstance().getCombatEventManager().setCombatSet(player, false);
+                        player.sendMessage(CC.translate("&cYou cannot enter the FFA spawn area while in combat."));
+                        return;
+                    }*/
                     profile.getFfaMatch().setState(EnumFFAState.SPAWN);
                     playerStates.put(player.getUniqueId(), EnumFFAState.SPAWN);
                     player.sendMessage(CC.translate("&aYou have entered the FFA spawn area."));

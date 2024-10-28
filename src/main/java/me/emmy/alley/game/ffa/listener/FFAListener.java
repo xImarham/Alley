@@ -4,12 +4,11 @@ import me.emmy.alley.Alley;
 import me.emmy.alley.cooldown.Cooldown;
 import me.emmy.alley.cooldown.CooldownRepository;
 import me.emmy.alley.cooldown.enums.EnumCooldownType;
-import me.emmy.alley.game.ffa.combat.CombatTagEvent;
-import me.emmy.alley.game.ffa.safezone.FFASpawnHandler;
+import me.emmy.alley.game.ffa.spawn.FFACuboidService;
 import me.emmy.alley.profile.Profile;
 import me.emmy.alley.profile.enums.EnumProfileState;
-import me.emmy.alley.util.chat.CC;
 import me.emmy.alley.util.PlayerUtil;
+import me.emmy.alley.util.chat.CC;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Item;
@@ -39,25 +38,22 @@ import java.util.Optional;
  */
 public class FFAListener implements Listener {
 
-    /**
-     * Handles the CombatTagEvent.
-     *
-     * @param event The CombatTagEvent
-     */
-    @EventHandler
+    /*@EventHandler
     public void onCombatTag(CombatTagEvent event) {
         Player player = event.getPlayer();
         Player attacker = event.getAttacker();
 
-        // call this at the onEntityDamageByEntity event
-
         Profile playerProfile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
         Profile attackerProfile = Alley.getInstance().getProfileRepository().getProfile(attacker.getUniqueId());
+
         if (playerProfile.getState() == EnumProfileState.FFA && attackerProfile.getState() == EnumProfileState.FFA) {
+            if (Alley.getInstance().getCombatEventManager().isCombat(player) || Alley.getInstance().getCombatEventManager().isCombat(attacker)) {
+                return;
+            }
             player.sendMessage(CC.translate("&cYou are now in combat with &4" + attacker.getName() + "&c."));
             attacker.sendMessage(CC.translate("&cYou are now in combat with &4" + player.getName() + "&c."));
         }
-    }
+    }*/
 
     @EventHandler
     private void onPlayerDropItem(PlayerDropItemEvent event) {
@@ -159,15 +155,19 @@ public class FFAListener implements Listener {
 
         Player victim = (Player) event.getEntity();
         Player attacker = (Player) event.getDamager();
-        FFASpawnHandler ffaSpawnHandler = Alley.getInstance().getFfaSpawnHandler();
-        if (ffaSpawnHandler.getCuboid().isIn((victim)) && ffaSpawnHandler.getCuboid().isIn((attacker)) ||
-                !ffaSpawnHandler.getCuboid().isIn(victim) && ffaSpawnHandler.getCuboid().isIn(attacker) ||
-                ffaSpawnHandler.getCuboid().isIn(victim) && !ffaSpawnHandler.getCuboid().isIn(attacker)) {
+        FFACuboidService ffaCuboidService = Alley.getInstance().getFfaCuboidService();
+        if (ffaCuboidService.getCuboid().isIn((victim)) && ffaCuboidService.getCuboid().isIn((attacker)) ||
+                !ffaCuboidService.getCuboid().isIn(victim) && ffaCuboidService.getCuboid().isIn(attacker) ||
+                ffaCuboidService.getCuboid().isIn(victim) && !ffaCuboidService.getCuboid().isIn(attacker)) {
+
+            /*if (Alley.getInstance().getCombatEventManager().isCombat(victim) || Alley.getInstance().getCombatEventManager().isCombat(attacker)) {
+                return;
+            }*/
 
             event.setCancelled(true);
         }
 
-        /*CombatManager combatManager = Alley.getInstance().getCombatManager();
+        /*CombatEventManager combatManager = Alley.getInstance().getCombatEventManager();
 
         Bukkit.getPluginManager().callEvent(new CombatTagEvent(victim, attacker));
         combatManager.setCombatTime(victim, 16);
@@ -217,7 +217,7 @@ public class FFAListener implements Listener {
 
         if (profile.getState() == EnumProfileState.FFA && item != null && item.getType() == Material.ENDER_PEARL) {
             if (event.getAction().name().contains("RIGHT_CLICK")) {
-                if (Alley.getInstance().getFfaSpawnHandler().getCuboid().isIn(player)) {
+                if (Alley.getInstance().getFfaCuboidService().getCuboid().isIn(player)) {
                     event.setCancelled(true);
                     player.updateInventory();
                     player.sendMessage(CC.translate("&cYou cannot use ender pearls at spawn."));
@@ -244,5 +244,4 @@ public class FFAListener implements Listener {
             }
         }
     }
-
 }

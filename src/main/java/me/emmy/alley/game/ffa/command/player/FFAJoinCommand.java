@@ -6,6 +6,7 @@ import me.emmy.alley.kit.Kit;
 import me.emmy.alley.api.command.BaseCommand;
 import me.emmy.alley.api.command.Command;
 import me.emmy.alley.api.command.CommandArgs;
+import me.emmy.alley.util.chat.CC;
 import org.bukkit.entity.Player;
 
 /**
@@ -21,7 +22,7 @@ public class FFAJoinCommand extends BaseCommand {
         String[] args = command.getArgs();
 
         if (args.length != 1) {
-            player.sendMessage("Usage: /ffa join <kit>");
+            player.sendMessage(CC.translate("&6Usage: &e/ffa join &b<kit>"));
             return;
         }
 
