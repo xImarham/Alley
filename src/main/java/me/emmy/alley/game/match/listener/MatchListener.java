@@ -335,15 +335,18 @@ public class MatchListener implements Listener {
         Player player = event.getEntity();
         Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
         Player killer = PlayerUtil.getLastAttacker(player);
-        if (killer != null) {
-            ActionBarUtil.sendMessage(killer, "&c&lKILL! &f" + player.getName(), 3);
-            profile.getMatch().getParticipants()
-                    .forEach(participant -> participant.getPlayer().getPlayer().sendMessage(CC.translate("&c" + player.getName() + " &fwas killed by &c" + killer.getName() + "&f.")));
-            profile.getMatch().createSnapshot(player, killer);
-        }
 
         if (profile.getState() == EnumProfileState.PLAYING) {
             event.setDeathMessage(null);
+            if (killer != null) {
+                ActionBarUtil.sendMessage(killer, "&c&lKILL! &f" + player.getName(), 3);
+                profile.getMatch().getParticipants()
+                        .forEach(participant -> participant.getPlayer().getPlayer().sendMessage(CC.translate("&c" + player.getName() + " &fwas killed by &c" + killer.getName() + "&f.")));
+                profile.getMatch().createSnapshot(player, killer);
+            } else {
+                profile.getMatch().getParticipants()
+                        .forEach(participant -> participant.getPlayer().getPlayer().sendMessage(CC.translate("&c" + player.getName() + " &fdied.")));
+            }
 
             List<Item> droppedItems = new ArrayList<>();
             for (ItemStack drop : event.getDrops()) {
