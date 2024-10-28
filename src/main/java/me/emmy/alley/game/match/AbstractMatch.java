@@ -5,7 +5,6 @@ import lombok.Setter;
 import me.emmy.alley.Alley;
 import me.emmy.alley.arena.Arena;
 import me.emmy.alley.arena.impl.StandAloneArena;
-import me.emmy.alley.config.ConfigHandler;
 import me.emmy.alley.game.match.enums.EnumMatchState;
 import me.emmy.alley.game.match.impl.MatchRegularImpl;
 import me.emmy.alley.game.match.player.GameParticipant;
@@ -32,7 +31,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.BlockState;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
@@ -194,7 +192,7 @@ public abstract class AbstractMatch {
      */
     private void teleportPlayerToSpawn(Player player) {
         Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
-        Alley.getInstance().getSpawnHandler().teleportToSpawn(player);
+        Alley.getInstance().getSpawnService().teleportToSpawn(player);
 
         if (profile.getParty() == null) {
             Alley.getInstance().getHotbarRepository().applyHotbarItems(player, HotbarType.LOBBY);

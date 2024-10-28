@@ -20,7 +20,7 @@ import me.emmy.alley.config.ConfigHandler;
 import me.emmy.alley.cooldown.CooldownRepository;
 import me.emmy.alley.database.MongoService;
 import me.emmy.alley.essential.command.troll.*;
-import me.emmy.alley.essential.spawn.SpawnHandler;
+import me.emmy.alley.essential.spawn.SpawnService;
 import me.emmy.alley.essential.spawn.command.SetSpawnCommand;
 import me.emmy.alley.essential.spawn.command.SpawnCommand;
 import me.emmy.alley.essential.spawn.command.SpawnItemsCommand;
@@ -125,7 +125,7 @@ public class Alley extends JavaPlugin {
     private KitSettingRepository kitSettingRepository;
     private SnapshotRepository snapshotRepository;
     private FFARepository ffaRepository;
-    private SpawnHandler spawnHandler;
+    private SpawnService spawnService;
     private HotbarRepository hotbarRepository;
     private EventRepository eventRepository;
     private DuelRepository duelRepository;
@@ -207,7 +207,7 @@ public class Alley extends JavaPlugin {
         Logger.logTime("SnapshotRepository", () -> this.snapshotRepository = new SnapshotRepository());
         Logger.logTime("MatchRepository", () -> this.matchRepository = new MatchRepository());
         Logger.logTime("PartyRepository", () -> this.partyRepository = new PartyRepository());
-        Logger.logTime("SpawnHandler", () -> this.spawnHandler = new SpawnHandler());
+        Logger.logTime("SpawnService", () -> this.spawnService = new SpawnService());
         Logger.logTime("CombatManager", () -> this.combatManager = new CombatManager());
         Logger.logTime("FFASpawnHandler", () -> this.ffaSpawnHandler = new FFASpawnHandler());
         Logger.logTime("EventRepository", () -> this.eventRepository = new EventRepository());
@@ -260,6 +260,7 @@ public class Alley extends JavaPlugin {
 
             //troll
             new FakeExplosionCommand();
+            new HeartAttackCommand();
             new LaunchCommand();
             new PushCommand();
             new StrikeCommand();

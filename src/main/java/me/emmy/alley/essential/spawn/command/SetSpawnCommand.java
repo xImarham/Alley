@@ -21,7 +21,7 @@ public class SetSpawnCommand extends BaseCommand {
     public void onCommand(CommandArgs cmd) {
         Player player = (Player) cmd.getSender();
         Location location = player.getLocation();
-        Alley.getInstance().getSpawnHandler().setSpawnLocation(location);
+        Alley.getInstance().getSpawnService().updateSpawnLocation(location);
 
         String message = ConfigHandler.getInstance().getMessagesConfig().getString("spawn.spawn-set");
         message = message.replace("{world}", location.getWorld().getName())

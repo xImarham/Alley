@@ -55,7 +55,7 @@ public class ProfileListener implements Listener {
         profile.setMatch(null);
 
         PlayerUtil.reset(player);
-        Alley.getInstance().getSpawnHandler().teleportToSpawn(player);
+        Alley.getInstance().getSpawnService().teleportToSpawn(player);
         Alley.getInstance().getHotbarRepository().applyHotbarItems(player, HotbarType.LOBBY);
 
         player.setFlySpeed(1 * 0.1F);

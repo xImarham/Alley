@@ -16,9 +16,8 @@ import org.bukkit.inventory.ItemStack;
  * @date 28/05/2024 - 20:28
  */
 public class EnchantCommand extends BaseCommand {
-
-    @Override
     @Command(name = "enchant", permission = "alley.admin")
+    @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
         String[] args = command.getArgs();
@@ -54,7 +53,9 @@ public class EnchantCommand extends BaseCommand {
             return;
         }
 
+        String displayName = itemInHand.getItemMeta().getDisplayName() == null ? itemInHand.getType().name() : itemInHand.getItemMeta().getDisplayName();
+
         itemInHand.addUnsafeEnchantment(enchantment, level);
-        player.sendMessage(CC.translate("&aSuccessfully enchanted the &b" + player.getItemInHand().getItemMeta().getDisplayName() + " &aitem with &b" + enchantment.getName() + " &alevel &b" + level + "&a!"));
+        player.sendMessage(CC.translate("&aSuccessfully enchanted the &b" + displayName + " &aitem with &b" + enchantment.getName() + " &alevel &b" + level + "&a!"));
     }
 }

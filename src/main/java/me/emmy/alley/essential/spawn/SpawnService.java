@@ -2,6 +2,7 @@ package me.emmy.alley.essential.spawn;
 
 import lombok.Getter;
 import me.emmy.alley.Alley;
+import me.emmy.alley.util.chat.Logger;
 import me.emmy.alley.util.location.LocationUtil;
 import me.emmy.alley.util.chat.CC;
 import org.bukkit.Bukkit;
@@ -15,18 +16,17 @@ import org.bukkit.entity.Player;
  * @date 17/05/2024 - 17:47
  */
 @Getter
-public class SpawnHandler {
+public class SpawnService {
+    private Location location;
 
-    private Location joinLocation;
-
-    public SpawnHandler() {
+    public SpawnService() {
         loadSpawnLocation();
     }
 
     /**
      * Load the spawn location from the settings.yml file
      */
-    public void loadSpawnLocation() {
+    private void loadSpawnLocation() {
         FileConfiguration config = Alley.getInstance().getConfigHandler().getConfig("settings.yml");
 
         Location location = LocationUtil.deserialize(config.getString("spawn.join-location"));
@@ -36,16 +36,16 @@ public class SpawnHandler {
             return;
         }
 
-        joinLocation = new Location(location.getWorld(), location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
+        this.location = new Location(location.getWorld(), location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
     }
 
     /**
-     * Set the spawn location in the settings.yml file
+     * Update or set the spawn location and save it in the settings.yml file
      *
      * @param location the location to set
      */
-    public void setSpawnLocation(Location location) {
-        this.joinLocation = location;
+    public void updateSpawnLocation(Location location) {
+        this.location = location;
         FileConfiguration config = Alley.getInstance().getConfigHandler().getConfig("settings.yml");
 
         config.set("spawn.join-location", LocationUtil.serialize(location));
@@ -59,11 +59,11 @@ public class SpawnHandler {
      * @param player the player to teleport
      */
     public void teleportToSpawn(Player player) {
-        Location spawnLocation = getJoinLocation();
+        Location spawnLocation = getLocation();
         if (spawnLocation != null) {
             player.teleport(spawnLocation);
         } else {
-            Bukkit.getConsoleSender().sendMessage(CC.translate("&4&l(!) SPAWN LOCATION IS NULL (!)"));
+            Logger.logError("Spawn location is null.");
         }
     }
 }
