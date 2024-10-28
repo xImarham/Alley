@@ -9,6 +9,7 @@ import me.emmy.alley.profile.enums.EnumProfileState;
 import me.emmy.alley.util.chat.CC;
 import net.md_5.bungee.api.chat.*;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -167,5 +168,42 @@ public class PartyRepository {
         invitation.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, hoverComponent));
 
         target.spigot().sendMessage(invitation);
+    }
+
+    /**
+     * Expires party requests asynchronously.
+     */
+    public void expirePartyInvitesAsynchronously() {
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (partyRequests.isEmpty()) return;
+
+                List<PartyRequest> expiredRequests = new ArrayList<>();
+                synchronized (partyRequests) {
+                    partyRequests.removeIf(request -> {
+                        if (request.hasExpired()) {
+                            expiredRequests.add(request);
+                            return true;
+                        }
+                        return false;
+                    });
+
+                    notifyRequestIndividuals(expiredRequests);
+                }
+            }
+        }.runTaskTimerAsynchronously(Alley.getInstance(), 40L, 40L);
+    }
+
+    /**
+     * Notifies the individuals that their party request has expired.
+     *
+     * @param partyRequests The party requests that have expired.
+     */
+    private void notifyRequestIndividuals(List<PartyRequest> partyRequests) {
+        partyRequests.forEach(partyRequest -> {
+            partyRequest.getSender().sendMessage(CC.translate("&cYour party request to &b" + partyRequest.getSender().getName() + " &chas expired."));
+            partyRequest.getTarget().sendMessage(CC.translate("&cThe party request from &b" + partyRequest.getTarget().getName() + " &chas expired."));
+        });
     }
 }

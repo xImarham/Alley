@@ -48,10 +48,20 @@ public class DuelRequest {
         return System.currentTimeMillis() > expireTime;
     }
 
+    /**
+     * Get the remaining time until the duel request expires.
+     *
+     * @return the remaining time until the duel request expires
+     */
     public long getRemainingTime() {
         return expireTime - System.currentTimeMillis();
     }
 
+    /**
+     * Get the remaining time formatted as a string.
+     *
+     * @return the remaining time formatted as a string
+     */
     public String getRemainingTimeFormatted() {
         long seconds = getRemainingTime() / 1000;
         long minutes = seconds / 60;

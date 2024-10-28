@@ -52,6 +52,12 @@ public class PartyAcceptCommand extends BaseCommand {
             return;
         }
 
+        if (partyRequest.hasExpired()) {
+            partyRepository.removeRequest(partyRequest);
+            player.sendMessage(CC.translate("&cThe party request has expired."));
+            return;
+        }
+
         partyRepository.joinParty(player, targetPlayer);
         partyRepository.removeRequest(partyRequest);
         player.sendMessage(CC.translate(Locale.JOINED_PARTY.getMessage().replace("{player}", targetPlayer.getName())));
