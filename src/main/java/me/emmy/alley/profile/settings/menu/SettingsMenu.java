@@ -6,15 +6,13 @@ import me.emmy.alley.api.menu.Button;
 import me.emmy.alley.api.menu.Menu;
 import me.emmy.alley.api.menu.pagination.ItemBuilder;
 import me.emmy.alley.profile.Profile;
+import me.emmy.alley.util.chat.CC;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author Emmy
@@ -122,30 +120,72 @@ public class SettingsMenu extends Menu {
 
         @Override
         public void clicked(Player player, int slot, ClickType clickType, int hotbarSlot) {
-            if (clickType == ClickType.MIDDLE || clickType == ClickType.RIGHT || clickType == ClickType.NUMBER_KEY || clickType == ClickType.DROP || clickType == ClickType.SHIFT_LEFT || clickType == ClickType.SHIFT_RIGHT) {
-                return;
-            }
+            Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
 
-            switch (material) {
-                case FEATHER:
-                    player.performCommand("togglepartymessages");
-                    break;
-                case NAME_TAG:
-                    player.performCommand("togglepartyinvites");
-                    break;
-                case CARPET:
-                    if (durability == (short) 5) {
-                        player.performCommand("togglescoreboard");
+            if (clickType == ClickType.LEFT) {
+                switch (material) {
+                    case FEATHER:
+                        player.performCommand("togglepartymessages");
+                        break;
+                    case NAME_TAG:
+                        player.performCommand("togglepartyinvites");
+                        break;
+                    case CARPET:
+                        if (durability == (short) 5) {
+                            player.performCommand("togglescoreboard");
+                        }
+                        break;
+                    case ITEM_FRAME:
+                        player.performCommand("toggletablist");
+                        break;
+                    case WATCH:
+                        switch (profile.getProfileData().getProfileSettingData().getWorldTime()) {
+                            case DEFAULT:
+                                profile.getProfileData().getProfileSettingData().setTimeDay(player);
+                                player.sendMessage(CC.translate("&aYou have set the time to day."));
+                                break;
+                            case DAY:
+                                profile.getProfileData().getProfileSettingData().setTimeSunset(player);
+                                player.sendMessage(CC.translate("&aYou have set the time to sunset."));
+                                break;
+                            case SUNSET:
+                                profile.getProfileData().getProfileSettingData().setTimeNight(player);
+                                player.sendMessage(CC.translate("&aYou have set the time to night."));
+                                break;
+                            case NIGHT:
+                                profile.getProfileData().getProfileSettingData().setTimeDefault(player);
+                                player.sendMessage(CC.translate("&aYou have reset your world time."));
+                                break;
+                        }
+                        break;
+
+                }
+
+                playerClickSound(player);
+            } else if (clickType == ClickType.RIGHT) {
+                if (Objects.requireNonNull(material) == Material.WATCH) {
+                    switch (profile.getProfileData().getProfileSettingData().getWorldTime()) {
+                        case DEFAULT:
+                            profile.getProfileData().getProfileSettingData().setTimeNight(player);
+                            player.sendMessage(CC.translate("&aYou have set the time to night."));
+                            break;
+                        case DAY:
+                            profile.getProfileData().getProfileSettingData().setTimeDefault(player);
+                            player.sendMessage(CC.translate("&aYou have reset your world time."));
+                            break;
+                        case SUNSET:
+                            profile.getProfileData().getProfileSettingData().setTimeDay(player);
+                            player.sendMessage(CC.translate("&aYou have set the time to day."));
+                            break;
+                        case NIGHT:
+                            profile.getProfileData().getProfileSettingData().setTimeSunset(player);
+                            player.sendMessage(CC.translate("&aYou have set the time to sunset."));
+                            break;
                     }
-                    break;
-                case ITEM_FRAME:
-                    player.performCommand("toggletablist");
-                    break;
-                case WATCH:
-                    player.performCommand("toggleworldtime");
-                    break;
+
+                    playerClickSound(player);
+                }
             }
-            playNeutral(player);
         }
     }
 }
