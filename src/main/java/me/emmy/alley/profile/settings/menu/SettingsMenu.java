@@ -158,7 +158,6 @@ public class SettingsMenu extends Menu {
                                 break;
                         }
                         break;
-
                 }
 
                 playerClickSound(player);
