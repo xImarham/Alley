@@ -13,14 +13,12 @@ import me.emmy.alley.command.AlleyCommand;
 import me.emmy.alley.command.AlleyReloadCommand;
 import me.emmy.alley.command.admin.debug.FFAStateCommand;
 import me.emmy.alley.command.admin.debug.StateCommand;
-import me.emmy.alley.essential.command.EnchantCommand;
-import me.emmy.alley.essential.command.RenameCommand;
+import me.emmy.alley.essential.command.*;
 import me.emmy.alley.command.admin.management.PlaytimeCommand;
 import me.emmy.alley.command.donator.HostCommand;
 import me.emmy.alley.config.ConfigHandler;
 import me.emmy.alley.cooldown.CooldownRepository;
 import me.emmy.alley.database.MongoService;
-import me.emmy.alley.essential.command.InvSeeCommand;
 import me.emmy.alley.essential.command.troll.FakeExplosionCommand;
 import me.emmy.alley.essential.command.troll.LaunchCommand;
 import me.emmy.alley.essential.command.troll.PushCommand;
@@ -252,9 +250,11 @@ public class Alley extends JavaPlugin {
             new MatchInfoCommand();
 
             //essential
-            new InvSeeCommand();
-            new RenameCommand();
             new EnchantCommand();
+            new InvSeeCommand();
+            new MoreCommand();
+            new RefillCommand();
+            new RenameCommand();
             new PlaytimeCommand();
             new SpawnItemsCommand();
             new SetSpawnCommand();
