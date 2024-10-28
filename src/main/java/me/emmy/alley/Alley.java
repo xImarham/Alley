@@ -19,10 +19,7 @@ import me.emmy.alley.command.donator.HostCommand;
 import me.emmy.alley.config.ConfigHandler;
 import me.emmy.alley.cooldown.CooldownRepository;
 import me.emmy.alley.database.MongoService;
-import me.emmy.alley.essential.command.troll.FakeExplosionCommand;
-import me.emmy.alley.essential.command.troll.LaunchCommand;
-import me.emmy.alley.essential.command.troll.PushCommand;
-import me.emmy.alley.essential.command.troll.StrikeCommand;
+import me.emmy.alley.essential.command.troll.*;
 import me.emmy.alley.essential.spawn.SpawnHandler;
 import me.emmy.alley.essential.spawn.command.SetSpawnCommand;
 import me.emmy.alley.essential.spawn.command.SpawnCommand;
@@ -266,6 +263,7 @@ public class Alley extends JavaPlugin {
             new LaunchCommand();
             new PushCommand();
             new StrikeCommand();
+            new TrollCommand();
         });
 
         Logger.logTime("Donator Command", () -> {
