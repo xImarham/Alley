@@ -28,6 +28,7 @@ public class ArenaRepository {
     public ArenaRepository() {
         loadArenas();
     }
+    
     /**
      * Load all arenas from the arenas.yml file
      */
