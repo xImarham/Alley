@@ -29,6 +29,7 @@ import me.emmy.alley.game.duel.DuelRepository;
 import me.emmy.alley.game.duel.command.AcceptCommand;
 import me.emmy.alley.game.duel.command.DuelCommand;
 import me.emmy.alley.game.duel.command.DuelRequestsCommand;
+import me.emmy.alley.game.duel.task.DuelRequestExpiryTask;
 import me.emmy.alley.game.event.EventRepository;
 import me.emmy.alley.game.event.command.EventCommand;
 import me.emmy.alley.game.ffa.FFARepository;
@@ -58,6 +59,7 @@ import me.emmy.alley.kit.settings.KitSettingRepository;
 import me.emmy.alley.party.PartyRepository;
 import me.emmy.alley.party.command.PartyCommand;
 import me.emmy.alley.party.listener.PartyListener;
+import me.emmy.alley.party.task.PartyRequestExpiryTask;
 import me.emmy.alley.profile.ProfileRepository;
 import me.emmy.alley.profile.command.*;
 import me.emmy.alley.profile.cosmetic.command.CosmeticCommand;
@@ -96,6 +98,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -106,6 +109,8 @@ public class Alley extends JavaPlugin {
 
     @Getter
     private static Alley instance;
+
+    private List<Runnable> tasks = new ArrayList<>();
 
     private CommandFramework commandFramework;
     private CosmeticRepository cosmeticRepository;
@@ -327,9 +332,14 @@ public class Alley extends JavaPlugin {
     }
 
     private void runTasks() {
-        new FFASpawnTask(this.ffaCuboidService.getCuboid(), this).runTaskTimerAsynchronously(this, 0L, 20L);
-        this.duelRepository.expireDuelRequestsAsynchronously();
-        this.partyRepository.expirePartyInvitesAsynchronously();
+        FFASpawnTask ffaSpawnTask = new FFASpawnTask(this.ffaCuboidService.getCuboid(), this);
+        ffaSpawnTask.runTaskTimerAsynchronously(this, 0L, 5L);
+
+        PartyRequestExpiryTask partyRequestExpiryTask = new PartyRequestExpiryTask();
+        partyRequestExpiryTask.runTaskTimerAsynchronously(Alley.getInstance(), 40L, 40L);
+
+        DuelRequestExpiryTask duelRequestExpiryTask = new DuelRequestExpiryTask();
+        duelRequestExpiryTask.runTaskTimerAsynchronously(Alley.getInstance(), 40L, 40L);
     }
 
     /**

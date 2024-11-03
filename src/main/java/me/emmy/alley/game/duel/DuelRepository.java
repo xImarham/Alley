@@ -164,41 +164,4 @@ public class DuelRepository {
 
         this.removeDuelRequest(duelRequest);
     }
-
-    /**
-     * Remove duel requests if they have expired.
-     */
-    public void expireDuelRequestsAsynchronously() {
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                if (duelRequests.isEmpty()) return;
-
-                List<DuelRequest> expiredRequests = new ArrayList<>();
-                synchronized (duelRequests) {
-                    duelRequests.removeIf(duelRequest -> {
-                        if (duelRequest.hasExpired()) {
-                            expiredRequests.add(duelRequest);
-                            return true;
-                        }
-                        return false;
-                    });
-                }
-
-                notifyRequestIndividuals(expiredRequests);
-            }
-        }.runTaskTimerAsynchronously(Alley.getInstance(), 40L, 40L);
-    }
-
-    /**
-     * Notify the sender and target that the duel request has expired.
-     *
-     * @param expiredRequests the expired requests
-     */
-    private void notifyRequestIndividuals(List<DuelRequest> expiredRequests) {
-        expiredRequests.forEach(duelRequest -> {
-            duelRequest.getSender().sendMessage(CC.translate("&cYour duel request to " + duelRequest.getTarget().getName() + " has expired."));
-            duelRequest.getTarget().sendMessage(CC.translate("&cThe duel request from " + duelRequest.getSender().getName() + " has expired."));
-        });
-    }
 }
