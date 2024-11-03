@@ -255,6 +255,7 @@ public class Alley extends JavaPlugin {
             new EnchantCommand();
             new InvSeeCommand();
             new MoreCommand();
+            new PotionDurationCommand();
             new RefillCommand();
             new RemoveEnchantsCommand();
             new RenameCommand();

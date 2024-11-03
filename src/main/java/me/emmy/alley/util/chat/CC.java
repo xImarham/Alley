@@ -16,7 +16,6 @@ import java.util.List;
  */
 @UtilityClass
 public class CC {
-
     /**
      * Translate a string to a colored string.
      *
