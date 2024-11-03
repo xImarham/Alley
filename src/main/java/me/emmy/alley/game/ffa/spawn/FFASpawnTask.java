@@ -1,6 +1,8 @@
 package me.emmy.alley.game.ffa.spawn;
 
 import me.emmy.alley.Alley;
+import me.emmy.alley.game.ffa.AbstractFFAMatch;
+import me.emmy.alley.game.ffa.FFARepository;
 import me.emmy.alley.game.ffa.enums.EnumFFAState;
 import me.emmy.alley.util.cuboid.Cuboid;
 import me.emmy.alley.profile.Profile;
@@ -38,25 +40,26 @@ public class FFASpawnTask extends BukkitRunnable {
 
     @Override
     public void run() {
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            Profile profile = plugin.getProfileRepository().getProfile(player.getUniqueId());
-            if (profile != null && profile.getState() == EnumProfileState.FFA) {
+        for (AbstractFFAMatch abstractFFAMatch : Alley.getInstance().getFfaRepository().getMatches()) {
+            if (abstractFFAMatch.getPlayers().isEmpty()) {
+                continue;
+            }
+
+            for (Player player : abstractFFAMatch.getPlayers()) {
                 EnumFFAState currentState = playerStates.getOrDefault(player.getUniqueId(), EnumFFAState.FIGHTING);
                 boolean isInSpawn = cuboid.isIn(player);
 
-                if (isInSpawn && currentState != EnumFFAState.SPAWN) {
-                    /*if (Alley.getInstance().getCombatEventManager().isCombat(player)) {
-                        Alley.getInstance().getCombatEventManager().setCombatSet(player, false);
-                        player.sendMessage(CC.translate("&cYou cannot enter the FFA spawn area while in combat."));
-                        return;
-                    }*/
-                    profile.getFfaMatch().setState(EnumFFAState.SPAWN);
-                    playerStates.put(player.getUniqueId(), EnumFFAState.SPAWN);
-                    player.sendMessage(CC.translate("&aYou have entered the FFA spawn area."));
-                } else if (!isInSpawn && currentState != EnumFFAState.FIGHTING) {
-                    profile.getFfaMatch().setState(EnumFFAState.FIGHTING);
-                    playerStates.put(player.getUniqueId(), EnumFFAState.FIGHTING);
-                    player.sendMessage(CC.translate("&cYou have left the FFA spawn area."));
+                Profile profile = plugin.getProfileRepository().getProfile(player.getUniqueId());
+                if (profile != null && profile.getState() == EnumProfileState.FFA) {
+                    if (isInSpawn && currentState != EnumFFAState.SPAWN) {
+                        abstractFFAMatch.setState(EnumFFAState.SPAWN);
+                        playerStates.put(player.getUniqueId(), EnumFFAState.SPAWN);
+                        player.sendMessage(CC.translate("&aYou have entered the FFA spawn area."));
+                    } else if (!isInSpawn && currentState != EnumFFAState.FIGHTING) {
+                        abstractFFAMatch.setState(EnumFFAState.FIGHTING);
+                        playerStates.put(player.getUniqueId(), EnumFFAState.FIGHTING);
+                        player.sendMessage(CC.translate("&cYou have left the FFA spawn area."));
+                    }
                 }
             }
         }
