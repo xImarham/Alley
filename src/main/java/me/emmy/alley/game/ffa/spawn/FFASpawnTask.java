@@ -40,7 +40,7 @@ public class FFASpawnTask extends BukkitRunnable {
 
     @Override
     public void run() {
-        for (AbstractFFAMatch abstractFFAMatch : Alley.getInstance().getFfaRepository().getMatches()) {
+        for (AbstractFFAMatch abstractFFAMatch : plugin.getFfaRepository().getMatches()) {
             if (abstractFFAMatch.getPlayers().isEmpty()) {
                 continue;
             }
