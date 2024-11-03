@@ -1,7 +1,6 @@
 package me.emmy.alley;
 
 import lombok.Getter;
-import lombok.Setter;
 import me.emmy.alley.api.assemble.Assemble;
 import me.emmy.alley.api.assemble.AssembleStyle;
 import me.emmy.alley.api.command.CommandFramework;
@@ -13,12 +12,12 @@ import me.emmy.alley.command.AlleyCommand;
 import me.emmy.alley.command.AlleyReloadCommand;
 import me.emmy.alley.command.admin.debug.FFAStateCommand;
 import me.emmy.alley.command.admin.debug.StateCommand;
-import me.emmy.alley.essential.command.*;
 import me.emmy.alley.command.admin.management.PlaytimeCommand;
 import me.emmy.alley.command.donator.HostCommand;
 import me.emmy.alley.config.ConfigHandler;
 import me.emmy.alley.cooldown.CooldownRepository;
 import me.emmy.alley.database.MongoService;
+import me.emmy.alley.essential.command.*;
 import me.emmy.alley.essential.command.troll.*;
 import me.emmy.alley.essential.spawn.SpawnService;
 import me.emmy.alley.essential.spawn.command.SetSpawnCommand;
@@ -85,7 +84,7 @@ import me.emmy.alley.queue.command.player.RankedCommand;
 import me.emmy.alley.queue.command.player.UnrankedCommand;
 import me.emmy.alley.util.ServerUtil;
 import me.emmy.alley.util.chat.CC;
-import me.emmy.alley.util.chat.Logger;
+import me.emmy.alley.util.logger.Logger;
 import me.emmy.alley.visual.leaderboard.command.LeaderboardCommand;
 import me.emmy.alley.visual.scoreboard.ScoreboardVisualizer;
 import me.emmy.alley.visual.scoreboard.animation.ScoreboardTitleHandler;
@@ -98,19 +97,15 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
 @Getter
-@Setter
 public class Alley extends JavaPlugin {
 
     @Getter
     private static Alley instance;
-
-    private List<Runnable> tasks = new ArrayList<>();
 
     private CommandFramework commandFramework;
     private CosmeticRepository cosmeticRepository;
@@ -135,7 +130,8 @@ public class Alley extends JavaPlugin {
     private EventRepository eventRepository;
     private DuelRepository duelRepository;
 
-    private String prefix = "§f[§bAlley§f] §r";
+    private final String prefix = "§f[§b" + this.name + "§f] §r";
+    private final String name = this.getDescription().getName();
 
     @Override
     public void onEnable() {
@@ -157,7 +153,7 @@ public class Alley extends JavaPlugin {
         long end = System.currentTimeMillis();
         long timeTaken = end - start;
 
-        CC.pluginEnabled(timeTaken);
+        Logger.pluginEnabled(timeTaken);
     }
 
     @Override
@@ -175,7 +171,7 @@ public class Alley extends JavaPlugin {
             }
         }));
 
-        CC.pluginDisabled();
+        Logger.pluginDisabled();
     }
 
     private void checkDescription() {

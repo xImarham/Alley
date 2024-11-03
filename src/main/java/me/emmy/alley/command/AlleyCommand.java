@@ -13,17 +13,17 @@ import org.bukkit.command.CommandSender;
  * @date 19/04/2024 - 17:39
  */
 public class AlleyCommand extends BaseCommand {
+    @Command(name = "alley", aliases = {"emmy", "remi"}, inGameOnly = false)
     @Override
-    @Command(name = "alley", aliases = {"emmy", "ziue"}, inGameOnly = false)
     public void onCommand(CommandArgs command) {
         CommandSender sender = command.getSender();
-        sender.sendMessage(" ");
+        sender.sendMessage("");
         sender.sendMessage(CC.translate("  &b&l   Alley"));
         sender.sendMessage(CC.translate("      &f┃ Authors: &b" + Alley.getInstance().getDescription().getAuthors().toString().replace("[", "").replace("]", "")));
         sender.sendMessage(CC.translate("      &f┃ Version: &b" + Alley.getInstance().getDescription().getVersion()));
         sender.sendMessage(CC.translate(" "));
         sender.sendMessage(CC.translate("  &b&l   Description:"));
         sender.sendMessage(CC.translate("      &f┃ " + Alley.getInstance().getDescription().getDescription()));
-        sender.sendMessage(" ");
+        sender.sendMessage("");
     }
 }

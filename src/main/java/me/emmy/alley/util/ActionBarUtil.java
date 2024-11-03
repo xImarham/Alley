@@ -3,7 +3,7 @@ package me.emmy.alley.util;
 import lombok.experimental.UtilityClass;
 import me.emmy.alley.Alley;
 import me.emmy.alley.util.chat.CC;
-import me.emmy.alley.util.chat.Logger;
+import me.emmy.alley.util.logger.Logger;
 import net.minecraft.server.v1_8_R3.IChatBaseComponent;
 import net.minecraft.server.v1_8_R3.PacketPlayOutChat;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;

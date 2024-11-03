@@ -1,13 +1,6 @@
 package me.emmy.alley.arena;
 
-import me.emmy.alley.config.ConfigHandler;
-
-import me.emmy.alley.util.chat.Logger;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
-import org.bukkit.block.Block;
 
 import java.util.ArrayList;
 import java.util.List;

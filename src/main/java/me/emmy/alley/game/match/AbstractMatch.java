@@ -25,7 +25,7 @@ import me.emmy.alley.profile.enums.EnumProfileState;
 import me.emmy.alley.queue.Queue;
 import me.emmy.alley.util.PlayerUtil;
 import me.emmy.alley.util.chat.CC;
-import me.emmy.alley.util.chat.Logger;
+import me.emmy.alley.util.logger.Logger;
 import net.md_5.bungee.api.chat.*;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;

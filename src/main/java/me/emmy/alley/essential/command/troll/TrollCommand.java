@@ -5,7 +5,7 @@ import me.emmy.alley.api.command.BaseCommand;
 import me.emmy.alley.api.command.Command;
 import me.emmy.alley.api.command.CommandArgs;
 import me.emmy.alley.util.chat.CC;
-import me.emmy.alley.util.chat.Logger;
+import me.emmy.alley.util.logger.Logger;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;

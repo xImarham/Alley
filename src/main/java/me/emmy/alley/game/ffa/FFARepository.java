@@ -6,7 +6,7 @@ import me.emmy.alley.arena.Arena;
 import me.emmy.alley.config.ConfigHandler;
 import me.emmy.alley.game.ffa.impl.DefaultFFAMatchImpl;
 import me.emmy.alley.kit.Kit;
-import me.emmy.alley.util.chat.Logger;
+import me.emmy.alley.util.logger.Logger;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;

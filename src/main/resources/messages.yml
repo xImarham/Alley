@@ -85,13 +85,12 @@ match:
         - "&3&l{kit-name}"
         - " &f• &b{kit-disclaimer}"
         - ""
-  ended:
-    match-result:
-      - ""
-      - "&b&lEnd Match Results: &7(click to view)"
-      - "&aWinner: &f%winner% &7| &cLoser: &f%loser%"
-      - ""
-
+  #ended:
+  #  match-result:
+  #    - ""
+  #    - "&b&lEnd Match Results: &7(click to view)"
+  #    - "&aWinner: &f%winner% &7| &cLoser: &f%loser%"
+  #    - ""
 
 playtime:
   message: " \n&b{target}'s total playtime:\n &b{days} &fdays, &b{hours} &fhours, &b{minutes} &fminutes and &b{seconds} &fseconds.\n "

@@ -2,7 +2,7 @@ package me.emmy.alley.essential.spawn;
 
 import lombok.Getter;
 import me.emmy.alley.Alley;
-import me.emmy.alley.util.chat.Logger;
+import me.emmy.alley.util.logger.Logger;
 import me.emmy.alley.util.location.LocationUtil;
 import me.emmy.alley.util.chat.CC;
 import org.bukkit.Bukkit;

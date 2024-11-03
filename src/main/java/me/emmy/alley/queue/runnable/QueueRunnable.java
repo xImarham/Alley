@@ -15,7 +15,7 @@ import me.emmy.alley.profile.enums.EnumProfileState;
 import me.emmy.alley.queue.Queue;
 import me.emmy.alley.queue.QueueProfile;
 import me.emmy.alley.util.chat.CC;
-import me.emmy.alley.util.chat.Logger;
+import me.emmy.alley.util.logger.Logger;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;

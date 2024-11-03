@@ -12,7 +12,7 @@ import me.emmy.alley.queue.Queue;
 import me.emmy.alley.util.PlayerUtil;
 import me.emmy.alley.util.TaskUtil;
 import me.emmy.alley.util.chat.CC;
-import me.emmy.alley.util.chat.Logger;
+import me.emmy.alley.util.logger.Logger;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;

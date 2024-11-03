@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import me.emmy.alley.kit.Kit;
 import me.emmy.alley.kit.settings.impl.*;
-import me.emmy.alley.util.chat.Logger;
+import me.emmy.alley.util.logger.Logger;
 
 import java.util.ArrayList;
 import java.util.HashMap;

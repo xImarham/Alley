@@ -2,8 +2,6 @@ package me.emmy.alley.game.event;
 
 import lombok.Getter;
 import me.emmy.alley.game.event.impl.SumoEventImpl;
-import me.emmy.alley.util.chat.Logger;
-import org.bukkit.Bukkit;
 
 import java.util.ArrayList;
 import java.util.List;

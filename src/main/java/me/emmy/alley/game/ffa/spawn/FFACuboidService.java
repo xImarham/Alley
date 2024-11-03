@@ -6,7 +6,7 @@ import me.emmy.alley.arena.Arena;
 import me.emmy.alley.arena.ArenaType;
 import me.emmy.alley.config.ConfigHandler;
 import me.emmy.alley.util.cuboid.Cuboid;
-import me.emmy.alley.util.chat.Logger;
+import me.emmy.alley.util.logger.Logger;
 import me.emmy.alley.util.location.LocationUtil;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;

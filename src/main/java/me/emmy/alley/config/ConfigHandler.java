@@ -2,7 +2,7 @@ package me.emmy.alley.config;
 
 import lombok.Getter;
 import me.emmy.alley.Alley;
-import me.emmy.alley.util.chat.Logger;
+import me.emmy.alley.util.logger.Logger;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 

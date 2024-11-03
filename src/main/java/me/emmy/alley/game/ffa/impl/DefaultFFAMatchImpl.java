@@ -10,7 +10,7 @@ import me.emmy.alley.profile.enums.EnumProfileState;
 import me.emmy.alley.util.ActionBarUtil;
 import me.emmy.alley.util.PlayerUtil;
 import me.emmy.alley.util.chat.CC;
-import me.emmy.alley.util.chat.Logger;
+import me.emmy.alley.util.logger.Logger;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
