@@ -25,7 +25,7 @@ public class ProfileDivisionData {
 
     public ProfileDivisionData() {
         this.globalElo = Profile.DEFAULT_ELO;
-        this.division = determineDivision(globalElo);
+        this.division = this.determineDivision(globalElo);
     }
 
     /**
@@ -44,7 +44,7 @@ public class ProfileDivisionData {
      */
     public void updateEloAndDivision(Profile profile) {
         this.globalElo = calculateGlobalElo(profile);
-        updateDivision(this.globalElo);
+        this.updateDivision(this.globalElo);
     }
 
     /**
@@ -100,7 +100,7 @@ public class ProfileDivisionData {
         EnumDivisionTier tier = division.getTier();
         EnumDivisionLevel level = division.getLevel();
 
-        int currentElo = globalElo;
+        int currentElo = this.globalElo;
 
         EnumDivisionLevel nextLevel = calculateNextLevel(level);
         if (nextLevel != null) {

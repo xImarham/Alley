@@ -114,7 +114,7 @@ public abstract class AbstractMatch {
         if (gamePlayer != null) {
             gamePlayer.setDead(false);
             if (!gamePlayer.isDisconnected()) {
-                PlayerUtil.reset(player);
+                PlayerUtil.reset(player, false);
                 player.getInventory().setArmorContents(getKit().getArmor());
                 player.getInventory().setContents(getKit().getInventory());
             }
@@ -210,7 +210,7 @@ public abstract class AbstractMatch {
     private void resetPlayerState(Player player) {
         player.setFireTicks(0);
         player.updateInventory();
-        PlayerUtil.reset(player);
+        PlayerUtil.reset(player, false);
     }
 
     /**

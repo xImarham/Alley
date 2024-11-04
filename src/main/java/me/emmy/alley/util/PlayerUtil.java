@@ -42,25 +42,39 @@ public class PlayerUtil {
     }
 
     /**
-     * Reset the players effects, inventory, health, food, etc.
+     * This method resets a player's stats and inventory to default and optionally closes their inventory based on the boolean result.
      *
-     * @param player the player to reset
+     * @author Most likely Joel evans
+     * @project These very few absolute special and unique lines of code were taken from praxi which is definitely not a public repository.
+     *                This is a reminder that the code below is not Emmy's, nor Remi's and we do 𝐍𝐎𝐓 take credit for it.
+     *
+     *  @param player the player to reset the stats and inventory of
+     *  @param closeInventory whether to close the player's inventory or not
      */
-    public void reset(Player player) {
+    public void reset(Player player, boolean closeInventory) {
         player.setHealth(20.0D);
         player.setSaturation(20.0F);
         player.setFallDistance(0.0F);
         player.setFoodLevel(20);
         player.setFireTicks(0);
         player.setMaximumNoDamageTicks(20);
-        player.setExp(0.0F);
-        player.setLevel(0);
+
         player.setAllowFlight(false);
         player.setFlying(false);
+
+        player.setExp(0.0F);
+        player.setLevel(0);
+
         player.setGameMode(GameMode.SURVIVAL);
+
         player.getInventory().setArmorContents(new ItemStack[4]);
         player.getInventory().setContents(new ItemStack[36]);
+
         player.getActivePotionEffects().forEach(effect -> player.removePotionEffect(effect.getType()));
         player.updateInventory();
+
+        if (closeInventory) {
+            player.closeInventory();
+        }
     }
 }

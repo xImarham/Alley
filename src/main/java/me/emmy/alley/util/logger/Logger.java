@@ -21,20 +21,26 @@ public class Logger {
      */
     public void debug(String message) {
         if (ConfigHandler.getInstance().getSettingsConfig().getBoolean("debugging")) {
-            Bukkit.getConsoleSender().sendMessage(CC.translate("&c" + Symbol.ARROW_R + " &4&l" + Alley.getInstance().getName() + " Debug &c" + Symbol.ARROW_L + " &7&o" + message));
+            Bukkit.getConsoleSender().sendMessage(CC.translate("&c" + Symbol.ARROW_R + " &4&l" + Alley.getInstance().getDescription().getName() + " Debug &c" + Symbol.ARROW_L + " &7&o" + message));
         }
     }
 
     /**
      * Log the time it takes to run a task.
      *
-     * @param taskName the name of the task
+     * @param taskName the name of the task to run
      * @param runnable the task to run
+     * @param isRunnable   the task to run is it a runnable
      */
-    public void logTime(String taskName, Runnable runnable) {
+    public void logTime(boolean isRunnable, String taskName, Runnable runnable) {
         long start = System.currentTimeMillis();
         runnable.run();
         long end = System.currentTimeMillis();
+        if (isRunnable) {
+            Bukkit.getConsoleSender().sendMessage(CC.translate(Alley.getInstance().getPrefix() + "&fSuccessfully ran the &b" + taskName + " &fin &b" + (end - start) + "ms&f."));
+            return;
+        }
+
         Bukkit.getConsoleSender().sendMessage(CC.translate(Alley.getInstance().getPrefix() + "&fSuccessfully loaded &b" + taskName + " &fin &b" + (end - start) + "ms&f."));
     }
 
@@ -53,7 +59,7 @@ public class Logger {
      * @param message the error message to log
      */
     public void logError(String message) {
-        Bukkit.getServer().getConsoleSender().sendMessage(CC.translate("&8[&4" + Alley.getInstance().getName() + "&8] &cERROR: " + message + "!"));
+        Bukkit.getServer().getConsoleSender().sendMessage(CC.translate("&8[&4" + Alley.getInstance().getDescription().getName() + "&8] &cERROR: " + message + "!"));
     }
 
     /**
@@ -63,7 +69,7 @@ public class Logger {
      */
     public void pluginEnabled(long timeTaken) {
         Bukkit.getConsoleSender().sendMessage(" ");
-        Bukkit.getConsoleSender().sendMessage(CC.translate("        &b&l" + Alley.getInstance().getName() + " &bPractice"));
+        Bukkit.getConsoleSender().sendMessage(CC.translate("        &b&l" + Alley.getInstance().getDescription().getName() + " &bPractice"));
         Bukkit.getConsoleSender().sendMessage(" ");
         Bukkit.getConsoleSender().sendMessage(CC.translate("    &fAuthors: &b" + Alley.getInstance().getDescription().getAuthors().toString().replace("[", "").replace("]", "")));
         Bukkit.getConsoleSender().sendMessage(" ");

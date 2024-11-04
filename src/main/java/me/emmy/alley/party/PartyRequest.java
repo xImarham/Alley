@@ -35,7 +35,7 @@ public class PartyRequest {
      * @return True if the party request has expired, false otherwise.
      */
     public boolean hasExpired() {
-        return System.currentTimeMillis() > expireTime;
+        return System.currentTimeMillis() > this.expireTime;
     }
 
     /**
@@ -44,7 +44,7 @@ public class PartyRequest {
      * @return The remaining time until the party request expires.
      */
     public long getRemainingTime() {
-        return expireTime - System.currentTimeMillis();
+        return this.expireTime - System.currentTimeMillis();
     }
 
     /**
@@ -53,7 +53,7 @@ public class PartyRequest {
      * @return The remaining time formatted as a string.
      */
     public String getRemainingTimeFormatted() {
-        long seconds = getRemainingTime() / 1000;
+        long seconds = this.getRemainingTime() / 1000;
         long minutes = seconds / 60;
         return String.format("%02d:%02d", minutes, seconds % 60);
     }

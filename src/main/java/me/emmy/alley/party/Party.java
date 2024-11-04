@@ -35,7 +35,7 @@ public class Party {
         this.leader = leader;
         this.members = new ArrayList<>();
         this.addMember(leader);
-        this.registerParty();
+        Alley.getInstance().getPartyRepository().getParties().add(this);
     }
 
     /**
@@ -43,7 +43,7 @@ public class Party {
      */
     public void disbandParty() {
         this.notifyPartyExcludeLeader("&cThe party has been disbanded.");
-        this.unregisterParty();
+        Alley.getInstance().getPartyRepository().getParties().remove(this);
         this.resetAllPlayers();
     }
 
@@ -132,7 +132,7 @@ public class Party {
      * @param join   Whether the player is joining the party.
      */
     private void setupProfile(Player player, boolean join) {
-        Profile profile = getProfile(player);
+        Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
         profile.setParty(join ? this : null);
         if (join && (profile.getState() == EnumProfileState.LOBBY || profile.getState() == EnumProfileState.WAITING)) {
             Alley.getInstance().getHotbarRepository().applyHotbarItems(player, HotbarType.PARTY);
@@ -155,22 +155,13 @@ public class Party {
     }
 
     /**
-     * Forces a message to be sent to the party regardless of their profile settings.
-     *
-     * @param message The message to send.
-     */
-    public void notifyPartyForcefully(String message) {
-        this.getPlayersInParty().forEach(player -> player.sendMessage(CC.translate(message)));
-    }
-
-    /**
      * Notifies the party members based on their profile settings.
      *
      * @param message The message to send.
      */
     public void notifyParty(String message) {
         this.getPlayersInParty().forEach(player -> {
-            if (getProfile(player).getProfileData().getProfileSettingData().isPartyMessagesEnabled()) {
+            if (Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId()).getProfileData().getProfileSettingData().isPartyMessagesEnabled()) {
                 player.sendMessage(CC.translate(message));
             }
         });
@@ -183,33 +174,9 @@ public class Party {
      */
     public void notifyPartyExcludeLeader(String message) {
         this.getPlayersInParty().stream().filter(player -> !player.equals(this.leader)).forEach(player -> {
-            if (getProfile(player).getProfileData().getProfileSettingData().isPartyMessagesEnabled()) {
+            if (Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId()).getProfileData().getProfileSettingData().isPartyMessagesEnabled()) {
                 player.sendMessage(CC.translate(message));
             }
         });
-    }
-
-    /**
-     * Gets the profile of a player.
-     *
-     * @param player The player to get the profile of.
-     * @return The profile of the player.
-     */
-    private Profile getProfile(Player player) {
-        return Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
-    }
-
-    /**
-     * Registers the party.
-     */
-    private void registerParty() {
-        Alley.getInstance().getPartyRepository().getParties().add(this);
-    }
-
-    /**
-     * Unregisters the party.
-     */
-    private void unregisterParty() {
-        Alley.getInstance().getPartyRepository().getParties().remove(this);
     }
 }

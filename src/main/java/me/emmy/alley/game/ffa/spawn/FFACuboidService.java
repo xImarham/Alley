@@ -51,10 +51,6 @@ public class FFACuboidService {
             return;
         }
 
-        Logger.debug("FFA spawn location: " + this.spawn);
-        Logger.debug("FFA safezoneMin: " + this.minimum);
-        Logger.debug("FFA safezoneMax: " + this.maximum);
-
         this.cuboid = new Cuboid(minimum, maximum);
     }
 }

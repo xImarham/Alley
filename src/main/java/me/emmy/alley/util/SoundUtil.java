@@ -24,6 +24,20 @@ public class SoundUtil {
     }
 
     /**
+     * Play a sound to the player based on the success boolean
+     *
+     * @param player the player to play the sound to
+     * @param success the boolean to determine the sound
+     */
+    public void playSound(Player player, boolean success) {
+        if (success) {
+            player.playSound(player.getLocation(), Sound.NOTE_PLING, 2F, 2F);
+        } else {
+            player.playSound(player.getLocation(), Sound.ITEM_BREAK, 2F, 2F);
+        }
+    }
+
+    /**
      * Play a fail sound to the player (Note Bass)
      *
      * @param player the player to play the sound to

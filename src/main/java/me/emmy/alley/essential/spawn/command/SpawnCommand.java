@@ -28,7 +28,7 @@ public class SpawnCommand extends BaseCommand {
             return;
         }
 
-        PlayerUtil.reset(player);
+        PlayerUtil.reset(player, false);
         Alley.getInstance().getSpawnService().teleportToSpawn(player);
         Alley.getInstance().getHotbarRepository().applyHotbarItems(player, HotbarType.LOBBY);
         player.sendMessage(CC.translate(ConfigHandler.getInstance().getMessagesConfig().getString("spawn.teleported")));

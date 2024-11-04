@@ -90,32 +90,52 @@ public class ProfileSettingData {
     public void setTimeBasedOnProfileSetting(Player player) {
         switch (this.getWorldTime()) {
             case DEFAULT:
-                setTimeDefault(player);
+                this.setTimeDefault(player);
                 break;
             case DAY:
-                setTimeDay(player);
+                this.setTimeDay(player);
                 break;
             case SUNSET:
-                setTimeSunset(player);
+                this.setTimeSunset(player);
                 break;
             case NIGHT:
-                setTimeNight(player);
+                this.setTimeNight(player);
                 break;
         }
     }
 
+    /**
+     * Check if the player is in day time.
+     *
+     * @return True if the player is in day time.
+     */
     public boolean isDayTime() {
         return this.time.equals(EnumWorldTime.DAY.getName());
     }
 
+    /**
+     * Check if the player is in sunset time.
+     *
+     * @return True if the player is in sunset time.
+     */
     public boolean isSunsetTime() {
         return this.time.equals(EnumWorldTime.SUNSET.getName());
     }
 
+    /**
+     * Check if the player is in night time.
+     *
+     * @return True if the player is in night time.
+     */
     public boolean isNightTime() {
         return this.time.equals(EnumWorldTime.NIGHT.getName());
     }
 
+    /**
+     * Check if the player is in default time.
+     *
+     * @return True if the player is in default time.
+     */
     public boolean isDefaultTime() {
         return this.time.equals(EnumWorldTime.DEFAULT.getName());
     }

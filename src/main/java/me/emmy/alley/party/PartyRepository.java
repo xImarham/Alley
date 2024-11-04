@@ -22,8 +22,13 @@ import java.util.UUID;
 @Getter
 @Setter
 public class PartyRepository {
-    private final List<Party> parties = new ArrayList<>();
-    private final List<PartyRequest> partyRequests = new ArrayList<>();
+    private final List<Party> parties;
+    private final List<PartyRequest> partyRequests;
+
+    public PartyRepository() {
+        this.parties = new ArrayList<>();
+        this.partyRequests = new ArrayList<>();
+    }
 
     /**
      * Gets the party of a leader.

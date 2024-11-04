@@ -104,8 +104,7 @@ import java.util.List;
 @Getter
 public class Alley extends JavaPlugin {
 
-    @Getter
-    private static Alley instance;
+    @Getter private static Alley instance;
 
     private CommandFramework commandFramework;
     private CosmeticRepository cosmeticRepository;
@@ -130,8 +129,7 @@ public class Alley extends JavaPlugin {
     private EventRepository eventRepository;
     private DuelRepository duelRepository;
 
-    private final String prefix = "§f[§b" + this.name + "§f] §r";
-    private final String name = this.getDescription().getName();
+    private final String prefix = "§f[§b" + this.getDescription().getName() + "§f] §r";
 
     @Override
     public void onEnable() {
@@ -158,12 +156,13 @@ public class Alley extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        profileRepository.getProfiles().forEach((uuid, profile) -> profile.save());
+        this.profileRepository.getProfiles().forEach((uuid, profile) -> profile.save());
 
         ServerUtil.disconnectPlayers();
-        kitRepository.saveKits();
-        ffaRepository.saveFFAMatches();
-        arenaRepository.saveArenas();
+
+        this.kitRepository.saveKits();
+        this.ffaRepository.saveFFAMatches();
+        this.arenaRepository.saveArenas();
 
         Bukkit.getWorlds().forEach(world -> world.getEntities().forEach(entity -> {
             if (entity.getType() == EntityType.DROPPED_ITEM) {
@@ -187,32 +186,32 @@ public class Alley extends JavaPlugin {
     }
 
     private void registerHandlers() {
-        configHandler = new ConfigHandler();
-        scoreboardTitleHandler = new ScoreboardTitleHandler();
+        this.configHandler = new ConfigHandler();
+        this.scoreboardTitleHandler = new ScoreboardTitleHandler();
     }
 
     private void registerManagers() {
-        Logger.logTime("CommandFramework", () -> this.commandFramework = new CommandFramework(this));
-        Logger.logTime("QueueRepository", () -> this.queueRepository = new QueueRepository());
-        Logger.logTime("KitSettingRepository", () -> this.kitSettingRepository = new KitSettingRepository());
-        Logger.logTime("KitRepository", () -> this.kitRepository = new KitRepository());
-        Logger.logTime("ArenaRepository", () -> this.arenaRepository = new ArenaRepository());
-        Logger.logTime("FFARepository", () -> this.ffaRepository = new FFARepository());
-        Logger.logTime("CosmeticRepository", () -> this.cosmeticRepository = new CosmeticRepository());
-        Logger.logTime("ProfileRepository", () -> this.profileRepository = new ProfileRepository());
-        Logger.logTime("DivisionRepository", () -> this.divisionRepository = new DivisionRepository());
-        Logger.logTime("MongoService", () -> this.mongoService = new MongoService(this.configHandler.getDatabaseConfig().getString("mongo.uri")));
-        Logger.logTime("HotbarRepository", () -> this.hotbarRepository = new HotbarRepository());
-        Logger.logTime("Profiles", () -> this.profileRepository.loadProfiles());
-        Logger.logTime("CooldownRepository", () -> this.cooldownRepository = new CooldownRepository());
-        Logger.logTime("SnapshotRepository", () -> this.snapshotRepository = new SnapshotRepository());
-        Logger.logTime("MatchRepository", () -> this.matchRepository = new MatchRepository());
-        Logger.logTime("PartyRepository", () -> this.partyRepository = new PartyRepository());
-        Logger.logTime("SpawnService", () -> this.spawnService = new SpawnService());
-        Logger.logTime("CombatEventManager", () -> this.combatEventManager = new CombatEventManager());
-        Logger.logTime("FFACuboidService", () -> this.ffaCuboidService = new FFACuboidService());
-        Logger.logTime("EventRepository", () -> this.eventRepository = new EventRepository());
-        Logger.logTime("DuelRepository", () -> this.duelRepository = new DuelRepository());
+        Logger.logTime(false, "CommandFramework", () -> this.commandFramework = new CommandFramework(this));
+        Logger.logTime(false, "QueueRepository", () -> this.queueRepository = new QueueRepository());
+        Logger.logTime(false, "KitSettingRepository", () -> this.kitSettingRepository = new KitSettingRepository());
+        Logger.logTime(false, "KitRepository", () -> this.kitRepository = new KitRepository());
+        Logger.logTime(false, "ArenaRepository", () -> this.arenaRepository = new ArenaRepository());
+        Logger.logTime(false, "FFARepository", () -> this.ffaRepository = new FFARepository());
+        Logger.logTime(false, "CosmeticRepository", () -> this.cosmeticRepository = new CosmeticRepository());
+        Logger.logTime(false, "ProfileRepository", () -> this.profileRepository = new ProfileRepository());
+        Logger.logTime(false, "DivisionRepository", () -> this.divisionRepository = new DivisionRepository());
+        Logger.logTime(false, "MongoService", () -> this.mongoService = new MongoService(this.configHandler.getDatabaseConfig().getString("mongo.uri")));
+        Logger.logTime(false, "HotbarRepository", () -> this.hotbarRepository = new HotbarRepository());
+        Logger.logTime(false, "Profiles", () -> this.profileRepository.loadProfiles());
+        Logger.logTime(false, "CooldownRepository", () -> this.cooldownRepository = new CooldownRepository());
+        Logger.logTime(false, "SnapshotRepository", () -> this.snapshotRepository = new SnapshotRepository());
+        Logger.logTime(false, "MatchRepository", () -> this.matchRepository = new MatchRepository());
+        Logger.logTime(false, "PartyRepository", () -> this.partyRepository = new PartyRepository());
+        Logger.logTime(false, "SpawnService", () -> this.spawnService = new SpawnService());
+        Logger.logTime(false, "CombatEventManager", () -> this.combatEventManager = new CombatEventManager());
+        Logger.logTime(false, "FFACuboidService", () -> this.ffaCuboidService = new FFACuboidService());
+        Logger.logTime(false, "EventRepository", () -> this.eventRepository = new EventRepository());
+        Logger.logTime(false, "DuelRepository", () -> this.duelRepository = new DuelRepository());
     }
 
     private void registerListeners() {
@@ -230,7 +229,7 @@ public class Alley extends JavaPlugin {
     }
 
     private void registerCommands() {
-        Logger.logTime("Admin Commands", () -> {
+        Logger.logTime(false, "Admin Commands", () -> {
             new AlleyCommand();
             new AlleyReloadCommand();
 
@@ -242,12 +241,10 @@ public class Alley extends JavaPlugin {
             new CosmeticCommand();
             new DivisionCommand();
 
-            //debugging
             new StateCommand();
             new FFAStateCommand();
             new MatchInfoCommand();
 
-            //essential
             new EnchantCommand();
             new InvSeeCommand();
             new MoreCommand();
@@ -261,7 +258,6 @@ public class Alley extends JavaPlugin {
             new SpawnCommand();
             new SetCoinsCommand();
 
-            //troll
             new FakeExplosionCommand();
             new HeartAttackCommand();
             new LaunchCommand();
@@ -270,13 +266,13 @@ public class Alley extends JavaPlugin {
             new TrollCommand();
         });
 
-        Logger.logTime("Donator Command", () -> {
+        Logger.logTime(false, "Donator Command", () -> {
             new HostCommand();
             new EventCommand();
             new TournamentCommand();
         });
 
-        Logger.logTime("Player Commands", () -> {
+        Logger.logTime(false, "Player Commands", () -> {
             new ChatCommand();
             new DayCommand();
             new NightCommand();
@@ -289,10 +285,10 @@ public class Alley extends JavaPlugin {
             new ToggleWorldTimeCommand();
 
             new PartyCommand();
-
             new AcceptCommand();
             new DuelCommand();
             new DuelRequestsCommand();
+            new InventoryCommand();
             new UnrankedCommand();
             new RankedCommand();
             new PracticeSettingsCommand();
@@ -304,8 +300,6 @@ public class Alley extends JavaPlugin {
             new LeaveQueueCommand();
             new QueuesCommand();
             new MatchSettingsCommand();
-
-            new InventoryCommand();
 
             new ShopCommand();
             new ChallengesCommand();
@@ -329,14 +323,20 @@ public class Alley extends JavaPlugin {
     }
 
     private void runTasks() {
-        FFASpawnTask ffaSpawnTask = new FFASpawnTask(this.ffaCuboidService.getCuboid(), this);
-        ffaSpawnTask.runTaskTimerAsynchronously(this, 0L, 5L);
+        Logger.logTime(true, "FFASpawnTask", () -> {
+            FFASpawnTask ffaSpawnTask = new FFASpawnTask(this.ffaCuboidService.getCuboid(), this);
+            ffaSpawnTask.runTaskTimerAsynchronously(this, 0L, 5L);
+        });
 
-        PartyRequestExpiryTask partyRequestExpiryTask = new PartyRequestExpiryTask();
-        partyRequestExpiryTask.runTaskTimerAsynchronously(Alley.getInstance(), 40L, 40L);
+        Logger.logTime(true, "PartyRequestExpiryTask", () -> {
+            PartyRequestExpiryTask partyRequestExpiryTask = new PartyRequestExpiryTask();
+            partyRequestExpiryTask.runTaskTimerAsynchronously(this, 40L, 40L);
+        });
 
-        DuelRequestExpiryTask duelRequestExpiryTask = new DuelRequestExpiryTask();
-        duelRequestExpiryTask.runTaskTimerAsynchronously(Alley.getInstance(), 40L, 40L);
+        Logger.logTime(true, "DuelRequestExpiryTask", () -> {
+            DuelRequestExpiryTask duelRequestExpiryTask = new DuelRequestExpiryTask();
+            duelRequestExpiryTask.runTaskTimerAsynchronously(this, 40L, 40L);
+        });
     }
 
     /**
@@ -346,7 +346,7 @@ public class Alley extends JavaPlugin {
      * @return the file configuration
      */
     public FileConfiguration getConfig(String fileName) {
-        File configFile = new File(getDataFolder(), fileName);
+        File configFile = new File(this.getDataFolder(), fileName);
         return YamlConfiguration.loadConfiguration(configFile);
     }
 
@@ -356,7 +356,7 @@ public class Alley extends JavaPlugin {
      * @return the exact bukkit version
      */
     public String getBukkitVersionExact() {
-        String version = Bukkit.getServer().getVersion();
+        String version = this.getServer().getVersion();
         version = version.split("MC: ")[1];
         version = version.split("\\)")[0];
         return version;
@@ -371,19 +371,19 @@ public class Alley extends JavaPlugin {
     public int getPlayerCountOfGameType(String queue) {
         switch (queue) {
             case "Unranked":
-                return (int) matchRepository.getMatches().stream()
-                        .filter(match -> !match.isRanked())
-                        .distinct()
-                        .count() * 2; //* 2 because there are 2 players in a regular match, so we double the amount of matches
+                return (int) this.profileRepository.getProfiles().values().stream()
+                        .filter(profile -> profile.getState().equals(EnumProfileState.PLAYING))
+                        .filter(profile -> !profile.getMatch().isRanked())
+                        .count();
             case "Ranked":
-                return (int) matchRepository.getMatches().stream()
-                        .filter(AbstractMatch::isRanked)
-                        .distinct()
-                        .count() * 2; //same applies here
+                return (int) this.profileRepository.getProfiles().values().stream()
+                        .filter(profile -> profile.getState().equals(EnumProfileState.PLAYING))
+                        .filter(profile -> profile.getMatch().isRanked())
+                        .count();
             case "FFA":
-                return (int) profileRepository.getProfiles().values().stream()
+                return (int) this.profileRepository.getProfiles().values().stream()
                         .filter(profile -> profile.getState().equals(EnumProfileState.FFA))
-                        .count(); //not needed, because we can just get every profile that is in the FFA state
+                        .count();
             case "Bots":
                 return 0;
         }

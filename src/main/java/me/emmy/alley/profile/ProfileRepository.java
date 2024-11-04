@@ -19,12 +19,13 @@ import java.util.UUID;
 @Getter
 @Setter
 public class ProfileRepository {
-    private final HashMap<UUID, Profile> profiles = new HashMap<>();
+    private final HashMap<UUID, Profile> profiles;
     public MongoCollection<Document> collection;
     public IProfile iProfile;
 
     public ProfileRepository() {
-        setIProfile(new MongoProfileImpl());
+        this.profiles = new HashMap<>();
+        this.iProfile = new MongoProfileImpl();
     }
 
     /**

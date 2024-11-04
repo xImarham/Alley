@@ -67,7 +67,7 @@ public class DefaultFFAMatchImpl extends AbstractFFAMatch {
         profile.setState(EnumProfileState.LOBBY);
         profile.setFfaMatch(null);
 
-        PlayerUtil.reset(player);
+        PlayerUtil.reset(player, false);
         Alley.getInstance().getSpawnService().teleportToSpawn(player);
         Alley.getInstance().getHotbarRepository().applyHotbarItems(player, HotbarType.LOBBY);
     }

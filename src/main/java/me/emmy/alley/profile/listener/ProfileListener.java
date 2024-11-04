@@ -54,7 +54,7 @@ public class ProfileListener implements Listener {
         profile.setOnline(true);
         profile.setMatch(null);
 
-        PlayerUtil.reset(player);
+        PlayerUtil.reset(player, false);
         Alley.getInstance().getSpawnService().teleportToSpawn(player);
         Alley.getInstance().getHotbarRepository().applyHotbarItems(player, HotbarType.LOBBY);
 

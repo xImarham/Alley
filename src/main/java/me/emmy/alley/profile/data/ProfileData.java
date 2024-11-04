@@ -33,9 +33,9 @@ public class ProfileData {
      * Constructor for the ProfileData class
      */
     public ProfileData() {
-        initializeMaps();
-        feedDataClasses();
-        initializeDataClasses();
+        this.initializeMaps();
+        this.feedDataClasses();
+        this.initializeDataClasses();
     }
 
     /**
@@ -63,10 +63,20 @@ public class ProfileData {
         this.ffaData = Maps.newHashMap();
     }
 
+    /**
+     * Get the total amount of wins
+     *
+     * @return The total amount of wins
+     */
     public int getTotalWins() {
         return this.rankedWins + this.unrankedWins;
     }
 
+    /**
+     * Get the total amount of losses
+     *
+     * @return The total amount of losses
+     */
     public int getTotalLosses() {
         return this.rankedLosses + this.unrankedLosses;
     }

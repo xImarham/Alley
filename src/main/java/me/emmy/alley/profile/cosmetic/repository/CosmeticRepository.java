@@ -18,8 +18,8 @@ public class CosmeticRepository {
     private final Map<String, ICosmeticRepository<?>> cosmeticRepositories = new HashMap<>();
 
     public CosmeticRepository() {
-        registerCosmeticRepository("KillEffect", new KillEffectRepository());
-        registerCosmeticRepository("SoundEffect", new SoundEffectRepository());
+        this.registerCosmeticRepository("KillEffect", new KillEffectRepository());
+        this.registerCosmeticRepository("SoundEffect", new SoundEffectRepository());
     }
 
     /**

@@ -129,8 +129,8 @@ public class CommandFramework implements CommandExecutor {
                 help.add(topic);
             }
         }
-        IndexHelpTopic topic = new IndexHelpTopic(plugin.getName(), "All commands for " + plugin.getName(), null, help,
-                "Below is a list of all " + plugin.getName() + " commands:");
+        IndexHelpTopic topic = new IndexHelpTopic(plugin.getDescription().getName(), "All commands for " + plugin.getDescription().getName(), null, help,
+                "Below is a list of all " + plugin.getDescription().getName() + " commands:");
         Bukkit.getServer().getHelpMap().addTopic(topic);
     }
 
@@ -139,7 +139,7 @@ public class CommandFramework implements CommandExecutor {
             if (m.getAnnotation(Command.class) != null) {
                 Command command = m.getAnnotation(Command.class);
                 commandMap.remove(command.name().toLowerCase());
-                commandMap.remove(this.plugin.getName() + ":" + command.name().toLowerCase());
+                commandMap.remove(this.plugin.getDescription().getName() + ":" + command.name().toLowerCase());
                 map.getCommand(command.name().toLowerCase()).unregister(map);
             }
         }
@@ -147,12 +147,12 @@ public class CommandFramework implements CommandExecutor {
 
     public void registerCommand(Command command, String label, Method m, Object obj) {
         commandMap.put(label.toLowerCase(), new AbstractMap.SimpleEntry<Method, Object>(m, obj));
-        commandMap.put(this.plugin.getName() + ':' + label.toLowerCase(),
+        commandMap.put(this.plugin.getDescription().getName() + ':' + label.toLowerCase(),
                 new AbstractMap.SimpleEntry<Method, Object>(m, obj));
         String cmdLabel = label.replace(".", ",").split(",")[0].toLowerCase();
         if (map.getCommand(cmdLabel) == null) {
             org.bukkit.command.Command cmd = new BukkitCommand(cmdLabel, this, plugin);
-            map.register(plugin.getName(), cmd);
+            map.register(plugin.getDescription().getName(), cmd);
         }
         if (!command.description().equalsIgnoreCase("") && cmdLabel == label) {
             map.getCommand(cmdLabel).setDescription(command.description());
@@ -166,7 +166,7 @@ public class CommandFramework implements CommandExecutor {
         String cmdLabel = label.replace(".", ",").split(",")[0].toLowerCase();
         if (map.getCommand(cmdLabel) == null) {
             org.bukkit.command.Command command = new BukkitCommand(cmdLabel, this, plugin);
-            map.register(plugin.getName(), command);
+            map.register(plugin.getDescription().getName(), command);
         }
         if (map.getCommand(cmdLabel) instanceof BukkitCommand) {
             BukkitCommand command = (BukkitCommand) map.getCommand(cmdLabel);

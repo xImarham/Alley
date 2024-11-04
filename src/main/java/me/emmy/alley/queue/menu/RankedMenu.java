@@ -82,7 +82,7 @@ public class RankedMenu extends Menu {
 
             Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
             queue.addPlayer(player, queue.isRanked() ? profile.getProfileData().getKitData().get(queue.getKit().getName()).getElo() : 0);
-            PlayerUtil.reset(player);
+            PlayerUtil.reset(player, false);
             player.closeInventory();
             playNeutral(player);
             Alley.getInstance().getHotbarRepository().applyHotbarItems(player, HotbarType.QUEUE);
