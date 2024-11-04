@@ -24,6 +24,15 @@ public class SoundUtil {
     }
 
     /**
+     * Play a ban hammer sound to the player
+     *
+     * @param player the player to play the sound to
+     */
+    public void playBanHammer(Player player) {
+        player.playSound(player.getLocation(), Sound.ANVIL_LAND, 2.0F, 1.5F);
+    }
+
+    /**
      * Play a sound to the player based on the success boolean
      *
      * @param player the player to play the sound to

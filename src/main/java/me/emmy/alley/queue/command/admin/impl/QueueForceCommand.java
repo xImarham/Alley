@@ -6,6 +6,7 @@ import me.emmy.alley.kit.Kit;
 import me.emmy.alley.profile.Profile;
 import me.emmy.alley.queue.Queue;
 import me.emmy.alley.util.PlayerUtil;
+import me.emmy.alley.util.SoundUtil;
 import me.emmy.alley.util.chat.CC;
 import me.emmy.alley.api.command.BaseCommand;
 import me.emmy.alley.api.command.Command;
@@ -50,8 +51,8 @@ public class QueueForceCommand extends BaseCommand {
         for (Queue queue : Alley.getInstance().getQueueRepository().getQueues()) {
             if (queue.getKit().equals(kit) && queue.isRanked() == ranked) {
                 queue.addPlayer(target, queue.isRanked() ? profile.getProfileData().getKitData().get(queue.getKit().getName()).getElo() : 0);
-                PlayerUtil.reset(target);
-                target.playSound(target.getLocation(), Sound.ANVIL_LAND, 2.0F, 1.5F);
+                PlayerUtil.reset(target, false);
+                SoundUtil.playBanHammer(target);
                 Alley.getInstance().getHotbarRepository().applyHotbarItems(target, HotbarType.QUEUE);
                 player.sendMessage(CC.translate("&aYou've added &b" + target.getName() + " &ato the &b" + queue.getQueueType() + " &aqueue."));
                 return;
