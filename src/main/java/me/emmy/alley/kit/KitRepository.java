@@ -12,6 +12,7 @@ import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -58,6 +59,7 @@ public class KitRepository {
             Material icon = Material.matchMaterial(config.getString(key + ".icon"));
             int iconData = config.getInt(key + ".icondata");
             String disclaimer = config.getString(key + ".disclaimer");
+            //PotionEffect[] potionEffects = config.getList(key + ".potioneffects").toArray(new PotionEffect[0]);
 
             Kit kit = new Kit(
                     name,

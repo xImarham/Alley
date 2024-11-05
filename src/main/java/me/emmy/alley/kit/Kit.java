@@ -36,6 +36,7 @@ public class Kit {
     private int iconData;
 
     private String disclaimer;
+    //private PotionEffect[] potionEffects;
 
     /**
      * Constructor for the Kit class.
@@ -52,7 +53,7 @@ public class Kit {
      * @param icon         The icon of the kit.
      * @param iconData     The icon data of the kit.
      */
-    public Kit(String name, String displayName, String description, boolean enabled, int unrankedslot, int rankedslot, int editorslot, ItemStack[] inventory, ItemStack[] armor, Material icon, int iconData, String disclaimer) {
+    public Kit(String name, String displayName, String description, boolean enabled, int unrankedslot, int rankedslot, int editorslot, ItemStack[] inventory, ItemStack[] armor, Material icon, int iconData, String disclaimer/*, PotionEffect[] potionEffects*/) {
         this.name = name;
         this.displayName = displayName;
         this.description = description;
@@ -66,6 +67,7 @@ public class Kit {
         this.iconData = iconData;
         this.kitSettings = new ArrayList<>();
         this.disclaimer = disclaimer;
+        //this.potionEffects = potionEffects;
     }
 
     /**
