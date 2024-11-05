@@ -26,6 +26,7 @@ public class KitSetIconCommand extends BaseCommand {
         }
 
         String kitName = args[0];
+
         Kit kit = Alley.getInstance().getKitRepository().getKit(kitName);
         if (kit == null) {
             player.sendMessage(CC.translate("&cKit not found."));

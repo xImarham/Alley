@@ -28,7 +28,7 @@ public class KitRepository {
     private final List<Kit> kits = new ArrayList<>();
 
     public KitRepository() {
-        loadKits();
+        this.loadKits();
     }
 
     /**
@@ -74,12 +74,13 @@ public class KitRepository {
                     icon,
                     iconData,
                     disclaimer
+                    //potionEffects
             );
 
-            loadKitSettings(config, key, kit);
-            addMissingKitSettings(kit, config, key);
-            kits.add(kit);
-            addKitToQueue(kit);
+            this.loadKitSettings(config, key, kit);
+            this.addMissingKitSettings(kit, config, key);
+            this.kits.add(kit);
+            this.addKitToQueue(kit);
         }
     }
 
@@ -87,7 +88,7 @@ public class KitRepository {
      * Method to save all kits to the kits.yml file.
      */
     public void saveKits() {
-        for (Kit kit : kits) {
+        for (Kit kit : this.kits) {
             FileConfiguration config = ConfigHandler.getInstance().getKitsConfig();
             String key = "kits." + kit.getName();
             config.set(key + ".displayname", kit.getDisplayName());
@@ -101,7 +102,8 @@ public class KitRepository {
             config.set(key + ".icon", kit.getIcon().name());
             config.set(key + ".icondata", kit.getIconData());
             config.set(key + ".disclaimer", kit.getDisclaimer());
-            saveKitSettings(config, key, kit);
+            //config.set(key + ".potioneffects", kit.getPotionEffects());
+            this.saveKitSettings(config, key, kit);
             Alley.getInstance().getConfigHandler().saveConfig(Alley.getInstance().getConfigHandler().getConfigFile("storage/kits.yml"), config);
         }
     }
@@ -131,7 +133,7 @@ public class KitRepository {
     private void loadKitSettings(FileConfiguration config, String key, Kit kit) {
         ConfigurationSection settingsSection = config.getConfigurationSection(key + ".settings");
         if (settingsSection == null) {
-            applyDefaultSettings(config, key, kit);
+            this.applyDefaultSettings(config, key, kit);
             return;
         }
 
@@ -161,7 +163,7 @@ public class KitRepository {
             if (kit.getKitSettings().stream().noneMatch(kitSetting -> kitSetting.getName().equals(setting.getName()))) {
                 kit.addKitSetting(setting);
                 Bukkit.getConsoleSender().sendMessage(CC.translate("&cAdded missing setting " + setting.getName() + " to kit " + kit.getName() + ". Now saving it into the kits config..."));
-                saveKitSettings(config, key, kit);
+                this.saveKitSettings(config, key, kit);
             }
         });
     }
@@ -185,11 +187,12 @@ public class KitRepository {
         config.set(key + ".icon", kit.getIcon().name());
         config.set(key + ".icondata", kit.getIconData());
         config.set(key + ".disclaimer", kit.getDisclaimer());
+        //config.set(key + ".potioneffects", kit.getPotionEffects());
 
         if (kit.getKitSettings() == null) {
-            applyDefaultSettings(config, key, kit);
+            this.applyDefaultSettings(config, key, kit);
         } else {
-            saveKitSettings(config, key, kit);
+            this.saveKitSettings(config, key, kit);
         }
 
         Alley.getInstance().getConfigHandler().saveConfig(ConfigHandler.getInstance().getConfigFile("storage/kits.yml"), config);
@@ -237,7 +240,7 @@ public class KitRepository {
         FileConfiguration config = ConfigHandler.getInstance().getKitsConfig();
         File file = ConfigHandler.getInstance().getConfigFile("storage/kits.yml");
 
-        kits.remove(kit);
+        this.kits.remove(kit);
         config.set("kits." + kit.getName(), null);
 
         Alley.getInstance().getConfigHandler().saveConfig(file, config);
@@ -250,9 +253,8 @@ public class KitRepository {
      * @param inventory The inventory of the kit.
      * @param armor     The armor of the kit.
      * @param icon      The icon of the kit.
-     * @return The created kit.
      */
-    public Kit createKit(String kitName, ItemStack[] inventory, ItemStack[] armor, Material icon) {
+    public void createKit(String kitName, ItemStack[] inventory, ItemStack[] armor, Material icon) {
         Kit kit = new Kit(
                 kitName,
                 ConfigHandler.getInstance().getSettingsConfig().getString("kit.default-name").replace("{kit-name}", kitName),
@@ -269,8 +271,8 @@ public class KitRepository {
         );
 
         Alley.getInstance().getKitSettingRepository().applyAllSettingsToKit(kit);
-
-        return kit;
+        this.kits.add(kit);
+        this.saveKit(kit);
     }
 
     /**
@@ -280,7 +282,7 @@ public class KitRepository {
      * @return The kit.
      */
     public Kit getKit(String name) {
-        return kits.stream()
+        return this.kits.stream()
                 .filter(kit -> kit.getName().equalsIgnoreCase(name))
                 .findFirst()
                 .orElse(null);

@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import me.emmy.alley.kit.settings.KitSetting;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
@@ -36,6 +37,7 @@ public class Kit {
     private int iconData;
 
     private String disclaimer;
+
     //private PotionEffect[] potionEffects;
 
     /**
@@ -107,5 +109,16 @@ public class Kit {
                 .orElse(null);
 
         return kitSetting != null && kitSetting.isEnabled();
+    }
+
+    /**
+     * Method to apply the potion effects of the kit to a player.
+     *
+     * @param player The player to apply the potion effects to.
+     */
+    public void applyPotionEffects(Player player) {
+        /*for (PotionEffect effect : potionEffects) {
+            player.addPotionEffect(effect);
+        }*/
     }
 }

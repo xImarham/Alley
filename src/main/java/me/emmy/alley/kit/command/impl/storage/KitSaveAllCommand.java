@@ -14,8 +14,8 @@ import org.bukkit.entity.Player;
  * @date 23/05/2024 - 01:18
  */
 public class KitSaveAllCommand extends BaseCommand {
-    @Override
     @Command(name = "kit.saveall", permission = "alley.admin")
+    @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
 

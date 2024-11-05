@@ -15,8 +15,8 @@ import org.bukkit.entity.Player;
  * @date 23/05/2024 - 01:11
  */
 public class KitSaveCommand extends BaseCommand {
-    @Override
     @Command(name = "kit.save", permission = "alley.admin")
+    @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
         String[] args = command.getArgs();
@@ -29,7 +29,6 @@ public class KitSaveCommand extends BaseCommand {
         String kitName = args[0];
 
         Kit kit = Alley.getInstance().getKitRepository().getKit(kitName);
-
         if (kit == null) {
             player.sendMessage(CC.translate(Locale.KIT_NOT_FOUND.getMessage()));
             return;

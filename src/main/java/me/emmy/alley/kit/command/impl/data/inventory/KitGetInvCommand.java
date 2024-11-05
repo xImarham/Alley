@@ -15,8 +15,8 @@ import org.bukkit.entity.Player;
  * @date 28/04/2024 - 22:25
  */
 public class KitGetInvCommand extends BaseCommand {
-    @Override
     @Command(name = "kit.getinventory", aliases = "kit.getinv",permission = "alley.admin")
+    @Override
     public void onCommand(CommandArgs command) {
         Player sender = command.getPlayer();
         String[] args = command.getArgs();

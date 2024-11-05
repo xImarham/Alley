@@ -15,8 +15,8 @@ import org.bukkit.entity.Player;
  * @date 28/04/2024 - 22:23
  */
 public class KitSetInvCommand extends BaseCommand {
-    @Override
     @Command(name = "kit.setinventory", aliases = "kit.setinv", permission = "practice.admin")
+    @Override
     public void onCommand(CommandArgs args) {
         Player sender = args.getPlayer();
 
@@ -40,4 +40,3 @@ public class KitSetInvCommand extends BaseCommand {
         sender.sendMessage(CC.translate(Locale.KIT_INVENTORY_SET.getMessage().replace("{kit-name}", kitName)));
     }
 }
-

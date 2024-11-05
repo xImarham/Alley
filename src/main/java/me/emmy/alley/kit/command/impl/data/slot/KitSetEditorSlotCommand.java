@@ -15,8 +15,8 @@ import org.bukkit.entity.Player;
  * @date 21/05/2024 - 00:15
  */
 public class KitSetEditorSlotCommand extends BaseCommand {
-    @Override
     @Command(name = "kit.seteditorslot", permission = "alley.admin")
+    @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
         String[] args = command.getArgs();

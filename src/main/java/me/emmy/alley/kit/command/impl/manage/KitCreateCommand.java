@@ -4,8 +4,11 @@ import me.emmy.alley.Alley;
 import me.emmy.alley.config.ConfigHandler;
 import me.emmy.alley.database.util.MongoUtility;
 import me.emmy.alley.kit.Kit;
+import me.emmy.alley.kit.KitRepository;
+import me.emmy.alley.kit.settings.KitSettingRepository;
 import me.emmy.alley.kit.settings.impl.*;
 import me.emmy.alley.locale.Locale;
+import me.emmy.alley.util.ActionBarUtil;
 import me.emmy.alley.util.chat.CC;
 import me.emmy.alley.api.command.BaseCommand;
 import me.emmy.alley.api.command.Command;
@@ -33,25 +36,24 @@ public class KitCreateCommand extends BaseCommand {
 
         String kitName = args[0];
 
-        if (Alley.getInstance().getKitRepository().getKit(kitName) != null) {
+        KitRepository kitRepository = Alley.getInstance().getKitRepository();
+        if (kitRepository.getKit(kitName) != null) {
             player.sendMessage(CC.translate("&cA kit with that name already exists!"));
             return;
         }
 
         ItemStack[] inventory = player.getInventory().getContents();
         ItemStack[] armor = player.getInventory().getArmorContents();
-        Material icon = Material.DIAMOND_SWORD;
 
+        Material icon = Material.DIAMOND_SWORD;
         if (player.getItemInHand() != null && player.getItemInHand().getType() != Material.AIR) {
             icon = player.getItemInHand().getType();
         }
 
-        Kit kit = Alley.getInstance().getKitRepository().createKit(kitName, inventory, armor, icon);
-
-        Alley.getInstance().getKitRepository().getKits().add(kit);
-        Alley.getInstance().getKitRepository().saveKit(kit);
+        kitRepository.createKit(kitName, inventory, armor, icon);
         Alley.getInstance().getProfileRepository().loadProfiles();
         player.sendMessage(CC.translate(Locale.KIT_CREATED.getMessage().replace("{kit-name}", kitName)));
+        ActionBarUtil.sendMessage(player, Locale.KIT_CREATED.getMessage().replace("{kit-name}", kitName), 5);
         player.sendMessage(CC.translate("&7Additionally, all profiles have been reloaded."));
     }
 }

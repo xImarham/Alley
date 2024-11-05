@@ -15,8 +15,8 @@ import org.bukkit.entity.Player;
  * @date 21/05/2024 - 00:23
  */
 public class KitSetRankedSlotCommand extends BaseCommand {
-    @Override
     @Command(name = "kit.setrankedslot", permission = "alley.admin")
+    @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
         String[] args = command.getArgs();
@@ -30,7 +30,6 @@ public class KitSetRankedSlotCommand extends BaseCommand {
         int slot = Integer.parseInt(args[1]);
 
         Kit kit = Alley.getInstance().getKitRepository().getKit(kitName);
-
         if (kit == null) {
             player.sendMessage(CC.translate(Locale.KIT_NOT_FOUND.getMessage()));
             return;

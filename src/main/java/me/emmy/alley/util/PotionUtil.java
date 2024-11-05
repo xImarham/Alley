@@ -1,8 +1,10 @@
 package me.emmy.alley.util;
 
 import lombok.experimental.UtilityClass;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.Potion;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 /**
@@ -59,5 +61,26 @@ public class PotionUtil {
             default:
                 return "Unknown";
         }
+    }
+
+    /**
+     * Serialize a potion effect and convert it into a string.
+     *
+     * @param potionEffect The potion effect.
+     * @return The serialized potion effect.
+     */
+    public String serialize(PotionEffect potionEffect) {
+        return potionEffect.getType().getName() + ":" + potionEffect.getDuration() + ":" + potionEffect.getAmplifier();
+    }
+
+    /**
+     * Deserialize a potion effect and convert it into a new potion effect.
+     *
+     * @param string The serialized potion effect.
+     * @return The potion effect.
+     */
+    public PotionEffect deserialize(String string) {
+        String[] parts = string.split(":");
+        return new PotionEffect(PotionEffectType.getByName(parts[0]), Integer.parseInt(parts[1]), Integer.parseInt(parts[2]));
     }
 }
