@@ -1,6 +1,6 @@
 name: Alley
 version: '${project.version}'
-main: me.emmy.alley.Alley
-authors: ["Emmy", "Remi"]
+main: dev.revere.alley.Alley
+authors: ["Revere Development", "Emmy", "Remi"]
 description: '${project.description}'
-website: https://discord.gg/eT4B65k5E4
+website: https://discord.gg/revere
