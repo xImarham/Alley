@@ -1,26 +1,60 @@
-# Alley Practice core
-A modern Practice core made by Emmy and Remi...
+# Alley
 
-## Todo List:
-### Finished:
-- Arena System
-- Queue System
+Alley is a fully custom, feature-rich Practice PvP core developed from the ground up for Minecraft 1.8. Designed for high performance and extensive customization, Alley provides a powerful foundation for Practice PvP servers, offering a robust set of tools to enhance gameplay, manage players, and ensure a streamlined server experience. This core includes advanced match systems, customizable player management, making it an ideal choice for server owners who want a competitive, reliable PvP environment.
 
-### Ongoing:
-- Match System
-- Party System
-- Kit System
-- FFA System
-- Elo System
-- Leaderboard System
-- Tournament System
+Developed and maintained by [Revere Development](https://www.revere.dev), Alley is currently a work in progress. While it provides a strong base for PvP-focused servers, it is not a finished product. We encourage developers from the community to contribute to its development and help bring Alley to its full potential. Together, we can build a seamless and enjoyable PvP experience for players and admins alike.
 
-### Untouched:
-- Arena Restoring System
-- Events System
+## Features
 
-### In future to be added
-- Coin shop maybe?
-- Core support?
-- Nametags?
-- Support for newer minecraft versions?
+- **Optimized Performance**: Built for efficient performance to ensure the smoothest PvP experience possible.
+- **Fully Customizable Configurations**: Tailor settings to meet your server’s unique requirements.
+- **Modular Design**: Built with a modular approach, making updates and expansions simple and efficient.
+
+## Table of Contents
+
+- [Installation](#installation)
+- [Usage](#usage)
+- [Guidelines](#guidelines)
+- [Contributing](#contributing)
+- [Authors](#authors)
+
+## Installation
+
+1. Download the latest release of Alley from this repository.
+2. Move the Alley.jar file into your server’s plugins directory.
+3. Restart your server to load the plugin.
+
+> **Note**: Alley is designed for Minecraft 1.8 and may not be compatible with other versions.
+
+## Usage
+
+Alley is built to be easily configurable. After installation, access the configuration files in the `plugins` folder to customize settings such as match parameters, visuals, and player permissions to fit your server’s specific needs.
+
+## Guidelines
+
+By using Alley, you agree to the following terms:
+
+- This project may not be used for commercial gain without explicit permission from [Remi](https://github.com/hmRemi) and [Emmy](https://github.com/hmEmmy).
+- Credit must be given to the original authors by including their names and a link to the official repository in any distributed version.
+- Do not claim this project as your own, and do not remove existing copyright notices or license information.
+- Alley must remain free of charge and may not be used as a paid product.
+
+## Contributing
+
+We welcome contributions to improve Alley! If you would like to contribute, please follow these steps:
+
+1. Fork the repository and create a new branch.
+2. Implement your changes and thoroughly test them.
+3. Commit your changes with a descriptive message.
+4. Push your changes to your forked repository.
+5. Open a pull request with a summary of the changes and why they should be merged.
+
+## Authors
+
+Alley is developed and maintained by Revere Development, with primary contributions from [Remi](https://github.com/hmRemi) and [Emmy](https://github.com/hmEmmy). For inquiries or to reach the team:
+
+- **Website**: [revere.dev](https://www.revere.dev)
+- **Email**: [support@revere.dev](mailto:support@revere.dev)
+- **Support:** [discord.gg/revere](https://discord.gg/revere)
+
+Thank you for using and supporting Alley!
