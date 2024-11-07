@@ -1,8 +1,11 @@
 # Alley
 
+**Developed by [Revere Development](https://www.revere.dev)**  
+*Primary Authors: [Remi](https://github.com/hmRemi) & [Emmy](https://github.com/hmEmmy)*
+
 Alley is a fully custom, feature-rich Practice PvP core developed from the ground up for Minecraft 1.8. Designed for high performance and extensive customization, Alley provides a powerful foundation for Practice PvP servers, offering a robust set of tools to enhance gameplay, manage players, and ensure a streamlined server experience. This core includes advanced match systems, customizable player management, making it an ideal choice for server owners who want a competitive, reliable PvP environment.
 
-Developed and maintained by [Revere Development](https://www.revere.dev), Alley is currently a work in progress. While it provides a strong base for PvP-focused servers, it is not a finished product. We encourage developers from the community to contribute to its development and help bring Alley to its full potential. Together, we can build a seamless and enjoyable PvP experience for players and admins alike.
+Alley is currently a work in progress. While it provides a strong base for PvP-focused servers, it is not a finished product. We encourage developers from the community to contribute to its development and help bring Alley to its full potential. Together, we can build a seamless and enjoyable PvP experience for players and admins alike.
 
 ## Features
 
