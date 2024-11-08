@@ -1,5 +1,3 @@
-debugging: false
-
 command:
   anti-syntax-message: "&cYou cannot execute {argument}."
   # Allows you to execute for example alley:alley (syntax)

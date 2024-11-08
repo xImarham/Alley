@@ -24,7 +24,6 @@ import dev.revere.alley.profile.enums.EnumProfileState;
 import dev.revere.alley.queue.Queue;
 import dev.revere.alley.util.PlayerUtil;
 import dev.revere.alley.util.chat.CC;
-import dev.revere.alley.util.logger.Logger;
 import lombok.Getter;
 import lombok.Setter;
 import net.md_5.bungee.api.chat.*;
