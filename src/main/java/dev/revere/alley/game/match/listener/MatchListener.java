@@ -1,7 +1,6 @@
 package dev.revere.alley.game.match.listener;
 
 import dev.revere.alley.Alley;
-import dev.revere.alley.arena.Arena;
 import dev.revere.alley.config.ConfigHandler;
 import dev.revere.alley.cooldown.Cooldown;
 import dev.revere.alley.cooldown.CooldownRepository;
@@ -18,7 +17,6 @@ import dev.revere.alley.profile.enums.EnumProfileState;
 import dev.revere.alley.util.ActionBarUtil;
 import dev.revere.alley.util.PlayerUtil;
 import dev.revere.alley.util.chat.CC;
-import dev.revere.alley.util.logger.Logger;
 import dev.revere.alley.util.location.RayTracerUtil;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -41,7 +39,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * @author Remi
@@ -49,8 +47,6 @@ import java.util.Random;
  * @date 5/21/2024
  */
 public class MatchListener implements Listener {
-
-    private final Random random = new Random();
 
     @EventHandler
     private void onEntityDamage(EntityDamageEvent event) {
@@ -173,7 +169,6 @@ public class MatchListener implements Listener {
                     if (profile.getMatch().getPlacedBlocks().containsKey(blockState)) {
                         profile.getMatch().removeBlockFromPlacedBlocksMap(blockState);
                     } else {
-                        Logger.debug("Cannot break block.");
                         event.setCancelled(true);
                     }
                     return;
@@ -189,7 +184,7 @@ public class MatchListener implements Listener {
                     event.setCancelled(false);
                     event.getBlock().setType(Material.AIR);
 
-                    int amount = random.nextInt(100) < 50 ? random.nextInt(3) + 2 : 0;
+                    int amount = ThreadLocalRandom.current().nextInt(3, 6);
                     if (amount > 0) {
                         ItemStack snowballs = new ItemStack(Material.SNOW_BALL, amount);
                         player.getInventory().addItem(snowballs);
@@ -232,21 +227,7 @@ public class MatchListener implements Listener {
         Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
         if (profile.getState() == EnumProfileState.SPECTATING || profile.getState() == EnumProfileState.PLAYING) {
             if (event.getCause() == PlayerTeleportEvent.TeleportCause.ENDER_PEARL) {
-                Arena arena = profile.getMatch().getArena();
-                Location corner1 = arena.getMinimum();
-                Location corner2 = arena.getMaximum();
-
-                double minX = Math.min(corner1.getX(), corner2.getX());
-                double maxX = Math.max(corner1.getX(), corner2.getX());
-                double minY = Math.min(corner1.getY(), corner2.getY());
-                double maxY = Math.max(corner1.getY(), corner2.getY());
-                double minZ = Math.min(corner1.getZ(), corner2.getZ());
-                double maxZ = Math.max(corner1.getZ(), corner2.getZ());
-
-                Location to = event.getTo();
-
-                boolean withinBounds = to.getX() >= minX && to.getX() <= maxX && to.getY() >= minY && to.getY() <= maxY && to.getZ() >= minZ && to.getZ() <= maxZ;
-                if (!withinBounds) {
+                if (MatchUtility.isBeyondBounds(event.getTo(), profile)) {
                     event.setCancelled(true);
                     player.sendMessage(CC.translate("&cYou cannot leave the arena."));
                 }
@@ -260,7 +241,7 @@ public class MatchListener implements Listener {
         Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
         AbstractMatch match = profile.getMatch();
 
-        if (profile != null && profile.getMatch() != null) {
+        if (profile.getMatch() != null) {
             if (profile.getState() == EnumProfileState.PLAYING && profile.getMatch().getState() == EnumMatchState.RUNNING) {
                 if (profile.getMatch().getKit().isSettingEnabled(KitSettingSumoImpl.class) || profile.getMatch().getKit().isSettingEnabled(KitSettingSpleefImpl.class)) {
                     if (player.getLocation().getBlock().getType() == Material.WATER || player.getLocation().getBlock().getType() == Material.STATIONARY_WATER) {
@@ -290,30 +271,11 @@ public class MatchListener implements Listener {
             }
 
             if (profile.getState() == EnumProfileState.SPECTATING || profile.getState() == EnumProfileState.PLAYING) {
-                if (profile.getMatch() == null) return;
-                Arena arena = profile.getMatch().getArena();
-                Location corner1 = arena.getMinimum();
-                Location corner2 = arena.getMaximum();
-
-                double minX = Math.min(corner1.getX(), corner2.getX());
-                double maxX = Math.max(corner1.getX(), corner2.getX());
-                double minY = Math.min(corner1.getY(), corner2.getY());
-                double maxY = Math.max(corner1.getY(), corner2.getY());
-                double minZ = Math.min(corner1.getZ(), corner2.getZ());
-                double maxZ = Math.max(corner1.getZ(), corner2.getZ());
-
-                Location to = event.getTo();
-
-                //boolean withinBounds = to.getX() >= minX && to.getX() <= maxX && to.getY() >= minY && to.getY() <= maxY && to.getZ() >= minZ && to.getZ() <= maxZ;
-
-                boolean withinBounds;
-                if (profile.getMatch().getState() == EnumMatchState.ENDING_MATCH) {
-                    withinBounds = to.getX() >= minX && to.getX() <= maxX && to.getZ() >= minZ && to.getZ() <= maxZ;
-                } else {
-                    withinBounds = to.getX() >= minX && to.getX() <= maxX && to.getY() >= minY && to.getY() <= maxY && to.getZ() >= minZ && to.getZ() <= maxZ;
+                if (profile.getMatch() == null) {
+                    return;
                 }
 
-                if (!withinBounds) {
+                if (MatchUtility.isBeyondBounds(event.getTo(), profile)) {
                     player.teleport(event.getFrom());
                     player.sendMessage(CC.translate("&cYou cannot leave the arena."));
                 }

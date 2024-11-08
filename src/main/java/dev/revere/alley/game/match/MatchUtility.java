@@ -1,5 +1,8 @@
 package dev.revere.alley.game.match;
 
+import dev.revere.alley.arena.Arena;
+import dev.revere.alley.game.match.enums.EnumMatchState;
+import dev.revere.alley.profile.Profile;
 import lombok.experimental.UtilityClass;
 import dev.revere.alley.game.match.player.GameParticipant;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
@@ -46,5 +49,34 @@ public class MatchUtility {
                 }
             }
         }
+    }
+
+    /**
+     * Check if a location is beyond the bounds of an arena.
+     *
+     * @param location      the location
+     * @param profile the profile
+     * @return if the location is beyond the bounds
+     */
+    public boolean isBeyondBounds(Location location, Profile profile) {
+        Arena arena = profile.getMatch().getArena();
+        Location corner1 = arena.getMinimum();
+        Location corner2 = arena.getMaximum();
+
+        double minX = Math.min(corner1.getX(), corner2.getX());
+        double maxX = Math.max(corner1.getX(), corner2.getX());
+        double minY = Math.min(corner1.getY(), corner2.getY());
+        double maxY = Math.max(corner1.getY(), corner2.getY());
+        double minZ = Math.min(corner1.getZ(), corner2.getZ());
+        double maxZ = Math.max(corner1.getZ(), corner2.getZ());
+
+        boolean withinBounds;
+        if (profile.getMatch().getState() == EnumMatchState.ENDING_MATCH) {
+            withinBounds = location.getX() >= minX && location.getX() <= maxX && location.getZ() >= minZ && location.getZ() <= maxZ;
+        } else {
+            withinBounds = location.getX() >= minX && location.getX() <= maxX && location.getY() >= minY && location.getY() <= maxY && location.getZ() >= minZ && location.getZ() <= maxZ;
+        }
+
+        return !withinBounds;
     }
 }
