@@ -167,7 +167,7 @@ public class MatchListener implements Listener {
                     BlockState blockState = event.getBlock().getState();
 
                     if (profile.getMatch().getPlacedBlocks().containsKey(blockState)) {
-                        profile.getMatch().removeBlockFromPlacedBlocksMap(blockState);
+                        profile.getMatch().removeBlockFromPlacedBlocksMap(blockState, event.getBlock().getLocation());
                     } else {
                         event.setCancelled(true);
                     }
