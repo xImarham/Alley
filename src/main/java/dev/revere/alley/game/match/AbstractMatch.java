@@ -152,7 +152,6 @@ public abstract class AbstractMatch {
      * @param location   The location of the block.
      */
     public void addBlockToPlacedBlocksMap(BlockState blockState, Location location) {
-        Logger.debug("Adding block to placed blocks map: " + blockState.getType().name() + " at " + location.getX() + ", " + location.getY() + ", " + location.getZ());
         placedBlocks.put(blockState, location);
     }
 
@@ -162,7 +161,6 @@ public abstract class AbstractMatch {
      * @param blockState The block state to remove.
      */
     public void removeBlockFromPlacedBlocksMap(BlockState blockState, Location location) {
-        Logger.debug("Removing block from placed blocks map: " + blockState.getType().name() + " at " + location.getX() + ", " + location.getY() + ", " + location.getZ());
         placedBlocks.remove(blockState, location);
     }
 
