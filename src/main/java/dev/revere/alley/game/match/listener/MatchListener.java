@@ -304,7 +304,7 @@ public class MatchListener implements Listener {
                 ActionBarUtil.sendMessage(killer, "&c&lKILL! &f" + player.getName(), 3);
                 profile.getMatch().getParticipants()
                         .forEach(participant -> participant.getPlayer().getPlayer().sendMessage(CC.translate("&c" + player.getName() + " &fwas killed by &c" + killer.getName() + "&f.")));
-                profile.getMatch().createSnapshot(player, killer);
+                profile.getMatch().createSnapshot(player.getUniqueId(), killer.getUniqueId());
             } else {
                 profile.getMatch().getParticipants()
                         .forEach(participant -> participant.getPlayer().getPlayer().sendMessage(CC.translate("&c" + player.getName() + " &fdied.")));

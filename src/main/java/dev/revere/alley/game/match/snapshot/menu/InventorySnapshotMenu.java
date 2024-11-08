@@ -30,7 +30,7 @@ public class InventorySnapshotMenu extends Menu {
 
     @Override
     public String getTitle(Player player) {
-        return CC.translate("&b&l" + Bukkit.getPlayer(target).getName() + "'s Inventory");
+        return CC.translate("&b&l" + Bukkit.getOfflinePlayer(target).getName() + "'s Inventory");
     }
 
     @Override

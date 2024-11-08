@@ -26,7 +26,7 @@ public class ViewOpponentButton extends Button {
     public ItemStack getButtonItem(Player player) {
         return new ItemBuilder(Material.PAPER)
                 .name(CC.translate("&bView Opponent"))
-                .lore("&7Click to view &b" + Bukkit.getPlayer(opponent).getName() + "'s &7inventory.")
+                .lore("&7Click to view &b" + Bukkit.getOfflinePlayer(opponent).getName() + "'s &7inventory.")
                 .build();
     }
 

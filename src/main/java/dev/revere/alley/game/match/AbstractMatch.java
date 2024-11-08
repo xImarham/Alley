@@ -27,6 +27,7 @@ import dev.revere.alley.util.chat.CC;
 import lombok.Getter;
 import lombok.Setter;
 import net.md_5.bungee.api.chat.*;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.BlockState;
@@ -217,13 +218,13 @@ public abstract class AbstractMatch {
      * @param loser  The loser of the match.
      * @param winner The winner of the match.
      */
-    public void createSnapshot(Player loser, Player winner) {
-        Snapshot winnerSnapshot = new Snapshot(winner, true);
-        winnerSnapshot.setOpponent(loser.getUniqueId());
+    public void createSnapshot(UUID loser, UUID winner) {
+        Snapshot winnerSnapshot = new Snapshot(Bukkit.getPlayer(winner), true);
+        winnerSnapshot.setOpponent(loser);
         snapshots.add(winnerSnapshot);
 
-        Snapshot loserSnapshot = new Snapshot(loser, false);
-        loserSnapshot.setOpponent(winner.getUniqueId());
+        Snapshot loserSnapshot = new Snapshot(Bukkit.getPlayer(loser), false);
+        loserSnapshot.setOpponent(winner);
         snapshots.add(loserSnapshot);
     }
 
