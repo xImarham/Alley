@@ -264,7 +264,7 @@ public class Alley extends JavaPlugin {
             new TrollCommand();
         });
 
-        Logger.logTime(false, "Donator Command", () -> {
+        Logger.logTime(false, "Donator Commands", () -> {
             new HostCommand();
             new EventCommand();
             new TournamentCommand();
