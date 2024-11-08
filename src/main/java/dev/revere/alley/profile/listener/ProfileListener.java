@@ -72,7 +72,7 @@ public class ProfileListener implements Listener {
                 player.sendMessage(CC.translate(message)
                         .replace("{player}", player.getName())
                         .replace("{version}", Alley.getInstance().getDescription().getVersion())
-                        .replace("{author}", Alley.getInstance().getDescription().getAuthors().get(0))
+                        .replace("{author}", Alley.getInstance().getDescription().getAuthors().toString().replace("[", "").replace("]", ""))
                 );
             }
         }
