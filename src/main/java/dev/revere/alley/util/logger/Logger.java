@@ -26,6 +26,16 @@ public class Logger {
     }
 
     /**
+     * Log an exception to the console.
+     *
+     * @param message   the message to log
+     * @param exception the exception to log
+     */
+    public void logException(String message, Exception exception) {
+        Bukkit.getConsoleSender().sendMessage(CC.translate("&c" + Symbol.ARROW_R + " &4&l" + Alley.getInstance().getDescription().getName() + " Exception &c" + Symbol.ARROW_L + " &7&o" + message + " &c" + exception.getMessage()));
+    }
+
+    /**
      * Log the time it takes to run a task.
      *
      * @param taskName the name of the task to run
