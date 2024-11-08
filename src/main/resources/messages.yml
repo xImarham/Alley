@@ -85,12 +85,19 @@ match:
         - "&3&l{kit-name}"
         - " &f• &b{kit-disclaimer}"
         - ""
-  #ended:
-  #  match-result:
-  #    - ""
-  #    - "&b&lEnd Match Results: &7(click to view)"
-  #    - "&aWinner: &f%winner% &7| &cLoser: &f%loser%"
-  #    - ""
+  ended:
+    match-result:
+      format:
+        - ""
+        - "&b&lMatch Results: &7(click to view)"
+        - "&aWinner: &f{winner} &7| &cLoser: &f{loser}"
+        - ""
+      winner:
+        command: "/inventory {winner}"
+        hover: "&aClick to view {winner}'s inventory"
+      loser:
+        command: "/inventory {loser}"
+        hover: "&cClick to view {loser}'s inventory"
 
 playtime:
   message: " \n&b{target}'s total playtime:\n &b{days} &fdays, &b{hours} &fhours, &b{minutes} &fminutes and &b{seconds} &fseconds.\n "
