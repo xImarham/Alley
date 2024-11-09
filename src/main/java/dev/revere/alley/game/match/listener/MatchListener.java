@@ -7,8 +7,8 @@ import dev.revere.alley.cooldown.enums.EnumCooldownType;
 import dev.revere.alley.game.match.AbstractMatch;
 import dev.revere.alley.game.match.MatchUtility;
 import dev.revere.alley.game.match.enums.EnumMatchState;
-import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
+import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.kit.settings.impl.*;
 import dev.revere.alley.locale.ErrorMessage;
 import dev.revere.alley.profile.Profile;
@@ -17,7 +17,6 @@ import dev.revere.alley.util.ActionBarUtil;
 import dev.revere.alley.util.PlayerUtil;
 import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.util.location.RayTracerUtil;
-import dev.revere.alley.util.logger.Logger;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -94,7 +93,6 @@ public class MatchListener implements Listener {
                             || profile.getMatch().getKit().isSettingEnabled(KitSettingLivesImpl.class)
                             || profile.getMatch().getKit().isSettingEnabled(KitSettingBattleRushImpl.class)
                             || profile.getMatch().getKit().isSettingEnabled(KitSettingStickFightImpl.class)) {
-                        Logger.log("Ender pearl damage cancelled.");
                         event.setCancelled(true);
                     }
                 }
