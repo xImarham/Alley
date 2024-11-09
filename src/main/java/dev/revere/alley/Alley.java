@@ -1,6 +1,5 @@
 package dev.revere.alley;
 
-import lombok.Getter;
 import dev.revere.alley.api.assemble.Assemble;
 import dev.revere.alley.api.assemble.AssembleStyle;
 import dev.revere.alley.api.command.CommandFramework;
@@ -82,13 +81,13 @@ import dev.revere.alley.queue.command.player.QueuesCommand;
 import dev.revere.alley.queue.command.player.RankedCommand;
 import dev.revere.alley.queue.command.player.UnrankedCommand;
 import dev.revere.alley.util.ServerUtil;
-import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.util.logger.Logger;
 import dev.revere.alley.visual.leaderboard.command.LeaderboardCommand;
 import dev.revere.alley.visual.scoreboard.ScoreboardVisualizer;
 import dev.revere.alley.visual.scoreboard.animation.ScoreboardTitleHandler;
 import dev.revere.alley.visual.tablist.task.TablistUpdateTask;
 import dev.revere.alley.world.WorldListener;
+import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -175,9 +174,6 @@ public class Alley extends JavaPlugin {
     private void checkDescription() {
         List<String> authors = getDescription().getAuthors();
         List<String> expectedAuthors = Arrays.asList("Revere Development", "Emmy", "Remi");
-
-        Bukkit.getConsoleSender().sendMessage(CC.translate(prefix + "Expected authors: &a" + expectedAuthors + "&f, Retrieved authors: &c" + authors));
-
         if (!new HashSet<>(authors).containsAll(expectedAuthors)) {
             System.exit(0);
         }
