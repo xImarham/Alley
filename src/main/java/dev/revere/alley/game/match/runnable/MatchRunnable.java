@@ -68,10 +68,9 @@ public class MatchRunnable extends BukkitRunnable {
      */
     private void sendDisclaimer() {
         FileConfiguration config = Alley.getInstance().getConfigHandler().getMessagesConfig();
-
         if (config.getBoolean("match.started.kit-disclaimer.enabled")) {
             if (match.getKit().getDisclaimer() == null) {
-                match.sendMessage(CC.translate("&4&lWarning: &cUsing hacks or any form of cheating is strictly prohibited!"));
+                Alley.getInstance().getConfigHandler().getMessagesConfig().getStringList("match.started.kit-disclaimer.not-set").forEach(message -> match.sendMessage(CC.translate(message)));
                 return;
             }
 

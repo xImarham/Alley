@@ -85,6 +85,8 @@ match:
         - "&3&l{kit-name}"
         - " &f• &b{kit-disclaimer}"
         - ""
+      not-set: # In case if the kit disclaimer is null.
+        - "&4&lWarning: &cUsing hacks or any form of cheating is strictly prohibited!"
   ended:
     match-result:
       format:
