@@ -137,7 +137,7 @@ public class MongoUtility {
             Document profileDataDocument = (Document) document.get("profileData");
             ProfileData profileData = new ProfileData();
 
-            profileData.setCoins(((Number) profileDataDocument.get("coins")).intValue());
+            profileData.setCoins(profileDataDocument.getInteger("coins"));
             profileData.setUnrankedWins(profileDataDocument.getInteger("unrankedWins"));
             profileData.setUnrankedLosses(profileDataDocument.getInteger("unrankedLosses"));
             profileData.setRankedWins(profileDataDocument.getInteger("rankedWins"));
@@ -145,16 +145,12 @@ public class MongoUtility {
 
             Map<String, ProfileKitData> existingKitData = profileData.getKitData();
             Map<String, ProfileKitData> newKitData = parseKitData((Document) profileDataDocument.get("kitData"));
-            for (Map.Entry<String, ProfileKitData> entry : newKitData.entrySet()) {
-                existingKitData.put(entry.getKey(), entry.getValue());
-            }
+            existingKitData.putAll(newKitData);
             profileData.setKitData(existingKitData);
 
             Map<String, ProfileFFAData> existingFFAData = profileData.getFfaData();
             Map<String, ProfileFFAData> newFFAData = parseFFAData((Document) profileDataDocument.get("ffaData"));
-            for (Map.Entry<String, ProfileFFAData> entry : newFFAData.entrySet()) {
-                existingFFAData.put(entry.getKey(), entry.getValue());
-            }
+            existingFFAData.putAll(newFFAData);
             profileData.setFfaData(existingFFAData);
 
             profileData.setProfileSettingData(parseProfileSettingData((Document) profileDataDocument.get("profileSettingData")));
