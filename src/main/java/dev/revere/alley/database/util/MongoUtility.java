@@ -5,27 +5,26 @@ import dev.revere.alley.profile.data.ProfileData;
 import dev.revere.alley.profile.data.impl.*;
 import dev.revere.alley.profile.enums.EnumChatChannel;
 import dev.revere.alley.profile.enums.EnumWorldTime;
+import lombok.experimental.UtilityClass;
 import org.bson.Document;
 
 import java.util.HashMap;
 import java.util.Map;
-
 /**
- * Utility class for converting between Profile objects and MongoDB Documents.
- *
  * @author Remi
  * @project Alley
  * @date 5/26/2024
  */
+@UtilityClass
 public class MongoUtility {
 
     /**
-     * Converts a Profile object to a MongoDB Document manually.
+     * Converts a Profile object to a Document.
      *
-     * @param profile The Profile object to convert.
-     * @return The created Document.
+     * @param profile The profile to convert.
+     * @return The converted Document.
      */
-    public static Document toDocument(Profile profile) {
+    public Document toDocument(Profile profile) {
         Document document = new Document();
         document.put("uuid", profile.getUuid().toString());
         document.put("name", profile.getName());
@@ -49,7 +48,13 @@ public class MongoUtility {
         return document;
     }
 
-    private static Document convertKitData(Map<String, ProfileKitData> kitData) {
+    /**
+     * Converts a Map of ProfileKitData objects to a Document.
+     *
+     * @param kitData The kit data to convert.
+     * @return The converted Document.
+     */
+    private Document convertKitData(Map<String, ProfileKitData> kitData) {
         Document kitDataDocument = new Document();
         for (Map.Entry<String, ProfileKitData> entry : kitData.entrySet()) {
             Document kitEntry = new Document();
@@ -61,7 +66,13 @@ public class MongoUtility {
         return kitDataDocument;
     }
 
-    private static Document convertFFAData(Map<String, ProfileFFAData> ffaData) {
+    /**
+     * Converts a Map of ProfileFFAData objects to a Document.
+     *
+     * @param ffaData The FFA data to convert.
+     * @return The converted Document.
+     */
+    private Document convertFFAData(Map<String, ProfileFFAData> ffaData) {
         Document ffaDataDocument = new Document();
         for (Map.Entry<String, ProfileFFAData> entry : ffaData.entrySet()) {
             Document ffaEntry = new Document();
@@ -72,7 +83,13 @@ public class MongoUtility {
         return ffaDataDocument;
     }
 
-    private static Document convertProfileSettingData(ProfileSettingData settingData) {
+    /**
+     * Converts a ProfileSettingData object to a Document.
+     *
+     * @param settingData The setting data to convert.
+     * @return The converted Document.
+     */
+    private Document convertProfileSettingData(ProfileSettingData settingData) {
         Document settingDocument = new Document();
         settingDocument.put("partyMessagesEnabled", settingData.isPartyMessagesEnabled());
         settingDocument.put("partyInvitesEnabled", settingData.isPartyInvitesEnabled());
@@ -83,14 +100,26 @@ public class MongoUtility {
         return settingDocument;
     }
 
-    private static Document convertProfileCosmeticData(ProfileCosmeticData cosmeticData) {
+    /**
+     * Converts a ProfileCosmeticData object to a Document.
+     *
+     * @param cosmeticData The cosmetic data to convert.
+     * @return The converted Document.
+     */
+    private Document convertProfileCosmeticData(ProfileCosmeticData cosmeticData) {
         Document cosmeticDocument = new Document();
         cosmeticDocument.put("selectedKillEffect", cosmeticData.getSelectedKillEffect());
         cosmeticDocument.put("selectedSoundEffect", cosmeticData.getSelectedSoundEffect());
         return cosmeticDocument;
     }
 
-    private static Document convertProfileDivisionData(ProfileDivisionData divisionData) {
+    /**
+     * Converts a ProfileDivisionData object to a Document.
+     *
+     * @param divisionData The division data to convert.
+     * @return The converted Document.
+     */
+    private Document convertProfileDivisionData(ProfileDivisionData divisionData) {
         Document divisionDocument = new Document();
         divisionDocument.put("division", divisionData.getDivision());
         divisionDocument.put("globalElo", divisionData.getGlobalElo());
@@ -98,33 +127,33 @@ public class MongoUtility {
     }
 
     /**
-     * Updates a Profile object using data from a Document.
+     * Updates a Profile object from a Document.
      *
-     * @param profile The Profile object to update.
-     * @param document The Document containing the data.
+     * @param profile   The profile to update.
+     * @param document  The document to update from.
      */
-    public static void updateProfileFromDocument(Profile profile, Document document) {
+    public void updateProfileFromDocument(Profile profile, Document document) {
         if (document.containsKey("profileData")) {
             Document profileDataDocument = (Document) document.get("profileData");
             ProfileData profileData = new ProfileData();
 
-            profileData.setCoins(profileDataDocument.getInteger("coins", Profile.DEFAULT_COINS));
-            profileData.setUnrankedWins(profileDataDocument.getInteger("unrankedWins", 0));
-            profileData.setUnrankedLosses(profileDataDocument.getInteger("unrankedLosses", 0));
-            profileData.setRankedWins(profileDataDocument.getInteger("rankedWins", 0));
-            profileData.setRankedLosses(profileDataDocument.getInteger("rankedLosses", 0));
+            profileData.setCoins(((Number) profileDataDocument.get("coins")).intValue());
+            profileData.setUnrankedWins(profileDataDocument.getInteger("unrankedWins"));
+            profileData.setUnrankedLosses(profileDataDocument.getInteger("unrankedLosses"));
+            profileData.setRankedWins(profileDataDocument.getInteger("rankedWins"));
+            profileData.setRankedLosses(profileDataDocument.getInteger("rankedLosses"));
 
             Map<String, ProfileKitData> existingKitData = profileData.getKitData();
             Map<String, ProfileKitData> newKitData = parseKitData((Document) profileDataDocument.get("kitData"));
             for (Map.Entry<String, ProfileKitData> entry : newKitData.entrySet()) {
-                existingKitData.putIfAbsent(entry.getKey(), entry.getValue());
+                existingKitData.put(entry.getKey(), entry.getValue());
             }
             profileData.setKitData(existingKitData);
 
             Map<String, ProfileFFAData> existingFFAData = profileData.getFfaData();
             Map<String, ProfileFFAData> newFFAData = parseFFAData((Document) profileDataDocument.get("ffaData"));
             for (Map.Entry<String, ProfileFFAData> entry : newFFAData.entrySet()) {
-                existingFFAData.putIfAbsent(entry.getKey(), entry.getValue());
+                existingFFAData.put(entry.getKey(), entry.getValue());
             }
             profileData.setFfaData(existingFFAData);
 
@@ -136,32 +165,50 @@ public class MongoUtility {
         }
     }
 
-    private static Map<String, ProfileKitData> parseKitData(Document kitDataDocument) {
+    /**
+     * Parses a Map of ProfileKitData objects from a Document.
+     *
+     * @param kitDataDocument The kit data document to parse.
+     * @return The parsed Map.
+     */
+    private Map<String, ProfileKitData> parseKitData(Document kitDataDocument) {
         Map<String, ProfileKitData> kitData = new HashMap<>();
         for (Map.Entry<String, Object> entry : kitDataDocument.entrySet()) {
             Document kitEntry = (Document) entry.getValue();
             ProfileKitData kit = new ProfileKitData();
-            kit.setElo(kitEntry.getInteger("elo", 1000));
-            kit.setWins(kitEntry.getInteger("wins", 0));
-            kit.setLosses(kitEntry.getInteger("losses", 0));
+            kit.setElo(kitEntry.getInteger("elo"));
+            kit.setWins(kitEntry.getInteger("wins"));
+            kit.setLosses(kitEntry.getInteger("losses"));
             kitData.put(entry.getKey(), kit);
         }
         return kitData;
     }
 
-    private static Map<String, ProfileFFAData> parseFFAData(Document ffaDataDocument) {
+    /**
+     * Parses a Map of ProfileFFAData objects from a Document.
+     *
+     * @param ffaDataDocument The FFA data document to parse.
+     * @return The parsed Map.
+     */
+    private Map<String, ProfileFFAData> parseFFAData(Document ffaDataDocument) {
         Map<String, ProfileFFAData> ffaData = new HashMap<>();
         for (Map.Entry<String, Object> entry : ffaDataDocument.entrySet()) {
             Document ffaEntry = (Document) entry.getValue();
             ProfileFFAData ffa = new ProfileFFAData();
-            ffa.setKills(ffaEntry.getInteger("kills", 0));
-            ffa.setDeaths(ffaEntry.getInteger("deaths", 0));
+            ffa.setKills(ffaEntry.getInteger("kills"));
+            ffa.setDeaths(ffaEntry.getInteger("deaths"));
             ffaData.put(entry.getKey(), ffa);
         }
         return ffaData;
     }
 
-    private static ProfileSettingData parseProfileSettingData(Document settingDocument) {
+    /**
+     * Parses a ProfileSettingData object from a Document.
+     *
+     * @param settingDocument The setting document to parse.
+     * @return The parsed ProfileSettingData.
+     */
+    private ProfileSettingData parseProfileSettingData(Document settingDocument) {
         ProfileSettingData settingData = new ProfileSettingData();
         settingData.setPartyMessagesEnabled(settingDocument.getBoolean("partyMessagesEnabled", true));
         settingData.setPartyInvitesEnabled(settingDocument.getBoolean("partyInvitesEnabled", true));
@@ -172,17 +219,29 @@ public class MongoUtility {
         return settingData;
     }
 
-    private static ProfileCosmeticData parseProfileCosmeticData(Document cosmeticDocument) {
+    /**
+     * Parses a ProfileCosmeticData object from a Document.
+     *
+     * @param cosmeticDocument The cosmetic document to parse.
+     * @return The parsed ProfileCosmeticData.
+     */
+    private ProfileCosmeticData parseProfileCosmeticData(Document cosmeticDocument) {
         ProfileCosmeticData cosmeticData = new ProfileCosmeticData();
         cosmeticData.setSelectedKillEffect(cosmeticDocument.getString("selectedKillEffect"));
         cosmeticData.setSelectedSoundEffect(cosmeticDocument.getString("selectedSoundEffect"));
         return cosmeticData;
     }
 
-    private static ProfileDivisionData parseProfileDivisionData(Document divisionDocument) {
+    /**
+     * Parses a ProfileDivisionData object from a Document.
+     *
+     * @param divisionDocument The division document to parse.
+     * @return The parsed ProfileDivisionData.
+     */
+    private ProfileDivisionData parseProfileDivisionData(Document divisionDocument) {
         ProfileDivisionData divisionData = new ProfileDivisionData();
         divisionData.setDivision(divisionDocument.getString("division"));
-        divisionData.setGlobalElo(divisionDocument.getInteger("globalElo", Profile.DEFAULT_ELO));
+        divisionData.setGlobalElo(divisionDocument.getInteger("globalElo"));
         return divisionData;
     }
 }

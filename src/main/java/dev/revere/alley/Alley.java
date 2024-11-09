@@ -192,11 +192,10 @@ public class Alley extends JavaPlugin {
         Logger.logTime(false, "ArenaRepository", () -> this.arenaRepository = new ArenaRepository());
         Logger.logTime(false, "FFARepository", () -> this.ffaRepository = new FFARepository());
         Logger.logTime(false, "CosmeticRepository", () -> this.cosmeticRepository = new CosmeticRepository());
+        Logger.logTime(false, "MongoService", () -> this.mongoService = new MongoService(this.configHandler.getDatabaseConfig().getString("mongo.uri")));
         Logger.logTime(false, "ProfileRepository", () -> this.profileRepository = new ProfileRepository());
         Logger.logTime(false, "DivisionRepository", () -> this.divisionRepository = new DivisionRepository());
-        Logger.logTime(false, "MongoService", () -> this.mongoService = new MongoService(this.configHandler.getDatabaseConfig().getString("mongo.uri")));
         Logger.logTime(false, "HotbarRepository", () -> this.hotbarRepository = new HotbarRepository());
-        Logger.logTime(false, "Profiles", () -> this.profileRepository.loadProfiles());
         Logger.logTime(false, "CooldownRepository", () -> this.cooldownRepository = new CooldownRepository());
         Logger.logTime(false, "SnapshotRepository", () -> this.snapshotRepository = new SnapshotRepository());
         Logger.logTime(false, "MatchRepository", () -> this.matchRepository = new MatchRepository());

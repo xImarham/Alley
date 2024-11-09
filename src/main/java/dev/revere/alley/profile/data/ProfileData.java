@@ -80,4 +80,20 @@ public class ProfileData {
     public int getTotalLosses() {
         return this.rankedLosses + this.unrankedLosses;
     }
+
+    public void incrementUnrankedWins() {
+        this.unrankedWins++;
+    }
+
+    public void incrementUnrankedLosses() {
+        this.unrankedLosses++;
+    }
+
+    public void incrementRankedWins() {
+        this.rankedWins++;
+    }
+
+    public void incrementRankedLosses() {
+        this.rankedLosses++;
+    }
 }

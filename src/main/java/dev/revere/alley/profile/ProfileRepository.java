@@ -25,6 +25,7 @@ public class ProfileRepository {
 
     public ProfileRepository() {
         this.profiles = new HashMap<>();
+        this.collection = Alley.getInstance().getMongoService().getMongoDatabase().getCollection("profiles");
         this.iProfile = new MongoProfileImpl();
     }
 
@@ -42,8 +43,6 @@ public class ProfileRepository {
      * Loads all profiles from the database.
      */
     public void loadProfiles() {
-        this.collection = Alley.getInstance().getMongoService().getMongoDatabase().getCollection("profiles");
-
         for (Document document : collection.find()) {
             UUID uuid = UUID.fromString(document.getString("uuid"));
             Profile profile = new Profile(uuid);
