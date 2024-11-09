@@ -1,7 +1,6 @@
 package dev.revere.alley.game.match.listener;
 
 import dev.revere.alley.Alley;
-import dev.revere.alley.config.ConfigHandler;
 import dev.revere.alley.cooldown.Cooldown;
 import dev.revere.alley.cooldown.CooldownRepository;
 import dev.revere.alley.cooldown.enums.EnumCooldownType;
@@ -250,7 +249,7 @@ public class MatchListener implements Listener {
                 }
 
                 if (profile.getMatch().getKit().isSettingEnabled(KitSettingLivesImpl.class)) {
-                    if (player.getLocation().getY() <= ConfigHandler.getInstance().getSettingsConfig().getInt("game.death-y-level")) {
+                    if (player.getLocation().getY() <= Alley.getInstance().getConfigHandler().getSettingsConfig().getInt("game.death-y-level")) {
                         if (player.getGameMode() == GameMode.SPECTATOR) return;
                         if (player.getGameMode() == GameMode.CREATIVE) return;
                         player.setHealth(0);

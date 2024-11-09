@@ -2,12 +2,11 @@ package dev.revere.alley.visual.scoreboard;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.assemble.AssembleAdapter;
-import dev.revere.alley.config.ConfigHandler;
-import dev.revere.alley.kit.settings.impl.KitSettingBoxingImpl;
-import dev.revere.alley.kit.settings.impl.KitSettingLivesImpl;
 import dev.revere.alley.game.match.enums.EnumMatchState;
 import dev.revere.alley.game.match.player.GameParticipant;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
+import dev.revere.alley.kit.settings.impl.KitSettingBoxingImpl;
+import dev.revere.alley.kit.settings.impl.KitSettingLivesImpl;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
 import dev.revere.alley.util.AnimationUtil;
@@ -237,7 +236,7 @@ public class ScoreboardVisualizer implements AssembleAdapter {
             int opponentHits = profile.getMatch().getGamePlayer(opponent.getPlayer().getPlayer()).getData().getHits();
             int difference = playerHits - opponentHits;
 
-            FileConfiguration config = ConfigHandler.getInstance().getScoreboardConfig();
+            FileConfiguration config = Alley.getInstance().getConfigHandler().getScoreboardConfig();
             String positiveDifference = config.getString("boxing-placeholder.positive-difference", "&a(+{difference})");
             String negativeDifference = config.getString("boxing-placeholder.negative-difference", "&c({difference})");
             String zeroDifference = config.getString("boxing-placeholder.no-difference", "&a(+0)");

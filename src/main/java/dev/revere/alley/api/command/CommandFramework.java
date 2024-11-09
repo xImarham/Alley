@@ -1,7 +1,6 @@
 package dev.revere.alley.api.command;
 
 import dev.revere.alley.Alley;
-import dev.revere.alley.config.ConfigHandler;
 import dev.revere.alley.locale.Locale;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.Bukkit;
@@ -201,7 +200,7 @@ public class CommandFramework implements CommandExecutor {
         String label = args.getLabel();
         String[] parts = label.split(":");
 
-        if (args.getSender().hasPermission(ConfigHandler.getInstance().getSettingsConfig().getString("command.syntax-bypass-perm"))) {
+        if (args.getSender().hasPermission(Alley.getInstance().getConfigHandler().getSettingsConfig().getString("command.syntax-bypass-perm"))) {
             if (parts.length > 1) {
                 String commandToExecute = parts[1];
 
@@ -220,7 +219,7 @@ public class CommandFramework implements CommandExecutor {
                 args.getSender().sendMessage(CC.translate("&cMissing arguments / Wrong format or Internal error."));
             }
         } else {
-            args.getSender().sendMessage(CC.translate(ConfigHandler.getInstance().getSettingsConfig().getString("command.anti-syntax-message").replace("{argument}", args.getLabel())));
+            args.getSender().sendMessage(CC.translate(Alley.getInstance().getConfigHandler().getSettingsConfig().getString("command.anti-syntax-message").replace("{argument}", args.getLabel())));
         }
     }
 }

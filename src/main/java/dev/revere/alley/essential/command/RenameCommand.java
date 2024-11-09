@@ -1,10 +1,10 @@
 package dev.revere.alley.essential.command;
 
-import dev.revere.alley.config.ConfigHandler;
-import dev.revere.alley.util.chat.CC;
+import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.Command;
 import dev.revere.alley.api.command.CommandArgs;
+import dev.revere.alley.util.chat.CC;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -26,7 +26,7 @@ public class RenameCommand extends BaseCommand {
         Player player = command.getPlayer();
 
         if (command.getArgs().length == 0) {
-            player.sendMessage(CC.translate(ConfigHandler.getInstance().getMessagesConfig().getString("rename-item.missing-arguments")));
+            player.sendMessage(CC.translate(Alley.getInstance().getConfigHandler().getMessagesConfig().getString("rename-item.missing-arguments")));
             return;
         }
 
@@ -34,7 +34,7 @@ public class RenameCommand extends BaseCommand {
 
         ItemStack itemStack = player.getItemInHand();
         if (itemStack == null || itemStack.getType() == Material.AIR) {
-            player.sendMessage(CC.translate(ConfigHandler.getInstance().getMessagesConfig().getString("rename-item.no-item")));
+            player.sendMessage(CC.translate(Alley.getInstance().getConfigHandler().getMessagesConfig().getString("rename-item.no-item")));
             return;
         }
 
@@ -51,7 +51,7 @@ public class RenameCommand extends BaseCommand {
 
         player.updateInventory();
 
-        String renameMessage = ConfigHandler.getInstance().getMessagesConfig().getString("rename-item.renamed")
+        String renameMessage = Alley.getInstance().getConfigHandler().getMessagesConfig().getString("rename-item.renamed")
                 .replace("{item}", originalName)
                 .replace("{renamed}", itemRename);
         player.sendMessage(CC.translate(renameMessage));

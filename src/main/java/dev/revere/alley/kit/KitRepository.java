@@ -1,18 +1,16 @@
 package dev.revere.alley.kit;
 
-import lombok.Getter;
 import dev.revere.alley.Alley;
-import dev.revere.alley.config.ConfigHandler;
 import dev.revere.alley.kit.settings.KitSetting;
 import dev.revere.alley.kit.settings.impl.KitSettingRankedImpl;
 import dev.revere.alley.queue.Queue;
 import dev.revere.alley.util.chat.CC;
+import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.potion.PotionEffect;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -89,7 +87,7 @@ public class KitRepository {
      */
     public void saveKits() {
         for (Kit kit : this.kits) {
-            FileConfiguration config = ConfigHandler.getInstance().getKitsConfig();
+            FileConfiguration config = Alley.getInstance().getConfigHandler().getKitsConfig();
             String key = "kits." + kit.getName();
             config.set(key + ".displayname", kit.getDisplayName());
             config.set(key + ".description", kit.getDescription());
@@ -174,7 +172,7 @@ public class KitRepository {
      * @param kit The kit to save.
      */
     public void saveKit(Kit kit) {
-        FileConfiguration config = ConfigHandler.getInstance().getKitsConfig();
+        FileConfiguration config = Alley.getInstance().getConfigHandler().getKitsConfig();
         String key = "kits." + kit.getName();
         config.set(key + ".displayname", kit.getDisplayName());
         config.set(key + ".description", kit.getDescription());
@@ -195,7 +193,7 @@ public class KitRepository {
             this.saveKitSettings(config, key, kit);
         }
 
-        Alley.getInstance().getConfigHandler().saveConfig(ConfigHandler.getInstance().getConfigFile("storage/kits.yml"), config);
+        Alley.getInstance().getConfigHandler().saveConfig(Alley.getInstance().getConfigHandler().getConfigFile("storage/kits.yml"), config);
     }
 
     /**
@@ -213,7 +211,7 @@ public class KitRepository {
             config.set(settingKey + ".enabled", setting.isEnabled());
         });
 
-        Alley.getInstance().getConfigHandler().saveConfig(ConfigHandler.getInstance().getConfigFile("storage/kits.yml"), config);
+        Alley.getInstance().getConfigHandler().saveConfig(Alley.getInstance().getConfigHandler().getConfigFile("storage/kits.yml"), config);
     }
 
     /**
@@ -237,8 +235,8 @@ public class KitRepository {
      * @param kit The kit to delete.
      */
     public void deleteKit(Kit kit) {
-        FileConfiguration config = ConfigHandler.getInstance().getKitsConfig();
-        File file = ConfigHandler.getInstance().getConfigFile("storage/kits.yml");
+        FileConfiguration config = Alley.getInstance().getConfigHandler().getKitsConfig();
+        File file = Alley.getInstance().getConfigHandler().getConfigFile("storage/kits.yml");
 
         this.kits.remove(kit);
         config.set("kits." + kit.getName(), null);
@@ -257,8 +255,8 @@ public class KitRepository {
     public void createKit(String kitName, ItemStack[] inventory, ItemStack[] armor, Material icon) {
         Kit kit = new Kit(
                 kitName,
-                ConfigHandler.getInstance().getSettingsConfig().getString("kit.default-name").replace("{kit-name}", kitName),
-                ConfigHandler.getInstance().getSettingsConfig().getString("kit.default-description").replace("{kit-name}", kitName),
+                Alley.getInstance().getConfigHandler().getSettingsConfig().getString("kit.default-name").replace("{kit-name}", kitName),
+                Alley.getInstance().getConfigHandler().getSettingsConfig().getString("kit.default-description").replace("{kit-name}", kitName),
                 true,
                 0,
                 0,

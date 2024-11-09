@@ -4,7 +4,6 @@ import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.Command;
 import dev.revere.alley.api.command.CommandArgs;
-import dev.revere.alley.config.ConfigHandler;
 import dev.revere.alley.kit.Kit;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.command.CommandSender;
@@ -46,6 +45,6 @@ public class KitSetSlotAllCommand extends BaseCommand {
         kit.setRankedslot(slot);
         kit.setUnrankedslot(slot);
         Alley.getInstance().getKitRepository().saveKit(kit);
-        sender.sendMessage(CC.translate(ConfigHandler.getInstance().getMessagesConfig().getString("kit.slots-set")).replace("{kit-name}", kitName).replace("{slot}", args[1]));
+        sender.sendMessage(CC.translate(Alley.getInstance().getConfigHandler().getMessagesConfig().getString("kit.slots-set")).replace("{kit-name}", kitName).replace("{slot}", args[1]));
     }
 }

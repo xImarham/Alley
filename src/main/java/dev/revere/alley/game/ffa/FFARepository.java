@@ -1,12 +1,11 @@
 package dev.revere.alley.game.ffa;
 
-import lombok.Getter;
 import dev.revere.alley.Alley;
 import dev.revere.alley.arena.Arena;
-import dev.revere.alley.config.ConfigHandler;
 import dev.revere.alley.game.ffa.impl.DefaultFFAMatchImpl;
 import dev.revere.alley.kit.Kit;
 import dev.revere.alley.util.logger.Logger;
+import lombok.Getter;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -31,7 +30,7 @@ public class FFARepository {
      * Load all FFA matches
      */
     public void loadFFAMatches() {
-        FileConfiguration config = ConfigHandler.getInstance().getFfaConfig();
+        FileConfiguration config = Alley.getInstance().getConfigHandler().getFfaConfig();
         ConfigurationSection ffaConfig = config.getConfigurationSection("ffa");
         if (ffaConfig == null) {
             return;
@@ -72,11 +71,11 @@ public class FFARepository {
      */
     public void saveFFAMatch(AbstractFFAMatch match) {
         String name = "ffa." + match.getKit().getName();
-        FileConfiguration config = ConfigHandler.getInstance().getFfaConfig();
+        FileConfiguration config = Alley.getInstance().getConfigHandler().getFfaConfig();
         config.set(name, null);
         config.set(name + ".arena", match.getArena().getName());
         config.set(name + ".maxPlayers", match.getMaxPlayers());
-        ConfigHandler.getInstance().saveConfig(ConfigHandler.getInstance().getConfigFile("storage/ffa.yml"), config);
+        Alley.getInstance().getConfigHandler().saveConfig(Alley.getInstance().getConfigHandler().getConfigFile("storage/ffa.yml"), config);
     }
 
     /**

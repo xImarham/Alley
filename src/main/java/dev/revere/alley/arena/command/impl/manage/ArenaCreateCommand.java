@@ -1,17 +1,16 @@
 package dev.revere.alley.arena.command.impl.manage;
 
 import dev.revere.alley.Alley;
+import dev.revere.alley.api.command.BaseCommand;
+import dev.revere.alley.api.command.Command;
+import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.arena.Arena;
 import dev.revere.alley.arena.ArenaType;
 import dev.revere.alley.arena.impl.FreeForAllArena;
 import dev.revere.alley.arena.impl.SharedArena;
 import dev.revere.alley.arena.impl.StandAloneArena;
 import dev.revere.alley.arena.selection.ArenaSelection;
-import dev.revere.alley.config.ConfigHandler;
 import dev.revere.alley.util.chat.CC;
-import dev.revere.alley.api.command.BaseCommand;
-import dev.revere.alley.api.command.Command;
-import dev.revere.alley.api.command.CommandArgs;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
@@ -80,7 +79,7 @@ public class ArenaCreateCommand extends BaseCommand {
     }
 
     private String getDefaultDisplayName(ArenaType arenaType) {
-        FileConfiguration config = ConfigHandler.getInstance().getSettingsConfig();
+        FileConfiguration config = Alley.getInstance().getConfigHandler().getSettingsConfig();
 
         switch (arenaType) {
             case SHARED:

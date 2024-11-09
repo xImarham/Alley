@@ -70,14 +70,14 @@ public class MatchLivesRegularImpl extends MatchRegularImpl {
         MatchGamePlayerData data = participant.getPlayer().getData();
         data.setLives(data.getLives() - 1);
         if (data.getLives() <= 0) {
-            determineWinnerAndLoser();
+            this.determineWinnerAndLoser();
         }
     }
 
     @Override
     public void handleDeath(Player player) {
         GameParticipant<MatchGamePlayerImpl> participant = participantA.containsPlayer(player.getUniqueId()) ? participantA : participantB;
-        reduceLife(participant);
+        this.reduceLife(participant);
 
         if (participant.getPlayer().getData().getLives() > 0) {
             TaskUtil.runTaskLater(() -> startRespawnProcess(player), 5L);
@@ -91,11 +91,11 @@ public class MatchLivesRegularImpl extends MatchRegularImpl {
      */
     private void determineWinnerAndLoser() {
         if (participantA.getPlayer().getData().getLives() <= 0) {
-            winner = participantB;
-            loser = participantA;
+            this.winner = this.participantB;
+            this.loser = this.participantA;
         } else if (participantB.getPlayer().getData().getLives() <= 0) {
-            winner = participantA;
-            loser = participantB;
+            this.winner = this.participantA;
+            this.loser = this.participantB;
         }
     }
 
@@ -126,7 +126,7 @@ public class MatchLivesRegularImpl extends MatchRegularImpl {
 
     @Override
     public void handleRespawn(Player player) {
-        PlayerUtil.reset(player, false);
+        PlayerUtil.reset(player, true);
 
         Location spawnLocation = getParticipants().get(0).containsPlayer(player.getUniqueId()) ? getArena().getPos1() : getArena().getPos2();
         player.teleport(spawnLocation);
@@ -134,7 +134,7 @@ public class MatchLivesRegularImpl extends MatchRegularImpl {
         player.getInventory().setArmorContents(getKit().getArmor());
         player.getInventory().setContents(getKit().getInventory());
 
-        notifyParticipants("&b" + player.getName() + " &ahas respawned");
-        notifySpectators("&b" + player.getName() + " &ahas respawned");
+        this.notifyParticipants("&b" + player.getName() + " &ahas respawned");
+        this.notifySpectators("&b" + player.getName() + " &ahas respawned");
     }
 }

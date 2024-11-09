@@ -1,7 +1,6 @@
 package dev.revere.alley.game.match.runnable;
 
 import dev.revere.alley.Alley;
-import dev.revere.alley.config.ConfigHandler;
 import dev.revere.alley.game.match.AbstractMatch;
 import dev.revere.alley.game.match.enums.EnumMatchState;
 import dev.revere.alley.util.SoundUtil;
@@ -68,7 +67,7 @@ public class MatchRunnable extends BukkitRunnable {
      * Send the disclaimer to the participants.
      */
     private void sendDisclaimer() {
-        FileConfiguration config = ConfigHandler.getInstance().getMessagesConfig();
+        FileConfiguration config = Alley.getInstance().getConfigHandler().getMessagesConfig();
 
         if (config.getBoolean("match.started.kit-disclaimer.enabled")) {
             if (match.getKit().getDisclaimer() == null) {

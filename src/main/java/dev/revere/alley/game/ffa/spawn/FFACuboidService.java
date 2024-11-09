@@ -1,13 +1,12 @@
 package dev.revere.alley.game.ffa.spawn;
 
-import lombok.Getter;
 import dev.revere.alley.Alley;
 import dev.revere.alley.arena.Arena;
 import dev.revere.alley.arena.ArenaType;
-import dev.revere.alley.config.ConfigHandler;
 import dev.revere.alley.util.cuboid.Cuboid;
-import dev.revere.alley.util.logger.Logger;
 import dev.revere.alley.util.location.LocationUtil;
+import dev.revere.alley.util.logger.Logger;
+import lombok.Getter;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
 
@@ -31,7 +30,7 @@ public class FFACuboidService {
      * Load the FFA spawn location from the arenas.yml file
      */
     public void loadFFASpawn() {
-        FileConfiguration config = ConfigHandler.getInstance().getArenasConfig();
+        FileConfiguration config = Alley.getInstance().getConfigHandler().getArenasConfig();
         Arena arena = Alley.getInstance().getArenaRepository().getArenas().stream()
                 .filter(a -> a.getType() == ArenaType.FFA)
                 .findFirst()

@@ -1,10 +1,9 @@
 package dev.revere.alley.util.logger;
 
-import lombok.experimental.UtilityClass;
 import dev.revere.alley.Alley;
-import dev.revere.alley.config.ConfigHandler;
-import dev.revere.alley.util.chat.Symbol;
 import dev.revere.alley.util.chat.CC;
+import dev.revere.alley.util.chat.Symbol;
+import lombok.experimental.UtilityClass;
 import org.bukkit.Bukkit;
 
 /**
@@ -84,8 +83,8 @@ public class Logger {
         Bukkit.getConsoleSender().sendMessage(CC.translate("    &fVersion: &b" + Alley.getInstance().getBukkitVersionExact()));
         Bukkit.getConsoleSender().sendMessage(" ");
         Bukkit.getConsoleSender().sendMessage(CC.translate("    &bMongoDB &f| &bStatus: &aConnected"));
-        Bukkit.getConsoleSender().sendMessage(CC.translate("     &fHost: &b" + ConfigHandler.getInstance().getDatabaseConfig().getString("mongo.uri")));
-        Bukkit.getConsoleSender().sendMessage(CC.translate("     &fDatabase: &b" + ConfigHandler.getInstance().getDatabaseConfig().getString("mongo.database")));
+        Bukkit.getConsoleSender().sendMessage(CC.translate("     &fHost: &b" + Alley.getInstance().getConfigHandler().getDatabaseConfig().getString("mongo.uri")));
+        Bukkit.getConsoleSender().sendMessage(CC.translate("     &fDatabase: &b" + Alley.getInstance().getConfigHandler().getDatabaseConfig().getString("mongo.database")));
         Bukkit.getConsoleSender().sendMessage(" ");
         Bukkit.getConsoleSender().sendMessage(CC.translate("    &fLoaded in &b" + timeTaken + " &bms"));
         Bukkit.getConsoleSender().sendMessage(" ");

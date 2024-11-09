@@ -1,7 +1,6 @@
 package dev.revere.alley.visual.tablist.impl;
 
 import dev.revere.alley.Alley;
-import dev.revere.alley.config.ConfigHandler;
 import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.util.logger.Logger;
 import dev.revere.alley.visual.tablist.ITablist;
@@ -23,12 +22,12 @@ public class TablistVisualizer implements ITablist {
 
     @Override
     public List<String> getHeader(Player player) {
-        return ConfigHandler.getInstance().getTablistConfig().getStringList("tablist.header");
+        return Alley.getInstance().getConfigHandler().getTablistConfig().getStringList("tablist.header");
     }
 
     @Override
     public List<String> getFooter(Player player) {
-        return ConfigHandler.getInstance().getTablistConfig().getStringList("tablist.footer");
+        return Alley.getInstance().getConfigHandler().getTablistConfig().getStringList("tablist.footer");
     }
 
     @Override

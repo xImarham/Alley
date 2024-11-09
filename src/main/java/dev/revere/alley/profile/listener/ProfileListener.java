@@ -1,7 +1,6 @@
 package dev.revere.alley.profile.listener;
 
 import dev.revere.alley.Alley;
-import dev.revere.alley.config.ConfigHandler;
 import dev.revere.alley.hotbar.enums.HotbarType;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.ProfileRepository;
@@ -66,7 +65,7 @@ public class ProfileListener implements Listener {
 
         profile.getProfileData().getProfileSettingData().setTimeBasedOnProfileSetting(player);
 
-        FileConfiguration config = ConfigHandler.getInstance().getMessagesConfig();
+        FileConfiguration config = Alley.getInstance().getConfigHandler().getMessagesConfig();
         if (config.getBoolean("welcome-message.enabled")) {
             for (String message : config.getStringList("welcome-message.message")) {
                 player.sendMessage(CC.translate(message)

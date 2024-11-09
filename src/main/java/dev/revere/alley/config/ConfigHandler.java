@@ -17,8 +17,6 @@ import java.util.Map;
  */
 @Getter
 public class ConfigHandler {
-    @Getter private static ConfigHandler instance;
-
     private final Map<String, File> configFiles = new HashMap<>();
     private final Map<String, FileConfiguration> fileConfigurations = new HashMap<>();
 
@@ -45,8 +43,6 @@ public class ConfigHandler {
         for (String fileName : configFileNames) {
             loadConfig(fileName);
         }
-
-        instance = this;
 
         settingsConfig = getConfig("settings.yml");
         messagesConfig = getConfig("messages.yml");

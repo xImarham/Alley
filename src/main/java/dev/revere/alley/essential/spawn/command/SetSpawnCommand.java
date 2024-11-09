@@ -1,11 +1,10 @@
 package dev.revere.alley.essential.spawn.command;
 
 import dev.revere.alley.Alley;
-import dev.revere.alley.config.ConfigHandler;
-import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.Command;
 import dev.revere.alley.api.command.CommandArgs;
+import dev.revere.alley.util.chat.CC;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -23,7 +22,7 @@ public class SetSpawnCommand extends BaseCommand {
         Location location = player.getLocation();
         Alley.getInstance().getSpawnService().updateSpawnLocation(location);
 
-        String message = ConfigHandler.getInstance().getMessagesConfig().getString("spawn.spawn-set");
+        String message = Alley.getInstance().getConfigHandler().getMessagesConfig().getString("spawn.spawn-set");
         message = message.replace("{world}", location.getWorld().getName())
                 .replace("{x}", String.format("%.2f", location.getX()))
                 .replace("{y}", String.format("%.2f", location.getY()))

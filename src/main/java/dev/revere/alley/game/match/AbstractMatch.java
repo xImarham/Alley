@@ -3,7 +3,6 @@ package dev.revere.alley.game.match;
 import dev.revere.alley.Alley;
 import dev.revere.alley.arena.Arena;
 import dev.revere.alley.arena.impl.StandAloneArena;
-import dev.revere.alley.config.ConfigHandler;
 import dev.revere.alley.game.match.enums.EnumMatchState;
 import dev.revere.alley.game.match.impl.MatchRegularImpl;
 import dev.revere.alley.game.match.player.GameParticipant;
@@ -315,14 +314,14 @@ public abstract class AbstractMatch {
      * @param loserName  The name of the loser.
      */
     private void sendMatchResult(String winnerName, String loserName) {
-        FileConfiguration config = ConfigHandler.getInstance().getMessagesConfig();
+        FileConfiguration config = Alley.getInstance().getConfigHandler().getMessagesConfig();
         
         String winnerCommand = config.getString("match.ended.match-result.winner.command").replace("{winner}", winnerName);
         String winnerHover = config.getString("match.ended.match-result.winner.hover").replace("{winner}", winnerName);
         String loserCommand = config.getString("match.ended.match-result.loser.command").replace("{loser}", loserName);
         String loserHover = config.getString("match.ended.match-result.loser.hover").replace("{loser}", loserName);
 
-        for (String line : ConfigHandler.getInstance().getMessagesConfig().getStringList("match.ended.match-result.format")) {
+        for (String line : Alley.getInstance().getConfigHandler().getMessagesConfig().getStringList("match.ended.match-result.format")) {
             if (line.contains("{winner}") && line.contains("{loser}")) {
                 String[] parts = line.split("\\{winner}", 2);
 

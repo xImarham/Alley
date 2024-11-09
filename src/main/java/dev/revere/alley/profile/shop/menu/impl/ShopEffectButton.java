@@ -1,13 +1,12 @@
 package dev.revere.alley.profile.shop.menu.impl;
 
-import lombok.AllArgsConstructor;
 import dev.revere.alley.Alley;
-import dev.revere.alley.config.ConfigHandler;
+import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.cosmetic.interfaces.ICosmetic;
 import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.util.item.ItemBuilder;
-import dev.revere.alley.api.menu.Button;
+import lombok.AllArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -75,7 +74,7 @@ public class ShopEffectButton extends Button {
         profile.getProfileData().setCoins(profile.getProfileData().getCoins() - cosmetic.getPrice());
 
 
-        FileConfiguration config = ConfigHandler.getInstance().getSettingsConfig();
+        FileConfiguration config = Alley.getInstance().getConfigHandler().getSettingsConfig();
         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), config.get("command.grant-cosmetic-permission-command").toString().replace("{player}", player.getName()).replace("%permission%", cosmetic.getPermission()));
 
         player.sendMessage(CC.translate("&aYou have successfully purchased the " + cosmetic.getName() + " cosmetic for &b" + cosmetic.getPrice() + " coins."));
