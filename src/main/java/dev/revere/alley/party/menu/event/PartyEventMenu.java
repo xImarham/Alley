@@ -1,5 +1,9 @@
 package dev.revere.alley.party.menu.event;
 
+import dev.revere.alley.Alley;
+import dev.revere.alley.locale.Locale;
+import dev.revere.alley.party.Party;
+import dev.revere.alley.util.chat.CC;
 import lombok.AllArgsConstructor;
 import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.api.menu.Menu;
@@ -93,6 +97,22 @@ public class PartyEventMenu extends Menu {
         @Override
         public void clicked(Player player, ClickType clickType) {
             if (clickType != ClickType.LEFT) return;
+
+            Party party = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId()).getParty();
+            if (party == null) {
+                player.sendMessage(CC.translate(Locale.NOT_IN_PARTY.getMessage()));
+                return;
+            }
+
+            if (party.getLeader() != player) {
+                player.sendMessage(CC.translate(Locale.NOT_LEADER.getMessage()));
+                return;
+            }
+
+            if (party.getMembers().size() < 2) {
+                player.sendMessage(CC.translate("&cYou need at least 2 players in your party to start an event."));
+                return;
+            }
 
             switch (material) {
                 case DIAMOND_SWORD:

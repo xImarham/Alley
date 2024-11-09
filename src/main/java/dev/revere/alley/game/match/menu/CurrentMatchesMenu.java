@@ -1,5 +1,6 @@
 package dev.revere.alley.game.match.menu;
 
+import dev.revere.alley.util.chat.CC;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import dev.revere.alley.Alley;
@@ -99,8 +100,15 @@ public class CurrentMatchesMenu extends PaginatedMenu {
          */
         @Override
         public void clicked(Player player, int slot, ClickType clickType, int hotbarButton) {
-            playNeutral(player);
+            if (clickType != ClickType.LEFT) return;
+
+            if (Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId()).getMatch() != null) {
+                player.sendMessage(CC.translate("&cYou can't spectate a match in your current state."));
+                return;
+            }
+
             match.addSpectator(player);
+            playNeutral(player);
         }
     }
 

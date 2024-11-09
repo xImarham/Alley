@@ -28,6 +28,11 @@ public class UnrankedCommand extends BaseCommand {
             return;
         }
 
+        if (profile.getParty() != null) {
+            player.sendMessage(CC.translate("&cYou must leave your party to queue for unranked."));
+            return;
+        }
+
         new UnrankedMenu().openMenu(player);
     }
 }

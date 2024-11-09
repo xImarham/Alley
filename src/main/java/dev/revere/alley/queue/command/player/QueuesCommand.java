@@ -28,6 +28,11 @@ public class QueuesCommand extends BaseCommand {
             return;
         }
 
+        if (profile.getParty() != null) {
+            player.sendMessage(CC.translate("&cYou must leave your party to queue for a game."));
+            return;
+        }
+
         new QueuesMenu().openMenu(player);
     }
 }

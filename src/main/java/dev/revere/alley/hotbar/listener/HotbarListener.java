@@ -5,6 +5,7 @@ import dev.revere.alley.hotbar.HotbarItem;
 import dev.revere.alley.hotbar.enums.HotbarType;
 import dev.revere.alley.party.menu.duel.DuelOtherPartyMenu;
 import dev.revere.alley.party.menu.event.PartyEventMenu;
+import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.visual.leaderboard.menu.personal.StatisticsMenu;
 import dev.revere.alley.game.match.menu.CurrentMatchesMenu;
 import dev.revere.alley.profile.Profile;
@@ -83,9 +84,11 @@ public class HotbarListener implements Listener {
                                 Alley.getInstance().getHotbarRepository().applyHotbarItems(player, HotbarType.LOBBY);
                                 break;
                             case START_PARTY_EVENT:
+                                if (this.checkForPartyLeader(player, profile)) return;
                                 new PartyEventMenu().openMenu(player);
                                 break;
                             case FIGHT_OTHER_PARTY:
+                                if (this.checkForPartyLeader(player, profile)) return;
                                 new DuelOtherPartyMenu().openMenu(player);
                                 break;
                         }
@@ -93,5 +96,20 @@ public class HotbarListener implements Listener {
                 }
             }
         }
+    }
+
+    /**
+     * Check if the player is the leader of the party.
+     *
+     * @param player  the player to check
+     * @param profile the profile of the player
+     * @return true if the player is not the leader of the party
+     */
+    private boolean checkForPartyLeader(Player player, Profile profile) {
+        if (player != profile.getParty().getLeader()) {
+            player.sendMessage(CC.translate("&cYou're not the leader of this party."));
+            return true;
+        }
+        return false;
     }
 }

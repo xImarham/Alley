@@ -28,6 +28,11 @@ public class RankedCommand extends BaseCommand {
             return;
         }
 
+        if (profile.getParty() != null) {
+            player.sendMessage(CC.translate("&cYou must leave your party to queue for ranked."));
+            return;
+        }
+
         new RankedMenu().openMenu(player);
     }
 }

@@ -1,4 +1,4 @@
-package dev.revere.alley.party.menu.event.impl;
+package dev.revere.alley.party.menu.event.impl.ffa;
 
 import lombok.AllArgsConstructor;
 import dev.revere.alley.api.menu.Button;
@@ -30,7 +30,7 @@ public class PartyEventFFAMenu extends Menu {
 
         buttons.put(0, backButton);
 
-        addGlass(buttons, 15);
+        this.addGlass(buttons, 15);
 
         return buttons;
     }

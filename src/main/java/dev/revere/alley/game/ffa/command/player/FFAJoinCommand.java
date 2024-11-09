@@ -6,6 +6,7 @@ import dev.revere.alley.kit.Kit;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.Command;
 import dev.revere.alley.api.command.CommandArgs;
+import dev.revere.alley.profile.Profile;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.entity.Player;
 
@@ -28,9 +29,14 @@ public class FFAJoinCommand extends BaseCommand {
 
         String kitName = args[0];
         Kit kit = Alley.getInstance().getKitRepository().getKit(kitName);
-
         if (kit == null) {
             player.sendMessage("Kit not found.");
+            return;
+        }
+
+        Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
+        if (profile.getParty() != null) {
+            player.sendMessage(CC.translate("&cYou must leave your party to join FFA."));
             return;
         }
 

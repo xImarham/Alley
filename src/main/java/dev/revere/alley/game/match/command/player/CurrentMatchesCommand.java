@@ -1,9 +1,12 @@
 package dev.revere.alley.game.match.command.player;
 
+import dev.revere.alley.Alley;
 import dev.revere.alley.game.match.menu.CurrentMatchesMenu;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.Command;
 import dev.revere.alley.api.command.CommandArgs;
+import dev.revere.alley.profile.enums.EnumProfileState;
+import dev.revere.alley.util.chat.CC;
 import org.bukkit.entity.Player;
 
 /**
@@ -16,6 +19,12 @@ public class CurrentMatchesCommand extends BaseCommand {
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
+
+        if (Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId()).getState() != EnumProfileState.LOBBY) {
+            player.sendMessage(CC.translate("&cYou can only execute this command at lobby."));
+            return;
+        }
+
         new CurrentMatchesMenu().openMenu(player);
     }
 }
