@@ -8,7 +8,7 @@ import dev.revere.alley.kit.settings.impl.KitSettingLivesImpl;
 import dev.revere.alley.game.match.AbstractMatch;
 import dev.revere.alley.game.match.impl.MatchLivesRegularImpl;
 import dev.revere.alley.game.match.impl.MatchRegularImpl;
-import dev.revere.alley.game.match.player.GameParticipant;
+import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.queue.Queue;
 import dev.revere.alley.util.chat.CC;

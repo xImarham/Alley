@@ -7,7 +7,7 @@ import dev.revere.alley.cooldown.enums.EnumCooldownType;
 import dev.revere.alley.game.match.AbstractMatch;
 import dev.revere.alley.game.match.MatchUtility;
 import dev.revere.alley.game.match.enums.EnumMatchState;
-import dev.revere.alley.game.match.player.GameParticipant;
+import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.kit.settings.impl.*;
 import dev.revere.alley.locale.ErrorMessage;
@@ -17,6 +17,7 @@ import dev.revere.alley.util.ActionBarUtil;
 import dev.revere.alley.util.PlayerUtil;
 import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.util.location.RayTracerUtil;
+import dev.revere.alley.util.logger.Logger;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -67,10 +68,36 @@ public class MatchListener implements Listener {
             if (profile.getMatch().getKit().isSettingEnabled(KitSettingBoxingImpl.class)
                     || profile.getMatch().getKit().isSettingEnabled(KitSettingSumoImpl.class)
                     || profile.getMatch().getKit().isSettingEnabled(KitSettingSpleefImpl.class)
-                    || profile.getMatch().getKit().isSettingEnabled(KitSettingNoDamageImpl.class)) {
+                    || profile.getMatch().getKit().isSettingEnabled(KitSettingNoDamageImpl.class)
+                    || profile.getMatch().getKit().isSettingEnabled(KitSettingLivesImpl.class)
+                    || profile.getMatch().getKit().isSettingEnabled(KitSettingBattleRushImpl.class)
+                    || profile.getMatch().getKit().isSettingEnabled(KitSettingStickFightImpl.class)) {
                 event.setDamage(0);
                 player.setHealth(20.0);
                 player.updateInventory();
+            }
+        }
+    }
+
+    @EventHandler
+    private void handlePearlDamage(EntityDamageByEntityEvent event) {
+        if (event.getDamager() instanceof EnderPearl) {
+            EnderPearl enderPearl = (EnderPearl) event.getDamager();
+            if (enderPearl.getShooter() instanceof Player) {
+                Player player = (Player) enderPearl.getShooter();
+                Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
+                if (profile.getState() == EnumProfileState.PLAYING) {
+                    if (profile.getMatch().getKit().isSettingEnabled(KitSettingBoxingImpl.class)
+                            || profile.getMatch().getKit().isSettingEnabled(KitSettingSumoImpl.class)
+                            || profile.getMatch().getKit().isSettingEnabled(KitSettingSpleefImpl.class)
+                            || profile.getMatch().getKit().isSettingEnabled(KitSettingNoDamageImpl.class)
+                            || profile.getMatch().getKit().isSettingEnabled(KitSettingLivesImpl.class)
+                            || profile.getMatch().getKit().isSettingEnabled(KitSettingBattleRushImpl.class)
+                            || profile.getMatch().getKit().isSettingEnabled(KitSettingStickFightImpl.class)) {
+                        Logger.log("Ender pearl damage cancelled.");
+                        event.setCancelled(true);
+                    }
+                }
             }
         }
     }
@@ -206,7 +233,7 @@ public class MatchListener implements Listener {
         switch (profile.getState()) {
             case PLAYING:
                 if (profile.getMatch().getState() == EnumMatchState.STARTING) event.setCancelled(true);
-                if (profile.getMatch().getState() == EnumMatchState.ENDING_MATCH) return;
+                if (profile.getMatch().getState() == EnumMatchState.ENDING_MATCH) event.setCancelled(true);
 
                 if (profile.getMatch().getKit().isSettingEnabled(KitSettingBuildImpl.class)) {
                     profile.getMatch().addBlockToPlacedBlocksMap(event.getBlock().getState(), event.getBlockPlaced().getLocation());
@@ -334,7 +361,7 @@ public class MatchListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    public void onEntityDamageByEntityMonitor(EntityDamageByEntityEvent event) {
+    private void onEntityDamageByEntityMonitor(EntityDamageByEntityEvent event) {
         if (event.getEntity() instanceof Player && event.getDamager() instanceof Player) {
             Profile profile = Alley.getInstance().getProfileRepository().getProfile(event.getEntity().getUniqueId());
             if (profile.getState() == EnumProfileState.SPECTATING) {

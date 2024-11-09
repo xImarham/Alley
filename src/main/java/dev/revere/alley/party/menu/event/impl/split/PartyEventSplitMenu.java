@@ -7,8 +7,9 @@ import dev.revere.alley.arena.Arena;
 import dev.revere.alley.game.match.AbstractMatch;
 import dev.revere.alley.game.match.impl.MatchLivesRegularImpl;
 import dev.revere.alley.game.match.impl.MatchRegularImpl;
-import dev.revere.alley.game.match.player.GameParticipant;
+import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
+import dev.revere.alley.game.match.player.participant.TeamGameParticipant;
 import dev.revere.alley.kit.Kit;
 import dev.revere.alley.kit.settings.impl.KitSettingLivesImpl;
 import dev.revere.alley.locale.Locale;
@@ -98,8 +99,8 @@ public class PartyEventSplitMenu extends Menu {
             MatchGamePlayerImpl gamePlayerA = new MatchGamePlayerImpl(playerA.getUniqueId(), playerA.getName());
             MatchGamePlayerImpl gamePlayerB = new MatchGamePlayerImpl(playerB.getUniqueId(), playerB.getName());
 
-            GameParticipant<MatchGamePlayerImpl> participantA = new GameParticipant<>(gamePlayerA);
-            GameParticipant<MatchGamePlayerImpl> participantB = new GameParticipant<>(gamePlayerB);
+            GameParticipant<MatchGamePlayerImpl> participantA = new TeamGameParticipant<>(gamePlayerA);
+            GameParticipant<MatchGamePlayerImpl> participantB = new TeamGameParticipant<>(gamePlayerB);
 
             List<Player> players = party.getMembers().stream().map(Bukkit::getPlayer).collect(Collectors.toList());
             Collections.shuffle(players);

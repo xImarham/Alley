@@ -5,7 +5,7 @@ import dev.revere.alley.arena.Arena;
 import dev.revere.alley.arena.impl.StandAloneArena;
 import dev.revere.alley.game.match.enums.EnumMatchState;
 import dev.revere.alley.game.match.impl.MatchRegularImpl;
-import dev.revere.alley.game.match.player.GameParticipant;
+import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.runnable.MatchRunnable;
 import dev.revere.alley.game.match.snapshot.Snapshot;

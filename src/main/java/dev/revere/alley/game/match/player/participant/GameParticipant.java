@@ -1,5 +1,6 @@
-package dev.revere.alley.game.match.player;
+package dev.revere.alley.game.match.player.participant;
 
+import dev.revere.alley.game.match.player.GamePlayer;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -29,6 +30,24 @@ public class GameParticipant<T extends GamePlayer> {
 
     public List<T> getPlayers() {
         return Collections.singletonList(player);
+    }
+
+    /**
+     * Gets the amount of players that are alive.
+     *
+     * @return The amount of players that are alive.
+     */
+    public int getAliveCount() {
+        return player.isDead() ? 0 : 1;
+    }
+
+    /**
+     * Gets the conjoined names of the players in the participant.
+     *
+     * @return The conjoined names of the players in the participant.
+     */
+    public String getConjoinedNames() {
+        return player.getUsername();
     }
 
     /**

@@ -3,7 +3,7 @@ package dev.revere.alley.visual.scoreboard;
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.assemble.AssembleAdapter;
 import dev.revere.alley.game.match.enums.EnumMatchState;
-import dev.revere.alley.game.match.player.GameParticipant;
+import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.kit.settings.impl.KitSettingBoxingImpl;
 import dev.revere.alley.kit.settings.impl.KitSettingLivesImpl;

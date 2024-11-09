@@ -4,7 +4,7 @@ import dev.revere.alley.arena.Arena;
 import dev.revere.alley.game.match.enums.EnumMatchState;
 import dev.revere.alley.profile.Profile;
 import lombok.experimental.UtilityClass;
-import dev.revere.alley.game.match.player.GameParticipant;
+import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;

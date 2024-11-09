@@ -89,8 +89,8 @@ match:
         - "&4&lWarning: &cUsing hacks or any form of cheating is strictly prohibited!"
   ended:
     elo-changes:
-      winner-indicator-color: "&a"  # Color for positive Elo gain (replaces {color-winner})
-      loser-indicator-color: "&c"   # Color for negative Elo loss (replaces {color-loser})
+      winner-indicator-color: "&a"  # Color for positive Elo gain
+      loser-indicator-color: "&c"   # Color for negative Elo loss
       format:
         - ""
         - "&b&lElo Changes"

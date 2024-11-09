@@ -15,7 +15,6 @@ import java.util.UUID;
 @Setter
 @Getter
 public class MatchGamePlayerImpl extends GamePlayer {
-
     private final MatchGamePlayerData data;
     private int elo;
 

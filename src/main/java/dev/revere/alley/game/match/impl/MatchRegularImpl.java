@@ -8,7 +8,7 @@ import dev.revere.alley.Alley;
 import dev.revere.alley.arena.Arena;
 import dev.revere.alley.kit.Kit;
 import dev.revere.alley.game.match.AbstractMatch;
-import dev.revere.alley.game.match.player.GameParticipant;
+import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.queue.Queue;
