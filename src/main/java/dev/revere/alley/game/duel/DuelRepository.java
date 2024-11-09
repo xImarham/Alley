@@ -144,6 +144,8 @@ public class DuelRepository {
      * @param duelRequest the duel
      */
     public void acceptPendingRequest(DuelRequest duelRequest) {
+        if (duelRequest.hasExpired()) return;
+
         MatchGamePlayerImpl playerA = new MatchGamePlayerImpl(duelRequest.getSender().getUniqueId(), duelRequest.getSender().getName());
         MatchGamePlayerImpl playerB = new MatchGamePlayerImpl(duelRequest.getTarget().getUniqueId(), duelRequest.getTarget().getName());
 

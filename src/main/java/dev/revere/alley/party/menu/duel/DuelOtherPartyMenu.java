@@ -32,7 +32,7 @@ public class DuelOtherPartyMenu extends PaginatedMenu {
     public Map<Integer, Button> getGlobalButtons(Player player) {
         Map<Integer, Button> buttons = new HashMap<>();
 
-        addGlassHeader(buttons, 15);
+        this.addGlassHeader(buttons, 15);
 
         return buttons;
     }

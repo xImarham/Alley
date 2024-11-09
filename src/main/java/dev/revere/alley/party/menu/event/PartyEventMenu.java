@@ -3,8 +3,8 @@ package dev.revere.alley.party.menu.event;
 import lombok.AllArgsConstructor;
 import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.api.menu.Menu;
-import dev.revere.alley.party.menu.event.impl.PartyEventFFAMenu;
-import dev.revere.alley.party.menu.event.impl.PartyEventSplitMenu;
+import dev.revere.alley.party.menu.event.impl.ffa.PartyEventFFAMenu;
+import dev.revere.alley.party.menu.event.impl.split.PartyEventSplitMenu;
 import dev.revere.alley.util.item.ItemBuilder;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -63,7 +63,7 @@ public class PartyEventMenu extends Menu {
                 )
         ));
 
-        addGlass(buttons, 15);
+        this.addGlass(buttons, 15);
 
         return buttons;
     }

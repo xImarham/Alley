@@ -144,19 +144,6 @@ public abstract class Menu {
         }
     }
 
-    /*
-    public void addBorder(Map<Integer, Button> buttons, byte data, int rows) {
-        for (int i = 0; i < 9; i++) {
-            buttons.putIfAbsent(i, Button.placeholder(Material.STAINED_GLASS_PANE, data, ""));
-            buttons.putIfAbsent(4 * 9 + i, Button.placeholder(Material.STAINED_GLASS_PANE, data, ""));
-        }
-
-        for (int i = 0; i < rows; i++) {
-            buttons.putIfAbsent(i * 9, Button.placeholder(Material.STAINED_GLASS_PANE, data, ""));
-            buttons.putIfAbsent(i * 9 + 8, Button.placeholder(Material.STAINED_GLASS_PANE, data, ""));
-        }
-    }*/
-
     public int getSize() {
         return -1;
     }
