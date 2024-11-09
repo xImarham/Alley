@@ -1,14 +1,13 @@
 package dev.revere.alley.game.match.runnable;
 
-import lombok.Getter;
-import lombok.Setter;
 import dev.revere.alley.Alley;
 import dev.revere.alley.config.ConfigHandler;
 import dev.revere.alley.game.match.AbstractMatch;
 import dev.revere.alley.game.match.enums.EnumMatchState;
 import dev.revere.alley.util.SoundUtil;
 import dev.revere.alley.util.chat.CC;
-import org.bukkit.Bukkit;
+import lombok.Getter;
+import lombok.Setter;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -73,8 +72,8 @@ public class MatchRunnable extends BukkitRunnable {
 
         if (config.getBoolean("match.started.kit-disclaimer.enabled")) {
             if (match.getKit().getDisclaimer() == null) {
-                //TODO: get this message from config
                 match.sendMessage(CC.translate("&4&lWarning: &cUsing hacks or any form of cheating is strictly prohibited!"));
+                return;
             }
 
             config.getStringList("match.started.kit-disclaimer.format").forEach(message -> match.sendMessage(CC.translate(message)
@@ -88,19 +87,13 @@ public class MatchRunnable extends BukkitRunnable {
      * Play the sound during match countdown.
      */
     private void playSoundStarting() {
-        Bukkit.getOnlinePlayers().stream()
-                .filter(player -> match.getParticipants().stream().anyMatch(participant -> participant.containsPlayer(player.getUniqueId())))
-                .forEach(SoundUtil::playNeutral)
-        ;
+        this.match.getParticipants().forEach(participant -> SoundUtil.playNeutral(participant.getPlayer().getPlayer()));
     }
 
     /**
      * Play the sound for the match when it started.
      */
     private void playSoundStarted() {
-        Bukkit.getOnlinePlayers().stream()
-                .filter(player -> match.getParticipants().stream().anyMatch(participant -> participant.containsPlayer(player.getUniqueId())))
-                .forEach(SoundUtil::playBlast)
-        ;
+        this.match.getParticipants().forEach(participant -> SoundUtil.playBlast(participant.getPlayer().getPlayer()));
     }
 }
