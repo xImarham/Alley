@@ -1,4 +1,4 @@
-package dev.revere.alley.util.elo;
+package dev.revere.alley.elo;
 
 import lombok.experimental.UtilityClass;
 
