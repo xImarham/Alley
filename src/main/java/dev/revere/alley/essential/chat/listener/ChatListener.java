@@ -1,0 +1,35 @@
+package dev.revere.alley.essential.chat.listener;
+
+import dev.revere.alley.Alley;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
+
+import java.util.Map;
+
+/**
+ * @author Emmy
+ * @project Alley
+ * @date 10/11/2024 - 09:34
+ */
+public class ChatListener implements Listener {
+
+    @EventHandler
+    private void onAsyncChat(AsyncPlayerChatEvent event) {
+        Player player = event.getPlayer();
+        String message = event.getMessage();
+
+        if (!player.hasPermission("alley.donator.chat.symbol")) {
+            return;
+        }
+
+        for (Map.Entry<String, String> entry : Alley.getInstance().getChatService().getSymbolReplacements().entrySet()) {
+            if (message.contains(entry.getKey())) {
+                message = message.replace(entry.getKey(), entry.getValue());
+            }
+        }
+
+        event.setMessage(message);
+    }
+}

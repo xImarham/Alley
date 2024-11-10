@@ -1,11 +1,10 @@
 package dev.revere.alley.profile;
 
 import com.mongodb.client.MongoCollection;
-import lombok.Getter;
-import lombok.Setter;
 import dev.revere.alley.Alley;
 import dev.revere.alley.database.profile.IProfile;
 import dev.revere.alley.database.profile.impl.MongoProfileImpl;
+import lombok.Getter;
 import org.bson.Document;
 
 import java.util.HashMap;
@@ -17,7 +16,6 @@ import java.util.UUID;
  * @date 5/20/2024
  */
 @Getter
-@Setter
 public class ProfileRepository {
     private final HashMap<UUID, Profile> profiles;
     public MongoCollection<Document> collection;

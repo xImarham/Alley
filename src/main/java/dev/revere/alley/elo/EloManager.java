@@ -9,7 +9,6 @@ import lombok.experimental.UtilityClass;
  */
 @UtilityClass
 public class EloManager {
-
     private final KFactor[] K_FACTORS = {
             new KFactor(0, 1100, 25),
             new KFactor(1001, 1400, 20),

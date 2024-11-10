@@ -16,6 +16,8 @@ import dev.revere.alley.command.donator.HostCommand;
 import dev.revere.alley.config.ConfigHandler;
 import dev.revere.alley.cooldown.CooldownRepository;
 import dev.revere.alley.database.MongoService;
+import dev.revere.alley.essential.chat.ChatService;
+import dev.revere.alley.essential.chat.listener.ChatListener;
 import dev.revere.alley.essential.command.*;
 import dev.revere.alley.essential.command.troll.*;
 import dev.revere.alley.essential.spawn.SpawnService;
@@ -126,6 +128,7 @@ public class Alley extends JavaPlugin {
     private HotbarRepository hotbarRepository;
     private EventRepository eventRepository;
     private DuelRepository duelRepository;
+    private ChatService chatService;
 
     private final String prefix = "§f[§b" + this.getDescription().getName() + "§f] §r";
 
@@ -205,6 +208,7 @@ public class Alley extends JavaPlugin {
         Logger.logTime(false, "FFACuboidService", () -> this.ffaCuboidService = new FFACuboidService());
         Logger.logTime(false, "EventRepository", () -> this.eventRepository = new EventRepository());
         Logger.logTime(false, "DuelRepository", () -> this.duelRepository = new DuelRepository());
+        Logger.logTime(false, "ChatService", () -> this.chatService = new ChatService());
     }
 
     private void registerListeners() {
@@ -217,7 +221,8 @@ public class Alley extends JavaPlugin {
                 new MenuListener(),
                 new SpawnListener(),
                 new FFAListener(),
-                new WorldListener()
+                new WorldListener(),
+                new ChatListener()
         ).forEach(listener -> getServer().getPluginManager().registerEvents(listener, this));
     }
 
