@@ -26,7 +26,7 @@ public class ArenaRepository {
     private final List<Arena> arenas = new ArrayList<>();
 
     public ArenaRepository() {
-        loadArenas();
+        this.loadArenas();
     }
     
     /**
@@ -105,7 +105,7 @@ public class ArenaRepository {
                 arena.setEnabled(config.getBoolean(name + ".enabled"));
             }
 
-            arenas.add(arena);
+            this.arenas.add(arena);
         }
     }
 
@@ -115,7 +115,7 @@ public class ArenaRepository {
     public void saveArenas() {
         FileConfiguration config = Alley.getInstance().getConfigHandler().getConfig("storage/arenas.yml");
 
-        for (Arena arena : arenas) {
+        for (Arena arena : this.arenas) {
             String name = "arenas." + arena.getName();
 
             config.set(name + ".type", arena.getType().name());
@@ -157,7 +157,7 @@ public class ArenaRepository {
      * @return the arena
      */
     public Arena getArenaByName(String name) {
-        return arenas.stream().filter(arena -> arena.getName().equalsIgnoreCase(name)).findFirst().orElse(null);
+        return this.arenas.stream().filter(arena -> arena.getName().equalsIgnoreCase(name)).findFirst().orElse(null);
     }
 
     /**
@@ -167,7 +167,7 @@ public class ArenaRepository {
      * @return the arena
      */
     public Arena getArenaByClass(Class<? extends Arena> clazz) {
-        return arenas.stream().filter(arena -> arena.getClass().equals(clazz)).findFirst().orElse(null);
+        return this.arenas.stream().filter(arena -> arena.getClass().equals(clazz)).findFirst().orElse(null);
     }
 
     /**
@@ -177,7 +177,7 @@ public class ArenaRepository {
      * @return the arena
      */
     public Arena getRandomArena(Kit kit) {
-        List<Arena> availableArenas = arenas.stream()
+        List<Arena> availableArenas = this.arenas.stream()
                 .filter(arena -> arena.getKits().contains(kit.getName()))
                 .filter(Arena::isEnabled)
                 .filter(arena -> !(arena instanceof StandAloneArena) || !((StandAloneArena) arena).isActive())

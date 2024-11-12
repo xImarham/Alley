@@ -53,7 +53,7 @@ public class Queue {
      * @return The queue type.
      */
     public String getQueueType() {
-        return (ranked ? "Ranked" : "Unranked");
+        return (this.ranked ? "Ranked" : "Unranked");
     }
 
     /**
@@ -64,7 +64,7 @@ public class Queue {
     public void addPlayer(Player player, int elo) {
         UUID uuid = player.getUniqueId();
 
-        if (profiles.stream().anyMatch(queueProfile -> queueProfile.getUuid().equals(uuid))) {
+        if (this.profiles.stream().anyMatch(queueProfile -> queueProfile.getUuid().equals(uuid))) {
             player.sendMessage(CC.translate("&cYou're already in a queue."));
             return;
         }
@@ -76,7 +76,7 @@ public class Queue {
         profile.setQueueProfile(queueProfile);
         profile.setState(EnumProfileState.WAITING);
 
-        profiles.add(queueProfile);
+        this.profiles.add(queueProfile);
 
         player.sendMessage(CC.translate("&aYou've joined the &b" + queueProfile.getQueue().getKit().getName() + " &aqueue."));
     }
@@ -87,14 +87,13 @@ public class Queue {
      * @param queueProfile The queue profile to remove.
      */
     public void removePlayer(QueueProfile queueProfile) {
-        profiles.remove(queueProfile);
+        this.profiles.remove(queueProfile);
 
         Profile profile = Alley.getInstance().getProfileRepository().getProfile(queueProfile.getUuid());
         profile.setQueueProfile(null);
         profile.setState(EnumProfileState.LOBBY);
 
         Player player = Bukkit.getPlayer(queueProfile.getUuid());
-
         if (player == null) {
             return;
         }

@@ -1,9 +1,9 @@
 package dev.revere.alley.arena.selection;
 
-import lombok.Data;
-import lombok.Getter;
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.menu.pagination.ItemBuilder;
+import lombok.Data;
+import lombok.Getter;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;

@@ -1,9 +1,9 @@
 package dev.revere.alley.queue;
 
-import lombok.Getter;
-import lombok.Setter;
 import dev.revere.alley.Alley;
 import dev.revere.alley.queue.runnable.QueueRunnable;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +19,7 @@ public class QueueRepository {
     private final List<Queue> queues = new ArrayList<>();
 
     public QueueRepository() {
-        initialize();
+        this.initialize();
     }
 
     public void initialize() {

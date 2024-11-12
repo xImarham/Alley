@@ -31,6 +31,5 @@ public class QueueReloadCommand extends BaseCommand {
         });
 
         player.sendMessage(CC.translate("&aYou've reloaded the queues."));
-
     }
 }

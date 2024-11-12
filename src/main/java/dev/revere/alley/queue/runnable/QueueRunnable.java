@@ -74,10 +74,10 @@ public class QueueRunnable implements Runnable {
                         return;
                     }
 
-                    clearQueueProfiles(queue, firstProfile, secondProfile);
+                    this.clearQueueProfiles(queue, firstProfile, secondProfile);
                     GamePlayerList gamePlayerList = getGamePlayerList(firstPlayerOpt.get(), secondPlayerOpt.get(), firstProfile, secondProfile);
                     GameParticipantList gameParticipantList = getGameParticipantList(gamePlayerList);
-                    processGame(queue, gameParticipantList);
+                    this.processGame(queue, gameParticipantList);
                 }
             }
         }

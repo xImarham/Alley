@@ -13,7 +13,7 @@ import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.queue.Queue;
 import dev.revere.alley.util.PlayerUtil;
-import dev.revere.alley.elo.EloManager;
+import dev.revere.alley.elo.EloCalculator;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -125,8 +125,8 @@ public class MatchRegularImpl extends AbstractMatch {
      * @return The elo result.
      */
     private @NotNull EloResult getEloResult(int oldWinnerElo, int oldLoserElo) {
-        int newWinnerElo = EloManager.calculateElo(oldWinnerElo, oldLoserElo, true);
-        int newLoserElo = EloManager.calculateElo(oldLoserElo, oldWinnerElo, false);
+        int newWinnerElo = EloCalculator.determineWinnerAndCalculate(oldWinnerElo, oldLoserElo, true);
+        int newLoserElo = EloCalculator.determineWinnerAndCalculate(oldLoserElo, oldWinnerElo, false);
         return new EloResult(newWinnerElo, newLoserElo);
     }
 

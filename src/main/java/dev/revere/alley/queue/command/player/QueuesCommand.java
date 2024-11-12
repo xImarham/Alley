@@ -15,7 +15,6 @@ import org.bukkit.entity.Player;
  * @project Alley
  * @date 25/05/2024 - 16:45
  */
-
 public class QueuesCommand extends BaseCommand {
     @Override
     @Command(name = "queues", aliases = {"selectqueue", "joinqueue"})

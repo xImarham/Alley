@@ -19,7 +19,6 @@ public class LeaveQueueCommand extends BaseCommand {
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
-
         Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
         if (!profile.getState().equals(EnumProfileState.WAITING)) {
             player.sendMessage(CC.translate("&cYou are not in a queue."));

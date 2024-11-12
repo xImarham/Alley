@@ -41,42 +41,62 @@ public class QueueProfile {
      * Method to queue the range.
      */
     public void queueRange() {
-        ticks++;
+        this.ticks++;
 
-        if (ticks % TICK_THRESHOLD != 0) {
+        if (this.ticks % this.TICK_THRESHOLD != 0) {
             return;
         }
 
-        range += RANGE_INCREMENT;
-        if (range < MAX_RANGE) {
+        this.range += this.RANGE_INCREMENT;
+        if (this.range < this.MAX_RANGE) {
             return;
         }
 
-        ticks = 0;
-        range = 0;
+        this.ticks = 0;
+        this.range = 0;
 
-        if (queue.isRanked()) {
-            Player player = Bukkit.getPlayer(uuid);
+        if (this.queue.isRanked()) {
+            Player player = Bukkit.getPlayer(this.uuid);
             if (player != null) {
                 player.sendMessage(CC.translate("&aIncreased queue range to 50 due to inactivity. &7(" + getMinimumElo() + " - " + getMaximumElo() + ")"));
             }
         }
     }
 
+    /**
+     * Method to get the minimum elo.
+     *
+     * @return The minimum elo.
+     */
     private int getMinimumElo() {
         int minimumElo = this.elo - this.range;
         return Math.max(minimumElo, 0);
     }
 
+    /**
+     * Method to get the maximum elo.
+     *
+     * @return The maximum elo.
+     */
     private int getMaximumElo() {
         int max = this.elo + this.range;
         return Math.min(max, 3000);
     }
 
+    /**
+     * Method to get the elapsed time.
+     *
+     * @return The elapsed time.
+     */
     public long getElapsedTime() {
-        return System.currentTimeMillis() - startTime;
+        return System.currentTimeMillis() - this.startTime;
     }
 
+    /**
+     * Method to get the formatted elapsed time.
+     *
+     * @return The formatted elapsed time.
+     */
     public String getFormattedElapsedTime() {
         long elapsedSeconds = getElapsedTime() / 1000;
         return String.format("%02d:%02d", elapsedSeconds / 60, elapsedSeconds % 60);

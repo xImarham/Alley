@@ -1,4 +1,4 @@
-package dev.revere.alley.profile.command;
+package dev.revere.alley.visual.scoreboard.theme.command;
 
 import dev.revere.alley.locale.ErrorMessage;
 import dev.revere.alley.util.chat.CC;
