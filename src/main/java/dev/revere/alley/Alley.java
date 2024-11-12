@@ -76,7 +76,6 @@ import dev.revere.alley.profile.settings.command.toggle.ToggleTablistCommand;
 import dev.revere.alley.profile.settings.command.worldtime.*;
 import dev.revere.alley.profile.shop.command.ShopCommand;
 import dev.revere.alley.profile.shop.command.admin.SetCoinsCommand;
-import dev.revere.alley.visual.scoreboard.theme.command.ThemesCommand;
 import dev.revere.alley.queue.QueueRepository;
 import dev.revere.alley.queue.command.admin.QueueCommand;
 import dev.revere.alley.queue.command.player.LeaveQueueCommand;
@@ -304,7 +303,6 @@ public class Alley extends JavaPlugin {
             new ChallengesCommand();
             new ProfileMenuCommand();
             new MatchHistoryCommand();
-            new ThemesCommand();
             new KitEditorCommand();
         });
     }
