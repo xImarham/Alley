@@ -68,8 +68,8 @@ public class DuelKitSelectorMenu extends Menu {
             }
 
             player.closeInventory();
-            Alley.getInstance().getDuelRepository().sendDuelRequest(player, targetPlayer, kit);
-            player.sendMessage(CC.translate("&aYou have sent a duel request to " + targetPlayer.getName() + " in the " + Alley.getInstance().getDuelRepository().getDuelRequest(player, targetPlayer).getArena().getName() + " arena with the " + kit.getName() + " kit."));
+            Alley.getInstance().getDuelRequestHandler().sendDuelRequest(player, targetPlayer, kit);
+            player.sendMessage(CC.translate("&aYou have sent a duel request to " + targetPlayer.getName() + " in the " + Alley.getInstance().getDuelRequestHandler().getDuelRequest(player, targetPlayer).getArena().getName() + " arena with the " + kit.getName() + " kit."));
         }
     }
 }

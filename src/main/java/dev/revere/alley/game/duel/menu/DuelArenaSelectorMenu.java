@@ -69,7 +69,7 @@ public class DuelArenaSelectorMenu extends Menu {
         @Override
         public void clicked(Player player, ClickType clickType) {
             player.closeInventory();
-            Alley.getInstance().getDuelRepository().sendDuelRequest(player, targetPlayer, kit, arena);
+            Alley.getInstance().getDuelRequestHandler().sendDuelRequest(player, targetPlayer, kit, arena);
             player.sendMessage(CC.translate("&aYou have sent a duel request to " + targetPlayer.getName() + " in the " + arena.getName() + " arena with the " + kit.getName() + " kit."));
         }
     }

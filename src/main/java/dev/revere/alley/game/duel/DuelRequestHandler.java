@@ -29,13 +29,13 @@ import java.util.List;
  */
 @Getter
 @Setter
-public class DuelRepository {
+public class DuelRequestHandler {
     private final List<DuelRequest> duelRequests;
 
     /**
      * Constructor for the DuelRepository class which initializes the duel requests.
      */
-    public DuelRepository() {
+    public DuelRequestHandler() {
         this.duelRequests = new ArrayList<>();
     }
 

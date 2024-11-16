@@ -25,7 +25,7 @@ import dev.revere.alley.essential.spawn.command.SetSpawnCommand;
 import dev.revere.alley.essential.spawn.command.SpawnCommand;
 import dev.revere.alley.essential.spawn.command.SpawnItemsCommand;
 import dev.revere.alley.essential.spawn.listener.SpawnListener;
-import dev.revere.alley.game.duel.DuelRepository;
+import dev.revere.alley.game.duel.DuelRequestHandler;
 import dev.revere.alley.game.duel.command.AcceptCommand;
 import dev.revere.alley.game.duel.command.DuelCommand;
 import dev.revere.alley.game.duel.command.DuelRequestsCommand;
@@ -127,7 +127,7 @@ public class Alley extends JavaPlugin {
     private SpawnService spawnService;
     private HotbarRepository hotbarRepository;
     private EventRepository eventRepository;
-    private DuelRepository duelRepository;
+    private DuelRequestHandler duelRequestHandler;
     private ChatService chatService;
 
     private final String prefix = "§f[§b" + this.getDescription().getName() + "§f] §r";
@@ -207,7 +207,7 @@ public class Alley extends JavaPlugin {
         Logger.logTime(false, "CombatEventManager", () -> this.combatEventManager = new CombatEventManager());
         Logger.logTime(false, "FFACuboidService", () -> this.ffaCuboidService = new FFACuboidService());
         Logger.logTime(false, "EventRepository", () -> this.eventRepository = new EventRepository());
-        Logger.logTime(false, "DuelRepository", () -> this.duelRepository = new DuelRepository());
+        Logger.logTime(false, "DuelRequestHandler", () -> this.duelRequestHandler = new DuelRequestHandler());
         Logger.logTime(false, "ChatService", () -> this.chatService = new ChatService());
     }
 

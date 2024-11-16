@@ -31,13 +31,13 @@ public class AcceptCommand extends BaseCommand {
             return;
         }
 
-        DuelRequest duelRequest = Alley.getInstance().getDuelRepository().getDuelRequest(player, target);
+        DuelRequest duelRequest = Alley.getInstance().getDuelRequestHandler().getDuelRequest(player, target);
         if (duelRequest == null) {
             player.sendMessage(CC.translate("&cYou do not have a pending duel request from that player."));
             return;
         }
 
-        Alley.getInstance().getDuelRepository().acceptPendingRequest(duelRequest);
+        Alley.getInstance().getDuelRequestHandler().acceptPendingRequest(duelRequest);
         player.sendMessage(CC.translate("&aYou have accepted the duel request from " + target.getName() + "."));
     }
 }

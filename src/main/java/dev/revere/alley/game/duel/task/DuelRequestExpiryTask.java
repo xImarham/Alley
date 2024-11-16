@@ -1,7 +1,7 @@
 package dev.revere.alley.game.duel.task;
 
 import dev.revere.alley.Alley;
-import dev.revere.alley.game.duel.DuelRepository;
+import dev.revere.alley.game.duel.DuelRequestHandler;
 import dev.revere.alley.game.duel.DuelRequest;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -17,14 +17,14 @@ import java.util.List;
 public class DuelRequestExpiryTask extends BukkitRunnable {
     @Override
     public void run() {
-        DuelRepository duelRepository = Alley.getInstance().getDuelRepository();
-        if (duelRepository.getDuelRequests().isEmpty()) {
+        DuelRequestHandler duelRequestHandler = Alley.getInstance().getDuelRequestHandler();
+        if (duelRequestHandler.getDuelRequests().isEmpty()) {
             return;
         }
 
         List<DuelRequest> expiredRequests = new ArrayList<>();
-        synchronized (duelRepository.getDuelRequests()) {
-            duelRepository.getDuelRequests().removeIf(duelRequest -> {
+        synchronized (duelRequestHandler.getDuelRequests()) {
+            duelRequestHandler.getDuelRequests().removeIf(duelRequest -> {
                 if (duelRequest.hasExpired()) {
                     expiredRequests.add(duelRequest);
                     return true;

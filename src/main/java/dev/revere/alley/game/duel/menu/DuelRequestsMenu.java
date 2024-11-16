@@ -44,7 +44,7 @@ public class DuelRequestsMenu extends PaginatedMenu {
     public Map<Integer, Button> getAllPagesButtons(Player player) {
         Map<Integer, Button> buttons = new HashMap<>();
 
-        Alley.getInstance().getDuelRepository().getDuelRequests()
+        Alley.getInstance().getDuelRequestHandler().getDuelRequests()
                 .stream()
                 .filter(duelRequest -> !duelRequest.getSender().equals(player))
                 .forEach(duelRequest -> buttons.put(buttons.size(), new DuelRequestsButton(duelRequest)));
@@ -91,7 +91,7 @@ public class DuelRequestsMenu extends PaginatedMenu {
                 return;
             }
 
-            Alley.getInstance().getDuelRepository().acceptPendingRequest(duelRequest);
+            Alley.getInstance().getDuelRequestHandler().acceptPendingRequest(duelRequest);
             player.closeInventory();
         }
     }
