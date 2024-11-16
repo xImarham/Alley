@@ -1,9 +1,9 @@
-package dev.revere.alley.game.party.command.impl.member;
+package dev.revere.alley.game.party.command.impl;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.locale.Locale;
 import dev.revere.alley.game.party.Party;
-import dev.revere.alley.game.party.PartyRepository;
+import dev.revere.alley.game.party.PartyHandler;
 import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.Command;
@@ -27,8 +27,8 @@ public class PartyInfoCommand extends BaseCommand {
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
 
-        PartyRepository partyRepository = Alley.getInstance().getPartyRepository();
-        Party party = partyRepository.getPartyByMember(player.getUniqueId());
+        PartyHandler partyHandler = Alley.getInstance().getPartyHandler();
+        Party party = partyHandler.getPartyByMember(player.getUniqueId());
 
         if (party == null) {
             player.sendMessage(CC.translate(Locale.NOT_IN_PARTY.getMessage()));

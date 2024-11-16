@@ -55,7 +55,7 @@ import dev.revere.alley.kit.KitRepository;
 import dev.revere.alley.kit.command.KitCommand;
 import dev.revere.alley.kit.editor.command.KitEditorCommand;
 import dev.revere.alley.kit.settings.KitSettingRepository;
-import dev.revere.alley.game.party.PartyRepository;
+import dev.revere.alley.game.party.PartyHandler;
 import dev.revere.alley.game.party.command.PartyCommand;
 import dev.revere.alley.game.party.listener.PartyListener;
 import dev.revere.alley.game.party.task.PartyRequestExpiryTask;
@@ -116,7 +116,7 @@ public class Alley extends JavaPlugin {
     private QueueRepository queueRepository;
     private ConfigHandler configHandler;
     private MatchRepository matchRepository;
-    private PartyRepository partyRepository;
+    private PartyHandler partyHandler;
     private CooldownRepository cooldownRepository;
     private CombatEventManager combatEventManager;
     private KitRepository kitRepository;
@@ -202,7 +202,7 @@ public class Alley extends JavaPlugin {
         Logger.logTime(false, "CooldownRepository", () -> this.cooldownRepository = new CooldownRepository());
         Logger.logTime(false, "SnapshotRepository", () -> this.snapshotRepository = new SnapshotRepository());
         Logger.logTime(false, "MatchRepository", () -> this.matchRepository = new MatchRepository());
-        Logger.logTime(false, "PartyRepository", () -> this.partyRepository = new PartyRepository());
+        Logger.logTime(false, "PartyHandler", () -> this.partyHandler = new PartyHandler());
         Logger.logTime(false, "SpawnService", () -> this.spawnService = new SpawnService());
         Logger.logTime(false, "CombatEventManager", () -> this.combatEventManager = new CombatEventManager());
         Logger.logTime(false, "FFACuboidService", () -> this.ffaCuboidService = new FFACuboidService());

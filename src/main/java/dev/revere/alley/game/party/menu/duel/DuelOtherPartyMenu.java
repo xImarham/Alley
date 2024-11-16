@@ -41,7 +41,7 @@ public class DuelOtherPartyMenu extends PaginatedMenu {
     public Map<Integer, Button> getAllPagesButtons(Player player) {
         Map<Integer, Button> buttons = new HashMap<>();
 
-        Alley.getInstance().getPartyRepository().getParties().stream()
+        Alley.getInstance().getPartyHandler().getParties().stream()
                 .sorted(Comparator.comparing(party -> party.getLeader().getName()))
                 //.filter(party -> !party.getLeader().equals(player))
                 .sorted(Comparator.comparingInt(party -> party.getMembers().size()))

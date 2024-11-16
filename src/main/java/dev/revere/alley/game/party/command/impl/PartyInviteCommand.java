@@ -1,10 +1,10 @@
-package dev.revere.alley.game.party.command.impl.leader;
+package dev.revere.alley.game.party.command.impl;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.locale.ErrorMessage;
 import dev.revere.alley.locale.Locale;
 import dev.revere.alley.game.party.Party;
-import dev.revere.alley.game.party.PartyRepository;
+import dev.revere.alley.game.party.PartyHandler;
 import dev.revere.alley.game.party.PartyRequest;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.util.chat.CC;
@@ -44,7 +44,7 @@ public class PartyInviteCommand extends BaseCommand {
             return;
         }
 
-        Party party = Alley.getInstance().getPartyRepository().getPartyByMember(player.getUniqueId());
+        Party party = Alley.getInstance().getPartyHandler().getPartyByMember(player.getUniqueId());
         if (party == null) {
             player.sendMessage(CC.translate(Locale.NOT_IN_PARTY.getMessage()));
             return;
@@ -57,8 +57,8 @@ public class PartyInviteCommand extends BaseCommand {
         }
 
         PartyRequest request = new PartyRequest(player, targetPlayer);
-        PartyRepository partyRepository = Alley.getInstance().getPartyRepository();
-        partyRepository.addRequest(request);
-        partyRepository.sendRequest(party, targetPlayer);
+        PartyHandler partyHandler = Alley.getInstance().getPartyHandler();
+        partyHandler.addRequest(request);
+        partyHandler.sendRequest(party, targetPlayer);
     }
 }

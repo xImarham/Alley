@@ -1,7 +1,7 @@
 package dev.revere.alley.game.party.task;
 
 import dev.revere.alley.Alley;
-import dev.revere.alley.game.party.PartyRepository;
+import dev.revere.alley.game.party.PartyHandler;
 import dev.revere.alley.game.party.PartyRequest;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -17,14 +17,14 @@ import java.util.List;
 public class PartyRequestExpiryTask extends BukkitRunnable {
     @Override
     public void run() {
-        PartyRepository partyRepository = Alley.getInstance().getPartyRepository();
-        if (partyRepository.getParties().isEmpty()) {
+        PartyHandler partyHandler = Alley.getInstance().getPartyHandler();
+        if (partyHandler.getParties().isEmpty()) {
             return;
         }
 
         List<PartyRequest> expiredRequests = new ArrayList<>();
-        synchronized (partyRepository.getPartyRequests()) {
-            partyRepository.getPartyRequests().removeIf(request -> {
+        synchronized (partyHandler.getPartyRequests()) {
+            partyHandler.getPartyRequests().removeIf(request -> {
                 if (request.hasExpired()) {
                     expiredRequests.add(request);
                     return true;

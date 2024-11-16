@@ -1,6 +1,7 @@
-package dev.revere.alley.game.party.command.impl.leader;
+package dev.revere.alley.game.party.command.impl;
 
 import dev.revere.alley.Alley;
+import dev.revere.alley.game.party.PartyHandler;
 import dev.revere.alley.locale.ErrorMessage;
 import dev.revere.alley.locale.Locale;
 import dev.revere.alley.game.party.Party;
@@ -28,21 +29,19 @@ public class PartyKickCommand extends BaseCommand {
             return;
         }
 
-        String target = args[0];
-
+        Player target = Bukkit.getPlayer(args[0]);
         if (target == null) {
             player.sendMessage(CC.translate(ErrorMessage.PLAYER_NOT_ONLINE).replace("{player}", args[0]));
             return;
         }
 
-        Player targetPlayer = Bukkit.getPlayer(target);
-        Party party = Alley.getInstance().getPartyRepository().getPartyByLeader(player);
-
+        PartyHandler partyHandler = Alley.getInstance().getPartyHandler();
+        Party party = partyHandler.getPartyByLeader(player);
         if (party == null) {
             player.sendMessage(CC.translate(Locale.NOT_IN_PARTY.getMessage()));
             return;
         }
 
-        party.kickPlayer(targetPlayer);
+        partyHandler.kickMember(player, target);
     }
 }

@@ -10,8 +10,7 @@ import lombok.Getter;
 @Getter
 public enum EnumPartyState {
     PRIVATE("Private", "Only invited players can join"),
-    PUBLIC("Public", "Everyone can join"),
-    LOCKED("Locked", "No one can join until unlocked");
+    PUBLIC("Public", "Everyone can join");
 
     private final String name;
     private final String description;

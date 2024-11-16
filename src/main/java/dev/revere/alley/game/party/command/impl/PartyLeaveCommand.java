@@ -1,8 +1,8 @@
-package dev.revere.alley.game.party.command.impl.member;
+package dev.revere.alley.game.party.command.impl;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.locale.Locale;
-import dev.revere.alley.game.party.PartyRepository;
+import dev.revere.alley.game.party.PartyHandler;
 import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.Command;
@@ -23,16 +23,15 @@ public class PartyLeaveCommand extends BaseCommand {
         Player player = command.getPlayer();
         UUID playerUUID = player.getUniqueId();
 
-        PartyRepository partyRepository = Alley.getInstance().getPartyRepository();
-
-        if (partyRepository.getPartyByLeader(player) != null) {
-            partyRepository.disbandParty(player);
+        PartyHandler partyHandler = Alley.getInstance().getPartyHandler();
+        if (partyHandler.getPartyByLeader(player) != null) {
+            partyHandler.disbandParty(player);
             player.sendMessage(CC.translate(Locale.PARTY_DISBANDED.getMessage()));
             return;
         }
 
-        if (partyRepository.getPartyByMember(playerUUID) != null) {
-            partyRepository.leaveParty(player);
+        if (partyHandler.getPartyByMember(playerUUID) != null) {
+            partyHandler.leaveParty(player);
             player.sendMessage(CC.translate(Locale.PARTY_LEFT.getMessage()));
             return;
         }

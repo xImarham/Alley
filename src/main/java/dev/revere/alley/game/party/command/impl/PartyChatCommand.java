@@ -1,8 +1,8 @@
-package dev.revere.alley.game.party.command.impl.member;
+package dev.revere.alley.game.party.command.impl;
 
 import dev.revere.alley.Alley;
+import dev.revere.alley.game.party.PartyHandler;
 import dev.revere.alley.locale.Locale;
-import dev.revere.alley.game.party.Party;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumChatChannel;
 import dev.revere.alley.util.chat.CC;
@@ -50,8 +50,8 @@ public class PartyChatCommand extends BaseCommand {
             return;
         }
 
-        Party party = Alley.getInstance().getPartyRepository().getPartyByMember(player.getUniqueId());
-
-        profile.getParty().notifyParty(party.getChatFormat().replace("{player}", player.getName()).replace("{message}", message));
+        PartyHandler partyHandler = Alley.getInstance().getPartyHandler();
+        String partyMessage = Alley.getInstance().getPartyHandler().getChatFormat().replace("{player}", player.getName()).replace("{message}", message);
+        partyHandler.notifyParty(profile.getParty(), partyMessage);
     }
 }

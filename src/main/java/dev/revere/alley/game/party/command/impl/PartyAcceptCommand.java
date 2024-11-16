@@ -1,10 +1,10 @@
-package dev.revere.alley.game.party.command.impl.member;
+package dev.revere.alley.game.party.command.impl;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.locale.ErrorMessage;
 import dev.revere.alley.locale.Locale;
 import dev.revere.alley.game.party.Party;
-import dev.revere.alley.game.party.PartyRepository;
+import dev.revere.alley.game.party.PartyHandler;
 import dev.revere.alley.game.party.PartyRequest;
 import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.api.command.BaseCommand;
@@ -30,36 +30,35 @@ public class PartyAcceptCommand extends BaseCommand {
             return;
         }
 
-        String target = args[0];
-        Player targetPlayer = Bukkit.getPlayer(target);
+        Player target = Bukkit.getPlayer(args[0]);
 
-        if (targetPlayer == null) {
-            player.sendMessage(CC.translate(ErrorMessage.PLAYER_NOT_ONLINE.replace("{player}", target)));
+        if (target == null) {
+            player.sendMessage(CC.translate(ErrorMessage.PLAYER_NOT_ONLINE.replace("{player}", args[0])));
             return;
         }
 
-        PartyRepository partyRepository = Alley.getInstance().getPartyRepository();
-        PartyRequest partyRequest = partyRepository.getRequest(player);
-        Party party = partyRepository.getPartyByLeader(targetPlayer);
+        PartyHandler partyHandler = Alley.getInstance().getPartyHandler();
 
+        Party party = partyHandler.getPartyByLeader(target);
         if (party == null) {
-            player.sendMessage(CC.translate(ErrorMessage.TARGET_HAS_NO_PARTY.replace("{player}", targetPlayer.getName())));
+            player.sendMessage(CC.translate(ErrorMessage.TARGET_HAS_NO_PARTY.replace("{player}", target.getName())));
             return;
         }
 
-        if (partyRequest == null || !partyRequest.getSender().equals(targetPlayer)) {
-            player.sendMessage(CC.translate(Locale.NO_PARTY_INVITE.getMessage().replace("{player}", targetPlayer.getName())));
+        PartyRequest partyRequest = partyHandler.getRequest(player);
+        if (partyRequest == null || !partyRequest.getSender().equals(target)) {
+            player.sendMessage(CC.translate(Locale.NO_PARTY_INVITE.getMessage().replace("{player}", target.getName())));
             return;
         }
 
         if (partyRequest.hasExpired()) {
-            partyRepository.removeRequest(partyRequest);
+            partyHandler.removeRequest(partyRequest);
             player.sendMessage(CC.translate("&cThe party request has expired."));
             return;
         }
 
-        partyRepository.joinParty(player, targetPlayer);
-        partyRepository.removeRequest(partyRequest);
-        player.sendMessage(CC.translate(Locale.JOINED_PARTY.getMessage().replace("{player}", targetPlayer.getName())));
+        partyHandler.joinParty(player, target);
+        partyHandler.removeRequest(partyRequest);
+        player.sendMessage(CC.translate(Locale.JOINED_PARTY.getMessage().replace("{player}", target.getName())));
     }
 }

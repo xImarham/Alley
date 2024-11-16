@@ -1,8 +1,8 @@
-package dev.revere.alley.game.party.command.impl.leader;
+package dev.revere.alley.game.party.command.impl;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.locale.Locale;
-import dev.revere.alley.game.party.PartyRepository;
+import dev.revere.alley.game.party.PartyHandler;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
 import dev.revere.alley.util.chat.CC;
@@ -33,9 +33,9 @@ public class PartyDisbandCommand extends BaseCommand {
             return;
         }
 
-        PartyRepository partyRepository = Alley.getInstance().getPartyRepository();
-        if (partyRepository.getPartyByLeader(player) != null) {
-            partyRepository.disbandParty(player);
+        PartyHandler partyHandler = Alley.getInstance().getPartyHandler();
+        if (partyHandler.getPartyByLeader(player) != null) {
+            partyHandler.disbandParty(player);
             player.sendMessage(CC.translate(Locale.PARTY_DISBANDED.getMessage()));
             return;
         }

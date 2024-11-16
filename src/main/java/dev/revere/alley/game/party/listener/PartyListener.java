@@ -2,6 +2,7 @@ package dev.revere.alley.game.party.listener;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.game.party.Party;
+import dev.revere.alley.game.party.PartyHandler;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumChatChannel;
 import dev.revere.alley.util.chat.CC;
@@ -21,6 +22,7 @@ public class PartyListener implements Listener {
     @EventHandler
     private void onAsyncPlayerChatEvent(AsyncPlayerChatEvent event) {
         Profile profile = Alley.getInstance().getProfileRepository().getProfile(event.getPlayer().getUniqueId());
+        PartyHandler partyHandler = Alley.getInstance().getPartyHandler();
         
         if (profile.getProfileData().getProfileSettingData().getChatChannel().equalsIgnoreCase(EnumChatChannel.PARTY.toString())) {
             event.setCancelled(true);
@@ -34,8 +36,8 @@ public class PartyListener implements Listener {
                 return;
             }
 
-            Party party = Alley.getInstance().getPartyRepository().getPartyByMember(event.getPlayer().getUniqueId());
-            profile.getParty().notifyParty(party.getChatFormat().replace("{player}", event.getPlayer().getName()).replace("{message}", event.getMessage()));
+            String partyMessage = partyHandler.getChatFormat().replace("{player}", event.getPlayer().getName()).replace("{message}", event.getMessage());
+            partyHandler.notifyParty(profile.getParty(), partyMessage);
             return;
         }
 
@@ -51,8 +53,8 @@ public class PartyListener implements Listener {
                 return;
             }
 
-            Party party = Alley.getInstance().getPartyRepository().getPartyByMember(event.getPlayer().getUniqueId());
-            profile.getParty().notifyParty(party.getChatFormat().replace("{player}", event.getPlayer().getName()).replace("{message}", event.getMessage().substring(1)));
+            String partyMessage = partyHandler.getChatFormat().replace("{player}", event.getPlayer().getName()).replace("{message}", event.getMessage().substring(1));
+            partyHandler.notifyParty(profile.getParty(), partyMessage);
         }
     }
 
@@ -61,13 +63,16 @@ public class PartyListener implements Listener {
         Player player = event.getPlayer();
         Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
 
-        if (profile.getParty() != null) {
-            if (profile.getParty().getLeader().equals(player)) {
-                profile.getParty().disbandParty();
-                return;
-            }
-
-            profile.getParty().leaveParty(player);
+        Party party = profile.getParty();
+        if (party == null) {
+            return;
         }
+
+        if (party.getLeader() == player) {
+            Alley.getInstance().getPartyHandler().disbandParty(player);
+            return;
+        }
+
+        Alley.getInstance().getPartyHandler().leaveParty(player);
     }
 }

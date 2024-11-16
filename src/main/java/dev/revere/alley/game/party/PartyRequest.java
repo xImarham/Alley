@@ -26,7 +26,7 @@ public class PartyRequest {
     public PartyRequest(Player sender, Player target) {
         this.sender = sender;
         this.target = target;
-        this.expireTime = System.currentTimeMillis() + 300000L; // 300 seconds (5 minutes)
+        this.expireTime = System.currentTimeMillis() + 300000L;
     }
 
     /**
@@ -38,23 +38,14 @@ public class PartyRequest {
         return System.currentTimeMillis() > this.expireTime;
     }
 
-    /**
-     * Get the remaining time until the party request expires.
-     *
-     * @return The remaining time until the party request expires.
-     */
+    /*
     public long getRemainingTime() {
         return this.expireTime - System.currentTimeMillis();
     }
 
-    /**
-     * Get the remaining time formatted as a string.
-     *
-     * @return The remaining time formatted as a string.
-     */
     public String getRemainingTimeFormatted() {
         long seconds = this.getRemainingTime() / 1000;
         long minutes = seconds / 60;
         return String.format("%02d:%02d", minutes, seconds % 60);
-    }
+    }*/
 }
