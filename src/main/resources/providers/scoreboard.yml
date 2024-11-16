@@ -122,7 +122,12 @@ scoreboard:
       - ""
       - "&fYour Ping: &b{ping}ms"
 
-boxing-placeholder:
+boxing-hit-difference:
   positive-difference: "&a(+{difference})"
   negative-difference: "&c({difference})"
   no-difference: "&a(+0)"
+
+boxing-combo-display:
+  positive-combo: "&a{combo} Combo"
+  negative-combo: "&c{combo} Combo"
+  no-combo: "&fNo Combo"
