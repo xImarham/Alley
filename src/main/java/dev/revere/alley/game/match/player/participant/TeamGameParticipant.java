@@ -6,11 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-/**
- * @author Emmy
- * @project Alley
- * @date 09/11/2024 - 22:38
- */
 public class TeamGameParticipant<T extends GamePlayer> extends GameParticipant<T> {
     private final List<T> players;
 
