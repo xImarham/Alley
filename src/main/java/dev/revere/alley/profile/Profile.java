@@ -6,7 +6,7 @@ import dev.revere.alley.Alley;
 import dev.revere.alley.game.ffa.AbstractFFAMatch;
 import dev.revere.alley.visual.leaderboard.menu.leaderboard.enums.EnumLeaderboardType;
 import dev.revere.alley.game.match.AbstractMatch;
-import dev.revere.alley.party.Party;
+import dev.revere.alley.game.party.Party;
 import dev.revere.alley.profile.data.ProfileData;
 import dev.revere.alley.profile.enums.EnumProfileState;
 import dev.revere.alley.queue.QueueProfile;
