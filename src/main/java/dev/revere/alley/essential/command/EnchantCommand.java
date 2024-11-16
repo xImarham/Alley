@@ -27,15 +27,10 @@ public class EnchantCommand extends BaseCommand {
             return;
         }
 
-        String enchantmentName = EnchantUtil.getEnchantment(args[0]);
-        if (enchantmentName == null) {
-            player.sendMessage(CC.translate("&cInvalid enchantment name!"));
-            return;
-        }
-
-        Enchantment enchantment = Enchantment.getByName(enchantmentName);
+        Enchantment enchantment = EnchantUtil.getEnchantment(args[0]);
         if (enchantment == null) {
             player.sendMessage(CC.translate("&cInvalid enchantment name!"));
+            player.sendMessage(CC.translate("&cValid enchantments: &7" + EnchantUtil.getSortedEnchantments().toUpperCase()));
             return;
         }
 
