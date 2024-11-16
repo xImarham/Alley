@@ -236,9 +236,9 @@ public class ScoreboardVisualizer implements AssembleAdapter {
             int opponentHits = profile.getMatch().getGamePlayer(opponent.getPlayer().getPlayer()).getData().getHits();
 
             FileConfiguration config = Alley.getInstance().getConfigHandler().getScoreboardConfig();
-            String positiveDifference = config.getString("boxing-placeholder.positive-difference", "&a(+{difference})");
-            String negativeDifference = config.getString("boxing-placeholder.negative-difference", "&c(-{difference})");
-            String zeroDifference = config.getString("boxing-placeholder.no-difference", "&a(+0)");
+            String positiveDifference = config.getString("boxing-hit-difference.positive-difference", "&a(+{difference})");
+            String negativeDifference = config.getString("boxing-hit-difference.negative-difference", "&c(-{difference})");
+            String zeroDifference = config.getString("boxing-hit-difference.no-difference", "&a(+0)");
 
             if (difference > 0) {
                 return CC.translate(positiveDifference.replace("{difference}", String.valueOf(playerHits - opponentHits)));
@@ -265,9 +265,9 @@ public class ScoreboardVisualizer implements AssembleAdapter {
             int opponentCombo = profile.getMatch().getGamePlayer(opponent.getPlayer().getPlayer()).getData().getCombo();
 
             FileConfiguration config = Alley.getInstance().getConfigHandler().getScoreboardConfig();
-            String positiveCombo = config.getString("boxing-placeholder.positive-combo", "&a{combo} Combo");
-            String negativeCombo = config.getString("boxing-placeholder.negative-combo", "&c{combo} Combo");
-            String zeroCombo = config.getString("boxing-placeholder.no-combo", "&fNo Combo");
+            String positiveCombo = config.getString("boxing-combo-display.positive-combo", "&a{combo} Combo");
+            String negativeCombo = config.getString("boxing-combo-display.negative-combo", "&c{combo} Combo");
+            String zeroCombo = config.getString("boxing-combo-display.no-combo", "&fNo Combo");
 
             if (playerCombo > 1) {
                 return CC.translate(positiveDifference.replace("{combo}", String.valueOf(playerCombo)));
