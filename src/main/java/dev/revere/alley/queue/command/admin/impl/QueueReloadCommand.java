@@ -20,16 +20,7 @@ public class QueueReloadCommand extends BaseCommand {
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
 
-        Alley.getInstance().getQueueRepository().getQueues().clear();
-        Alley.getInstance().getKitRepository().getKits().forEach(kit -> {
-            if (!kit.isEnabled()) return;
-            new Queue(kit, false);
-
-            if (kit.isSettingEnabled(KitSettingRankedImpl.class)) {
-                new Queue(kit, true);
-            }
-        });
-
+        Alley.getInstance().getQueueRepository().reloadQueues();
         player.sendMessage(CC.translate("&aYou've reloaded the queues."));
     }
 }

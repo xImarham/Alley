@@ -14,6 +14,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -252,13 +253,13 @@ public class KitRepository {
      * @param armor     The armor of the kit.
      * @param icon      The icon of the kit.
      */
-    public void createKit(String kitName, ItemStack[] inventory, ItemStack[] armor, Material icon) {
+    public void createKit(String kitName, ItemStack[] inventory, ItemStack[] armor, Material icon, int slot) {
         Kit kit = new Kit(
                 kitName,
                 Alley.getInstance().getConfigHandler().getSettingsConfig().getString("kit.default-name").replace("{kit-name}", kitName),
                 Alley.getInstance().getConfigHandler().getSettingsConfig().getString("kit.default-description").replace("{kit-name}", kitName),
                 true,
-                0,
+                slot,
                 0,
                 0,
                 inventory,

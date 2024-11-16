@@ -1,6 +1,7 @@
 package dev.revere.alley.queue;
 
 import dev.revere.alley.Alley;
+import dev.revere.alley.kit.settings.impl.KitSettingRankedImpl;
 import dev.revere.alley.queue.runnable.QueueRunnable;
 import lombok.Getter;
 import lombok.Setter;
@@ -24,5 +25,17 @@ public class QueueRepository {
 
     public void initialize() {
         Alley.getInstance().getServer().getScheduler().runTaskTimer(Alley.getInstance(), new QueueRunnable(), 10L, 10L);
+    }
+
+    public void reloadQueues() {
+        this.queues.clear();
+        Alley.getInstance().getKitRepository().getKits().forEach(kit -> {
+            if (!kit.isEnabled()) return;
+            new Queue(kit, false);
+
+            if (kit.isSettingEnabled(KitSettingRankedImpl.class)) {
+                new Queue(kit, true);
+            }
+        });
     }
 }

@@ -20,11 +20,11 @@ arena:
   # When creating an arena, the following displayname for each
   # arena type will be set. {arena} represents the arena name.
   default-display-name:
-    shared: "&b{arena}"
-    standalone: "&b{arena}"
-    ffa: "&b{arena}"
+    shared: "&b{arena-name}"
+    standalone: "&b{arena-name}"
+    ffa: "&b{arena-name}"
 
 kit:
   # The default name and description that's going to be set when creating a kit.
-  default-name: "&b&l{kit}"
-  default-description: "&7{description} kit description."
+  default-name: "&b&l{kit-name}"
+  default-description: "&7{kit-name} kit description."

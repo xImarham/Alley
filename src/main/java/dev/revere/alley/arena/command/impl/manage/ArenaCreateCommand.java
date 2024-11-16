@@ -72,7 +72,7 @@ public class ArenaCreateCommand extends BaseCommand {
                 return;
         }
 
-        arena.setDisplayName(Objects.requireNonNull(getDefaultDisplayName(arenaType)).replace("{arena}", arenaName));
+        arena.setDisplayName(Objects.requireNonNull(getDefaultDisplayName(arenaType)).replace("{arena-name}", arenaName));
 
         arena.createArena();
         player.sendMessage(CC.translate("&aSuccessfully created a new arena named &b" + arenaName + "&a with type &b" + arenaType.name() + "&a!"));

@@ -18,11 +18,11 @@ public class KitGetInvCommand extends BaseCommand {
     @Command(name = "kit.getinventory", aliases = "kit.getinv",permission = "alley.admin")
     @Override
     public void onCommand(CommandArgs command) {
-        Player sender = command.getPlayer();
+        Player player = command.getPlayer();
         String[] args = command.getArgs();
 
         if (command.length() < 1) {
-            sender.sendMessage(CC.translate("&6Usage: &e/kit getinventory &b<kitName>"));
+            player.sendMessage(CC.translate("&6Usage: &e/kit getinventory &b<kitName>"));
             return;
         }
 
@@ -30,12 +30,12 @@ public class KitGetInvCommand extends BaseCommand {
         Kit kit = Alley.getInstance().getKitRepository().getKit(kitName);
 
         if (kit == null) {
-            sender.sendMessage(CC.translate(Locale.KIT_NOT_FOUND.getMessage()));
+            player.sendMessage(CC.translate(Locale.KIT_NOT_FOUND.getMessage()));
             return;
         }
 
-        sender.getInventory().setContents(kit.getInventory());
-        sender.getInventory().setArmorContents(kit.getArmor());
-        sender.sendMessage(CC.translate(Locale.KIT_INVENTORY_GIVEN.getMessage().replace("{kit-name}", kitName)));
+        player.getInventory().setContents(kit.getInventory());
+        player.getInventory().setArmorContents(kit.getArmor());
+        player.sendMessage(CC.translate(Locale.KIT_INVENTORY_GIVEN.getMessage().replace("{kit-name}", kitName)));
     }
 }

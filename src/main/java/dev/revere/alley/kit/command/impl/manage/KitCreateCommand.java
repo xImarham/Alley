@@ -1,21 +1,19 @@
 package dev.revere.alley.kit.command.impl.manage;
 
 import dev.revere.alley.Alley;
-import dev.revere.alley.config.ConfigHandler;
-import dev.revere.alley.database.util.MongoUtility;
-import dev.revere.alley.kit.Kit;
-import dev.revere.alley.kit.KitRepository;
-import dev.revere.alley.kit.settings.KitSettingRepository;
-import dev.revere.alley.kit.settings.impl.*;
-import dev.revere.alley.locale.Locale;
-import dev.revere.alley.util.ActionBarUtil;
-import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.Command;
 import dev.revere.alley.api.command.CommandArgs;
+import dev.revere.alley.kit.Kit;
+import dev.revere.alley.kit.KitRepository;
+import dev.revere.alley.locale.Locale;
+import dev.revere.alley.util.ActionBarUtil;
+import dev.revere.alley.util.chat.CC;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+
+import java.util.Arrays;
 
 /**
  * @author Emmy
@@ -29,8 +27,8 @@ public class KitCreateCommand extends BaseCommand {
         Player player = command.getPlayer();
         String[] args = command.getArgs();
 
-        if (args.length < 1) {
-            player.sendMessage(CC.translate("&6Usage: &e/kit create &b<kitName>"));
+        if (args.length < 2) {
+            player.sendMessage(CC.translate("&6Usage: &e/kit create &b<kitName> <unranked-slot>"));
             return;
         }
 
@@ -50,10 +48,34 @@ public class KitCreateCommand extends BaseCommand {
             icon = player.getItemInHand().getType();
         }
 
-        kitRepository.createKit(kitName, inventory, armor, icon);
-        Alley.getInstance().getProfileRepository().loadProfiles();
-        player.sendMessage(CC.translate(Locale.KIT_CREATED.getMessage().replace("{kit-name}", kitName)));
+        int slot;
+        try {
+            boolean slotTaken = false;
+            for (Kit kit : kitRepository.getKits()) {
+                if (kit.getUnrankedslot() == Integer.parseInt(args[1])) {
+                    player.sendMessage(CC.translate("&cThat slot is already taken by the &7" + kit.getName() + " &ckit!"));
+                    slotTaken = true;
+                    break;
+                }
+            }
+
+            if (slotTaken) return;
+            slot = Integer.parseInt(args[1]);
+        } catch (NumberFormatException e) {
+            player.sendMessage(CC.translate("&cInvalid slot number!"));
+            return;
+        }
+
+        if (slot < 0) {
+            player.sendMessage(CC.translate("&cSlot number cannot be less than 0!"));
+            return;
+        }
+
+        kitRepository.createKit(kitName, inventory, armor, icon, slot);
+        Alley.getInstance().getProfileRepository().loadProfiles(); // to update the kits in the database
         ActionBarUtil.sendMessage(player, Locale.KIT_CREATED.getMessage().replace("{kit-name}", kitName), 5);
-        player.sendMessage(CC.translate("&7Additionally, all profiles have been reloaded."));
+
+        player.sendMessage(CC.translate(Locale.KIT_CREATED.getMessage().replace("{kit-name}", kitName)));
+        player.sendMessage(CC.translate("&7Do not forget to reload the queues by using &c&l/queue reload&7."));
     }
 }
