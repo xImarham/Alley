@@ -9,6 +9,7 @@ import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.util.chat.ClickableUtil;
 import lombok.Getter;
 import lombok.Setter;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -215,5 +216,21 @@ public class PartyHandler {
                 .filter(party -> party.getMembers().contains(uuid))
                 .findFirst()
                 .orElse(null);
+    }
+
+    /**
+     * Announces a party to all online players.
+     *
+     * @param party The party to announce.
+     */
+    public void announceParty(Party party) {
+        TextComponent textComponent = ClickableUtil.createComponent(" &a(Click to join)", "/party join " + party.getLeader().getName(), "&aClick to accept &b" + party.getLeader().getName() + "&a's party invitation.");
+
+        Bukkit.getOnlinePlayers().forEach(player -> {
+            player.sendMessage("");
+            player.sendMessage(CC.translate("&b&l" + party.getLeader().getName() + " &a&lis inviting you to join &b&ltheir &a&lparty!"));
+            player.spigot().sendMessage(textComponent);
+            player.sendMessage("");
+        });
     }
 }

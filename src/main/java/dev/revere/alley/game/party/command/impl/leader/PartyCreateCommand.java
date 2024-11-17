@@ -1,4 +1,4 @@
-package dev.revere.alley.game.party.command.impl;
+package dev.revere.alley.game.party.command.impl.leader;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.locale.Locale;

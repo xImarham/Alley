@@ -74,6 +74,15 @@ public class Cooldown {
     }
 
     /**
+     * Get the remaining time of the cooldown in minutes.
+     *
+     * @return the remaining time of the cooldown in minutes
+     */
+    public String remainingTimeInMinutes() {
+        return String.format("%02d:%02d", remainingTime() / 60, remainingTime() % 60);
+    }
+
+    /**
      * Cancel the existing task.
      */
     private void cancelExistingTask() {

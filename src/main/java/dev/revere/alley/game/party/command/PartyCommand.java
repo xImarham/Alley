@@ -1,6 +1,10 @@
 package dev.revere.alley.game.party.command;
 
-import dev.revere.alley.game.party.command.impl.*;
+import dev.revere.alley.game.party.command.impl.donator.PartyAnnounceCommand;
+import dev.revere.alley.game.party.command.impl.leader.*;
+import dev.revere.alley.game.party.command.impl.leader.privacy.PartyCloseCommand;
+import dev.revere.alley.game.party.command.impl.leader.privacy.PartyOpenCommand;
+import dev.revere.alley.game.party.command.impl.member.*;
 import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.Command;
@@ -29,6 +33,7 @@ public class PartyCommand extends BaseCommand {
         new PartyOpenCommand();
         new PartyCloseCommand();
         new PartyJoinCommand();
+        new PartyAnnounceCommand();
     }
 
     @Override
