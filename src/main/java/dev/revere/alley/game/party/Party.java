@@ -36,6 +36,11 @@ public class Party {
         Alley.getInstance().getPartyHandler().getParties().add(this);
     }
 
+    /**
+     * Sens a message to all party members.
+     *
+     * @param message The message to notify the party members of.
+     */
     public void notifyParty(String message) {
         for (UUID member : members) {
             Player player = Alley.getInstance().getServer().getPlayer(member);
@@ -45,6 +50,11 @@ public class Party {
         }
     }
 
+    /**
+     * Sends a message to all party members excluding the leader.
+     *
+     * @param message The message to notify the party members of.
+     */
     public void notifyPartyExcludeLeader(String message) {
         for (UUID member : members) {
             if (member.equals(leader.getUniqueId())) {
