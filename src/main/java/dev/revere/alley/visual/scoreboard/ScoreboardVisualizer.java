@@ -154,7 +154,7 @@ public class ScoreboardVisualizer implements AssembleAdapter {
                                     .replaceAll("\\{difference}", getBoxingHitDifference(player, opponent))
                                     .replaceAll("\\{player-hits}", String.valueOf(profile.getMatch().getGamePlayer(player).getData().getHits()))
                                     .replaceAll("\\{opponent-hits}", String.valueOf(profile.getMatch().getGamePlayer(opponent.getPlayer().getPlayer()).getData().getHits()))
-                                    .replaceAll("\\{combo}", profile.getMatch().getGamePlayer(player).getData().getCombo() == 0 ? "No Combo" : profile.getMatch().getGamePlayer(player).getData().getCombo() + " Combo")
+                                    .replaceAll("\\{combo}", getBoxingCombo(player, opponent))
                                     .replaceAll("\\{player-ping}", String.valueOf(BukkitReflection.getPing(player)))
                                     .replaceAll("\\{duration}", profile.getMatch().getDuration())
                                     .replaceAll("\\{arena}", profile.getMatch().getArena().getDisplayName() == null ? "&c&lNULL" : profile.getMatch().getArena().getDisplayName())
@@ -234,19 +234,47 @@ public class ScoreboardVisualizer implements AssembleAdapter {
         if (profile.getMatch().getKit().isSettingEnabled(KitSettingBoxingImpl.class)) {
             int playerHits = profile.getMatch().getGamePlayer(player).getData().getHits();
             int opponentHits = profile.getMatch().getGamePlayer(opponent.getPlayer().getPlayer()).getData().getHits();
-            int difference = playerHits - opponentHits;
 
             FileConfiguration config = Alley.getInstance().getConfigHandler().getScoreboardConfig();
-            String positiveDifference = config.getString("boxing-placeholder.positive-difference", "&a(+{difference})");
-            String negativeDifference = config.getString("boxing-placeholder.negative-difference", "&c({difference})");
-            String zeroDifference = config.getString("boxing-placeholder.no-difference", "&a(+0)");
+            String positiveDifference = config.getString("boxing-hit-difference.positive-difference", "&a(+{difference})");
+            String negativeDifference = config.getString("boxing-hit-difference.negative-difference", "&c(-{difference})");
+            String zeroDifference = config.getString("boxing-hit-difference.no-difference", "&a(+0)");
 
             if (difference > 0) {
-                return CC.translate(positiveDifference.replace("{difference}", String.valueOf(difference)));
+                return CC.translate(positiveDifference.replace("{difference}", String.valueOf(playerHits - opponentHits)));
             } else if (difference < 0) {
-                return CC.translate(negativeDifference.replace("{difference}", String.valueOf(difference)));
+                return CC.translate(negativeDifference.replace("{difference}", String.valueOf(opponentHits - playerHits)));
             } else {
                 return CC.translate(zeroDifference);
+            }
+        }
+        return "null";
+    }
+
+    /**
+     * Get the combo that either the player, or the opponent, or no one has
+     *
+     * @param player   The player to get the its combo from.
+     * @param opponent The opponent to get its combo from.
+     * @return The combo that either the player, or the opponent, or no one has.
+     */
+    private String getBoxingCombo(Player player, GameParticipant<MatchGamePlayerImpl> opponent) {
+        Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
+        if (profile.getMatch().getKit().isSettingEnabled(KitSettingBoxingImpl.class)) {
+            int playerCombo = profile.getMatch().getGamePlayer(player).getData().getCombo();
+            int opponentCombo = profile.getMatch().getGamePlayer(opponent.getPlayer().getPlayer()).getData().getCombo();
+
+            FileConfiguration config = Alley.getInstance().getConfigHandler().getScoreboardConfig();
+            String positiveCombo = config.getString("boxing-combo-display.positive-combo", "&a{combo} Combo");
+            String negativeCombo = config.getString("boxing-combo-display.negative-combo", "&c{combo} Combo");
+            String zeroCombo = config.getString("boxing-combo-display.no-combo", "&fNo Combo");
+
+            if (playerCombo > 1) {
+                return CC.translate(positiveDifference.replace("{combo}", String.valueOf(playerCombo)));
+            } else if (opponentCombo > 1) {
+                return CC.translate(negativeDifference.replace("{combo}", String.valueOf(opponentCombo)));
+            } else {
+                return CC.translate(zeroCombo);
             }
         }
         return "null";
