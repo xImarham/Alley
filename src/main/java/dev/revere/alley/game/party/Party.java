@@ -37,7 +37,7 @@ public class Party {
     }
 
     /**
-     * Sens a message to all party members.
+     * Sends a message to all party members.
      *
      * @param message The message to notify the party members of.
      */
