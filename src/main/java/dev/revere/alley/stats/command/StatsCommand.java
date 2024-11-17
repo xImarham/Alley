@@ -5,6 +5,7 @@ import dev.revere.alley.api.command.Command;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.stats.menu.StatisticsMenu;
 import dev.revere.alley.util.PlayerUtil;
+import dev.revere.alley.util.chat.CC;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -29,7 +30,7 @@ public class StatsCommand extends BaseCommand {
         Player onlineTarget = Bukkit.getPlayerExact(args[0]);
         OfflinePlayer target = onlineTarget != null ? onlineTarget : PlayerUtil.getOfflinePlayerByName(args[0]);
         if (target == null) {
-            player.sendMessage("§cPlayer not found.");
+            player.sendMessage(CC.translate("&cPlayer not found."));
             return;
         }
 
