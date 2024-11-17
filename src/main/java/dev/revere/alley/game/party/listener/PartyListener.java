@@ -37,7 +37,7 @@ public class PartyListener implements Listener {
             }
 
             String partyMessage = partyHandler.getChatFormat().replace("{player}", event.getPlayer().getName()).replace("{message}", event.getMessage());
-            partyHandler.notifyParty(profile.getParty(), partyMessage);
+            profile.getParty().notifyParty(partyMessage);
             return;
         }
 
@@ -54,7 +54,7 @@ public class PartyListener implements Listener {
             }
 
             String partyMessage = partyHandler.getChatFormat().replace("{player}", event.getPlayer().getName()).replace("{message}", event.getMessage().substring(1));
-            partyHandler.notifyParty(profile.getParty(), partyMessage);
+            profile.getParty().notifyParty(partyMessage);
         }
     }
 

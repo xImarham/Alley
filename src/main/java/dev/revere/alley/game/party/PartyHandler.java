@@ -1,17 +1,14 @@
 package dev.revere.alley.game.party;
 
 import dev.revere.alley.Alley;
-import dev.revere.alley.arena.Arena;
 import dev.revere.alley.hotbar.HotbarRepository;
 import dev.revere.alley.hotbar.enums.HotbarType;
-import dev.revere.alley.kit.Kit;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
 import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.util.chat.ClickableUtil;
 import lombok.Getter;
 import lombok.Setter;
-import net.md_5.bungee.api.chat.*;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -73,7 +70,7 @@ public class PartyHandler {
         }
 
         party.getMembers().add(player.getUniqueId());
-        this.notifyParty(party, "&a" + player.getName() + " has joined the party.");
+        party.notifyParty("&a" + player.getName() + " has joined the party.");
         this.setupProfile(player, true);
     }
 
@@ -85,7 +82,7 @@ public class PartyHandler {
     public void disbandParty(Player leader) {
         Party party = this.getPartyByLeader(leader);
         party.getMembers().forEach(member -> this.setupProfile(Bukkit.getPlayer(member), false));
-        this.notifyPartyExcludeLeader(party, "&cThe party has been disbanded.");
+        party.notifyPartyExcludeLeader("&cThe party has been disbanded.");
         this.getParties().remove(party);
         this.setupProfile(leader, false);
     }
@@ -123,7 +120,7 @@ public class PartyHandler {
         }
 
         party.getMembers().remove(player.getUniqueId());
-        this.notifyParty(party, "&a" + player.getName() + " has left the party.");
+        party.notifyParty("&a" + player.getName() + " has left the party.");
         this.setupProfile(player, false);
     }
 
@@ -137,7 +134,7 @@ public class PartyHandler {
         Party party = this.getPartyByLeader(leader);
         if (party == null) return;
         party.getMembers().remove(member.getUniqueId());
-        this.notifyParty(party, "&c" + member.getName() + " has been kicked from the party.");
+        party.notifyParty("&c" + member.getName() + " has been kicked from the party.");
         this.setupProfile(member, false);
     }
 
@@ -173,67 +170,25 @@ public class PartyHandler {
     }
 
     /**
-     * Sends a party request to the target player.
+     * Creates a new party request and send a message to the target.
      *
-     * @param party  The party to send the request to.
-     * @param target The target player to send the request to.
+     * @param party  The party to send the invite to.
+     * @param sender The player sending the invite.
+     * @param target The player receiving the invite.
      */
-    public void sendRequest(Party party, Player target) {
-        this.notifyParty(party, "&b" + target.getName() + " &ahas been invited to the party.");
+    public void sendInvite(Party party, Player sender, Player target) {
+        if (party == null) return;
 
-        String partyLeader = party.getLeader().getName();
+        PartyRequest request = new PartyRequest(sender, target);
+        this.addRequest(request);
 
-        TextComponent invitation = new TextComponent(CC.translate(" &a(Click To Accept)"));
-        invitation.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/party accept " + partyLeader));
-
-        String hover = CC.translate("&aClick to accept " + partyLeader + "&a's party invitation.");
-        BaseComponent[] hoverComponent = new ComponentBuilder(hover).create();
-        invitation.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, hoverComponent));
-
-        this.sendInvite(party.getLeader(), target, invitation);
-    }
-
-    /**
-     * Sends an invite message to a player.
-     *
-     * @param sender      The player sending the invite.
-     * @param target      The player receiving the invite.
-     * @param invitation  The invitation message.
-     */
-    private void sendInvite(Player sender, Player target, TextComponent invitation) {
         target.sendMessage("");
         target.sendMessage(CC.translate("&b&lParty Invitation"));
+        target.sendMessage(CC.translate("&f&l ● &fYou've been invited to join &b" + party.getLeader().getName() + "&f's party."));
         target.sendMessage(CC.translate("&f&l ● &fFrom: &b" + sender.getName()));
-        //target.sendMessage(CC.translate("&f&l ● &fLeader: &b" + this.getPartyByMember(sender.getUniqueId()).getLeader().getName()));
-        target.spigot().sendMessage(invitation);
+        target.sendMessage(CC.translate("&f&l ● &fPlayers: &b" + party.getMembers().size() + "&f/&b30")); //TODO: Implement party size limit with permissions ect...
+        target.spigot().sendMessage(ClickableUtil.createComponent(" &a(Click To Accept)", "/party accept " + sender.getName(), "&aClick to accept " + sender.getName() + "&a's party invitation."));
         target.sendMessage("");
-    }
-
-    /**
-     * Notifies the party members based on their profile settings.
-     *
-     * @param party   The party to notify.
-     * @param message The message to send.
-     */
-    public void notifyParty(Party party, String message) {
-        party.getMembers().stream().map(uuid -> Alley.getInstance().getServer().getPlayer(uuid)).forEach(player -> {
-            if (Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId()).getProfileData().getProfileSettingData().isPartyMessagesEnabled()) {
-                player.sendMessage(CC.translate(message));
-            }
-        });
-    }
-
-    /**
-     * Notifies the party members excluding the leader based on their profile settings.
-     *
-     * @param message The message to send.
-     */
-    public void notifyPartyExcludeLeader(Party party, String message) {
-        party.getMembers().stream().filter(uuid -> !party.getLeader().getUniqueId().equals(uuid)).map(uuid -> Alley.getInstance().getServer().getPlayer(uuid)).forEach(player -> {
-            if (Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId()).getProfileData().getProfileSettingData().isPartyMessagesEnabled()) {
-                player.sendMessage(CC.translate(message));
-            }
-        });
     }
 
     /**

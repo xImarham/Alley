@@ -2,6 +2,7 @@ package dev.revere.alley.game.party;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.game.party.enums.EnumPartyState;
+import dev.revere.alley.util.chat.CC;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.entity.Player;
@@ -33,5 +34,26 @@ public class Party {
         this.members.add(leader.getUniqueId());
         this.state = EnumPartyState.PRIVATE;
         Alley.getInstance().getPartyHandler().getParties().add(this);
+    }
+
+    public void notifyParty(String message) {
+        for (UUID member : members) {
+            Player player = Alley.getInstance().getServer().getPlayer(member);
+            if (player != null) {
+                player.sendMessage(CC.translate(message));
+            }
+        }
+    }
+
+    public void notifyPartyExcludeLeader(String message) {
+        for (UUID member : members) {
+            if (member.equals(leader.getUniqueId())) {
+                continue;
+            }
+            Player player = Alley.getInstance().getServer().getPlayer(member);
+            if (player != null) {
+                player.sendMessage(CC.translate(message));
+            }
+        }
     }
 }

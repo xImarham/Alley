@@ -15,14 +15,14 @@ public class ClickableUtil {
     private final String EMPTY_SPACE_BETWEEN_COMPONENTS = "    ";
 
     /**
-     * Create a clickable message
+     * Create a clickable text component.
      *
      * @param message the message
      * @param command the command
      * @param hoverText the hover text
      * @return the text component
      */
-    public @NotNull TextComponent createClickableMessage(String message, String command, String hoverText) {
+    public @NotNull TextComponent createComponent(String message, String command, String hoverText) {
         TextComponent clickableMessage = new TextComponent(CC.translate(message));
         clickableMessage.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, command));
         String hover = CC.translate(hoverText);
@@ -44,8 +44,8 @@ public class ClickableUtil {
      * @param displayBoth whether to always show both buttons or not (keepInPosition won't affect this, it will be ignored)
      */
     public void sendPageNavigation(Player player, int page, int totalPages, String command, boolean keepInPosition, boolean displayBoth) {
-        TextComponent nextPage = createClickableMessage(page == totalPages ? "&a&m[Next Page]" : "&a[Next Page]", command + " " + (page + 1), page == totalPages ? "&cYou are already on the last page." : "&7Click to view page &b" + (page + 1) + "&7.");
-        TextComponent previousPage = createClickableMessage(page == 1 ? "&c&m[Previous Page]" : "&c[Previous Page]", command + " " + (page - 1), page == 1 ? "&cYou are already on the first page." : "&7Click to view page &b" + (page - 1) + "&7.");
+        TextComponent nextPage = createComponent(page == totalPages ? "&a&m[Next Page]" : "&a[Next Page]", command + " " + (page + 1), page == totalPages ? "&cYou are already on the last page." : "&7Click to view page &b" + (page + 1) + "&7.");
+        TextComponent previousPage = createComponent(page == 1 ? "&c&m[Previous Page]" : "&c[Previous Page]", command + " " + (page - 1), page == 1 ? "&cYou are already on the first page." : "&7Click to view page &b" + (page - 1) + "&7.");
 
         if (displayBoth) {
             TextComponent component = new TextComponent("");
