@@ -140,15 +140,6 @@ public class PartyHandler {
     }
 
     /**
-     * Adds a party request to the repository.
-     *
-     * @param request The party request to add.
-     */
-    public void addRequest(PartyRequest request) {
-        this.partyRequests.add(request);
-    }
-
-    /**
      * Gets a party request for a specific player.
      *
      * @param player The player to get the request for.
@@ -181,7 +172,7 @@ public class PartyHandler {
         if (party == null) return;
 
         PartyRequest request = new PartyRequest(sender, target);
-        this.addRequest(request);
+        this.partyRequests.add(request);
 
         target.sendMessage("");
         target.sendMessage(CC.translate("&b&lParty Invitation"));
