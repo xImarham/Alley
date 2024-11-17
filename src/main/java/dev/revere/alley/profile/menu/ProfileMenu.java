@@ -2,7 +2,7 @@ package dev.revere.alley.profile.menu;
 
 import lombok.AllArgsConstructor;
 import dev.revere.alley.Alley;
-import dev.revere.alley.visual.leaderboard.menu.personal.StatisticsMenu;
+import dev.revere.alley.stats.menu.StatisticsMenu;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.data.impl.ProfileFFAData;
 import dev.revere.alley.profile.division.AbstractDivision;
@@ -120,7 +120,7 @@ public class ProfileMenu extends Menu {
 
             switch (material) {
                 case PAPER:
-                    new StatisticsMenu().openMenu(player);
+                    new StatisticsMenu(player).openMenu(player);
                     break;
                 case SKULL_ITEM:
                     break;

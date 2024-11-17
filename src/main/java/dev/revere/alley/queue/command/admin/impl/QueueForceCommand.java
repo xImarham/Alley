@@ -11,7 +11,6 @@ import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.Command;
 import dev.revere.alley.api.command.CommandArgs;
-import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
 /**
@@ -50,7 +49,7 @@ public class QueueForceCommand extends BaseCommand {
         Profile profile = Alley.getInstance().getProfileRepository().getProfile(target.getUniqueId());
         for (Queue queue : Alley.getInstance().getQueueRepository().getQueues()) {
             if (queue.getKit().equals(kit) && queue.isRanked() == ranked) {
-                queue.addPlayer(target, queue.isRanked() ? profile.getProfileData().getKitData().get(queue.getKit().getName()).getElo() : 0);
+                queue.addPlayer(target, queue.isRanked() ? profile.getProfileData().getRankedKitData().get(queue.getKit().getName()).getElo() : 0);
                 PlayerUtil.reset(target, false);
                 SoundUtil.playBanHammer(target);
                 Alley.getInstance().getHotbarRepository().applyHotbarItems(target, HotbarType.QUEUE);

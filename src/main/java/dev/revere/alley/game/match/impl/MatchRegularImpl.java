@@ -137,8 +137,8 @@ public class MatchRegularImpl extends AbstractMatch {
      */
     private void handleWinner(int elo) {
         Profile winnerProfile = Alley.getInstance().getProfileRepository().getProfile(winner.getPlayer().getUuid());
-        winnerProfile.getProfileData().getKitData().get(getKit().getName()).setElo(elo);
-        winnerProfile.getProfileData().getKitData().get(getKit().getName()).incrementWins();
+        winnerProfile.getProfileData().getRankedKitData().get(getKit().getName()).setElo(elo);
+        winnerProfile.getProfileData().getRankedKitData().get(getKit().getName()).incrementWins();
         winnerProfile.getProfileData().incrementRankedWins();
         winnerProfile.getProfileData().getProfileDivisionData().updateEloAndDivision(winnerProfile);
     }
@@ -150,8 +150,8 @@ public class MatchRegularImpl extends AbstractMatch {
      */
     private void handleLoser(int elo) {
         Profile loserProfile = Alley.getInstance().getProfileRepository().getProfile(loser.getPlayer().getUuid());
-        loserProfile.getProfileData().getKitData().get(getKit().getName()).setElo(elo);
-        loserProfile.getProfileData().getKitData().get(getKit().getName()).incrementLosses();
+        loserProfile.getProfileData().getRankedKitData().get(getKit().getName()).setElo(elo);
+        loserProfile.getProfileData().getRankedKitData().get(getKit().getName()).incrementLosses();
         loserProfile.getProfileData().incrementRankedLosses();
         loserProfile.getProfileData().getProfileDivisionData().updateEloAndDivision(loserProfile);
     }
@@ -161,9 +161,11 @@ public class MatchRegularImpl extends AbstractMatch {
      */
     private void handleUnrankedData() {
         Profile winnerProfile = Alley.getInstance().getProfileRepository().getProfile(winner.getPlayer().getUuid());
+        winnerProfile.getProfileData().getUnrankedKitData().get(getKit().getName()).incrementWins();
         winnerProfile.getProfileData().incrementUnrankedWins();
 
         Profile loserProfile = Alley.getInstance().getProfileRepository().getProfile(loser.getPlayer().getUuid());
+        loserProfile.getProfileData().getUnrankedKitData().get(getKit().getName()).incrementLosses();
         loserProfile.getProfileData().incrementUnrankedLosses();
     }
 

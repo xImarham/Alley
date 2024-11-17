@@ -1,6 +1,6 @@
-package dev.revere.alley.visual.leaderboard.menu.button;
+package dev.revere.alley.stats.menu.button;
 
-import dev.revere.alley.visual.leaderboard.menu.personal.StatisticsMenu;
+import dev.revere.alley.leaderboard.menu.LeaderboardMenu;
 import dev.revere.alley.util.item.ItemBuilder;
 import dev.revere.alley.api.menu.Button;
 import org.bukkit.Material;
@@ -13,7 +13,7 @@ import org.bukkit.inventory.ItemStack;
  * @project Alley
  * @date 5/26/2024
  */
-public class StatisticsButton extends Button {
+public class LeaderboardButton extends Button {
 
     /**
      * Gets the item to display in the menu.
@@ -23,14 +23,14 @@ public class StatisticsButton extends Button {
      */
     @Override
     public ItemStack getButtonItem(Player player) {
-        return new ItemBuilder(Material.PAPER)
-                .name("&b&lYour Statistics")
+        return new ItemBuilder(Material.EYE_OF_ENDER)
+                .name("&b&lLeaderboards")
                 .lore(
                         "",
-                        " &fYour statistics are displayed here.",
-                        " &fYou can view your wins, losses, and more.",
+                        " &fAll of the leaderboards are displayed here.",
+                        " &fYou can view top wins, losses, and more.",
                         "",
-                        "&fClick to view your statistics."
+                        "&aClick to view the leaderboards."
                 )
                 .build();
     }
@@ -47,6 +47,6 @@ public class StatisticsButton extends Button {
             return;
         }
         playNeutral(player);
-        new StatisticsMenu().openMenu(player);
+        new LeaderboardMenu().openMenu(player);
     }
 }

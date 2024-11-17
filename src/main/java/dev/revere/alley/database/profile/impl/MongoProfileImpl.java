@@ -38,7 +38,7 @@ public class MongoProfileImpl implements IProfile {
 
         Document document = Alley.getInstance().getProfileRepository().getCollection().find(Filters.eq("uuid", profile.getUuid().toString())).first();
         if (document == null) {
-            saveProfile(profile);
+            this.saveProfile(profile);
             return;
         }
 

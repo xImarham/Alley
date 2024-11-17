@@ -9,7 +9,6 @@ import dev.revere.alley.queue.Queue;
 import dev.revere.alley.util.PlayerUtil;
 import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.api.menu.Menu;
-import dev.revere.alley.api.menu.button.BackButton;
 import dev.revere.alley.api.menu.pagination.ItemBuilder;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
@@ -66,9 +65,9 @@ public class RankedMenu extends Menu {
                     "&fIn Queue: &b" + queue.getProfiles().size(),
                     "&fIn Fights: &b" + queue.getQueueFightCount(),
                     "",
-                    "&fTotal Wins: &b" + Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId()).getProfileData().getKitData().get(kit.getName()).getWins(),
-                    "&fTotal Losses: &b" + Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId()).getProfileData().getKitData().get(kit.getName()).getLosses(),
-                    "&fElo: &b" + Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId()).getProfileData().getKitData().get(kit.getName()).getElo(),
+                    "&fTotal Wins: &b" + Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId()).getProfileData().getRankedKitData().get(kit.getName()).getWins(),
+                    "&fTotal Losses: &b" + Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId()).getProfileData().getRankedKitData().get(kit.getName()).getLosses(),
+                    "&fElo: &b" + Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId()).getProfileData().getRankedKitData().get(kit.getName()).getElo(),
                     "",
                     "&fClick to join the &b" + kit.getName() + " &fqueue!")
             ).hideMeta().build();
@@ -81,7 +80,7 @@ public class RankedMenu extends Menu {
             }
 
             Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
-            queue.addPlayer(player, queue.isRanked() ? profile.getProfileData().getKitData().get(queue.getKit().getName()).getElo() : 0);
+            queue.addPlayer(player, queue.isRanked() ? profile.getProfileData().getRankedKitData().get(queue.getKit().getName()).getElo() : 0);
             PlayerUtil.reset(player, false);
             player.closeInventory();
             playNeutral(player);

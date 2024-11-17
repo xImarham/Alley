@@ -1,6 +1,9 @@
 package dev.revere.alley.profile.data;
 
 import com.google.common.collect.Maps;
+import dev.revere.alley.game.ffa.AbstractFFAMatch;
+import dev.revere.alley.kit.Kit;
+import dev.revere.alley.kit.settings.impl.KitSettingRankedImpl;
 import lombok.Getter;
 import lombok.Setter;
 import dev.revere.alley.Alley;
@@ -17,13 +20,14 @@ import java.util.Map;
 @Getter
 @Setter
 public class ProfileData {
-    private Map<String, ProfileKitData> kitData;
+    private Map<String, ProfileUnrankedKitData> unrankedKitData;
+    private Map<String, ProfileRankedKitData> rankedKitData;
     private Map<String, ProfileFFAData> ffaData;
     private ProfileSettingData profileSettingData;
     private ProfileCosmeticData profileCosmeticData;
     private ProfileDivisionData profileDivisionData;
 
-    private int coins = Profile.DEFAULT_COINS;
+    private int coins = 100;
     private int unrankedWins = 0;
     private int unrankedLosses = 0;
     private int rankedWins = 0;
@@ -51,7 +55,9 @@ public class ProfileData {
      * Feeds the data classes with the kits and ffa matches
      */
     private void feedDataClasses() {
-        Alley.getInstance().getKitRepository().getKits().forEach(kit -> this.kitData.put(kit.getName(), new ProfileKitData()));
+        //Alley.getInstance().getKitRepository().getKits().stream().filter(Kit -> Kit.isSettingEnabled(KitSettingRankedImpl.class)).forEach(kit -> this.rankedKitData.put(kit.getName(), new ProfileRankedKitData()));
+        Alley.getInstance().getKitRepository().getKits().forEach(kit -> this.rankedKitData.put(kit.getName(), new ProfileRankedKitData()));
+        Alley.getInstance().getKitRepository().getKits().forEach(kit -> this.unrankedKitData.put(kit.getName(), new ProfileUnrankedKitData()));
         Alley.getInstance().getFfaRepository().getMatches().forEach(kit -> this.ffaData.put(kit.getName(), new ProfileFFAData()));
     }
 
@@ -59,7 +65,8 @@ public class ProfileData {
      * Initializes the maps
      */
     private void initializeMaps() {
-        this.kitData = Maps.newHashMap();
+        this.unrankedKitData = Maps.newHashMap();
+        this.rankedKitData = Maps.newHashMap();
         this.ffaData = Maps.newHashMap();
     }
 

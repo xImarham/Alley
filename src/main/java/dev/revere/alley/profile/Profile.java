@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import dev.revere.alley.Alley;
 import dev.revere.alley.game.ffa.AbstractFFAMatch;
-import dev.revere.alley.visual.leaderboard.menu.leaderboard.enums.EnumLeaderboardType;
+import dev.revere.alley.leaderboard.enums.EnumLeaderboardType;
 import dev.revere.alley.game.match.AbstractMatch;
 import dev.revere.alley.game.party.Party;
 import dev.revere.alley.profile.data.ProfileData;
@@ -23,8 +23,6 @@ import java.util.UUID;
 @Setter
 public class Profile {
     private EnumLeaderboardType leaderboardType = EnumLeaderboardType.RANKED;
-    public static final int DEFAULT_COINS = 100;
-    public static final int DEFAULT_ELO = 1000;
     private QueueProfile queueProfile;
     private AbstractFFAMatch ffaMatch;
     private ProfileData profileData;

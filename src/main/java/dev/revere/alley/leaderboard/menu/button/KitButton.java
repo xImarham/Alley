@@ -1,11 +1,10 @@
-package dev.revere.alley.visual.leaderboard.menu.leaderboard.button;
+package dev.revere.alley.leaderboard.menu.button;
 
 import lombok.AllArgsConstructor;
 import dev.revere.alley.Alley;
 import dev.revere.alley.kit.Kit;
-import dev.revere.alley.visual.leaderboard.menu.leaderboard.enums.EnumLeaderboardType;
+import dev.revere.alley.leaderboard.enums.EnumLeaderboardType;
 import dev.revere.alley.profile.Profile;
-import dev.revere.alley.profile.data.impl.ProfileFFAData;
 import dev.revere.alley.util.item.ItemBuilder;
 import dev.revere.alley.api.menu.Button;
 import org.bukkit.entity.Player;
@@ -38,17 +37,17 @@ public class KitButton extends Button {
         lore.add("");
         switch (leaderboardType) {
             case RANKED:
-                lore.add("&f● &bWins: &f" + profile.getProfileData().getRankedWins());
-                lore.add("&f● &bLosses: &f" + profile.getProfileData().getRankedLosses());
-                lore.add("&f● &bElo: &f" + profile.getProfileData().getProfileDivisionData().getGlobalElo());
+                lore.add("&f● &bWins: &f" + profile.getProfileData().getRankedKitData().get(kit.getName()).getWins());
+                lore.add("&f● &bLosses: &f" + profile.getProfileData().getRankedKitData().get(kit.getName()).getLosses());
+                lore.add("&f● &bElo: &f" + profile.getProfileData().getRankedKitData().get(kit.getName()).getElo());
                 break;
             case UNRANKED:
-                lore.add("&f● &bWins: &f" + profile.getProfileData().getUnrankedWins());
-                lore.add("&f● &bLosses: &f" + profile.getProfileData().getUnrankedLosses());
+                lore.add("&f● &bWins: &f" + profile.getProfileData().getUnrankedKitData().get(kit.getName()).getWins());
+                lore.add("&f● &bLosses: &f" + profile.getProfileData().getUnrankedKitData().get(kit.getName()).getLosses());
                 break;
             case FFA:
-                lore.add("&f● &bKills: &f" + profile.getProfileData().getFfaData().values().stream().mapToInt(ProfileFFAData::getKills).sum());
-                lore.add("&f● &bDeaths: &f" + profile.getProfileData().getFfaData().values().stream().mapToInt(ProfileFFAData::getDeaths).sum());
+                lore.add("&f● &bKills: &f" + profile.getProfileData().getFfaData().get(kit.getName()).getKills());
+                lore.add("&f● &bDeaths: &f" + profile.getProfileData().getFfaData().get(kit.getName()).getDeaths());
                 break;
         }
         lore.add("");

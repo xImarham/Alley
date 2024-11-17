@@ -1,6 +1,7 @@
-package dev.revere.alley.visual.leaderboard.command;
+package dev.revere.alley.leaderboard.command;
 
-import dev.revere.alley.visual.leaderboard.menu.personal.StatisticsMenu;
+import dev.revere.alley.leaderboard.menu.LeaderboardMenu;
+import dev.revere.alley.stats.menu.StatisticsMenu;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.Command;
 import dev.revere.alley.api.command.CommandArgs;
@@ -17,6 +18,6 @@ public class LeaderboardCommand extends BaseCommand {
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
 
-        new StatisticsMenu().openMenu(player);
+        new LeaderboardMenu().openMenu(player);
     }
 }

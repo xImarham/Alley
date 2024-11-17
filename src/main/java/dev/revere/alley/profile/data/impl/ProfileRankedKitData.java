@@ -10,7 +10,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class ProfileKitData {
+public class ProfileRankedKitData {
     private int elo = 1000;
     private int wins = 0;
     private int losses = 0;

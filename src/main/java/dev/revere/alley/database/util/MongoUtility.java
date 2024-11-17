@@ -38,7 +38,8 @@ public class MongoUtility {
         profileDataDocument.put("rankedWins", profileData.getRankedWins());
         profileDataDocument.put("rankedLosses", profileData.getRankedLosses());
 
-        profileDataDocument.put("kitData", convertKitData(profileData.getKitData()));
+        profileDataDocument.put("unrankedKitData", convertUnrankedKitData(profileData.getUnrankedKitData()));
+        profileDataDocument.put("rankedKitData", convertRankedKitData(profileData.getRankedKitData()));
         profileDataDocument.put("ffaData", convertFFAData(profileData.getFfaData()));
         profileDataDocument.put("profileSettingData", convertProfileSettingData(profileData.getProfileSettingData()));
         profileDataDocument.put("profileCosmeticData", convertProfileCosmeticData(profileData.getProfileCosmeticData()));
@@ -49,14 +50,31 @@ public class MongoUtility {
     }
 
     /**
+     * Converts a Map of ProfileUnrankedKitData objects to a Document.
+     *
+     * @param kitData The kit data to convert.
+     * @return The converted Document.
+     */
+    private Document convertUnrankedKitData(Map<String, ProfileUnrankedKitData> kitData) {
+        Document kitDataDocument = new Document();
+        for (Map.Entry<String, ProfileUnrankedKitData> entry : kitData.entrySet()) {
+            Document kitEntry = new Document();
+            kitEntry.put("wins", entry.getValue().getWins());
+            kitEntry.put("losses", entry.getValue().getLosses());
+            kitDataDocument.put(entry.getKey(), kitEntry);
+        }
+        return kitDataDocument;
+    }
+
+    /**
      * Converts a Map of ProfileKitData objects to a Document.
      *
      * @param kitData The kit data to convert.
      * @return The converted Document.
      */
-    private Document convertKitData(Map<String, ProfileKitData> kitData) {
+    private Document convertRankedKitData(Map<String, ProfileRankedKitData> kitData) {
         Document kitDataDocument = new Document();
-        for (Map.Entry<String, ProfileKitData> entry : kitData.entrySet()) {
+        for (Map.Entry<String, ProfileRankedKitData> entry : kitData.entrySet()) {
             Document kitEntry = new Document();
             kitEntry.put("elo", entry.getValue().getElo());
             kitEntry.put("wins", entry.getValue().getWins());
@@ -143,10 +161,15 @@ public class MongoUtility {
             profileData.setRankedWins(profileDataDocument.getInteger("rankedWins"));
             profileData.setRankedLosses(profileDataDocument.getInteger("rankedLosses"));
 
-            Map<String, ProfileKitData> existingKitData = profileData.getKitData();
-            Map<String, ProfileKitData> newKitData = parseKitData((Document) profileDataDocument.get("kitData"));
-            existingKitData.putAll(newKitData);
-            profileData.setKitData(existingKitData);
+            Map<String, ProfileUnrankedKitData> existingUnrankedKitData = profileData.getUnrankedKitData();
+            Map<String, ProfileUnrankedKitData> newUnrankedKitData = parseUnrankedKitData((Document) profileDataDocument.get("unrankedKitData"));
+            existingUnrankedKitData.putAll(newUnrankedKitData);
+            profileData.setUnrankedKitData(existingUnrankedKitData);
+
+            Map<String, ProfileRankedKitData> existingRankedKitData = profileData.getRankedKitData();
+            Map<String, ProfileRankedKitData> newKitData = parseRankedKitData((Document) profileDataDocument.get("rankedKitData"));
+            existingRankedKitData.putAll(newKitData);
+            profileData.setRankedKitData(existingRankedKitData);
 
             Map<String, ProfileFFAData> existingFFAData = profileData.getFfaData();
             Map<String, ProfileFFAData> newFFAData = parseFFAData((Document) profileDataDocument.get("ffaData"));
@@ -162,16 +185,34 @@ public class MongoUtility {
     }
 
     /**
+     * Parses a Map of ProfileUnrankedKitData objects from a Document.
+     *
+     * @param kitDataDocument The kit data document to parse.
+     * @return The parsed Map.
+     */
+    private Map<String, ProfileUnrankedKitData> parseUnrankedKitData(Document kitDataDocument) {
+        Map<String, ProfileUnrankedKitData> kitData = new HashMap<>();
+        for (Map.Entry<String, Object> entry : kitDataDocument.entrySet()) {
+            Document kitEntry = (Document) entry.getValue();
+            ProfileUnrankedKitData kit = new ProfileUnrankedKitData();
+            kit.setWins(kitEntry.getInteger("wins"));
+            kit.setLosses(kitEntry.getInteger("losses"));
+            kitData.put(entry.getKey(), kit);
+        }
+        return kitData;
+    }
+
+    /**
      * Parses a Map of ProfileKitData objects from a Document.
      *
      * @param kitDataDocument The kit data document to parse.
      * @return The parsed Map.
      */
-    private Map<String, ProfileKitData> parseKitData(Document kitDataDocument) {
-        Map<String, ProfileKitData> kitData = new HashMap<>();
+    private Map<String, ProfileRankedKitData> parseRankedKitData(Document kitDataDocument) {
+        Map<String, ProfileRankedKitData> kitData = new HashMap<>();
         for (Map.Entry<String, Object> entry : kitDataDocument.entrySet()) {
             Document kitEntry = (Document) entry.getValue();
-            ProfileKitData kit = new ProfileKitData();
+            ProfileRankedKitData kit = new ProfileRankedKitData();
             kit.setElo(kitEntry.getInteger("elo"));
             kit.setWins(kitEntry.getInteger("wins"));
             kit.setLosses(kitEntry.getInteger("losses"));

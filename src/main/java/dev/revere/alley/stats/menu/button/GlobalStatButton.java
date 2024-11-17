@@ -1,4 +1,4 @@
-package dev.revere.alley.visual.leaderboard.menu.personal.button;
+package dev.revere.alley.stats.menu.button;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.profile.Profile;
@@ -29,16 +29,16 @@ public class GlobalStatButton extends Button {
                 .name("&b&lGlobal")
                 .lore(
                         "",
-                        "&b&lRanked Kit Statistics",
+                        "&b&lUnranked",
+                        "&f● &bWins: &f" + profile.getProfileData().getUnrankedWins(),
+                        "&f● &bLosses: &f" + profile.getProfileData().getUnrankedLosses(),
+                        "",
+                        "&b&lRanked",
                         "&f● &bWins: &f" + profile.getProfileData().getRankedWins(),
                         "&f● &bLosses: &f" + profile.getProfileData().getRankedLosses(),
                         "&f● &bElo: &f" + profile.getProfileData().getProfileDivisionData().getGlobalElo(),
                         "",
-                        "&b&lUnranked Kit Statistics",
-                        "&f● &bWins: &f" + profile.getProfileData().getUnrankedWins(),
-                        "&f● &bLosses: &f" + profile.getProfileData().getUnrankedLosses(),
-                        "",
-                        "&b&lFFA Statistics",
+                        "&b&lFFA",
                         "&f● &bKills: &f" + profile.getProfileData().getFfaData().values().stream().mapToInt(ProfileFFAData::getKills).sum(),
                         "&f● &bDeaths: &f" + profile.getProfileData().getFfaData().values().stream().mapToInt(ProfileFFAData::getDeaths).sum(),
                         ""

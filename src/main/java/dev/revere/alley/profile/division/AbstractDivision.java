@@ -81,7 +81,7 @@ public class AbstractDivision {
      * @return the progress bar
      */
     public String generateProgressBar(int eloRequired) {
-        int progressBarLength = 20;
+        int progressBarLength = 10;
         int progress = (int) Math.ceil((double) (this.eloMax - eloRequired - this.eloMin) / (this.eloMax - this.eloMin) * progressBarLength);
         StringBuilder builder = new StringBuilder();
         for (int i = 0; i < progressBarLength; i++) {

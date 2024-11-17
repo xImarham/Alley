@@ -1,5 +1,7 @@
 package dev.revere.alley.kit;
 
+import dev.revere.alley.Alley;
+import dev.revere.alley.game.ffa.AbstractFFAMatch;
 import lombok.Getter;
 import lombok.Setter;
 import dev.revere.alley.kit.settings.KitSetting;
@@ -120,5 +122,19 @@ public class Kit {
         /*for (PotionEffect effect : potionEffects) {
             player.addPotionEffect(effect);
         }*/
+    }
+
+    /**
+     * Method to check if the kit is a FFA kit.
+     *
+     * @return Whether the kit is a FFA kit.
+     */
+    public boolean isFfaKit() {
+        for (AbstractFFAMatch match : Alley.getInstance().getFfaRepository().getMatches()) {
+            if (match.getKit().getName().equals(this.name)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

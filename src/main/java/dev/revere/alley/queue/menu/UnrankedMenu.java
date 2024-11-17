@@ -66,8 +66,8 @@ public class UnrankedMenu extends Menu {
                     "&fIn Queue: &b" + queue.getProfiles().size(),
                     "&fIn Fights: &b" + queue.getQueueFightCount(),
                     "",
-                    "&fTotal Wins: &b" + Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId()).getProfileData().getKitData().get(kit.getName()).getWins(),
-                    "&fTotal Losses: &b" + Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId()).getProfileData().getKitData().get(kit.getName()).getLosses(),
+                    "&fTotal Wins: &b" + Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId()).getProfileData().getUnrankedKitData().get(kit.getName()).getWins(),
+                    "&fTotal Losses: &b" + Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId()).getProfileData().getUnrankedKitData().get(kit.getName()).getLosses(),
                     "",
                     "&fClick to join the &b" + kit.getName() + " &fqueue!")
             ).hideMeta().build();
@@ -80,7 +80,7 @@ public class UnrankedMenu extends Menu {
             }
 
             Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
-            queue.addPlayer(player, queue.isRanked() ? profile.getProfileData().getKitData().get(queue.getKit().getName()).getElo() : 0);
+            queue.addPlayer(player, queue.isRanked() ? profile.getProfileData().getRankedKitData().get(queue.getKit().getName()).getElo() : 0);
             PlayerUtil.reset(player, false);
             player.closeInventory();
             playNeutral(player);

@@ -1,9 +1,9 @@
-package dev.revere.alley.visual.leaderboard.menu.leaderboard.button;
+package dev.revere.alley.leaderboard.menu.button;
 
 import lombok.AllArgsConstructor;
 import dev.revere.alley.Alley;
-import dev.revere.alley.visual.leaderboard.menu.leaderboard.LeaderboardMenu;
-import dev.revere.alley.visual.leaderboard.menu.leaderboard.enums.EnumLeaderboardType;
+import dev.revere.alley.leaderboard.menu.LeaderboardMenu;
+import dev.revere.alley.leaderboard.enums.EnumLeaderboardType;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.util.item.ItemBuilder;
 import dev.revere.alley.api.menu.Button;
@@ -40,7 +40,7 @@ public class DisplayTypeButton extends Button {
             lore.add((currentType == type ? "&f● &b" : "&f● &7") + type.getName());
         }
         lore.add("");
-        lore.add("&fClick to change the display type.");
+        lore.add("&aClick to change the display type.");
 
         return new ItemBuilder(Material.EYE_OF_ENDER)
                 .name("&b&lDisplay Type")

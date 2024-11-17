@@ -34,6 +34,12 @@ public class ProfileRepository {
      * @return The profile.
      */
     public Profile getProfile(UUID uuid) {
+        if (!profiles.containsKey(uuid)) {
+            Profile profile = new Profile(uuid);
+            profile.load();
+
+            profiles.put(uuid, profile);
+        }
         return profiles.get(uuid);
     }
 

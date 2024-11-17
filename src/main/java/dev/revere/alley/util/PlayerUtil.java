@@ -1,9 +1,10 @@
 package dev.revere.alley.util;
 
-import lombok.experimental.UtilityClass;
 import dev.revere.alley.Alley;
+import lombok.experimental.UtilityClass;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
@@ -72,5 +73,20 @@ public class PlayerUtil {
         if (closeInventory) {
             player.closeInventory();
         }
+    }
+
+    /**
+     * Get an offline player by their name
+     *
+     * @param name the name of the player
+     * @return the offline player
+     */
+    public OfflinePlayer getOfflinePlayerByName(String name) {
+        for (OfflinePlayer offlinePlayer : Bukkit.getOfflinePlayers()) {
+            if (offlinePlayer.getName().equalsIgnoreCase(name)) {
+                return offlinePlayer;
+            }
+        }
+        return null;
     }
 }

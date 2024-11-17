@@ -5,8 +5,9 @@ import dev.revere.alley.hotbar.HotbarItem;
 import dev.revere.alley.hotbar.enums.HotbarType;
 import dev.revere.alley.game.party.menu.duel.DuelOtherPartyMenu;
 import dev.revere.alley.game.party.menu.event.PartyEventMenu;
+import dev.revere.alley.leaderboard.menu.LeaderboardMenu;
 import dev.revere.alley.util.chat.CC;
-import dev.revere.alley.visual.leaderboard.menu.personal.StatisticsMenu;
+import dev.revere.alley.stats.menu.StatisticsMenu;
 import dev.revere.alley.game.match.menu.CurrentMatchesMenu;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.queue.menu.QueuesMenu;
@@ -75,7 +76,7 @@ public class HotbarListener implements Listener {
                             case KIT_EDITOR:
                                 break;
                             case LEADERBOARD:
-                                new StatisticsMenu().openMenu(player);
+                                new LeaderboardMenu().openMenu(player);
                                 break;
                             case OPTIONS_ENABLE:
                                 Alley.getInstance().getHotbarRepository().applyHotbarItems(player, HotbarType.SETTINGS);

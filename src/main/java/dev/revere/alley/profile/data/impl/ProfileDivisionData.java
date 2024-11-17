@@ -24,7 +24,7 @@ public class ProfileDivisionData {
     private int globalElo;
 
     public ProfileDivisionData() {
-        this.globalElo = Profile.DEFAULT_ELO;
+        this.globalElo = 1000;
         this.division = this.determineDivision(globalElo);
     }
 
@@ -64,7 +64,7 @@ public class ProfileDivisionData {
 
         int totalElo = rankedKits.stream()
                 .mapToInt(kit -> {
-                    ProfileKitData kitData = profile.getProfileData().getKitData().get(kit.getName());
+                    ProfileRankedKitData kitData = profile.getProfileData().getRankedKitData().get(kit.getName());
                     return kitData != null ? kitData.getElo() : 0;
                 })
                 .sum();
