@@ -124,7 +124,7 @@ scoreboard:
 
 boxing-hit-difference:
   positive-difference: "&a(+{difference})"
-  negative-difference: "&c({difference})"
+  negative-difference: "&c(-{difference})"
   no-difference: "&a(+0)"
 
 boxing-combo-display:

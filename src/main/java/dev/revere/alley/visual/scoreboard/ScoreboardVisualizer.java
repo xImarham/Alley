@@ -3,8 +3,8 @@ package dev.revere.alley.visual.scoreboard;
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.assemble.AssembleAdapter;
 import dev.revere.alley.game.match.enums.EnumMatchState;
-import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
+import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.kit.settings.impl.KitSettingBoxingImpl;
 import dev.revere.alley.kit.settings.impl.KitSettingLivesImpl;
 import dev.revere.alley.profile.Profile;
@@ -240,9 +240,9 @@ public class ScoreboardVisualizer implements AssembleAdapter {
             String negativeDifference = config.getString("boxing-hit-difference.negative-difference", "&c(-{difference})");
             String zeroDifference = config.getString("boxing-hit-difference.no-difference", "&a(+0)");
 
-            if (difference > 0) {
+            if (playerHits > opponentHits) {
                 return CC.translate(positiveDifference.replace("{difference}", String.valueOf(playerHits - opponentHits)));
-            } else if (difference < 0) {
+            } else if (opponentHits > playerHits) {
                 return CC.translate(negativeDifference.replace("{difference}", String.valueOf(opponentHits - playerHits)));
             } else {
                 return CC.translate(zeroDifference);
@@ -270,9 +270,9 @@ public class ScoreboardVisualizer implements AssembleAdapter {
             String zeroCombo = config.getString("boxing-combo-display.no-combo", "&fNo Combo");
 
             if (playerCombo > 1) {
-                return CC.translate(positiveDifference.replace("{combo}", String.valueOf(playerCombo)));
+                return CC.translate(positiveCombo.replace("{combo}", String.valueOf(playerCombo)));
             } else if (opponentCombo > 1) {
-                return CC.translate(negativeDifference.replace("{combo}", String.valueOf(opponentCombo)));
+                return CC.translate(negativeCombo.replace("{combo}", String.valueOf(opponentCombo)));
             } else {
                 return CC.translate(zeroCombo);
             }
