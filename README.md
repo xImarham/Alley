@@ -58,6 +58,6 @@ Alley is developed and maintained by Revere Development, with primary contributi
 
 - **Website**: [revere.dev](https://www.revere.dev)
 - **Email**: [support@revere.dev](mailto:support@revere.dev)
-- **Support:** [discord.gg/revere](https://discord.gg/revere)
+- **Support:** [discord.gg/revere](https://discord.gg/revere), or alternatively [discord.gg/ERgRdXPS9T](https://discord.gg/ERgRdXPS9T)
 
 Thank you for using and supporting Alley!
