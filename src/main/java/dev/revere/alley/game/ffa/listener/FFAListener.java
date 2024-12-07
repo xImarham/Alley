@@ -142,13 +142,11 @@ public class FFAListener implements Listener {
         }
     }
 
-    /**
-     * Handles the EntityDamageByEntityEvent. The event is cancelled if the player is in the FFA state and tries to damage another player.
-     *
-     * @param event The EntityDamageByEntityEvent
-     */
-    @EventHandler
+    /*@EventHandler
     public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
+        
+        TODO: Combat handling 
+        
         if (!(event.getDamager() instanceof Player) || !(event.getEntity() instanceof Player)) {
             return;
         }
@@ -159,22 +157,9 @@ public class FFAListener implements Listener {
         if (ffaCuboidService.getCuboid().isIn((victim)) && ffaCuboidService.getCuboid().isIn((attacker)) ||
                 !ffaCuboidService.getCuboid().isIn(victim) && ffaCuboidService.getCuboid().isIn(attacker) ||
                 ffaCuboidService.getCuboid().isIn(victim) && !ffaCuboidService.getCuboid().isIn(attacker)) {
-
-            /*if (Alley.getInstance().getCombatEventManager().isCombat(victim) || Alley.getInstance().getCombatEventManager().isCombat(attacker)) {
-                return;
-            }*/
-
-            event.setCancelled(true);
+            
         }
-
-        /*CombatEventManager combatManager = Alley.getInstance().getCombatEventManager();
-
-        Bukkit.getPluginManager().callEvent(new CombatTagEvent(victim, attacker));
-        combatManager.setCombatTime(victim, 16);
-        combatManager.setCombatTime(attacker, 16);
-        combatManager.setCombatSet(victim, true);
-        combatManager.setCombatSet(attacker, true);*/
-    }
+    }*/
 
     /**
      * Handles the BlockPlaceEvent. The event is cancelled if the player is in the FFA state and tries to place a block.
