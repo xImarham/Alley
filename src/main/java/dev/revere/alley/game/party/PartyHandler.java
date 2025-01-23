@@ -1,6 +1,8 @@
 package dev.revere.alley.game.party;
 
 import dev.revere.alley.Alley;
+import dev.revere.alley.cooldown.Cooldown;
+import dev.revere.alley.cooldown.enums.EnumCooldownType;
 import dev.revere.alley.hotbar.HotbarRepository;
 import dev.revere.alley.hotbar.enums.HotbarType;
 import dev.revere.alley.profile.Profile;
@@ -53,6 +55,55 @@ public class PartyHandler {
     }
 
     /**
+     * Bans a member from the party.
+     *
+     * @param leader The leader of the party.
+     * @param target The member to ban.
+     */
+    public void banMember(Player leader, Player target) {
+        Party party = this.getPartyByLeader(leader);
+        if (party == null) {
+            leader.sendMessage(CC.translate("&cYou are not the leader of a party."));
+            return;
+        }
+
+        if (!party.getMembers().contains(target.getUniqueId())) {
+            leader.sendMessage(CC.translate("&cThat player is not in your party."));
+            return;
+        }
+
+        party.getBannedMembers().add(target.getUniqueId());
+        party.getMembers().remove(target.getUniqueId());
+        this.setupProfile(target, false);
+
+        party.notifyParty(CC.translate("&c" + target.getName() + " has been banned from the party."));
+        target.sendMessage(CC.translate("&cYou have been banned from the party."));
+    }
+
+    /**
+     * Unbans a member from the party.
+     *
+     * @param leader The leader of the party.
+     * @param target The member to unban.
+     */
+    public void unbanMember(Player leader, Player target) {
+        Party party = this.getPartyByLeader(leader);
+        if (party == null) {
+            leader.sendMessage(CC.translate("&cYou are not the leader of a party."));
+            return;
+        }
+
+        if (!party.getBannedMembers().contains(target.getUniqueId())) {
+            leader.sendMessage(CC.translate("&cThat player is not banned from your party."));
+            return;
+        }
+
+        party.getBannedMembers().remove(target.getUniqueId());
+        party.notifyParty(CC.translate("&b" + target.getName() + " &ahas been unbanned from the party and is now able to join again."));
+        target.sendMessage(CC.translate("&aYou have been unbanned from &b" + party.getLeader().getName() + "'s &aparty."));
+    }
+
+    /**
      * Joins a party.
      *
      * @param player The player to join the party.
@@ -85,6 +136,12 @@ public class PartyHandler {
         party.getMembers().forEach(member -> this.setupProfile(Bukkit.getPlayer(member), false));
         party.notifyPartyExcludeLeader("&cThe party has been disbanded.");
         this.getParties().remove(party);
+
+        Cooldown cooldown = Alley.getInstance().getCooldownRepository().getCooldown(leader.getUniqueId(), EnumCooldownType.PARTY_ANNOUNCE_COOLDOWN);
+        if (cooldown.isActive()) {
+            cooldown.resetCooldown();
+        }
+
         this.setupProfile(leader, false);
     }
 
