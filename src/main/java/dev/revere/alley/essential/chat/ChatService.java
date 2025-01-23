@@ -1,7 +1,6 @@
 package dev.revere.alley.essential.chat;
 
 import dev.revere.alley.essential.chat.chat.EnumEmojiType;
-import dev.revere.alley.util.chat.Symbol;
 import lombok.Getter;
 
 import java.util.HashMap;
