@@ -13,6 +13,14 @@ Alley is currently a work in progress. While it provides a strong base for PvP-f
 - **Fully Customizable Configurations**: Tailor settings to meet your server’s unique requirements.
 - **Modular Design**: Built with a modular approach, making updates and expansions simple and efficient.
 
+## Todo List
+
+- **Recode division system**: Recode to be based on unranked wins
+- **Finish events system**: Tasks, and overall improvements
+- **Add arena generator**: via WorldEdit
+- **Implement Leaderboards and global stats**
+- **Finish Match making implementations**: Party Events: Split and FFA, Lives, Bed, etc
+
 ## Table of Contents
 
 - [Installation](#installation)
