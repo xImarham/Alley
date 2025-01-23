@@ -21,7 +21,7 @@ import java.util.UUID;
 public class Party {
     private Player leader;
     private List<UUID> members;
-    private List<UUID> bannedMembers;
+    private List<UUID> bannedPlayers;
     private EnumPartyState state;
 
     /**
@@ -33,7 +33,7 @@ public class Party {
         this.leader = leader;
         this.members = new ArrayList<>();
         this.members.add(leader.getUniqueId());
-        this.bannedMembers = new ArrayList<>();
+        this.bannedPlayers = new ArrayList<>();
         this.state = EnumPartyState.PRIVATE;
         Alley.getInstance().getPartyHandler().getParties().add(this);
     }

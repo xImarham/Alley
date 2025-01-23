@@ -72,7 +72,7 @@ public class PartyHandler {
             return;
         }
 
-        party.getBannedMembers().add(target.getUniqueId());
+        party.getBannedPlayers().add(target.getUniqueId());
         party.getMembers().remove(target.getUniqueId());
         this.setupProfile(target, false);
 
@@ -93,12 +93,12 @@ public class PartyHandler {
             return;
         }
 
-        if (!party.getBannedMembers().contains(target.getUniqueId())) {
+        if (!party.getBannedPlayers().contains(target.getUniqueId())) {
             leader.sendMessage(CC.translate("&cThat player is not banned from your party."));
             return;
         }
 
-        party.getBannedMembers().remove(target.getUniqueId());
+        party.getBannedPlayers().remove(target.getUniqueId());
         party.notifyParty(CC.translate("&b" + target.getName() + " &ahas been unbanned from the party and is now able to join again."));
         target.sendMessage(CC.translate("&aYou have been unbanned from &b" + party.getLeader().getName() + "'s &aparty."));
     }
@@ -264,6 +264,20 @@ public class PartyHandler {
                 .filter(party -> party.getMembers().contains(uuid))
                 .findFirst()
                 .orElse(null);
+    }
+
+    /**
+     * Gets the party of a player, either as a leader or a member.
+     *
+     * @param player The player to check.
+     * @return The party the player is in, or null if the player is not in any party.
+     */
+    public Party getParty(Player player) {
+        Party party = getPartyByLeader(player);
+        if (party != null) {
+            return party;
+        }
+        return getPartyByMember(player.getUniqueId());
     }
 
     /**

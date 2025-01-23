@@ -1,6 +1,7 @@
 package dev.revere.alley.game.party.command;
 
 import dev.revere.alley.game.party.command.impl.donator.PartyAnnounceCommand;
+import dev.revere.alley.game.party.command.impl.external.PartyLookupCommand;
 import dev.revere.alley.game.party.command.impl.leader.*;
 import dev.revere.alley.game.party.command.impl.leader.privacy.PartyCloseCommand;
 import dev.revere.alley.game.party.command.impl.leader.privacy.PartyOpenCommand;
@@ -40,6 +41,7 @@ public class PartyCommand extends BaseCommand {
         new PartyBanCommand();
         new PartyUnbanCommand();
         new PartyBanListCommand();
+        new PartyLookupCommand();
     }
 
     @Override
@@ -59,6 +61,11 @@ public class PartyCommand extends BaseCommand {
         player.sendMessage(CC.translate(" &f● &b/party kick &8(&7player&8) &7| Kick a player out of your party"));
         player.sendMessage(CC.translate(" &f● &b/party open &7| Open your party to the public"));
         player.sendMessage(CC.translate(" &f● &b/party close &7| Close your party to the public"));
+        player.sendMessage(CC.translate(" &f● &b/party ban &8(&7player&8) &7| Ban a player from your party"));
+        player.sendMessage(CC.translate(" &f● &b/party unban &8(&7player&8) &7| Unban a player from your party"));
+        player.sendMessage(CC.translate(" &f● &b/party banlist &7| List all banned players in your party"));
+        player.sendMessage(CC.translate(" &f● &b/party announce &8(&7message&8) &7| Public invitation to your party"));
+        player.sendMessage(CC.translate(" &f● &b/party lookup &8(&7player&8) &7| Lookup a player's party"));
         player.sendMessage("");
     }
 }
