@@ -24,6 +24,6 @@ public class SnapshotRepository {
      * @return the snapshot
      */
     public Snapshot getSnapshot(UUID uuid) {
-        return snapshots.get(uuid);
+        return this.snapshots.get(uuid);
     }
 }
