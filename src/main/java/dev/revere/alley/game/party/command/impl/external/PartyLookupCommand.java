@@ -9,7 +9,6 @@ import dev.revere.alley.util.chat.CC;
 import org.bukkit.entity.Player;
 
 import java.util.Arrays;
-import java.util.List;
 
 /**
  * @author Emmy

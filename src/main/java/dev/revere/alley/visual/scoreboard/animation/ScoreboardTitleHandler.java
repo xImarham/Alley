@@ -1,9 +1,8 @@
 package dev.revere.alley.visual.scoreboard.animation;
 
+import dev.revere.alley.util.TaskUtil;
 import lombok.Getter;
 import lombok.Setter;
-import dev.revere.alley.Alley;
-import dev.revere.alley.util.TaskUtil;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.ArrayList;

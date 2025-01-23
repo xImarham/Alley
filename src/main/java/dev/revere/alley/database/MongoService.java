@@ -43,7 +43,7 @@ public class MongoService {
                     .applyConnectionString(connectionString)
                     .retryWrites(true)
                     .build();
-            ;
+
             this.mongoClient = MongoClients.create(settings);
             this.mongoDatabase = this.mongoClient.getDatabase(this.databaseName);
             Bukkit.getConsoleSender().sendMessage(CC.translate("&f[&bAlley&f] &fSuccessfully connected to MongoDB."));

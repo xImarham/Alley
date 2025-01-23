@@ -24,7 +24,7 @@ import java.util.Map.Entry;
 
 public class CommandFramework implements CommandExecutor {
 
-    private final Map<String, Entry<Method, Object>> commandMap = new HashMap<String, Entry<Method, Object>>();
+    private final Map<String, Entry<Method, Object>> commandMap = new HashMap<>();
     private final Alley plugin;
     private CommandMap map;
 
@@ -37,7 +37,7 @@ public class CommandFramework implements CommandExecutor {
                 field.setAccessible(true);
                 map = (CommandMap) field.get(manager);
             } catch (IllegalArgumentException | SecurityException | NoSuchFieldException | IllegalAccessException e) {
-                e.printStackTrace();
+                Bukkit.getConsoleSender().sendMessage("Failed to register commands: " + e.getMessage());
             }
         }
     }
@@ -64,7 +64,7 @@ public class CommandFramework implements CommandExecutor {
                     sender.sendMessage(ChatColor.RED + "Only ops may execute this command.");
                     return true;
                 }
-                if (!command.permission().equals("") && (!sender.hasPermission(command.permission()))) {
+                if (!command.permission().isEmpty() && (!sender.hasPermission(command.permission()))) {
                     sender.sendMessage(CC.translate(CC.translate(Locale.NO_PERM.getMessage())));
                     return true;
                 }
@@ -77,8 +77,7 @@ public class CommandFramework implements CommandExecutor {
                     method.invoke(methodObject,
                             new CommandArgs(sender, cmd, label, args, cmdLabel.split("\\.").length - 1));
                 } catch (IllegalArgumentException | IllegalAccessException | InvocationTargetException e) {
-                    //Bukkit.getConsoleSender().sendMessage(e.getMessage());
-                    e.printStackTrace();
+                    Bukkit.getConsoleSender().sendMessage("Failed to execute command: " + cmdLabel);
                 }
                 return true;
             }
@@ -101,7 +100,7 @@ public class CommandFramework implements CommandExecutor {
                 }
             } else if (m.getAnnotation(Completer.class) != null) {
                 Completer comp = m.getAnnotation(Completer.class);
-                if (m.getParameterTypes().length > 1 || m.getParameterTypes().length == 0
+                if (m.getParameterTypes().length != 1
                         || m.getParameterTypes()[0] != CommandArgs.class) {
                     System.out.println(
                             "Unable to register tab completer " + m.getName() + ". Unexpected method arguments");
@@ -145,18 +144,18 @@ public class CommandFramework implements CommandExecutor {
     }
 
     public void registerCommand(Command command, String label, Method m, Object obj) {
-        commandMap.put(label.toLowerCase(), new AbstractMap.SimpleEntry<Method, Object>(m, obj));
+        commandMap.put(label.toLowerCase(), new AbstractMap.SimpleEntry<>(m, obj));
         commandMap.put(this.plugin.getDescription().getName() + ':' + label.toLowerCase(),
-                new AbstractMap.SimpleEntry<Method, Object>(m, obj));
+                new AbstractMap.SimpleEntry<>(m, obj));
         String cmdLabel = label.replace(".", ",").split(",")[0].toLowerCase();
         if (map.getCommand(cmdLabel) == null) {
             org.bukkit.command.Command cmd = new BukkitCommand(cmdLabel, this, plugin);
             map.register(plugin.getDescription().getName(), cmd);
         }
-        if (!command.description().equalsIgnoreCase("") && cmdLabel == label) {
+        if (!command.description().equalsIgnoreCase("") && cmdLabel.equals(label)) {
             map.getCommand(cmdLabel).setDescription(command.description());
         }
-        if (!command.usage().equalsIgnoreCase("") && cmdLabel == label) {
+        if (!command.usage().equalsIgnoreCase("") && cmdLabel.equals(label)) {
             map.getCommand(cmdLabel).setUsage(command.usage());
         }
     }
@@ -189,8 +188,8 @@ public class CommandFramework implements CommandExecutor {
                     System.out.println("Unable to register tab completer " + m.getName()
                             + ". A tab completer is already registered for that command!");
                 }
-            } catch (Exception ex) {
-                ex.printStackTrace();
+            } catch (Exception exception) {
+                System.out.println("Failed to register tab completer " + m.getName() + " for command " + label + ": " + exception.getMessage());
             }
         }
     }
