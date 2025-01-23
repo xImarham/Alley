@@ -7,6 +7,7 @@ import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.Command;
 import dev.revere.alley.api.command.CommandArgs;
+import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 
 /**
@@ -17,26 +18,29 @@ import org.bukkit.entity.Player;
 public class KitSetInvCommand extends BaseCommand {
     @Command(name = "kit.setinventory", aliases = "kit.setinv", permission = "practice.admin")
     @Override
-    public void onCommand(CommandArgs args) {
-        Player sender = args.getPlayer();
+    public void onCommand(CommandArgs command) {
+        Player player = command.getPlayer();
+        String[] args = command.getArgs();
 
-        if (args.length() < 1) {
-            sender.sendMessage(CC.translate("&6Usage: &e/kit setinventory &b<kitName>"));
+        if (args.length < 1) {
+            player.sendMessage(CC.translate("&6Usage: &e/kit setinventory &b<kitName>"));
             return;
         }
 
-        String kitName = args.getArgs()[0];
-
-        Kit kit = Alley.getInstance().getKitRepository().getKit(kitName);
-
+        Kit kit = Alley.getInstance().getKitRepository().getKit(args[0]);
         if (kit == null) {
-            sender.sendMessage(CC.translate(Locale.KIT_NOT_FOUND.getMessage()));
+            player.sendMessage(CC.translate(Locale.KIT_NOT_FOUND.getMessage()));
             return;
         }
 
-        kit.setInventory(sender.getInventory().getContents());
-        kit.setArmor(sender.getInventory().getArmorContents());
+        if (player.getGameMode() == GameMode.CREATIVE) {
+            player.sendMessage(CC.translate("&cYou can't set a kit's inventory in creative mode!"));
+            return;
+        }
+
+        kit.setInventory(player.getInventory().getContents());
+        kit.setArmor(player.getInventory().getArmorContents());
         Alley.getInstance().getKitRepository().saveKit(kit);
-        sender.sendMessage(CC.translate(Locale.KIT_INVENTORY_SET.getMessage().replace("{kit-name}", kitName)));
+        player.sendMessage(CC.translate(Locale.KIT_INVENTORY_SET.getMessage().replace("{kit-name}", kit.getName())));
     }
 }
