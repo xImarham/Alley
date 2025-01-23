@@ -1,7 +1,6 @@
 package dev.revere.alley.game.party.command.impl.member;
 
 import dev.revere.alley.Alley;
-import dev.revere.alley.locale.ErrorMessage;
 import dev.revere.alley.locale.Locale;
 import dev.revere.alley.game.party.Party;
 import dev.revere.alley.game.party.PartyHandler;
@@ -33,7 +32,7 @@ public class PartyAcceptCommand extends BaseCommand {
         Player target = Bukkit.getPlayer(args[0]);
 
         if (target == null) {
-            player.sendMessage(CC.translate(ErrorMessage.PLAYER_NOT_ONLINE.replace("{player}", args[0])));
+            player.sendMessage(CC.translate("&cThe player you are trying to join is not online."));
             return;
         }
 
@@ -41,7 +40,7 @@ public class PartyAcceptCommand extends BaseCommand {
 
         Party party = partyHandler.getPartyByLeader(target);
         if (party == null) {
-            player.sendMessage(CC.translate(ErrorMessage.TARGET_HAS_NO_PARTY.replace("{player}", target.getName())));
+            player.sendMessage(CC.translate("&cThe player you are trying to join does not have a party."));
             return;
         }
 

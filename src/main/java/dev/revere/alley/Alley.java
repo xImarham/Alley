@@ -4,8 +4,10 @@ import dev.revere.alley.api.assemble.Assemble;
 import dev.revere.alley.api.assemble.AssembleStyle;
 import dev.revere.alley.api.command.CommandFramework;
 import dev.revere.alley.api.menu.MenuListener;
+import dev.revere.alley.arena.Arena;
 import dev.revere.alley.arena.ArenaRepository;
 import dev.revere.alley.arena.listener.ArenaListener;
+import dev.revere.alley.command.CommandUtility;
 import dev.revere.alley.config.ConfigService;
 import dev.revere.alley.cooldown.CooldownRepository;
 import dev.revere.alley.database.MongoService;
@@ -32,7 +34,6 @@ import dev.revere.alley.kit.settings.KitSettingRepository;
 import dev.revere.alley.profile.ProfileRepository;
 import dev.revere.alley.profile.cosmetic.repository.CosmeticRepository;
 import dev.revere.alley.profile.division.DivisionRepository;
-import dev.revere.alley.profile.enums.EnumProfileState;
 import dev.revere.alley.profile.listener.ProfileListener;
 import dev.revere.alley.queue.QueueRepository;
 import dev.revere.alley.util.ServerUtil;
@@ -42,7 +43,6 @@ import dev.revere.alley.visual.scoreboard.animation.ScoreboardTitleHandler;
 import dev.revere.alley.visual.tablist.task.TablistUpdateTask;
 import dev.revere.alley.world.WorldListener;
 import lombok.Getter;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.EntityType;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -75,7 +75,6 @@ public class Alley extends JavaPlugin {
     private DuelRequestHandler duelRequestHandler;
     private ChatService chatService;
 
-    @Override
     public void onEnable() {
         instance = this;
 
@@ -89,6 +88,7 @@ public class Alley extends JavaPlugin {
         this.loadScoreboard();
         this.runTasks();
 
+        CommandUtility.registerCommands();
         ServerUtil.setupWorld();
 
         long end = System.currentTimeMillis();
@@ -102,23 +102,18 @@ public class Alley extends JavaPlugin {
         this.profileRepository.getProfiles().forEach((uuid, profile) -> profile.save());
 
         ServerUtil.disconnectPlayers();
+        ServerUtil.clearEntities(EntityType.DROPPED_ITEM);
 
         this.kitRepository.saveKits();
         this.ffaRepository.saveFFAMatches();
-        this.arenaRepository.saveArenas();
-
-        Bukkit.getWorlds().forEach(world -> world.getEntities().forEach(entity -> {
-            if (entity.getType() == EntityType.DROPPED_ITEM) {
-                entity.remove();
-            }
-        }));
+        this.arenaRepository.getArenas().forEach(Arena::saveArena);
 
         Logger.pluginDisabled();
     }
 
     private void checkDescription() {
         List<String> authors = getDescription().getAuthors();
-        List<String> expectedAuthors = Arrays.asList("Revere Development", "Emmy", "Remi");
+        List<String> expectedAuthors = Arrays.asList("Emmy", "Remi");
         if (!new HashSet<>(authors).containsAll(expectedAuthors)) {
             System.exit(0);
         }
@@ -211,45 +206,5 @@ public class Alley extends JavaPlugin {
 
         runnables.forEach(Logger::logTimeTask);
         runnables.clear();
-    }
-
-    /**
-     * Get the exact bukkit version
-     *
-     * @return the exact bukkit version
-     */
-    public String getBukkitVersionExact() {
-        String version = this.getServer().getVersion();
-        version = version.split("MC: ")[1];
-        version = version.split("\\)")[0];
-        return version;
-    }
-
-    /**
-     * Get the player count of a specific queue type (Unranked, FFA, Ranked)
-     *
-     * @param queue the queue
-     * @return the player count
-     */
-    public int getPlayerCountOfGameType(String queue) {
-        switch (queue) {
-            case "Unranked":
-                return (int) this.profileRepository.getProfiles().values().stream()
-                        .filter(profile -> profile.getState().equals(EnumProfileState.PLAYING))
-                        .filter(profile -> !profile.getMatch().isRanked())
-                        .count();
-            case "Ranked":
-                return (int) this.profileRepository.getProfiles().values().stream()
-                        .filter(profile -> profile.getState().equals(EnumProfileState.PLAYING))
-                        .filter(profile -> profile.getMatch().isRanked())
-                        .count();
-            case "FFA":
-                return (int) this.profileRepository.getProfiles().values().stream()
-                        .filter(profile -> profile.getState().equals(EnumProfileState.FFA))
-                        .count();
-            case "Bots":
-                return 0;
-        }
-        return 0;
     }
 }

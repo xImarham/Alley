@@ -1,6 +1,7 @@
 package dev.revere.alley.util.logger;
 
 import dev.revere.alley.Alley;
+import dev.revere.alley.util.ServerUtil;
 import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.util.chat.Symbol;
 import lombok.experimental.UtilityClass;
@@ -111,7 +112,7 @@ public class Logger {
         Bukkit.getConsoleSender().sendMessage(CC.translate("     &fDatabase: &b" + plugin.getConfigService().getDatabaseConfig().getString("mongo.database")));
         Bukkit.getConsoleSender().sendMessage(" ");
         Bukkit.getConsoleSender().sendMessage(CC.translate("    &fSpigot: &b" + Bukkit.getName()));
-        Bukkit.getConsoleSender().sendMessage(CC.translate("    &fVersion: &b" + plugin.getBukkitVersionExact()));
+        Bukkit.getConsoleSender().sendMessage(CC.translate("    &fVersion: &b" + ServerUtil.getBukkitVersionExact(plugin)));
         Bukkit.getConsoleSender().sendMessage(" ");
         Bukkit.getConsoleSender().sendMessage(CC.translate("    &fLoaded in &b" + timeTaken + " &bms"));
         Bukkit.getConsoleSender().sendMessage(" ");

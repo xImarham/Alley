@@ -1,13 +1,13 @@
 package dev.revere.alley.queue.menu;
 
-import lombok.AllArgsConstructor;
 import dev.revere.alley.Alley;
-import dev.revere.alley.game.ffa.menu.FFAMenu;
-import dev.revere.alley.locale.ErrorMessage;
-import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.api.menu.Menu;
 import dev.revere.alley.api.menu.pagination.ItemBuilder;
+import dev.revere.alley.game.ffa.menu.FFAMenu;
+import dev.revere.alley.queue.QueueRepository;
+import dev.revere.alley.util.chat.CC;
+import lombok.AllArgsConstructor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
@@ -34,12 +34,13 @@ public class QueuesMenu extends Menu {
     @Override
     public Map<Integer, Button> getButtons(Player player) {
         Map<Integer, Button> buttons = new HashMap<>();
+        QueueRepository queueRepository = Alley.getInstance().getQueueRepository();
 
         buttons.put(11, new QueuesButton("&b&lSolos", Material.IRON_SWORD, 0, Arrays.asList(
                 "&7Casual 1v1s with",
                 "&7no loss penalty.",
                 "",
-                "&bPlayers: &f" + Alley.getInstance().getPlayerCountOfGameType("Unranked"),
+                "&bPlayers: &f" + queueRepository.getPlayerCountOfGameType("Unranked"),
                 "",
                 "&aClick to select a kit!"
         )));
@@ -48,7 +49,7 @@ public class QueuesMenu extends Menu {
                 "&7Practice against bots",
                 "&7to improve your skills.",
                 "",
-                "&bPlayers: &f" + Alley.getInstance().getPlayerCountOfGameType("Bots"),
+                "&bPlayers: &f" + queueRepository.getPlayerCountOfGameType("Bots"),
                 "",
                 "&cCurrently in development."
         )));
@@ -57,7 +58,7 @@ public class QueuesMenu extends Menu {
                 "&7Free for all with",
                 "&7infinity respawns.",
                 "",
-                "&bPlayers: &f" + Alley.getInstance().getPlayerCountOfGameType("FFA"),
+                "&bPlayers: &f" + queueRepository.getPlayerCountOfGameType("FFA"),
                 "",
                 "&aClick to select a kit!"
         )));
@@ -81,21 +82,19 @@ public class QueuesMenu extends Menu {
 
         @Override
         public ItemStack getButtonItem(Player player) {
-            return new ItemBuilder(material)
-                    .name(displayName)
-                    .durability(durability)
-                    .lore(lore)
+            return new ItemBuilder(this.material)
+                    .name(this.displayName)
+                    .durability(this.durability)
+                    .lore(this.lore)
                     .hideMeta()
                     .build();
         }
 
         @Override
         public void clicked(Player player, int slot, ClickType clickType, int hotbarSlot) {
-            if (clickType == ClickType.MIDDLE || clickType == ClickType.RIGHT || clickType == ClickType.NUMBER_KEY || clickType == ClickType.DROP || clickType == ClickType.SHIFT_LEFT || clickType == ClickType.SHIFT_RIGHT) {
-                return;
-            }
+            if (clickType != ClickType.LEFT) return;
 
-            switch (material) {
+            switch (this.material) {
                 case IRON_SWORD:
                     new UnrankedMenu().openMenu(player);
                     break;
@@ -103,8 +102,7 @@ public class QueuesMenu extends Menu {
                     new FFAMenu().openMenu(player);
                     break;
                 case GOLD_SWORD:
-                    //new BotQueueMenu().openMenu(player);
-                    player.sendMessage(CC.translate(ErrorMessage.DEBUG_STILL_IN_DEVELOPMENT));
+                    player.sendMessage(CC.translate("&cThis feature is currently in development."));
                     break;
             }
 

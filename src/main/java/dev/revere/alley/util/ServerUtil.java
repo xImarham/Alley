@@ -6,7 +6,9 @@ import dev.revere.alley.util.chat.CC;
 import org.bukkit.Bukkit;
 import org.bukkit.Difficulty;
 import org.bukkit.World;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.plugin.java.JavaPlugin;
 
 /**
  * @author Emmy
@@ -40,5 +42,42 @@ public class ServerUtil {
                 }
             });
         }
+    }
+
+    /**
+     * Clear all entities of a specific type from the server.
+     *
+     * @param entityType the type of entity to clear
+     */
+    public void clearEntities(EntityType entityType) {
+        for (World world : Alley.getInstance().getServer().getWorlds()) {
+            world.getEntities().forEach(entity -> {
+                if (entity.getType() == entityType) {
+                    entity.remove();
+                }
+            });
+        }
+    }
+
+    /**
+     * Clear all entities from the server.
+     */
+    public void clearAllEntities() {
+        for (World world : Alley.getInstance().getServer().getWorlds()) {
+            world.getEntities().forEach(Entity::remove);
+        }
+    }
+
+    /**
+     * Get the exact bukkit version of the server.
+     *
+     * @param plugin the plugin instance.
+     * @return the exact bukkit version
+     */
+    public String getBukkitVersionExact(JavaPlugin plugin) {
+        String version = plugin.getServer().getVersion();
+        version = version.split("MC: ")[1];
+        version = version.split("\\)")[0];
+        return version;
     }
 }

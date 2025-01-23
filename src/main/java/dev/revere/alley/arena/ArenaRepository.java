@@ -23,9 +23,10 @@ import java.util.stream.Collectors;
  */
 @Getter
 public class ArenaRepository {
-    private final List<Arena> arenas = new ArrayList<>();
+    private final List<Arena> arenas;
 
     public ArenaRepository() {
+        this.arenas = new ArrayList<>();
         this.loadArenas();
     }
     
@@ -110,29 +111,6 @@ public class ArenaRepository {
     }
 
     /**
-     * Save all arenas to the arenas.yml file
-     */
-    public void saveArenas() {
-        FileConfiguration config = Alley.getInstance().getConfigService().getConfig("storage/arenas.yml");
-
-        for (Arena arena : this.arenas) {
-            String name = "arenas." + arena.getName();
-
-            config.set(name + ".type", arena.getType().name());
-            config.set(name + ".minimum", LocationUtil.serialize(arena.getMinimum()));
-            config.set(name + ".maximum", LocationUtil.serialize(arena.getMaximum()));
-            config.set(name + ".kits", arena.getKits());
-            config.set(name + ".pos1", LocationUtil.serialize(arena.getPos1()));
-            config.set(name + ".pos2", LocationUtil.serialize(arena.getPos2()));
-            config.set(name + ".center", LocationUtil.serialize(arena.getCenter()));
-            config.set(name + ".displayName", arena.getDisplayName());
-            config.set(name + ".enabled", arena.isEnabled());
-        }
-
-        Alley.getInstance().getConfigService().saveConfig(Alley.getInstance().getConfigService().getConfigFile("storage/arenas.yml"), config);
-    }
-
-    /**
      * Save an arena
      *
      * @param arena the arena to save
@@ -158,16 +136,6 @@ public class ArenaRepository {
      */
     public Arena getArenaByName(String name) {
         return this.arenas.stream().filter(arena -> arena.getName().equalsIgnoreCase(name)).findFirst().orElse(null);
-    }
-
-    /**
-     * Get an arena by its class
-     *
-     * @param clazz the class of the arena
-     * @return the arena
-     */
-    public Arena getArenaByClass(Class<? extends Arena> clazz) {
-        return this.arenas.stream().filter(arena -> arena.getClass().equals(clazz)).findFirst().orElse(null);
     }
 
     /**

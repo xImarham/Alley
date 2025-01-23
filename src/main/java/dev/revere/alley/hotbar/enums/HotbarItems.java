@@ -25,15 +25,7 @@ public enum HotbarItems {
     PARTY("&bCreate Party &7(Right Click)", Material.NAME_TAG, 0, 5, "party create", HotbarType.LOBBY),
     LEADERBOARD("&bLeaderboards &7(Right Click)", Material.EMERALD, 0, 6, "leaderboards", HotbarType.LOBBY),
     EVENTS("&bEvents &7(Right Click)", Material.EYE_OF_ENDER, 0, 7, "host", HotbarType.LOBBY),
-    OPTIONS_ENABLE("&bToggle Hotbar Items &7(&bCurrent: &aLobby&7)", Material.INK_SACK, 10, 8, "", HotbarType.LOBBY),
-
-    OPTIONS_DISABLE("&bToggle Hotbar Items &7(&bCurrent: &cSettings&7)", Material.INK_SACK, 1, 8, "", HotbarType.SETTINGS),
-    PROFILE_SETTINGS("&bSettings &7(Right Click)", Material.ANVIL, 0, 0, "practicesettings", HotbarType.SETTINGS),
-    MATCH_SETTINGS("&bMatch Settings &7(Right Click)", Material.BOOK, 0, 1, "matchsettings", HotbarType.SETTINGS),
-    THEMES("&bThemes &7(Right Click)", Material.PAINTING, 0, 2, "themes", HotbarType.SETTINGS),
-    DIVISIONS("&bDivisions &7(Right Click)", Material.DIAMOND, 0, 3, "divisions", HotbarType.SETTINGS),
-    COSMETICS("&bCosmetics &7(Right Click)", Material.NETHER_STAR, 0, 4, "cosmetics", HotbarType.SETTINGS),
-    PROFILE("&bYour Profile &7(Right Click)", Material.SKULL_ITEM, 3, 6, "profilemenu", HotbarType.SETTINGS),
+    PROFILE("&bYour Profile &7(Right Click)", Material.SKULL_ITEM, 3, 8, "profilemenu", HotbarType.LOBBY),
 
     DUO_UNRANKED_QUEUE("&bUnranked Duo Queue &7(Right Click)", Material.IRON_SWORD, 0, 0, "unrankedduo", HotbarType.PARTY),
     KIT_EDITOR_PARTY("&bKit Editor &7(Right Click)", Material.BOOK, 0, 1, "kiteditor", HotbarType.PARTY),

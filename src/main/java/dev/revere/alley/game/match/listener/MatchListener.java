@@ -10,7 +10,6 @@ import dev.revere.alley.game.match.enums.EnumMatchState;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.kit.settings.impl.*;
-import dev.revere.alley.locale.ErrorMessage;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
 import dev.revere.alley.util.ActionBarUtil;
@@ -175,7 +174,6 @@ public class MatchListener implements Listener {
 
                 if (hitLocation.getBlock().getType() == Material.SNOW || hitLocation.getBlock().getType() == Material.SNOW_BLOCK) {
                     hitLocation.getBlock().setType(Material.AIR);
-                    player.sendMessage(CC.translate(ErrorMessage.DEBUG));
                 }
             }
         }

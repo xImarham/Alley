@@ -2,6 +2,8 @@ package dev.revere.alley.queue;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.kit.settings.impl.KitSettingRankedImpl;
+import dev.revere.alley.profile.Profile;
+import dev.revere.alley.profile.enums.EnumProfileState;
 import dev.revere.alley.queue.runnable.QueueRunnable;
 import lombok.Getter;
 import lombok.Setter;
@@ -45,5 +47,59 @@ public class QueueRepository {
                 new Queue(kit, true);
             }
         });
+    }
+
+    /**
+     * Get the player count of a specific game type
+     *
+     * @param queue the queue to get the player count of
+     * @return the player count of the game type
+     */
+    public int getPlayerCountOfGameType(String queue) {
+        EnumProfileState stateForQueue = getStateForQueue(queue);
+
+        if (stateForQueue == null) {
+            return 0;
+        }
+
+        return (int) this.plugin.getProfileRepository().getProfiles().values().stream()
+                .filter(profile -> profile.getState().equals(stateForQueue))
+                .filter(profile -> isMatchForQueue(profile, queue))
+                .count();
+    }
+
+    /**
+     * Get the state of a profile for a specific queue
+     *
+     * @param queue the queue to get the state for
+     * @return the state of the profile for the queue
+     */
+    private EnumProfileState getStateForQueue(String queue) {
+        switch (queue) {
+            case "Unranked":
+            case "Ranked":
+                return EnumProfileState.PLAYING;
+            case "FFA":
+                return EnumProfileState.FFA;
+            default:
+                return null;
+        }
+    }
+
+    /**
+     * Check if a profile's match type matches the queue
+     *
+     * @param profile the profile to check
+     * @param queue the queue to check the profile's match for
+     * @return true if the profile's match type matches the queue
+     */
+    private boolean isMatchForQueue(Profile profile, String queue) {
+        if (queue.equals("FFA")) {
+            return true;
+        } else if (queue.equals("Ranked")) {
+            return profile.getMatch().isRanked();
+        }
+
+        return false;
     }
 }

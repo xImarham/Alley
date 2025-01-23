@@ -1,17 +1,15 @@
 package dev.revere.alley.hotbar.listener;
 
 import dev.revere.alley.Alley;
-import dev.revere.alley.hotbar.HotbarItem;
-import dev.revere.alley.hotbar.enums.HotbarType;
+import dev.revere.alley.game.match.menu.CurrentMatchesMenu;
 import dev.revere.alley.game.party.menu.duel.DuelOtherPartyMenu;
 import dev.revere.alley.game.party.menu.event.PartyEventMenu;
+import dev.revere.alley.hotbar.HotbarItem;
 import dev.revere.alley.leaderboard.menu.LeaderboardMenu;
-import dev.revere.alley.util.chat.CC;
-import dev.revere.alley.stats.menu.StatisticsMenu;
-import dev.revere.alley.game.match.menu.CurrentMatchesMenu;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.queue.menu.QueuesMenu;
 import dev.revere.alley.queue.menu.RankedMenu;
+import dev.revere.alley.util.chat.CC;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -77,12 +75,6 @@ public class HotbarListener implements Listener {
                                 break;
                             case LEADERBOARD:
                                 new LeaderboardMenu().openMenu(player);
-                                break;
-                            case OPTIONS_ENABLE:
-                                Alley.getInstance().getHotbarRepository().applyHotbarItems(player, HotbarType.SETTINGS);
-                                break;
-                            case OPTIONS_DISABLE:
-                                Alley.getInstance().getHotbarRepository().applyHotbarItems(player, HotbarType.LOBBY);
                                 break;
                             case START_PARTY_EVENT:
                                 if (this.checkForPartyLeader(player, profile)) return;

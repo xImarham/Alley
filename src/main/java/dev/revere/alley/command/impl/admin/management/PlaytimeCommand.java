@@ -1,11 +1,10 @@
 package dev.revere.alley.command.impl.admin.management;
 
 import dev.revere.alley.Alley;
-import dev.revere.alley.locale.ErrorMessage;
-import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.Command;
 import dev.revere.alley.api.command.CommandArgs;
+import dev.revere.alley.util.chat.CC;
 import org.bukkit.Bukkit;
 import org.bukkit.Statistic;
 import org.bukkit.entity.Player;
@@ -32,12 +31,12 @@ public class PlaytimeCommand extends BaseCommand {
         Player targetPlayer = Bukkit.getPlayer(target);
 
         if (targetPlayer == null) {
-            player.sendMessage(CC.translate(ErrorMessage.PLAYER_NOT_ONLINE).replace("{player}", target));
+            player.sendMessage(CC.translate("&cThe player you are trying to check is not online."));
             return;
         }
 
         if (!targetPlayer.hasPlayedBefore()) {
-            player.sendMessage(CC.translate(ErrorMessage.PLAYER_NEVER_PLAYED_BEFORE));
+            player.sendMessage(CC.translate("&cThe player you are trying to check has never played before."));
             return;
         }
 

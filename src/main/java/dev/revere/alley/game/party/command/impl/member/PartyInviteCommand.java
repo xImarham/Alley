@@ -5,7 +5,6 @@ import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.Command;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.game.party.Party;
-import dev.revere.alley.locale.ErrorMessage;
 import dev.revere.alley.locale.Locale;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.util.chat.CC;
@@ -33,12 +32,12 @@ public class PartyInviteCommand extends BaseCommand {
         Player targetPlayer = Bukkit.getPlayer(target);
 
         if (targetPlayer == null) {
-            player.sendMessage(CC.translate(ErrorMessage.PLAYER_NOT_ONLINE.replace("{player}", target)));
+            player.sendMessage(CC.translate("&cThe player you are trying to invite is not online."));
             return;
         }
 
         if (targetPlayer == command.getPlayer()) {
-            player.sendMessage(CC.translate(ErrorMessage.CANNOT_INVITE_SELF));
+            player.sendMessage(CC.translate("&cYou cannot invite yourself to a party."));
             return;
         }
 

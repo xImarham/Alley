@@ -2,7 +2,6 @@ package dev.revere.alley.game.party.command.impl.leader;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.game.party.PartyHandler;
-import dev.revere.alley.locale.ErrorMessage;
 import dev.revere.alley.locale.Locale;
 import dev.revere.alley.game.party.Party;
 import dev.revere.alley.util.chat.CC;
@@ -31,7 +30,7 @@ public class PartyKickCommand extends BaseCommand {
 
         Player target = Bukkit.getPlayer(args[0]);
         if (target == null) {
-            player.sendMessage(CC.translate(ErrorMessage.PLAYER_NOT_ONLINE).replace("{player}", args[0]));
+            player.sendMessage(CC.translate("&cThe player you are trying to kick is not online."));
             return;
         }
 

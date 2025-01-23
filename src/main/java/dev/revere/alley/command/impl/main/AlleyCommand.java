@@ -13,7 +13,7 @@ import org.bukkit.command.CommandSender;
  * @date 19/04/2024 - 17:39
  */
 public class AlleyCommand extends BaseCommand {
-    @Command(name = "alley", aliases = {"revere", "emmy", "remi"}, inGameOnly = false)
+    @Command(name = "alley", aliases = {"emmy", "remi", "revere"}, inGameOnly = false)
     @Override
     public void onCommand(CommandArgs command) {
         CommandSender sender = command.getSender();

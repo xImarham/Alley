@@ -16,7 +16,6 @@ import dev.revere.alley.essential.spawn.command.SpawnItemsCommand;
 import dev.revere.alley.game.duel.command.AcceptCommand;
 import dev.revere.alley.game.duel.command.DuelCommand;
 import dev.revere.alley.game.duel.command.DuelRequestsCommand;
-import dev.revere.alley.game.event.command.EventCommand;
 import dev.revere.alley.game.ffa.command.admin.FFACommand;
 import dev.revere.alley.game.match.command.admin.MatchCommand;
 import dev.revere.alley.game.match.command.admin.impl.MatchInfoCommand;
@@ -26,7 +25,6 @@ import dev.revere.alley.game.match.command.player.LeaveSpectatorCommand;
 import dev.revere.alley.game.match.command.player.SpectateCommand;
 import dev.revere.alley.game.match.snapshot.command.InventoryCommand;
 import dev.revere.alley.game.party.command.PartyCommand;
-import dev.revere.alley.game.tournament.command.TournamentCommand;
 import dev.revere.alley.kit.command.KitCommand;
 import dev.revere.alley.kit.editor.command.KitEditorCommand;
 import dev.revere.alley.leaderboard.command.LeaderboardCommand;
@@ -77,7 +75,6 @@ public class CommandUtility {
             new FFACommand();
             new CosmeticCommand();
             new DivisionCommand();
-            new EventCommand();
 
             new StateCommand();
             new FFAStateCommand();
@@ -106,7 +103,6 @@ public class CommandUtility {
 
         Logger.logTimeWithAction("registered", "Donator Commands", () -> {
             new HostCommand();
-            new TournamentCommand();
             new EmojiCommand();
         });
 

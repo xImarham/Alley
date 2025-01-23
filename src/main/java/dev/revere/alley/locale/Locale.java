@@ -9,10 +9,8 @@ import dev.revere.alley.util.chat.CC;
  * @project Alley
  * @date 19/04/2024 - 17:41
  */
-
 @Getter
 public enum Locale {
-
     NO_PERM("messages.yml", "no-permission"),
 
     KIT_NOT_FOUND("messages.yml", "kit.not-found"),
@@ -58,6 +56,6 @@ public enum Locale {
     }
 
     public String getMessage() {
-        return CC.translate(Alley.getInstance().getConfigService().getConfig(configName).getString(configString));
+        return CC.translate(Alley.getInstance().getConfigService().getConfig(this.configName).getString(this.configString));
     }
 }

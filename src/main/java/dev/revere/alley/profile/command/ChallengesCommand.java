@@ -1,6 +1,5 @@
 package dev.revere.alley.profile.command;
 
-import dev.revere.alley.locale.ErrorMessage;
 import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.Command;
@@ -18,6 +17,6 @@ public class ChallengesCommand extends BaseCommand {
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
 
-        player.sendMessage(CC.translate(ErrorMessage.DEBUG_STILL_IN_DEVELOPMENT));
+        player.sendMessage(CC.translate("&cThis feature is not yet implemented."));
     }
 }
