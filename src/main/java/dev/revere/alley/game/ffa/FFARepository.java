@@ -30,7 +30,7 @@ public class FFARepository {
      * Load all FFA matches
      */
     public void loadFFAMatches() {
-        FileConfiguration config = Alley.getInstance().getConfigHandler().getFfaConfig();
+        FileConfiguration config = Alley.getInstance().getConfigService().getFfaConfig();
         ConfigurationSection ffaConfig = config.getConfigurationSection("ffa");
         if (ffaConfig == null) {
             return;
@@ -71,11 +71,11 @@ public class FFARepository {
      */
     public void saveFFAMatch(AbstractFFAMatch match) {
         String name = "ffa." + match.getKit().getName();
-        FileConfiguration config = Alley.getInstance().getConfigHandler().getFfaConfig();
+        FileConfiguration config = Alley.getInstance().getConfigService().getFfaConfig();
         config.set(name, null);
         config.set(name + ".arena", match.getArena().getName());
         config.set(name + ".maxPlayers", match.getMaxPlayers());
-        Alley.getInstance().getConfigHandler().saveConfig(Alley.getInstance().getConfigHandler().getConfigFile("storage/ffa.yml"), config);
+        Alley.getInstance().getConfigService().saveConfig(Alley.getInstance().getConfigService().getConfigFile("storage/ffa.yml"), config);
     }
 
     /**
@@ -98,7 +98,7 @@ public class FFARepository {
      */
     public void deleteFFAMatch(AbstractFFAMatch match) {
         matches.remove(match);
-        FileConfiguration config = Alley.getInstance().getConfigHandler().getConfig("storage/ffa.yml");
+        FileConfiguration config = Alley.getInstance().getConfigService().getConfig("storage/ffa.yml");
         config.set("ffa." + match.getKit().getName(), null);
         Alley.getInstance().getFfaRepository().saveFFAMatches();
     }

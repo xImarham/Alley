@@ -1,5 +1,9 @@
 package dev.revere.alley.profile;
 
+import dev.revere.alley.kit.Kit;
+import dev.revere.alley.profile.data.impl.ProfileFFAData;
+import dev.revere.alley.profile.data.impl.ProfileRankedKitData;
+import dev.revere.alley.profile.data.impl.ProfileUnrankedKitData;
 import lombok.Getter;
 import lombok.Setter;
 import dev.revere.alley.Alley;
@@ -12,7 +16,10 @@ import dev.revere.alley.profile.enums.EnumProfileState;
 import dev.revere.alley.queue.QueueProfile;
 import org.bukkit.Bukkit;
 
+import java.util.Comparator;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 /**
  * @author Emmy
@@ -57,5 +64,37 @@ public class Profile {
      */
     public void save() {
         Alley.getInstance().getProfileRepository().getIProfile().saveProfile(this);
+    }
+
+    /**
+     * Retrieves a sorted list of kits based on FFA kills and ranked wins.
+     *
+     * @return A sorted list of kits that the profile has participated in.
+     */
+    public List<Kit> getSortedKits() {
+        return Alley.getInstance().getKitRepository().getKits()
+                .stream()
+                .filter(kit -> {
+                    ProfileRankedKitData rankedData = this.profileData.getRankedKitData().get(kit.getName());
+                    ProfileUnrankedKitData unrankedData = this.profileData.getUnrankedKitData().get(kit.getName());
+                    ProfileFFAData ffaData = this.profileData.getFfaData().get(kit.getName());
+
+                    return (rankedData != null && (rankedData.getWins() != 0 || rankedData.getLosses() != 0)) ||
+                            (unrankedData != null && (unrankedData.getWins() != 0 || unrankedData.getLosses() != 0)) ||
+                            (ffaData != null && (ffaData.getKills() != 0 || ffaData.getDeaths() != 0));
+                })
+                .sorted(Comparator.comparingInt((Kit kit) -> {
+                            ProfileRankedKitData ranked = this.profileData.getRankedKitData().get(kit.getName());
+                            return ranked != null ? ranked.getElo() : 0;
+                        }).reversed()
+                        .thenComparingInt(kit -> {
+                            ProfileRankedKitData ranked = this.profileData.getRankedKitData().get(kit.getName());
+                            return ranked != null ? ranked.getWins() : 0;
+                        }).reversed()
+                        .thenComparingInt(kit -> {
+                            ProfileFFAData ffa = this.profileData.getFfaData().get(kit.getName());
+                            return ffa != null ? ffa.getKills() : 0;
+                        }).reversed())
+                .collect(Collectors.toList());
     }
 }

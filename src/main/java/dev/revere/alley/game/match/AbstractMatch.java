@@ -314,14 +314,14 @@ public abstract class AbstractMatch {
      * @param loserName  The name of the loser.
      */
     private void sendMatchResult(String winnerName, String loserName) {
-        FileConfiguration config = Alley.getInstance().getConfigHandler().getMessagesConfig();
+        FileConfiguration config = Alley.getInstance().getConfigService().getMessagesConfig();
         
         String winnerCommand = config.getString("match.ended.match-result.winner.command").replace("{winner}", winnerName);
         String winnerHover = config.getString("match.ended.match-result.winner.hover").replace("{winner}", winnerName);
         String loserCommand = config.getString("match.ended.match-result.loser.command").replace("{loser}", loserName);
         String loserHover = config.getString("match.ended.match-result.loser.hover").replace("{loser}", loserName);
 
-        for (String line : Alley.getInstance().getConfigHandler().getMessagesConfig().getStringList("match.ended.match-result.format")) {
+        for (String line : Alley.getInstance().getConfigService().getMessagesConfig().getStringList("match.ended.match-result.format")) {
             if (line.contains("{winner}") && line.contains("{loser}")) {
                 String[] parts = line.split("\\{winner}", 2);
 

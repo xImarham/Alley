@@ -30,7 +30,7 @@ public class FFACuboidService {
      * Load the FFA spawn location from the arenas.yml file
      */
     public void loadFFASpawn() {
-        FileConfiguration config = Alley.getInstance().getConfigHandler().getArenasConfig();
+        FileConfiguration config = Alley.getInstance().getConfigService().getArenasConfig();
         Arena arena = Alley.getInstance().getArenaRepository().getArenas().stream()
                 .filter(a -> a.getType() == ArenaType.FFA)
                 .findFirst()

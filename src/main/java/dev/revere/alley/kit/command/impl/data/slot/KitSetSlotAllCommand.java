@@ -45,6 +45,6 @@ public class KitSetSlotAllCommand extends BaseCommand {
         kit.setRankedslot(slot);
         kit.setUnrankedslot(slot);
         Alley.getInstance().getKitRepository().saveKit(kit);
-        sender.sendMessage(CC.translate(Alley.getInstance().getConfigHandler().getMessagesConfig().getString("kit.slots-set")).replace("{kit-name}", kitName).replace("{slot}", args[1]));
+        sender.sendMessage(CC.translate(Alley.getInstance().getConfigService().getMessagesConfig().getString("kit.slots-set")).replace("{kit-name}", kitName).replace("{slot}", args[1]));
     }
 }

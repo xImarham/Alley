@@ -38,7 +38,7 @@ public class SharedArena extends Arena {
     @Override
     public void saveArena() {
         String name = "arenas." + getName();
-        FileConfiguration config = Alley.getInstance().getConfigHandler().getConfig("storage/arenas.yml");
+        FileConfiguration config = Alley.getInstance().getConfigService().getConfig("storage/arenas.yml");
         config.set(name, null);
         config.set(name + ".type", getType().name());
         config.set(name + ".minimum", LocationUtil.serialize(getMinimum()));
@@ -49,15 +49,15 @@ public class SharedArena extends Arena {
         config.set(name + ".kits", getKits());
         config.set(name + ".enabled", isEnabled());
         config.set(name + ".displayName", getDisplayName());
-        Alley.getInstance().getConfigHandler().saveConfig(Alley.getInstance().getConfigHandler().getConfigFile("storage/arenas.yml"), config);
+        Alley.getInstance().getConfigService().saveConfig(Alley.getInstance().getConfigService().getConfigFile("storage/arenas.yml"), config);
     }
 
     @Override
     public void deleteArena() {
-        FileConfiguration config = Alley.getInstance().getConfigHandler().getConfig("storage/arenas.yml");
+        FileConfiguration config = Alley.getInstance().getConfigService().getConfig("storage/arenas.yml");
         config.set("arenas." + getName(), null);
 
         Alley.getInstance().getArenaRepository().getArenas().remove(this);
-        Alley.getInstance().getConfigHandler().saveConfig(Alley.getInstance().getConfigHandler().getConfigFile("storage/arenas.yml"), config);
+        Alley.getInstance().getConfigService().saveConfig(Alley.getInstance().getConfigService().getConfigFile("storage/arenas.yml"), config);
     }
 }

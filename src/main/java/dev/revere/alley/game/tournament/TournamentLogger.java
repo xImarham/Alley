@@ -25,7 +25,7 @@ public class TournamentLogger {
      * @param player the player
      */
     public void broadcastPlayerJoin(Player player) {
-        String message = CC.translate(Alley.getInstance().getConfigHandler().getMessagesConfig().getString("tournament-broadcast.player.joined")
+        String message = CC.translate(Alley.getInstance().getConfigService().getMessagesConfig().getString("tournament-broadcast.player.joined")
                 .replace("{player}", player.getName())
                 .replace("{players}", "0")
                 .replace("{maxPlayers}", "0")
@@ -39,7 +39,7 @@ public class TournamentLogger {
      * @param player the player
      */
     public void broadcastPlayerLeave(Player player) {
-        String message = CC.translate(Alley.getInstance().getConfigHandler().getMessagesConfig().getString("tournament-broadcast.player.left")
+        String message = CC.translate(Alley.getInstance().getConfigService().getMessagesConfig().getString("tournament-broadcast.player.left")
                 .replace("{player}", player.getName())
                 .replace("{players}", "0")
                 .replace("{maxPlayers}", "0")
@@ -49,7 +49,7 @@ public class TournamentLogger {
 
     public void broadcastWaiting() {
        // TournamentRepository tournamentRepository = getTournament();
-        List<String> list = Alley.getInstance().getConfigHandler().getMessagesConfig().getStringList("tournament-broadcast.waiting.message");
+        List<String> list = Alley.getInstance().getConfigService().getMessagesConfig().getStringList("tournament-broadcast.waiting.message");
         List<BaseComponent> messages = new ArrayList<>();
 
         for (String message : list) {
@@ -72,9 +72,9 @@ public class TournamentLogger {
     }
 
     private @NotNull TextComponent getTextComponent() {
-        TextComponent clickableJoinMessage = new TextComponent(CC.translate(Alley.getInstance().getConfigHandler().getMessagesConfig().getString("tournament-broadcast.waiting.clickable-format")));
+        TextComponent clickableJoinMessage = new TextComponent(CC.translate(Alley.getInstance().getConfigService().getMessagesConfig().getString("tournament-broadcast.waiting.clickable-format")));
         clickableJoinMessage.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/tournament join"));
-        String hover = Alley.getInstance().getConfigHandler().getMessagesConfig().getString("tournament-broadcast.waiting.clickable-hover");
+        String hover = Alley.getInstance().getConfigService().getMessagesConfig().getString("tournament-broadcast.waiting.clickable-hover");
         BaseComponent[] hoverComponent = new ComponentBuilder(CC.translate(hover)).create();
         clickableJoinMessage.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, hoverComponent));
         return clickableJoinMessage;

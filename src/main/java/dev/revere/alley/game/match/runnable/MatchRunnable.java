@@ -67,10 +67,10 @@ public class MatchRunnable extends BukkitRunnable {
      * Send the disclaimer to the participants.
      */
     private void sendDisclaimer() {
-        FileConfiguration config = Alley.getInstance().getConfigHandler().getMessagesConfig();
+        FileConfiguration config = Alley.getInstance().getConfigService().getMessagesConfig();
         if (config.getBoolean("match.started.kit-disclaimer.enabled")) {
             if (match.getKit().getDisclaimer() == null) {
-                Alley.getInstance().getConfigHandler().getMessagesConfig().getStringList("match.started.kit-disclaimer.not-set").forEach(message -> match.sendMessage(CC.translate(message)));
+                Alley.getInstance().getConfigService().getMessagesConfig().getStringList("match.started.kit-disclaimer.not-set").forEach(message -> match.sendMessage(CC.translate(message)));
                 return;
             }
 

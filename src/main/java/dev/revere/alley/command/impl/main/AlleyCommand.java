@@ -1,4 +1,4 @@
-package dev.revere.alley.command;
+package dev.revere.alley.command.impl.main;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.util.chat.CC;

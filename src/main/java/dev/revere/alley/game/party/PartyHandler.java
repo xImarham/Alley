@@ -32,7 +32,7 @@ public class PartyHandler {
     public PartyHandler() {
         this.partyRequests = new ArrayList<>();
         this.parties = new ArrayList<>();
-        this.chatFormat = Alley.getInstance().getConfigHandler().getConfig("messages.yml").getString("party.chat-format");
+        this.chatFormat = Alley.getInstance().getConfigService().getConfig("messages.yml").getString("party.chat-format");
     }
 
     /**

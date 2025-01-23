@@ -28,18 +28,41 @@ public class Logger {
      *
      * @param taskName the name of the task to run
      * @param runnable the task to run
-     * @param isRunnable   the task to run is it a runnable
      */
-    public void logTime(boolean isRunnable, String taskName, Runnable runnable) {
+    public void logTime(String taskName, Runnable runnable) {
         long start = System.currentTimeMillis();
         runnable.run();
         long end = System.currentTimeMillis();
-        if (isRunnable) {
-            Bukkit.getConsoleSender().sendMessage(CC.translate(Alley.getInstance().getPrefix() + "&fSuccessfully ran the &b" + taskName + " &fin &b" + (end - start) + "ms&f."));
-            return;
-        }
 
-        Bukkit.getConsoleSender().sendMessage(CC.translate(Alley.getInstance().getPrefix() + "&fSuccessfully loaded &b" + taskName + " &fin &b" + (end - start) + "ms&f."));
+        Bukkit.getConsoleSender().sendMessage(CC.translate(CC.PREFIX + "&fSuccessfully initialized the &b" + taskName + " &fin &b" + (end - start) + "ms&f."));
+    }
+
+    /**
+     * Log the time it takes to run a task.
+     *
+     * @param runnableTaskName the name of the task to run
+     * @param runnable the task to run
+     */
+    public void logTimeTask(String runnableTaskName, Runnable runnable) {
+        long start = System.currentTimeMillis();
+        runnable.run();
+        long end = System.currentTimeMillis();
+
+        Bukkit.getConsoleSender().sendMessage(CC.translate(CC.PREFIX + "&fSuccessfully ran the &b" + runnableTaskName + " &fin &b" + (end - start) + "ms&f."));
+    }
+
+    /**
+     * Measure the runtime of a task and log it to the console with the provided action in its parameter.
+     *
+     * @param action the action
+     * @param task the task to measure
+     * @param runnable the runnable to run
+     */
+    public void logTimeWithAction(String action, String task, Runnable runnable) {
+        long start = System.currentTimeMillis();
+        runnable.run();
+        long runtime = System.currentTimeMillis() - start;
+        Bukkit.getConsoleSender().sendMessage(CC.translate(CC.PREFIX + "&fSuccessfully " + action + "&f the &b" + task + " &fin &b" + runtime + "ms&f."));
     }
 
     /**
@@ -48,7 +71,7 @@ public class Logger {
      * @param message the message to log
      */
     public void log(String message) {
-        Bukkit.getConsoleSender().sendMessage(CC.translate(Alley.getInstance().getPrefix() + message));
+        Bukkit.getConsoleSender().sendMessage(CC.translate(CC.PREFIX + message));
     }
 
     /**
@@ -66,25 +89,29 @@ public class Logger {
      * @param timeTaken The time taken to enable the plugin.
      */
     public void pluginEnabled(long timeTaken) {
+        Alley plugin = Alley.getInstance();
+
+        //Bukkit.getConsoleSender().sendMessage(" ");
+        //Arrays.stream(ASCIIUtil.ALLEY).forEach(line -> Bukkit.getConsoleSender().sendMessage(CC.translate(line)));
         Bukkit.getConsoleSender().sendMessage(" ");
-        Bukkit.getConsoleSender().sendMessage(CC.translate("        &b&l" + Alley.getInstance().getDescription().getName() + " &bPractice"));
+        Bukkit.getConsoleSender().sendMessage(CC.translate("        &b&l" + plugin.getDescription().getName() + " &bPractice"));
         Bukkit.getConsoleSender().sendMessage(" ");
-        Bukkit.getConsoleSender().sendMessage(CC.translate("    &fAuthors: &b" + Alley.getInstance().getDescription().getAuthors().toString().replace("[", "").replace("]", "")));
+        Bukkit.getConsoleSender().sendMessage(CC.translate("    &fAuthors: &b" + plugin.getDescription().getAuthors().toString().replace("[", "").replace("]", "")));
         Bukkit.getConsoleSender().sendMessage(" ");
-        Bukkit.getConsoleSender().sendMessage(CC.translate("    &fVersion: &b" + Alley.getInstance().getDescription().getVersion()));
-        Bukkit.getConsoleSender().sendMessage(CC.translate("    &fDiscord: &b" + Alley.getInstance().getDescription().getWebsite()));
-        Bukkit.getConsoleSender().sendMessage(CC.translate("    &fDescription: &b" + Alley.getInstance().getDescription().getDescription()));
+        Bukkit.getConsoleSender().sendMessage(CC.translate("    &fVersion: &b" + plugin.getDescription().getVersion()));
+        Bukkit.getConsoleSender().sendMessage(CC.translate("    &fDiscord: &b" + plugin.getDescription().getWebsite()));
+        Bukkit.getConsoleSender().sendMessage(CC.translate("    &fDescription: &b" + plugin.getDescription().getDescription()));
         Bukkit.getConsoleSender().sendMessage(" ");
-        Bukkit.getConsoleSender().sendMessage(CC.translate("    &fArenas: &b" + Alley.getInstance().getArenaRepository().getArenas().size()));
-        Bukkit.getConsoleSender().sendMessage(CC.translate("    &fKits: &b" + Alley.getInstance().getKitRepository().getKits().size()));
-        Bukkit.getConsoleSender().sendMessage(CC.translate("    &fFFA Arenas: &b" + Alley.getInstance().getFfaRepository().getMatches().size()));
-        Bukkit.getConsoleSender().sendMessage(" ");
-        Bukkit.getConsoleSender().sendMessage(CC.translate("    &fSpigot: &b" + Bukkit.getName()));
-        Bukkit.getConsoleSender().sendMessage(CC.translate("    &fVersion: &b" + Alley.getInstance().getBukkitVersionExact()));
+        Bukkit.getConsoleSender().sendMessage(CC.translate("    &fKits &b" + plugin.getKitRepository().getKits().size()));
+        Bukkit.getConsoleSender().sendMessage(CC.translate("    &fArenas: &b" + plugin.getArenaRepository().getArenas().size()));
+        Bukkit.getConsoleSender().sendMessage(CC.translate("    &fFFA Arenas: &b" + plugin.getFfaRepository().getMatches().size()));
         Bukkit.getConsoleSender().sendMessage(" ");
         Bukkit.getConsoleSender().sendMessage(CC.translate("    &bMongoDB &f| &bStatus: &aConnected"));
-        Bukkit.getConsoleSender().sendMessage(CC.translate("     &fHost: &b" + Alley.getInstance().getConfigHandler().getDatabaseConfig().getString("mongo.uri")));
-        Bukkit.getConsoleSender().sendMessage(CC.translate("     &fDatabase: &b" + Alley.getInstance().getConfigHandler().getDatabaseConfig().getString("mongo.database")));
+        Bukkit.getConsoleSender().sendMessage(CC.translate("     &fHost: &b" + plugin.getConfigService().getDatabaseConfig().getString("mongo.uri")));
+        Bukkit.getConsoleSender().sendMessage(CC.translate("     &fDatabase: &b" + plugin.getConfigService().getDatabaseConfig().getString("mongo.database")));
+        Bukkit.getConsoleSender().sendMessage(" ");
+        Bukkit.getConsoleSender().sendMessage(CC.translate("    &fSpigot: &b" + Bukkit.getName()));
+        Bukkit.getConsoleSender().sendMessage(CC.translate("    &fVersion: &b" + plugin.getBukkitVersionExact()));
         Bukkit.getConsoleSender().sendMessage(" ");
         Bukkit.getConsoleSender().sendMessage(CC.translate("    &fLoaded in &b" + timeTaken + " &bms"));
         Bukkit.getConsoleSender().sendMessage(" ");

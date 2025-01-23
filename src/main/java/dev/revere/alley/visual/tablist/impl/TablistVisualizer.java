@@ -22,12 +22,12 @@ public class TablistVisualizer implements ITablist {
 
     @Override
     public List<String> getHeader(Player player) {
-        return Alley.getInstance().getConfigHandler().getTablistConfig().getStringList("tablist.header");
+        return Alley.getInstance().getConfigService().getTablistConfig().getStringList("tablist.header");
     }
 
     @Override
     public List<String> getFooter(Player player) {
-        return Alley.getInstance().getConfigHandler().getTablistConfig().getStringList("tablist.footer");
+        return Alley.getInstance().getConfigService().getTablistConfig().getStringList("tablist.footer");
     }
 
     @Override

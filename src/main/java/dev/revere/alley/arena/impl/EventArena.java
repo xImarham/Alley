@@ -26,7 +26,7 @@ public class EventArena extends Arena {
     public void saveArena() {
         String name = "arenas." + getName();
 
-        FileConfiguration config = Alley.getInstance().getConfigHandler().getConfig("storage/arenas.yml");
+        FileConfiguration config = Alley.getInstance().getConfigService().getConfig("storage/arenas.yml");
         config.set(name, null);
         config.set(name + ".type", getType().name());
 

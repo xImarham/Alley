@@ -4,11 +4,9 @@ import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.Command;
 import dev.revere.alley.api.command.CommandArgs;
-import dev.revere.alley.config.ConfigHandler;
 import dev.revere.alley.kit.Kit;
 import dev.revere.alley.util.chat.CC;
 import net.md_5.bungee.api.chat.*;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 

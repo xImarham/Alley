@@ -17,31 +17,37 @@ import java.util.List;
 @Getter
 @Setter
 public class ScoreboardTitleHandler {
-    FileConfiguration scoreboardConfig = Alley.getInstance().getConfigHandler().getConfig("providers/scoreboard.yml");
-
-    private String text;
-    private boolean animated;
-    private long ticks;
+    private final FileConfiguration config;
     private List<String> animation;
+    private boolean animated;
+    private String text;
+    private long ticks;
+    private int index;
 
-    public ScoreboardTitleHandler(){
-        text = scoreboardConfig.getString("scoreboard.title.text", "null");
-        animated = scoreboardConfig.getBoolean("scoreboard.title.animated");
-        ticks = scoreboardConfig.getLong("scoreboard.title.ticks");
-        if (animated){
-            animation = new ArrayList<>();
-            animation = scoreboardConfig.getStringList("scoreboard.title.animation");
-            runTitleAnimation();
+    /**
+     * Constructor for the ScoreboardTitleHandler class.
+     *
+     * @param config The configuration file
+     */
+    public ScoreboardTitleHandler(FileConfiguration config) {
+        this.config = config;
+        this.text = this.config.getString("scoreboard.title.text", "null");
+        this.animated = this.config.getBoolean("scoreboard.title.animated");
+        this.ticks = this.config.getLong("scoreboard.title.ticks");
+        this.index = 0;
+
+        if (this.animated) {
+            this.animation = new ArrayList<>();
+            this.animation = this.config.getStringList("scoreboard.title.animation");
+            this.runTitleAnimation();
         }
     }
 
-    int i = 0;
-
-    private void runTitleAnimation(){
+    private void runTitleAnimation() {
         TaskUtil.runTaskTimer(() -> {
-            text = animation.get(i);
-            i++;
-            if (i == animation.size()) i = 0;
-        }, ticks, ticks);
+            this.text = this.animation.get(this.index);
+            this.index++;
+            if (this.index == this.animation.size()) this.index = 0;
+        }, this.ticks, this.ticks);
     }
 }

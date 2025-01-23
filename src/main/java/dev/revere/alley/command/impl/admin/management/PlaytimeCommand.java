@@ -1,7 +1,6 @@
-package dev.revere.alley.command.admin.management;
+package dev.revere.alley.command.impl.admin.management;
 
 import dev.revere.alley.Alley;
-import dev.revere.alley.config.ConfigHandler;
 import dev.revere.alley.locale.ErrorMessage;
 import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.api.command.BaseCommand;
@@ -54,7 +53,7 @@ public class PlaytimeCommand extends BaseCommand {
         int minutes = (int)((hoursPlayed - (double)(hours + days * 24)) * 60.0);
         int seconds = (int)((minutesPlayed - (double)(minutes + hours * 60 + days * 60 * 24)) * 60.0);
 
-        player.sendMessage(CC.translate(Alley.getInstance().getConfigHandler().getMessagesConfig().getString("playtime.message")
+        player.sendMessage(CC.translate(Alley.getInstance().getConfigService().getMessagesConfig().getString("playtime.message")
                 .replace("{days}", String.valueOf(days))
                 .replace("{hours}", String.valueOf(hours))
                 .replace("{minutes}", String.valueOf(minutes))

@@ -1,5 +1,6 @@
 package dev.revere.alley.essential.chat;
 
+import dev.revere.alley.essential.chat.chat.EnumEmojiType;
 import dev.revere.alley.util.chat.Symbol;
 import lombok.Getter;
 
@@ -17,6 +18,9 @@ public class ChatService {
 
     public ChatService() {
         this.symbolReplacements = new HashMap<>();
-        this.symbolReplacements.put(":heart:", "§4§l" + Symbol.HEART + "§r");
+
+        for (EnumEmojiType value : EnumEmojiType.values()) {
+            this.symbolReplacements.put(value.getIdentifier(), value.getFormat());
+        }
     }
 }

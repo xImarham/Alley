@@ -16,7 +16,7 @@ import java.util.Map;
  * @date 19/04/2024 - 17:39
  */
 @Getter
-public class ConfigHandler {
+public class ConfigService {
     private final Map<String, File> configFiles = new HashMap<>();
     private final Map<String, FileConfiguration> fileConfigurations = new HashMap<>();
 
@@ -39,19 +39,19 @@ public class ConfigHandler {
     /**
      * Constructor for the ConfigHandler class.
      */
-    public ConfigHandler() {
+    public ConfigService() {
         for (String fileName : configFileNames) {
             loadConfig(fileName);
         }
 
-        settingsConfig = getConfig("settings.yml");
-        messagesConfig = getConfig("messages.yml");
-        databaseConfig = getConfig("database/database.yml");
-        ffaConfig = getConfig("storage/ffa.yml");
-        kitsConfig = getConfig("storage/kits.yml");
-        arenasConfig = getConfig("storage/arenas.yml");
-        scoreboardConfig = getConfig("providers/scoreboard.yml");
-        tablistConfig = getConfig("providers/tablist.yml");
+        this.settingsConfig = this.getConfig("settings.yml");
+        this.messagesConfig = this.getConfig("messages.yml");
+        this.databaseConfig = this.getConfig("database/database.yml");
+        this.ffaConfig = this.getConfig("storage/ffa.yml");
+        this.kitsConfig = this.getConfig("storage/kits.yml");
+        this.arenasConfig = this.getConfig("storage/arenas.yml");
+        this.scoreboardConfig = this.getConfig("providers/scoreboard.yml");
+        this.tablistConfig = this.getConfig("providers/tablist.yml");
     }
 
     /**
@@ -62,22 +62,22 @@ public class ConfigHandler {
     @SuppressWarnings("ResultOfMethodCallIgnored")
     private void loadConfig(String fileName) {
         File configFile = new File(Alley.getInstance().getDataFolder(), fileName);
-        configFiles.put(fileName, configFile);
+        this.configFiles.put(fileName, configFile);
         if (!configFile.exists()) {
             configFile.getParentFile().mkdirs();
             Alley.getInstance().saveResource(fileName, false);
         }
 
         FileConfiguration config = YamlConfiguration.loadConfiguration(configFile);
-        fileConfigurations.put(fileName, config);
+        this.fileConfigurations.put(fileName, config);
     }
 
     /**
      * Reload all configurations.
      */
     public void reloadConfigs() {
-        for (String fileName : configFileNames) {
-            loadConfig(fileName);
+        for (String fileName : this.configFileNames) {
+            this.loadConfig(fileName);
         }
     }
 
@@ -103,7 +103,7 @@ public class ConfigHandler {
      * @return The file configuration.
      */
     public FileConfiguration getConfig(String configName) {
-        return fileConfigurations.get(configName);
+        return this.fileConfigurations.get(configName);
     }
 
     /**
@@ -113,6 +113,6 @@ public class ConfigHandler {
      * @return The file.
      */
     public File getConfigFile(String fileName) {
-        return configFiles.get(fileName);
+        return this.configFiles.get(fileName);
     }
 }

@@ -1,4 +1,4 @@
-package dev.revere.alley.command.admin.debug;
+package dev.revere.alley.command.impl.admin.debug;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.profile.Profile;

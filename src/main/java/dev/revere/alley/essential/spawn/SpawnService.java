@@ -27,7 +27,7 @@ public class SpawnService {
      * Load the spawn location from the settings.yml file
      */
     private void loadSpawnLocation() {
-        FileConfiguration config = Alley.getInstance().getConfigHandler().getConfig("settings.yml");
+        FileConfiguration config = Alley.getInstance().getConfigService().getConfig("settings.yml");
 
         Location location = LocationUtil.deserialize(config.getString("spawn.join-location"));
 
@@ -46,11 +46,11 @@ public class SpawnService {
      */
     public void updateSpawnLocation(Location location) {
         this.location = location;
-        FileConfiguration config = Alley.getInstance().getConfigHandler().getConfig("settings.yml");
+        FileConfiguration config = Alley.getInstance().getConfigService().getConfig("settings.yml");
 
         config.set("spawn.join-location", LocationUtil.serialize(location));
 
-        Alley.getInstance().getConfigHandler().saveConfig(Alley.getInstance().getConfigHandler().getConfigFile("settings.yml"), config);
+        Alley.getInstance().getConfigService().saveConfig(Alley.getInstance().getConfigService().getConfigFile("settings.yml"), config);
     }
 
     /**

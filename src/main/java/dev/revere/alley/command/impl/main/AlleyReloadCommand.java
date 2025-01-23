@@ -1,4 +1,4 @@
-package dev.revere.alley.command;
+package dev.revere.alley.command.impl.main;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.util.chat.CC;
@@ -20,7 +20,7 @@ public class AlleyReloadCommand extends BaseCommand {
 
         player.sendMessage("");
         player.sendMessage(CC.translate("&eReloading &b&lAlley&e..."));
-        Alley.getInstance().getConfigHandler().reloadConfigs();
+        Alley.getInstance().getConfigService().reloadConfigs();
         player.sendMessage(CC.translate("&b&lAlley &ehas been reloaded."));
         player.sendMessage("");
     }

@@ -274,7 +274,7 @@ public class MatchListener implements Listener {
                 }
 
                 if (profile.getMatch().getKit().isSettingEnabled(KitSettingLivesImpl.class)) {
-                    if (player.getLocation().getY() <= Alley.getInstance().getConfigHandler().getSettingsConfig().getInt("game.death-y-level")) {
+                    if (player.getLocation().getY() <= Alley.getInstance().getConfigService().getSettingsConfig().getInt("game.death-y-level")) {
                         if (player.getGameMode() == GameMode.SPECTATOR) return;
                         if (player.getGameMode() == GameMode.CREATIVE) return;
                         player.setHealth(0);

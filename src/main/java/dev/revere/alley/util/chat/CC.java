@@ -1,9 +1,7 @@
 package dev.revere.alley.util.chat;
 
-import lombok.experimental.UtilityClass;
 import dev.revere.alley.Alley;
-import dev.revere.alley.config.ConfigHandler;
-import org.bukkit.Bukkit;
+import lombok.experimental.UtilityClass;
 import org.bukkit.ChatColor;
 
 import java.util.ArrayList;
@@ -16,8 +14,8 @@ import java.util.List;
  */
 @UtilityClass
 public class CC {
-    public String MENU_BAR = translate("&7&m------------------------");
-    public String CHAT_BAR = translate("&7&m------------------------------------------------");
+    public final String MENU_BAR = translate("&7&m------------------------");
+    public final String PREFIX = translate("&f[&b" + Alley.getInstance().getDescription().getName() + "&f] &r");
 
     /**
      * Translate a string to a colored string.

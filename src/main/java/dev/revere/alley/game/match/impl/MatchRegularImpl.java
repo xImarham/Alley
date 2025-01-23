@@ -82,7 +82,7 @@ public class MatchRegularImpl extends AbstractMatch {
     }
 
     private void sendEloResult(String winnerName, String loserName, int oldEloWinner, int oldEloLoser, int newEloWinner, int newEloLoser) {
-        FileConfiguration config = Alley.getInstance().getConfigHandler().getMessagesConfig();
+        FileConfiguration config = Alley.getInstance().getConfigService().getMessagesConfig();
 
         List<String> list = config.getStringList("match.ended.elo-changes.format");
         String winnerIndicatorColor = config.getString("match.ended.elo-changes.winner-indicator-color", "&a");

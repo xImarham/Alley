@@ -17,9 +17,17 @@ import java.util.List;
 @Getter
 @Setter
 public class QueueRepository {
-    private final List<Queue> queues = new ArrayList<>();
+    private final List<Queue> queues;
+    private final Alley plugin;
 
-    public QueueRepository() {
+    /**
+     * Constructor for the QueueRepository class.
+     *
+     * @param plugin the plugin instance
+     */
+    public QueueRepository(Alley plugin) {
+        this.queues = new ArrayList<>();
+        this.plugin = plugin;
         this.initialize();
     }
 

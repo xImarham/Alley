@@ -3,7 +3,6 @@ package dev.revere.alley.game.match.player.data;
 import dev.revere.alley.Alley;
 import lombok.Getter;
 import lombok.Setter;
-import dev.revere.alley.config.ConfigHandler;
 
 /**
  * @author Remi
@@ -16,7 +15,7 @@ public class MatchGamePlayerData {
     private int longestCombo;
     private int combo;
     private int hits;
-    private int lives = Alley.getInstance().getConfigHandler().getSettingsConfig().getInt("game.lives");
+    private int lives = Alley.getInstance().getConfigService().getSettingsConfig().getInt("game.lives");
 
     /**
      * Method to handle an attack.

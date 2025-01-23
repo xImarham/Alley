@@ -22,7 +22,7 @@ public class SetSpawnCommand extends BaseCommand {
         Location location = player.getLocation();
         Alley.getInstance().getSpawnService().updateSpawnLocation(location);
 
-        String message = Alley.getInstance().getConfigHandler().getMessagesConfig().getString("spawn.spawn-set");
+        String message = Alley.getInstance().getConfigService().getMessagesConfig().getString("spawn.spawn-set");
         message = message.replace("{world}", location.getWorld().getName())
                 .replace("{x}", String.format("%.2f", location.getX()))
                 .replace("{y}", String.format("%.2f", location.getY()))

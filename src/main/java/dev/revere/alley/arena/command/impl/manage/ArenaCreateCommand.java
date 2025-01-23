@@ -79,7 +79,7 @@ public class ArenaCreateCommand extends BaseCommand {
     }
 
     private String getDefaultDisplayName(ArenaType arenaType) {
-        FileConfiguration config = Alley.getInstance().getConfigHandler().getSettingsConfig();
+        FileConfiguration config = Alley.getInstance().getConfigService().getSettingsConfig();
 
         switch (arenaType) {
             case SHARED:

@@ -74,7 +74,7 @@ public class ShopEffectButton extends Button {
         profile.getProfileData().setCoins(profile.getProfileData().getCoins() - cosmetic.getPrice());
 
 
-        FileConfiguration config = Alley.getInstance().getConfigHandler().getSettingsConfig();
+        FileConfiguration config = Alley.getInstance().getConfigService().getSettingsConfig();
         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), config.get("command.grant-cosmetic-permission-command").toString().replace("{player}", player.getName()).replace("%permission%", cosmetic.getPermission()));
 
         player.sendMessage(CC.translate("&aYou have successfully purchased the " + cosmetic.getName() + " cosmetic for &b" + cosmetic.getPrice() + " coins."));

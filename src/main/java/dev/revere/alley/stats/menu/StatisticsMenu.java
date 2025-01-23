@@ -18,7 +18,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * @author Emmy
@@ -31,7 +30,7 @@ public class StatisticsMenu extends Menu {
 
     @Override
     public String getTitle(Player player) {
-        return "&b&lYour Stats";
+        return this.target == player ? "&b&lYour Stats" : "&b&l" + this.target.getName() + "'s Stats";
     }
 
     @Override
@@ -42,16 +41,12 @@ public class StatisticsMenu extends Menu {
         buttons.put(4, new GlobalStatButton());
         buttons.put(6, new LeaderboardButton());
 
-        List<Map.Entry<String, ProfileRankedKitData>> sortedKits = Alley.getInstance().getProfileRepository().getProfile(target.getUniqueId()).getProfileData().getRankedKitData().entrySet().stream()
-                .filter(entry -> entry.getValue().getWins() != 0 || entry.getValue().getLosses() != 0)
-                .sorted((entry1, entry2) -> Integer.compare(entry2.getValue().getWins(), entry1.getValue().getWins()))
-                .collect(Collectors.toList());
+        Profile profile = Alley.getInstance().getProfileRepository().getProfile(this.target == player ? player.getUniqueId() : this.target.getUniqueId());
+        List<Kit> sortedKits = profile.getSortedKits();
 
         int slot = 10;
-
-        // Loop through the sorted kits and add a button for each kit that the player has played
-        for (Map.Entry<String, ProfileRankedKitData> entry : sortedKits) {
-            buttons.put(slot++, new KitStatButton(Alley.getInstance().getKitRepository().getKit(entry.getKey())));
+        for (Kit kit : sortedKits) {
+            buttons.put(slot++, new KitStatButton(profile, kit));
             if (slot == 17 || slot == 26 || slot == 35 || slot == 44 || slot == 53) {
                 slot += 2;
             }
@@ -69,14 +64,14 @@ public class StatisticsMenu extends Menu {
 
     @AllArgsConstructor
     private static class KitStatButton extends Button {
+        private final Profile profile;
         private final Kit kit;
 
         @Override
         public ItemStack getButtonItem(Player player) {
-            Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
-            ProfileRankedKitData profileRankedKitData = profile.getProfileData().getRankedKitData().get(this.kit.getName());
-            ProfileUnrankedKitData profileUnrankedKitData = profile.getProfileData().getUnrankedKitData().get(this.kit.getName());
-            ProfileFFAData profileFFAData = profile.getProfileData().getFfaData().get(this.kit.getName());
+            ProfileRankedKitData profileRankedKitData = this.profile.getProfileData().getRankedKitData().get(this.kit.getName());
+            ProfileUnrankedKitData profileUnrankedKitData = this.profile.getProfileData().getUnrankedKitData().get(this.kit.getName());
+            ProfileFFAData profileFFAData = this.profile.getProfileData().getFfaData().get(this.kit.getName());
 
             List<String> lore = new ArrayList<>(Arrays.asList(
                     "",
