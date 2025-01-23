@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 
 /**
  * @author Emmy
- * @project Practice
+ * @project Alley
  * @date 29/04/2024 - 18:45
  */
 public class SpawnItemsCommand extends BaseCommand {

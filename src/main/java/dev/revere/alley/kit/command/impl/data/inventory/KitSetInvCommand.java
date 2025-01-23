@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
 
 /**
  * @author Emmy
- * @project Practice
+ * @project Alley
  * @date 28/04/2024 - 22:23
  */
 public class KitSetInvCommand extends BaseCommand {

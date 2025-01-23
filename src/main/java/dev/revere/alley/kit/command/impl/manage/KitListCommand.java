@@ -9,7 +9,7 @@ import org.bukkit.command.CommandSender;
 
 /**
  * @author Emmy
- * @project Practice
+ * @project Alley
  * @date 28/04/2024 - 22:07
  */
 public class KitListCommand extends BaseCommand {

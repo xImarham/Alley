@@ -13,7 +13,7 @@ import java.util.Arrays;
 
 /**
  * @author Emmy
- * @project Practice
+ * @project Alley
  * @date 28/04/2024 - 22:46
  */
 public class KitSetDescriptionCommand extends BaseCommand {
