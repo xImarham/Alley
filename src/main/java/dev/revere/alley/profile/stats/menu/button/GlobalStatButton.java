@@ -36,7 +36,7 @@ public class GlobalStatButton extends Button {
                         "&b&lRanked",
                         "&f● &bWins: &f" + profile.getProfileData().getRankedWins(),
                         "&f● &bLosses: &f" + profile.getProfileData().getRankedLosses(),
-                        "&f● &bElo: &f" + profile.getProfileData().getProfileDivisionData().getGlobalElo(),
+                        "&f● &bElo: &f" + profile.getProfileData().getElo(),
                         "",
                         "&b&lFFA",
                         "&f● &bKills: &f" + profile.getProfileData().getFfaData().values().stream().mapToInt(ProfileFFAData::getKills).sum(),

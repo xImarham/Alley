@@ -17,7 +17,6 @@ import java.util.Map;
  */
 @UtilityClass
 public class MongoUtility {
-
     /**
      * Converts a Profile object to a Document.
      *
@@ -32,6 +31,7 @@ public class MongoUtility {
         Document profileDataDocument = new Document();
         ProfileData profileData = profile.getProfileData();
 
+        profileDataDocument.put("elo", profileData.getElo());
         profileDataDocument.put("coins", profileData.getCoins());
         profileDataDocument.put("unrankedWins", profileData.getUnrankedWins());
         profileDataDocument.put("unrankedLosses", profileData.getUnrankedLosses());
@@ -43,7 +43,6 @@ public class MongoUtility {
         profileDataDocument.put("ffaData", convertFFAData(profileData.getFfaData()));
         profileDataDocument.put("profileSettingData", convertProfileSettingData(profileData.getProfileSettingData()));
         profileDataDocument.put("profileCosmeticData", convertProfileCosmeticData(profileData.getProfileCosmeticData()));
-        profileDataDocument.put("profileDivisionData", convertProfileDivisionData(profileData.getProfileDivisionData()));
 
         document.put("profileData", profileDataDocument);
         return document;
@@ -132,19 +131,6 @@ public class MongoUtility {
     }
 
     /**
-     * Converts a ProfileDivisionData object to a Document.
-     *
-     * @param divisionData The division data to convert.
-     * @return The converted Document.
-     */
-    private Document convertProfileDivisionData(ProfileDivisionData divisionData) {
-        Document divisionDocument = new Document();
-        divisionDocument.put("division", divisionData.getDivision());
-        divisionDocument.put("globalElo", divisionData.getGlobalElo());
-        return divisionDocument;
-    }
-
-    /**
      * Updates a Profile object from a Document.
      *
      * @param profile   The profile to update.
@@ -155,6 +141,7 @@ public class MongoUtility {
             Document profileDataDocument = (Document) document.get("profileData");
             ProfileData profileData = new ProfileData();
 
+            profileData.setElo(profileDataDocument.getInteger("elo"));
             profileData.setCoins(profileDataDocument.getInteger("coins"));
             profileData.setUnrankedWins(profileDataDocument.getInteger("unrankedWins"));
             profileData.setUnrankedLosses(profileDataDocument.getInteger("unrankedLosses"));
@@ -178,7 +165,6 @@ public class MongoUtility {
 
             profileData.setProfileSettingData(parseProfileSettingData((Document) profileDataDocument.get("profileSettingData")));
             profileData.setProfileCosmeticData(parseProfileCosmeticData((Document) profileDataDocument.get("profileCosmeticData")));
-            profileData.setProfileDivisionData(parseProfileDivisionData((Document) profileDataDocument.get("profileDivisionData")));
 
             profile.setProfileData(profileData);
         }
@@ -267,18 +253,5 @@ public class MongoUtility {
         cosmeticData.setSelectedKillEffect(cosmeticDocument.getString("selectedKillEffect"));
         cosmeticData.setSelectedSoundEffect(cosmeticDocument.getString("selectedSoundEffect"));
         return cosmeticData;
-    }
-
-    /**
-     * Parses a ProfileDivisionData object from a Document.
-     *
-     * @param divisionDocument The division document to parse.
-     * @return The parsed ProfileDivisionData.
-     */
-    private ProfileDivisionData parseProfileDivisionData(Document divisionDocument) {
-        ProfileDivisionData divisionData = new ProfileDivisionData();
-        divisionData.setDivision(divisionDocument.getString("division"));
-        divisionData.setGlobalElo(divisionDocument.getInteger("globalElo"));
-        return divisionData;
     }
 }

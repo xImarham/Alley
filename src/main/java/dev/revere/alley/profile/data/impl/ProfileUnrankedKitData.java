@@ -1,5 +1,6 @@
 package dev.revere.alley.profile.data.impl;
 
+import dev.revere.alley.profile.division.AbstractDivision;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,6 +12,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ProfileUnrankedKitData {
+    private AbstractDivision division;
     private int wins = 0;
     private int losses = 0;
 

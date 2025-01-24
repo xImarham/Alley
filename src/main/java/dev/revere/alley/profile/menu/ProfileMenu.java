@@ -1,16 +1,13 @@
 package dev.revere.alley.profile.menu;
 
-import lombok.AllArgsConstructor;
 import dev.revere.alley.Alley;
-import dev.revere.alley.profile.stats.menu.StatisticsMenu;
-import dev.revere.alley.profile.Profile;
-import dev.revere.alley.profile.data.impl.ProfileFFAData;
-import dev.revere.alley.profile.division.AbstractDivision;
 import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.api.menu.Menu;
+import dev.revere.alley.profile.Profile;
+import dev.revere.alley.profile.data.impl.ProfileFFAData;
+import dev.revere.alley.profile.stats.menu.StatisticsMenu;
 import dev.revere.alley.util.data.item.ItemBuilder;
-import dev.revere.alley.profile.division.enums.EnumDivisionLevel;
-import dev.revere.alley.profile.division.enums.EnumDivisionTier;
+import lombok.AllArgsConstructor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
@@ -39,7 +36,7 @@ public class ProfileMenu extends Menu {
     public Map<Integer, Button> getButtons(Player player) {
         Map<Integer, Button> buttons = new HashMap<>();
         Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
-        AbstractDivision abstractDivision = Alley.getInstance().getDivisionRepository().getDivision(profile.getProfileData().getProfileDivisionData().getDivision());
+        //AbstractDivision abstractDivision = Alley.getInstance().getDivisionRepository().getDivision(profile.getProfileData().getProfileDivisionData().getDivision());
 
         ItemStack skullItem = new ItemStack(Material.SKULL_ITEM, 1, (short) 3);
         SkullMeta skullMeta = (SkullMeta) skullItem.getItemMeta();
@@ -49,16 +46,16 @@ public class ProfileMenu extends Menu {
             skullItem.setItemMeta(skullMeta);
         }
 
-        String[] nextDivisionAndLevel = abstractDivision.getNextDivisionAndLevelArray();
-        int eloNeeded = abstractDivision.getEloNeededForDivision(EnumDivisionTier.valueOf(nextDivisionAndLevel[0].toUpperCase()), EnumDivisionLevel.valueOf("LEVEL_" + nextDivisionAndLevel[1]));
+//        String[] nextDivisionAndLevel = abstractDivision.getNextDivisionAndLevelArray();
+//        int eloNeeded = abstractDivision.getEloNeededForDivision(EnumDivisionTier.valueOf(nextDivisionAndLevel[0].toUpperCase()), EnumDivisionLevel.valueOf("LEVEL_" + nextDivisionAndLevel[1]));
 
         buttons.put(4, new ProfileButton("&b&lYour Profile", skullItem, Arrays.asList(
                 " &b&l● &fCoins: &b" + profile.getProfileData().getCoins(),
-                " &b&l● &fDivision: &b" + abstractDivision.getTier().getName(),
-                " &b&l● &fLevel: &b" + abstractDivision.getLevel().getLevelInt(),
-                " &b&l● &fProgress: &b" + abstractDivision.generateProgressBar(eloNeeded),
-                "",
-                " &b&l● &fNext Division: &b" + abstractDivision.getNextDivisionAndLevel(),
+//                " &b&l● &fDivision: &b" + abstractDivision.getTier().getName(),
+//                " &b&l● &fLevel: &b" + abstractDivision.getLevel().getLevelInt(),
+//                " &b&l● &fProgress: &b" + abstractDivision.generateProgressBar(eloNeeded),
+//                "",
+//                " &b&l● &fNext Division: &b" + abstractDivision.getNextDivisionAndLevel(),
                 ""
         )));
 
@@ -67,7 +64,7 @@ public class ProfileMenu extends Menu {
                 "&b&lGlobal",
                 " &b&l● &fWins: &b" + profile.getProfileData().getTotalWins(),
                 " &b&l● &fLosses: &b" + profile.getProfileData().getTotalLosses(),
-                " &b&l● &fElo: &b" + profile.getProfileData().getProfileDivisionData().getGlobalElo(),
+                " &b&l● &fElo: &b" + profile.getProfileData().getElo(),
                 "",
                 "&b&lRanked",
                 " &b&l● &fWins: &b" + profile.getProfileData().getRankedWins(),

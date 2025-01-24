@@ -140,7 +140,7 @@ public class MatchRegularImpl extends AbstractMatch {
         winnerProfile.getProfileData().getRankedKitData().get(getKit().getName()).setElo(elo);
         winnerProfile.getProfileData().getRankedKitData().get(getKit().getName()).incrementWins();
         winnerProfile.getProfileData().incrementRankedWins();
-        winnerProfile.getProfileData().getProfileDivisionData().updateEloAndDivision(winnerProfile);
+        winnerProfile.getProfileData().updateEloAndDivision(winnerProfile, this.getKit());
     }
 
     /**
@@ -153,7 +153,7 @@ public class MatchRegularImpl extends AbstractMatch {
         loserProfile.getProfileData().getRankedKitData().get(getKit().getName()).setElo(elo);
         loserProfile.getProfileData().getRankedKitData().get(getKit().getName()).incrementLosses();
         loserProfile.getProfileData().incrementRankedLosses();
-        loserProfile.getProfileData().getProfileDivisionData().updateEloAndDivision(loserProfile);
+        loserProfile.getProfileData().updateEloAndDivision(loserProfile, this.getKit());
     }
 
     /**

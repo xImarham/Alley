@@ -1,19 +1,19 @@
 package dev.revere.alley.profile;
 
+import dev.revere.alley.Alley;
+import dev.revere.alley.game.ffa.AbstractFFAMatch;
+import dev.revere.alley.game.match.AbstractMatch;
+import dev.revere.alley.game.party.Party;
 import dev.revere.alley.kit.Kit;
+import dev.revere.alley.leaderboard.enums.EnumLeaderboardType;
+import dev.revere.alley.profile.data.ProfileData;
 import dev.revere.alley.profile.data.impl.ProfileFFAData;
 import dev.revere.alley.profile.data.impl.ProfileRankedKitData;
 import dev.revere.alley.profile.data.impl.ProfileUnrankedKitData;
-import lombok.Getter;
-import lombok.Setter;
-import dev.revere.alley.Alley;
-import dev.revere.alley.game.ffa.AbstractFFAMatch;
-import dev.revere.alley.leaderboard.enums.EnumLeaderboardType;
-import dev.revere.alley.game.match.AbstractMatch;
-import dev.revere.alley.game.party.Party;
-import dev.revere.alley.profile.data.ProfileData;
 import dev.revere.alley.profile.enums.EnumProfileState;
 import dev.revere.alley.queue.QueueProfile;
+import lombok.Getter;
+import lombok.Setter;
 import org.bukkit.Bukkit;
 
 import java.util.Comparator;

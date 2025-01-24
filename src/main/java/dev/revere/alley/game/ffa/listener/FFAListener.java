@@ -99,10 +99,7 @@ public class FFAListener implements Listener {
             }
 
             Alley.getInstance().getServer().getScheduler().runTaskLater(Alley.getInstance(), () -> player.spigot().respawn(), 1L);
-
-            Bukkit.getScheduler().runTaskLater(Alley.getInstance(), () -> {
-                profile.getFfaMatch().handleDeath(player, killer);
-            }, 1L);
+            Bukkit.getScheduler().runTaskLater(Alley.getInstance(), () -> profile.getFfaMatch().handleDeath(player, killer), 1L);
         }
     }
 
@@ -142,24 +139,19 @@ public class FFAListener implements Listener {
         }
     }
 
-    /*@EventHandler
+    @EventHandler
     public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
-        
-        TODO: Combat handling 
-        
-        if (!(event.getDamager() instanceof Player) || !(event.getEntity() instanceof Player)) {
-            return;
-        }
+        Profile profile = Alley.getInstance().getProfileRepository().getProfile(event.getEntity().getUniqueId());
+        if (profile.getState() != EnumProfileState.FFA) return;
+        if (!(event.getDamager() instanceof Player) || !(event.getEntity() instanceof Player)) return;
 
         Player victim = (Player) event.getEntity();
         Player attacker = (Player) event.getDamager();
         FFACuboidService ffaCuboidService = Alley.getInstance().getFfaCuboidService();
-        if (ffaCuboidService.getCuboid().isIn((victim)) && ffaCuboidService.getCuboid().isIn((attacker)) ||
-                !ffaCuboidService.getCuboid().isIn(victim) && ffaCuboidService.getCuboid().isIn(attacker) ||
-                ffaCuboidService.getCuboid().isIn(victim) && !ffaCuboidService.getCuboid().isIn(attacker)) {
-            
+        if (ffaCuboidService.getCuboid().isIn((victim)) && ffaCuboidService.getCuboid().isIn((attacker)) || !ffaCuboidService.getCuboid().isIn(victim) && ffaCuboidService.getCuboid().isIn(attacker) || ffaCuboidService.getCuboid().isIn(victim) && !ffaCuboidService.getCuboid().isIn(attacker)) {
+            event.setCancelled(true);
         }
-    }*/
+    }
 
     /**
      * Handles the BlockPlaceEvent. The event is cancelled if the player is in the FFA state and tries to place a block.

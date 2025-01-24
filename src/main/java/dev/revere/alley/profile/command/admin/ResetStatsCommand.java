@@ -5,7 +5,7 @@ import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.annotation.Command;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.profile.Profile;
-import dev.revere.alley.profile.menu.StatResetConfirmMenu;
+import dev.revere.alley.profile.menu.ResetConfirmMenu;
 import dev.revere.alley.util.PlayerUtil;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.Bukkit;
@@ -46,6 +46,6 @@ public class ResetStatsCommand extends BaseCommand {
             return;
         }
 
-        new StatResetConfirmMenu(uuid).openMenu(player);
+        new ResetConfirmMenu(uuid).openMenu(player);
     }
 }

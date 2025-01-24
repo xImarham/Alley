@@ -1,16 +1,17 @@
 package dev.revere.alley.profile.data;
 
 import com.google.common.collect.Maps;
-import dev.revere.alley.game.ffa.AbstractFFAMatch;
 import dev.revere.alley.kit.Kit;
 import dev.revere.alley.kit.settings.impl.KitSettingRankedImpl;
+import dev.revere.alley.profile.Profile;
 import lombok.Getter;
 import lombok.Setter;
 import dev.revere.alley.Alley;
-import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.data.impl.*;
+import lombok.var;
 
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author Emmy
@@ -25,8 +26,8 @@ public class ProfileData {
     private Map<String, ProfileFFAData> ffaData;
     private ProfileSettingData profileSettingData;
     private ProfileCosmeticData profileCosmeticData;
-    private ProfileDivisionData profileDivisionData;
 
+    private int elo = 1000;
     private int coins = 100;
     private int unrankedWins = 0;
     private int unrankedLosses = 0;
@@ -48,7 +49,6 @@ public class ProfileData {
     private void initializeDataClasses() {
         this.profileSettingData = new ProfileSettingData();
         this.profileCosmeticData = new ProfileCosmeticData();
-        this.profileDivisionData = new ProfileDivisionData();
     }
 
     /**
@@ -68,6 +68,41 @@ public class ProfileData {
         this.unrankedKitData = Maps.newHashMap();
         this.rankedKitData = Maps.newHashMap();
         this.ffaData = Maps.newHashMap();
+    }
+
+    /**
+     * Calculates the global elo of the player
+     *
+     * @param profile the profile of the player
+     * @return the global elo of the player
+     */
+    private int calculateGlobalElo(Profile profile) {
+        var rankedKits = Alley.getInstance().getKitRepository().getKits().stream()
+                .filter(kit -> kit.isSettingEnabled(KitSettingRankedImpl.class))
+                .collect(Collectors.toList());
+
+        if (rankedKits.isEmpty()) {
+            return 0;
+        }
+
+        int totalElo = rankedKits.stream()
+                .mapToInt(kit -> {
+                    ProfileRankedKitData kitData = profile.getProfileData().getRankedKitData().get(kit.getName());
+                    return kitData != null ? kitData.getElo() : 0;
+                })
+                .sum();
+
+        return totalElo / rankedKits.size();
+    }
+
+    /**
+     * Updates the elo and division of the player
+     *
+     * @param profile the profile of the player
+     */
+    public void updateEloAndDivision(Profile profile, Kit kit) {
+        this.elo = this.calculateGlobalElo(profile);
+        // update elo
     }
 
     /**

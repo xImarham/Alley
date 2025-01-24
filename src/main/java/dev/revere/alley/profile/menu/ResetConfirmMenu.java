@@ -4,9 +4,6 @@ import dev.revere.alley.Alley;
 import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.api.menu.Menu;
 import dev.revere.alley.util.data.item.ItemBuilder;
-import dev.revere.alley.profile.Profile;
-import dev.revere.alley.profile.data.ProfileData;
-import dev.revere.alley.util.chat.CC;
 import lombok.AllArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -24,7 +21,7 @@ import java.util.UUID;
  * @date 02/01/2025 - 21:08
  */
 @AllArgsConstructor
-public class StatResetConfirmMenu extends Menu {
+public class ResetConfirmMenu extends Menu {
     private final UUID uuid;
 
     @Override
@@ -38,6 +35,8 @@ public class StatResetConfirmMenu extends Menu {
 
         buttons.put(11, new ConfirmButton(this.uuid));
         buttons.put(15, new CancelButton());
+
+        this.addGlass(buttons, 15);
 
         return buttons;
     }
@@ -57,19 +56,26 @@ public class StatResetConfirmMenu extends Menu {
                     .name("&aConfirm")
                     .lore(
                             "",
-                            "&7Click here to confirm the reset of",
-                            "&7the stats of " + Bukkit.getPlayer(this.uuid).getName() + "."
+                            "&7Click here to confirm the stat",
+                            "&7reset of " + Bukkit.getPlayer(this.uuid).getName() + ".",
+                            "",
+                            "&c&lWARNING:",
+                            "&fThis is &nbig responsibility&f.",
+                            "&fYou cannot undo this action",
+                            "&fand if you abuse this, you will be",
+                            "&fpermanently &c&l&nBLACKLISTED&f!",
+                            "",
+                            "&4You may only reset stats with confirmation of an owner."
                     )
                     .build();
         }
 
         @Override
         public void clicked(Player player, int slot, ClickType clickType, int hotbarButton) {
-            Profile profile = Alley.getInstance().getProfileRepository().getProfile(this.uuid);
-            profile.setProfileData(new ProfileData());
-            profile.save();
+            if (clickType != ClickType.LEFT) return;
 
-            player.sendMessage(CC.translate("&aSuccessfully reset stats for &e" + Bukkit.getPlayer(this.uuid).getName() + "&a."));
+            Alley.getInstance().getProfileRepository().resetStats(player, this.uuid);
+            player.closeInventory();
         }
     }
 
