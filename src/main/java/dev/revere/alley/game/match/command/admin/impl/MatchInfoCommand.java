@@ -47,10 +47,10 @@ public class MatchInfoCommand extends BaseCommand {
         );
         
         sender.sendMessage(CC.translate(" &f&l● &fSpectators:"));
-        if (profile.getMatch().getMatchSpectators().isEmpty()) {
+        if (profile.getMatch().getSpectators().isEmpty()) {
             sender.sendMessage(CC.translate("   &f* &cNone"));
         } else {
-            profile.getMatch().getMatchSpectators().forEach(spectator -> 
+            profile.getMatch().getSpectators().forEach(spectator ->
                     sender.sendMessage(CC.translate("   &f* &c" + Bukkit.getPlayer(spectator).getName()))
             );
         }

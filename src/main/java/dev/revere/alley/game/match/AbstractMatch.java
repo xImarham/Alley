@@ -5,10 +5,11 @@ import dev.revere.alley.arena.Arena;
 import dev.revere.alley.arena.impl.StandAloneArena;
 import dev.revere.alley.game.match.enums.EnumMatchState;
 import dev.revere.alley.game.match.impl.MatchRegularImpl;
-import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
+import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.game.match.runnable.MatchRunnable;
 import dev.revere.alley.game.match.snapshot.Snapshot;
+import dev.revere.alley.hotbar.HotbarRepository;
 import dev.revere.alley.hotbar.enums.HotbarType;
 import dev.revere.alley.kit.Kit;
 import dev.revere.alley.kit.settings.impl.KitSettingLivesImpl;
@@ -25,12 +26,11 @@ import dev.revere.alley.util.PlayerUtil;
 import dev.revere.alley.util.chat.CC;
 import lombok.Getter;
 import lombok.Setter;
-import net.md_5.bungee.api.chat.*;
+import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.BlockState;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
@@ -45,16 +45,18 @@ import java.util.concurrent.CopyOnWriteArrayList;
 @Getter
 @Setter
 public abstract class AbstractMatch {
-    private final List<UUID> matchSpectators = new CopyOnWriteArrayList<>();
-    private Map<BlockState, Location> placedBlocks = new HashMap<>();
-    private EnumMatchState state = EnumMatchState.STARTING;
+    private Map<BlockState, Location> changedBlocks;
+    private Map<BlockState, Location> brokenBlocks;
+    private Map<BlockState, Location> placedBlocks;
+    private final List<UUID> spectators;
     private List<Snapshot> snapshots;
     private MatchRunnable runnable;
+    private EnumMatchState state;
     private final Queue queue;
     private final Arena arena;
-    private final Kit kit;
-    private long startTime;
     private boolean ranked;
+    private long startTime;
+    private final Kit kit;
 
     /**
      * Constructor for the AbstractMatch class.
@@ -69,6 +71,10 @@ public abstract class AbstractMatch {
         this.arena = arena;
         this.ranked = ranked;
         this.snapshots = new ArrayList<>();
+        this.changedBlocks = new HashMap<>();
+        this.placedBlocks = new HashMap<>();
+        this.brokenBlocks = new HashMap<>();
+        this.spectators = new CopyOnWriteArrayList<>();
         Alley.getInstance().getMatchRepository().getMatches().add(this);
     }
 
@@ -76,15 +82,15 @@ public abstract class AbstractMatch {
      * Starts the match by setting the state and updating player profiles.
      */
     public void startMatch() {
-        if (arena instanceof StandAloneArena) {
-            ((StandAloneArena) arena).setActive(true);
+        if (this.arena instanceof StandAloneArena) {
+            ((StandAloneArena) this.arena).setActive(true);
         }
 
-        state = EnumMatchState.STARTING;
-        runnable = new MatchRunnable(this);
-        runnable.runTaskTimer(Alley.getInstance(), 0L, 20L);
-        getParticipants().forEach(this::initializeParticipant);
-        startTime = System.currentTimeMillis();
+        this.state = EnumMatchState.STARTING;
+        this.runnable = new MatchRunnable(this);
+        this.runnable.runTaskTimer(Alley.getInstance(), 0L, 20L);
+        this.getParticipants().forEach(this::initializeParticipant);
+        this.startTime = System.currentTimeMillis();
     }
 
     /**
@@ -99,7 +105,7 @@ public abstract class AbstractMatch {
                 Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
                 profile.setState(EnumProfileState.PLAYING);
                 profile.setMatch(this);
-                setupPlayer(player);
+                this.setupPlayer(player);
             }
         });
     }
@@ -114,7 +120,7 @@ public abstract class AbstractMatch {
         if (gamePlayer != null) {
             gamePlayer.setDead(false);
             if (!gamePlayer.isDisconnected()) {
-                PlayerUtil.reset(player, false);
+                PlayerUtil.reset(player, true);
                 player.getInventory().setArmorContents(getKit().getArmor());
                 player.getInventory().setContents(getKit().getInventory());
             }
@@ -125,42 +131,26 @@ public abstract class AbstractMatch {
      * Ends the match.
      */
     public void endMatch() {
-        placedBlocks.forEach((blockState, location) -> location.getBlock().setType(Material.AIR));
-        placedBlocks.clear();
+        this.placedBlocks.forEach((blockState, location) -> location.getBlock().setType(Material.AIR));
+        this.placedBlocks.clear();
 
-        getParticipants().forEach(this::finalizeParticipant);
-        getMatchSpectators().forEach(uuid -> {
+        this.brokenBlocks.forEach((blockState, location) -> location.getBlock().setType(blockState.getType()));
+        this.brokenBlocks.clear();
+
+        this.getParticipants().forEach(this::finalizeParticipant);
+        this.spectators.forEach(uuid -> {
             Player player = Alley.getInstance().getServer().getPlayer(uuid);
             if (player != null) {
-                removeSpectator(player, false);
+                this.removeSpectator(player, false);
             }
         });
 
         Alley.getInstance().getMatchRepository().getMatches().remove(this);
-        runnable.cancel();
+        this.runnable.cancel();
 
-        if (arena instanceof StandAloneArena) {
-            ((StandAloneArena) arena).setActive(false);
+        if (this.arena instanceof StandAloneArena) {
+            ((StandAloneArena) this.arena).setActive(false);
         }
-    }
-
-    /**
-     * Adds a block to the placed blocks map with the intention to handle block placement and removal.
-     *
-     * @param blockState The block state to add.
-     * @param location   The location of the block.
-     */
-    public void addBlockToPlacedBlocksMap(BlockState blockState, Location location) {
-        placedBlocks.put(blockState, location);
-    }
-
-    /**
-     * Removes a block from the placed blocks map.
-     *
-     * @param blockState The block state to remove.
-     */
-    public void removeBlockFromPlacedBlocksMap(BlockState blockState, Location location) {
-        placedBlocks.remove(blockState, location);
     }
 
     /**
@@ -173,7 +163,7 @@ public abstract class AbstractMatch {
             if (!gamePlayer.isDisconnected()) {
                 Player player = Alley.getInstance().getServer().getPlayer(gamePlayer.getUuid());
                 if (player != null) {
-                    resetPlayerState(player);
+                    this.resetPlayerState(player);
                     Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
                     profile.setState(EnumProfileState.LOBBY);
                     profile.setMatch(null);
@@ -192,12 +182,13 @@ public abstract class AbstractMatch {
         Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
         Alley.getInstance().getSpawnService().teleportToSpawn(player);
 
+        HotbarRepository hotbarRepository = Alley.getInstance().getHotbarRepository();
         if (profile.getParty() == null) {
-            Alley.getInstance().getHotbarRepository().applyHotbarItems(player, HotbarType.LOBBY);
+            hotbarRepository.applyHotbarItems(player, HotbarType.LOBBY);
             return;
         }
 
-        Alley.getInstance().getHotbarRepository().applyHotbarItems(player, HotbarType.PARTY);
+        hotbarRepository.applyHotbarItems(player, HotbarType.PARTY);
     }
 
     /**
@@ -220,11 +211,11 @@ public abstract class AbstractMatch {
     public void createSnapshot(UUID loser, UUID winner) {
         Snapshot winnerSnapshot = new Snapshot(Bukkit.getPlayer(winner), true);
         winnerSnapshot.setOpponent(loser);
-        snapshots.add(winnerSnapshot);
+        this.snapshots.add(winnerSnapshot);
 
         Snapshot loserSnapshot = new Snapshot(Bukkit.getPlayer(loser), false);
         loserSnapshot.setOpponent(winner);
-        snapshots.add(loserSnapshot);
+        this.snapshots.add(loserSnapshot);
     }
 
     /**
@@ -233,23 +224,23 @@ public abstract class AbstractMatch {
      * @param player The player that died.
      */
     public void handleDeath(Player player) {
-        if (!(state == EnumMatchState.STARTING || state == EnumMatchState.RUNNING)) return;
+        if (!(this.state == EnumMatchState.STARTING || this.state == EnumMatchState.RUNNING)) return;
 
         MatchGamePlayerImpl gamePlayer = getGamePlayer(player);
         if (gamePlayer.isDead()) {
             return;
         }
 
-        setParticipantAsDead(player, gamePlayer);
-        notifySpectators(player.getName() + " has died");
+        this.setParticipantAsDead(player, gamePlayer);
+        this.notifySpectators(player.getName() + " has died");
         //notifyParticipants(player.getName() + " has died");
 
         player.setVelocity(new Vector());
 
-        handleRoundOrRespawn(player);
+        this.handleRoundOrRespawn(player);
 
-        if (getParticipants().size() == 2) {
-            handleFinalMatchResult();
+        if (this.getParticipants().size() == 2) {
+            this.handleFinalMatchResult();
         }
     }
 
@@ -259,20 +250,20 @@ public abstract class AbstractMatch {
      * @param player The player to handle the round or respawn of.
      */
     private void handleRoundOrRespawn(Player player) {
-        if (canEndRound()) {
-            state = EnumMatchState.ENDING_ROUND;
-            handleRoundEnd();
+        if (this.canEndRound()) {
+            this.state = EnumMatchState.ENDING_ROUND;
+            this.handleRoundEnd();
 
-            if (canEndMatch()) {
+            if (this.canEndMatch()) {
                 Player killer = PlayerUtil.getLastAttacker(player);
                 if (killer != null) {
-                    handleEffects(player, killer);
+                    this.handleEffects(player, killer);
                 }
-                state = EnumMatchState.ENDING_MATCH;
+                this.state = EnumMatchState.ENDING_MATCH;
             }
-            getRunnable().setStage(4);
+            this.runnable.setStage(4);
         } else {
-            handleRespawn(player);
+            this.handleRespawn(player);
         }
     }
 
@@ -283,18 +274,18 @@ public abstract class AbstractMatch {
         String winner;
         String loser;
 
-        if (isParticipantDead(participantA) && !isParticipantDead(participantB)) {
+        if (this.isParticipantDead(participantA) && !this.isParticipantDead(participantB)) {
             winner = participantB.getPlayers().get(0).getPlayer().getName();
             loser = participantA.getPlayers().get(0).getPlayer().getName();
-        } else if (!isParticipantDead(participantA) && isParticipantDead(participantB)) {
+        } else if (!this.isParticipantDead(participantA) && this.isParticipantDead(participantB)) {
             winner = participantA.getPlayers().get(0).getPlayer().getName();
             loser = participantB.getPlayers().get(0).getPlayer().getName();
         } else {
-            winner = "No winner, it's a draw!";
-            loser = "No loser, it's a draw!";
+            winner = "error";
+            loser = "error";
         }
 
-        this.sendMatchResult(winner, loser);
+        MatchUtility.sendMatchResult(this, winner, loser);
     }
 
     /**
@@ -308,84 +299,17 @@ public abstract class AbstractMatch {
     }
 
     /**
-     * Sends the match result message.
-     *
-     * @param winnerName The name of the winner.
-     * @param loserName  The name of the loser.
-     */
-    private void sendMatchResult(String winnerName, String loserName) {
-        FileConfiguration config = Alley.getInstance().getConfigService().getMessagesConfig();
-        
-        String winnerCommand = config.getString("match.ended.match-result.winner.command").replace("{winner}", winnerName);
-        String winnerHover = config.getString("match.ended.match-result.winner.hover").replace("{winner}", winnerName);
-        String loserCommand = config.getString("match.ended.match-result.loser.command").replace("{loser}", loserName);
-        String loserHover = config.getString("match.ended.match-result.loser.hover").replace("{loser}", loserName);
-
-        for (String line : Alley.getInstance().getConfigService().getMessagesConfig().getStringList("match.ended.match-result.format")) {
-            if (line.contains("{winner}") && line.contains("{loser}")) {
-                String[] parts = line.split("\\{winner}", 2);
-
-                if (parts.length > 1) {
-                    String[] loserParts = parts[1].split("\\{loser}", 2);
-
-                    TextComponent winnerComponent = new TextComponent(CC.translate(winnerName));
-                    winnerComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, winnerCommand));
-                    winnerComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(CC.translate(winnerHover)).create()));
-
-                    TextComponent loserComponent = new TextComponent(CC.translate(loserName));
-                    loserComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, loserCommand));
-                    loserComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(CC.translate(loserHover)).create()));
-
-                    this.sendCombinedSpigotMessage(
-                            new TextComponent(CC.translate(parts[0])), 
-                            winnerComponent, 
-                            new TextComponent(CC.translate(loserParts[0])), 
-                            loserComponent, 
-                            new TextComponent(loserParts.length > 1 ? CC.translate(loserParts[1]) : "")
-                    );
-                }
-            } else if (line.contains("{winner}")) {
-                String[] parts = line.split("\\{winner}", 2);
-
-                TextComponent winnerComponent = new TextComponent(CC.translate(winnerName));
-                winnerComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, winnerCommand));
-                winnerComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(CC.translate(winnerHover)).create()));
-
-                this.sendCombinedSpigotMessage(
-                        new TextComponent(CC.translate(parts[0])), 
-                        winnerComponent, 
-                        new TextComponent(parts.length > 1 ? CC.translate(parts[1]) : "")
-                );
-            } else if (line.contains("{loser}")) {
-                String[] parts = line.split("\\{loser}", 2);
-
-                TextComponent loserComponent = new TextComponent(CC.translate(loserName));
-                loserComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, loserCommand));
-                loserComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(CC.translate(loserHover)).create()));
-
-                this.sendCombinedSpigotMessage(
-                        new TextComponent(CC.translate(parts[0])), 
-                        loserComponent, 
-                        new TextComponent(parts.length > 1 ? CC.translate(parts[1]) : "")
-                );
-            } else {
-                this.sendMessage(CC.translate(line));
-            }
-        }
-    }
-
-    /**
      * Sets a participant as dead.
      *
      * @param player     The player to set as dead.
      * @param gamePlayer The game player to set as dead.
      */
     private void setParticipantAsDead(Player player, MatchGamePlayerImpl gamePlayer) {
-        if (getKit().isSettingEnabled(KitSettingLivesImpl.class)) {
-            if (getParticipant(player).getPlayer().getData().getLives() <= 0) {
+        if (this.kit.isSettingEnabled(KitSettingLivesImpl.class)) {
+            if (this.getParticipant(player).getPlayer().getData().getLives() <= 0) {
                 gamePlayer.setDead(true);
             } else {
-                getParticipant(player).getPlayers().forEach(participant -> participant.setDead(false));
+                this.getParticipant(player).getPlayers().forEach(participant -> participant.setDead(false));
             }
         } else {
             gamePlayer.setDead(true);
@@ -423,7 +347,7 @@ public abstract class AbstractMatch {
      * @param message The message to notify.
      */
     protected void notifyParticipants(String message) {
-        getParticipants().forEach(gameParticipant -> gameParticipant.getPlayers().forEach(uuid -> {
+        this.getParticipants().forEach(gameParticipant -> gameParticipant.getPlayers().forEach(uuid -> {
             Player player = Alley.getInstance().getServer().getPlayer(uuid.getUuid());
             if (player != null) {
                 player.sendMessage(CC.translate(message));
@@ -437,26 +361,26 @@ public abstract class AbstractMatch {
      * @param message The message to notify.
      */
     protected void notifySpectators(String message) {
-        if (getMatchSpectators() == null) {
+        if (this.spectators == null) {
             return;
         }
-        matchSpectators.stream()
+        this.spectators.stream()
                 .map(uuid -> Alley.getInstance().getServer().getPlayer(uuid))
                 .filter(Objects::nonNull)
                 .forEach(player -> player.sendMessage(CC.translate(message)));
     }
 
     public void handleLeaving(Player player) {
-        if (!(state == EnumMatchState.STARTING || state == EnumMatchState.RUNNING)) return;
+        if (!(this.state == EnumMatchState.STARTING || state == EnumMatchState.RUNNING)) return;
 
         MatchGamePlayerImpl gamePlayer = getGamePlayer(player);
         if (gamePlayer != null) {
             if (!gamePlayer.isDead()) {
                 if (this.kit.isSettingEnabled(KitSettingLivesImpl.class)) {
-                    getParticipant(player).getPlayer().getData().setLives(0);
-                    handleDeath(player);
+                    this.getParticipant(player).getPlayer().getData().setLives(0);
+                    this.handleDeath(player);
                 } else {
-                    handleDeath(player);
+                    this.handleDeath(player);
                 }
             }
         }
@@ -468,13 +392,13 @@ public abstract class AbstractMatch {
      * @param player The player that disconnected.
      */
     public void handleDisconnect(Player player) {
-        if (!(state == EnumMatchState.STARTING || state == EnumMatchState.RUNNING)) return;
+        if (!(this.state == EnumMatchState.STARTING || this.state == EnumMatchState.RUNNING)) return;
 
         MatchGamePlayerImpl gamePlayer = getGamePlayer(player);
         if (gamePlayer != null) {
             gamePlayer.setDisconnected(true);
             if (!gamePlayer.isDead()) {
-                handleDeath(player);
+                this.handleDeath(player);
             }
         }
     }
@@ -483,22 +407,22 @@ public abstract class AbstractMatch {
      * Handles the start of a round.
      */
     public void handleRoundStart() {
-        snapshots.clear();
-        startTime = System.currentTimeMillis();
+        this.snapshots.clear();
+        this.startTime = System.currentTimeMillis();
     }
 
     /**
      * Handles the end of a round.
      */
     public void handleRoundEnd() {
-        startTime = System.currentTimeMillis() - startTime;
+        this.startTime = System.currentTimeMillis() - this.startTime;
         getParticipants().forEach(gameParticipant -> {
             if (gameParticipant.isAllDead()) {
                 gameParticipant.getPlayers().forEach(gamePlayer -> {
                     Player player = gamePlayer.getPlayer();
                     if (player != null && !gamePlayer.isDead()) {
                         Snapshot snapshot = new Snapshot(player, true);
-                        snapshots.add(snapshot);
+                        this.snapshots.add(snapshot);
                     }
                 });
             }
@@ -506,7 +430,7 @@ public abstract class AbstractMatch {
 
         MatchRegularImpl match = (MatchRegularImpl) this;
         if (match.getParticipantA().getPlayers().size() == 1 && match.getParticipantB().getPlayers().size() == 1) {
-            updateSnapshots(match);
+            this.updateSnapshots(match);
         }
     }
 
@@ -547,7 +471,7 @@ public abstract class AbstractMatch {
         player.setAllowFlight(true);
         player.setFlying(true);
 
-        matchSpectators.add(player.getUniqueId());
+        spectators.add(player.getUniqueId());
         notifyParticipants(player.getName() + " is now spectating the match");
         notifySpectators(player.getName() + " is now spectating the match");
     }
@@ -561,14 +485,17 @@ public abstract class AbstractMatch {
         Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
         profile.setState(EnumProfileState.LOBBY);
         profile.setMatch(null);
+
         player.setAllowFlight(false);
         player.setFlying(false);
-        resetPlayerState(player);
-        teleportPlayerToSpawn(player);
-        matchSpectators.remove(player.getUniqueId());
+
+        this.resetPlayerState(player);
+        this.teleportPlayerToSpawn(player);
+        this.spectators.remove(player.getUniqueId());
+
         if (notify) {
-            notifyParticipants(player.getName() + " is no longer spectating the match");
-            notifySpectators(player.getName() + " is no longer spectating the match");
+            this.notifyParticipants("&b" + player.getName() + " &ais no longer spectating the match");
+            this.notifySpectators("&b" + player.getName() + " &ais no longer spectating the match");
         }
     }
 
@@ -578,8 +505,8 @@ public abstract class AbstractMatch {
      * @return The duration of the match.
      */
     public String getDuration() {
-        if (state == EnumMatchState.STARTING) return EnumMatchState.STARTING.getDescription();
-        if (state == EnumMatchState.ENDING_MATCH) return EnumMatchState.ENDING_MATCH.getDescription();
+        if (this.state == EnumMatchState.STARTING) return EnumMatchState.STARTING.getDescription();
+        if (this.state == EnumMatchState.ENDING_MATCH) return EnumMatchState.ENDING_MATCH.getDescription();
         else return getFormattedElapsedTime();
     }
 
@@ -630,7 +557,7 @@ public abstract class AbstractMatch {
             }
         }));
 
-        getMatchSpectators().forEach(uuid -> {
+        getSpectators().forEach(uuid -> {
             Player player = Alley.getInstance().getServer().getPlayer(uuid);
             if (player != null) {
                 player.sendMessage(message);
@@ -651,7 +578,7 @@ public abstract class AbstractMatch {
             }
         }));
 
-        getMatchSpectators().forEach(uuid -> {
+        getSpectators().forEach(uuid -> {
             Player player = Alley.getInstance().getServer().getPlayer(uuid);
             if (player != null) {
                 player.spigot().sendMessage(message);
@@ -672,7 +599,7 @@ public abstract class AbstractMatch {
             }
         }));
 
-        getMatchSpectators().forEach(uuid -> {
+        getSpectators().forEach(uuid -> {
             Player player = Alley.getInstance().getServer().getPlayer(uuid);
             if (player != null) {
                 player.spigot().sendMessage(message);
@@ -685,6 +612,44 @@ public abstract class AbstractMatch {
                 .filter(gameParticipant -> gameParticipant.containsPlayer(player.getUniqueId()))
                 .findFirst()
                 .orElse(null);
+    }
+
+    /**
+     * Adds a block to the placed blocks map with the intention to handle block placement and removal.
+     *
+     * @param blockState The block state to add.
+     * @param location   The location of the block.
+     */
+    public void addBlockToPlacedBlocksMap(BlockState blockState, Location location) {
+        this.placedBlocks.put(blockState, location);
+    }
+
+    /**
+     * Removes a block from the placed blocks map.
+     *
+     * @param blockState The block state to remove.
+     */
+    public void removeBlockFromPlacedBlocksMap(BlockState blockState, Location location) {
+        this.placedBlocks.remove(blockState, location);
+    }
+
+    /**
+     * Adds a block to the changed blocks map with the intention to handle block changes.
+     *
+     * @param blockState The block state to add.
+     * @param location   The location of the block.
+     */
+    public void addBlockToBrokenBlocksMap(BlockState blockState, Location location) {
+        this.brokenBlocks.put(blockState, location);
+    }
+
+    /**
+     * Removes a block from the broken blocks map.
+     *
+     * @param blockState The block state to remove.
+     */
+    public void removeBlockFromBrokenBlocksMap(BlockState blockState, Location location) {
+        this.brokenBlocks.remove(blockState, location);
     }
 
     /**

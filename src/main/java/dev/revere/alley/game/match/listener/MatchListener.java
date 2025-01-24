@@ -173,6 +173,7 @@ public class MatchListener implements Listener {
                 Location hitLocation = RayTracerUtil.rayTrace(snowball.getLocation(), snowball.getVelocity().normalize());
 
                 if (hitLocation.getBlock().getType() == Material.SNOW || hitLocation.getBlock().getType() == Material.SNOW_BLOCK) {
+                    profile.getMatch().addBlockToBrokenBlocksMap(hitLocation.getBlock().getState(), hitLocation);
                     hitLocation.getBlock().setType(Material.AIR);
                 }
             }
@@ -183,8 +184,15 @@ public class MatchListener implements Listener {
     private void onBlockBreak(BlockBreakEvent event) {
         Player player = event.getPlayer();
         Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
+
         switch (profile.getState()) {
             case PLAYING:
+                EnumMatchState matchState = profile.getMatch().getState();
+                if (matchState == EnumMatchState.STARTING || matchState == EnumMatchState.ENDING_MATCH) {
+                    event.setCancelled(true);
+                    return;
+                }
+
                 if (profile.getMatch().getKit().isSettingEnabled(KitSettingBuildImpl.class)) {
                     BlockState blockState = event.getBlock().getState();
 
@@ -203,7 +211,7 @@ public class MatchListener implements Listener {
                         return;
                     }
 
-                    event.setCancelled(false);
+                    profile.getMatch().addBlockToBrokenBlocksMap(block.getState(), block.getLocation());
                     event.getBlock().setType(Material.AIR);
 
                     int amount = ThreadLocalRandom.current().nextInt(3, 6);
@@ -216,11 +224,13 @@ public class MatchListener implements Listener {
 
                 event.setCancelled(true);
                 break;
+
             case SPECTATING:
                 event.setCancelled(true);
                 break;
         }
     }
+
 
     @EventHandler
     private void onBlockPlace(BlockPlaceEvent event) {
