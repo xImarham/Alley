@@ -3,7 +3,7 @@ package dev.revere.alley.queue.menu;
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.api.menu.Menu;
-import dev.revere.alley.api.menu.pagination.ItemBuilder;
+import dev.revere.alley.util.data.item.ItemBuilder;
 import dev.revere.alley.game.ffa.menu.FFAMenu;
 import dev.revere.alley.queue.QueueRepository;
 import dev.revere.alley.util.chat.CC;

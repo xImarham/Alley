@@ -2,7 +2,7 @@ package dev.revere.alley.kit.command.impl.manage;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
-import dev.revere.alley.api.command.Command;
+import dev.revere.alley.api.command.annotation.Command;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.kit.Kit;
 import dev.revere.alley.kit.KitRepository;
@@ -12,8 +12,6 @@ import dev.revere.alley.util.chat.CC;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-
-import java.util.Arrays;
 
 /**
  * @author Emmy

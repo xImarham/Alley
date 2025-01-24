@@ -1,5 +1,7 @@
 package dev.revere.alley.api.command;
 
+import lombok.Getter;
+import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -10,44 +12,30 @@ import org.bukkit.entity.Player;
  *
  * @author minnymin3
  */
+@Getter
 public class CommandArgs {
-
     private final CommandSender sender;
-    private final org.bukkit.command.Command command;
+    private final Command command;
     private final String label;
     private final String[] args;
 
-    protected CommandArgs(CommandSender sender, org.bukkit.command.Command command, String label, String[] args,
-                          int subCommand) {
+    protected CommandArgs(CommandSender sender, Command command, String label, String[] args, int subCommand) {
         String[] modArgs = new String[args.length - subCommand];
         if (args.length - subCommand >= 0) System.arraycopy(args, subCommand, modArgs, 0, args.length - subCommand);
 
-        StringBuffer buffer = new StringBuffer();
-        buffer.append(label);
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(label);
+
         for (int x = 0; x < subCommand; x++) {
-            buffer.append("." + args[x]);
+            stringBuilder.append(".").append(args[x]);
         }
-        String cmdLabel = buffer.toString();
+
+        String cmdLabel = stringBuilder.toString();
+
         this.sender = sender;
         this.command = command;
         this.label = cmdLabel;
         this.args = modArgs;
-    }
-
-    public CommandSender getSender() {
-        return sender;
-    }
-
-    public org.bukkit.command.Command getCommand() {
-        return command;
-    }
-
-    public String getLabel() {
-        return label;
-    }
-
-    public String[] getArgs() {
-        return args;
     }
 
     public String getArgs(int index) {
@@ -69,5 +57,4 @@ public class CommandArgs {
             return null;
         }
     }
-
 }

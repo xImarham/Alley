@@ -3,7 +3,7 @@ package dev.revere.alley.hotbar;
 import lombok.Getter;
 import dev.revere.alley.hotbar.enums.HotbarItems;
 import dev.revere.alley.hotbar.enums.HotbarType;
-import dev.revere.alley.util.item.ItemBuilder;
+import dev.revere.alley.util.data.item.ItemBuilder;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;

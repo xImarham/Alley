@@ -67,11 +67,12 @@ public class Profile {
     }
 
     /**
-     * Retrieves a sorted list of kits based on FFA kills and ranked wins.
+     * Retrieves a sorted list of kits that the profile has participated in
+     * based on the profile's ELO for each kit, overall wins/losses and FFA kills/deaths.
      *
      * @return A sorted list of kits that the profile has participated in.
      */
-    public List<Kit> getSortedKits() {
+    public List<Kit> getParticipatedKits() {
         return Alley.getInstance().getKitRepository().getKits()
                 .stream()
                 .filter(kit -> {

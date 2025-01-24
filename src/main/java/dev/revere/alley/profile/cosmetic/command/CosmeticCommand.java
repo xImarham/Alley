@@ -6,7 +6,7 @@ import dev.revere.alley.profile.cosmetic.command.impl.admin.CosmeticSetCommand;
 import dev.revere.alley.profile.cosmetic.command.impl.player.CosmeticsCommand;
 import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.api.command.BaseCommand;
-import dev.revere.alley.api.command.Command;
+import dev.revere.alley.api.command.annotation.Command;
 import dev.revere.alley.api.command.CommandArgs;
 import org.bukkit.entity.Player;
 

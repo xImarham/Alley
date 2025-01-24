@@ -17,8 +17,8 @@ import java.util.Map;
  */
 @Getter
 public class ConfigService {
-    private final Map<String, File> configFiles = new HashMap<>();
-    private final Map<String, FileConfiguration> fileConfigurations = new HashMap<>();
+    private final Map<String, FileConfiguration> fileConfigurations;
+    private final Map<String, File> configFiles;
 
     private final FileConfiguration settingsConfig;
     private final FileConfiguration messagesConfig;
@@ -40,8 +40,11 @@ public class ConfigService {
      * Constructor for the ConfigHandler class.
      */
     public ConfigService() {
-        for (String fileName : configFileNames) {
-            loadConfig(fileName);
+        this.configFiles = new HashMap<>();
+        this.fileConfigurations = new HashMap<>();
+
+        for (String fileName : this.configFileNames) {
+            this.loadConfig(fileName);
         }
 
         this.settingsConfig = this.getConfig("settings.yml");

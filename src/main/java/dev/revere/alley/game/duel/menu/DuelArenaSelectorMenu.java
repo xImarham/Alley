@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.api.menu.Menu;
-import dev.revere.alley.api.menu.pagination.ItemBuilder;
+import dev.revere.alley.util.data.item.ItemBuilder;
 import dev.revere.alley.arena.Arena;
 import dev.revere.alley.arena.impl.StandAloneArena;
 import dev.revere.alley.kit.Kit;

@@ -1,10 +1,10 @@
 package dev.revere.alley.command.impl.donator.emoji;
 
 import dev.revere.alley.api.command.BaseCommand;
-import dev.revere.alley.api.command.Command;
+import dev.revere.alley.api.command.annotation.Command;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.command.impl.donator.emoji.impl.EmojiListCommand;
-import dev.revere.alley.essential.chat.chat.EnumEmojiType;
+import dev.revere.alley.essential.chat.enums.EnumEmojiType;
 import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.util.chat.ClickableUtil;
 import org.bukkit.entity.Player;

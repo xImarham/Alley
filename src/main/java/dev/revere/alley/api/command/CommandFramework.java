@@ -1,6 +1,8 @@
 package dev.revere.alley.api.command;
 
 import dev.revere.alley.Alley;
+import dev.revere.alley.api.command.annotation.Command;
+import dev.revere.alley.api.command.annotation.Completer;
 import dev.revere.alley.locale.Locale;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.Bukkit;

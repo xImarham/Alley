@@ -2,7 +2,7 @@ package dev.revere.alley.essential.spawn.command;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
-import dev.revere.alley.api.command.Command;
+import dev.revere.alley.api.command.annotation.Command;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.hotbar.enums.HotbarType;
 import dev.revere.alley.profile.Profile;

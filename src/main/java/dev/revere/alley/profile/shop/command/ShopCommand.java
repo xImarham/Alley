@@ -2,7 +2,7 @@ package dev.revere.alley.profile.shop.command;
 
 import dev.revere.alley.profile.shop.menu.ShopMenu;
 import dev.revere.alley.api.command.BaseCommand;
-import dev.revere.alley.api.command.Command;
+import dev.revere.alley.api.command.annotation.Command;
 import dev.revere.alley.api.command.CommandArgs;
 import org.bukkit.entity.Player;
 

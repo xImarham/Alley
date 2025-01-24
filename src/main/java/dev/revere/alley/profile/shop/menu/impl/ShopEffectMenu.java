@@ -10,7 +10,7 @@ import dev.revere.alley.profile.shop.menu.ShopButton;
 import dev.revere.alley.profile.shop.menu.ShopMenu;
 import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.api.menu.Menu;
-import dev.revere.alley.api.menu.button.BackButton;
+import dev.revere.alley.api.menu.impl.BackButton;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;

@@ -2,13 +2,11 @@ package dev.revere.alley.game.ffa.spawn;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.game.ffa.AbstractFFAMatch;
-import dev.revere.alley.game.ffa.FFARepository;
 import dev.revere.alley.game.ffa.enums.EnumFFAState;
-import dev.revere.alley.util.cuboid.Cuboid;
+import dev.revere.alley.util.data.cuboid.Cuboid;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
 import dev.revere.alley.util.chat.CC;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 

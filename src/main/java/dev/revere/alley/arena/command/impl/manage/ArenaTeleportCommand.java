@@ -4,9 +4,9 @@ import dev.revere.alley.Alley;
 import dev.revere.alley.arena.Arena;
 import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.api.command.BaseCommand;
-import dev.revere.alley.api.command.Command;
+import dev.revere.alley.api.command.annotation.Command;
 import dev.revere.alley.api.command.CommandArgs;
-import dev.revere.alley.api.command.Completer;
+import dev.revere.alley.api.command.annotation.Completer;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;

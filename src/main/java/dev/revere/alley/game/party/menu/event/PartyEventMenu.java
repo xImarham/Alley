@@ -9,7 +9,7 @@ import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.api.menu.Menu;
 import dev.revere.alley.game.party.menu.event.impl.ffa.PartyEventFFAMenu;
 import dev.revere.alley.game.party.menu.event.impl.split.PartyEventSplitMenu;
-import dev.revere.alley.util.item.ItemBuilder;
+import dev.revere.alley.util.data.item.ItemBuilder;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;

@@ -3,7 +3,7 @@ package dev.revere.alley.profile.menu;
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.api.menu.Menu;
-import dev.revere.alley.api.menu.pagination.ItemBuilder;
+import dev.revere.alley.util.data.item.ItemBuilder;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.data.ProfileData;
 import dev.revere.alley.util.chat.CC;

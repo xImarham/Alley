@@ -1,7 +1,7 @@
 package dev.revere.alley.world;
 
 import dev.revere.alley.Alley;
-import dev.revere.alley.task.ArrowCleanUpTask;
+import dev.revere.alley.world.task.ArrowRemovalTask;
 import org.bukkit.Difficulty;
 import org.bukkit.Material;
 import org.bukkit.entity.Arrow;
@@ -25,7 +25,7 @@ public class WorldListener implements Listener {
     @EventHandler
     private void onArrowShoot(EntityShootBowEvent event) {
         if (event.getProjectile() instanceof Arrow) {
-            new ArrowCleanUpTask().runTaskLater(Alley.getInstance(), 20L);
+            new ArrowRemovalTask().runTaskLater(Alley.getInstance(), 20L);
         }
     }
 

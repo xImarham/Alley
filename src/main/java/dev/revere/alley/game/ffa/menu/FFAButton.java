@@ -4,14 +4,12 @@ import lombok.AllArgsConstructor;
 import dev.revere.alley.game.ffa.AbstractFFAMatch;
 import dev.revere.alley.util.SoundUtil;
 import dev.revere.alley.api.menu.Button;
-import dev.revere.alley.api.menu.pagination.ItemBuilder;
+import dev.revere.alley.util.data.item.ItemBuilder;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 /**
  * @author Emmy

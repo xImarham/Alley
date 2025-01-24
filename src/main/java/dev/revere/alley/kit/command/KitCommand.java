@@ -1,6 +1,6 @@
 package dev.revere.alley.kit.command;
 
-import dev.revere.alley.api.command.Completer;
+import dev.revere.alley.api.command.annotation.Completer;
 import dev.revere.alley.kit.command.impl.data.KitSetDescriptionCommand;
 import dev.revere.alley.kit.command.impl.data.KitSetDisclaimerCommand;
 import dev.revere.alley.kit.command.impl.data.KitSetDisplayNameCommand;
@@ -18,10 +18,9 @@ import dev.revere.alley.kit.command.impl.storage.KitSaveAllCommand;
 import dev.revere.alley.kit.command.impl.storage.KitSaveCommand;
 import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.api.command.BaseCommand;
-import dev.revere.alley.api.command.Command;
+import dev.revere.alley.api.command.annotation.Command;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.util.chat.ClickableUtil;
-import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 

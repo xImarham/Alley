@@ -5,7 +5,7 @@ import dev.revere.alley.Alley;
 import dev.revere.alley.game.ffa.AbstractFFAMatch;
 import dev.revere.alley.kit.Kit;
 import dev.revere.alley.kit.settings.impl.KitSettingRankedImpl;
-import dev.revere.alley.stats.menu.button.StatisticsButton;
+import dev.revere.alley.profile.stats.menu.button.StatisticsButton;
 import dev.revere.alley.leaderboard.menu.button.DisplayTypeButton;
 import dev.revere.alley.leaderboard.menu.button.KitButton;
 import dev.revere.alley.leaderboard.enums.EnumLeaderboardType;

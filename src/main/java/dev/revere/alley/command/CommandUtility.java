@@ -49,7 +49,7 @@ import dev.revere.alley.queue.command.player.LeaveQueueCommand;
 import dev.revere.alley.queue.command.player.QueuesCommand;
 import dev.revere.alley.queue.command.player.RankedCommand;
 import dev.revere.alley.queue.command.player.UnrankedCommand;
-import dev.revere.alley.stats.command.StatsCommand;
+import dev.revere.alley.profile.stats.command.StatsCommand;
 import dev.revere.alley.util.logger.Logger;
 import lombok.experimental.UtilityClass;
 

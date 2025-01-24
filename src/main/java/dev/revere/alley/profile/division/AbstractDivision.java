@@ -15,7 +15,6 @@ import org.bukkit.Material;
 @Setter
 @Getter
 public class AbstractDivision {
-
     private final String name;
     private final String description;
     private final Material icon;

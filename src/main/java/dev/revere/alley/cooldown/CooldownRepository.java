@@ -2,7 +2,7 @@ package dev.revere.alley.cooldown;
 
 import lombok.Getter;
 import dev.revere.alley.cooldown.enums.EnumCooldownType;
-import dev.revere.alley.util.MutableTriple;
+import dev.revere.alley.util.data.triple.impl.MutableTriple;
 
 import java.util.ArrayList;
 import java.util.List;

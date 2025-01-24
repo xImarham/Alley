@@ -5,7 +5,7 @@ import dev.revere.alley.Alley;
 import dev.revere.alley.kit.Kit;
 import dev.revere.alley.leaderboard.enums.EnumLeaderboardType;
 import dev.revere.alley.profile.Profile;
-import dev.revere.alley.util.item.ItemBuilder;
+import dev.revere.alley.util.data.item.ItemBuilder;
 import dev.revere.alley.api.menu.Button;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;

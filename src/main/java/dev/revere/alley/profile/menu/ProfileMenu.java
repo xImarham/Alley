@@ -2,13 +2,13 @@ package dev.revere.alley.profile.menu;
 
 import lombok.AllArgsConstructor;
 import dev.revere.alley.Alley;
-import dev.revere.alley.stats.menu.StatisticsMenu;
+import dev.revere.alley.profile.stats.menu.StatisticsMenu;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.data.impl.ProfileFFAData;
 import dev.revere.alley.profile.division.AbstractDivision;
 import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.api.menu.Menu;
-import dev.revere.alley.api.menu.pagination.ItemBuilder;
+import dev.revere.alley.util.data.item.ItemBuilder;
 import dev.revere.alley.profile.division.enums.EnumDivisionLevel;
 import dev.revere.alley.profile.division.enums.EnumDivisionTier;
 import org.bukkit.Material;

@@ -6,7 +6,7 @@ import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.api.menu.pagination.PaginatedMenu;
 import dev.revere.alley.game.party.Party;
 import dev.revere.alley.util.chat.CC;
-import dev.revere.alley.util.item.ItemBuilder;
+import dev.revere.alley.util.data.item.ItemBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;

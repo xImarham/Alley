@@ -34,25 +34,25 @@ public class ProfileRepository {
      * @return The profile.
      */
     public Profile getProfile(UUID uuid) {
-        if (!profiles.containsKey(uuid)) {
+        if (!this.profiles.containsKey(uuid)) {
             Profile profile = new Profile(uuid);
             profile.load();
 
-            profiles.put(uuid, profile);
+            this.profiles.put(uuid, profile);
         }
-        return profiles.get(uuid);
+        return this.profiles.get(uuid);
     }
 
     /**
      * Loads all profiles from the database.
      */
     public void loadProfiles() {
-        for (Document document : collection.find()) {
+        for (Document document : this.collection.find()) {
             UUID uuid = UUID.fromString(document.getString("uuid"));
             Profile profile = new Profile(uuid);
             profile.load();
 
-            Alley.getInstance().getProfileRepository().getProfiles().put(uuid, profile);
+            this.profiles.put(uuid, profile);
         }
     }
 
@@ -62,6 +62,6 @@ public class ProfileRepository {
      * @param profile The profile to add.
      */
     public void addProfile(Profile profile) {
-        profiles.put(profile.getUuid(), profile);
+        this.profiles.put(profile.getUuid(), profile);
     }
 }

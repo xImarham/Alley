@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import dev.revere.alley.queue.Queue;
 import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.api.menu.Menu;
-import dev.revere.alley.api.menu.button.BackButton;
+import dev.revere.alley.api.menu.impl.BackButton;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;

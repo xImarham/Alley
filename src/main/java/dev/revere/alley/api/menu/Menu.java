@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import dev.revere.alley.Alley;
 import dev.revere.alley.util.chat.CC;
-import dev.revere.alley.api.menu.button.PageGlassButton;
+import dev.revere.alley.api.menu.impl.PageGlassButton;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;

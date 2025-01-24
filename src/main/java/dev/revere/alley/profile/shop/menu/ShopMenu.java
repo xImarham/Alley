@@ -7,7 +7,7 @@ import dev.revere.alley.profile.cosmetic.impl.soundeffect.SoundEffectRepository;
 import dev.revere.alley.profile.menu.ProfileMenu;
 import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.api.menu.Menu;
-import dev.revere.alley.api.menu.button.BackButton;
+import dev.revere.alley.api.menu.impl.BackButton;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;

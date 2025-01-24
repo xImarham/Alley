@@ -7,7 +7,7 @@ import dev.revere.alley.profile.cosmetic.impl.soundeffect.AbstractSoundEffect;
 import dev.revere.alley.profile.cosmetic.impl.killeffects.AbstractKillEffect;
 import dev.revere.alley.profile.cosmetic.interfaces.ICosmetic;
 import dev.revere.alley.util.chat.CC;
-import dev.revere.alley.util.item.ItemBuilder;
+import dev.revere.alley.util.data.item.ItemBuilder;
 import dev.revere.alley.api.menu.Button;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;

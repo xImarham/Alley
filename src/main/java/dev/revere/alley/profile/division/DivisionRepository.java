@@ -83,13 +83,13 @@ public class DivisionRepository {
     );
 
     public DivisionRepository() {
-        registerDivisions(bronzeDivisions);
-        registerDivisions(silverDivisions);
-        registerDivisions(goldDivisions);
-        registerDivisions(platinumDivisions);
-        registerDivisions(diamondDivisions);
-        registerDivisions(masterDivisions);
-        registerDivisions(grandmasterDivisions);
+        this.registerDivisions(this.bronzeDivisions);
+        this.registerDivisions(this.silverDivisions);
+        this.registerDivisions(this.goldDivisions);
+        this.registerDivisions(this.platinumDivisions);
+        this.registerDivisions(this.diamondDivisions);
+        this.registerDivisions(this.masterDivisions);
+        this.registerDivisions(this.grandmasterDivisions);
     }
 
     /**
@@ -109,8 +109,8 @@ public class DivisionRepository {
     public void registerDivision(Class<? extends AbstractDivision> clazz) {
         try {
             AbstractDivision instance = clazz.getDeclaredConstructor().newInstance();
-            divisions.add(instance);
-        } catch (Exception e) {
+            this.divisions.add(instance);
+        } catch (Exception exception) {
             System.out.println("Failed to register division class " + clazz.getSimpleName() + "!");
         }
     }
@@ -122,7 +122,7 @@ public class DivisionRepository {
      * @return The division
      */
     public AbstractDivision getDivision(String name) {
-        return divisions.stream()
+        return this.divisions.stream()
                 .filter(division -> division.getName().equalsIgnoreCase(name))
                 .findFirst()
                 .orElse(null);
@@ -135,7 +135,7 @@ public class DivisionRepository {
      * @return The division
      */
     public AbstractDivision getDivision(Class<? extends AbstractDivision> clazz) {
-        return divisions.stream()
+        return this.divisions.stream()
                 .filter(division -> division.getClass().equals(clazz))
                 .findFirst()
                 .orElse(null);
@@ -149,7 +149,7 @@ public class DivisionRepository {
      * @return The division
      */
     public String getDivision(EnumDivisionTier tier, EnumDivisionLevel level) {
-        return divisions.stream()
+        return this.divisions.stream()
                 .filter(division -> division.getTier() == tier && division.getLevel() == level)
                 .findFirst()
                 .map(AbstractDivision::getName)

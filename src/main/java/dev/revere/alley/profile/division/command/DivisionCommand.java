@@ -4,7 +4,7 @@ import dev.revere.alley.profile.division.command.impl.DivisionListCommand;
 import dev.revere.alley.profile.division.command.impl.DivisionMenuCommand;
 import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.api.command.BaseCommand;
-import dev.revere.alley.api.command.Command;
+import dev.revere.alley.api.command.annotation.Command;
 import dev.revere.alley.api.command.CommandArgs;
 import org.bukkit.entity.Player;
 

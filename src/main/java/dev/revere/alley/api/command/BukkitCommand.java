@@ -10,15 +10,21 @@ import org.bukkit.plugin.Plugin;
 import java.util.List;
 
 public class BukkitCommand extends org.bukkit.command.Command {
-
-    private final Plugin owningPlugin;
+    private final Plugin plugin;
     private final CommandExecutor executor;
     protected BukkitCompleter completer;
 
+    /**
+     * Creates a new instance of BukkitCommand
+     *
+     * @param label    the label of the command
+     * @param executor the executor of the command
+     * @param owner    the owner of the command
+     */
     protected BukkitCommand(String label, CommandExecutor executor, Plugin owner) {
         super(label);
         this.executor = executor;
-        this.owningPlugin = owner;
+        this.plugin = owner;
         this.usageMessage = "";
     }
 
@@ -26,7 +32,7 @@ public class BukkitCommand extends org.bukkit.command.Command {
     public boolean execute(CommandSender sender, String commandLabel, String[] args) {
         boolean success = false;
 
-        if (!owningPlugin.isEnabled()) {
+        if (!plugin.isEnabled()) {
             return false;
         }
 
@@ -38,7 +44,7 @@ public class BukkitCommand extends org.bukkit.command.Command {
             success = executor.onCommand(sender, this, commandLabel, args);
         } catch (Throwable ex) {
             throw new CommandException("Unhandled exception executing command '" + commandLabel + "' in plugin "
-                    + owningPlugin.getDescription().getFullName(), ex);
+                    + plugin.getDescription().getFullName(), ex);
         }
 
         if (!success && usageMessage.length() > 0) {
@@ -72,7 +78,7 @@ public class BukkitCommand extends org.bukkit.command.Command {
                 message.append(arg).append(' ');
             }
             message.deleteCharAt(message.length() - 1).append("' in plugin ")
-                    .append(owningPlugin.getDescription().getFullName());
+                    .append(plugin.getDescription().getFullName());
             throw new CommandException(message.toString(), ex);
         }
 

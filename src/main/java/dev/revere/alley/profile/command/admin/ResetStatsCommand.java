@@ -2,7 +2,7 @@ package dev.revere.alley.profile.command.admin;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
-import dev.revere.alley.api.command.Command;
+import dev.revere.alley.api.command.annotation.Command;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.menu.StatResetConfirmMenu;

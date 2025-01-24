@@ -3,7 +3,7 @@ package dev.revere.alley.game.ffa.spawn;
 import dev.revere.alley.Alley;
 import dev.revere.alley.arena.Arena;
 import dev.revere.alley.arena.ArenaType;
-import dev.revere.alley.util.cuboid.Cuboid;
+import dev.revere.alley.util.data.cuboid.Cuboid;
 import dev.revere.alley.util.location.LocationUtil;
 import dev.revere.alley.util.logger.Logger;
 import lombok.Getter;

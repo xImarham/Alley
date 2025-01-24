@@ -6,7 +6,7 @@ import dev.revere.alley.locale.Locale;
 import dev.revere.alley.game.party.Party;
 import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.api.command.BaseCommand;
-import dev.revere.alley.api.command.Command;
+import dev.revere.alley.api.command.annotation.Command;
 import dev.revere.alley.api.command.CommandArgs;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;

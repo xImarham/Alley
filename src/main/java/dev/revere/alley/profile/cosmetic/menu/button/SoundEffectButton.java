@@ -1,7 +1,7 @@
 package dev.revere.alley.profile.cosmetic.menu.button;
 
 import dev.revere.alley.profile.cosmetic.menu.CosmeticsMenu;
-import dev.revere.alley.util.item.ItemBuilder;
+import dev.revere.alley.util.data.item.ItemBuilder;
 import dev.revere.alley.api.menu.Button;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;

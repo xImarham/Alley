@@ -1,10 +1,8 @@
 package dev.revere.alley.profile.division.menu;
 
 import dev.revere.alley.Alley;
-import dev.revere.alley.profile.menu.ProfileMenu;
 import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.api.menu.Menu;
-import dev.revere.alley.api.menu.button.BackButton;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
