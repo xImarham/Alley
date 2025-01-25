@@ -1,7 +1,7 @@
-package dev.revere.alley.profile.division.command;
+package dev.revere.alley.division.command;
 
-import dev.revere.alley.profile.division.command.impl.DivisionListCommand;
-import dev.revere.alley.profile.division.command.impl.DivisionMenuCommand;
+import dev.revere.alley.division.command.impl.DivisionListCommand;
+import dev.revere.alley.division.command.impl.DivisionMenuCommand;
 import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.annotation.Command;

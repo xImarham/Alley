@@ -28,11 +28,12 @@ public class ConfigService {
     private final FileConfiguration arenasConfig;
     private final FileConfiguration scoreboardConfig;
     private final FileConfiguration tablistConfig;
+    private final FileConfiguration divisionsConfig;
 
     private final String[] configFileNames = {
             "settings.yml", "messages.yml",
             "database/database.yml",
-            "storage/ffa.yml", "storage/kits.yml", "storage/arenas.yml",
+            "storage/ffa.yml", "storage/kits.yml", "storage/arenas.yml", "storage/divisions.yml",
             "providers/scoreboard.yml", "providers/tablist.yml"
     };
 
@@ -55,6 +56,7 @@ public class ConfigService {
         this.arenasConfig = this.getConfig("storage/arenas.yml");
         this.scoreboardConfig = this.getConfig("providers/scoreboard.yml");
         this.tablistConfig = this.getConfig("providers/tablist.yml");
+        this.divisionsConfig = this.getConfig("storage/divisions.yml");
     }
 
     /**

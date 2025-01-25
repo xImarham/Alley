@@ -31,10 +31,9 @@ import dev.revere.alley.leaderboard.command.LeaderboardCommand;
 import dev.revere.alley.profile.command.ChallengesCommand;
 import dev.revere.alley.profile.command.ChatCommand;
 import dev.revere.alley.profile.command.MatchHistoryCommand;
-import dev.revere.alley.profile.command.ProfileMenuCommand;
 import dev.revere.alley.profile.command.admin.ResetStatsCommand;
 import dev.revere.alley.profile.cosmetic.command.CosmeticCommand;
-import dev.revere.alley.profile.division.command.DivisionCommand;
+import dev.revere.alley.division.command.DivisionCommand;
 import dev.revere.alley.profile.settings.command.MatchSettingsCommand;
 import dev.revere.alley.profile.settings.command.PracticeSettingsCommand;
 import dev.revere.alley.profile.settings.command.toggle.TogglePartyInvitesCommand;
@@ -139,7 +138,6 @@ public class CommandUtility {
 
             new ShopCommand();
             new ChallengesCommand();
-            new ProfileMenuCommand();
             new MatchHistoryCommand();
             new KitEditorCommand();
         });

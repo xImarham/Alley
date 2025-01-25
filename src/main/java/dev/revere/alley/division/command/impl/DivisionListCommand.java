@@ -1,4 +1,4 @@
-package dev.revere.alley.profile.division.command.impl;
+package dev.revere.alley.division.command.impl;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.util.chat.CC;
@@ -22,7 +22,8 @@ public class DivisionListCommand extends BaseCommand {
         if (Alley.getInstance().getDivisionRepository().getDivisions().isEmpty()) {
             player.sendMessage(CC.translate("      &f● &cNo Divisions available."));
         }
-        Alley.getInstance().getDivisionRepository().getDivisions().forEach(division -> player.sendMessage(CC.translate("      &f● &b" + division.getName() + " " + division.getLevel().getName().replace("Level ", "") + " &f(&b" + division.getLevel().getName() + "&f) (&b" + division.getEloMin() + " &f- &b" + division.getEloMax() + "&f)")));
+        Alley.getInstance().getDivisionRepository().getDivisions()
+                .forEach(division -> player.sendMessage(CC.translate("      &f● &b" + division.getDisplayName() + " &f(" + division.getTiers().get(0).getRequiredWins() + " wins)")));
         player.sendMessage("");
 
     }

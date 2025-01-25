@@ -1,8 +1,11 @@
 package dev.revere.alley.database.util;
 
+import dev.revere.alley.Alley;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.data.ProfileData;
 import dev.revere.alley.profile.data.impl.*;
+import dev.revere.alley.division.Division;
+import dev.revere.alley.division.tier.DivisionTier;
 import dev.revere.alley.profile.enums.EnumChatChannel;
 import dev.revere.alley.profile.enums.EnumWorldTime;
 import lombok.experimental.UtilityClass;
@@ -10,6 +13,8 @@ import org.bson.Document;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
+
 /**
  * @author Remi
  * @project Alley
@@ -58,6 +63,8 @@ public class MongoUtility {
         Document kitDataDocument = new Document();
         for (Map.Entry<String, ProfileUnrankedKitData> entry : kitData.entrySet()) {
             Document kitEntry = new Document();
+            kitEntry.put("division", entry.getValue().getDivision().getName());
+            kitEntry.put("tier", entry.getValue().getTier().getName());
             kitEntry.put("wins", entry.getValue().getWins());
             kitEntry.put("losses", entry.getValue().getLosses());
             kitDataDocument.put(entry.getKey(), kitEntry);
@@ -181,12 +188,26 @@ public class MongoUtility {
         for (Map.Entry<String, Object> entry : kitDataDocument.entrySet()) {
             Document kitEntry = (Document) entry.getValue();
             ProfileUnrankedKitData kit = new ProfileUnrankedKitData();
+
+            String storedDivision = kitEntry.getString("division");
+            Division division = Alley.getInstance().getDivisionRepository().getDivision(storedDivision);
+            kit.setDivision(division.getName());
+
+            String storedTier = kitEntry.getString("tier");
+            DivisionTier tier = division.getTiers().stream()
+                    .filter(t -> t.getName().equals(storedTier))
+                    .findFirst()
+                    .orElse(null);
+            kit.setTier(Objects.requireNonNull(tier).getName());
+
             kit.setWins(kitEntry.getInteger("wins"));
             kit.setLosses(kitEntry.getInteger("losses"));
+
             kitData.put(entry.getKey(), kit);
         }
         return kitData;
     }
+
 
     /**
      * Parses a Map of ProfileKitData objects from a Document.

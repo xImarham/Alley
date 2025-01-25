@@ -34,7 +34,7 @@ public class PageButton extends Button {
                         .name("&b&lNext Page &7" + (this.menu.getPage() + "/" + this.menu.getPages(player)))
                         .lore(Arrays.asList(
                                 "&7Right-Click:",
-                                " &7" + Symbol.ARROW_R + " View all",
+                                " &7▶ View all",
                                 "",
                                 "&bClick to view!"
                         ))
@@ -56,7 +56,7 @@ public class PageButton extends Button {
                         .name("&6&lLast Page &7" + (this.menu.getPage() + "/" + this.menu.getPages(player)))
                         .lore(Arrays.asList(
                                 "&7Right-Click:",
-                                " &7" + Symbol.ARROW_R + " View all",
+                                " &7▶ View all",
                                 "",
                                 "&6Click to view!"
                         ))

@@ -33,7 +33,7 @@ import dev.revere.alley.kit.KitRepository;
 import dev.revere.alley.kit.settings.KitSettingRepository;
 import dev.revere.alley.profile.ProfileRepository;
 import dev.revere.alley.profile.cosmetic.repository.CosmeticRepository;
-import dev.revere.alley.profile.division.DivisionRepository;
+import dev.revere.alley.division.DivisionRepository;
 import dev.revere.alley.profile.listener.ProfileListener;
 import dev.revere.alley.queue.QueueRepository;
 import dev.revere.alley.util.ServerUtil;
@@ -107,6 +107,7 @@ public class Alley extends JavaPlugin {
         this.kitRepository.saveKits();
         this.ffaRepository.saveFFAMatches();
         this.arenaRepository.getArenas().forEach(Arena::saveArena);
+        this.divisionRepository.saveDivisions();
 
         Logger.pluginDisabled();
     }
@@ -140,7 +141,7 @@ public class Alley extends JavaPlugin {
         managers.put("ArenaRepository", () -> this.arenaRepository = new ArenaRepository());
         managers.put("FFARepository", () -> this.ffaRepository = new FFARepository());
         managers.put("CosmeticRepository", () -> this.cosmeticRepository = new CosmeticRepository());
-        managers.put("DivisionRepository", () -> this.divisionRepository = new DivisionRepository());
+        managers.put("DivisionRepository", () -> this.divisionRepository = new DivisionRepository(this));
         managers.put("ProfileRepository", () -> { this.profileRepository = new ProfileRepository(); this.profileRepository.loadProfiles(); });
         managers.put("HotbarRepository", () -> this.hotbarRepository = new HotbarRepository());
         managers.put("CooldownRepository", () -> this.cooldownRepository = new CooldownRepository());

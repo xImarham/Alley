@@ -1,13 +1,11 @@
 package dev.revere.alley.profile.shop.menu;
 
+import dev.revere.alley.api.menu.Button;
+import dev.revere.alley.api.menu.Menu;
 import dev.revere.alley.profile.cosmetic.impl.killeffects.AbstractKillEffect;
 import dev.revere.alley.profile.cosmetic.impl.killeffects.KillEffectRepository;
 import dev.revere.alley.profile.cosmetic.impl.soundeffect.AbstractSoundEffect;
 import dev.revere.alley.profile.cosmetic.impl.soundeffect.SoundEffectRepository;
-import dev.revere.alley.profile.menu.ProfileMenu;
-import dev.revere.alley.api.menu.Button;
-import dev.revere.alley.api.menu.Menu;
-import dev.revere.alley.api.menu.impl.BackButton;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -45,7 +43,6 @@ public class ShopMenu extends Menu {
                 .filter(player::hasPermission)
                 .count();
 
-        buttons.put(0, new BackButton(new ProfileMenu()));
         buttons.put(21, new ShopButton("&b&lKill Effects", new ItemStack(Material.REDSTONE), Arrays.asList(
                 "",
                 "&fPurchase kill effects",

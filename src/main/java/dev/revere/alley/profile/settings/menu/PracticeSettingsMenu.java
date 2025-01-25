@@ -20,7 +20,7 @@ import java.util.*;
  * @date 23/05/2024 - 01:27
  */
 @AllArgsConstructor
-public class SettingsMenu extends Menu {
+public class PracticeSettingsMenu extends Menu {
 
     @Override
     public String getTitle(Player player) {

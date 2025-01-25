@@ -12,7 +12,7 @@ import java.util.Arrays;
 
 /**
  * @author Emmy
- * @project alley-practice
+ * @project Alley
  * @since 23/01/2025
  */
 public class PartyLookupCommand extends BaseCommand {

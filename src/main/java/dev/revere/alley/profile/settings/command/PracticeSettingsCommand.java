@@ -1,6 +1,6 @@
 package dev.revere.alley.profile.settings.command;
 
-import dev.revere.alley.profile.settings.menu.SettingsMenu;
+import dev.revere.alley.profile.settings.menu.PracticeSettingsMenu;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.annotation.Command;
 import dev.revere.alley.api.command.CommandArgs;
@@ -18,6 +18,6 @@ public class PracticeSettingsCommand extends BaseCommand {
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
 
-        new SettingsMenu().openMenu(player);
+        new PracticeSettingsMenu().openMenu(player);
     }
 }
