@@ -1,9 +1,10 @@
-package dev.revere.alley.game.ffa.spawn;
+package dev.revere.alley.game.ffa.cuboid;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.arena.Arena;
 import dev.revere.alley.arena.ArenaType;
 import dev.revere.alley.util.data.cuboid.Cuboid;
+import dev.revere.alley.util.data.cuboid.CuboidService;
 import dev.revere.alley.util.location.LocationUtil;
 import dev.revere.alley.util.logger.Logger;
 import lombok.Getter;
@@ -16,20 +17,20 @@ import org.bukkit.configuration.file.FileConfiguration;
  * @date 12/06/2024 - 22:14
  */
 @Getter
-public class FFACuboidService {
+public class FFACuboidServiceImpl extends CuboidService {
     private Location minimum;
     private Location maximum;
     private Location spawn;
     private Cuboid cuboid;
 
-    public FFACuboidService() {
-        this.loadFFASpawn();
+    public FFACuboidServiceImpl() {
+        this.loadCuboid();
     }
 
     /**
      * Load the FFA spawn location from the arenas.yml file
      */
-    public void loadFFASpawn() {
+    public void loadCuboid() {
         FileConfiguration config = Alley.getInstance().getConfigService().getArenasConfig();
         Arena arena = Alley.getInstance().getArenaRepository().getArenas().stream()
                 .filter(a -> a.getType() == ArenaType.FFA)
@@ -50,6 +51,11 @@ public class FFACuboidService {
             return;
         }
 
-        this.cuboid = new Cuboid(minimum, maximum);
+        this.cuboid = new Cuboid(this.minimum, this.maximum);
+    }
+
+    @Override
+    public void updateCuboid() {
+
     }
 }

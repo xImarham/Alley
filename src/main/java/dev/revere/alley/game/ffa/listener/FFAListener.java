@@ -4,7 +4,7 @@ import dev.revere.alley.Alley;
 import dev.revere.alley.cooldown.Cooldown;
 import dev.revere.alley.cooldown.CooldownRepository;
 import dev.revere.alley.cooldown.enums.EnumCooldownType;
-import dev.revere.alley.game.ffa.spawn.FFACuboidService;
+import dev.revere.alley.game.ffa.cuboid.FFACuboidServiceImpl;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
 import dev.revere.alley.util.PlayerUtil;
@@ -37,23 +37,6 @@ import java.util.Optional;
  * @date 25/05/2024 - 14:24
  */
 public class FFAListener implements Listener {
-
-    /*@EventHandler
-    public void onCombatTag(CombatTagEvent event) {
-        Player player = event.getPlayer();
-        Player attacker = event.getAttacker();
-
-        Profile playerProfile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
-        Profile attackerProfile = Alley.getInstance().getProfileRepository().getProfile(attacker.getUniqueId());
-
-        if (playerProfile.getState() == EnumProfileState.FFA && attackerProfile.getState() == EnumProfileState.FFA) {
-            if (Alley.getInstance().getCombatEventManager().isCombat(player) || Alley.getInstance().getCombatEventManager().isCombat(attacker)) {
-                return;
-            }
-            player.sendMessage(CC.translate("&cYou are now in combat with &4" + attacker.getName() + "&c."));
-            attacker.sendMessage(CC.translate("&cYou are now in combat with &4" + player.getName() + "&c."));
-        }
-    }*/
 
     @EventHandler
     private void onPlayerDropItem(PlayerDropItemEvent event) {
@@ -103,7 +86,6 @@ public class FFAListener implements Listener {
         }
     }
 
-
     @EventHandler
     private void onQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
@@ -147,7 +129,7 @@ public class FFAListener implements Listener {
 
         Player victim = (Player) event.getEntity();
         Player attacker = (Player) event.getDamager();
-        FFACuboidService ffaCuboidService = Alley.getInstance().getFfaCuboidService();
+        FFACuboidServiceImpl ffaCuboidService = Alley.getInstance().getFfaCuboidService();
         if (ffaCuboidService.getCuboid().isIn((victim)) && ffaCuboidService.getCuboid().isIn((attacker)) || !ffaCuboidService.getCuboid().isIn(victim) && ffaCuboidService.getCuboid().isIn(attacker) || ffaCuboidService.getCuboid().isIn(victim) && !ffaCuboidService.getCuboid().isIn(attacker)) {
             event.setCancelled(true);
         }

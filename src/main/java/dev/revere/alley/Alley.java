@@ -18,9 +18,9 @@ import dev.revere.alley.essential.spawn.listener.SpawnListener;
 import dev.revere.alley.game.duel.DuelRequestHandler;
 import dev.revere.alley.game.duel.task.DuelRequestExpiryTask;
 import dev.revere.alley.game.ffa.FFARepository;
+import dev.revere.alley.game.ffa.listener.impl.FFACuboidListener;
 import dev.revere.alley.game.ffa.listener.FFAListener;
-import dev.revere.alley.game.ffa.spawn.FFACuboidService;
-import dev.revere.alley.game.ffa.spawn.FFASpawnTask;
+import dev.revere.alley.game.ffa.cuboid.FFACuboidServiceImpl;
 import dev.revere.alley.game.match.MatchRepository;
 import dev.revere.alley.game.match.listener.MatchListener;
 import dev.revere.alley.game.match.snapshot.SnapshotRepository;
@@ -57,7 +57,7 @@ public class Alley extends JavaPlugin {
     private CosmeticRepository cosmeticRepository;
     private ProfileRepository profileRepository;
     private DivisionRepository divisionRepository;
-    private FFACuboidService ffaCuboidService;
+    private FFACuboidServiceImpl ffaCuboidService;
     private MongoService mongoService;
     private ArenaRepository arenaRepository;
     private QueueRepository queueRepository;
@@ -148,7 +148,7 @@ public class Alley extends JavaPlugin {
         managers.put("MatchRepository", () -> this.matchRepository = new MatchRepository());
         managers.put("PartyHandler", () -> this.partyHandler = new PartyHandler());
         managers.put("SpawnService", () -> this.spawnService = new SpawnService());
-        managers.put("FFACuboidService", () -> this.ffaCuboidService = new FFACuboidService());
+        managers.put("FFACuboidService", () -> this.ffaCuboidService = new FFACuboidServiceImpl());
         managers.put("DuelRequestHandler", () -> this.duelRequestHandler = new DuelRequestHandler());
         managers.put("ChatService", () -> this.chatService = new ChatService());
 
@@ -166,6 +166,7 @@ public class Alley extends JavaPlugin {
                 new MenuListener(),
                 new SpawnListener(),
                 new FFAListener(),
+                new FFACuboidListener(this.ffaCuboidService.getCuboid(), this),
                 new WorldListener(),
                 new ChatListener()
         ).forEach(listener -> getServer().getPluginManager().registerEvents(listener, this));
@@ -181,11 +182,6 @@ public class Alley extends JavaPlugin {
 
     private void runTasks() {
         final Map<String, Runnable> runnables = new LinkedHashMap<>();
-
-        runnables.put("FFASpawnTask", () -> {
-            FFASpawnTask ffaSpawnTask = new FFASpawnTask(this.ffaCuboidService.getCuboid(), this);
-            ffaSpawnTask.runTaskTimerAsynchronously(this, 0L, 5L);
-        });
 
         runnables.put("PartyRequestExpiryTask", () -> {
             PartyRequestExpiryTask partyRequestExpiryTask = new PartyRequestExpiryTask();

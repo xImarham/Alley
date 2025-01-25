@@ -9,7 +9,6 @@ import org.bukkit.entity.Player;
  * Modified by: @Elb1to
  */
 public class Cuboid {
-
     private final int xMin;
     private final int xMax;
 

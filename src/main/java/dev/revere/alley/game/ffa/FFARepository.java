@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author Remi
@@ -20,9 +21,10 @@ import java.util.List;
  */
 @Getter
 public class FFARepository {
-    private final List<AbstractFFAMatch> matches = new ArrayList<>();
+    private final List<AbstractFFAMatch> matches;
 
     public FFARepository() {
+        this.matches = new ArrayList<>();
         this.loadFFAMatches();
     }
 
@@ -53,7 +55,7 @@ public class FFARepository {
             }
 
             int maxPlayers = config.getInt(name + ".maxPlayers");
-            matches.add(new DefaultFFAMatchImpl(kitName, arena, kit, maxPlayers));
+            this.matches.add(new DefaultFFAMatchImpl(kitName, arena, kit, maxPlayers));
         }
     }
 
@@ -61,7 +63,7 @@ public class FFARepository {
      * Save all FFA matches
      */
     public void saveFFAMatches() {
-        matches.forEach(this::saveFFAMatch);
+        this.matches.forEach(this::saveFFAMatch);
     }
 
     /**
@@ -97,7 +99,7 @@ public class FFARepository {
      * @param match The match to delete
      */
     public void deleteFFAMatch(AbstractFFAMatch match) {
-        matches.remove(match);
+        this.matches.remove(match);
         FileConfiguration config = Alley.getInstance().getConfigService().getConfig("storage/ffa.yml");
         config.set("ffa." + match.getKit().getName(), null);
         Alley.getInstance().getFfaRepository().saveFFAMatches();
@@ -110,7 +112,7 @@ public class FFARepository {
      * @return The FFA match
      */
     public AbstractFFAMatch getFFAMatch(String kitName) {
-        return matches.stream().filter(match -> match.getKit().getName().equalsIgnoreCase(kitName)).findFirst().orElse(null);
+        return this.matches.stream().filter(match -> match.getKit().getName().equalsIgnoreCase(kitName)).findFirst().orElse(null);
     }
 
     /**
@@ -120,6 +122,18 @@ public class FFARepository {
      * @return The FFA match
      */
     public AbstractFFAMatch getFFAMatch(Player player) {
-        return matches.stream().filter(match -> match.getPlayers().contains(player)).findFirst().orElse(null);
+        return this.matches.stream().filter(match -> match.getPlayers().contains(player)).findFirst().orElse(null);
+    }
+
+    /**
+     * Get an FFA match by player UUID.
+     *
+     * @param player The player
+     * @return An Optional containing the FFA match if found, or empty if not
+     */
+    public Optional<AbstractFFAMatch> getMatchByPlayer(Player player) {
+        return this.matches.stream()
+                .filter(match -> match.getPlayers().contains(player))
+                .findFirst();
     }
 }
