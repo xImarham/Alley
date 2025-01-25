@@ -22,6 +22,11 @@ public class DivisionRepository {
     private final List<Division> divisions;
     private final Alley plugin;
 
+    /**
+     * Constructor for the DivisionRepository class.
+     *
+     * @param plugin The Alley plugin instance.
+     */
     public DivisionRepository(Alley plugin) {
         this.plugin = plugin;
         this.divisions = new ArrayList<>();
@@ -77,6 +82,11 @@ public class DivisionRepository {
         this.divisions.addAll(loadedDivisions);
     }
 
+    /**
+     * Save a division to the divisions configuration file.
+     *
+     * @param division The division to save.
+     */
     public void saveDivision(Division division) {
         FileConfiguration config = this.plugin.getConfigService().getDivisionsConfig();
         String path = "divisions." + division.getName();
