@@ -98,4 +98,31 @@ public class Profile {
                         }).reversed())
                 .collect(Collectors.toList());
     }
+
+    /**
+     * Checks if the profile has participated in ranked matches.
+     *
+     * @return True if the profile has participated in ranked matches, otherwise false.
+     */
+    public boolean hasParticipatedInRanked() {
+        return this.profileData.getRankedKitData().values().stream().anyMatch(data -> data.getWins() > 0 || data.getLosses() > 0 || data.getElo() != 1000);
+    }
+
+    /**
+     * Checks if the profile has participated in unranked matches.
+     *
+     * @return True if the profile has participated in unranked matches, otherwise false.
+     */
+    public boolean hasParticipatedInTournament() {
+        return false; //TODO: Implement tournament system
+    }
+
+    /**
+     * Checks if the profile has participated in FFA matches.
+     *
+     * @return True if the profile has participated in FFA matches, otherwise false.
+     */
+    public boolean hasParticipatedInFFA() {
+        return this.profileData.getFfaData().values().stream().anyMatch(data -> data.getKills() > 0 || data.getDeaths() > 0);
+    }
 }

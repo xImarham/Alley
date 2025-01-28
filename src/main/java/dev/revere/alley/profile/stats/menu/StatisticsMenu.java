@@ -74,25 +74,39 @@ public class StatisticsMenu extends Menu {
             ProfileFFAData profileFFAData = this.profile.getProfileData().getFfaData().get(this.kit.getName());
 
             List<String> lore = new ArrayList<>(Arrays.asList(
-                    "",
-                    "&b&lUnranked",
+                    "&b&lUnranked &6⭐" + profileUnrankedKitData.getDivision().getName() + " " + profileUnrankedKitData.getTier().getName(),
                     "&f● &bWins: &f" + profileUnrankedKitData.getWins(),
-                    "&f● &bLosses: &f" + profileUnrankedKitData.getLosses(),
+                    //"&f● &bLosses: &f" + profileUnrankedKitData.getLosses(),
                     "",
-                    "&b&lRanked",
-                    "&f● &bWins: &f" + profileRankedKitData.getWins(),
-                    "&f● &bLosses: &f" + profileRankedKitData.getLosses(),
-                    "&f● &bElo: &f" + profileRankedKitData.getElo(),
-                    ""
+                    "&f● &bWin Streak: " + "&fN/A",
+                    "    &bBest: " + "&fN/A" + " &7(N/A Daily)"
             ));
 
-            if (this.kit.isFfaKit()) {
+            if (this.profile.hasParticipatedInRanked()) {
                 lore.addAll(Arrays.asList(
+                        "",
+                        "&b&lRanked",
+                        "&f● &bWins: &f" + profileRankedKitData.getWins(),
+                        //"&f● &bLosses: &f" + profileRankedKitData.getLosses(),
+                        "&f● &bElo: &f" + profileRankedKitData.getElo()
+                ));
+            }
+
+            if (this.profile.hasParticipatedInTournament()) {
+                lore.addAll(Arrays.asList(
+                        "",
+                        "&b&lTournament",
+                        "&f● &bWins: &f" + "N/A",
+                        "&f● &bLosses: &f" + "N/A"
+                ));
+            }
+
+            if (this.kit.isFfaKit() && this.profile.hasParticipatedInFFA()) {
+                lore.addAll(Arrays.asList(
+                        "",
                         "&b&lFFA",
-                        "&f● &bKills: &f" + profileFFAData.getKills(),
-                        "&f● &bDeaths: &f" + profileFFAData.getDeaths(),
-                        "&f● &bKDR: &f" + profileFFAData.getKdr(),
-                        ""
+                        "&f● &bKills: &f" + profileFFAData.getKills() + " &7(" + profileFFAData.getKdr() + "x)",
+                        "&f● &bDeaths: &f" + profileFFAData.getDeaths()
                 ));
             }
 
