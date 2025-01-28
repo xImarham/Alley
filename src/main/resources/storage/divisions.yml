@@ -8,9 +8,9 @@ divisions:
       I:
         required-wins: 0
       II:
-        required-wins: 30
+        required-wins: 10
       III:
-        required-wins: 50
+        required-wins: 40
       IV:
         required-wins: 80
       V:
