@@ -9,6 +9,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
@@ -116,5 +117,40 @@ public class DivisionRepository {
      */
     public Division getDivision(String name) {
         return this.divisions.stream().filter(division -> division.getName().equalsIgnoreCase(name)).findFirst().orElse(null);
+    }
+
+    /**
+     * Create a division with I, II, III, IV, V tiers.
+     *
+     * @param name         The name of the division.
+     * @param requiredWins The required wins of the division.
+     */
+    public void createDivision(String name, int requiredWins) {
+        Division division = new Division(name, "&b&l" + name, "The " + name + " Division", 0, Material.DIRT, Arrays.asList(
+                new DivisionTier("I", requiredWins),
+                new DivisionTier("II", (int) (requiredWins * 1.25)),
+                new DivisionTier("III", (int) (requiredWins * 1.5)),
+                new DivisionTier("IV", (int) (requiredWins * 1.75)),
+                new DivisionTier("V", (requiredWins * 2))
+        ));
+
+        this.divisions.add(division);
+        this.saveDivision(division);
+    }
+
+    /**
+     * Delete a division by its name.
+     *
+     * @param name The name of the division to delete.
+     */
+    public void deleteDivision(String name) {
+        FileConfiguration config = this.plugin.getConfigService().getDivisionsConfig();
+        Division division = this.getDivision(name);
+        if (division == null) return;
+
+        this.divisions.remove(division);
+        config.set("divisions." + name, null);
+
+        this.plugin.getConfigService().saveConfig(this.plugin.getConfigService().getConfigFile("storage/divisions.yml"), config);
     }
 }

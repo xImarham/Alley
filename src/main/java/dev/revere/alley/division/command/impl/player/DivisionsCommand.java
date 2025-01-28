@@ -1,4 +1,4 @@
-package dev.revere.alley.division.command.impl;
+package dev.revere.alley.division.command.impl.player;
 
 import dev.revere.alley.division.menu.DivisionsMenu;
 import dev.revere.alley.api.command.BaseCommand;
@@ -11,8 +11,8 @@ import org.bukkit.entity.Player;
  * @project Alley
  * @date 6/2/2024
  */
-public class DivisionMenuCommand extends BaseCommand {
-    @Command(name = "division.menu", aliases = {"divisions"}, permission = "alley.admin")
+public class DivisionsCommand extends BaseCommand {
+    @Command(name = "divisions", aliases = {"division.menu"})
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();

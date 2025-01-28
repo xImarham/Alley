@@ -1,5 +1,5 @@
 divisions:
-  bronze:
+  Bronze:
     display-name: "Bronze"
     description: "The Bronze division"
     durability: 0
@@ -15,7 +15,7 @@ divisions:
         required-wins: 80
       V:
         required-wins: 100
-  silver:
+  Silver:
     display-name: "Silver"
     description: "The Silver division"
     durability: 0
@@ -31,7 +31,7 @@ divisions:
         required-wins: 200
       V:
         required-wins: 220
-  gold:
+  Gold:
     display-name: "Gold"
     description: "The Gold division"
     durability: 0
@@ -47,7 +47,7 @@ divisions:
         required-wins: 400
       V:
         required-wins: 500
-  platinum:
+  Platinum:
     display-name: "Platinum"
     description: "The Platinum division"
     durability: 4
@@ -63,7 +63,7 @@ divisions:
         required-wins: 1350
       V:
         required-wins: 1500
-  diamond:
+  Diamond:
     display-name: "Diamond"
     description: "The Diamond division"
     durability: 0
@@ -79,7 +79,7 @@ divisions:
         required-wins: 2000
       V:
         required-wins: 2200
-  master:
+  Master:
     display-name: "Master"
     description: "The Master division"
     durability: 12
@@ -95,7 +95,7 @@ divisions:
         required-wins: 4000
       V:
         required-wins: 5000
-  grandmaster:
+  Grandmaster:
     display-name: "Grandmaster"
     description: "The Grandmaster division"
     durability: 6

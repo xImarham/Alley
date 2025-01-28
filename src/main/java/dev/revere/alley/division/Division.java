@@ -17,10 +17,10 @@ import java.util.List;
 @Setter
 public class Division {
     private final String name;
-    private final String displayName;
-    private final String description;
-    private final int durability;
-    private final Material icon;
+    private String displayName;
+    private String description;
+    private int durability;
+    private Material icon;
     private final List<DivisionTier> tiers;
 
     //private final String permissionReward;
@@ -57,6 +57,22 @@ public class Division {
 
         var divisionTier = this.tiers.get(tier);
         return divisionTier.getName();
+    }
+
+    /**
+     * Gets the division tier by the name.
+     *
+     * @param tier The name of the division tier.
+     * @return The division tier.
+     */
+    public DivisionTier getTier(String tier) {
+        for (DivisionTier divisionTier : this.tiers) {
+            if (divisionTier.getName().equalsIgnoreCase(tier)) {
+                return divisionTier;
+            }
+        }
+
+        return null;
     }
 
     /**

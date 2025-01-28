@@ -12,7 +12,7 @@ import lombok.Setter;
 @Setter
 public class DivisionTier {
     private final String name;
-    private final int requiredWins;
+    private int requiredWins;
 
     /**
      * Constructor for the DivisionTier class.
