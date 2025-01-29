@@ -15,7 +15,7 @@ Alley is currently a work in progress. While it provides a strong base for PvP-f
 
 ## Todo List
 
-- **Recode division system**: Recode to be based on unranked wins
+- ~~Recode division system: Recode to be based on unranked wins~~
 - **Finish events system**: Tasks, and overall improvements
 - **Add arena generator**: via WorldEdit
 - **Implement Leaderboards and global stats**

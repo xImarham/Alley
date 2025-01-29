@@ -1,14 +1,14 @@
-package dev.revere.alley.profile.shop.menu.impl;
+package dev.revere.alley.cosmetic.menu.button;
 
+import lombok.AllArgsConstructor;
 import dev.revere.alley.Alley;
-import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.profile.Profile;
+import dev.revere.alley.cosmetic.impl.soundeffect.AbstractSoundEffect;
+import dev.revere.alley.cosmetic.impl.killeffects.AbstractKillEffect;
 import dev.revere.alley.cosmetic.interfaces.ICosmetic;
 import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.util.data.item.ItemBuilder;
-import lombok.AllArgsConstructor;
-import org.bukkit.Bukkit;
-import org.bukkit.configuration.file.FileConfiguration;
+import dev.revere.alley.api.menu.Button;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
@@ -19,19 +19,21 @@ import org.bukkit.inventory.ItemStack;
  * @date 5/26/2024
  */
 @AllArgsConstructor
-public class ShopEffectButton extends Button {
+public class CosmeticButton extends Button {
 
     private final ICosmetic cosmetic;
 
     @Override
     public ItemStack getButtonItem(Player player) {
+        Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
         boolean hasPermission = player.hasPermission(cosmetic.getPermission());
+        boolean isSelected = profile.getProfileData().getProfileCosmeticData().isSelectedCosmetic(cosmetic);
 
         String lore;
         if (hasPermission) {
-            lore = "&fYou already own this cosmetic.";
+            lore = isSelected ? "&cYou already have this cosmetic selected." : "&fClick to select this cosmetic.";
         } else {
-            lore = "&cClick to purchase this cosmetic for &b" + cosmetic.getPrice() + " coins.";
+            lore = "&cYou do not have permission to select this cosmetic.";
         }
 
         return new ItemBuilder(cosmetic.getIcon())
@@ -39,7 +41,6 @@ public class ShopEffectButton extends Button {
                 .lore(
                         "",
                         "&f● &bDescription: &f" + cosmetic.getDescription(),
-                        "&f● &bPrice: &f" + cosmetic.getPrice() + " coins",
                         "",
                         lore
 
@@ -61,22 +62,22 @@ public class ShopEffectButton extends Button {
         playNeutral(player);
 
         Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
-        if (player.hasPermission(cosmetic.getPermission())) {
-            player.sendMessage(CC.translate("&cYou already own this cosmetic."));
+        if (profile.getProfileData().getProfileCosmeticData().isSelectedCosmetic(cosmetic)) {
+            player.sendMessage(CC.translate("&cYou already have this cosmetic selected."));
             return;
         }
 
-        if (profile.getProfileData().getCoins() < cosmetic.getPrice()) {
-            player.sendMessage(CC.translate("&cYou do not have enough coins to purchase this cosmetic."));
+        if (!player.hasPermission(cosmetic.getPermission())) {
+            player.sendMessage(CC.translate("&cYou do not have permission to select this cosmetic."));
             return;
         }
 
-        profile.getProfileData().setCoins(profile.getProfileData().getCoins() - cosmetic.getPrice());
+        if (cosmetic instanceof AbstractKillEffect) {
+            profile.getProfileData().getProfileCosmeticData().setSelectedKillEffect(cosmetic.getName());
+        } else if (cosmetic instanceof AbstractSoundEffect) {
+            profile.getProfileData().getProfileCosmeticData().setSelectedSoundEffect(cosmetic.getName());
+        }
 
-
-        FileConfiguration config = Alley.getInstance().getConfigService().getSettingsConfig();
-        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), config.get("command.grant-cosmetic-permission-command").toString().replace("{player}", player.getName()).replace("%permission%", cosmetic.getPermission()));
-
-        player.sendMessage(CC.translate("&aYou have successfully purchased the " + cosmetic.getName() + " cosmetic for &b" + cosmetic.getPrice() + " coins."));
+        player.sendMessage(CC.translate("&aYou have successfully selected the &b" + cosmetic.getName() + " &acosmetic."));
     }
 }

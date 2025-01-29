@@ -32,7 +32,7 @@ import dev.revere.alley.profile.command.ChallengesCommand;
 import dev.revere.alley.profile.command.ChatCommand;
 import dev.revere.alley.profile.command.MatchHistoryCommand;
 import dev.revere.alley.profile.command.admin.ResetStatsCommand;
-import dev.revere.alley.profile.cosmetic.command.CosmeticCommand;
+import dev.revere.alley.cosmetic.command.CosmeticCommand;
 import dev.revere.alley.division.command.DivisionCommand;
 import dev.revere.alley.profile.settings.command.MatchSettingsCommand;
 import dev.revere.alley.profile.settings.command.PracticeSettingsCommand;

@@ -2,10 +2,10 @@ package dev.revere.alley.profile.shop.menu;
 
 import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.api.menu.Menu;
-import dev.revere.alley.profile.cosmetic.impl.killeffects.AbstractKillEffect;
-import dev.revere.alley.profile.cosmetic.impl.killeffects.KillEffectRepository;
-import dev.revere.alley.profile.cosmetic.impl.soundeffect.AbstractSoundEffect;
-import dev.revere.alley.profile.cosmetic.impl.soundeffect.SoundEffectRepository;
+import dev.revere.alley.cosmetic.impl.killeffects.AbstractKillEffect;
+import dev.revere.alley.cosmetic.impl.killeffects.KillEffectRepository;
+import dev.revere.alley.cosmetic.impl.soundeffect.AbstractSoundEffect;
+import dev.revere.alley.cosmetic.impl.soundeffect.SoundEffectRepository;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;

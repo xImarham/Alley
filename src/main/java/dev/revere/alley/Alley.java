@@ -32,7 +32,7 @@ import dev.revere.alley.hotbar.listener.HotbarListener;
 import dev.revere.alley.kit.KitRepository;
 import dev.revere.alley.kit.settings.KitSettingRepository;
 import dev.revere.alley.profile.ProfileRepository;
-import dev.revere.alley.profile.cosmetic.repository.CosmeticRepository;
+import dev.revere.alley.cosmetic.repository.CosmeticRepository;
 import dev.revere.alley.division.DivisionRepository;
 import dev.revere.alley.profile.listener.ProfileListener;
 import dev.revere.alley.queue.QueueRepository;
