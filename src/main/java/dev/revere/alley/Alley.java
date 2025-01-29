@@ -10,7 +10,9 @@ import dev.revere.alley.arena.listener.ArenaListener;
 import dev.revere.alley.command.CommandUtility;
 import dev.revere.alley.config.ConfigService;
 import dev.revere.alley.cooldown.CooldownRepository;
+import dev.revere.alley.cosmetic.repository.CosmeticRepository;
 import dev.revere.alley.database.MongoService;
+import dev.revere.alley.division.DivisionRepository;
 import dev.revere.alley.essential.chat.ChatService;
 import dev.revere.alley.essential.chat.listener.ChatListener;
 import dev.revere.alley.essential.spawn.SpawnService;
@@ -18,9 +20,10 @@ import dev.revere.alley.essential.spawn.listener.SpawnListener;
 import dev.revere.alley.game.duel.DuelRequestHandler;
 import dev.revere.alley.game.duel.task.DuelRequestExpiryTask;
 import dev.revere.alley.game.ffa.FFARepository;
-import dev.revere.alley.game.ffa.listener.impl.FFACuboidListener;
-import dev.revere.alley.game.ffa.listener.FFAListener;
+import dev.revere.alley.combat.CombatRepository;
 import dev.revere.alley.game.ffa.cuboid.FFACuboidServiceImpl;
+import dev.revere.alley.game.ffa.listener.FFAListener;
+import dev.revere.alley.game.ffa.listener.impl.FFACuboidListener;
 import dev.revere.alley.game.match.MatchRepository;
 import dev.revere.alley.game.match.listener.MatchListener;
 import dev.revere.alley.game.match.snapshot.SnapshotRepository;
@@ -32,8 +35,6 @@ import dev.revere.alley.hotbar.listener.HotbarListener;
 import dev.revere.alley.kit.KitRepository;
 import dev.revere.alley.kit.settings.KitSettingRepository;
 import dev.revere.alley.profile.ProfileRepository;
-import dev.revere.alley.cosmetic.repository.CosmeticRepository;
-import dev.revere.alley.division.DivisionRepository;
 import dev.revere.alley.profile.listener.ProfileListener;
 import dev.revere.alley.queue.QueueRepository;
 import dev.revere.alley.util.ServerUtil;
@@ -74,6 +75,7 @@ public class Alley extends JavaPlugin {
     private HotbarRepository hotbarRepository;
     private DuelRequestHandler duelRequestHandler;
     private ChatService chatService;
+    private CombatRepository combatRepository;
 
     public void onEnable() {
         instance = this;
@@ -152,6 +154,7 @@ public class Alley extends JavaPlugin {
         managers.put("FFACuboidService", () -> this.ffaCuboidService = new FFACuboidServiceImpl());
         managers.put("DuelRequestHandler", () -> this.duelRequestHandler = new DuelRequestHandler());
         managers.put("ChatService", () -> this.chatService = new ChatService());
+        managers.put("CombatRepository", () -> this.combatRepository = new CombatRepository());
 
         managers.forEach(Logger::logTime);
         managers.clear();
@@ -166,7 +169,7 @@ public class Alley extends JavaPlugin {
                 new ArenaListener(),
                 new MenuListener(),
                 new SpawnListener(),
-                new FFAListener(),
+                new FFAListener(this),
                 new FFACuboidListener(this.ffaCuboidService.getCuboid(), this),
                 new WorldListener(),
                 new ChatListener()

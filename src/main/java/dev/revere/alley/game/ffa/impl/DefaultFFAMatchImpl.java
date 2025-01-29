@@ -137,7 +137,7 @@ public class DefaultFFAMatchImpl extends AbstractFFAMatch {
 
         ActionBarUtil.sendMessage(killer, "&c&lKILL! &f" + player.getName(), 3);
 
-        getPlayers().forEach(online -> online.sendMessage(CC.translate("&c" + player.getName() + " has been killed by " + killer.getName() + ".")));
+        this.getPlayers().forEach(online -> online.sendMessage(CC.translate("&c" + player.getName() + " has been killed by " + killer.getName() + ".")));
         handleRespawn(player);
     }
 }

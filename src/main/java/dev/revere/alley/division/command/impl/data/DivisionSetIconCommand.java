@@ -11,7 +11,7 @@ import org.bukkit.entity.Player;
 
 /**
  * @author Emmy
- * @project alley-practice
+ * @project Alley
  * @since 28/01/2025
  */
 public class DivisionSetIconCommand extends BaseCommand {

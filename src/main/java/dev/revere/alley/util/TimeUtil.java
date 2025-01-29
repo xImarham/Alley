@@ -32,6 +32,16 @@ public final class TimeUtil {
     }
 
     /**
+     * Converts seconds to milliseconds.
+     *
+     * @param seconds the seconds to convert.
+     * @return the milliseconds.
+     */
+    public long secondsToMillis(long seconds) {
+        return seconds * 1000L;
+    }
+
+    /**
      * Converts milliseconds to a seconds format.
      *
      * @param millis the milliseconds to convert.
