@@ -95,10 +95,10 @@ public class FFAListener implements Listener {
         }.runTaskLater(this.plugin, 100L);
 
         Player killer = PlayerUtil.getLastAttacker(player);
-        if (killer != null) {
+        /*if (killer != null) {
             player.sendMessage(CC.translate("&cYou have been killed by &4" + killer.getName() + "&c."));
             killer.sendMessage(CC.translate("&aYou have killed &2" + player.getName() + "&a."));
-        }
+        }*/
 
         this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> player.spigot().respawn(), 1L);
         Bukkit.getScheduler().runTaskLater(this.plugin, () -> profile.getFfaMatch().handleDeath(player, killer), 1L);

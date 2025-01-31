@@ -32,16 +32,6 @@ public final class TimeUtil {
     }
 
     /**
-     * Converts seconds to milliseconds.
-     *
-     * @param seconds the seconds to convert.
-     * @return the milliseconds.
-     */
-    public long secondsToMillis(long seconds) {
-        return seconds * 1000L;
-    }
-
-    /**
      * Converts milliseconds to a seconds format.
      *
      * @param millis the milliseconds to convert.
@@ -49,6 +39,10 @@ public final class TimeUtil {
      */
     public String millisToSeconds(long millis) {
         return new DecimalFormat("#0.0").format(millis / 1000.0F);
+    }
+
+    public String millisToSecondsRaw(long millis) {
+        return String.valueOf(millis / 1000);
     }
 
     /**

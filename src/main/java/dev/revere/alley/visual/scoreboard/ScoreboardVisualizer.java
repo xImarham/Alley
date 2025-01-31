@@ -2,6 +2,7 @@ package dev.revere.alley.visual.scoreboard;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.assemble.AssembleAdapter;
+import dev.revere.alley.combat.CombatRepository;
 import dev.revere.alley.game.match.enums.EnumMatchState;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
@@ -200,15 +201,28 @@ public class ScoreboardVisualizer implements AssembleAdapter {
                     }
                     break;
                 case FFA:
-                    for (String line : Alley.getInstance().getConfigService().getConfig("providers/scoreboard.yml").getStringList("scoreboard.lines.ffa")) {
-                        toReturn.add(CC.translate(line)
-                                .replaceAll("\\{sidebar}", Alley.getInstance().getConfigService().getConfig("providers/scoreboard.yml").getString("scoreboard.sidebar-format"))
-                                .replaceAll("\\{kit}", profile.getFfaMatch().getKit().getDisplayName())
-                                .replaceAll("\\{players}", String.valueOf(profile.getFfaMatch().getPlayers().size()))
-                                .replaceAll("\\{zone}", Alley.getInstance().getFfaCuboidService().getCuboid().isIn(player) ? "Spawn" : "Warzone")
-                                .replaceAll("\\{kills}", String.valueOf(profile.getProfileData().getFfaData().get(profile.getFfaMatch().getKit().getName()).getKills()))
-                                .replaceAll("\\{deaths}", String.valueOf(profile.getProfileData().getFfaData().get(profile.getFfaMatch().getKit().getName()).getDeaths()))
-                                .replaceAll("\\{ping}", String.valueOf(BukkitReflection.getPing(player))));
+                    CombatRepository combatRepository = Alley.getInstance().getCombatRepository();
+                    List<String> ffaLines = Alley.getInstance().getConfigService().getConfig("providers/scoreboard.yml").getStringList("scoreboard.lines.ffa");
+                    List<String> combatTagLines = Alley.getInstance().getConfigService().getConfig("providers/scoreboard.yml").getStringList("ffa-combat-tag");
+
+                    for (String line : ffaLines) {
+                        if (line.contains("{player-combat}")) {
+                            if (combatRepository.isPlayerInCombat(player.getUniqueId())) {
+                                for (String combatLine : combatTagLines) {
+                                    toReturn.add(CC.translate(combatLine
+                                            .replaceAll("\\{combat-tag}", combatRepository.getRemainingTimeFormatted(player.getUniqueId()))));
+                                }
+                            }
+                        } else {
+                            toReturn.add(CC.translate(line)
+                                    .replaceAll("\\{sidebar}", Alley.getInstance().getConfigService().getConfig("providers/scoreboard.yml").getString("scoreboard.sidebar-format"))
+                                    .replaceAll("\\{kit}", profile.getFfaMatch().getKit().getDisplayName())
+                                    .replaceAll("\\{players}", String.valueOf(profile.getFfaMatch().getPlayers().size()))
+                                    .replaceAll("\\{zone}", Alley.getInstance().getFfaCuboidService().getCuboid().isIn(player) ? "Spawn" : "Warzone")
+                                    .replaceAll("\\{kills}", String.valueOf(profile.getProfileData().getFfaData().get(profile.getFfaMatch().getKit().getName()).getKills()))
+                                    .replaceAll("\\{deaths}", String.valueOf(profile.getProfileData().getFfaData().get(profile.getFfaMatch().getKit().getName()).getDeaths()))
+                                    .replaceAll("\\{ping}", String.valueOf(BukkitReflection.getPing(player))));
+                        }
                     }
                     break;
             }

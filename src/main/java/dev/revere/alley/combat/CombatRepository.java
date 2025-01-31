@@ -2,6 +2,7 @@ package dev.revere.alley.combat;
 
 import dev.revere.alley.util.TimeUtil;
 import lombok.Getter;
+import lombok.var;
 
 import java.util.HashMap;
 import java.util.UUID;
@@ -18,7 +19,7 @@ public class CombatRepository {
 
     public CombatRepository() {
         this.combatMap = new HashMap<>();
-        this.combatTime = TimeUtil.secondsToMillis(15);
+        this.combatTime = 15 * 1000L;
     }
 
     /**
@@ -41,17 +42,12 @@ public class CombatRepository {
      * @param victim   The victim.
      */
     public void addPlayersToCombat(UUID attacker, UUID victim) {
-        Combat combat = new Combat(attacker, victim);
-        this.combatMap.put(this.combatTime, combat);
-    }
+        if (this.isPlayerInCombat(attacker) || this.isPlayerInCombat(victim)) {
+            this.resetCombat(attacker);
+        }
 
-    /**
-     * Remove a player from combat.
-     *
-     * @param player The player.
-     */
-    public void removePlayerFromCombat(UUID player) {
-        this.combatMap.values().removeIf(combat -> combat.getAttacker().equals(player) || combat.getVictim().equals(player));
+        Combat combat = new Combat(attacker, victim);
+        this.combatMap.put(System.currentTimeMillis(), combat);
     }
 
     /**
@@ -61,19 +57,30 @@ public class CombatRepository {
      * @return Whether the player is in combat.
      */
     public boolean isPlayerInCombat(UUID player) {
-        return this.combatMap.values().stream().anyMatch(combat -> combat.getAttacker().equals(player) || combat.getVictim().equals(player));
+        for (var entry : this.combatMap.entrySet()) {
+            Combat combat = entry.getValue();
+
+            if ((combat.getAttacker().equals(player) || combat.getVictim().equals(player)) && this.isExpired(entry.getKey())) {
+                this.resetCombat(player);
+                return false;
+            }
+
+            if (combat.getAttacker().equals(player) || combat.getVictim().equals(player)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
-     * Check if a player is expired from combat.
+     * Check if the combat is expired.
      *
-     * @param player The player.
-     * @return Whether the player is expired.
+     * @param timestamp The timestamp.
+     * @return Whether the combat is expired.
      */
-    public boolean isExpired(UUID player) {
-        return this.combatMap.entrySet().stream()
-                .filter(entry -> entry.getValue().getAttacker().equals(player) || entry.getValue().getVictim().equals(player))
-                .anyMatch(entry -> System.currentTimeMillis() - entry.getKey() >= this.combatTime);
+    public boolean isExpired(Long timestamp) {
+        return System.currentTimeMillis() - timestamp >= this.combatTime;
     }
 
     /**
@@ -94,7 +101,7 @@ public class CombatRepository {
     public long getRemainingTime(UUID player) {
         return this.combatMap.entrySet().stream()
                 .filter(entry -> entry.getValue().getAttacker().equals(player) || entry.getValue().getVictim().equals(player))
-                .mapToLong(entry -> this.combatTime - (System.currentTimeMillis() - entry.getKey()))
+                .mapToLong(entry -> (entry.getKey() + this.combatTime) - System.currentTimeMillis())
                 .findFirst()
                 .orElse(0);
     }
@@ -107,6 +114,6 @@ public class CombatRepository {
      */
     public String getRemainingTimeFormatted(UUID player) {
         long remainingTime = this.getRemainingTime(player);
-        return TimeUtil.millisToSeconds(remainingTime) + "s";
+        return TimeUtil.millisToSecondsRaw(remainingTime) + "s";
     }
 }

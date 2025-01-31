@@ -116,11 +116,15 @@ scoreboard:
       - ""
       - " &fKills: &b{kills}"
       - " &fDeaths: &b{deaths}"
+      - "{player-combat}"
       - ""
       - " &fKillstreak: &b{ks}"
       - " &fPlayers: &b{players}"
       - ""
       - "&fYour Ping: &b{ping}ms"
+
+ffa-combat-tag:
+  - " &fCombat: &b{combat-tag}"
 
 boxing-hit-difference:
   positive-difference: "&a(+{difference})"
