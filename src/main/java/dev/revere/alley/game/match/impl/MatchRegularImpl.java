@@ -1,19 +1,19 @@
 package dev.revere.alley.game.match.impl;
 
-import dev.revere.alley.elo.result.EloResult;
-import dev.revere.alley.elo.result.OldEloResult;
+import dev.revere.alley.util.elo.result.EloResult;
+import dev.revere.alley.util.elo.result.OldEloResult;
 import lombok.Getter;
 import lombok.Setter;
 import dev.revere.alley.Alley;
-import dev.revere.alley.arena.Arena;
-import dev.revere.alley.kit.Kit;
+import dev.revere.alley.feature.arena.Arena;
+import dev.revere.alley.feature.kit.Kit;
 import dev.revere.alley.game.match.AbstractMatch;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.profile.Profile;
-import dev.revere.alley.queue.Queue;
+import dev.revere.alley.feature.queue.Queue;
 import dev.revere.alley.util.PlayerUtil;
-import dev.revere.alley.elo.EloCalculator;
+import dev.revere.alley.util.elo.EloCalculator;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;

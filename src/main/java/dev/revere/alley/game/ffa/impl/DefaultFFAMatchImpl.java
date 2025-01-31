@@ -1,10 +1,10 @@
 package dev.revere.alley.game.ffa.impl;
 
 import dev.revere.alley.Alley;
-import dev.revere.alley.arena.Arena;
+import dev.revere.alley.feature.arena.Arena;
 import dev.revere.alley.game.ffa.AbstractFFAMatch;
-import dev.revere.alley.hotbar.enums.HotbarType;
-import dev.revere.alley.kit.Kit;
+import dev.revere.alley.feature.hotbar.enums.HotbarType;
+import dev.revere.alley.feature.kit.Kit;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
 import dev.revere.alley.util.ActionBarUtil;

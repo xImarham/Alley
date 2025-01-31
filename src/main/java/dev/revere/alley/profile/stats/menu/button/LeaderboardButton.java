@@ -1,6 +1,6 @@
 package dev.revere.alley.profile.stats.menu.button;
 
-import dev.revere.alley.leaderboard.menu.LeaderboardMenu;
+import dev.revere.alley.feature.leaderboard.menu.LeaderboardMenu;
 import dev.revere.alley.util.data.item.ItemBuilder;
 import dev.revere.alley.api.menu.Button;
 import org.bukkit.Material;

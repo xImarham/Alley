@@ -1,9 +1,9 @@
 package dev.revere.alley.game.ffa;
 
 import dev.revere.alley.Alley;
-import dev.revere.alley.arena.Arena;
+import dev.revere.alley.feature.arena.Arena;
 import dev.revere.alley.game.ffa.impl.DefaultFFAMatchImpl;
-import dev.revere.alley.kit.Kit;
+import dev.revere.alley.feature.kit.Kit;
 import dev.revere.alley.util.logger.Logger;
 import lombok.Getter;
 import org.bukkit.configuration.ConfigurationSection;

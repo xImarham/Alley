@@ -1,9 +1,9 @@
 package dev.revere.alley.profile.data.impl;
 
 import dev.revere.alley.Alley;
-import dev.revere.alley.division.Division;
-import dev.revere.alley.division.DivisionRepository;
-import dev.revere.alley.division.tier.DivisionTier;
+import dev.revere.alley.feature.division.Division;
+import dev.revere.alley.feature.division.DivisionRepository;
+import dev.revere.alley.feature.division.tier.DivisionTier;
 import lombok.Getter;
 import lombok.Setter;
 

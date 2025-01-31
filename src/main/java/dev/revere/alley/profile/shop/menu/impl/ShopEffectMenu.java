@@ -2,10 +2,10 @@ package dev.revere.alley.profile.shop.menu.impl;
 
 import lombok.AllArgsConstructor;
 import dev.revere.alley.Alley;
-import dev.revere.alley.cosmetic.impl.killeffects.AbstractKillEffect;
-import dev.revere.alley.cosmetic.impl.killeffects.KillEffectRepository;
-import dev.revere.alley.cosmetic.impl.soundeffect.AbstractSoundEffect;
-import dev.revere.alley.cosmetic.impl.soundeffect.SoundEffectRepository;
+import dev.revere.alley.feature.cosmetic.impl.killeffects.AbstractKillEffect;
+import dev.revere.alley.feature.cosmetic.impl.killeffects.KillEffectRepository;
+import dev.revere.alley.feature.cosmetic.impl.soundeffect.AbstractSoundEffect;
+import dev.revere.alley.feature.cosmetic.impl.soundeffect.SoundEffectRepository;
 import dev.revere.alley.profile.shop.menu.ShopButton;
 import dev.revere.alley.profile.shop.menu.ShopMenu;
 import dev.revere.alley.api.menu.Button;

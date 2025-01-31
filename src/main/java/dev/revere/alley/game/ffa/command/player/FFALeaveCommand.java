@@ -1,7 +1,7 @@
 package dev.revere.alley.game.ffa.command.player;
 
 import dev.revere.alley.Alley;
-import dev.revere.alley.combat.CombatRepository;
+import dev.revere.alley.feature.combat.CombatRepository;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.api.command.BaseCommand;

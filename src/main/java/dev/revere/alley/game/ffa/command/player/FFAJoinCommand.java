@@ -2,7 +2,7 @@ package dev.revere.alley.game.ffa.command.player;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.game.ffa.FFARepository;
-import dev.revere.alley.kit.Kit;
+import dev.revere.alley.feature.kit.Kit;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.annotation.Command;
 import dev.revere.alley.api.command.CommandArgs;

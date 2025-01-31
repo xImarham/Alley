@@ -1,7 +1,7 @@
 package dev.revere.alley.essential.spawn.command;
 
 import dev.revere.alley.Alley;
-import dev.revere.alley.hotbar.enums.HotbarType;
+import dev.revere.alley.feature.hotbar.enums.HotbarType;
 import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.annotation.Command;

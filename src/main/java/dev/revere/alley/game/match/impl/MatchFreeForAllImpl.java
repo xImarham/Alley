@@ -1,11 +1,11 @@
 package dev.revere.alley.game.match.impl;
 
-import dev.revere.alley.arena.Arena;
+import dev.revere.alley.feature.arena.Arena;
 import dev.revere.alley.game.match.AbstractMatch;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
-import dev.revere.alley.kit.Kit;
-import dev.revere.alley.queue.Queue;
+import dev.revere.alley.feature.kit.Kit;
+import dev.revere.alley.feature.queue.Queue;
 import org.bukkit.entity.Player;
 
 import java.util.Collections;

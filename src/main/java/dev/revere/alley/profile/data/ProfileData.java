@@ -1,8 +1,8 @@
 package dev.revere.alley.profile.data;
 
 import com.google.common.collect.Maps;
-import dev.revere.alley.kit.Kit;
-import dev.revere.alley.kit.settings.impl.KitSettingRankedImpl;
+import dev.revere.alley.feature.kit.Kit;
+import dev.revere.alley.feature.kit.settings.impl.KitSettingRankedImpl;
 import dev.revere.alley.profile.Profile;
 import lombok.Getter;
 import lombok.Setter;

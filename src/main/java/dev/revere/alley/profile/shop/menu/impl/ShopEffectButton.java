@@ -3,7 +3,7 @@ package dev.revere.alley.profile.shop.menu.impl;
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.profile.Profile;
-import dev.revere.alley.cosmetic.interfaces.ICosmetic;
+import dev.revere.alley.feature.cosmetic.interfaces.ICosmetic;
 import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.util.data.item.ItemBuilder;
 import lombok.AllArgsConstructor;

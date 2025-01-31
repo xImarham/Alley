@@ -1,9 +1,9 @@
 package dev.revere.alley.game.ffa.command.admin;
 
 import dev.revere.alley.Alley;
-import dev.revere.alley.arena.Arena;
-import dev.revere.alley.arena.ArenaType;
-import dev.revere.alley.kit.Kit;
+import dev.revere.alley.feature.arena.Arena;
+import dev.revere.alley.feature.arena.ArenaType;
+import dev.revere.alley.feature.kit.Kit;
 import dev.revere.alley.locale.Locale;
 import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.api.command.BaseCommand;

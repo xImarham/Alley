@@ -1,8 +1,8 @@
 package dev.revere.alley.game.ffa.cuboid;
 
 import dev.revere.alley.Alley;
-import dev.revere.alley.arena.Arena;
-import dev.revere.alley.arena.ArenaType;
+import dev.revere.alley.feature.arena.Arena;
+import dev.revere.alley.feature.arena.ArenaType;
 import dev.revere.alley.util.data.cuboid.Cuboid;
 import dev.revere.alley.util.data.cuboid.CuboidService;
 import dev.revere.alley.util.location.LocationUtil;

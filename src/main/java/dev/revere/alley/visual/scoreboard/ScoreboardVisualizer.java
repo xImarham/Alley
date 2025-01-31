@@ -2,12 +2,12 @@ package dev.revere.alley.visual.scoreboard;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.assemble.AssembleAdapter;
-import dev.revere.alley.combat.CombatRepository;
+import dev.revere.alley.feature.combat.CombatRepository;
 import dev.revere.alley.game.match.enums.EnumMatchState;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
-import dev.revere.alley.kit.settings.impl.KitSettingBoxingImpl;
-import dev.revere.alley.kit.settings.impl.KitSettingLivesImpl;
+import dev.revere.alley.feature.kit.settings.impl.KitSettingBoxingImpl;
+import dev.revere.alley.feature.kit.settings.impl.KitSettingLivesImpl;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
 import dev.revere.alley.util.AnimationUtil;

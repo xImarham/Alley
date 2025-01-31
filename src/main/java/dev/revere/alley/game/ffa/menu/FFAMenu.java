@@ -3,7 +3,7 @@ package dev.revere.alley.game.ffa.menu;
 import lombok.AllArgsConstructor;
 import dev.revere.alley.Alley;
 import dev.revere.alley.game.ffa.AbstractFFAMatch;
-import dev.revere.alley.queue.menu.QueuesMenu;
+import dev.revere.alley.feature.queue.menu.QueuesMenu;
 import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.api.menu.Menu;
 import dev.revere.alley.api.menu.impl.BackButton;

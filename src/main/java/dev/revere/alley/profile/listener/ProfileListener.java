@@ -1,7 +1,7 @@
 package dev.revere.alley.profile.listener;
 
 import dev.revere.alley.Alley;
-import dev.revere.alley.hotbar.enums.HotbarType;
+import dev.revere.alley.feature.hotbar.enums.HotbarType;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.ProfileRepository;
 import dev.revere.alley.profile.enums.EnumProfileState;

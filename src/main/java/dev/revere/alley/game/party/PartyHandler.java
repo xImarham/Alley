@@ -1,10 +1,10 @@
 package dev.revere.alley.game.party;
 
 import dev.revere.alley.Alley;
-import dev.revere.alley.cooldown.Cooldown;
-import dev.revere.alley.cooldown.enums.EnumCooldownType;
-import dev.revere.alley.hotbar.HotbarRepository;
-import dev.revere.alley.hotbar.enums.HotbarType;
+import dev.revere.alley.feature.cooldown.Cooldown;
+import dev.revere.alley.feature.cooldown.enums.EnumCooldownType;
+import dev.revere.alley.feature.hotbar.HotbarRepository;
+import dev.revere.alley.feature.hotbar.enums.HotbarType;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
 import dev.revere.alley.util.chat.CC;

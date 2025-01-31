@@ -3,7 +3,7 @@ package dev.revere.alley.profile.stats.menu;
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.api.menu.Menu;
-import dev.revere.alley.kit.Kit;
+import dev.revere.alley.feature.kit.Kit;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.data.impl.ProfileFFAData;
 import dev.revere.alley.profile.data.impl.ProfileRankedKitData;
