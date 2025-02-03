@@ -78,8 +78,14 @@ public abstract class AbstractMatch {
         Alley.getInstance().getMatchRepository().getMatches().add(this);
     }
 
+    public abstract void handleRespawn(Player player);
+    public abstract List<GameParticipant<MatchGamePlayerImpl>> getParticipants();
+    public abstract boolean canStartRound();
+    public abstract boolean canEndRound();
+    public abstract boolean canEndMatch();
+
     /**
-     * Starts the match by setting the state and updating player profiles.
+     * Starts the match by setting the state and updating player profiles and running the match runnable.
      */
     public void startMatch() {
         if (this.arena instanceof StandAloneArena) {
@@ -237,19 +243,6 @@ public abstract class AbstractMatch {
 
         player.setVelocity(new Vector());
 
-        this.handleRoundOrRespawn(player);
-
-        if (this.getParticipants().size() == 2) {
-            this.handleFinalMatchResult();
-        }
-    }
-
-    /**
-     * Handles the round or respawn of a player.
-     *
-     * @param player The player to handle the round or respawn of.
-     */
-    private void handleRoundOrRespawn(Player player) {
         if (this.canEndRound()) {
             this.state = EnumMatchState.ENDING_ROUND;
             this.handleRoundEnd();
@@ -265,27 +258,6 @@ public abstract class AbstractMatch {
         } else {
             this.handleRespawn(player);
         }
-    }
-
-    private void handleFinalMatchResult() {
-        GameParticipant<MatchGamePlayerImpl> participantA = getParticipants().get(0);
-        GameParticipant<MatchGamePlayerImpl> participantB = getParticipants().get(1);
-
-        String winner;
-        String loser;
-
-        if (this.isParticipantDead(participantA) && !this.isParticipantDead(participantB)) {
-            winner = participantB.getPlayers().get(0).getPlayer().getName();
-            loser = participantA.getPlayers().get(0).getPlayer().getName();
-        } else if (!this.isParticipantDead(participantA) && this.isParticipantDead(participantB)) {
-            winner = participantA.getPlayers().get(0).getPlayer().getName();
-            loser = participantB.getPlayers().get(0).getPlayer().getName();
-        } else {
-            winner = "error";
-            loser = "error";
-        }
-
-        MatchUtility.sendMatchResult(this, winner, loser);
     }
 
     /**
@@ -361,15 +333,18 @@ public abstract class AbstractMatch {
      * @param message The message to notify.
      */
     protected void notifySpectators(String message) {
-        if (this.spectators == null) {
-            return;
-        }
+        if (this.spectators == null) return;
         this.spectators.stream()
                 .map(uuid -> Alley.getInstance().getServer().getPlayer(uuid))
                 .filter(Objects::nonNull)
                 .forEach(player -> player.sendMessage(CC.translate(message)));
     }
 
+    /**
+     * Handles a player leaving the match.
+     *
+     * @param player The player that left.
+     */
     public void handleLeaving(Player player) {
         if (!(this.state == EnumMatchState.STARTING || state == EnumMatchState.RUNNING)) return;
 
@@ -651,39 +626,4 @@ public abstract class AbstractMatch {
     public void removeBlockFromBrokenBlocksMap(BlockState blockState, Location location) {
         this.brokenBlocks.remove(blockState, location);
     }
-
-    /**
-     * Handles the respawn of a player.
-     *
-     * @param player The player that respawned.
-     */
-    public abstract void handleRespawn(Player player);
-
-    /**
-     * Gets the participants of the match.
-     *
-     * @return The participants of the match.
-     */
-    public abstract List<GameParticipant<MatchGamePlayerImpl>> getParticipants();
-
-    /**
-     * Checks if the round can start.
-     *
-     * @return True if the round can start.
-     */
-    public abstract boolean canStartRound();
-
-    /**
-     * Checks if the round can end.
-     *
-     * @return True if the round can end.
-     */
-    public abstract boolean canEndRound();
-
-    /**
-     * Checks if the match can end.
-     *
-     * @return True if the match can end.
-     */
-    public abstract boolean canEndMatch();
 }

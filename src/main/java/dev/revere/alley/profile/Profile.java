@@ -72,7 +72,7 @@ public class Profile {
      *
      * @return A sorted list of kits that the profile has participated in.
      */
-    public List<Kit> getParticipatedKits() {
+    public List<Kit> getSortedKits() {
         return Alley.getInstance().getKitRepository().getKits()
                 .stream()
                 .filter(kit -> {

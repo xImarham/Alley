@@ -30,8 +30,14 @@ public class ProfileFFAData {
      *
      * @return the kill/death ratio
      */
-    public int getKdr() {
+    public String getKillDeathRatio() {
+        if (this.deaths == 0) {
+            return this.kills == 0 ? "0.0x" : String.format("%.1f", (double) this.kills) + "x";
+        }
+
+        double ratio = (double) this.kills / this.deaths;
+
         DecimalFormat decimalFormat = new DecimalFormat("#.##");
-        return this.deaths == 0 ? this.kills : Integer.parseInt(decimalFormat.format((double) this.kills / this.deaths));
+        return decimalFormat.format(ratio) + "x";
     }
 }

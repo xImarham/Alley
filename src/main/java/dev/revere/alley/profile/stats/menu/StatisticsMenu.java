@@ -42,7 +42,7 @@ public class StatisticsMenu extends Menu {
         buttons.put(6, new LeaderboardButton());
 
         Profile profile = Alley.getInstance().getProfileRepository().getProfile(this.target == player ? player.getUniqueId() : this.target.getUniqueId());
-        List<Kit> sortedKits = profile.getParticipatedKits();
+        List<Kit> sortedKits = profile.getSortedKits();
 
         int slot = 10;
         for (Kit kit : sortedKits) {
@@ -105,7 +105,7 @@ public class StatisticsMenu extends Menu {
                 lore.addAll(Arrays.asList(
                         "",
                         "&b&lFFA",
-                        "&f● &bKills: &f" + profileFFAData.getKills() + " &7(" + profileFFAData.getKdr() + "x)",
+                        "&f● &bKills: &f" + profileFFAData.getKills() + " &7(" + profileFFAData.getKillDeathRatio() + ")",
                         "&f● &bDeaths: &f" + profileFFAData.getDeaths()
                 ));
             }

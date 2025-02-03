@@ -23,14 +23,14 @@ public class TeamGameParticipant<T extends GamePlayer> extends GameParticipant<T
 
     @Override
     public List<T> getPlayers() {
-        return players;
+        return this.players;
     }
 
     @Override
     public int getAliveCount() {
         int i = 0;
 
-        for (GamePlayer gamePlayer : players) {
+        for (GamePlayer gamePlayer : this.players) {
             if (!gamePlayer.isDead() && !gamePlayer.isDisconnected()) {
                 i++;
             }
@@ -43,18 +43,18 @@ public class TeamGameParticipant<T extends GamePlayer> extends GameParticipant<T
     public boolean isAllDead() {
         int i = 0;
 
-        for (GamePlayer gamePlayer : players) {
+        for (GamePlayer gamePlayer : this.players) {
             if (gamePlayer.isDead() || gamePlayer.isDisconnected()) {
                 i++;
             }
         }
 
-        return players.size() == i;
+        return this.players.size() == i;
     }
 
     @Override
     public boolean containsPlayer(UUID uuid) {
-        for (GamePlayer gamePlayer : players) {
+        for (GamePlayer gamePlayer : this.players) {
             if (gamePlayer.getUuid().equals(uuid)) {
                 return true;
             }
@@ -67,29 +67,21 @@ public class TeamGameParticipant<T extends GamePlayer> extends GameParticipant<T
     public String getConjoinedNames() {
         StringBuilder builder = new StringBuilder();
 
-        if (players.size() == 2) {
-            for (GamePlayer gamePlayer : players) {
-                builder.append(gamePlayer.getUsername());
-                builder.append(" and ");
-            }
-
-            return builder.substring(0, builder.length() - 5);
-        } else {
-            int processed = 0;
-
-            for (GamePlayer gamePlayer : players) {
-                processed++;
-
-                builder.append(gamePlayer.getUsername());
-
-                if (processed == players.size() - 1) {
-                    builder.append(" and ");
-                } else {
-                    builder.append(", ");
-                }
-            }
-
-            return builder.substring(0, builder.length() - ((processed == players.size() - 1) ? 5 : 2));
+        int size = this.players.size();
+        if (size == 1) {
+            return this.players.get(0).getUsername();
         }
+
+        for (int i = 0; i < size; i++) {
+            builder.append(this.players.get(i).getUsername());
+
+            if (i == size - 2) {
+                builder.append(" and ");
+            } else if (i < size - 2) {
+                builder.append(", ");
+            }
+        }
+
+        return builder.toString();
     }
 }

@@ -88,15 +88,6 @@ match:
       not-set: # In case if the kit disclaimer is null.
         - "&4&lWarning: &cUsing hacks or any form of cheating is strictly prohibited!"
   ended:
-    elo-changes:
-      winner-indicator-color: "&a"  # Color for positive Elo gain
-      loser-indicator-color: "&c"   # Color for negative Elo loss
-      format:
-        - ""
-        - "&b&lElo Changes"
-        - " &b&l● &f{winner} &7{winner-color}{winner-indicator}{math-winner-elo} &7(&f{old-winner-elo} &7-> &f{new-winner-elo})"
-        - " &b&l● &f{loser} &7{loser-color}{loser-indicator}{math-loser-elo} &7(&f{old-loser-elo} &7-> &f{new-loser-elo})"
-        - ""
     match-result:
       format:
         - ""
@@ -109,6 +100,14 @@ match:
       loser:
         command: "/inventory {loser}"
         hover: "&cClick to view {loser}'s inventory"
+    elo-changes:
+      winner-indicator-color: "&a"  # Color for positive Elo gain
+      loser-indicator-color: "&c"   # Color for negative Elo loss
+      format:
+        - " &b&lElo Changes"
+        - "  &b&l● &f{winner} &7{winner-color}{winner-indicator}{math-winner-elo} &7(&f{old-winner-elo} &7-> &f{new-winner-elo})"
+        - "  &b&l● &f{loser} &7{loser-color}{loser-indicator}{math-loser-elo} &7(&f{old-loser-elo} &7-> &f{new-loser-elo})"
+        - ""
 
 playtime:
   message: " \n&b{target}'s total playtime:\n &b{days} &fdays, &b{hours} &fhours, &b{minutes} &fminutes and &b{seconds} &fseconds.\n "

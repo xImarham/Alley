@@ -27,7 +27,7 @@ public class EloCalculator {
      * @param playerWon   Whether the player won the match.
      * @return The player's updated Elo rating.
      */
-    public int determineWinnerAndCalculate(int playerElo, int opponentElo, boolean playerWon) {
+    public int determineNewElo(int playerElo, int opponentElo, boolean playerWon) {
         int score = playerWon ? 1 : 0;
         return calculateElo(playerElo, opponentElo, score);
     }

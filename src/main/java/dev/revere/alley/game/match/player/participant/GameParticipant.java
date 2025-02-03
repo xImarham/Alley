@@ -29,7 +29,7 @@ public class GameParticipant<T extends GamePlayer> {
     }
 
     public List<T> getPlayers() {
-        return Collections.singletonList(player);
+        return Collections.singletonList(this.player);
     }
 
     /**
@@ -38,7 +38,7 @@ public class GameParticipant<T extends GamePlayer> {
      * @return The amount of players that are alive.
      */
     public int getAliveCount() {
-        return player.isDead() ? 0 : 1;
+        return this.player.isDead() ? 0 : 1;
     }
 
     /**
@@ -47,7 +47,7 @@ public class GameParticipant<T extends GamePlayer> {
      * @return The conjoined names of the players in the participant.
      */
     public String getConjoinedNames() {
-        return player.getUsername();
+        return this.player.getUsername();
     }
 
     /**
@@ -56,7 +56,7 @@ public class GameParticipant<T extends GamePlayer> {
      * @return True if all the players are dead.
      */
     public boolean isAllDead() {
-        return player.isDead();
+        return this.player.isDead();
     }
 
     /**
@@ -66,6 +66,6 @@ public class GameParticipant<T extends GamePlayer> {
      * @return True if the participant contains the player.
      */
     public boolean containsPlayer(UUID uuid) {
-        return player.getUuid().equals(uuid);
+        return this.player.getUuid().equals(uuid);
     }
 }
