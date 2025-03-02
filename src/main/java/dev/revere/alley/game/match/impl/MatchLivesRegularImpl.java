@@ -17,12 +17,13 @@ import org.bukkit.entity.Player;
  * @project Alley
  * @date 5/21/2024
  */
+@Getter
 public class MatchLivesRegularImpl extends MatchRegularImpl {
     private final GameParticipant<MatchGamePlayerImpl> participantA;
     private final GameParticipant<MatchGamePlayerImpl> participantB;
 
-    @Getter private GameParticipant<MatchGamePlayerImpl> winner;
-    @Getter private GameParticipant<MatchGamePlayerImpl> loser;
+    private GameParticipant<MatchGamePlayerImpl> winner;
+    private GameParticipant<MatchGamePlayerImpl> loser;
 
     /**
      * Constructor for the MatchLivesRegularImpl class.

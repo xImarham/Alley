@@ -3,28 +3,27 @@ package dev.revere.alley.game.match;
 import dev.revere.alley.Alley;
 import dev.revere.alley.feature.arena.Arena;
 import dev.revere.alley.feature.arena.impl.StandAloneArena;
-import dev.revere.alley.game.match.enums.EnumMatchState;
-import dev.revere.alley.game.match.impl.MatchRegularImpl;
-import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
-import dev.revere.alley.game.match.player.participant.GameParticipant;
-import dev.revere.alley.game.match.runnable.MatchRunnable;
-import dev.revere.alley.game.match.snapshot.Snapshot;
-import dev.revere.alley.feature.hotbar.HotbarRepository;
-import dev.revere.alley.feature.hotbar.enums.HotbarType;
-import dev.revere.alley.feature.kit.Kit;
-import dev.revere.alley.feature.kit.settings.impl.KitSettingLivesImpl;
-import dev.revere.alley.profile.Profile;
 import dev.revere.alley.feature.cosmetic.impl.killeffects.AbstractKillEffect;
 import dev.revere.alley.feature.cosmetic.impl.killeffects.KillEffectRepository;
 import dev.revere.alley.feature.cosmetic.impl.soundeffect.AbstractSoundEffect;
 import dev.revere.alley.feature.cosmetic.impl.soundeffect.SoundEffectRepository;
 import dev.revere.alley.feature.cosmetic.interfaces.ICosmeticRepository;
 import dev.revere.alley.feature.cosmetic.repository.CosmeticRepository;
-import dev.revere.alley.profile.enums.EnumProfileState;
+import dev.revere.alley.feature.hotbar.HotbarRepository;
+import dev.revere.alley.feature.hotbar.enums.HotbarType;
+import dev.revere.alley.feature.kit.Kit;
+import dev.revere.alley.feature.kit.settings.impl.KitSettingLivesImpl;
 import dev.revere.alley.feature.queue.Queue;
+import dev.revere.alley.game.match.enums.EnumMatchState;
+import dev.revere.alley.game.match.impl.MatchRegularImpl;
+import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
+import dev.revere.alley.game.match.player.participant.GameParticipant;
+import dev.revere.alley.game.match.runnable.MatchRunnable;
+import dev.revere.alley.game.match.snapshot.Snapshot;
+import dev.revere.alley.profile.Profile;
+import dev.revere.alley.profile.enums.EnumProfileState;
 import dev.revere.alley.util.PlayerUtil;
 import dev.revere.alley.util.chat.CC;
-import dev.revere.alley.util.logger.Logger;
 import lombok.Getter;
 import lombok.Setter;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -240,7 +239,6 @@ public abstract class AbstractMatch {
      * @param player The player that died.
      */
     public void handleDeath(Player player) {
-        Logger.log("Handling death of " + player.getName());
         if (!(this.state == EnumMatchState.STARTING || this.state == EnumMatchState.RUNNING)) return;
 
         MatchGamePlayerImpl gamePlayer = getGamePlayer(player);
@@ -294,16 +292,6 @@ public abstract class AbstractMatch {
                 count--;
             }
         }.runTaskTimer(Alley.getInstance(), 0L, 20L);
-    }
-
-    /**
-     * Checks if a participant is dead.
-     *
-     * @param participant The participant to check.
-     * @return True if the participant is dead.
-     */
-    private boolean isParticipantDead(GameParticipant<MatchGamePlayerImpl> participant) {
-        return participant.getPlayers().stream().allMatch(MatchGamePlayerImpl::isDead);
     }
 
     /**
@@ -431,7 +419,6 @@ public abstract class AbstractMatch {
      * Handles the end of a round.
      */
     public void handleRoundEnd() {
-        Logger.log("Handling round end");
         this.startTime = System.currentTimeMillis() - this.startTime;
         this.getParticipants().forEach(gameParticipant -> {
             if (gameParticipant.isAllDead()) {

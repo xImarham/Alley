@@ -20,23 +20,18 @@ import java.util.Arrays;
  * @project Alley
  * @since 08/02/2025
  */
+@Getter
 public class MatchRoundsRegularImpl extends MatchRegularImpl {
     private final GameParticipant<MatchGamePlayerImpl> participantA;
     private final GameParticipant<MatchGamePlayerImpl> participantB;
 
-    @Getter
     private final ChatColor teamAColor;
-    @Getter
     private final ChatColor teamBColor;
 
-    @Getter
     private GameParticipant<MatchGamePlayerImpl> winner;
-    @Getter
     private GameParticipant<MatchGamePlayerImpl> loser;
 
-    @Getter
     private final int rounds;
-    @Getter
     private int currentRound;
 
     /**

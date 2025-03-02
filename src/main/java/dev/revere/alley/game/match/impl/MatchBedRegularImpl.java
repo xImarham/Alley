@@ -15,7 +15,7 @@ import org.bukkit.entity.Player;
  */
 public class MatchBedRegularImpl extends MatchRegularImpl {
     /**
-     * Constructor for the RegularMatchImpl class.
+     * Constructor for the MatchBedRegularImpl class.
      *
      * @param queue        The queue of the match.
      * @param kit          The kit of the match.
