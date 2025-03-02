@@ -24,7 +24,6 @@ import org.bukkit.inventory.InventoryHolder;
 
 
 public class ProfileListener implements Listener {
-    
     private final ProfileRepository profileRepository;
 
     /**
@@ -97,7 +96,7 @@ public class ProfileListener implements Listener {
     private void onEntityDamage(EntityDamageEvent event) {
         if (!(event.getEntity() instanceof Player)) return;
         Player player = (Player) event.getEntity();
-        Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
+        Profile profile = this.profileRepository.getProfile(player.getUniqueId());
         if (profile.getState() == EnumProfileState.LOBBY
                 || profile.getState() == EnumProfileState.SPECTATING
                 || profile.getState() == EnumProfileState.EDITING
@@ -118,7 +117,7 @@ public class ProfileListener implements Listener {
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
-        Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
+        Profile profile = this.profileRepository.getProfile(player.getUniqueId());
         if (profile.getState() == EnumProfileState.LOBBY) {
             if (player.getGameMode() == GameMode.CREATIVE) return;
             event.setCancelled(true);
