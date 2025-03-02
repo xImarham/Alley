@@ -7,15 +7,20 @@ import dev.revere.alley.profile.ProfileRepository;
 import dev.revere.alley.profile.enums.EnumProfileState;
 import dev.revere.alley.util.PlayerUtil;
 import dev.revere.alley.util.chat.CC;
+import org.bukkit.GameMode;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.inventory.InventoryHolder;
 
 
 public class ProfileListener implements Listener {
@@ -108,5 +113,23 @@ public class ProfileListener implements Listener {
         event.setQuitMessage(null);
         profile.setOnline(false);
         profile.save();
+    }
+
+    @EventHandler
+    public void onPlayerInteract(PlayerInteractEvent event) {
+        Player player = event.getPlayer();
+        Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
+        if (profile.getState() == EnumProfileState.LOBBY) {
+            if (player.getGameMode() == GameMode.CREATIVE) return;
+            event.setCancelled(true);
+        }
+
+        Block block = event.getClickedBlock();
+        if (block != null && block.getState() instanceof InventoryHolder) {
+            if (block.getType() == Material.CHEST || block.getType() == Material.DISPENSER ||
+                    block.getType() == Material.FURNACE || block.getType() == Material.BREWING_STAND) {
+                event.setCancelled(true);
+            }
+        }
     }
 }
