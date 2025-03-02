@@ -30,21 +30,21 @@ public class HostMenu extends Menu {
         Map<Integer, Button> buttons = new HashMap<>();
 
         buttons.put(11, new HostButton("&b&lEvent", new ItemStack(Material.EMPTY_MAP), Arrays.asList(
-                "&7Host an event with different",
-                "&7unique implementations.",
+                "&fHost an event with different",
+                "&funique implementations.",
                 "",
                 " &f● &bTypes: &7Sumo",
                 " &f● &cMore soon...",
                 "",
-                "&bClick to host!"
+                "&aClick to host!"
         )));
 
         buttons.put(15, new HostButton("&b&lTournament", new ItemStack(Material.BOW), Arrays.asList(
-                "&7Host a tournament to",
-                "&7compete in a number",
-                "&7of duels to win.",
+                "&fHost a tournament to",
+                "&fcompete in a number",
+                "&fof duels to win.",
                 "",
-                "&bClick to host!"
+                "&aClick to host!"
         )));
 
         this.addGlass(buttons, (byte) 15);

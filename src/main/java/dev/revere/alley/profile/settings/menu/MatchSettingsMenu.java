@@ -36,8 +36,8 @@ public class MatchSettingsMenu extends Menu {
 
         buttons.put(10, new MatchSettingsButton("&b&lClear inventory", Material.CHEST, (short) 0, Arrays.asList(
                 "&fClear your inventory",
-                "&fafter every &bkill &fin",
-                "&fa duel.",
+                "&fupon &bend &fof",
+                "&fa match.",
                 "",
                 " &f● &bStatus: &cNULL",
                 "",

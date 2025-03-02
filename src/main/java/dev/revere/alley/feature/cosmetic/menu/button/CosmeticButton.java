@@ -31,16 +31,16 @@ public class CosmeticButton extends Button {
 
         String lore;
         if (hasPermission) {
-            lore = isSelected ? "&cYou already have this cosmetic selected." : "&fClick to select this cosmetic.";
+            lore = isSelected ? "&cYou already have this cosmetic selected." : "&aClick to select this cosmetic.";
         } else {
-            lore = "&cYou do not have permission to select this cosmetic.";
+            lore = "&c&lYou do not have permission to select this cosmetic.";
         }
 
         return new ItemBuilder(cosmetic.getIcon())
                 .name("&b&l" + cosmetic.getName())
                 .lore(
                         "",
-                        "&f● &bDescription: &f" + cosmetic.getDescription(),
+                        "&f● &bDescription: &7" + cosmetic.getDescription(),
                         "",
                         lore
 

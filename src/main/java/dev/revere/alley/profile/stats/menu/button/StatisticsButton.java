@@ -26,9 +26,8 @@ public class StatisticsButton extends Button {
         return new ItemBuilder(Material.PAPER)
                 .name("&b&lYour Statistics")
                 .lore(
-                        "",
-                        " &fYour statistics are displayed here.",
-                        " &fYou can view your wins, losses, and more.",
+                        "&fYour statistics are displayed here.",
+                        "&fYou can view your wins, losses, and more.",
                         "",
                         "&aClick to view your statistics."
                 )
@@ -43,9 +42,8 @@ public class StatisticsButton extends Button {
      */
     @Override
     public void clicked(Player player, ClickType clickType) {
-        if (clickType == ClickType.MIDDLE || clickType == ClickType.RIGHT || clickType == ClickType.NUMBER_KEY || clickType == ClickType.DROP || clickType == ClickType.SHIFT_LEFT || clickType == ClickType.SHIFT_RIGHT) {
-            return;
-        }
+        if (clickType != ClickType.LEFT) return;
+
         playNeutral(player);
         new StatisticsMenu(player).openMenu(player);
     }

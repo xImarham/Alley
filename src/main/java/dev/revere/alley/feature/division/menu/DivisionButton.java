@@ -29,7 +29,7 @@ public class DivisionButton extends Button {
                         "&f&l● &bTiers: &f" + this.division.getTiers().size(),
                         "  &7▶ (" + this.division.getTiers().get(0).getRequiredWins() + " - " + this.division.getTotalWins() + " Wins)",
                         "",
-                        " &fFor each kit, you'll have",
+                        " &fFor each kit, you will have",
                         " &fa division based on your",
                         " &bUnranked &fwins.",
                         "",

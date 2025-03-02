@@ -19,10 +19,10 @@ public class SoundEffectButton extends Button {
         return new ItemBuilder(Material.PAPER)
                 .name("&b&lSound Effects")
                 .lore(
+                        "&fAll of your sound effects",
+                        "&fare displayed here.",
                         "",
-                        " &fAll of your sound effects are displayed here.",
-                        "",
-                        "&fClick to view your sound effects."
+                        "&aClick to view your sound effects."
                 )
                 .build();
     }

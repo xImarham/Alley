@@ -35,7 +35,6 @@ public class DisplayTypeButton extends Button {
         EnumLeaderboardType currentType = profile.getLeaderboardType();
 
         List<String> lore = new ArrayList<>();
-        lore.add("");
         for (EnumLeaderboardType type : EnumLeaderboardType.values()) {
             lore.add((currentType == type ? "&f● &b" : "&f● &7") + type.getName());
         }

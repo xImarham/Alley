@@ -35,26 +35,26 @@ public class KitButton extends Button {
         List<String> lore = new ArrayList<>();
 
         lore.add("");
-        switch (leaderboardType) {
+        switch (this.leaderboardType) {
             case RANKED:
-                lore.add("&f● &bWins: &f" + profile.getProfileData().getRankedKitData().get(kit.getName()).getWins());
-                lore.add("&f● &bLosses: &f" + profile.getProfileData().getRankedKitData().get(kit.getName()).getLosses());
-                lore.add("&f● &bElo: &f" + profile.getProfileData().getRankedKitData().get(kit.getName()).getElo());
+                lore.add("&f● &bWins: &f" + profile.getProfileData().getRankedKitData().get(this.kit.getName()).getWins());
+                lore.add("&f● &bLosses: &f" + profile.getProfileData().getRankedKitData().get(this.kit.getName()).getLosses());
+                lore.add("&f● &bElo: &f" + profile.getProfileData().getRankedKitData().get(this.kit.getName()).getElo());
                 break;
             case UNRANKED:
-                lore.add("&f● &bWins: &f" + profile.getProfileData().getUnrankedKitData().get(kit.getName()).getWins());
-                lore.add("&f● &bLosses: &f" + profile.getProfileData().getUnrankedKitData().get(kit.getName()).getLosses());
+                lore.add("&f● &bWins: &f" + profile.getProfileData().getUnrankedKitData().get(this.kit.getName()).getWins());
+                lore.add("&f● &bLosses: &f" + profile.getProfileData().getUnrankedKitData().get(this.kit.getName()).getLosses());
                 break;
             case FFA:
-                lore.add("&f● &bKills: &f" + profile.getProfileData().getFfaData().get(kit.getName()).getKills());
-                lore.add("&f● &bDeaths: &f" + profile.getProfileData().getFfaData().get(kit.getName()).getDeaths());
+                lore.add("&f● &bKills: &f" + profile.getProfileData().getFfaData().get(this.kit.getName()).getKills());
+                lore.add("&f● &bDeaths: &f" + profile.getProfileData().getFfaData().get(this.kit.getName()).getDeaths());
                 break;
         }
         lore.add("");
 
-        return new ItemBuilder(kit.getIcon())
-                .name("&b&l" + kit.getDisplayName())
-                .durability(kit.getIconData())
+        return new ItemBuilder(this.kit.getIcon())
+                .name("&b&l" + this.kit.getDisplayName())
+                .durability(this.kit.getIconData())
                 .lore(lore)
                 .build();
     }

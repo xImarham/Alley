@@ -19,10 +19,10 @@ public class KillEffectButton extends Button {
         return new ItemBuilder(Material.PAPER)
                 .name("&b&lKill Effects")
                 .lore(
+                        "&fAll of your kill effects",
+                        "&fare displayed here.",
                         "",
-                        " &fAll of your kill effects are displayed here.",
-                        "",
-                        "&fClick to view your kill effects."
+                        "&aClick to view your kill effects."
                 )
                 .build();
     }
