@@ -22,35 +22,32 @@ import java.util.Map;
 public class HostMenu extends Menu {
     @Override
     public String getTitle(Player player) {
-        return "Choose an event type";
+        return "&b&lHost Event";
     }
 
     @Override
     public Map<Integer, Button> getButtons(Player player) {
         Map<Integer, Button> buttons = new HashMap<>();
 
-        buttons.put(12, new HostButton("&cStart a Tournament", new ItemStack(Material.DIAMOND_SWORD), Arrays.asList(
+        buttons.put(11, new HostButton("&b&lEvent", new ItemStack(Material.EMPTY_MAP), Arrays.asList(
+                "&7Host an event with different",
+                "&7unique implementations.",
                 "",
-                "&fClick to start a &cnew &ftournament.",
-                "&fPlayers will be able to &cjoin &fand &ccompete.",
+                " &f● &bTypes: &7Sumo",
+                " &f● &cMore soon...",
                 "",
-                " &f* &cSelect a kit",
-                " &f* &cChoose if solo or team",
-                ""
+                "&bClick to host!"
         )));
 
-        buttons.put(14, new HostButton("&9Host an Event", new ItemStack(Material.EMPTY_MAP), Arrays.asList(
+        buttons.put(15, new HostButton("&b&lTournament", new ItemStack(Material.BOW), Arrays.asList(
+                "&7Host a tournament to",
+                "&7compete in a number",
+                "&7of duels to win.",
                 "",
-                "&fClick to &9choose &fan event type to host",
-                "&fand &9create &fa new event for players to join.",
-                "",
-                " &f* &9Select an event type",
-                " &f* &9Choose if solo or team",
-                ""
+                "&bClick to host!"
         )));
 
-        addGlass(buttons, (byte) 15);
-
+        this.addGlass(buttons, (byte) 15);
         return buttons;
     }
 
@@ -62,9 +59,9 @@ public class HostMenu extends Menu {
 
         @Override
         public ItemStack getButtonItem(Player player) {
-            return new ItemBuilder(itemStack)
-                    .name(displayName)
-                    .lore(lore)
+            return new ItemBuilder(this.itemStack)
+                    .name(this.displayName)
+                    .lore(this.lore)
                     .hideMeta()
                     .build();
         }
@@ -75,12 +72,12 @@ public class HostMenu extends Menu {
                 return;
             }
 
-            switch (itemStack.getType()) {
-                case DIAMOND:
+            switch (this.itemStack.getType()) {
+                case BOW:
                     // Open the tournament menu
                     break;
-                case EMERALD:
-                    // Open the event menu
+                case EMPTY_MAP:
+                    //new EventMenu().openMenu(player);
                     break;
             }
 
