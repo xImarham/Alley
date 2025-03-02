@@ -40,8 +40,10 @@ public class MatchRegularImpl extends AbstractMatch {
     /**
      * Constructor for the RegularMatchImpl class.
      *
+     * @param queue       The queue of the match.
      * @param kit          The kit of the match.
      * @param arena        The arena of the match.
+     * @param ranked      Whether the match is ranked or not.
      * @param participantA The first participant.
      * @param participantB The second participant.
      */
@@ -158,7 +160,7 @@ public class MatchRegularImpl extends AbstractMatch {
         winnerProfile.getProfileData().getRankedKitData().get(getKit().getName()).setElo(elo);
         winnerProfile.getProfileData().getRankedKitData().get(getKit().getName()).incrementWins();
         winnerProfile.getProfileData().incrementRankedWins();
-        winnerProfile.getProfileData().updateEloAndDivision(winnerProfile, this.getKit());
+        winnerProfile.getProfileData().updateElo(winnerProfile);
     }
 
     /**
@@ -171,7 +173,7 @@ public class MatchRegularImpl extends AbstractMatch {
         loserProfile.getProfileData().getRankedKitData().get(getKit().getName()).setElo(elo);
         loserProfile.getProfileData().getRankedKitData().get(getKit().getName()).incrementLosses();
         loserProfile.getProfileData().incrementRankedLosses();
-        loserProfile.getProfileData().updateEloAndDivision(loserProfile, this.getKit());
+        loserProfile.getProfileData().updateElo(loserProfile);
     }
 
     /**

@@ -13,5 +13,10 @@ public abstract class BaseCommand {
         this.plugin.getCommandFramework().registerCommands(this);
     }
 
+    /**
+     * Method to be called when a command is executed.
+     *
+     * @param command The command.
+     */
     public abstract void onCommand(CommandArgs command);
 }

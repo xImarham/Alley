@@ -2,12 +2,14 @@ package dev.revere.alley.game.match.command.admin.impl;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.feature.arena.Arena;
-import dev.revere.alley.feature.arena.ArenaType;
+import dev.revere.alley.feature.arena.enums.EnumArenaType;
 import dev.revere.alley.feature.kit.Kit;
+import dev.revere.alley.feature.kit.settings.impl.KitSettingBattleRushImpl;
 import dev.revere.alley.feature.kit.settings.impl.KitSettingLivesImpl;
 import dev.revere.alley.game.match.AbstractMatch;
 import dev.revere.alley.game.match.impl.MatchLivesRegularImpl;
 import dev.revere.alley.game.match.impl.MatchRegularImpl;
+import dev.revere.alley.game.match.impl.MatchRoundsRegularImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.feature.queue.Queue;
@@ -46,7 +48,7 @@ public class MatchStartCommand extends BaseCommand {
                     // Alley.getInstance().getArenaRepository().getArenas().forEach(arena -> completion.add(arena.getName()));
 
                     //excluding FFA arenas
-                    Alley.getInstance().getArenaRepository().getArenas().stream().filter(arena -> arena.getType() != ArenaType.FFA).forEach(arena -> completion.add(arena.getName()));
+                    Alley.getInstance().getArenaRepository().getArenas().stream().filter(arena -> arena.getType() != EnumArenaType.FFA).forEach(arena -> completion.add(arena.getName()));
                     break;
                 case 4:
                     Alley.getInstance().getKitRepository().getKits().forEach(kit -> completion.add(kit.getName()));
@@ -102,6 +104,9 @@ public class MatchStartCommand extends BaseCommand {
             if (queue.getKit().equals(kit) && !queue.isRanked()) {
                 if (queue.getKit().isSettingEnabled(KitSettingLivesImpl.class)) {
                     AbstractMatch match = new MatchLivesRegularImpl(queue, kit, arena, false, participantA, participantB);
+                    match.startMatch();
+                } else if (queue.getKit().isSettingEnabled(KitSettingBattleRushImpl.class)) {
+                    AbstractMatch match = new MatchRoundsRegularImpl(queue, kit, arena, false, participantA, participantB, 3);
                     match.startMatch();
                 } else {
                     AbstractMatch match = new MatchRegularImpl(queue, kit, arena, false, participantA, participantB);

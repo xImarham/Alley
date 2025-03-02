@@ -1,14 +1,14 @@
-package dev.revere.alley.feature.arena;
+package dev.revere.alley.feature.arena.enums;
 
 import lombok.Getter;
 
 /**
  * @author Emmy
  * @project Alley
- * @date 20/05/2024 - 19:34
+ * @since 20/05/2024
  */
 @Getter
-public enum ArenaType {
+public enum EnumArenaType {
     SHARED,
     STANDALONE,
     FFA

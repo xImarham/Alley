@@ -2,7 +2,7 @@ package dev.revere.alley.game.ffa.command.admin;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.feature.arena.Arena;
-import dev.revere.alley.feature.arena.ArenaType;
+import dev.revere.alley.feature.arena.enums.EnumArenaType;
 import dev.revere.alley.feature.kit.Kit;
 import dev.revere.alley.locale.Locale;
 import dev.revere.alley.util.chat.CC;
@@ -35,7 +35,7 @@ public class FFACreateCommand extends BaseCommand {
             return;
         }
 
-        if (arena.getType() != ArenaType.FFA) {
+        if (arena.getType() != EnumArenaType.FFA) {
             player.sendMessage(CC.translate("&cThis arena is not a FFA arena."));
             return;
         }

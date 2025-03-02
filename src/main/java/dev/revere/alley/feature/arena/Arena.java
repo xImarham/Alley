@@ -1,5 +1,6 @@
 package dev.revere.alley.feature.arena;
 
+import dev.revere.alley.feature.arena.enums.EnumArenaType;
 import org.bukkit.Location;
 
 import java.util.ArrayList;
@@ -21,7 +22,7 @@ public abstract class Arena {
     private String name;
     private String displayName;
 
-    private ArenaType type;
+    private EnumArenaType type;
 
     private boolean enabled;
 

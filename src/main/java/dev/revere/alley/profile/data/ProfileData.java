@@ -100,9 +100,8 @@ public class ProfileData {
      *
      * @param profile the profile of the player
      */
-    public void updateEloAndDivision(Profile profile, Kit kit) {
+    public void updateElo(Profile profile) {
         this.elo = this.calculateGlobalElo(profile);
-        // update elo
     }
 
     /**
@@ -121,6 +120,24 @@ public class ProfileData {
      */
     public int getTotalLosses() {
         return this.rankedLosses + this.unrankedLosses;
+    }
+
+    /**
+     * Get the total amount of kills of the player ffa data.
+     *
+     * @return The total amount of kills
+     */
+    public int getTotalFFAKills() {
+        return this.ffaData.values().stream().mapToInt(ProfileFFAData::getKills).sum();
+    }
+
+    /**
+     * Get the total amount of deaths of the player ffa data.
+     *
+     * @return The total amount of deaths
+     */
+    public int getTotalFFADeaths() {
+        return this.ffaData.values().stream().mapToInt(ProfileFFAData::getDeaths).sum();
     }
 
     public void incrementUnrankedWins() {

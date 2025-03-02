@@ -33,9 +33,7 @@ public class SpawnListener implements Listener {
         Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
 
         if (profile.getState().equals(EnumProfileState.LOBBY) || profile.getState().equals(EnumProfileState.EDITING) || profile.getState().equals(EnumProfileState.WAITING)) {
-            Logger.log("&c" + player.getName() + " tried to place a block in the lobby");
             if (player.getGameMode() == GameMode.CREATIVE) {
-                Logger.log("&c" + player.getName() + " tried to place a block in the lobby in creative mode");
                 return;
             }
             event.setCancelled(true);
@@ -74,10 +72,8 @@ public class SpawnListener implements Listener {
         Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
         if (profile.getState().equals(EnumProfileState.LOBBY) || profile.getState().equals(EnumProfileState.EDITING) || profile.getState().equals(EnumProfileState.WAITING)) {
             if (player.getGameMode() == GameMode.CREATIVE) {
-                Bukkit.getConsoleSender().sendMessage(CC.translate("&c" + player.getName() + " broke a block but is in creative."));
                 return;
             }
-            Bukkit.getConsoleSender().sendMessage(CC.translate("&c" + player.getName() + " tried to break a block in the lobby"));
             event.setCancelled(true);
         }
     }

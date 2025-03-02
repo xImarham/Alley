@@ -81,7 +81,7 @@ public class ProfileRepository {
      * @param target The UUID of the target player.
      */
     public void resetStats(Player player, UUID target) {
-        Profile profile = Alley.getInstance().getProfileRepository().getProfile(target);
+        Profile profile = this.getProfile(target);
         Player targetPlayer = Bukkit.getPlayer(target);
 
         this.archiveProfile(profile);

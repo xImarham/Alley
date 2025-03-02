@@ -31,11 +31,15 @@ public class Logger {
      * @param runnable the task to run
      */
     public void logTime(String taskName, Runnable runnable) {
-        long start = System.currentTimeMillis();
-        runnable.run();
-        long end = System.currentTimeMillis();
+        try {
+            long start = System.currentTimeMillis();
+            runnable.run();
+            long end = System.currentTimeMillis();
 
-        Bukkit.getConsoleSender().sendMessage(CC.translate(CC.PREFIX + "&fSuccessfully initialized the &b" + taskName + " &fin &b" + (end - start) + "ms&f."));
+            Bukkit.getConsoleSender().sendMessage(CC.translate(CC.PREFIX + "&fSuccessfully initialized the &b" + taskName + " &fin &b" + (end - start) + "ms&f."));
+        } catch (Exception exception) {
+            logException("Failed to run the task: " + taskName, exception);
+        }
     }
 
     /**
@@ -45,11 +49,15 @@ public class Logger {
      * @param runnable the task to run
      */
     public void logTimeTask(String runnableTaskName, Runnable runnable) {
-        long start = System.currentTimeMillis();
-        runnable.run();
-        long end = System.currentTimeMillis();
+        try {
+            long start = System.currentTimeMillis();
+            runnable.run();
+            long end = System.currentTimeMillis();
 
-        Bukkit.getConsoleSender().sendMessage(CC.translate(CC.PREFIX + "&fSuccessfully ran the &b" + runnableTaskName + " &fin &b" + (end - start) + "ms&f."));
+            Bukkit.getConsoleSender().sendMessage(CC.translate(CC.PREFIX + "&fSuccessfully ran the &b" + runnableTaskName + " &fin &b" + (end - start) + "ms&f."));
+        } catch (Exception exception) {
+            logException("Failed to run the task: " + runnableTaskName, exception);
+        }
     }
 
     /**

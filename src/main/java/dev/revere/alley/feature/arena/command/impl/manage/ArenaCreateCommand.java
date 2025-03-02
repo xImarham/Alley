@@ -5,7 +5,7 @@ import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.annotation.Command;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.feature.arena.Arena;
-import dev.revere.alley.feature.arena.ArenaType;
+import dev.revere.alley.feature.arena.enums.EnumArenaType;
 import dev.revere.alley.feature.arena.impl.FreeForAllArena;
 import dev.revere.alley.feature.arena.impl.SharedArena;
 import dev.revere.alley.feature.arena.impl.StandAloneArena;
@@ -36,7 +36,7 @@ public class ArenaCreateCommand extends BaseCommand {
         }
 
         String arenaName = args[0];
-        ArenaType arenaType = Arrays.stream(ArenaType.values())
+        EnumArenaType arenaType = Arrays.stream(EnumArenaType.values())
                 .filter(type -> type.name().equalsIgnoreCase(args[1]))
                 .findFirst()
                 .orElse(null);
@@ -63,7 +63,7 @@ public class ArenaCreateCommand extends BaseCommand {
                 arena = new SharedArena(arenaName, arenaSelection.getMinimum(), arenaSelection.getMaximum());
                 break;
             case STANDALONE:
-                arena = new StandAloneArena(arenaName, arenaSelection.getMinimum(), arenaSelection.getMaximum());
+                arena = new StandAloneArena(arenaName, arenaSelection.getMinimum(), arenaSelection.getMaximum(), null, null);
                 break;
             case FFA:
                 arena = new FreeForAllArena(arenaName, arenaSelection.getMinimum(), arenaSelection.getMaximum());
@@ -78,7 +78,7 @@ public class ArenaCreateCommand extends BaseCommand {
         player.sendMessage(CC.translate("&aSuccessfully created a new arena named &b" + arenaName + "&a with type &b" + arenaType.name() + "&a!"));
     }
 
-    private String getDefaultDisplayName(ArenaType arenaType) {
+    private String getDefaultDisplayName(EnumArenaType arenaType) {
         FileConfiguration config = Alley.getInstance().getConfigService().getSettingsConfig();
 
         switch (arenaType) {

@@ -1,20 +1,16 @@
 package dev.revere.alley.game.match.impl;
 
-import lombok.Getter;
-import dev.revere.alley.Alley;
 import dev.revere.alley.feature.arena.Arena;
 import dev.revere.alley.feature.kit.Kit;
-import dev.revere.alley.game.match.enums.EnumMatchState;
-import dev.revere.alley.game.match.player.participant.GameParticipant;
+import dev.revere.alley.feature.queue.Queue;
 import dev.revere.alley.game.match.player.data.MatchGamePlayerData;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
-import dev.revere.alley.feature.queue.Queue;
+import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.util.PlayerUtil;
 import dev.revere.alley.util.TaskUtil;
-import dev.revere.alley.util.chat.CC;
+import lombok.Getter;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
 
 /**
  * @author Emmy
@@ -22,7 +18,6 @@ import org.bukkit.scheduler.BukkitRunnable;
  * @date 5/21/2024
  */
 public class MatchLivesRegularImpl extends MatchRegularImpl {
-
     private final GameParticipant<MatchGamePlayerImpl> participantA;
     private final GameParticipant<MatchGamePlayerImpl> participantB;
 
@@ -96,31 +91,6 @@ public class MatchLivesRegularImpl extends MatchRegularImpl {
             this.winner = this.participantA;
             this.loser = this.participantB;
         }
-    }
-
-    /**
-     * Starts the respawn process for a participant.
-     *
-     * @param player      The player to start the respawn process for.
-     */
-    private void startRespawnProcess(Player player) {
-        new BukkitRunnable() {
-            int count = 3;
-            @Override
-            public void run() {
-                if (count == 0) {
-                    cancel();
-                    handleRespawn(player);
-                    return;
-                }
-                if (getState() == EnumMatchState.ENDING_MATCH) {
-                    cancel();
-                    return;
-                }
-                player.sendMessage(CC.translate("&a" + count + "..."));
-                count--;
-            }
-        }.runTaskTimer(Alley.getInstance(), 0L, 20L);
     }
 
     @Override

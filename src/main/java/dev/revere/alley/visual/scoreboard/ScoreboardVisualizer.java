@@ -2,8 +2,10 @@ package dev.revere.alley.visual.scoreboard;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.assemble.AssembleAdapter;
-import dev.revere.alley.feature.combat.CombatRepository;
+import dev.revere.alley.feature.combat.CombatService;
+import dev.revere.alley.feature.kit.settings.impl.KitSettingBattleRushImpl;
 import dev.revere.alley.game.match.enums.EnumMatchState;
+import dev.revere.alley.game.match.impl.MatchRoundsRegularImpl;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.feature.kit.settings.impl.KitSettingBoxingImpl;
@@ -11,6 +13,7 @@ import dev.revere.alley.feature.kit.settings.impl.KitSettingLivesImpl;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
 import dev.revere.alley.util.AnimationUtil;
+import dev.revere.alley.util.ScoreboardUtil;
 import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.util.reflection.BukkitReflection;
 import org.bukkit.Bukkit;
@@ -50,7 +53,7 @@ public class ScoreboardVisualizer implements AssembleAdapter {
     public List<String> getLines(Player player) {
         if (Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId()).getProfileData().getProfileSettingData().isScoreboardEnabled()) {
             Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
-            List<String> toReturn = new ArrayList<>();
+            List<String> lines = new ArrayList<>();
             if (profile == null) {
                 return Arrays.asList(
                         "&cProfile could not load.",
@@ -75,7 +78,7 @@ public class ScoreboardVisualizer implements AssembleAdapter {
             switch (profile.getState()) {
                 case LOBBY:
                     for (String line : Alley.getInstance().getConfigService().getConfig("providers/scoreboard.yml").getStringList("scoreboard.lines.lobby")) {
-                        toReturn.add(CC.translate(line)
+                        lines.add(CC.translate(line)
                                 .replaceAll("\\{sidebar}", Alley.getInstance().getConfigService().getConfig("providers/scoreboard.yml").getString("scoreboard.sidebar-format"))
                                 .replaceAll("\\{online}", String.valueOf(Bukkit.getOnlinePlayers().size()))
                                 .replaceAll("\\{playing}", String.valueOf(Alley.getInstance().getProfileRepository().getProfiles().values().stream().filter(profile1 -> profile1.getState() == EnumProfileState.PLAYING).count()))
@@ -84,7 +87,7 @@ public class ScoreboardVisualizer implements AssembleAdapter {
 
                     if (profile.getParty() != null) {
                         for (String line : Alley.getInstance().getConfigService().getConfig("providers/scoreboard.yml").getStringList("scoreboard.lines.party-addition")) {
-                            toReturn.add(CC.translate(line)
+                            lines.add(CC.translate(line)
                                     .replaceAll("\\{sidebar}", Alley.getInstance().getConfigService().getConfig("providers/scoreboard.yml").getString("scoreboard.sidebar-format"))
                                     .replaceAll("\\{party-size}", String.valueOf(profile.getParty().getMembers().size()))
                                     .replaceAll("\\{party-leader}", profile.getParty().getLeader().getName()));
@@ -94,7 +97,7 @@ public class ScoreboardVisualizer implements AssembleAdapter {
                     break;
                 case WAITING:
                     for (String line : Alley.getInstance().getConfigService().getConfig("providers/scoreboard.yml").getStringList("scoreboard.lines.waiting")) {
-                        toReturn.add(CC.translate(line)
+                        lines.add(CC.translate(line)
                                 .replaceAll("\\{sidebar}", Alley.getInstance().getConfigService().getConfig("providers/scoreboard.yml").getString("scoreboard.sidebar-format"))
                                 .replaceAll("\\{online}", String.valueOf(Bukkit.getOnlinePlayers().size()))
                                 .replaceAll("\\{playing}", String.valueOf(Alley.getInstance().getProfileRepository().getProfiles().values().stream().filter(profile1 -> profile1.getState() == EnumProfileState.PLAYING).count()))
@@ -123,7 +126,7 @@ public class ScoreboardVisualizer implements AssembleAdapter {
 
                     if (profile.getMatch().getState() == EnumMatchState.STARTING) {
                         for (String line : Alley.getInstance().getConfigService().getConfig("providers/scoreboard.yml").getStringList("scoreboard.lines.starting")) {
-                            toReturn.add(CC.translate(line)
+                            lines.add(CC.translate(line)
                                     .replaceAll("\\{sidebar}", Alley.getInstance().getConfigService().getConfig("providers/scoreboard.yml").getString("scoreboard.sidebar-format"))
                                     .replaceAll("\\{opponent}", opponent.getPlayer().getUsername())
                                     .replaceAll("\\{opponent-ping}", String.valueOf(BukkitReflection.getPing(opponent.getPlayer().getPlayer())))
@@ -135,7 +138,7 @@ public class ScoreboardVisualizer implements AssembleAdapter {
                         }
                     } else if (profile.getMatch().getState() == EnumMatchState.ENDING_MATCH) {
                         for (String line : Alley.getInstance().getConfigService().getConfig("providers/scoreboard.yml").getStringList("scoreboard.lines.ending")) {
-                            toReturn.add(CC.translate(line)
+                            lines.add(CC.translate(line)
                                     .replaceAll("\\{sidebar}", Alley.getInstance().getConfigService().getConfig("providers/scoreboard.yml").getString("scoreboard.sidebar-format"))
                                     .replaceAll("\\{opponent}", opponent.getPlayer().getUsername())
                                     .replaceAll("\\{opponent-ping}", String.valueOf(BukkitReflection.getPing(opponent.getPlayer().getPlayer())))
@@ -148,7 +151,7 @@ public class ScoreboardVisualizer implements AssembleAdapter {
                         }
                     } else if (profile.getMatch().getKit().isSettingEnabled(KitSettingBoxingImpl.class)) {
                         for (String line : Alley.getInstance().getConfigService().getConfig("providers/scoreboard.yml").getStringList("scoreboard.lines.playing.boxing-match")) {
-                            toReturn.add(CC.translate(line)
+                            lines.add(CC.translate(line)
                                     .replaceAll("\\{sidebar}", Alley.getInstance().getConfigService().getConfig("providers/scoreboard.yml").getString("scoreboard.sidebar-format"))
                                     .replaceAll("\\{opponent}", opponent.getPlayer().getUsername())
                                     .replaceAll("\\{opponent-ping}", String.valueOf(BukkitReflection.getPing(opponent.getPlayer().getPlayer())))
@@ -161,9 +164,28 @@ public class ScoreboardVisualizer implements AssembleAdapter {
                                     .replaceAll("\\{arena}", profile.getMatch().getArena().getDisplayName() == null ? "&c&lNULL" : profile.getMatch().getArena().getDisplayName())
                                     .replaceAll("\\{kit}", profile.getMatch().getKit().getDisplayName()));
                         }
+                    } else if (profile.getMatch().getKit().isSettingEnabled(KitSettingBattleRushImpl.class)) {
+                        MatchRoundsRegularImpl roundsMatch = (MatchRoundsRegularImpl) profile.getMatch();
+
+                        for (String line : Alley.getInstance().getConfigService().getConfig("providers/scoreboard.yml").getStringList("scoreboard.lines.playing.battlerush-match")) {
+                            lines.add(CC.translate(line)
+                                    .replaceAll("\\{sidebar}", Alley.getInstance().getConfigService().getConfig("providers/scoreboard.yml").getString("scoreboard.sidebar-format"))
+                                    .replaceAll("\\{opponent}", opponent.getPlayer().getUsername())
+                                    .replaceAll("\\{opponent-ping}", String.valueOf(BukkitReflection.getPing(opponent.getPlayer().getPlayer())))
+                                    .replaceAll("\\{player-ping}", String.valueOf(BukkitReflection.getPing(player)))
+                                    .replaceAll("\\{goals}", ScoreboardUtil.visualizeGoalsAsCircles(roundsMatch.getParticipantA().getPlayer().getData().getGoals(), 3))
+                                    .replaceAll("\\{opponent-goals}", ScoreboardUtil.visualizeGoalsAsCircles(roundsMatch.getParticipantB().getPlayer().getData().getGoals(), 3))
+                                    .replaceAll("\\{kills}", String.valueOf(profile.getMatch().getGamePlayer(player).getData().getKills()))
+                                    .replaceAll("\\{current-round}", String.valueOf(roundsMatch.getCurrentRound()))
+                                    .replaceAll("\\{duration}", profile.getMatch().getDuration())
+                                    .replaceAll("\\{color}", String.valueOf(roundsMatch.getTeamAColor()))
+                                    .replaceAll("\\{opponent-color}", String.valueOf(roundsMatch.getTeamBColor()))
+                                    .replaceAll("\\{arena}", profile.getMatch().getArena().getDisplayName() == null ? "&c&lNULL" : profile.getMatch().getArena().getDisplayName())
+                                    .replaceAll("\\{kit}", profile.getMatch().getKit().getDisplayName()));
+                        }
                     } else if (profile.getMatch().getKit().isSettingEnabled(KitSettingLivesImpl.class)) {
                         for (String line : Alley.getInstance().getConfigService().getConfig("providers/scoreboard.yml").getStringList("scoreboard.lines.playing.lives-match")) {
-                            toReturn.add(CC.translate(line)
+                            lines.add(CC.translate(line)
                                     .replaceAll("\\{sidebar}", Alley.getInstance().getConfigService().getConfig("providers/scoreboard.yml").getString("scoreboard.sidebar-format"))
                                     .replaceAll("\\{opponent}", opponent.getPlayer().getUsername())
                                     .replaceAll("\\{opponent-ping}", String.valueOf(BukkitReflection.getPing(opponent.getPlayer().getPlayer())))
@@ -176,7 +198,7 @@ public class ScoreboardVisualizer implements AssembleAdapter {
                         }
                     } else {
                         for (String line : Alley.getInstance().getConfigService().getConfig("providers/scoreboard.yml").getStringList("scoreboard.lines.playing.regular-match")) {
-                            toReturn.add(CC.translate(line)
+                            lines.add(CC.translate(line)
                                     .replaceAll("\\{sidebar}", Alley.getInstance().getConfigService().getConfig("providers/scoreboard.yml").getString("scoreboard.sidebar-format"))
                                     .replaceAll("\\{opponent}", opponent.getPlayer().getUsername())
                                     .replaceAll("\\{opponent-ping}", String.valueOf(BukkitReflection.getPing(opponent.getPlayer().getPlayer())))
@@ -189,7 +211,7 @@ public class ScoreboardVisualizer implements AssembleAdapter {
                     break;
                 case SPECTATING:
                     for (String line : Alley.getInstance().getConfigService().getConfig("providers/scoreboard.yml").getStringList("scoreboard.lines.spectating")) {
-                        toReturn.add(CC.translate(line)
+                        lines.add(CC.translate(line)
                                 .replaceAll("\\{sidebar}", Alley.getInstance().getConfigService().getConfig("providers/scoreboard.yml").getString("scoreboard.sidebar-format"))
                                 .replaceAll("\\{playerA}", profile.getMatch().getParticipants().get(0).getPlayer().getUsername())
                                 .replaceAll("\\{playerB}", profile.getMatch().getParticipants().get(1).getPlayer().getUsername())
@@ -201,20 +223,20 @@ public class ScoreboardVisualizer implements AssembleAdapter {
                     }
                     break;
                 case FFA:
-                    CombatRepository combatRepository = Alley.getInstance().getCombatRepository();
+                    CombatService combatService = Alley.getInstance().getCombatService();
                     List<String> ffaLines = Alley.getInstance().getConfigService().getConfig("providers/scoreboard.yml").getStringList("scoreboard.lines.ffa");
                     List<String> combatTagLines = Alley.getInstance().getConfigService().getConfig("providers/scoreboard.yml").getStringList("ffa-combat-tag");
 
                     for (String line : ffaLines) {
                         if (line.contains("{player-combat}")) {
-                            if (combatRepository.isPlayerInCombat(player.getUniqueId())) {
+                            if (combatService.isPlayerInCombat(player.getUniqueId())) {
                                 for (String combatLine : combatTagLines) {
-                                    toReturn.add(CC.translate(combatLine
-                                            .replaceAll("\\{combat-tag}", combatRepository.getRemainingTimeFormatted(player.getUniqueId()))));
+                                    lines.add(CC.translate(combatLine
+                                            .replaceAll("\\{combat-tag}", combatService.getRemainingTimeFormatted(player.getUniqueId()))));
                                 }
                             }
                         } else {
-                            toReturn.add(CC.translate(line)
+                            lines.add(CC.translate(line)
                                     .replaceAll("\\{sidebar}", Alley.getInstance().getConfigService().getConfig("providers/scoreboard.yml").getString("scoreboard.sidebar-format"))
                                     .replaceAll("\\{kit}", profile.getFfaMatch().getKit().getDisplayName())
                                     .replaceAll("\\{players}", String.valueOf(profile.getFfaMatch().getPlayers().size()))
@@ -229,9 +251,9 @@ public class ScoreboardVisualizer implements AssembleAdapter {
 
             List<String> footer = Alley.getInstance().getConfigService().getConfig("providers/scoreboard.yml").getStringList("scoreboard.footer-addition");
             for (String line : footer) {
-                toReturn.add(CC.translate(line).replaceAll("\\{sidebar}", Alley.getInstance().getConfigService().getConfig("providers/scoreboard.yml").getString("scoreboard.sidebar-format")));
+                lines.add(CC.translate(line).replaceAll("\\{sidebar}", Alley.getInstance().getConfigService().getConfig("providers/scoreboard.yml").getString("scoreboard.sidebar-format")));
             }
-            return toReturn;
+            return lines;
         }
         return null;
     }

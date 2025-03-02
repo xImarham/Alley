@@ -7,6 +7,8 @@ import dev.revere.alley.api.command.annotation.Command;
 import dev.revere.alley.api.command.CommandArgs;
 import org.bukkit.command.CommandSender;
 
+import java.util.Arrays;
+
 /**
  * @author Emmy
  * @project Alley
@@ -17,13 +19,25 @@ public class AlleyCommand extends BaseCommand {
     @Override
     public void onCommand(CommandArgs command) {
         CommandSender sender = command.getSender();
-        sender.sendMessage("");
-        sender.sendMessage(CC.translate("  &b&l   Alley"));
-        sender.sendMessage(CC.translate("      &f┃ Authors: &b" + Alley.getInstance().getDescription().getAuthors().toString().replace("[", "").replace("]", "")));
-        sender.sendMessage(CC.translate("      &f┃ Version: &b" + Alley.getInstance().getDescription().getVersion()));
-        sender.sendMessage(CC.translate(" "));
-        sender.sendMessage(CC.translate("  &b&l   Description:"));
-        sender.sendMessage(CC.translate("      &f┃ " + Alley.getInstance().getDescription().getDescription()));
-        sender.sendMessage("");
+
+        Arrays.asList(
+                "",
+                "     &b&lAlley",
+                "      &f┃ Authors: &b" + Alley.getInstance().getDescription().getAuthors().toString().replace("[", "").replace("]", ""),
+                "      &f┃ Version: &b" + Alley.getInstance().getDescription().getVersion(),
+                "",
+                "     &b&lDescription:",
+                "      &f┃ " + Alley.getInstance().getDescription().getDescription(),
+                ""
+        ).forEach(line -> sender.sendMessage(CC.translate(line)));
+
+        if (sender.hasPermission("alley.admin")) {
+            Arrays.asList(
+                    "     &b&lAdmin Help",
+                    "      &f┃ /alley reload &7- &bReloads the plugin.",
+                    "      &f┃ /alley debug &7- &bDisplays info for development purposes.",
+                    ""
+            ).forEach(line -> sender.sendMessage(CC.translate(line)));
+        }
     }
 }

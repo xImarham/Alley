@@ -24,6 +24,7 @@ import dev.revere.alley.profile.enums.EnumProfileState;
 import dev.revere.alley.feature.queue.Queue;
 import dev.revere.alley.util.PlayerUtil;
 import dev.revere.alley.util.chat.CC;
+import dev.revere.alley.util.logger.Logger;
 import lombok.Getter;
 import lombok.Setter;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -32,6 +33,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 import java.util.*;
@@ -129,6 +131,7 @@ public abstract class AbstractMatch {
                 PlayerUtil.reset(player, true);
                 player.getInventory().setArmorContents(getKit().getArmor());
                 player.getInventory().setContents(getKit().getInventory());
+                player.updateInventory();
             }
         }
     }
@@ -137,11 +140,8 @@ public abstract class AbstractMatch {
      * Ends the match.
      */
     public void endMatch() {
-        this.placedBlocks.forEach((blockState, location) -> location.getBlock().setType(Material.AIR));
-        this.placedBlocks.clear();
-
-        this.brokenBlocks.forEach((blockState, location) -> location.getBlock().setType(blockState.getType()));
-        this.brokenBlocks.clear();
+        this.removePlacedBlocks();
+        this.placeBrokenBlocks();
 
         this.getParticipants().forEach(this::finalizeParticipant);
         this.spectators.forEach(uuid -> {
@@ -157,6 +157,16 @@ public abstract class AbstractMatch {
         if (this.arena instanceof StandAloneArena) {
             ((StandAloneArena) this.arena).setActive(false);
         }
+    }
+
+    public void placeBrokenBlocks() {
+        this.brokenBlocks.forEach((blockState, location) -> location.getBlock().setType(blockState.getType()));
+        this.brokenBlocks.clear();
+    }
+
+    public void removePlacedBlocks() {
+        this.placedBlocks.forEach((blockState, location) -> location.getBlock().setType(Material.AIR));
+        this.placedBlocks.clear();
     }
 
     /**
@@ -230,6 +240,7 @@ public abstract class AbstractMatch {
      * @param player The player that died.
      */
     public void handleDeath(Player player) {
+        Logger.log("Handling death of " + player.getName());
         if (!(this.state == EnumMatchState.STARTING || this.state == EnumMatchState.RUNNING)) return;
 
         MatchGamePlayerImpl gamePlayer = getGamePlayer(player);
@@ -258,6 +269,31 @@ public abstract class AbstractMatch {
         } else {
             this.handleRespawn(player);
         }
+    }
+
+    /**
+     * Starts the respawn process for a participant.
+     *
+     * @param player      The player to start the respawn process for.
+     */
+    public void startRespawnProcess(Player player) {
+        new BukkitRunnable() {
+            int count = 3;
+            @Override
+            public void run() {
+                if (count == 0) {
+                    cancel();
+                    handleRespawn(player);
+                    return;
+                }
+                if (getState() == EnumMatchState.ENDING_MATCH || getState() == EnumMatchState.ENDING_ROUND) {
+                    cancel();
+                    return;
+                }
+                player.sendMessage(CC.translate("&a" + count + "..."));
+                count--;
+            }
+        }.runTaskTimer(Alley.getInstance(), 0L, 20L);
     }
 
     /**
@@ -340,6 +376,11 @@ public abstract class AbstractMatch {
                 .forEach(player -> player.sendMessage(CC.translate(message)));
     }
 
+    protected void notifyAll(String message) {
+        this.notifyParticipants(message);
+        this.notifySpectators(message);
+    }
+
     /**
      * Handles a player leaving the match.
      *
@@ -390,8 +431,9 @@ public abstract class AbstractMatch {
      * Handles the end of a round.
      */
     public void handleRoundEnd() {
+        Logger.log("Handling round end");
         this.startTime = System.currentTimeMillis() - this.startTime;
-        getParticipants().forEach(gameParticipant -> {
+        this.getParticipants().forEach(gameParticipant -> {
             if (gameParticipant.isAllDead()) {
                 gameParticipant.getPlayers().forEach(gamePlayer -> {
                     Player player = gamePlayer.getPlayer();

@@ -114,6 +114,21 @@ public class Kit {
     }
 
     /**
+     * Method to check if multiple settings are enabled.
+     *
+     * @param names The names of the settings.
+     * @return Whether the settings are enabled.
+     */
+    public boolean areSettingsEnabled(String... names) {
+        for (String name : names) {
+            if (!this.isSettingEnabled(name)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
      * Method to apply the potion effects of the kit to a player.
      *
      * @param player The player to apply the potion effects to.

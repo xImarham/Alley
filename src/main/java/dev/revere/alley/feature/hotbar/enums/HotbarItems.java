@@ -25,7 +25,7 @@ public enum HotbarItems {
     PARTY("&bCreate Party &7(Right Click)", Material.NAME_TAG, 0, 5, "party create", HotbarType.LOBBY),
     LEADERBOARD("&bLeaderboards &7(Right Click)", Material.EMERALD, 0, 6, "leaderboards", HotbarType.LOBBY),
     EVENTS("&bEvents &7(Right Click)", Material.EYE_OF_ENDER, 0, 7, "host", HotbarType.LOBBY),
-    SETTINGS("&bYour Profile &7(Right Click)", Material.SKULL_ITEM, 3, 8, "practicesettings", HotbarType.LOBBY),
+    SETTINGS("&bSettings &7(Right Click)", Material.SKULL_ITEM, 0, 8, "practicesettings", HotbarType.LOBBY),
 
     DUO_UNRANKED_QUEUE("&bUnranked Duo Queue &7(Right Click)", Material.IRON_SWORD, 0, 0, "unrankedduo", HotbarType.PARTY),
     KIT_EDITOR_PARTY("&bKit Editor &7(Right Click)", Material.BOOK, 0, 1, "kiteditor", HotbarType.PARTY),

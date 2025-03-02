@@ -5,9 +5,11 @@ import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.api.menu.Menu;
 import dev.revere.alley.feature.arena.Arena;
 import dev.revere.alley.feature.arena.impl.StandAloneArena;
+import dev.revere.alley.feature.kit.settings.impl.KitSettingBattleRushImpl;
 import dev.revere.alley.game.match.AbstractMatch;
 import dev.revere.alley.game.match.impl.MatchLivesRegularImpl;
 import dev.revere.alley.game.match.impl.MatchRegularImpl;
+import dev.revere.alley.game.match.impl.MatchRoundsRegularImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.game.match.player.participant.TeamGameParticipant;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
@@ -111,6 +113,9 @@ public class PartyEventSplitArenaSelectorMenu extends Menu {
                 if (queue.getKit().equals(this.kit) && !queue.isRanked()) {
                     if (queue.getKit().isSettingEnabled(KitSettingLivesImpl.class)) {
                         AbstractMatch match = new MatchLivesRegularImpl(queue, this.kit, this.arena, false, participantA, participantB);
+                        match.startMatch();
+                    } else if (queue.getKit().isSettingEnabled(KitSettingBattleRushImpl.class)) {
+                        AbstractMatch match = new MatchRoundsRegularImpl(queue, this.kit, arena, false, participantA, participantB, 3);
                         match.startMatch();
                     } else {
                         AbstractMatch match = new MatchRegularImpl(queue, this.kit, this.arena, false, participantA, participantB);

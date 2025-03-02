@@ -12,20 +12,30 @@ import lombok.Setter;
 @Getter
 @Setter
 public class MatchGamePlayerData {
+    private boolean bedBroken;
     private int longestCombo;
     private int combo;
     private int hits;
-    private int lives = Alley.getInstance().getConfigService().getSettingsConfig().getInt("game.lives");
+    private int lives;
+    private int goals;
+    private int kills;
+    private int deaths;
+
+    public MatchGamePlayerData() {
+        this.bedBroken = false;
+        this.lives = Alley.getInstance().getConfigService().getSettingsConfig().getInt("game.lives", 3);
+        this.goals = 0;
+    }
 
     /**
      * Method to handle an attack.
      */
     public void handleAttack() {
-        hits++;
-        combo++;
+        this.hits++;
+        this.combo++;
 
-        if (combo > longestCombo) {
-            longestCombo = combo;
+        if (this.combo > this.longestCombo) {
+            this.longestCombo = this.combo;
         }
     }
 
@@ -33,6 +43,18 @@ public class MatchGamePlayerData {
      * Method to reset the combo.
      */
     public void resetCombo() {
-        combo = 0;
+        this.combo = 0;
+    }
+
+    public void incrementGoals() {
+        this.goals++;
+    }
+
+    public void incrementKills() {
+        this.kills++;
+    }
+
+    public void incrementDeaths() {
+        this.deaths++;
     }
 }

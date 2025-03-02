@@ -20,33 +20,43 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 public class ProfileListener implements Listener {
     
-    private final ProfileRepository profileRepository = Alley.getInstance().getProfileRepository();
+    private final ProfileRepository profileRepository;
+
+    /**
+     * Constructor for the ProfileListener class.
+     *
+     * @param profileRepository The profile repository.
+     */
+    public ProfileListener(ProfileRepository profileRepository) {
+        this.profileRepository = profileRepository;
+    }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     private void onLogin(PlayerLoginEvent event) {
-        if (event.getResult() != PlayerLoginEvent.Result.ALLOWED) {
-            return;
-        }
-        
-        if (profileRepository == null) {
+        if (!Alley.getInstance().isLoaded()) {
+            event.disallow(PlayerLoginEvent.Result.KICK_OTHER, CC.translate("&cThe server is still loading, please try again in a few seconds."));
             return;
         }
 
-        if (profileRepository.getProfile(event.getPlayer().getUniqueId()) != null) {
+        if (event.getResult() != PlayerLoginEvent.Result.ALLOWED) {
             return;
         }
 
         Profile profile = new Profile(event.getPlayer().getUniqueId());
         profile.load();
 
-        profileRepository.addProfile(profile);
+        this.profileRepository.addProfile(profile);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onJoin(PlayerJoinEvent event) {
-        Player player = event.getPlayer();
+        if (!Alley.getInstance().isLoaded()) {
+            event.getPlayer().kickPlayer(CC.translate("&cThe server is still loading, please try again in a few seconds."));
+            return;
+        }
 
-        Profile profile = profileRepository.getProfile(player.getUniqueId());
+        Player player = event.getPlayer();
+        Profile profile = this.profileRepository.getProfile(player.getUniqueId());
         profile.setState(EnumProfileState.LOBBY);
         profile.setName(player.getName());
         profile.setFfaMatch(null);
@@ -56,6 +66,7 @@ public class ProfileListener implements Listener {
         PlayerUtil.reset(player, false);
         Alley.getInstance().getSpawnService().teleportToSpawn(player);
         Alley.getInstance().getHotbarRepository().applyHotbarItems(player, HotbarType.LOBBY);
+        player.updateInventory();
 
         player.setFlySpeed(1 * 0.1F);
         player.setWalkSpeed(2 * 0.1F);
@@ -93,7 +104,8 @@ public class ProfileListener implements Listener {
     @EventHandler
     public void onPlayerQuitEvent(PlayerQuitEvent event) {
         Player player = event.getPlayer();
-        Profile profile = profileRepository.getProfile(player.getUniqueId());
+        Profile profile = this.profileRepository.getProfile(player.getUniqueId());
+        event.setQuitMessage(null);
         profile.setOnline(false);
         profile.save();
     }

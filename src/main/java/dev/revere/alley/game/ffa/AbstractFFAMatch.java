@@ -1,7 +1,7 @@
 package dev.revere.alley.game.ffa;
 
 import dev.revere.alley.Alley;
-import dev.revere.alley.feature.combat.CombatRepository;
+import dev.revere.alley.feature.combat.CombatService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.ProfileRepository;
 import dev.revere.alley.util.chat.CC;
@@ -69,7 +69,7 @@ public abstract class AbstractFFAMatch {
 
         this.getPlayers().forEach(online -> online.sendMessage(CC.translate("&7(Combat Log) &c" + player.getName() + " has been killed by " + killer.getName() + ".")));
 
-        CombatRepository combatRepository = Alley.getInstance().getCombatRepository();
-        combatRepository.resetCombat(player.getUniqueId());
+        CombatService combatService = Alley.getInstance().getCombatService();
+        combatService.resetCombat(player.getUniqueId());
     }
 }

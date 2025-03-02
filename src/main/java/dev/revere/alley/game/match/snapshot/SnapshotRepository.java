@@ -15,7 +15,11 @@ import java.util.UUID;
 @Getter
 @Setter
 public class SnapshotRepository {
-    private final Map<UUID, Snapshot> snapshots = new HashMap<>();
+    private final Map<UUID, Snapshot> snapshots;
+
+    public SnapshotRepository() {
+        this.snapshots = new HashMap<>();
+    }
 
     /**
      * Get a snapshot by UUID

@@ -20,12 +20,16 @@ import dev.revere.alley.essential.spawn.listener.SpawnListener;
 import dev.revere.alley.game.duel.DuelRequestHandler;
 import dev.revere.alley.game.duel.task.DuelRequestExpiryTask;
 import dev.revere.alley.game.ffa.FFARepository;
-import dev.revere.alley.feature.combat.CombatRepository;
+import dev.revere.alley.feature.combat.CombatService;
 import dev.revere.alley.game.ffa.cuboid.FFACuboidServiceImpl;
 import dev.revere.alley.game.ffa.listener.FFAListener;
 import dev.revere.alley.game.ffa.listener.impl.FFACuboidListener;
 import dev.revere.alley.game.match.MatchRepository;
-import dev.revere.alley.game.match.listener.MatchListener;
+import dev.revere.alley.game.match.listener.*;
+import dev.revere.alley.game.match.listener.impl.MatchBlockListener;
+import dev.revere.alley.game.match.listener.impl.MatchDamageListener;
+import dev.revere.alley.game.match.listener.impl.MatchDisconnectListener;
+import dev.revere.alley.game.match.listener.impl.MatchInteractListener;
 import dev.revere.alley.game.match.snapshot.SnapshotRepository;
 import dev.revere.alley.game.party.PartyHandler;
 import dev.revere.alley.game.party.listener.PartyListener;
@@ -75,9 +79,12 @@ public class Alley extends JavaPlugin {
     private HotbarRepository hotbarRepository;
     private DuelRequestHandler duelRequestHandler;
     private ChatService chatService;
-    private CombatRepository combatRepository;
+    private CombatService combatService;
+
+    private boolean loaded;
 
     public void onEnable() {
+        this.loaded = false;
         instance = this;
 
         long start = System.currentTimeMillis();
@@ -97,11 +104,13 @@ public class Alley extends JavaPlugin {
         long timeTaken = end - start;
 
         Logger.pluginEnabled(timeTaken);
+        this.loaded = true;
     }
 
     @Override
     public void onDisable() {
         this.profileRepository.getProfiles().forEach((uuid, profile) -> profile.save());
+        //this.matchRepository.endPresentMatches();
 
         ServerUtil.disconnectPlayers();
         ServerUtil.clearEntities(EntityType.DROPPED_ITEM);
@@ -115,7 +124,7 @@ public class Alley extends JavaPlugin {
     }
 
     private void checkDescription() {
-        List<String> authors = getDescription().getAuthors();
+        List<String> authors = this.getDescription().getAuthors();
         List<String> expectedAuthors = Arrays.asList("Emmy", "Remi");
         if (!new HashSet<>(authors).containsAll(expectedAuthors)) {
             System.exit(0);
@@ -154,18 +163,21 @@ public class Alley extends JavaPlugin {
         managers.put("FFACuboidService", () -> this.ffaCuboidService = new FFACuboidServiceImpl());
         managers.put("DuelRequestHandler", () -> this.duelRequestHandler = new DuelRequestHandler());
         managers.put("ChatService", () -> this.chatService = new ChatService());
-        managers.put("CombatRepository", () -> this.combatRepository = new CombatRepository());
+        managers.put("CombatService", () -> this.combatService = new CombatService());
 
         managers.forEach(Logger::logTime);
-        managers.clear();
     }
 
     private void registerListeners() {
         Arrays.asList(
-                new ProfileListener(),
+                new ProfileListener(this.profileRepository),
                 new HotbarListener(),
                 new PartyListener(),
-                new MatchListener(),
+                new MatchListener(this),
+                new MatchInteractListener(this),
+                new MatchDisconnectListener(this),
+                new MatchDamageListener(this),
+                new MatchBlockListener(this),
                 new ArenaListener(),
                 new MenuListener(),
                 new SpawnListener(),
@@ -205,6 +217,5 @@ public class Alley extends JavaPlugin {
         }
 
         runnables.forEach(Logger::logTimeTask);
-        runnables.clear();
     }
 }

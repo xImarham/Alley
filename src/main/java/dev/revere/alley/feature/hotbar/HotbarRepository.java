@@ -61,11 +61,11 @@ public class HotbarRepository {
         player.getInventory().clear();
         for (HotbarItem item : hotbarItemsByType.get(type)) {
             ItemStack itemStack = item.getItemStack();
-            if (item.getHotbarItems() == HotbarItems.SETTINGS) {
+            /*if (item.getHotbarItems() == HotbarItems.SETTINGS) {
                 SkullMeta meta = (SkullMeta) itemStack.getItemMeta();
                 meta.setOwner(player.getName());
                 itemStack.setItemMeta(meta);
-            }
+            }*/
             itemStack.setDurability((short) item.getHotbarItems().getDurability());
             player.getInventory().setItem(item.getSlot(), itemStack);
         }

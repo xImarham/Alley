@@ -13,11 +13,11 @@ import java.util.UUID;
  * @since 29/01/2025
  */
 @Getter
-public class CombatRepository {
+public class CombatService {
     private final HashMap<Long, Combat> combatMap;
     private final long combatTime;
 
-    public CombatRepository() {
+    public CombatService() {
         this.combatMap = new HashMap<>();
         this.combatTime = 15 * 1000L;
     }

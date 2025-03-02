@@ -4,15 +4,15 @@ import dev.revere.alley.Alley;
 import dev.revere.alley.feature.cooldown.Cooldown;
 import dev.revere.alley.feature.cooldown.CooldownRepository;
 import dev.revere.alley.feature.cooldown.enums.EnumCooldownType;
-import dev.revere.alley.feature.combat.CombatRepository;
+import dev.revere.alley.feature.combat.CombatService;
 import dev.revere.alley.game.ffa.cuboid.FFACuboidServiceImpl;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
+import dev.revere.alley.util.ListenerUtil;
 import dev.revere.alley.util.PlayerUtil;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -26,10 +26,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 /**
@@ -75,30 +72,9 @@ public class FFAListener implements Listener {
         if (profile.getState() != EnumProfileState.FFA) return;
         event.setDeathMessage(null);
 
-        List<Item> droppedItems = new ArrayList<>();
-        for (ItemStack drop : event.getDrops()) {
-            if (drop != null && drop.getType() != Material.AIR) {
-                droppedItems.add(player.getWorld().dropItemNaturally(player.getLocation(), drop));
-            }
-        }
-        event.getDrops().clear();
-
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                for (Item item : droppedItems) {
-                    if (item != null && item.isValid()) {
-                        item.remove();
-                    }
-                }
-            }
-        }.runTaskLater(this.plugin, 100L);
+        ListenerUtil.clearDroppedItemsOnDeath(event, player);
 
         Player killer = PlayerUtil.getLastAttacker(player);
-        /*if (killer != null) {
-            player.sendMessage(CC.translate("&cYou have been killed by &4" + killer.getName() + "&c."));
-            killer.sendMessage(CC.translate("&aYou have killed &2" + player.getName() + "&a."));
-        }*/
 
         this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> player.spigot().respawn(), 1L);
         Bukkit.getScheduler().runTaskLater(this.plugin, () -> profile.getFfaMatch().handleDeath(player, killer), 1L);
@@ -110,9 +86,9 @@ public class FFAListener implements Listener {
         Profile profile = this.accessProfile(player);
         if (profile.getState() != EnumProfileState.FFA) return;
 
-        CombatRepository combatRepository = Alley.getInstance().getCombatRepository();
-        if (combatRepository.isPlayerInCombat(player.getUniqueId())) {
-            profile.getFfaMatch().handleCombatLog(player, Bukkit.getPlayer(combatRepository.getCombat(player.getUniqueId()).getAttacker()));
+        CombatService combatService = Alley.getInstance().getCombatService();
+        if (combatService.isPlayerInCombat(player.getUniqueId())) {
+            profile.getFfaMatch().handleCombatLog(player, Bukkit.getPlayer(combatService.getCombat(player.getUniqueId()).getAttacker()));
         }
 
         profile.getFfaMatch().leave(player);
@@ -124,9 +100,9 @@ public class FFAListener implements Listener {
         Profile profile = this.accessProfile(player);
         if (profile.getState() != EnumProfileState.FFA) return;
 
-        CombatRepository combatRepository = Alley.getInstance().getCombatRepository();
-        if (combatRepository.isPlayerInCombat(player.getUniqueId())) {
-            profile.getFfaMatch().handleCombatLog(player, Bukkit.getPlayer(combatRepository.getCombat(player.getUniqueId()).getAttacker()));
+        CombatService combatService = Alley.getInstance().getCombatService();
+        if (combatService.isPlayerInCombat(player.getUniqueId())) {
+            profile.getFfaMatch().handleCombatLog(player, Bukkit.getPlayer(combatService.getCombat(player.getUniqueId()).getAttacker()));
         }
 
         profile.getFfaMatch().leave(player);
@@ -147,8 +123,8 @@ public class FFAListener implements Listener {
             Player attacker = (Player) event.getDamager();
             PlayerUtil.setLastAttacker(player, attacker);
 
-            CombatRepository combatRepository = Alley.getInstance().getCombatRepository();
-            combatRepository.addPlayersToCombat(player.getUniqueId(), attacker.getUniqueId());
+            CombatService combatService = Alley.getInstance().getCombatService();
+            combatService.addPlayersToCombat(player.getUniqueId(), attacker.getUniqueId());
         }
     }
 
@@ -166,8 +142,8 @@ public class FFAListener implements Listener {
                 || !ffaCuboidService.getCuboid().isIn(victim) && ffaCuboidService.getCuboid().isIn(attacker) 
                 || ffaCuboidService.getCuboid().isIn(victim) && !ffaCuboidService.getCuboid().isIn(attacker)) {
 
-            CombatRepository combatRepository = Alley.getInstance().getCombatRepository();
-            if (combatRepository.isPlayerInCombat(victim.getUniqueId() ) && combatRepository.isPlayerInCombat(attacker.getUniqueId())) {
+            CombatService combatService = Alley.getInstance().getCombatService();
+            if (combatService.isPlayerInCombat(victim.getUniqueId() ) && combatService.isPlayerInCombat(attacker.getUniqueId())) {
                 return;
             }
 

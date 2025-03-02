@@ -1,9 +1,11 @@
 package dev.revere.alley.feature.queue.runnable;
 
+import dev.revere.alley.feature.kit.settings.impl.KitSettingBattleRushImpl;
+import dev.revere.alley.game.match.impl.MatchRoundsRegularImpl;
 import lombok.Getter;
 import dev.revere.alley.Alley;
 import dev.revere.alley.feature.arena.Arena;
-import dev.revere.alley.feature.arena.ArenaType;
+import dev.revere.alley.feature.arena.enums.EnumArenaType;
 import dev.revere.alley.feature.hotbar.enums.HotbarType;
 import dev.revere.alley.feature.kit.settings.impl.KitSettingLivesImpl;
 import dev.revere.alley.game.match.AbstractMatch;
@@ -102,7 +104,7 @@ public class QueueRunnable implements Runnable {
     private void processGame(Queue queue, GameParticipantList gameParticipantList) {
         Arena arena = getArena(queue);
 
-        if (arena == null || arena.getType().equals(ArenaType.FFA)) {
+        if (arena == null || arena.getType().equals(EnumArenaType.FFA)) {
             gameParticipantList.getParticipants().forEach(participant -> {
                 Player player = Alley.getInstance().getServer().getPlayer(participant.getPlayer().getUuid());
                 player.sendMessage(CC.translate("&cThere are no available arenas for the kit you're playing."));
@@ -125,6 +127,8 @@ public class QueueRunnable implements Runnable {
     private @NotNull AbstractMatch getMatchType(Queue queue, GameParticipantList gameParticipantList, Arena arena) {
         if (queue.getKit().isSettingEnabled(KitSettingLivesImpl.class)) {
             return new MatchLivesRegularImpl(queue, queue.getKit(), arena, queue.isRanked(), gameParticipantList.getParticipantA(), gameParticipantList.getParticipantB());
+        } else if (queue.getKit().isSettingEnabled(KitSettingBattleRushImpl.class)) {
+            return new MatchRoundsRegularImpl(queue, queue.getKit(), arena, queue.isRanked(), gameParticipantList.getParticipantA(), gameParticipantList.getParticipantB(), 3);
         } else {
             return new MatchRegularImpl(queue, queue.getKit(), arena, queue.isRanked(), gameParticipantList.getParticipantA(), gameParticipantList.getParticipantB());
         }

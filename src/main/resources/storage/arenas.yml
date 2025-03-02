@@ -8,10 +8,6 @@ arenas:
     pos1: world:-6.5:73.0:-43.5:179.6078:17.52799
     enabled: false
     displayName: '&bFree For All'
-    minimum: world:-5.364354912130865:70.0:-42.30000001192093:179.9862:90.0
-    maximum: world:-7.699999988079071:77.20000004768372:-44.30000001192093:183.60805:88.897705
-    kits: []
-    pos2: 'null'
   Grass:
     type: SHARED
     minimum: world:98.0:62.0:707.0:0.0:0.0
@@ -77,17 +73,6 @@ arenas:
       - Classic
     enabled: true
     displayName: '&bWinter'
-  Candy:
-    type: STANDALONE
-    minimum: world:-2970.0:93.0:235.0:0.0:0.0
-    maximum: world:-2902.0:0.0:307.0:0.0:0.0
-    center: world:-2926.5:50.0:271.5:269.29163:54.220776
-    pos1: world:-2926.5:42.0:265.5:0.0:0.0
-    pos2: world:-2926.5:42.0:277.5:179.9695:0.04780883
-    kits:
-      - BattleRush
-    enabled: true
-    displayName: '&bCandy'
   sumotest:
     type: SHARED
     minimum: world:81.0:88.0:-47.0:0.0:0.0
@@ -121,3 +106,27 @@ arenas:
       - PearlFight
     enabled: true
     displayName: '&bForgotten'
+  spleeftest:
+    type: STANDALONE
+    minimum: world:-189.0:87.0:6.0:0.0:0.0
+    maximum: world:-235.0:72.0:-60.0:0.0:0.0
+    center: world:-211.50181584580423:83.53937351602089:-21.79512660975894:-179.9974:0.010838308
+    pos1: world:-211.5:78.0:4.5:-180.03767:0.010838308
+    pos2: world:-211.5:78.0:-57.5:0.011193948:0.015323731
+    kits:
+      - Spleef
+    enabled: true
+    displayName: '&bspleeftest'
+  Candy:
+    type: STANDALONE
+    minimum: world:-2970.0:93.0:235.0:0.0:0.0
+    maximum: world:-2902.0:0.0:307.0:0.0:0.0
+    center: world:-2926.5:50.0:271.5:269.29163:54.220776
+    pos1: world:-2926.5:42.0:265.5:0.0:0.0
+    pos2: world:-2926.5:42.0:277.5:179.9695:0.04780883
+    kits:
+      - BattleRush
+    enabled: true
+    displayName: '&bCandy'
+    team1Portal: world:-2926.5:41.0470918718468:247.5:-0.11523001:12.291254
+    team2Portal: world:-2926.5:41.41223260602121:295.5:-179.85208:1.3797958

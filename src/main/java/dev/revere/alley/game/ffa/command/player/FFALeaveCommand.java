@@ -1,7 +1,7 @@
 package dev.revere.alley.game.ffa.command.player;
 
 import dev.revere.alley.Alley;
-import dev.revere.alley.feature.combat.CombatRepository;
+import dev.revere.alley.feature.combat.CombatService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.api.command.BaseCommand;
@@ -27,9 +27,9 @@ public class FFALeaveCommand extends BaseCommand {
             return;
         }
 
-        CombatRepository combatRepository = Alley.getInstance().getCombatRepository();
-        if (combatRepository.isPlayerInCombat(player.getUniqueId())) {
-            profile.getFfaMatch().handleCombatLog(player, Bukkit.getPlayer(combatRepository.getCombat(player.getUniqueId()).getAttacker()));
+        CombatService combatService = Alley.getInstance().getCombatService();
+        if (combatService.isPlayerInCombat(player.getUniqueId())) {
+            profile.getFfaMatch().handleCombatLog(player, Bukkit.getPlayer(combatService.getCombat(player.getUniqueId()).getAttacker()));
         }
 
         profile.getFfaMatch().leave(player);

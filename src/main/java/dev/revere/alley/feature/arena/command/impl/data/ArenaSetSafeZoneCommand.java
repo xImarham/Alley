@@ -1,7 +1,7 @@
 package dev.revere.alley.feature.arena.command.impl.data;
 
 import dev.revere.alley.Alley;
-import dev.revere.alley.feature.arena.ArenaType;
+import dev.revere.alley.feature.arena.enums.EnumArenaType;
 import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.annotation.Command;
@@ -33,7 +33,7 @@ public class ArenaSetSafeZoneCommand extends BaseCommand {
             return;
         }
 
-        if (Alley.getInstance().getArenaRepository().getArenaByName(arenaName).getType() != ArenaType.FFA) {
+        if (Alley.getInstance().getArenaRepository().getArenaByName(arenaName).getType() != EnumArenaType.FFA) {
             player.sendMessage(CC.translate("&cYou can only set the safezone for Free-For-All arenas!"));
             return;
         }

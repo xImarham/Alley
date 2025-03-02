@@ -2,7 +2,7 @@ package dev.revere.alley.feature.arena.impl;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.feature.arena.Arena;
-import dev.revere.alley.feature.arena.ArenaType;
+import dev.revere.alley.feature.arena.enums.EnumArenaType;
 import dev.revere.alley.util.location.LocationUtil;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -25,8 +25,8 @@ public class FreeForAllArena extends Arena {
     }
 
     @Override
-    public ArenaType getType() {
-        return ArenaType.FFA;
+    public EnumArenaType getType() {
+        return EnumArenaType.FFA;
     }
 
     @Override
@@ -38,8 +38,8 @@ public class FreeForAllArena extends Arena {
     @Override
     public void saveArena() {
         String name = "arenas." + getName();
-
         FileConfiguration config = Alley.getInstance().getConfigService().getConfig("storage/arenas.yml");
+
         config.set(name, null);
         config.set(name + ".type", getType().name());
         config.set(name + ".safezone.pos1", LocationUtil.serialize(getMinimum()));
@@ -48,6 +48,7 @@ public class FreeForAllArena extends Arena {
         config.set(name + ".pos1", LocationUtil.serialize(getPos1()));
         config.set(name + ".enabled", isEnabled());
         config.set(name + ".displayName", getDisplayName());
+
         Alley.getInstance().getConfigService().saveConfig(Alley.getInstance().getConfigService().getConfigFile("storage/arenas.yml"), config);
     }
 

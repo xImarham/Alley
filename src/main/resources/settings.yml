@@ -15,6 +15,8 @@ game:
   death-y-level: 10
   # The amount of lives each player will have in a lives match.
   lives: 3
+  # The radius of the portal in blocks.
+  portal-radius: 5
 
 arena:
   # When creating an arena, the following displayname for each

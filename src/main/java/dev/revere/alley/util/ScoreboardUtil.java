@@ -11,18 +11,19 @@ import dev.revere.alley.util.chat.CC;
 @UtilityClass
 public class ScoreboardUtil {
     /**
-     * Visualizes the lives of a player in a circle format.
+     * Visualizes the goals as circles.
      *
-     * @param lives The amount of lives to visualize.
-     * @return The visualized lives.
+     * @param currentGoals The current goals.
+     * @param maxGoals     The maximum goals.
+     * @return The goals visualized as circles.
      */
-    public String visualizeLivesAsCircles(int lives) {
+    public String visualizeGoalsAsCircles(int currentGoals, int maxGoals) {
         StringBuilder stringBuilder = new StringBuilder();
-        for (int i = 0; i < 3; i++) {
-            if (i < lives) {
-                stringBuilder.append(CC.translate("&a&l●"));
+        for (int i = 0; i < maxGoals; i++) {
+            if (i < currentGoals) {
+                stringBuilder.append(CC.translate("&a&l■"));
             } else {
-                stringBuilder.append(CC.translate("&7&l●"));
+                stringBuilder.append(CC.translate("&7&l■"));
             }
         }
 

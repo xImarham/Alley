@@ -1,10 +1,13 @@
 package dev.revere.alley.game.match.runnable;
 
 import dev.revere.alley.Alley;
+import dev.revere.alley.feature.kit.settings.impl.KitSettingBattleRushImpl;
 import dev.revere.alley.game.match.AbstractMatch;
 import dev.revere.alley.game.match.enums.EnumMatchState;
+import dev.revere.alley.game.match.impl.MatchRoundsRegularImpl;
 import dev.revere.alley.util.SoundUtil;
 import dev.revere.alley.util.chat.CC;
+import dev.revere.alley.util.logger.Logger;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -33,31 +36,37 @@ public class MatchRunnable extends BukkitRunnable {
 
     @Override
     public void run() {
-        stage--;
-        switch (match.getState()) {
+        this.stage--;
+        switch (this.match.getState()) {
             case STARTING:
                 if (stage == 0) {
-                    Alley.getInstance().getServer().getScheduler().runTask(Alley.getInstance(), match::handleRoundStart);
-                    match.setState(EnumMatchState.RUNNING);
-                    match.sendMessage(CC.translate("&aMatch has started. Good luck!"));
-                    this.playSoundStarted();
-                    this.sendDisclaimer();
+                    Alley.getInstance().getServer().getScheduler().runTask(Alley.getInstance(), this.match::handleRoundStart);
+                    this.match.setState(EnumMatchState.RUNNING);
+
+                    if (this.match.getKit().isSettingEnabled(KitSettingBattleRushImpl.class) && ((MatchRoundsRegularImpl) this.match).getCurrentRound() > 0) {
+                        this.match.sendMessage(CC.translate("&aRound Started!"));
+                        this.playSoundStarted();
+                    } else {
+                        this.match.sendMessage(CC.translate("&aMatch has started. Good luck!"));
+                        this.playSoundStarted();
+                        this.sendDisclaimer();
+                    }
                 } else {
-                    match.sendMessage(CC.translate("&a" + stage + "..."));
+                    this.match.sendMessage(CC.translate("&a" + this.stage + "..."));
                     this.playSoundStarting();
                 }
                 break;
             case ENDING_ROUND:
-                if (stage == 0) {
-                    if (match.canStartRound()) {
-                        match.setState(EnumMatchState.STARTING);
-                        match.getRunnable().setStage(4);
+                if (this.stage == 0) {
+                    if (this.match.canStartRound()) {
+                        this.match.setState(EnumMatchState.STARTING);
+                        this.match.getRunnable().setStage(4);
                     }
                 }
                 break;
             case ENDING_MATCH:
-                if (stage == 0) {
-                    Alley.getInstance().getServer().getScheduler().runTask(Alley.getInstance(), match::endMatch);
+                if (this.stage == 0) {
+                    Alley.getInstance().getServer().getScheduler().runTask(Alley.getInstance(), this.match::endMatch);
                 }
                 break;
         }
@@ -69,14 +78,14 @@ public class MatchRunnable extends BukkitRunnable {
     private void sendDisclaimer() {
         FileConfiguration config = Alley.getInstance().getConfigService().getMessagesConfig();
         if (config.getBoolean("match.started.kit-disclaimer.enabled")) {
-            if (match.getKit().getDisclaimer() == null) {
-                Alley.getInstance().getConfigService().getMessagesConfig().getStringList("match.started.kit-disclaimer.not-set").forEach(message -> match.sendMessage(CC.translate(message)));
+            if (this.match.getKit().getDisclaimer() == null) {
+                Alley.getInstance().getConfigService().getMessagesConfig().getStringList("match.started.kit-disclaimer.not-set").forEach(message -> this.match.sendMessage(CC.translate(message)));
                 return;
             }
 
-            config.getStringList("match.started.kit-disclaimer.format").forEach(message -> match.sendMessage(CC.translate(message)
-                    .replace("{kit-disclaimer}", CC.translate(match.getKit().getDisclaimer()))
-                    .replace("{kit-name}", match.getKit().getName())
+            config.getStringList("match.started.kit-disclaimer.format").forEach(message -> this.match.sendMessage(CC.translate(message)
+                    .replace("{kit-disclaimer}", CC.translate(this.match.getKit().getDisclaimer()))
+                    .replace("{kit-name}", this.match.getKit().getName())
             ));
         }
     }

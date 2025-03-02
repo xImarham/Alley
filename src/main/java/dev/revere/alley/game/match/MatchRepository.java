@@ -1,5 +1,6 @@
 package dev.revere.alley.game.match;
 
+import dev.revere.alley.util.logger.Logger;
 import lombok.Getter;
 
 import java.util.ArrayList;
@@ -16,5 +17,14 @@ public class MatchRepository {
 
     public MatchRepository() {
         this.matches = new ArrayList<>();
+    }
+
+    public void endPresentMatches() {
+        if (this.matches.isEmpty()) {
+            return;
+        }
+
+        this.matches.forEach(AbstractMatch::endMatch);
+        Logger.log(this.matches.size() + " matches have been ended.");
     }
 }

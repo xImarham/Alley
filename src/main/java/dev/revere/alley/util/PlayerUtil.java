@@ -42,6 +42,12 @@ public class PlayerUtil {
         }
     }
 
+    public void resetLastAttacker(Player victim) {
+        if (victim.hasMetadata("lastAttacker")) {
+            victim.removeMetadata("lastAttacker", Alley.getInstance());
+        }
+    }
+
     /**
      * Reset a player's stats
      *

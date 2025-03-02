@@ -5,6 +5,8 @@ import dev.revere.alley.feature.kit.Kit;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.feature.queue.Queue;
+import org.bukkit.Location;
+import org.bukkit.entity.Player;
 
 /**
  * @author Remi
@@ -12,12 +14,13 @@ import dev.revere.alley.feature.queue.Queue;
  * @date 5/21/2024
  */
 public class MatchBedRegularImpl extends MatchRegularImpl {
-
     /**
-     * Constructor for the BedMatchImpl class.
+     * Constructor for the RegularMatchImpl class.
      *
+     * @param queue        The queue of the match.
      * @param kit          The kit of the match.
      * @param arena        The arena of the match.
+     * @param ranked       Whether the match is ranked or not.
      * @param participantA The first participant.
      * @param participantB The second participant.
      */

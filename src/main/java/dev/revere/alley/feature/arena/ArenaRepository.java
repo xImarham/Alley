@@ -1,5 +1,6 @@
 package dev.revere.alley.feature.arena;
 
+import dev.revere.alley.feature.arena.enums.EnumArenaType;
 import lombok.Getter;
 import dev.revere.alley.Alley;
 import dev.revere.alley.feature.arena.impl.FreeForAllArena;
@@ -44,9 +45,12 @@ public class ArenaRepository {
         for (String arenaName : arenasConfig.getKeys(false)) {
             String name = "arenas." + arenaName;
 
-            ArenaType arenaType = ArenaType.valueOf(config.getString(name + ".type"));
+            EnumArenaType arenaType = EnumArenaType.valueOf(config.getString(name + ".type"));
             Location minimum = LocationUtil.deserialize(config.getString(name + ".minimum"));
             Location maximum = LocationUtil.deserialize(config.getString(name + ".maximum"));
+
+            Location team1Portal = LocationUtil.deserialize(config.getString(name + ".team1Portal"));
+            Location team2Portal = LocationUtil.deserialize(config.getString(name + ".team2Portal"));
 
             Arena arena;
             switch (arenaType) {
@@ -61,7 +65,9 @@ public class ArenaRepository {
                     arena = new StandAloneArena(
                             arenaName,
                             minimum,
-                            maximum
+                            maximum,
+                            team1Portal,
+                            team2Portal
                     );
                     break;
                 case FFA:

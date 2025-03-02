@@ -2,7 +2,7 @@ package dev.revere.alley.feature.arena.impl;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.feature.arena.Arena;
-import dev.revere.alley.feature.arena.ArenaType;
+import dev.revere.alley.feature.arena.enums.EnumArenaType;
 import dev.revere.alley.util.location.LocationUtil;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -25,8 +25,8 @@ public class SharedArena extends Arena {
     }
 
     @Override
-    public ArenaType getType() {
-        return ArenaType.SHARED;
+    public EnumArenaType getType() {
+        return EnumArenaType.SHARED;
     }
 
     @Override
@@ -39,6 +39,7 @@ public class SharedArena extends Arena {
     public void saveArena() {
         String name = "arenas." + getName();
         FileConfiguration config = Alley.getInstance().getConfigService().getConfig("storage/arenas.yml");
+
         config.set(name, null);
         config.set(name + ".type", getType().name());
         config.set(name + ".minimum", LocationUtil.serialize(getMinimum()));
@@ -49,6 +50,7 @@ public class SharedArena extends Arena {
         config.set(name + ".kits", getKits());
         config.set(name + ".enabled", isEnabled());
         config.set(name + ".displayName", getDisplayName());
+
         Alley.getInstance().getConfigService().saveConfig(Alley.getInstance().getConfigService().getConfigFile("storage/arenas.yml"), config);
     }
 

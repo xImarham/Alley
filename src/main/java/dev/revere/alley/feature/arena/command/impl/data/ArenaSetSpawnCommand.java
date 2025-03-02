@@ -1,7 +1,7 @@
 package dev.revere.alley.feature.arena.command.impl.data;
 
 import dev.revere.alley.Alley;
-import dev.revere.alley.feature.arena.ArenaType;
+import dev.revere.alley.feature.arena.enums.EnumArenaType;
 import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.annotation.Command;
@@ -56,7 +56,7 @@ public class ArenaSetSpawnCommand extends BaseCommand {
 
         switch (spawnType.toLowerCase()) {
             case "pos1":
-                if (Alley.getInstance().getArenaRepository().getArenaByName(arenaName).getType() == ArenaType.FFA) {
+                if (Alley.getInstance().getArenaRepository().getArenaByName(arenaName).getType() == EnumArenaType.FFA) {
                     player.sendMessage(CC.translate("&cFFA Arenas do not need a spawn position!"));
                     return;
                 }
@@ -64,7 +64,7 @@ public class ArenaSetSpawnCommand extends BaseCommand {
                 player.sendMessage(CC.translate("&aSpawn Position 1 has been set for arena &b" + arenaName + "&a!"));
                 break;
             case "ffa":
-                if (Alley.getInstance().getArenaRepository().getArenaByName(arenaName).getType() != ArenaType.FFA) {
+                if (Alley.getInstance().getArenaRepository().getArenaByName(arenaName).getType() != EnumArenaType.FFA) {
                     player.sendMessage(CC.translate("&cThis arena is not an FFA arena!"));
                     return;
                 }
@@ -72,7 +72,7 @@ public class ArenaSetSpawnCommand extends BaseCommand {
                 player.sendMessage(CC.translate("&aSpawn Position has been set for arena &b" + arenaName + "&a!"));
                 break;
             default:
-                if (Alley.getInstance().getArenaRepository().getArenaByName(arenaName).getType() == ArenaType.FFA) {
+                if (Alley.getInstance().getArenaRepository().getArenaByName(arenaName).getType() == EnumArenaType.FFA) {
                     player.sendMessage(CC.translate("&cFFA Arenas do not need a spawn position!"));
                     return;
                 }
