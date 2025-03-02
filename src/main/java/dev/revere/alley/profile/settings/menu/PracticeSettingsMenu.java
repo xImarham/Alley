@@ -1,18 +1,18 @@
 package dev.revere.alley.profile.settings.menu;
 
-import lombok.AllArgsConstructor;
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.api.menu.Menu;
-import dev.revere.alley.util.data.item.ItemBuilder;
 import dev.revere.alley.profile.Profile;
-import dev.revere.alley.util.chat.CC;
+import dev.revere.alley.profile.data.impl.ProfileSettingData;
+import dev.revere.alley.profile.settings.menu.button.PracticeSettingsButton;
+import lombok.AllArgsConstructor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.ClickType;
-import org.bukkit.inventory.ItemStack;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Emmy
@@ -24,7 +24,7 @@ public class PracticeSettingsMenu extends Menu {
 
     @Override
     public String getTitle(Player player) {
-        return "Settings";
+        return "&b&lPractice Settings";
     }
 
     @Override
@@ -34,61 +34,64 @@ public class PracticeSettingsMenu extends Menu {
 
         //buttons.put(0, new BackButton(new ProfileMenu()));
 
-        buttons.put(10, new SettingsButton("&b&lToggle Party Messages", Material.FEATHER, 0, Arrays.asList(
-                "",
+        buttons.put(10, new PracticeSettingsButton("&b&lToggle Party Messages", Material.FEATHER, 0, Arrays.asList(
                 "&fDecide whether you should",
                 "&fsee the &bparty chat",
                 "&fmessages or not.",
                 "",
-                " &b● &fStatus: &r" + (profile.getProfileData().getProfileSettingData().isPartyMessagesEnabled() ? "&aEnabled" : "&cDisabled"),
+                " &f● &bStatus: &7" + (profile.getProfileData().getProfileSettingData().isPartyMessagesEnabled() ? "&aEnabled" : "&cDisabled"),
                 "",
                 "&aClick to toggle!"
         )));
 
-        buttons.put(11, new SettingsButton("&b&lToggle Party Invites", Material.NAME_TAG, 0, Arrays.asList(
-                "",
+        buttons.put(11, new PracticeSettingsButton("&b&lToggle Party Invites", Material.NAME_TAG, 0, Arrays.asList(
                 "&fDecide whether you should",
                 "&freceive &bparty invites",
                 "&for not.",
                 "",
-                " &b● &fStatus: &r" + (profile.getProfileData().getProfileSettingData().isPartyInvitesEnabled() ? "&aEnabled" : "&cDisabled"),
+                " &f● &bStatus: &7" + (profile.getProfileData().getProfileSettingData().isPartyInvitesEnabled() ? "&aEnabled" : "&cDisabled"),
                 "",
                 "&aClick to toggle!"
         )));
 
-        buttons.put(12, new SettingsButton("&b&lToggle Scoreboard", Material.CARPET, 5, Arrays.asList(
-                "",
+        buttons.put(12, new PracticeSettingsButton("&b&lToggle Scoreboard", Material.CARPET, 5, Arrays.asList(
                 "&fDecide whether you should",
                 "&fsee the &bscoreboard",
                 "&for not.",
                 "",
-                " &b● &fStatus: &r" + (profile.getProfileData().getProfileSettingData().isScoreboardEnabled() ? "&aEnabled" : "&cDisabled"),
+                " &f● &bStatus: &7" + (profile.getProfileData().getProfileSettingData().isScoreboardEnabled() ? "&aEnabled" : "&cDisabled"),
                 "",
                 "&aClick to toggle!"
         )));
 
-        buttons.put(13, new SettingsButton("&b&lToggle Tablist", Material.ITEM_FRAME, 0, Arrays.asList(
-                "",
+        buttons.put(13, new PracticeSettingsButton("&b&lToggle Tablist", Material.ITEM_FRAME, 0, Arrays.asList(
                 "&fDecide whether you should",
                 "&fsee the &btablist",
                 "&for not.",
                 "",
-                " &b● &fStatus: &r" + (profile.getProfileData().getProfileSettingData().isTablistEnabled() ? "&aEnabled" : "&cDisabled"),
+                " &f● &bStatus: &7" + (profile.getProfileData().getProfileSettingData().isTablistEnabled() ? "&aEnabled" : "&cDisabled"),
                 "",
                 "&aClick to toggle!"
         )));
 
-        buttons.put(14, new SettingsButton("&b&lWorld time", Material.WATCH, 0, Arrays.asList(
-                "",
+        ProfileSettingData profileSettingData = profile.getProfileData().getProfileSettingData();
+        buttons.put(14, new PracticeSettingsButton("&b&lWorld time", Material.WATCH, 0, Arrays.asList(
                 "&fChange your world time",
                 "&fto &bday&f, &bnight&f, or &bsunset&f.",
                 "",
-                profile.getProfileData().getProfileSettingData().isDefaultTime() ? " &b● &a&lDefault" : " &b● &7Default",
-                profile.getProfileData().getProfileSettingData().isDayTime() ? " &b● &e&lDay" : " &b● &7Day",
-                profile.getProfileData().getProfileSettingData().isSunsetTime() ? " &b● &6&lSunset" : " &b● &7Sunset",
-                profile.getProfileData().getProfileSettingData().isNightTime() ? " &b● &4&lNight" : " &b● &7Night",
+                profileSettingData.isDefaultTime() ? " &b● &a&lDefault" : " &b● &7Default",
+                profileSettingData.isDayTime() ? " &b● &e&lDay" : " &b● &7Day",
+                profileSettingData.isSunsetTime() ? " &b● &6&lSunset" : " &b● &7Sunset",
+                profileSettingData.isNightTime() ? " &b● &4&lNight" : " &b● &7Night",
                 "",
                 "&aClick to change!"
+        )));
+
+        buttons.put(16, new PracticeSettingsButton("&b&lMatch Settings", Material.BOOK, 0, Arrays.asList(
+                "",
+                "&fAdjust your match settings.",
+                "",
+                "&aClick to view!"
         )));
 
         addBorder(buttons, (byte) 15, 3);
@@ -99,92 +102,5 @@ public class PracticeSettingsMenu extends Menu {
     @Override
     public int getSize() {
         return 9 * 3;
-    }
-
-    @AllArgsConstructor
-    private static class SettingsButton extends Button {
-        private String displayName;
-        private Material material;
-        private int durability;
-        private List<String> lore;
-
-        @Override
-        public ItemStack getButtonItem(Player player) {
-            return new ItemBuilder(material)
-                    .name(displayName)
-                    .durability(durability)
-                    .lore(lore)
-                    .hideMeta()
-                    .build();
-        }
-
-        @Override
-        public void clicked(Player player, int slot, ClickType clickType, int hotbarSlot) {
-            Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
-
-            if (clickType == ClickType.LEFT) {
-                switch (material) {
-                    case FEATHER:
-                        player.performCommand("togglepartymessages");
-                        break;
-                    case NAME_TAG:
-                        player.performCommand("togglepartyinvites");
-                        break;
-                    case CARPET:
-                        if (durability == (short) 5) {
-                            player.performCommand("togglescoreboard");
-                        }
-                        break;
-                    case ITEM_FRAME:
-                        player.performCommand("toggletablist");
-                        break;
-                    case WATCH:
-                        switch (profile.getProfileData().getProfileSettingData().getWorldTime()) {
-                            case DEFAULT:
-                                profile.getProfileData().getProfileSettingData().setTimeDay(player);
-                                player.sendMessage(CC.translate("&aYou have set the time to day."));
-                                break;
-                            case DAY:
-                                profile.getProfileData().getProfileSettingData().setTimeSunset(player);
-                                player.sendMessage(CC.translate("&aYou have set the time to sunset."));
-                                break;
-                            case SUNSET:
-                                profile.getProfileData().getProfileSettingData().setTimeNight(player);
-                                player.sendMessage(CC.translate("&aYou have set the time to night."));
-                                break;
-                            case NIGHT:
-                                profile.getProfileData().getProfileSettingData().setTimeDefault(player);
-                                player.sendMessage(CC.translate("&aYou have reset your world time."));
-                                break;
-                        }
-                        break;
-                }
-
-                playerClickSound(player);
-            } else if (clickType == ClickType.RIGHT) {
-                if (Objects.requireNonNull(material) == Material.WATCH) {
-                    switch (profile.getProfileData().getProfileSettingData().getWorldTime()) {
-                        case DEFAULT:
-                            profile.getProfileData().getProfileSettingData().setTimeNight(player);
-                            player.sendMessage(CC.translate("&aYou have set the time to night."));
-                            break;
-                        case DAY:
-                            profile.getProfileData().getProfileSettingData().setTimeDefault(player);
-                            player.sendMessage(CC.translate("&aYou have reset your world time."));
-                            break;
-                        case SUNSET:
-                            profile.getProfileData().getProfileSettingData().setTimeDay(player);
-                            player.sendMessage(CC.translate("&aYou have set the time to day."));
-                            break;
-                        case NIGHT:
-                            profile.getProfileData().getProfileSettingData().setTimeSunset(player);
-                            player.sendMessage(CC.translate("&aYou have set the time to sunset."));
-                            break;
-                    }
-
-                    playerClickSound(player);
-                }
-            }
-        }
     }
 }

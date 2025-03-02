@@ -55,6 +55,7 @@ public class Profile {
         this.state = EnumProfileState.LOBBY;
         this.profileData = new ProfileData();
         this.name = Bukkit.getOfflinePlayer(this.uuid).getName();
+        this.leaderboardType = EnumLeaderboardType.RANKED;
     }
 
     /**

@@ -1,5 +1,6 @@
 package dev.revere.alley.profile.settings.menu;
 
+import dev.revere.alley.api.menu.impl.BackButton;
 import lombok.AllArgsConstructor;
 import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.api.menu.Menu;
@@ -24,33 +25,31 @@ public class MatchSettingsMenu extends Menu {
 
     @Override
     public String getTitle(Player player) {
-        return "Match Settings";
+        return "&b&lMatch Settings";
     }
 
     @Override
     public Map<Integer, Button> getButtons(Player player) {
         Map<Integer, Button> buttons = new HashMap<>();
 
-        //buttons.put(0, new BackButton(new SettingsMenu()));
+        buttons.put(0, new BackButton(new PracticeSettingsMenu()));
 
         buttons.put(10, new MatchSettingsButton("&b&lClear inventory", Material.CHEST, (short) 0, Arrays.asList(
-                "",
                 "&fClear your inventory",
                 "&fafter every &bkill &fin",
                 "&fa duel.",
                 "",
-                "&fStatus: &4null",
+                " &f● &bStatus: &cNULL",
                 "",
                 "&aClick to toggle!"
         )));
 
         buttons.put(11, new MatchSettingsButton("&b&lToggle Flight", Material.FEATHER, (short) 0, Arrays.asList(
-                "",
                 "&fStart flying upon ",
                 "&fyour opponents &bdeath",
                 "&fin a duel.",
                 "",
-                "&fStatus: &4null",
+                " &f● &bStatus: &cNULL",
                 "",
                 "&aClick to toggle!"
         )));
