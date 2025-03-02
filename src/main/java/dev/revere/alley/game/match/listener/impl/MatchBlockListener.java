@@ -91,7 +91,6 @@ public class MatchBlockListener implements Listener {
         }
     }
 
-
     @EventHandler
     private void onBlockPlace(BlockPlaceEvent event) {
         Player player = event.getPlayer();

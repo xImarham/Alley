@@ -20,9 +20,9 @@ import java.util.UUID;
 @Setter
 public class Party {
     private Player leader;
+    private EnumPartyState state;
     private List<UUID> members;
     private List<UUID> bannedPlayers;
-    private EnumPartyState state;
 
     /**
      * Constructor for the Party class.

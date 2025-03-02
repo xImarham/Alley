@@ -26,7 +26,7 @@ public class GamePlayer {
     private boolean dead;
 
     private List<UUID> players;
-    private List<UUID> alivePlayers = new ArrayList<>();
+    private List<UUID> alivePlayers;
 
     /**
      * Constructor for the GamePlayer class.
@@ -37,6 +37,7 @@ public class GamePlayer {
     public GamePlayer(UUID uuid, String username) {
         this.uuid = uuid;
         this.username = username;
+        this.players = new ArrayList<>();
     }
 
     /**

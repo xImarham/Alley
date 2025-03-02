@@ -34,26 +34,17 @@ public class ProfileData {
     private int rankedWins = 0;
     private int rankedLosses = 0;
 
-    /**
-     * Constructor for the ProfileData class
-     */
     public ProfileData() {
         this.initializeMaps();
         this.feedDataClasses();
         this.initializeDataClasses();
     }
 
-    /**
-     * Initializes the data classes
-     */
     private void initializeDataClasses() {
         this.profileSettingData = new ProfileSettingData();
         this.profileCosmeticData = new ProfileCosmeticData();
     }
 
-    /**
-     * Feeds the data classes with the kits and ffa matches
-     */
     private void feedDataClasses() {
         //Alley.getInstance().getKitRepository().getKits().stream().filter(Kit -> Kit.isSettingEnabled(KitSettingRankedImpl.class)).forEach(kit -> this.rankedKitData.put(kit.getName(), new ProfileRankedKitData()));
         Alley.getInstance().getKitRepository().getKits().forEach(kit -> this.rankedKitData.put(kit.getName(), new ProfileRankedKitData()));
@@ -61,9 +52,6 @@ public class ProfileData {
         Alley.getInstance().getFfaRepository().getMatches().forEach(kit -> this.ffaData.put(kit.getName(), new ProfileFFAData()));
     }
 
-    /**
-     * Initializes the maps
-     */
     private void initializeMaps() {
         this.unrankedKitData = Maps.newHashMap();
         this.rankedKitData = Maps.newHashMap();

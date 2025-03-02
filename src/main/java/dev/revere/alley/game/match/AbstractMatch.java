@@ -46,18 +46,22 @@ import java.util.concurrent.CopyOnWriteArrayList;
 @Getter
 @Setter
 public abstract class AbstractMatch {
-    private Map<BlockState, Location> changedBlocks;
-    private Map<BlockState, Location> brokenBlocks;
-    private Map<BlockState, Location> placedBlocks;
+    private final Arena arena;
+    private final Kit kit;
+    private final Queue queue;
+
     private final List<UUID> spectators;
     private List<Snapshot> snapshots;
+
     private MatchRunnable runnable;
     private EnumMatchState state;
-    private final Queue queue;
-    private final Arena arena;
+
+    //private Map<BlockState, Location> changedBlocks;
+    private Map<BlockState, Location> brokenBlocks;
+    private Map<BlockState, Location> placedBlocks;
+
     private boolean ranked;
     private long startTime;
-    private final Kit kit;
 
     /**
      * Constructor for the AbstractMatch class.
@@ -72,7 +76,7 @@ public abstract class AbstractMatch {
         this.arena = arena;
         this.ranked = ranked;
         this.snapshots = new ArrayList<>();
-        this.changedBlocks = new HashMap<>();
+        //this.changedBlocks = new HashMap<>();
         this.placedBlocks = new HashMap<>();
         this.brokenBlocks = new HashMap<>();
         this.spectators = new CopyOnWriteArrayList<>();

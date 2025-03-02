@@ -29,16 +29,21 @@ import java.util.stream.Collectors;
 @Getter
 @Setter
 public class Profile {
-    private EnumLeaderboardType leaderboardType = EnumLeaderboardType.RANKED;
-    private QueueProfile queueProfile;
-    private AbstractFFAMatch ffaMatch;
-    private ProfileData profileData;
-    private EnumProfileState state;
-    private AbstractMatch match;
     private final UUID uuid;
-    private boolean online;
     private String name;
+
+    private ProfileData profileData;
+    private QueueProfile queueProfile;
+    private EnumProfileState state;
+
+    private EnumLeaderboardType leaderboardType;
+
+    private AbstractFFAMatch ffaMatch;
+    private AbstractMatch match;
+
     private Party party;
+
+    private boolean online;
 
     /**
      * Constructor for the Profile class.

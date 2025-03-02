@@ -27,13 +27,13 @@ import java.util.UUID;
 @Getter
 @Setter
 public class PartyHandler {
-    private final List<PartyRequest> partyRequests;
     private final List<Party> parties;
+    private final List<PartyRequest> partyRequests;
     private String chatFormat;
 
     public PartyHandler() {
-        this.partyRequests = new ArrayList<>();
         this.parties = new ArrayList<>();
+        this.partyRequests = new ArrayList<>();
         this.chatFormat = Alley.getInstance().getConfigService().getConfig("messages.yml").getString("party.chat-format");
     }
 

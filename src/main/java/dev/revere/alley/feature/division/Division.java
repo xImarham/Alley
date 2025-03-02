@@ -16,14 +16,15 @@ import java.util.List;
 @Getter
 @Setter
 public class Division {
+    private final List<DivisionTier> tiers;
     private final String name;
+
     private String displayName;
     private String description;
-    private int durability;
-    private Material icon;
-    private final List<DivisionTier> tiers;
 
-    //private final String permissionReward;
+    private int durability;
+
+    private Material icon;
 
     /**
      * Constructor for the Division class.
@@ -71,7 +72,6 @@ public class Division {
                 return divisionTier;
             }
         }
-
         return null;
     }
 
