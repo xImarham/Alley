@@ -135,14 +135,18 @@ public class PartyHandler {
         Party party = this.getPartyByLeader(leader);
         party.getMembers().forEach(member -> this.setupProfile(Bukkit.getPlayer(member), false));
         party.notifyPartyExcludeLeader("&cThe party has been disbanded.");
-        this.getParties().remove(party);
+        this.parties.remove(party);
 
         Cooldown cooldown = Alley.getInstance().getCooldownRepository().getCooldown(leader.getUniqueId(), EnumCooldownType.PARTY_ANNOUNCE_COOLDOWN);
-        if (cooldown.isActive()) {
-            cooldown.resetCooldown();
+        if (cooldown != null) {
+            if (cooldown.isActive()) {
+                cooldown.resetCooldown();
+            }
         }
 
-        this.setupProfile(leader, false);
+        if (leader.isOnline()) {
+            this.setupProfile(leader, false);
+        }
     }
 
     /**
