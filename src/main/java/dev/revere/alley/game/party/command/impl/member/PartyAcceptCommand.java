@@ -1,14 +1,14 @@
 package dev.revere.alley.game.party.command.impl.member;
 
 import dev.revere.alley.Alley;
-import dev.revere.alley.locale.Locale;
+import dev.revere.alley.api.command.BaseCommand;
+import dev.revere.alley.api.command.CommandArgs;
+import dev.revere.alley.api.command.annotation.Command;
 import dev.revere.alley.game.party.Party;
 import dev.revere.alley.game.party.PartyHandler;
 import dev.revere.alley.game.party.PartyRequest;
+import dev.revere.alley.locale.impl.PartyLocale;
 import dev.revere.alley.util.chat.CC;
-import dev.revere.alley.api.command.BaseCommand;
-import dev.revere.alley.api.command.annotation.Command;
-import dev.revere.alley.api.command.CommandArgs;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -46,7 +46,7 @@ public class PartyAcceptCommand extends BaseCommand {
 
         PartyRequest partyRequest = partyHandler.getRequest(player);
         if (partyRequest == null || !partyRequest.getSender().equals(target)) {
-            player.sendMessage(CC.translate(Locale.NO_PARTY_INVITE.getMessage().replace("{player}", target.getName())));
+            player.sendMessage(CC.translate(PartyLocale.NO_PARTY_INVITE.getMessage().replace("{player}", target.getName())));
             return;
         }
 
@@ -58,6 +58,6 @@ public class PartyAcceptCommand extends BaseCommand {
 
         partyHandler.joinParty(player, target);
         partyHandler.removeRequest(partyRequest);
-        player.sendMessage(CC.translate(Locale.JOINED_PARTY.getMessage().replace("{player}", target.getName())));
+        player.sendMessage(CC.translate(PartyLocale.JOINED_PARTY.getMessage().replace("{player}", target.getName())));
     }
 }

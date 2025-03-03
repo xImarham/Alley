@@ -5,10 +5,10 @@ import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.annotation.Command;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.feature.kit.Kit;
+import dev.revere.alley.locale.impl.KitLocale;
 import dev.revere.alley.util.chat.CC;
-import net.md_5.bungee.api.chat.*;
+import dev.revere.alley.util.chat.ClickableUtil;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * @author Emmy
@@ -29,7 +29,7 @@ public class KitViewCommand extends BaseCommand {
 
         Kit kit = Alley.getInstance().getKitRepository().getKit(args[0]);
         if (kit == null) {
-            player.sendMessage(CC.translate("&cA kit with that name does not exist!"));
+            player.sendMessage(CC.translate(KitLocale.KIT_NOT_FOUND.getMessage()));
             return;
         }
 
@@ -40,23 +40,11 @@ public class KitViewCommand extends BaseCommand {
         player.sendMessage(CC.translate(" &f● &bIcon: &f" + kit.getIcon().name().toLowerCase() + " &7(" + kit.getIconData() + ")"));
         player.sendMessage(CC.translate(" &f● &bDisclaimer: &f" + kit.getDisclaimer()));
         player.sendMessage(CC.translate(" &f● &bDescription: &f" + kit.getDescription()));
+        player.spigot().sendMessage(ClickableUtil.createComponent(
+                        "  &a(Click here to view the kit settings)",
+                        "/kit viewsettings " + kit.getName(),
+                        "&7Click to view the settings of the kit &b" + kit.getName())
+        );
         player.sendMessage("");
-        player.spigot().sendMessage(sendClickable(kit));
-        player.sendMessage("");
-    }
-
-    /**
-     * Sends a clickable message to the player to view the kit settings
-     *
-     * @param kit the kit to view the settings of
-     * @return the clickable message
-     */
-    private @NotNull TextComponent sendClickable(Kit kit) {
-        TextComponent clickableMessage = new TextComponent(CC.translate("  &a(Click here to view the kit settings)"));
-        clickableMessage.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/kit viewsettings " + kit.getName()));
-        String hover = CC.translate("&7Click to view the settings of the kit &b" + kit.getName());
-        BaseComponent[] hoverComponent = new ComponentBuilder(hover).create();
-        clickableMessage.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, hoverComponent));
-        return clickableMessage;
     }
 }

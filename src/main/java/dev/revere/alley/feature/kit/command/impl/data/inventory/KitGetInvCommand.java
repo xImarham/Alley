@@ -2,7 +2,7 @@ package dev.revere.alley.feature.kit.command.impl.data.inventory;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.feature.kit.Kit;
-import dev.revere.alley.locale.Locale;
+import dev.revere.alley.locale.impl.KitLocale;
 import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.annotation.Command;
@@ -30,12 +30,12 @@ public class KitGetInvCommand extends BaseCommand {
         Kit kit = Alley.getInstance().getKitRepository().getKit(kitName);
 
         if (kit == null) {
-            player.sendMessage(CC.translate(Locale.KIT_NOT_FOUND.getMessage()));
+            player.sendMessage(CC.translate(KitLocale.KIT_NOT_FOUND.getMessage()));
             return;
         }
 
         player.getInventory().setContents(kit.getInventory());
         player.getInventory().setArmorContents(kit.getArmor());
-        player.sendMessage(CC.translate(Locale.KIT_INVENTORY_GIVEN.getMessage().replace("{kit-name}", kitName)));
+        player.sendMessage(CC.translate(KitLocale.KIT_INVENTORY_GIVEN.getMessage().replace("{kit-name}", kitName)));
     }
 }

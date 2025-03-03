@@ -2,7 +2,7 @@ package dev.revere.alley.feature.kit.command.impl.data.slot;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.feature.kit.Kit;
-import dev.revere.alley.locale.Locale;
+import dev.revere.alley.locale.impl.KitLocale;
 import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.annotation.Command;
@@ -32,12 +32,12 @@ public class KitSetUnrankedSlotCommand extends BaseCommand {
         Kit kit = Alley.getInstance().getKitRepository().getKit(kitName);
 
         if (kit == null) {
-            player.sendMessage(CC.translate(Locale.KIT_NOT_FOUND.getMessage()));
+            player.sendMessage(CC.translate(KitLocale.KIT_NOT_FOUND.getMessage()));
             return;
         }
 
         kit.setUnrankedslot(slot);
         Alley.getInstance().getKitRepository().saveKit(kit);
-        player.sendMessage(CC.translate(Locale.KIT_UNRANKEDSLOT_SET.getMessage()).replace("{kit-name}", kitName).replace("{slot}", args[1]));
+        player.sendMessage(CC.translate(KitLocale.KIT_UNRANKEDSLOT_SET.getMessage()).replace("{kit-name}", kitName).replace("{slot}", args[1]));
     }
 }

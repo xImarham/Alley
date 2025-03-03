@@ -51,10 +51,10 @@ public class CommandFramework implements CommandExecutor {
 
     public boolean handleCommand(CommandSender sender, org.bukkit.command.Command cmd, String label, String[] args) {
         for (int i = args.length; i >= 0; i--) {
-            StringBuffer buffer = new StringBuffer();
+            StringBuilder buffer = new StringBuilder();
             buffer.append(label.toLowerCase());
             for (int x = 0; x < i; x++) {
-                buffer.append("." + args[x].toLowerCase());
+                buffer.append(".").append(args[x].toLowerCase());
             }
             String cmdLabel = buffer.toString();
             if (commandMap.containsKey(cmdLabel)) {
@@ -121,7 +121,7 @@ public class CommandFramework implements CommandExecutor {
     }
 
     public void registerHelp() {
-        Set<HelpTopic> help = new TreeSet<HelpTopic>(HelpTopicComparator.helpTopicComparatorInstance());
+        Set<HelpTopic> help = new TreeSet<>(HelpTopicComparator.helpTopicComparatorInstance());
         for (String s : commandMap.keySet()) {
             if (!s.contains(".")) {
                 org.bukkit.command.Command cmd = map.getCommand(s);

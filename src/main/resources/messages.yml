@@ -25,17 +25,23 @@ welcome-message:
 
 kit:
   not-found: "&cThere is no kit with that name!"
+  already-exists: "&cA kit with that name already exists!"
   saved: "&aSuccessfully saved the &b{kit-name} &akit!"
   saved-all: "&aSuccessfully saved all kits!"
   created: "&aSuccessfully created a new kit named &b{kit-name}&a!"
   deleted: "&cSuccessfully deleted the kit named &b{kit-name}&c!"
   description-set: "&aSuccessfully set the description of the &b{kit-name} &akit: &r{kit-description}"
+  disclaimer-set: "&aSuccessfully set the disclaimer of the &b{kit-name} &akit: &r{disclaimer}"
+  displayname-set: "&aSuccessfully set the display name of the &b{kit-name} &akit: &r{kit-displayname}"
+  icon-set: "&aSuccessfully set the icon of the &b{kit-name} &akit to &b{icon}&a!"
   inventory-given: "&aSuccessfully retrieved the inventory of the &b{kit-name} &akit!"
   inventory-set: "&aSuccessfully set the inventory of the &b{kit-name} &akit!"
   editorslot-set: "&aSuccessfully set the editor slot of the &b{kit-name} &akit to &b{slot}&a!"
   unrankedslot-set: "&aSuccessfully set the unranked slot of the &b{kit-name} &akit to &b{slot}&a!"
   rankedslot-set: "&aSuccessfully set the ranked slot of the &b{kit-name} &akit to &b{slot}&a!"
   slots-set: "&aSuccessfully set all slots of the &b{kit-name} &akit to &b{slot}&a!"
+  setting-set: "&aSuccessfully set the setting &b{setting-name} &ato &b{enabled} &afor the kit &b{kit-name}&a."
+  cannot-set-in-creative: "&cYou can't set a kit's inventory in creative mode!"
 
 party:
   chat-format: "&7[&bParty&7] &b{player}&7: &f{message}"
@@ -58,23 +64,23 @@ party:
       - "  &f&l● &fMembers: &b{members}"
       - ""
 
-tournament-broadcast:
-  player:
-    joined: "&a{player} has joined the tournament &f(&b{players}&f/&b{maxPlayers}&f)"
-    left: "&c{player} has left the tournament &f(&b{players}&f/&b{maxPlayers}&f)"
-  waiting:
-    clickable-format: " &a[CLICK TO JOIN]"
-    clickable-hover: "&aClick to join the tournament!"
-    message:
-      - ""
-      - "&b&lTOURNAMENT"
-      - " &f• &bHost: &f{host}"
-      - " &f• &bKit: &f{kit}"
-      - " &f• &bPlayers: &f{players}/{maxPlayers}"
-      - " &f• &bWaiting for &b{remaining} &fmore players."
-      - ""
-      - "[clickable]"
-      - ""
+#tournament-broadcast:
+#  player:
+#    joined: "&a{player} has joined the tournament &f(&b{players}&f/&b{maxPlayers}&f)"
+#    left: "&c{player} has left the tournament &f(&b{players}&f/&b{maxPlayers}&f)"
+#  waiting:
+#    clickable-format: " &a[CLICK TO JOIN]"
+#    clickable-hover: "&aClick to join the tournament!"
+#    message:
+#      - ""
+#      - "&b&lTOURNAMENT"
+#      - " &f• &bHost: &f{host}"
+#      - " &f• &bKit: &f{kit}"
+#      - " &f• &bPlayers: &f{players}/{maxPlayers}"
+#      - " &f• &bWaiting for &b{remaining} &fmore players."
+#      - ""
+#      - "[clickable]"
+#      - ""
 
 match:
   started:

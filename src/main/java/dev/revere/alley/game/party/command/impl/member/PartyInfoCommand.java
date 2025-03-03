@@ -1,13 +1,13 @@
 package dev.revere.alley.game.party.command.impl.member;
 
 import dev.revere.alley.Alley;
-import dev.revere.alley.locale.Locale;
+import dev.revere.alley.api.command.BaseCommand;
+import dev.revere.alley.api.command.CommandArgs;
+import dev.revere.alley.api.command.annotation.Command;
 import dev.revere.alley.game.party.Party;
 import dev.revere.alley.game.party.PartyHandler;
+import dev.revere.alley.locale.impl.PartyLocale;
 import dev.revere.alley.util.chat.CC;
-import dev.revere.alley.api.command.BaseCommand;
-import dev.revere.alley.api.command.annotation.Command;
-import dev.revere.alley.api.command.CommandArgs;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
@@ -31,7 +31,7 @@ public class PartyInfoCommand extends BaseCommand {
         Party party = partyHandler.getPartyByMember(player.getUniqueId());
 
         if (party == null) {
-            player.sendMessage(CC.translate(Locale.NOT_IN_PARTY.getMessage()));
+            player.sendMessage(CC.translate(PartyLocale.NOT_IN_PARTY.getMessage()));
             return;
         }
 

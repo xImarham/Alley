@@ -1,12 +1,12 @@
 package dev.revere.alley.profile.settings.command.toggle;
 
 import dev.revere.alley.Alley;
-import dev.revere.alley.locale.Locale;
+import dev.revere.alley.api.command.BaseCommand;
+import dev.revere.alley.api.command.CommandArgs;
+import dev.revere.alley.api.command.annotation.Command;
+import dev.revere.alley.locale.impl.ProfileLocale;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.util.chat.CC;
-import dev.revere.alley.api.command.BaseCommand;
-import dev.revere.alley.api.command.annotation.Command;
-import dev.revere.alley.api.command.CommandArgs;
 import org.bukkit.entity.Player;
 
 /**
@@ -24,6 +24,6 @@ public class ToggleTablistCommand extends BaseCommand {
         Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
         profile.getProfileData().getProfileSettingData().setTablistEnabled(!profile.getProfileData().getProfileSettingData().isTablistEnabled());
 
-        player.sendMessage(CC.translate(Locale.TOGGLE_TABLIST.getMessage().replace("{status}", profile.getProfileData().getProfileSettingData().isTablistEnabled() ? "&aenabled" : "&cdisabled")));
+        player.sendMessage(CC.translate(ProfileLocale.TOGGLE_TABLIST.getMessage().replace("{status}", profile.getProfileData().getProfileSettingData().isTablistEnabled() ? "&aenabled" : "&cdisabled")));
     }
 }

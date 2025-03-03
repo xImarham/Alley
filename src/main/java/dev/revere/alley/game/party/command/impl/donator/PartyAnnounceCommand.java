@@ -2,13 +2,13 @@ package dev.revere.alley.game.party.command.impl.donator;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
-import dev.revere.alley.api.command.annotation.Command;
 import dev.revere.alley.api.command.CommandArgs;
+import dev.revere.alley.api.command.annotation.Command;
 import dev.revere.alley.feature.cooldown.Cooldown;
 import dev.revere.alley.feature.cooldown.CooldownRepository;
 import dev.revere.alley.feature.cooldown.enums.EnumCooldownType;
 import dev.revere.alley.game.party.enums.EnumPartyState;
-import dev.revere.alley.locale.Locale;
+import dev.revere.alley.locale.impl.PartyLocale;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
 import dev.revere.alley.util.chat.CC;
@@ -28,7 +28,7 @@ public class PartyAnnounceCommand extends BaseCommand {
         Player player = command.getPlayer();
         Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
         if (profile.getParty() == null) {
-            player.sendMessage(CC.translate(Locale.NOT_IN_PARTY.getMessage()));
+            player.sendMessage(CC.translate(PartyLocale.NOT_IN_PARTY.getMessage()));
             return;
         }
 

@@ -2,7 +2,7 @@ package dev.revere.alley.feature.kit.command.impl.data;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.feature.kit.Kit;
-import dev.revere.alley.locale.Locale;
+import dev.revere.alley.locale.impl.KitLocale;
 import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.annotation.Command;
@@ -33,12 +33,12 @@ public class KitSetDisplayNameCommand extends BaseCommand {
 
         Kit kit = Alley.getInstance().getKitRepository().getKit(kitName);
         if (kit == null) {
-            player.sendMessage(CC.translate(Locale.KIT_NOT_FOUND.getMessage()));
+            player.sendMessage(CC.translate(KitLocale.KIT_NOT_FOUND.getMessage()));
             return;
         }
 
         kit.setDisplayName(displayName);
         Alley.getInstance().getKitRepository().saveKit(kit);
-        player.sendMessage(CC.translate("&aSuccessfully set the display name &b" + displayName + " &afor the kit &b" + kit.getName() + "&a."));
+        player.sendMessage(CC.translate(KitLocale.KIT_DISPLAYNAME_SET.getMessage()).replace("{kit-name}", kit.getName()).replace("{display-name}", displayName));
     }
 }

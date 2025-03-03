@@ -1,4 +1,4 @@
-package dev.revere.alley.locale;
+package dev.revere.alley.locale.impl;
 
 import lombok.Getter;
 import dev.revere.alley.Alley;
@@ -10,20 +10,23 @@ import dev.revere.alley.util.chat.CC;
  * @date 19/04/2024 - 17:41
  */
 @Getter
-public enum Locale {
-    NO_PERM("messages.yml", "no-permission"),
+public enum ProfileLocale {
+    TOGGLED_PARTY_INVITES("messages.yml", "player-settings.party-invites"),
+    TOGGLED_PARTY_MESSAGES("messages.yml", "player-settings.party-messages"),
+    TOGGLED_SCOREBOARD("messages.yml", "player-settings.scoreboard"),
+    TOGGLE_TABLIST("messages.yml", "player-settings.tablist")
 
     ;
 
     private final String configName, configString;
 
     /**
-     * Constructor for the Locale class.
+     * Constructor for the ProfileLocale class.
      *
      * @param configName   The name of the config.
      * @param configString The string of the config.
      */
-    Locale(String configName, String configString) {
+    ProfileLocale(String configName, String configString) {
         this.configName = configName;
         this.configString = configString;
     }

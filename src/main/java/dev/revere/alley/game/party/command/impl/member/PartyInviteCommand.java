@@ -2,10 +2,10 @@ package dev.revere.alley.game.party.command.impl.member;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
-import dev.revere.alley.api.command.annotation.Command;
 import dev.revere.alley.api.command.CommandArgs;
+import dev.revere.alley.api.command.annotation.Command;
 import dev.revere.alley.game.party.Party;
-import dev.revere.alley.locale.Locale;
+import dev.revere.alley.locale.impl.PartyLocale;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.Bukkit;
@@ -43,13 +43,13 @@ public class PartyInviteCommand extends BaseCommand {
 
         Party party = Alley.getInstance().getPartyHandler().getPartyByMember(player.getUniqueId());
         if (party == null) {
-            player.sendMessage(CC.translate(Locale.NOT_IN_PARTY.getMessage()));
+            player.sendMessage(CC.translate(PartyLocale.NOT_IN_PARTY.getMessage()));
             return;
         }
 
         Profile targetProfile = Alley.getInstance().getProfileRepository().getProfile(targetPlayer.getUniqueId());
         if (!targetProfile.getProfileData().getProfileSettingData().isPartyInvitesEnabled()) {
-            player.sendMessage(CC.translate(Locale.PLAYER_DISABLED_PARTY_INVITES.getMessage().replace("{player}", target)));
+            player.sendMessage(CC.translate(PartyLocale.PLAYER_DISABLED_PARTY_INVITES.getMessage().replace("{player}", target)));
             return;
         }
 

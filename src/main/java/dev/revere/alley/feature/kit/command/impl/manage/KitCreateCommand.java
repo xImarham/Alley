@@ -6,7 +6,7 @@ import dev.revere.alley.api.command.annotation.Command;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.feature.kit.Kit;
 import dev.revere.alley.feature.kit.KitRepository;
-import dev.revere.alley.locale.Locale;
+import dev.revere.alley.locale.impl.KitLocale;
 import dev.revere.alley.util.ActionBarUtil;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.Material;
@@ -34,7 +34,7 @@ public class KitCreateCommand extends BaseCommand {
 
         KitRepository kitRepository = Alley.getInstance().getKitRepository();
         if (kitRepository.getKit(kitName) != null) {
-            player.sendMessage(CC.translate("&cA kit with that name already exists!"));
+            player.sendMessage(CC.translate(KitLocale.KIT_ALREADY_EXISTS.getMessage()));
             return;
         }
 
@@ -71,9 +71,9 @@ public class KitCreateCommand extends BaseCommand {
 
         kitRepository.createKit(kitName, inventory, armor, icon, slot);
         Alley.getInstance().getProfileRepository().loadProfiles(); // to update the kits in the database
-        ActionBarUtil.sendMessage(player, Locale.KIT_CREATED.getMessage().replace("{kit-name}", kitName), 5);
+        ActionBarUtil.sendMessage(player, KitLocale.KIT_CREATED.getMessage().replace("{kit-name}", kitName), 5);
 
-        player.sendMessage(CC.translate(Locale.KIT_CREATED.getMessage().replace("{kit-name}", kitName)));
+        player.sendMessage(CC.translate(KitLocale.KIT_CREATED.getMessage().replace("{kit-name}", kitName)));
         player.sendMessage(CC.translate("&7Do not forget to reload the queues by using &c&l/queue reload&7."));
     }
 }

@@ -5,6 +5,7 @@ import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.annotation.Command;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.feature.kit.Kit;
+import dev.revere.alley.locale.impl.KitLocale;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.command.CommandSender;
 
@@ -27,7 +28,7 @@ public class KitViewSettingsCommand extends BaseCommand {
 
         Kit kit = Alley.getInstance().getKitRepository().getKit(args[0]);
         if (kit == null) {
-            sender.sendMessage(CC.translate("&cA kit with that name does not exist!"));
+            sender.sendMessage(CC.translate(KitLocale.KIT_NOT_FOUND.getMessage()));
             return;
         }
 

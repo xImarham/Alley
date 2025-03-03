@@ -2,6 +2,7 @@ package dev.revere.alley.feature.kit.command.impl.settings;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.feature.kit.Kit;
+import dev.revere.alley.locale.impl.KitLocale;
 import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.annotation.Command;
@@ -27,7 +28,7 @@ public class KitSetSettingCommand extends BaseCommand {
 
         Kit kit = Alley.getInstance().getKitRepository().getKit(args[0]);
         if (kit == null) {
-            player.sendMessage(CC.translate("&cA kit with that name does not exist."));
+            player.sendMessage(CC.translate(KitLocale.KIT_NOT_FOUND.getMessage()));
             return;
         }
 
@@ -41,6 +42,6 @@ public class KitSetSettingCommand extends BaseCommand {
 
         kit.getKitSettings().stream().filter(setting -> setting.getName().equalsIgnoreCase(settingName)).findFirst().ifPresent(setting -> setting.setEnabled(enabled));
         Alley.getInstance().getKitRepository().saveKit(kit);
-        player.sendMessage(CC.translate("&aSuccessfully set the setting &b" + settingName + " &ato &b" + enabled + " &afor the kit &b" + kit.getName() + "&a."));
+        player.sendMessage(CC.translate(KitLocale.KIT_SETTING_SET.getMessage()).replace("{setting-name}", settingName).replace("{enabled}", String.valueOf(enabled)).replace("{kit-name}", kit.getName()));
     }
 }

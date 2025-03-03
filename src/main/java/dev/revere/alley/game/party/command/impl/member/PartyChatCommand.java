@@ -2,9 +2,9 @@ package dev.revere.alley.game.party.command.impl.member;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
-import dev.revere.alley.api.command.annotation.Command;
 import dev.revere.alley.api.command.CommandArgs;
-import dev.revere.alley.locale.Locale;
+import dev.revere.alley.api.command.annotation.Command;
+import dev.revere.alley.locale.impl.PartyLocale;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumChatChannel;
 import dev.revere.alley.util.chat.CC;
@@ -40,12 +40,12 @@ public class PartyChatCommand extends BaseCommand {
         }
 
         if (profile.getParty() == null) {
-            player.sendMessage(CC.translate(Locale.NOT_IN_PARTY.getMessage()));
+            player.sendMessage(CC.translate(PartyLocale.NOT_IN_PARTY.getMessage()));
             return;
         }
 
         if (!profile.getProfileData().getProfileSettingData().isPartyMessagesEnabled()) {
-            player.sendMessage(CC.translate(Locale.DISABLED_PARTY_CHAT.getMessage()));
+            player.sendMessage(CC.translate(PartyLocale.DISABLED_PARTY_CHAT.getMessage()));
             return;
         }
 

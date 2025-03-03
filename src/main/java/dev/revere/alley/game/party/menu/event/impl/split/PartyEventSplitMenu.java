@@ -4,19 +4,19 @@ import dev.revere.alley.Alley;
 import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.api.menu.Menu;
 import dev.revere.alley.feature.arena.Arena;
+import dev.revere.alley.feature.kit.Kit;
 import dev.revere.alley.feature.kit.settings.impl.KitSettingBattleRushImpl;
+import dev.revere.alley.feature.kit.settings.impl.KitSettingLivesImpl;
+import dev.revere.alley.feature.queue.Queue;
 import dev.revere.alley.game.match.AbstractMatch;
 import dev.revere.alley.game.match.impl.MatchLivesRegularImpl;
 import dev.revere.alley.game.match.impl.MatchRegularImpl;
 import dev.revere.alley.game.match.impl.MatchRoundsRegularImpl;
-import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
+import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.game.match.player.participant.TeamGameParticipant;
-import dev.revere.alley.feature.kit.Kit;
-import dev.revere.alley.feature.kit.settings.impl.KitSettingLivesImpl;
-import dev.revere.alley.locale.Locale;
 import dev.revere.alley.game.party.Party;
-import dev.revere.alley.feature.queue.Queue;
+import dev.revere.alley.locale.impl.PartyLocale;
 import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.util.data.item.ItemBuilder;
 import lombok.AllArgsConstructor;
@@ -91,7 +91,7 @@ public class PartyEventSplitMenu extends Menu {
             Party party = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId()).getParty();
             if (party == null) {
                 player.closeInventory();
-                player.sendMessage(CC.translate(Locale.NOT_IN_PARTY.getMessage()));
+                player.sendMessage(CC.translate(PartyLocale.NOT_IN_PARTY.getMessage()));
                 return;
             }
 

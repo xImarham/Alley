@@ -1,21 +1,24 @@
 package dev.revere.alley.game.party.menu.event;
 
 import dev.revere.alley.Alley;
-import dev.revere.alley.locale.Locale;
-import dev.revere.alley.game.party.Party;
-import dev.revere.alley.util.chat.CC;
-import lombok.AllArgsConstructor;
 import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.api.menu.Menu;
+import dev.revere.alley.game.party.Party;
 import dev.revere.alley.game.party.menu.event.impl.ffa.PartyEventFFAMenu;
 import dev.revere.alley.game.party.menu.event.impl.split.PartyEventSplitMenu;
+import dev.revere.alley.locale.impl.PartyLocale;
+import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.util.data.item.ItemBuilder;
+import lombok.AllArgsConstructor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author Emmy
@@ -100,12 +103,12 @@ public class PartyEventMenu extends Menu {
 
             Party party = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId()).getParty();
             if (party == null) {
-                player.sendMessage(CC.translate(Locale.NOT_IN_PARTY.getMessage()));
+                player.sendMessage(CC.translate(PartyLocale.NOT_IN_PARTY.getMessage()));
                 return;
             }
 
             if (party.getLeader() != player) {
-                player.sendMessage(CC.translate(Locale.NOT_LEADER.getMessage()));
+                player.sendMessage(CC.translate(PartyLocale.NOT_LEADER.getMessage()));
                 return;
             }
 

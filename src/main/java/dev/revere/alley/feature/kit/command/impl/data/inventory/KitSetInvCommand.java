@@ -2,7 +2,7 @@ package dev.revere.alley.feature.kit.command.impl.data.inventory;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.feature.kit.Kit;
-import dev.revere.alley.locale.Locale;
+import dev.revere.alley.locale.impl.KitLocale;
 import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.annotation.Command;
@@ -29,18 +29,18 @@ public class KitSetInvCommand extends BaseCommand {
 
         Kit kit = Alley.getInstance().getKitRepository().getKit(args[0]);
         if (kit == null) {
-            player.sendMessage(CC.translate(Locale.KIT_NOT_FOUND.getMessage()));
+            player.sendMessage(CC.translate(KitLocale.KIT_NOT_FOUND.getMessage()));
             return;
         }
 
         if (player.getGameMode() == GameMode.CREATIVE) {
-            player.sendMessage(CC.translate("&cYou can't set a kit's inventory in creative mode!"));
+            player.sendMessage(CC.translate(KitLocale.KIT_CANNOT_SET_IN_CREATIVE.getMessage()));
             return;
         }
 
         kit.setInventory(player.getInventory().getContents());
         kit.setArmor(player.getInventory().getArmorContents());
         Alley.getInstance().getKitRepository().saveKit(kit);
-        player.sendMessage(CC.translate(Locale.KIT_INVENTORY_SET.getMessage().replace("{kit-name}", kit.getName())));
+        player.sendMessage(CC.translate(KitLocale.KIT_INVENTORY_SET.getMessage().replace("{kit-name}", kit.getName())));
     }
 }

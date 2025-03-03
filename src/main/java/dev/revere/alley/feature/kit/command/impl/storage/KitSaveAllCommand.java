@@ -1,7 +1,7 @@
 package dev.revere.alley.feature.kit.command.impl.storage;
 
 import dev.revere.alley.Alley;
-import dev.revere.alley.locale.Locale;
+import dev.revere.alley.locale.impl.KitLocale;
 import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.annotation.Command;
@@ -20,6 +20,6 @@ public class KitSaveAllCommand extends BaseCommand {
         Player player = command.getPlayer();
 
         Alley.getInstance().getKitRepository().saveKits();
-        player.sendMessage(CC.translate(Locale.KIT_SAVED_ALL.getMessage()));
+        player.sendMessage(CC.translate(KitLocale.KIT_SAVED_ALL.getMessage()));
     }
 }

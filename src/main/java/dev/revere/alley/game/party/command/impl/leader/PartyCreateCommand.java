@@ -1,13 +1,13 @@
 package dev.revere.alley.game.party.command.impl.leader;
 
 import dev.revere.alley.Alley;
-import dev.revere.alley.locale.Locale;
+import dev.revere.alley.api.command.BaseCommand;
+import dev.revere.alley.api.command.CommandArgs;
+import dev.revere.alley.api.command.annotation.Command;
 import dev.revere.alley.game.party.PartyHandler;
+import dev.revere.alley.locale.impl.PartyLocale;
 import dev.revere.alley.profile.enums.EnumProfileState;
 import dev.revere.alley.util.chat.CC;
-import dev.revere.alley.api.command.BaseCommand;
-import dev.revere.alley.api.command.annotation.Command;
-import dev.revere.alley.api.command.CommandArgs;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
@@ -32,16 +32,16 @@ public class PartyCreateCommand extends BaseCommand {
         }
 
         if (partyHandler.getPartyByLeader(player) != null) {
-            player.sendMessage(CC.translate(Locale.ALREADY_IN_PARTY.getMessage()));
+            player.sendMessage(CC.translate(PartyLocale.ALREADY_IN_PARTY.getMessage()));
             return;
         }
 
         if (partyHandler.getPartyByMember(playerUUID) != null) {
-            player.sendMessage(CC.translate(Locale.ALREADY_IN_PARTY.getMessage()));
+            player.sendMessage(CC.translate(PartyLocale.ALREADY_IN_PARTY.getMessage()));
             return;
         }
 
         partyHandler.createParty(player);
-        player.sendMessage(CC.translate(Locale.PARTY_CREATED.getMessage()));
+        player.sendMessage(CC.translate(PartyLocale.PARTY_CREATED.getMessage()));
     }
 }
