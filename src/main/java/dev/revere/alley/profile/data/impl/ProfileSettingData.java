@@ -18,6 +18,7 @@ public class ProfileSettingData {
     private boolean partyInvitesEnabled;
     private boolean scoreboardEnabled;
     private boolean tablistEnabled;
+    private boolean showScoreboardLines;
     private String chatChannel;
     private String time;
 
@@ -29,6 +30,7 @@ public class ProfileSettingData {
         this.partyInvitesEnabled = true;
         this.scoreboardEnabled = true;
         this.tablistEnabled = true;
+        this.showScoreboardLines = true;
         this.chatChannel = EnumChatChannel.GLOBAL.toString();
         this.time = EnumWorldTime.DEFAULT.getName();
     }

@@ -122,6 +122,7 @@ player-settings:
   party-invites: "&aYou've {status} &aparty invites."
   party-messages: "&aYou've {status} &aparty messages."
   scoreboard: "&aYou've {status} &athe scoreboard."
+  scoreboard-lines: "&aYou've {status} &athe scoreboard lines."
   tablist: "&aYou've {status} &athe tablist."
 
 rename-item:

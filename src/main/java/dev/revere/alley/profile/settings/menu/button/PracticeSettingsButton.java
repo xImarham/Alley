@@ -87,6 +87,9 @@ public class PracticeSettingsButton extends Button {
             case BOOK:
                 new MatchSettingsMenu().openMenu(player);
                 break;
+            case STRING:
+                player.performCommand("togglescoreboardlines");
+                break;
             case ITEM_FRAME:
                 player.performCommand("toggletablist");
                 break;

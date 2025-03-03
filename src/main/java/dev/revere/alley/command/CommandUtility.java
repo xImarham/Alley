@@ -40,10 +40,7 @@ import dev.revere.alley.profile.command.MatchHistoryCommand;
 import dev.revere.alley.profile.command.admin.ResetStatsCommand;
 import dev.revere.alley.profile.settings.command.MatchSettingsCommand;
 import dev.revere.alley.profile.settings.command.PracticeSettingsCommand;
-import dev.revere.alley.profile.settings.command.toggle.TogglePartyInvitesCommand;
-import dev.revere.alley.profile.settings.command.toggle.TogglePartyMessagesCommand;
-import dev.revere.alley.profile.settings.command.toggle.ToggleScoreboardCommand;
-import dev.revere.alley.profile.settings.command.toggle.ToggleTablistCommand;
+import dev.revere.alley.profile.settings.command.toggle.*;
 import dev.revere.alley.profile.settings.command.worldtime.*;
 import dev.revere.alley.profile.shop.command.ShopCommand;
 import dev.revere.alley.profile.shop.command.admin.SetCoinsCommand;
@@ -112,6 +109,7 @@ public class CommandUtility {
             new TogglePartyInvitesCommand();
             new TogglePartyMessagesCommand();
             new ToggleScoreboardCommand();
+            new ToggleScoreboardLinesCommand();
             new ToggleTablistCommand();
             new ToggleWorldTimeCommand();
 

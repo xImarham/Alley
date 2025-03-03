@@ -94,13 +94,23 @@ public class PracticeSettingsMenu extends Menu {
                 "&aClick to view!"
         )));
 
-        addBorder(buttons, (byte) 15, 3);
+        buttons.put(19, new PracticeSettingsButton("&b&lShow Scoreboard Lines", Material.STRING, 0, Arrays.asList(
+                "&fDecide whether you should",
+                "&fsee the &bsidebar lines",
+                "&for not.",
+                "",
+                " &f● &bStatus: &7" + (profile.getProfileData().getProfileSettingData().isShowScoreboardLines() ? "&aEnabled" : "&cDisabled"),
+                "",
+                "&aClick to toggle!"
+        )));
+
+        this.addBorder(buttons, (byte) 15, 4);
 
         return buttons;
     }
 
     @Override
     public int getSize() {
-        return 9 * 3;
+        return 9 * 4;
     }
 }
