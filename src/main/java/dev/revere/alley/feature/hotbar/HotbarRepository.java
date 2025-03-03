@@ -69,6 +69,8 @@ public class HotbarRepository {
             itemStack.setDurability((short) item.getHotbarItems().getDurability());
             player.getInventory().setItem(item.getSlot(), itemStack);
         }
+
+        player.updateInventory();
     }
 
     /**
