@@ -4,7 +4,7 @@ import dev.revere.alley.Alley;
 import dev.revere.alley.feature.cosmetic.interfaces.ICosmeticRepository;
 import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.api.command.BaseCommand;
-import dev.revere.alley.api.command.annotation.Command;
+import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.CommandArgs;
 import org.bukkit.entity.Player;
 
@@ -16,7 +16,7 @@ import java.util.Map;
  * @date 6/1/2024
  */
 public class CosmeticListCommand extends BaseCommand {
-    @Command(name = "cosmetic.list", permission = "alley.admin")
+    @CommandData(name = "cosmetic.list", permission = "alley.admin")
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();

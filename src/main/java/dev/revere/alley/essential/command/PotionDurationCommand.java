@@ -1,7 +1,7 @@
 package dev.revere.alley.essential.command;
 
 import dev.revere.alley.api.command.BaseCommand;
-import dev.revere.alley.api.command.annotation.Command;
+import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.util.PotionUtil;
 import dev.revere.alley.util.chat.CC;
@@ -18,7 +18,7 @@ import org.bukkit.potion.PotionEffectType;
  * @date 03/11/2024 - 20:28
  */
 public class PotionDurationCommand extends BaseCommand {
-    @Command(name = "potionduration", permission = "alley.command.potionduration")
+    @CommandData(name = "potionduration", permission = "alley.command.potionduration")
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();

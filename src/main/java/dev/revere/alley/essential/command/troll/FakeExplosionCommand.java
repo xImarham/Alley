@@ -1,7 +1,7 @@
 package dev.revere.alley.essential.command.troll;
 
 import dev.revere.alley.api.command.BaseCommand;
-import dev.revere.alley.api.command.annotation.Command;
+import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.Bukkit;
@@ -14,7 +14,7 @@ import org.bukkit.entity.Player;
  */
 public class FakeExplosionCommand extends BaseCommand {
     @Override
-    @Command(name = "fakeexplosion", permission = "delta.command.fakeexplosion", usage = "fakeexplosion", description = "Fake an explosion")
+    @CommandData(name = "fakeexplosion", permission = "delta.command.fakeexplosion", usage = "fakeexplosion", description = "Fake an explosion")
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
         String[] args = command.getArgs();

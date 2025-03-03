@@ -2,7 +2,7 @@ package dev.revere.alley.feature.cosmetic.command.impl.player;
 
 import dev.revere.alley.feature.cosmetic.menu.CosmeticsMenu;
 import dev.revere.alley.api.command.BaseCommand;
-import dev.revere.alley.api.command.annotation.Command;
+import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.CommandArgs;
 import org.bukkit.entity.Player;
 
@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
  * @date 6/1/2024
  */
 public class CosmeticsCommand extends BaseCommand {
-    @Command(name = "cosmetics")
+    @CommandData(name = "cosmetics")
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();

@@ -3,8 +3,8 @@ package dev.revere.alley.feature.division.command.impl.data;
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
-import dev.revere.alley.api.command.annotation.Command;
-import dev.revere.alley.api.command.annotation.Completer;
+import dev.revere.alley.api.command.annotation.CommandData;
+import dev.revere.alley.api.command.annotation.CompleterData;
 import dev.revere.alley.feature.division.Division;
 import dev.revere.alley.feature.division.DivisionRepository;
 import dev.revere.alley.util.chat.CC;
@@ -20,7 +20,7 @@ import java.util.List;
  */
 public class DivisionSetWinsCommand extends BaseCommand {
 
-    @Completer(name = "division.setwins")
+    @CompleterData(name = "division.setwins")
     public List<String> DivisionSetWinsCompleter(CommandArgs command) {
         List<String> completion = new ArrayList<>();
         if (command.getArgs().length == 1 && command.getPlayer().hasPermission("alley.admin")) {
@@ -35,7 +35,7 @@ public class DivisionSetWinsCommand extends BaseCommand {
         return completion;
     }
 
-    @Command(name = "division.setwins", permission = "alley.admin", usage = "division setwins <name> <tier> <wins>")
+    @CommandData(name = "division.setwins", permission = "alley.admin", usage = "division setwins <name> <tier> <wins>")
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();

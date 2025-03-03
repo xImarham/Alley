@@ -2,7 +2,7 @@ package dev.revere.alley.game.party.command.impl.external;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
-import dev.revere.alley.api.command.annotation.Command;
+import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.game.party.Party;
 import dev.revere.alley.util.chat.CC;
@@ -16,7 +16,7 @@ import java.util.Arrays;
  * @since 23/01/2025
  */
 public class PartyLookupCommand extends BaseCommand {
-    @Command(name = "party.lookup", aliases = {"pl"})
+    @CommandData(name = "party.lookup", aliases = {"pl"})
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();

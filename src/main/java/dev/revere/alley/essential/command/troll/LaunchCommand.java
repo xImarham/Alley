@@ -1,7 +1,7 @@
 package dev.revere.alley.essential.command.troll;
 
 import dev.revere.alley.api.command.BaseCommand;
-import dev.revere.alley.api.command.annotation.Command;
+import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.entity.Player;
@@ -13,7 +13,7 @@ import org.bukkit.util.Vector;
  * @date 6/19/2024
  */
 public class LaunchCommand extends BaseCommand {
-    @Command(name = "launch", permission = "delta.troll.launch", description = "Launch a player", usage = "/launch <player> | all")
+    @CommandData(name = "launch", permission = "delta.troll.launch", description = "Launch a player", usage = "/launch <player> | all")
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();

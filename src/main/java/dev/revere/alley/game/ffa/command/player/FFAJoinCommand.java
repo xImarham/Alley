@@ -4,7 +4,7 @@ import dev.revere.alley.Alley;
 import dev.revere.alley.game.ffa.FFARepository;
 import dev.revere.alley.feature.kit.Kit;
 import dev.revere.alley.api.command.BaseCommand;
-import dev.revere.alley.api.command.annotation.Command;
+import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.util.chat.CC;
@@ -16,7 +16,7 @@ import org.bukkit.entity.Player;
  * @date 5/27/2024
  */
 public class FFAJoinCommand extends BaseCommand {
-    @Command(name = "ffa.join")
+    @CommandData(name = "ffa.join")
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();

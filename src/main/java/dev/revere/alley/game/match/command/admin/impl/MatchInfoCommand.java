@@ -2,7 +2,7 @@ package dev.revere.alley.game.match.command.admin.impl;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
-import dev.revere.alley.api.command.annotation.Command;
+import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.util.chat.CC;
@@ -16,7 +16,7 @@ import org.bukkit.entity.Player;
  * @date 15/09/2024 - 11:39
  */
 public class MatchInfoCommand extends BaseCommand {
-    @Command(name = "match.info", permission = "alley.command.match.info", inGameOnly = false)
+    @CommandData(name = "match.info", permission = "alley.command.match.info", inGameOnly = false)
     @Override
     public void onCommand(CommandArgs command) {
         CommandSender sender = command.getSender();

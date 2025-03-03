@@ -1,7 +1,7 @@
 package dev.revere.alley.feature.queue.command.admin;
 
 import dev.revere.alley.api.command.BaseCommand;
-import dev.revere.alley.api.command.annotation.Command;
+import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.feature.queue.command.admin.impl.QueueForceCommand;
 import dev.revere.alley.feature.queue.command.admin.impl.QueueReloadCommand;
@@ -20,7 +20,7 @@ public class QueueCommand extends BaseCommand {
         new QueueReloadCommand();
     }
 
-    @Command(name = "queue", permission = "alley.admin", inGameOnly = false)
+    @CommandData(name = "queue", permission = "alley.admin", inGameOnly = false)
     @Override
     public void onCommand(CommandArgs command) {
         CommandSender sender = command.getSender();

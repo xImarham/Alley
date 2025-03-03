@@ -1,7 +1,7 @@
 package dev.revere.alley.profile.stats.command;
 
 import dev.revere.alley.api.command.BaseCommand;
-import dev.revere.alley.api.command.annotation.Command;
+import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.profile.stats.menu.StatisticsMenu;
 import dev.revere.alley.util.PlayerUtil;
@@ -16,7 +16,7 @@ import org.bukkit.entity.Player;
  * @date 17/11/2024 - 12:07
  */
 public class StatsCommand extends BaseCommand {
-    @Command(name = "stats", aliases = {"statistics"})
+    @CommandData(name = "stats", aliases = {"statistics"})
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();

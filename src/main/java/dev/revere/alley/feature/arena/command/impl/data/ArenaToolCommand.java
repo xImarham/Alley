@@ -3,7 +3,7 @@ package dev.revere.alley.feature.arena.command.impl.data;
 import dev.revere.alley.feature.arena.selection.ArenaSelection;
 import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.api.command.BaseCommand;
-import dev.revere.alley.api.command.annotation.Command;
+import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.CommandArgs;
 import org.bukkit.entity.Player;
 
@@ -14,7 +14,7 @@ import org.bukkit.entity.Player;
  */
 public class ArenaToolCommand extends BaseCommand {
 
-    @Command(name = "arena.tool", aliases = "arena.wand", permission = "alley.admin")
+    @CommandData(name = "arena.tool", aliases = "arena.wand", permission = "alley.admin")
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();

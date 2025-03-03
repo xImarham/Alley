@@ -1,15 +1,12 @@
 package dev.revere.alley.api.command;
 
 import org.apache.commons.lang.Validate;
-import org.bukkit.command.CommandException;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabCompleter;
+import org.bukkit.command.*;
 import org.bukkit.plugin.Plugin;
 
 import java.util.List;
 
-public class BukkitCommand extends org.bukkit.command.Command {
+public class BukkitCommand extends Command {
     private final Plugin plugin;
     private final CommandExecutor executor;
     protected BukkitCompleter completer;

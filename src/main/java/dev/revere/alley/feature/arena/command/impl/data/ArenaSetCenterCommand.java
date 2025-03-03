@@ -1,11 +1,11 @@
 package dev.revere.alley.feature.arena.command.impl.data;
 
 import dev.revere.alley.Alley;
-import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.api.command.BaseCommand;
-import dev.revere.alley.api.command.annotation.Command;
 import dev.revere.alley.api.command.CommandArgs;
-import dev.revere.alley.api.command.annotation.Completer;
+import dev.revere.alley.api.command.annotation.CommandData;
+import dev.revere.alley.api.command.annotation.CompleterData;
+import dev.revere.alley.util.chat.CC;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -18,7 +18,7 @@ import java.util.List;
  */
 public class ArenaSetCenterCommand extends BaseCommand {
 
-    @Completer(name = "arena.setcenter")
+    @CompleterData(name = "arena.setcenter")
     public List<String> arenaSetCenterCompleter(CommandArgs command) {
         List<String> completion = new ArrayList<>();
 
@@ -30,7 +30,7 @@ public class ArenaSetCenterCommand extends BaseCommand {
     }
 
 
-    @Command(name = "arena.setcenter", permission = "alley.admin")
+    @CommandData(name = "arena.setcenter", permission = "alley.admin")
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();

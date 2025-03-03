@@ -2,7 +2,7 @@ package dev.revere.alley.profile.settings.command;
 
 import dev.revere.alley.profile.settings.menu.MatchSettingsMenu;
 import dev.revere.alley.api.command.BaseCommand;
-import dev.revere.alley.api.command.annotation.Command;
+import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.CommandArgs;
 import org.bukkit.entity.Player;
 
@@ -14,7 +14,7 @@ import org.bukkit.entity.Player;
 
 public class MatchSettingsCommand extends BaseCommand {
     @Override
-    @Command(name = "matchsettings")
+    @CommandData(name = "matchsettings")
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
 

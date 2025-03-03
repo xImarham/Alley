@@ -4,7 +4,7 @@ import dev.revere.alley.Alley;
 import dev.revere.alley.locale.impl.KitLocale;
 import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.api.command.BaseCommand;
-import dev.revere.alley.api.command.annotation.Command;
+import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.CommandArgs;
 import org.bukkit.entity.Player;
 
@@ -14,7 +14,7 @@ import org.bukkit.entity.Player;
  * @date 23/05/2024 - 01:18
  */
 public class KitSaveAllCommand extends BaseCommand {
-    @Command(name = "kit.saveall", permission = "alley.admin")
+    @CommandData(name = "kit.saveall", permission = "alley.admin")
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();

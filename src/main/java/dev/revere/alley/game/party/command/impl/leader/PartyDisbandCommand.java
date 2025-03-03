@@ -3,7 +3,7 @@ package dev.revere.alley.game.party.command.impl.leader;
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
-import dev.revere.alley.api.command.annotation.Command;
+import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.game.party.PartyHandler;
 import dev.revere.alley.locale.impl.PartyLocale;
 import dev.revere.alley.profile.Profile;
@@ -18,7 +18,7 @@ import org.bukkit.entity.Player;
  */
 public class PartyDisbandCommand extends BaseCommand {
     @Override
-    @Command(name = "party.disband", aliases = {"p.disband"})
+    @CommandData(name = "party.disband", aliases = {"p.disband"})
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
         Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());

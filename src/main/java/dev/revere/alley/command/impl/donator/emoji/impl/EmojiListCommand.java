@@ -1,7 +1,7 @@
 package dev.revere.alley.command.impl.donator.emoji.impl;
 
 import dev.revere.alley.api.command.BaseCommand;
-import dev.revere.alley.api.command.annotation.Command;
+import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.essential.chat.enums.EnumEmojiType;
 import dev.revere.alley.util.chat.CC;
@@ -15,7 +15,7 @@ import org.bukkit.entity.Player;
  * @date 22/01/2025 - 21:52
  */
 public class EmojiListCommand extends BaseCommand {
-    @Command(name = "emoji.list", aliases = "el", permission = "alley.donator.chat.symbol", usage = "/emoji list", description = "lists all available emojis usable in chat")
+    @CommandData(name = "emoji.list", aliases = "el", permission = "alley.donator.chat.symbol", usage = "/emoji list", description = "lists all available emojis usable in chat")
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();

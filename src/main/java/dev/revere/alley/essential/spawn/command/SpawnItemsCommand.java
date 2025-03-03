@@ -4,7 +4,7 @@ import dev.revere.alley.Alley;
 import dev.revere.alley.feature.hotbar.enums.HotbarType;
 import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.api.command.BaseCommand;
-import dev.revere.alley.api.command.annotation.Command;
+import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.CommandArgs;
 import org.bukkit.entity.Player;
 
@@ -15,7 +15,7 @@ import org.bukkit.entity.Player;
  */
 public class SpawnItemsCommand extends BaseCommand {
     @Override
-    @Command(name = "spawnitems", aliases = {"lobbyitems"}, permission = "alley.admin")
+    @CommandData(name = "spawnitems", aliases = {"lobbyitems"}, permission = "alley.admin")
     public void onCommand(CommandArgs args) {
         Player player = args.getPlayer();
 

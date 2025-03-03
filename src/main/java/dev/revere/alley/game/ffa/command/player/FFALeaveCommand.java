@@ -5,7 +5,7 @@ import dev.revere.alley.feature.combat.CombatService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.api.command.BaseCommand;
-import dev.revere.alley.api.command.annotation.Command;
+import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.CommandArgs;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -16,7 +16,7 @@ import org.bukkit.entity.Player;
  * @date 5/27/2024
  */
 public class FFALeaveCommand extends BaseCommand {
-    @Command(name = "ffa.leave", aliases = "leaveffa")
+    @CommandData(name = "ffa.leave", aliases = "leaveffa")
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();

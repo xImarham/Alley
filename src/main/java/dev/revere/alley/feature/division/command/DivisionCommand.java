@@ -12,7 +12,7 @@ import dev.revere.alley.feature.division.command.impl.player.DivisionsCommand;
 import dev.revere.alley.feature.division.menu.DivisionsMenu;
 import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.api.command.BaseCommand;
-import dev.revere.alley.api.command.annotation.Command;
+import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.CommandArgs;
 import org.bukkit.entity.Player;
 
@@ -35,7 +35,7 @@ public class DivisionCommand extends BaseCommand {
         new DivisionSetDescriptionCommand();
     }
 
-    @Command(name = "division")
+    @CommandData(name = "division")
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();

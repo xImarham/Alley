@@ -1,6 +1,6 @@
 package dev.revere.alley.feature.kit.command;
 
-import dev.revere.alley.api.command.annotation.Completer;
+import dev.revere.alley.api.command.annotation.CompleterData;
 import dev.revere.alley.feature.kit.command.impl.data.KitSetDescriptionCommand;
 import dev.revere.alley.feature.kit.command.impl.data.KitSetDisclaimerCommand;
 import dev.revere.alley.feature.kit.command.impl.data.KitSetDisplayNameCommand;
@@ -18,7 +18,7 @@ import dev.revere.alley.feature.kit.command.impl.storage.KitSaveAllCommand;
 import dev.revere.alley.feature.kit.command.impl.storage.KitSaveCommand;
 import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.api.command.BaseCommand;
-import dev.revere.alley.api.command.annotation.Command;
+import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.util.chat.ClickableUtil;
 import org.bukkit.command.CommandSender;
@@ -56,7 +56,7 @@ public class KitCommand extends BaseCommand {
         new KitViewSettingsCommand();
     }
 
-    @Completer(name = "kit")
+    @CompleterData(name = "kit")
     public List<String> kitCompleter(CommandArgs command) {
         List<String> completion = new ArrayList<>();
         if (command.getArgs().length == 1 && command.getPlayer().hasPermission("alley.admin")) {
@@ -84,7 +84,7 @@ public class KitCommand extends BaseCommand {
         return completion;
     }
 
-    @Command(name = "kit", permission = "alley.admin", inGameOnly = false)
+    @CommandData(name = "kit", permission = "alley.admin", inGameOnly = false)
     @Override
     public void onCommand(CommandArgs command) {
         CommandSender sender = command.getSender();

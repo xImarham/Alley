@@ -2,7 +2,7 @@ package dev.revere.alley.profile.command;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
-import dev.revere.alley.api.command.annotation.Command;
+import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumChatChannel;
@@ -15,7 +15,7 @@ import org.bukkit.entity.Player;
  * @date 22/10/2024 - 12:14
  */
 public class ChatCommand extends BaseCommand {
-    @Command(name = "chat")
+    @CommandData(name = "chat")
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();

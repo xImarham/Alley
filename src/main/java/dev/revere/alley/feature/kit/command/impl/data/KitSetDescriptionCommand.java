@@ -5,7 +5,7 @@ import dev.revere.alley.feature.kit.Kit;
 import dev.revere.alley.locale.impl.KitLocale;
 import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.api.command.BaseCommand;
-import dev.revere.alley.api.command.annotation.Command;
+import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.CommandArgs;
 import org.bukkit.entity.Player;
 
@@ -17,7 +17,7 @@ import java.util.Arrays;
  * @date 28/04/2024 - 22:46
  */
 public class KitSetDescriptionCommand extends BaseCommand {
-    @Command(name = "kit.description", aliases = "kit.setdesc",permission = "alley.admin")
+    @CommandData(name = "kit.description", aliases = "kit.setdesc",permission = "alley.admin")
     @Override
     public void onCommand(CommandArgs command) {
         Player sender = command.getPlayer();

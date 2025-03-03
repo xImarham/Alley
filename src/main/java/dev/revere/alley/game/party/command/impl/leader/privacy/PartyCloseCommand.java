@@ -2,7 +2,7 @@ package dev.revere.alley.game.party.command.impl.leader.privacy;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
-import dev.revere.alley.api.command.annotation.Command;
+import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.game.party.enums.EnumPartyState;
 import dev.revere.alley.profile.Profile;
@@ -16,7 +16,7 @@ import org.bukkit.entity.Player;
  * @date 16/11/2024 - 23:16
  */
 public class PartyCloseCommand extends BaseCommand {
-    @Command(name = "party.close", aliases = {"p.close"})
+    @CommandData(name = "party.close", aliases = {"p.close"})
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();

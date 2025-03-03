@@ -3,7 +3,7 @@ package dev.revere.alley.game.match.command.player;
 import dev.revere.alley.Alley;
 import dev.revere.alley.game.match.menu.CurrentMatchesMenu;
 import dev.revere.alley.api.command.BaseCommand;
-import dev.revere.alley.api.command.annotation.Command;
+import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.profile.enums.EnumProfileState;
 import dev.revere.alley.util.chat.CC;
@@ -15,7 +15,7 @@ import org.bukkit.entity.Player;
  * @date 5/26/2024
  */
 public class CurrentMatchesCommand extends BaseCommand {
-    @Command(name = "currentmatches", aliases = {"matches", "games", "currentgames"})
+    @CommandData(name = "currentmatches", aliases = {"matches", "games", "currentgames"})
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();

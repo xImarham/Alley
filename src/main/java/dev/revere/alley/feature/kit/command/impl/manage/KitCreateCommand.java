@@ -2,7 +2,7 @@ package dev.revere.alley.feature.kit.command.impl.manage;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
-import dev.revere.alley.api.command.annotation.Command;
+import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.feature.kit.Kit;
 import dev.revere.alley.feature.kit.KitRepository;
@@ -19,7 +19,7 @@ import org.bukkit.inventory.ItemStack;
  * @date 20/05/2024 - 13:06
  */
 public class KitCreateCommand extends BaseCommand {
-    @Command(name = "kit.create", permission = "alley.admin")
+    @CommandData(name = "kit.create", permission = "alley.admin")
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();

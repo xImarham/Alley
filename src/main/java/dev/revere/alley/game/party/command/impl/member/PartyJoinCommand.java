@@ -2,7 +2,7 @@ package dev.revere.alley.game.party.command.impl.member;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
-import dev.revere.alley.api.command.annotation.Command;
+import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.game.party.Party;
 import dev.revere.alley.game.party.enums.EnumPartyState;
@@ -15,7 +15,7 @@ import org.bukkit.entity.Player;
  * @date 16/11/2024 - 23:25
  */
 public class PartyJoinCommand extends BaseCommand {
-    @Command(name = "party.join", aliases = {"p.join"})
+    @CommandData(name = "party.join", aliases = {"p.join"})
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();

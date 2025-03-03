@@ -3,7 +3,7 @@ package dev.revere.alley.feature.division.command.impl.manage;
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
-import dev.revere.alley.api.command.annotation.Command;
+import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.feature.division.Division;
 import dev.revere.alley.feature.division.DivisionRepository;
 import dev.revere.alley.util.chat.CC;
@@ -15,7 +15,7 @@ import org.bukkit.entity.Player;
  * @since 26/01/2025
  */
 public class DivisionCreateCommand extends BaseCommand {
-    @Command(name = "division.create", permission = "alley.admin", usage = "division.create <name> <requiredWins>")
+    @CommandData(name = "division.create", permission = "alley.admin", usage = "division.create <name> <requiredWins>")
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();

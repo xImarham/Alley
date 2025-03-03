@@ -3,7 +3,7 @@ package dev.revere.alley.game.party.command.impl.member;
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
-import dev.revere.alley.api.command.annotation.Command;
+import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.locale.impl.PartyLocale;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumChatChannel;
@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
  * @date 5/25/2024
  */
 public class PartyChatCommand extends BaseCommand {
-    @Command(name = "party.chat", aliases = {"p.chat", "pc"})
+    @CommandData(name = "party.chat", aliases = {"p.chat", "pc"})
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();

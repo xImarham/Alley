@@ -4,7 +4,7 @@ import dev.revere.alley.Alley;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.api.command.BaseCommand;
-import dev.revere.alley.api.command.annotation.Command;
+import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.CommandArgs;
 import org.bukkit.entity.Player;
 
@@ -15,7 +15,7 @@ import org.bukkit.entity.Player;
  */
 public class NightCommand extends BaseCommand {
     @Override
-    @Command(name = "night")
+    @CommandData(name = "night")
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
         Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());

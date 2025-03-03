@@ -2,7 +2,7 @@ package dev.revere.alley.essential.spawn.command;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
-import dev.revere.alley.api.command.annotation.Command;
+import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.feature.hotbar.enums.HotbarType;
 import dev.revere.alley.profile.Profile;
@@ -18,7 +18,7 @@ import org.bukkit.entity.Player;
  */
 public class SpawnCommand extends BaseCommand {
     @Override
-    @Command(name = "spawn", permission = "alley.admin")
+    @CommandData(name = "spawn", permission = "alley.admin")
     public void onCommand(CommandArgs args) {
         Player player = args.getPlayer();
         Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());

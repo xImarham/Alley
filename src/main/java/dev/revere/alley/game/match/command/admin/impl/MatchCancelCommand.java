@@ -5,7 +5,7 @@ import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
 import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.api.command.BaseCommand;
-import dev.revere.alley.api.command.annotation.Command;
+import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.CommandArgs;
 import org.bukkit.entity.Player;
 
@@ -15,7 +15,7 @@ import org.bukkit.entity.Player;
  * @date 5/26/2024
  */
 public class MatchCancelCommand extends BaseCommand {
-    @Command(name = "match.cancel", permission = "alley.admin")
+    @CommandData(name = "match.cancel", permission = "alley.admin")
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();

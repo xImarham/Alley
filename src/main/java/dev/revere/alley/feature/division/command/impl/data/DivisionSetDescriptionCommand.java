@@ -3,7 +3,7 @@ package dev.revere.alley.feature.division.command.impl.data;
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
-import dev.revere.alley.api.command.annotation.Command;
+import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.feature.division.Division;
 import dev.revere.alley.feature.division.DivisionRepository;
 import dev.revere.alley.util.chat.CC;
@@ -17,7 +17,7 @@ import java.util.Arrays;
  * @since 28/01/2025
  */
 public class DivisionSetDescriptionCommand extends BaseCommand {
-    @Command(name = "division.setdescription", permission = "alley.admin", usage = "division setdescription <name> <description>")
+    @CommandData(name = "division.setdescription", permission = "alley.admin", usage = "division setdescription <name> <description>")
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();

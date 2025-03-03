@@ -3,7 +3,7 @@ package dev.revere.alley.game.party.command.impl.member;
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
-import dev.revere.alley.api.command.annotation.Command;
+import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.game.party.Party;
 import dev.revere.alley.game.party.PartyHandler;
 import dev.revere.alley.game.party.PartyRequest;
@@ -19,7 +19,7 @@ import org.bukkit.entity.Player;
  */
 public class PartyAcceptCommand extends BaseCommand {
     @Override
-    @Command(name = "party.accept", aliases = "p.accept")
+    @CommandData(name = "party.accept", aliases = "p.accept")
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
         String[] args = command.getArgs();

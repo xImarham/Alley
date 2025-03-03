@@ -2,7 +2,7 @@ package dev.revere.alley.feature.leaderboard.command;
 
 import dev.revere.alley.feature.leaderboard.menu.LeaderboardMenu;
 import dev.revere.alley.api.command.BaseCommand;
-import dev.revere.alley.api.command.annotation.Command;
+import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.CommandArgs;
 import org.bukkit.entity.Player;
 
@@ -13,7 +13,7 @@ import org.bukkit.entity.Player;
  */
 public class LeaderboardCommand extends BaseCommand {
     @Override
-    @Command(name = "leaderboard", aliases = {"leaderboards", "lb"})
+    @CommandData(name = "leaderboard", aliases = {"leaderboards", "lb"})
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
 

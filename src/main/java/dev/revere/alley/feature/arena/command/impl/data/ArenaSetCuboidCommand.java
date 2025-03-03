@@ -5,9 +5,9 @@ import dev.revere.alley.feature.arena.enums.EnumArenaType;
 import dev.revere.alley.feature.arena.selection.ArenaSelection;
 import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.api.command.BaseCommand;
-import dev.revere.alley.api.command.annotation.Command;
+import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.CommandArgs;
-import dev.revere.alley.api.command.annotation.Completer;
+import dev.revere.alley.api.command.annotation.CompleterData;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -20,7 +20,7 @@ import java.util.List;
  */
 public class ArenaSetCuboidCommand extends BaseCommand {
 
-    @Completer(name = "arena.setcuboid")
+    @CompleterData(name = "arena.setcuboid")
     public List<String> arenaCuboidCompleter(CommandArgs command) {
         List<String> completion = new ArrayList<>();
 
@@ -31,7 +31,7 @@ public class ArenaSetCuboidCommand extends BaseCommand {
         return completion;
     }
 
-    @Command(name = "arena.setcuboid", permission = "alley.admin")
+    @CommandData(name = "arena.setcuboid", permission = "alley.admin")
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();

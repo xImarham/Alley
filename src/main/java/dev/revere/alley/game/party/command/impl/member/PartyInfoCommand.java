@@ -3,7 +3,7 @@ package dev.revere.alley.game.party.command.impl.member;
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
-import dev.revere.alley.api.command.annotation.Command;
+import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.game.party.Party;
 import dev.revere.alley.game.party.PartyHandler;
 import dev.revere.alley.locale.impl.PartyLocale;
@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
  */
 public class PartyInfoCommand extends BaseCommand {
     @Override
-    @Command(name = "party.info", aliases = {"p.info"})
+    @CommandData(name = "party.info", aliases = {"p.info"})
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
 

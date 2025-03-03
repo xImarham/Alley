@@ -1,7 +1,7 @@
 package dev.revere.alley.essential.command.troll;
 
 import dev.revere.alley.api.command.BaseCommand;
-import dev.revere.alley.api.command.annotation.Command;
+import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.entity.Player;
@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
  * @date 28/10/2024 - 09:09
  */
 public class HeartAttackCommand extends BaseCommand {
-    @Command(name = "heartattack", permission = "alley.command.heartattack")
+    @CommandData(name = "heartattack", permission = "alley.command.heartattack")
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();

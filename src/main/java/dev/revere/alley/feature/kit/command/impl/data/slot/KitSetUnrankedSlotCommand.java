@@ -5,7 +5,7 @@ import dev.revere.alley.feature.kit.Kit;
 import dev.revere.alley.locale.impl.KitLocale;
 import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.api.command.BaseCommand;
-import dev.revere.alley.api.command.annotation.Command;
+import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.CommandArgs;
 import org.bukkit.entity.Player;
 
@@ -15,7 +15,7 @@ import org.bukkit.entity.Player;
  * @date 21/05/2024 - 00:22
  */
 public class KitSetUnrankedSlotCommand extends BaseCommand {
-    @Command(name = "kit.setunrankedslot", permission = "alley.admin")
+    @CommandData(name = "kit.setunrankedslot", permission = "alley.admin")
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();

@@ -2,7 +2,7 @@ package dev.revere.alley.command.impl.main;
 
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
-import dev.revere.alley.api.command.annotation.Command;
+import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.entity.Player;
@@ -19,7 +19,7 @@ import java.util.Locale;
 public class AlleyDebugCommand extends BaseCommand {
 
     @Override
-    @Command(name = "alley.debug", permission = "alley.admin", usage = "/alley debug <memory/instance/profile/profileData>", description = "Displays debug information for development purposes.")
+    @CommandData(name = "alley.debug", permission = "alley.admin", usage = "/alley debug <memory/instance/profile/profileData>", description = "Displays debug information for development purposes.")
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
         String[] args = command.getArgs();

@@ -1,5 +1,6 @@
 package dev.revere.alley.locale;
 
+import dev.revere.alley.locale.interfaces.ILocale;
 import lombok.Getter;
 import dev.revere.alley.Alley;
 import dev.revere.alley.util.chat.CC;
@@ -10,7 +11,7 @@ import dev.revere.alley.util.chat.CC;
  * @date 19/04/2024 - 17:41
  */
 @Getter
-public enum Locale {
+public enum Locale implements ILocale {
     NO_PERM("messages.yml", "no-permission"),
 
     ;
@@ -28,6 +29,12 @@ public enum Locale {
         this.configString = configString;
     }
 
+    /**
+     * Gets the String from the config.
+     *
+     * @return The message from the config.
+     */
+    @Override
     public String getMessage() {
         return CC.translate(Alley.getInstance().getConfigService().getConfig(this.configName).getString(this.configString));
     }

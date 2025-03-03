@@ -3,7 +3,7 @@ package dev.revere.alley.game.party.command.impl.member;
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
-import dev.revere.alley.api.command.annotation.Command;
+import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.game.party.PartyHandler;
 import dev.revere.alley.locale.impl.PartyLocale;
 import dev.revere.alley.util.chat.CC;
@@ -18,7 +18,7 @@ import java.util.UUID;
  */
 public class PartyLeaveCommand extends BaseCommand {
     @Override
-    @Command(name = "party.leave", aliases = {"p.leave"})
+    @CommandData(name = "party.leave", aliases = {"p.leave"})
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
         UUID playerUUID = player.getUniqueId();

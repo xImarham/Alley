@@ -8,9 +8,9 @@ import dev.revere.alley.feature.arena.command.impl.manage.*;
 import dev.revere.alley.feature.arena.command.impl.storage.ArenaSaveAllCommand;
 import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.api.command.BaseCommand;
-import dev.revere.alley.api.command.annotation.Command;
+import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.CommandArgs;
-import dev.revere.alley.api.command.annotation.Completer;
+import dev.revere.alley.api.command.annotation.CompleterData;
 import dev.revere.alley.util.chat.ClickableUtil;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -48,7 +48,7 @@ public class ArenaCommand extends BaseCommand {
         new ArenaViewCommand();
     }
 
-    @Completer(name = "arena")
+    @CompleterData(name = "arena")
     public List<String> arenaCompleter(CommandArgs command) {
         List<String> completion = new ArrayList<>();
 
@@ -73,7 +73,7 @@ public class ArenaCommand extends BaseCommand {
         return completion;
     }
 
-    @Command(name = "arena", permission = "alley.admin", inGameOnly = false)
+    @CommandData(name = "arena", permission = "alley.admin", inGameOnly = false)
     @Override
     public void onCommand(CommandArgs command) {
         CommandSender sender = command.getSender();

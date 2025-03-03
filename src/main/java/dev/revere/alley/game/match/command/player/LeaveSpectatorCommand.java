@@ -5,7 +5,7 @@ import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
 import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.api.command.BaseCommand;
-import dev.revere.alley.api.command.annotation.Command;
+import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.CommandArgs;
 import org.bukkit.entity.Player;
 
@@ -15,7 +15,7 @@ import org.bukkit.entity.Player;
  * @date 5/21/2024
  */
 public class LeaveSpectatorCommand extends BaseCommand {
-    @Command(name = "leavespectator", aliases = {"unspec"})
+    @CommandData(name = "leavespectator", aliases = {"unspec"})
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();

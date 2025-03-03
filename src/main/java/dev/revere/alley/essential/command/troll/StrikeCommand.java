@@ -1,7 +1,7 @@
 package dev.revere.alley.essential.command.troll;
 
 import dev.revere.alley.api.command.BaseCommand;
-import dev.revere.alley.api.command.annotation.Command;
+import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.entity.Player;
@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
  * @date 25/06/2024 - 19:42
  */
 public class StrikeCommand extends BaseCommand {
-    @Command(name = "strike", permission = "delta.command.strike", usage = "strike <player> | all", description = "Strike a player with lightning")
+    @CommandData(name = "strike", permission = "delta.command.strike", usage = "strike <player> | all", description = "Strike a player with lightning")
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();

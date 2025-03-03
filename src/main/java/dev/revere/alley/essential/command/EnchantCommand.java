@@ -3,7 +3,7 @@ package dev.revere.alley.essential.command;
 import dev.revere.alley.util.EnchantUtil;
 import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.api.command.BaseCommand;
-import dev.revere.alley.api.command.annotation.Command;
+import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.CommandArgs;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -16,7 +16,7 @@ import org.bukkit.inventory.ItemStack;
  * @date 28/05/2024 - 20:28
  */
 public class EnchantCommand extends BaseCommand {
-    @Command(name = "enchant", permission = "alley.admin")
+    @CommandData(name = "enchant", permission = "alley.admin")
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();

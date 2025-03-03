@@ -4,7 +4,7 @@ import dev.revere.alley.Alley;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.api.command.BaseCommand;
-import dev.revere.alley.api.command.annotation.Command;
+import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.CommandArgs;
 import org.bukkit.entity.Player;
 
@@ -14,7 +14,7 @@ import org.bukkit.entity.Player;
  * @date 6/2/2024
  */
 public class SetCoinsCommand extends BaseCommand {
-    @Command(name = "coins.set", permission = "alley.admin")
+    @CommandData(name = "coins.set", permission = "alley.admin")
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();

@@ -6,7 +6,7 @@ import dev.revere.alley.profile.enums.EnumProfileState;
 import dev.revere.alley.feature.queue.menu.UnrankedMenu;
 import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.api.command.BaseCommand;
-import dev.revere.alley.api.command.annotation.Command;
+import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.CommandArgs;
 import org.bukkit.entity.Player;
 
@@ -18,7 +18,7 @@ import org.bukkit.entity.Player;
 
 public class UnrankedCommand extends BaseCommand {
     @Override
-    @Command(name = "unranked")
+    @CommandData(name = "unranked")
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
 

@@ -1,7 +1,7 @@
 package dev.revere.alley.essential.command;
 
 import dev.revere.alley.api.command.BaseCommand;
-import dev.revere.alley.api.command.annotation.Command;
+import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.Material;
@@ -14,7 +14,7 @@ import org.bukkit.inventory.ItemStack;
  * @date 28/10/2024 - 08:50
  */
 public class MoreCommand extends BaseCommand {
-    @Command(name = "more", permission = "alley.command.more")
+    @CommandData(name = "more", permission = "alley.command.more")
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();

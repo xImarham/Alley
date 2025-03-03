@@ -2,7 +2,7 @@ package dev.revere.alley.game.duel.command;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
-import dev.revere.alley.api.command.annotation.Command;
+import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.game.duel.DuelRequest;
 import dev.revere.alley.util.chat.CC;
@@ -14,7 +14,7 @@ import org.bukkit.entity.Player;
  * @date 17/10/2024 - 20:31
  */
 public class AcceptCommand extends BaseCommand {
-    @Command(name = "accept", aliases = {"duel.accept"})
+    @CommandData(name = "accept", aliases = {"duel.accept"})
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();

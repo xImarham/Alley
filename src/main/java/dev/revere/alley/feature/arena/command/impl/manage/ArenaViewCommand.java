@@ -2,7 +2,7 @@ package dev.revere.alley.feature.arena.command.impl.manage;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
-import dev.revere.alley.api.command.annotation.Command;
+import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.feature.arena.Arena;
 import dev.revere.alley.feature.arena.ArenaRepository;
@@ -16,7 +16,7 @@ import org.bukkit.command.CommandSender;
  * @date 24/09/2024 - 18:29
  */
 public class ArenaViewCommand extends BaseCommand {
-    @Command(name = "arena.view", permission = "alley.admin", inGameOnly = false)
+    @CommandData(name = "arena.view", permission = "alley.admin", inGameOnly = false)
     @Override
     public void onCommand(CommandArgs command) {
         CommandSender sender = command.getSender();

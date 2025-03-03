@@ -5,7 +5,7 @@ import dev.revere.alley.feature.kit.Kit;
 import dev.revere.alley.locale.impl.KitLocale;
 import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.api.command.BaseCommand;
-import dev.revere.alley.api.command.annotation.Command;
+import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.CommandArgs;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
@@ -16,7 +16,7 @@ import org.bukkit.entity.Player;
  * @date 28/04/2024 - 22:23
  */
 public class KitSetInvCommand extends BaseCommand {
-    @Command(name = "kit.setinventory", aliases = "kit.setinv", permission = "practice.admin")
+    @CommandData(name = "kit.setinventory", aliases = "kit.setinv", permission = "practice.admin")
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();

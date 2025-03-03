@@ -4,9 +4,9 @@ import dev.revere.alley.Alley;
 import dev.revere.alley.feature.arena.enums.EnumArenaType;
 import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.api.command.BaseCommand;
-import dev.revere.alley.api.command.annotation.Command;
+import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.CommandArgs;
-import dev.revere.alley.api.command.annotation.Completer;
+import dev.revere.alley.api.command.annotation.CompleterData;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -19,7 +19,7 @@ import java.util.List;
  */
 public class ArenaAddKitCommand extends BaseCommand {
 
-    @Completer(name = "arena.addkit")
+    @CompleterData(name = "arena.addkit")
     public List<String> arenaAddKitCompleter(CommandArgs command) {
         List<String> completion = new ArrayList<>();
 
@@ -30,7 +30,7 @@ public class ArenaAddKitCommand extends BaseCommand {
         return completion;
     }
 
-    @Command(name = "arena.addkit", permission = "alley.admin")
+    @CommandData(name = "arena.addkit", permission = "alley.admin")
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();

@@ -2,7 +2,7 @@ package dev.revere.alley.essential.command.troll;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
-import dev.revere.alley.api.command.annotation.Command;
+import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.util.logger.Logger;
@@ -20,7 +20,7 @@ import java.lang.reflect.Method;
  */
 public class TrollCommand extends BaseCommand {
     @Override
-    @Command(name = "troll", aliases = "playertroll", inGameOnly = false, permission = "alley.command.troll")
+    @CommandData(name = "troll", aliases = "playertroll", inGameOnly = false, permission = "alley.command.troll")
     public void onCommand(CommandArgs command) {
         CommandSender sender = command.getSender();
         String[] args = command.getArgs();

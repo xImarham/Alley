@@ -2,7 +2,7 @@ package dev.revere.alley.profile.command;
 
 import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.api.command.BaseCommand;
-import dev.revere.alley.api.command.annotation.Command;
+import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.CommandArgs;
 import org.bukkit.entity.Player;
 
@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
  * @date 14/09/2024 - 23:03
  */
 public class ChallengesCommand extends BaseCommand {
-    @Command(name = "challenges")
+    @CommandData(name = "challenges")
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();

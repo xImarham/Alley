@@ -2,7 +2,7 @@ package dev.revere.alley.game.party.command.impl.leader.punishment;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
-import dev.revere.alley.api.command.annotation.Command;
+import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.entity.Player;
@@ -13,7 +13,7 @@ import org.bukkit.entity.Player;
  * @date 11/12/2024 - 13:25
  */
 public class PartyBanCommand extends BaseCommand {
-    @Command(name = "party.ban", aliases = "p.ban")
+    @CommandData(name = "party.ban", aliases = "p.ban")
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();

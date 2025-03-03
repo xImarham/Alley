@@ -4,9 +4,9 @@ import dev.revere.alley.Alley;
 import dev.revere.alley.feature.arena.Arena;
 import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.api.command.BaseCommand;
-import dev.revere.alley.api.command.annotation.Command;
+import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.CommandArgs;
-import dev.revere.alley.api.command.annotation.Completer;
+import dev.revere.alley.api.command.annotation.CompleterData;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -19,7 +19,7 @@ import java.util.List;
  */
 public class ArenaTeleportCommand extends BaseCommand {
 
-    @Completer(name = "arena.teleport", aliases = "arena.tp")
+    @CompleterData(name = "arena.teleport", aliases = "arena.tp")
     public List<String> arenaTeleportCompleter(CommandArgs command) {
         List<String> completion = new ArrayList<>();
 
@@ -31,7 +31,7 @@ public class ArenaTeleportCommand extends BaseCommand {
     }
 
     @Override
-    @Command(name = "arena.teleport", aliases = "arena.tp", permission = "alley.admin")
+    @CommandData(name = "arena.teleport", aliases = "arena.tp", permission = "alley.admin")
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
         String[] args = command.getArgs();

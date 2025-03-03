@@ -2,7 +2,7 @@ package dev.revere.alley.feature.arena.command.impl.manage;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
-import dev.revere.alley.api.command.annotation.Command;
+import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.feature.arena.Arena;
 import dev.revere.alley.feature.arena.enums.EnumArenaType;
@@ -24,7 +24,7 @@ import java.util.Objects;
  */
 public class ArenaCreateCommand extends BaseCommand {
 
-    @Command(name = "arena.create", permission = "alley.admin")
+    @CommandData(name = "arena.create", permission = "alley.admin")
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();

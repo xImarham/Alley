@@ -2,7 +2,7 @@ package dev.revere.alley.feature.kit.command.impl.manage;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
-import dev.revere.alley.api.command.annotation.Command;
+import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.feature.kit.Kit;
 import dev.revere.alley.locale.impl.KitLocale;
@@ -15,7 +15,7 @@ import org.bukkit.command.CommandSender;
  * @date 08/10/2024 - 20:04
  */
 public class KitViewSettingsCommand extends BaseCommand {
-    @Command(name = "kit.viewsettings", permission = "alley.admin", inGameOnly = false)
+    @CommandData(name = "kit.viewsettings", permission = "alley.admin", inGameOnly = false)
     @Override
     public void onCommand(CommandArgs command) {
         CommandSender sender = command.getSender();

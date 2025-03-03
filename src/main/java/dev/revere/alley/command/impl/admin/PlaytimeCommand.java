@@ -2,7 +2,7 @@ package dev.revere.alley.command.impl.admin;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
-import dev.revere.alley.api.command.annotation.Command;
+import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.Bukkit;
@@ -17,7 +17,7 @@ import org.bukkit.entity.Player;
  */
 public class PlaytimeCommand extends BaseCommand {
     @Override
-    @Command(name = "playtime", permission = "alley.admin")
+    @CommandData(name = "playtime", permission = "alley.admin")
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
         String[] args = command.getArgs();

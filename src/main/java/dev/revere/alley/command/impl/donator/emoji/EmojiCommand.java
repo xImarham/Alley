@@ -1,7 +1,7 @@
 package dev.revere.alley.command.impl.donator.emoji;
 
 import dev.revere.alley.api.command.BaseCommand;
-import dev.revere.alley.api.command.annotation.Command;
+import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.command.impl.donator.emoji.impl.EmojiListCommand;
 import dev.revere.alley.essential.chat.enums.EnumEmojiType;
@@ -22,7 +22,7 @@ public class EmojiCommand extends BaseCommand {
         new EmojiListCommand();
     }
 
-    @Command(name = "emoji", aliases = "emojis", permission = "alley.donator.chat.symbol", usage = "/emoji", description = "Help guide for emojis")
+    @CommandData(name = "emoji", aliases = "emojis", permission = "alley.donator.chat.symbol", usage = "/emoji", description = "Help guide for emojis")
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();

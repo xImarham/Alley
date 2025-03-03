@@ -3,7 +3,7 @@ package dev.revere.alley.feature.arena.command.impl.data;
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
-import dev.revere.alley.api.command.annotation.Command;
+import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.feature.arena.Arena;
 import dev.revere.alley.feature.arena.ArenaRepository;
 import dev.revere.alley.feature.arena.enums.EnumArenaType;
@@ -17,7 +17,7 @@ import org.bukkit.entity.Player;
  * @since 02/03/2025
  */
 public class ArenaSetPortalCommand extends BaseCommand {
-    @Command(name = "arena.setportal", permission = "alley.command.arena.setportal")
+    @CommandData(name = "arena.setportal", permission = "alley.command.arena.setportal")
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();

@@ -5,7 +5,7 @@ import dev.revere.alley.game.match.snapshot.SnapshotRepository;
 import dev.revere.alley.game.match.snapshot.menu.InventorySnapshotMenu;
 import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.api.command.BaseCommand;
-import dev.revere.alley.api.command.annotation.Command;
+import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.CommandArgs;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -18,7 +18,7 @@ import java.util.UUID;
  * @date 15/06/2024 - 22:19
  */
 public class InventoryCommand extends BaseCommand {
-    @Command(name = "inventory")
+    @CommandData(name = "inventory")
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();

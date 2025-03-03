@@ -3,9 +3,9 @@ package dev.revere.alley.feature.arena.command.impl.manage;
 import dev.revere.alley.Alley;
 import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.api.command.BaseCommand;
-import dev.revere.alley.api.command.annotation.Command;
+import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.CommandArgs;
-import dev.revere.alley.api.command.annotation.Completer;
+import dev.revere.alley.api.command.annotation.CompleterData;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -18,7 +18,7 @@ import java.util.List;
  */
 public class ArenaDeleteCommand extends BaseCommand {
 
-    @Completer(name = "arena.delete")
+    @CompleterData(name = "arena.delete")
     public List<String> arenaDeleteCompleter(CommandArgs command) {
         List<String> completion = new ArrayList<>();
 
@@ -29,7 +29,7 @@ public class ArenaDeleteCommand extends BaseCommand {
         return completion;
     }
 
-    @Command(name = "arena.delete", permission = "alley.admin")
+    @CommandData(name = "arena.delete", permission = "alley.admin")
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();

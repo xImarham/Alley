@@ -2,7 +2,7 @@ package dev.revere.alley.feature.kit.command.impl.data;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
-import dev.revere.alley.api.command.annotation.Command;
+import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.feature.kit.KitRepository;
 import dev.revere.alley.locale.impl.KitLocale;
@@ -17,7 +17,7 @@ import java.util.Arrays;
  * @date 08/10/2024 - 19:41
  */
 public class KitSetDisclaimerCommand extends BaseCommand {
-    @Command(name = "kit.setdisclaimer", permission = "alley.kit.setdisclaimer", inGameOnly = false)
+    @CommandData(name = "kit.setdisclaimer", permission = "alley.kit.setdisclaimer", inGameOnly = false)
     @Override
     public void onCommand(CommandArgs command) {
         CommandSender sender = command.getSender();

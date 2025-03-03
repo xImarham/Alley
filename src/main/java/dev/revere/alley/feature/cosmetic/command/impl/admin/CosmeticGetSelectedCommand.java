@@ -5,7 +5,7 @@ import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.data.impl.ProfileCosmeticData;
 import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.api.command.BaseCommand;
-import dev.revere.alley.api.command.annotation.Command;
+import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.CommandArgs;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -16,7 +16,7 @@ import org.bukkit.entity.Player;
  * @date 6/1/2024
  */
 public class CosmeticGetSelectedCommand extends BaseCommand {
-    @Command(name = "cosmetic.getselected", aliases = {"cosmetic.get"}, permission = "alley.admin")
+    @CommandData(name = "cosmetic.getselected", aliases = {"cosmetic.get"}, permission = "alley.admin")
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();

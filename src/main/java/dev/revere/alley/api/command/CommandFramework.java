@@ -1,16 +1,13 @@
 package dev.revere.alley.api.command;
 
 import dev.revere.alley.Alley;
-import dev.revere.alley.api.command.annotation.Command;
-import dev.revere.alley.api.command.annotation.Completer;
+import dev.revere.alley.api.command.annotation.CommandData;
+import dev.revere.alley.api.command.annotation.CompleterData;
 import dev.revere.alley.locale.Locale;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandMap;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.PluginCommand;
+import org.bukkit.command.*;
 import org.bukkit.entity.Player;
 import org.bukkit.help.GenericCommandHelpTopic;
 import org.bukkit.help.HelpTopic;
@@ -26,18 +23,33 @@ import java.util.Map.Entry;
 
 public class CommandFramework implements CommandExecutor {
 
-    private final Map<String, Entry<Method, Object>> commandMap = new HashMap<>();
+    private final Map<String, Entry<Method, Object>> commandMap;
     private final Alley plugin;
     private CommandMap map;
 
+    /**
+     * Instantiates a new Command framework.
+     *
+     * @param plugin the plugin
+     */
     public CommandFramework(Alley plugin) {
+        this.commandMap = new HashMap<>();
         this.plugin = plugin;
+        this.initializeMap(plugin);
+    }
+
+    /**
+     * Initializes the command map for the plugin manager.
+     *
+     * @param plugin the plugin
+     */
+    private void initializeMap(Alley plugin) {
         if (plugin.getServer().getPluginManager() instanceof SimplePluginManager) {
             SimplePluginManager manager = (SimplePluginManager) plugin.getServer().getPluginManager();
             try {
                 Field field = SimplePluginManager.class.getDeclaredField("commandMap");
                 field.setAccessible(true);
-                map = (CommandMap) field.get(manager);
+                this.map = (CommandMap) field.get(manager);
             } catch (IllegalArgumentException | SecurityException | NoSuchFieldException | IllegalAccessException e) {
                 Bukkit.getConsoleSender().sendMessage("Failed to register commands: " + e.getMessage());
             }
@@ -45,11 +57,11 @@ public class CommandFramework implements CommandExecutor {
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, org.bukkit.command.Command cmd, String label, String[] args) {
+    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         return handleCommand(sender, cmd, label, args);
     }
 
-    public boolean handleCommand(CommandSender sender, org.bukkit.command.Command cmd, String label, String[] args) {
+    public boolean handleCommand(CommandSender sender, Command cmd, String label, String[] args) {
         for (int i = args.length; i >= 0; i--) {
             StringBuilder buffer = new StringBuilder();
             buffer.append(label.toLowerCase());
@@ -57,20 +69,20 @@ public class CommandFramework implements CommandExecutor {
                 buffer.append(".").append(args[x].toLowerCase());
             }
             String cmdLabel = buffer.toString();
-            if (commandMap.containsKey(cmdLabel)) {
-                Method method = commandMap.get(cmdLabel).getKey();
-                Object methodObject = commandMap.get(cmdLabel).getValue();
-                Command command = method.getAnnotation(Command.class);
+            if (this.commandMap.containsKey(cmdLabel)) {
+                Method method = this.commandMap.get(cmdLabel).getKey();
+                Object methodObject = this.commandMap.get(cmdLabel).getValue();
+                CommandData commandData = method.getAnnotation(CommandData.class);
 
-                if (command.isAdminOnly() && !sender.hasPermission("alley.admin")) {
+                if (commandData.isAdminOnly() && !sender.hasPermission("alley.admin")) {
                     sender.sendMessage(ChatColor.RED + "Only ops may execute this command.");
                     return true;
                 }
-                if (!command.permission().isEmpty() && (!sender.hasPermission(command.permission()))) {
+                if (!commandData.permission().isEmpty() && (!sender.hasPermission(commandData.permission()))) {
                     sender.sendMessage(CC.translate(CC.translate(Locale.NO_PERM.getMessage())));
                     return true;
                 }
-                if (command.inGameOnly() && !(sender instanceof Player)) {
+                if (commandData.inGameOnly() && !(sender instanceof Player)) {
                     sender.sendMessage(ChatColor.RED + "This command is only performable in game.");
                     return true;
                 }
@@ -90,18 +102,18 @@ public class CommandFramework implements CommandExecutor {
 
     public void registerCommands(Object obj) {
         for (Method m : obj.getClass().getMethods()) {
-            if (m.getAnnotation(Command.class) != null) {
-                Command command = m.getAnnotation(Command.class);
+            if (m.getAnnotation(CommandData.class) != null) {
+                CommandData commandData = m.getAnnotation(CommandData.class);
                 if (m.getParameterTypes().length > 1 || m.getParameterTypes()[0] != CommandArgs.class) {
                     System.out.println("Unable to register command " + m.getName() + ". Unexpected method arguments");
                     continue;
                 }
-                registerCommand(command, command.name(), m, obj);
-                for (String alias : command.aliases()) {
-                    registerCommand(command, alias, m, obj);
+                registerCommand(commandData, commandData.name(), m, obj);
+                for (String alias : commandData.aliases()) {
+                    registerCommand(commandData, alias, m, obj);
                 }
-            } else if (m.getAnnotation(Completer.class) != null) {
-                Completer comp = m.getAnnotation(Completer.class);
+            } else if (m.getAnnotation(CompleterData.class) != null) {
+                CompleterData comp = m.getAnnotation(CompleterData.class);
                 if (m.getParameterTypes().length != 1
                         || m.getParameterTypes()[0] != CommandArgs.class) {
                     System.out.println(
@@ -122,9 +134,9 @@ public class CommandFramework implements CommandExecutor {
 
     public void registerHelp() {
         Set<HelpTopic> help = new TreeSet<>(HelpTopicComparator.helpTopicComparatorInstance());
-        for (String s : commandMap.keySet()) {
+        for (String s : this.commandMap.keySet()) {
             if (!s.contains(".")) {
-                org.bukkit.command.Command cmd = map.getCommand(s);
+                Command cmd = map.getCommand(s);
                 HelpTopic topic = new GenericCommandHelpTopic(cmd);
                 help.add(topic);
             }
@@ -136,36 +148,36 @@ public class CommandFramework implements CommandExecutor {
 
     public void unregisterCommands(Object obj) {
         for (Method m : obj.getClass().getMethods()) {
-            if (m.getAnnotation(Command.class) != null) {
-                Command command = m.getAnnotation(Command.class);
-                commandMap.remove(command.name().toLowerCase());
-                commandMap.remove(this.plugin.getDescription().getName() + ":" + command.name().toLowerCase());
-                map.getCommand(command.name().toLowerCase()).unregister(map);
+            if (m.getAnnotation(CommandData.class) != null) {
+                CommandData commandData = m.getAnnotation(CommandData.class);
+                this.commandMap.remove(commandData.name().toLowerCase());
+                this.commandMap.remove(this.plugin.getDescription().getName() + ":" + commandData.name().toLowerCase());
+                map.getCommand(commandData.name().toLowerCase()).unregister(map);
             }
         }
     }
 
-    public void registerCommand(Command command, String label, Method m, Object obj) {
-        commandMap.put(label.toLowerCase(), new AbstractMap.SimpleEntry<>(m, obj));
-        commandMap.put(this.plugin.getDescription().getName() + ':' + label.toLowerCase(),
+    public void registerCommand(CommandData commandData, String label, Method m, Object obj) {
+        this.commandMap.put(label.toLowerCase(), new AbstractMap.SimpleEntry<>(m, obj));
+        this.commandMap.put(this.plugin.getDescription().getName() + ':' + label.toLowerCase(),
                 new AbstractMap.SimpleEntry<>(m, obj));
         String cmdLabel = label.replace(".", ",").split(",")[0].toLowerCase();
         if (map.getCommand(cmdLabel) == null) {
-            org.bukkit.command.Command cmd = new BukkitCommand(cmdLabel, this, plugin);
+            Command cmd = new BukkitCommand(cmdLabel, this, plugin);
             map.register(plugin.getDescription().getName(), cmd);
         }
-        if (!command.description().equalsIgnoreCase("") && cmdLabel.equals(label)) {
-            map.getCommand(cmdLabel).setDescription(command.description());
+        if (!commandData.description().equalsIgnoreCase("") && cmdLabel.equals(label)) {
+            map.getCommand(cmdLabel).setDescription(commandData.description());
         }
-        if (!command.usage().equalsIgnoreCase("") && cmdLabel.equals(label)) {
-            map.getCommand(cmdLabel).setUsage(command.usage());
+        if (!commandData.usage().equalsIgnoreCase("") && cmdLabel.equals(label)) {
+            map.getCommand(cmdLabel).setUsage(commandData.usage());
         }
     }
 
     public void registerCompleter(String label, Method m, Object obj) {
         String cmdLabel = label.replace(".", ",").split(",")[0].toLowerCase();
         if (map.getCommand(cmdLabel) == null) {
-            org.bukkit.command.Command command = new BukkitCommand(cmdLabel, this, plugin);
+            Command command = new BukkitCommand(cmdLabel, this, plugin);
             map.register(plugin.getDescription().getName(), command);
         }
         if (map.getCommand(cmdLabel) instanceof BukkitCommand) {

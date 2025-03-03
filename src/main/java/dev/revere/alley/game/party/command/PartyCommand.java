@@ -11,7 +11,7 @@ import dev.revere.alley.game.party.command.impl.leader.punishment.PartyUnbanComm
 import dev.revere.alley.game.party.command.impl.member.*;
 import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.api.command.BaseCommand;
-import dev.revere.alley.api.command.annotation.Command;
+import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.CommandArgs;
 import org.bukkit.entity.Player;
 
@@ -45,7 +45,7 @@ public class PartyCommand extends BaseCommand {
     }
 
     @Override
-    @Command(name = "party", aliases = "p")
+    @CommandData(name = "party", aliases = "p")
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
         player.sendMessage("");

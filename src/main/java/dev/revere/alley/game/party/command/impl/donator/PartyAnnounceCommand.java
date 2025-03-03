@@ -3,7 +3,7 @@ package dev.revere.alley.game.party.command.impl.donator;
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
-import dev.revere.alley.api.command.annotation.Command;
+import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.feature.cooldown.Cooldown;
 import dev.revere.alley.feature.cooldown.CooldownRepository;
 import dev.revere.alley.feature.cooldown.enums.EnumCooldownType;
@@ -22,7 +22,7 @@ import java.util.Optional;
  * @date 17/11/2024 - 11:16
  */
 public class PartyAnnounceCommand extends BaseCommand {
-    @Command(name = "party.announce", aliases = {"p.announce"}, permission = "alley.donator.party.announce")
+    @CommandData(name = "party.announce", aliases = {"p.announce"}, permission = "alley.donator.party.announce")
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();

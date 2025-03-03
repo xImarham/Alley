@@ -15,9 +15,9 @@ import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.feature.queue.Queue;
 import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.api.command.BaseCommand;
-import dev.revere.alley.api.command.annotation.Command;
+import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.CommandArgs;
-import dev.revere.alley.api.command.annotation.Completer;
+import dev.revere.alley.api.command.annotation.CompleterData;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -30,7 +30,7 @@ import java.util.List;
  */
 public class MatchStartCommand extends BaseCommand {
 
-    @Completer(name = "match.start")
+    @CompleterData(name = "match.start")
     public List<String> matchStartCompleter(CommandArgs command) {
         List<String> completion = new ArrayList<>();
         Player player = command.getPlayer();
@@ -61,7 +61,7 @@ public class MatchStartCommand extends BaseCommand {
         return completion;
     }
 
-    @Command(name = "match.start", permission = "alley.admin")
+    @CommandData(name = "match.start", permission = "alley.admin")
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();

@@ -2,7 +2,7 @@ package dev.revere.alley.essential.command;
 
 import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.api.command.BaseCommand;
-import dev.revere.alley.api.command.annotation.Command;
+import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.CommandArgs;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -14,7 +14,7 @@ import org.bukkit.entity.Player;
  */
 public class InvSeeCommand extends BaseCommand {
     @Override
-    @Command(name = "invsee", aliases = {"seeinventory", "seeinv"}, permission = "alley.command.invsee")
+    @CommandData(name = "invsee", aliases = {"seeinventory", "seeinv"}, permission = "alley.command.invsee")
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
         String[] args = command.getArgs();

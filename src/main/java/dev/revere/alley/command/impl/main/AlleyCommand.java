@@ -3,7 +3,7 @@ package dev.revere.alley.command.impl.main;
 import dev.revere.alley.Alley;
 import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.api.command.BaseCommand;
-import dev.revere.alley.api.command.annotation.Command;
+import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.CommandArgs;
 import org.bukkit.command.CommandSender;
 
@@ -15,7 +15,7 @@ import java.util.Arrays;
  * @date 19/04/2024 - 17:39
  */
 public class AlleyCommand extends BaseCommand {
-    @Command(name = "alley", aliases = {"emmy", "remi", "revere"}, inGameOnly = false)
+    @CommandData(name = "alley", aliases = {"emmy", "remi", "revere"}, inGameOnly = false)
     @Override
     public void onCommand(CommandArgs command) {
         CommandSender sender = command.getSender();

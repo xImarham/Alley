@@ -3,7 +3,7 @@ package dev.revere.alley.feature.kit.command.impl.manage;
 import dev.revere.alley.Alley;
 import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.api.command.BaseCommand;
-import dev.revere.alley.api.command.annotation.Command;
+import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.CommandArgs;
 import org.bukkit.command.CommandSender;
 
@@ -13,7 +13,7 @@ import org.bukkit.command.CommandSender;
  * @date 28/04/2024 - 22:07
  */
 public class KitListCommand extends BaseCommand {
-    @Command(name = "kit.list", aliases = {"kits"}, permission = "alley.admin")
+    @CommandData(name = "kit.list", aliases = {"kits"}, permission = "alley.admin")
     @Override
     public void onCommand(CommandArgs command) {
         CommandSender sender = command.getSender();
