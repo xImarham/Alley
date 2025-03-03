@@ -36,8 +36,7 @@ public class MatchSettingsMenu extends Menu {
 
         buttons.put(10, new MatchSettingsButton("&b&lClear inventory", Material.CHEST, (short) 0, Arrays.asList(
                 "&fClear your inventory",
-                "&fupon &bend &fof",
-                "&fa match.",
+                "&fupon &bend &fof a match.",
                 "",
                 " &f● &bStatus: &cNULL",
                 "",
@@ -45,9 +44,8 @@ public class MatchSettingsMenu extends Menu {
         )));
 
         buttons.put(11, new MatchSettingsButton("&b&lToggle Flight", Material.FEATHER, (short) 0, Arrays.asList(
-                "&fStart flying upon ",
-                "&fyour opponents &bdeath",
-                "&fin a duel.",
+                "&fStart &bflying &fupon",
+                "&fend of a match.",
                 "",
                 " &f● &bStatus: &cNULL",
                 "",

@@ -88,7 +88,6 @@ public class PracticeSettingsMenu extends Menu {
         )));
 
         buttons.put(16, new PracticeSettingsButton("&b&lMatch Settings", Material.BOOK, 0, Arrays.asList(
-                "",
                 "&fAdjust your match settings.",
                 "",
                 "&aClick to view!"
@@ -96,12 +95,18 @@ public class PracticeSettingsMenu extends Menu {
 
         buttons.put(19, new PracticeSettingsButton("&b&lShow Scoreboard Lines", Material.STRING, 0, Arrays.asList(
                 "&fDecide whether you should",
-                "&fsee the &bsidebar lines",
+                "&fsee the &bscoreboard lines",
                 "&for not.",
                 "",
                 " &f● &bStatus: &7" + (profile.getProfileData().getProfileSettingData().isShowScoreboardLines() ? "&aEnabled" : "&cDisabled"),
                 "",
                 "&aClick to toggle!"
+        )));
+
+        buttons.put(25, new PracticeSettingsButton("&b&lCosmetics", Material.NETHER_STAR, 0, Arrays.asList(
+                "&fCustomize your cosmetics.",
+                "",
+                "&aClick to view!"
         )));
 
         this.addBorder(buttons, (byte) 15, 4);

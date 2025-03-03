@@ -1,5 +1,7 @@
 package dev.revere.alley.feature.cosmetic.menu;
 
+import dev.revere.alley.api.menu.impl.BackButton;
+import dev.revere.alley.profile.settings.menu.PracticeSettingsMenu;
 import lombok.AllArgsConstructor;
 import dev.revere.alley.Alley;
 import dev.revere.alley.feature.cosmetic.menu.button.SoundEffectButton;
@@ -19,7 +21,6 @@ import java.util.Map;
  */
 @AllArgsConstructor
 public class CosmeticsMenu extends Menu {
-
     private final String cosmeticType;
 
     @Override
@@ -31,7 +32,7 @@ public class CosmeticsMenu extends Menu {
     public Map<Integer, Button> getButtons(Player player) {
         final Map<Integer, Button> buttons = new HashMap<>();
 
-        //buttons.put(0, new BackButton(new MatchSettingsMenu()));
+        buttons.put(0, new BackButton(new PracticeSettingsMenu()));
         buttons.put(3, new KillEffectButton());
         buttons.put(5, new SoundEffectButton());
 
