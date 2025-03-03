@@ -125,16 +125,21 @@ public class ScoreboardVisualizer implements AssembleAdapter {
                     }
 
                     if (profile.getMatch().getState() == EnumMatchState.STARTING) {
-                        for (String line : Alley.getInstance().getConfigService().getConfig("providers/scoreboard.yml").getStringList("scoreboard.lines.starting")) {
-                            lines.add(CC.translate(line)
-                                    .replaceAll("\\{sidebar}", this.getScoreboardLines(player))
-                                    .replaceAll("\\{opponent}", opponent.getPlayer().getUsername())
-                                    .replaceAll("\\{opponent-ping}", String.valueOf(BukkitReflection.getPing(opponent.getPlayer().getPlayer())))
-                                    .replaceAll("\\{player-ping}", String.valueOf(BukkitReflection.getPing(player)))
-                                    .replaceAll("\\{duration}", profile.getMatch().getDuration())
-                                    .replaceAll("\\{arena}", profile.getMatch().getArena().getDisplayName() == null ? "&c&lNULL" : profile.getMatch().getArena().getDisplayName())
-                                    .replaceAll("\\{dot-animation}", AnimationUtil.getDots())
-                                    .replaceAll("\\{kit}", profile.getMatch().getKit().getDisplayName()));
+                        if (profile.getMatch().getKit().isSettingEnabled(KitSettingBattleRushImpl.class) && ((MatchRoundsRegularImpl) profile.getMatch()).getCurrentRound() > 0) {
+                            MatchRoundsRegularImpl roundsMatch = (MatchRoundsRegularImpl) profile.getMatch();
+                            this.replaceBattleRushLines(player, lines, opponent, roundsMatch, profile);
+                        } else {
+                            for (String line : Alley.getInstance().getConfigService().getConfig("providers/scoreboard.yml").getStringList("scoreboard.lines.starting")) {
+                                lines.add(CC.translate(line)
+                                        .replaceAll("\\{sidebar}", this.getScoreboardLines(player))
+                                        .replaceAll("\\{opponent}", opponent.getPlayer().getUsername())
+                                        .replaceAll("\\{opponent-ping}", String.valueOf(BukkitReflection.getPing(opponent.getPlayer().getPlayer())))
+                                        .replaceAll("\\{player-ping}", String.valueOf(BukkitReflection.getPing(player)))
+                                        .replaceAll("\\{duration}", profile.getMatch().getDuration())
+                                        .replaceAll("\\{arena}", profile.getMatch().getArena().getDisplayName() == null ? "&c&lNULL" : profile.getMatch().getArena().getDisplayName())
+                                        .replaceAll("\\{dot-animation}", AnimationUtil.getDots())
+                                        .replaceAll("\\{kit}", profile.getMatch().getKit().getDisplayName()));
+                            }
                         }
                     } else if (profile.getMatch().getState() == EnumMatchState.ENDING_MATCH) {
                         for (String line : Alley.getInstance().getConfigService().getConfig("providers/scoreboard.yml").getStringList("scoreboard.lines.ending")) {
@@ -166,23 +171,7 @@ public class ScoreboardVisualizer implements AssembleAdapter {
                         }
                     } else if (profile.getMatch().getKit().isSettingEnabled(KitSettingBattleRushImpl.class)) {
                         MatchRoundsRegularImpl roundsMatch = (MatchRoundsRegularImpl) profile.getMatch();
-
-                        for (String line : Alley.getInstance().getConfigService().getConfig("providers/scoreboard.yml").getStringList("scoreboard.lines.playing.battlerush-match")) {
-                            lines.add(CC.translate(line)
-                                    .replaceAll("\\{sidebar}", this.getScoreboardLines(player))
-                                    .replaceAll("\\{opponent}", opponent.getPlayer().getUsername())
-                                    .replaceAll("\\{opponent-ping}", String.valueOf(BukkitReflection.getPing(opponent.getPlayer().getPlayer())))
-                                    .replaceAll("\\{player-ping}", String.valueOf(BukkitReflection.getPing(player)))
-                                    .replaceAll("\\{goals}", ScoreboardUtil.visualizeGoalsAsCircles(roundsMatch.getParticipantA().getPlayer().getData().getGoals(), 3))
-                                    .replaceAll("\\{opponent-goals}", ScoreboardUtil.visualizeGoalsAsCircles(roundsMatch.getParticipantB().getPlayer().getData().getGoals(), 3))
-                                    .replaceAll("\\{kills}", String.valueOf(profile.getMatch().getGamePlayer(player).getData().getKills()))
-                                    .replaceAll("\\{current-round}", String.valueOf(roundsMatch.getCurrentRound()))
-                                    .replaceAll("\\{duration}", profile.getMatch().getDuration())
-                                    .replaceAll("\\{color}", String.valueOf(roundsMatch.getTeamAColor()))
-                                    .replaceAll("\\{opponent-color}", String.valueOf(roundsMatch.getTeamBColor()))
-                                    .replaceAll("\\{arena}", profile.getMatch().getArena().getDisplayName() == null ? "&c&lNULL" : profile.getMatch().getArena().getDisplayName())
-                                    .replaceAll("\\{kit}", profile.getMatch().getKit().getDisplayName()));
-                        }
+                        this.replaceBattleRushLines(player, lines, opponent, roundsMatch, profile);
                     } else if (profile.getMatch().getKit().isSettingEnabled(KitSettingLivesImpl.class)) {
                         for (String line : Alley.getInstance().getConfigService().getConfig("providers/scoreboard.yml").getStringList("scoreboard.lines.playing.lives-match")) {
                             lines.add(CC.translate(line)
@@ -256,6 +245,34 @@ public class ScoreboardVisualizer implements AssembleAdapter {
             return lines;
         }
         return null;
+    }
+
+    /**
+     * Replace the lines for the Battle Rush match.
+     *
+     * @param player      The player to replace the lines for.
+     * @param lines       The lines to replace.
+     * @param opponent    The opponent to replace the lines for.
+     * @param roundsMatch The rounds match to replace the lines for.
+     * @param profile     The profile to replace the lines for.
+     */
+    private void replaceBattleRushLines(Player player, List<String> lines, GameParticipant<MatchGamePlayerImpl> opponent, MatchRoundsRegularImpl roundsMatch, Profile profile) {
+        for (String line : Alley.getInstance().getConfigService().getConfig("providers/scoreboard.yml").getStringList("scoreboard.lines.playing.battlerush-match")) {
+            lines.add(CC.translate(line)
+                    .replaceAll("\\{sidebar}", this.getScoreboardLines(player))
+                    .replaceAll("\\{opponent}", opponent.getPlayer().getUsername())
+                    .replaceAll("\\{opponent-ping}", String.valueOf(BukkitReflection.getPing(opponent.getPlayer().getPlayer())))
+                    .replaceAll("\\{player-ping}", String.valueOf(BukkitReflection.getPing(player)))
+                    .replaceAll("\\{goals}", ScoreboardUtil.visualizeGoalsAsCircles(roundsMatch.getParticipantA().getPlayer().getData().getGoals(), 3))
+                    .replaceAll("\\{opponent-goals}", ScoreboardUtil.visualizeGoalsAsCircles(roundsMatch.getParticipantB().getPlayer().getData().getGoals(), 3))
+                    .replaceAll("\\{kills}", String.valueOf(profile.getMatch().getGamePlayer(player).getData().getKills()))
+                    .replaceAll("\\{current-round}", String.valueOf(roundsMatch.getCurrentRound()))
+                    .replaceAll("\\{duration}", profile.getMatch().getDuration())
+                    .replaceAll("\\{color}", String.valueOf(roundsMatch.getTeamAColor()))
+                    .replaceAll("\\{opponent-color}", String.valueOf(roundsMatch.getTeamBColor()))
+                    .replaceAll("\\{arena}", profile.getMatch().getArena().getDisplayName() == null ? "&c&lNULL" : profile.getMatch().getArena().getDisplayName())
+                    .replaceAll("\\{kit}", profile.getMatch().getKit().getDisplayName()));
+        }
     }
 
     /**
