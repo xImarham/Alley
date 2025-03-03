@@ -138,10 +138,8 @@ public class PartyHandler {
         this.parties.remove(party);
 
         Cooldown cooldown = Alley.getInstance().getCooldownRepository().getCooldown(leader.getUniqueId(), EnumCooldownType.PARTY_ANNOUNCE_COOLDOWN);
-        if (cooldown != null) {
-            if (cooldown.isActive()) {
-                cooldown.resetCooldown();
-            }
+        if (cooldown != null && cooldown.isActive()) {
+            cooldown.resetCooldown();
         }
 
         if (leader.isOnline()) {
