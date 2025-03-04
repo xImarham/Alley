@@ -57,7 +57,7 @@ public class ResetConfirmMenu extends Menu {
                     .lore(
                             "",
                             "&7Click here to confirm the stat",
-                            "&7reset of " + Bukkit.getPlayer(this.uuid).getName() + ".",
+                            "&7reset of " + Bukkit.getOfflinePlayer(this.uuid).getName() + ".",
                             "",
                             "&c&lWARNING:",
                             "&fThis is &nbig responsibility&f.",

@@ -11,6 +11,7 @@ import dev.revere.alley.util.chat.CC;
 import lombok.Getter;
 import org.bson.Document;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 import java.text.SimpleDateFormat;
@@ -82,7 +83,7 @@ public class ProfileRepository {
      */
     public void resetStats(Player player, UUID target) {
         Profile profile = this.getProfile(target);
-        Player targetPlayer = Bukkit.getPlayer(target);
+        OfflinePlayer targetPlayer = Bukkit.getOfflinePlayer(target);
 
         this.archiveProfile(profile);
 
@@ -104,7 +105,7 @@ public class ProfileRepository {
                     "&cYour stats have been wiped due to suspicious activity.",
                     "&7If you believe this was unjust, create a support ticket.",
                     ""
-            ).forEach(line -> targetPlayer.sendMessage(CC.translate(line)));
+            ).forEach(line -> targetPlayer.getPlayer().sendMessage(CC.translate(line)));
         }
     }
 
