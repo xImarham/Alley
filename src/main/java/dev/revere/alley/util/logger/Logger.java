@@ -7,6 +7,8 @@ import dev.revere.alley.util.chat.Symbol;
 import lombok.experimental.UtilityClass;
 import org.bukkit.Bukkit;
 
+import java.util.Arrays;
+
 /**
  * @author Remi
  * @project Alley
@@ -46,7 +48,7 @@ public class Logger {
      * Log the time it takes to run a task.
      *
      * @param runnableTaskName the name of the task to run
-     * @param runnable the task to run
+     * @param runnable         the task to run
      */
     public void logTimeTask(String runnableTaskName, Runnable runnable) {
         try {
@@ -63,8 +65,8 @@ public class Logger {
     /**
      * Measure the runtime of a task and log it to the console with the provided action in its parameter.
      *
-     * @param action the action
-     * @param task the task to measure
+     * @param action   the action
+     * @param task     the task to measure
      * @param runnable the runnable to run
      */
     public void logTimeWithAction(String action, String task, Runnable runnable) {
@@ -99,39 +101,42 @@ public class Logger {
      */
     public void pluginEnabled(long timeTaken) {
         Alley plugin = Alley.getInstance();
-
-        //Bukkit.getConsoleSender().sendMessage(" ");
-        //Arrays.stream(ASCIIUtil.ALLEY).forEach(line -> Bukkit.getConsoleSender().sendMessage(CC.translate(line)));
-        Bukkit.getConsoleSender().sendMessage(" ");
-        Bukkit.getConsoleSender().sendMessage(CC.translate("        &b&l" + plugin.getDescription().getName() + " &bPractice"));
-        Bukkit.getConsoleSender().sendMessage(" ");
-        Bukkit.getConsoleSender().sendMessage(CC.translate("    &fAuthors: &b" + plugin.getDescription().getAuthors().toString().replace("[", "").replace("]", "")));
-        Bukkit.getConsoleSender().sendMessage(" ");
-        Bukkit.getConsoleSender().sendMessage(CC.translate("    &fVersion: &b" + plugin.getDescription().getVersion()));
-        Bukkit.getConsoleSender().sendMessage(CC.translate("    &fDiscord: &b" + plugin.getDescription().getWebsite()));
-        Bukkit.getConsoleSender().sendMessage(CC.translate("    &fDescription: &b" + plugin.getDescription().getDescription()));
-        Bukkit.getConsoleSender().sendMessage(" ");
-        Bukkit.getConsoleSender().sendMessage(CC.translate("    &fKits &b" + plugin.getKitRepository().getKits().size()));
-        Bukkit.getConsoleSender().sendMessage(CC.translate("    &fArenas: &b" + plugin.getArenaRepository().getArenas().size()));
-        Bukkit.getConsoleSender().sendMessage(CC.translate("    &fFFA Arenas: &b" + plugin.getFfaRepository().getMatches().size()));
-        Bukkit.getConsoleSender().sendMessage(" ");
-        Bukkit.getConsoleSender().sendMessage(CC.translate("    &bMongoDB &f| &bStatus: &aConnected"));
-        Bukkit.getConsoleSender().sendMessage(CC.translate("     &fHost: &b" + plugin.getConfigService().getDatabaseConfig().getString("mongo.uri")));
-        Bukkit.getConsoleSender().sendMessage(CC.translate("     &fDatabase: &b" + plugin.getConfigService().getDatabaseConfig().getString("mongo.database")));
-        Bukkit.getConsoleSender().sendMessage(" ");
-        Bukkit.getConsoleSender().sendMessage(CC.translate("    &fSpigot: &b" + Bukkit.getName()));
-        Bukkit.getConsoleSender().sendMessage(CC.translate("    &fVersion: &b" + ServerUtil.getBukkitVersionExact(plugin)));
-        Bukkit.getConsoleSender().sendMessage(" ");
-        Bukkit.getConsoleSender().sendMessage(CC.translate("    &fLoaded in &b" + timeTaken + " &bms"));
-        Bukkit.getConsoleSender().sendMessage(" ");
+        Arrays.asList(
+                " ",
+                "        &b&l" + plugin.getDescription().getName() + " &bPractice",
+                " ",
+                "    &fAuthors: &b" + plugin.getDescription().getAuthors().toString().replace("[", "").replace("]", ""),
+                " ",
+                "    &fVersion: &b" + plugin.getDescription().getVersion(),
+                "    &fDiscord: &b" + plugin.getDescription().getWebsite(),
+                "    &fDescription: &b" + plugin.getDescription().getDescription(),
+                " ",
+                "    &fKits &b" + plugin.getKitRepository().getKits().size(),
+                "    &fArenas: &b" + plugin.getArenaRepository().getArenas().size(),
+                "    &fFFA Arenas: &b" + plugin.getFfaRepository().getMatches().size(),
+                "    &fDivisions: &b" + plugin.getDivisionRepository().getDivisions().size(),
+                " ",
+                "    &bMongoDB &f| &bStatus: &aConnected",
+                "     &fHost: &b" + plugin.getConfigService().getDatabaseConfig().getString("mongo.uri"),
+                "     &fDatabase: &b" + plugin.getConfigService().getDatabaseConfig().getString("mongo.database"),
+                "     &fLoaded Profiles: &b" + plugin.getProfileRepository().getProfiles().size(),
+                " ",
+                "    &fSpigot: &b" + Bukkit.getName(),
+                "    &fVersion: &b" + ServerUtil.getBukkitVersionExact(plugin),
+                " ",
+                "    &fLoaded in &b" + timeTaken + " &bms",
+                " "
+        ).forEach(line -> Bukkit.getConsoleSender().sendMessage(CC.translate(line)));
     }
 
     /**
      * Send a message to the console when the plugin is disabled.
      */
     public void pluginDisabled() {
-        Bukkit.getConsoleSender().sendMessage(" ");
-        Bukkit.getConsoleSender().sendMessage(CC.translate("&8[&bAlley&8] &cDisabled."));
-        Bukkit.getConsoleSender().sendMessage(" ");
+        Arrays.asList(
+                "",
+                CC.PREFIX + "&cDisabled.",
+                ""
+        ).forEach(line -> Bukkit.getConsoleSender().sendMessage(CC.translate(line)));
     }
 }
