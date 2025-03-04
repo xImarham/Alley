@@ -89,7 +89,7 @@ scoreboard:
         - "{opponent-color}&l[R] &r{opponent-goals}"
         - ""
         - "&fKills: &b{kills}"
-        - "&fTime Left: &b{time}"
+        - "&fTime Left: &b{time-left}"
         - ""
         - "&fYour Ping: &b{player-ping}ms"
         - "&fTheir Ping: &b{opponent-ping}ms"

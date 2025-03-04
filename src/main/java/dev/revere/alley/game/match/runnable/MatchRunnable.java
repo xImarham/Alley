@@ -7,7 +7,6 @@ import dev.revere.alley.game.match.enums.EnumMatchState;
 import dev.revere.alley.game.match.impl.MatchRoundsRegularImpl;
 import dev.revere.alley.util.SoundUtil;
 import dev.revere.alley.util.chat.CC;
-import dev.revere.alley.util.logger.Logger;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -37,9 +36,17 @@ public class MatchRunnable extends BukkitRunnable {
     @Override
     public void run() {
         this.stage--;
+
+        if (System.currentTimeMillis() - this.match.getStartTime() >= 900_000 && this.match.getKit().isSettingEnabled(KitSettingBattleRushImpl.class)) {
+            this.match.sendMessage(CC.translate("&cMatch has ended due to time limit!"));
+            this.match.setState(EnumMatchState.ENDING_MATCH);
+            this.stage = 4;
+            return;
+        }
+
         switch (this.match.getState()) {
             case STARTING:
-                if (stage == 0) {
+                if (this.stage == 0) {
                     Alley.getInstance().getServer().getScheduler().runTask(Alley.getInstance(), this.match::handleRoundStart);
                     this.match.setState(EnumMatchState.RUNNING);
 

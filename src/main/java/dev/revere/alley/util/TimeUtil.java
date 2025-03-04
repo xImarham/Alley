@@ -32,6 +32,18 @@ public final class TimeUtil {
     }
 
     /**
+     * Converts milliseconds to a timer format.
+     *
+     * @param millis the milliseconds to convert.
+     * @return the formatted time.
+     */
+    public String formatTime(long millis) {
+        long minutes = (millis / 1000) / 60;
+        long seconds = (millis / 1000) % 60;
+        return String.format("%02d:%02d", minutes, seconds);
+    }
+
+    /**
      * Converts milliseconds to a seconds format.
      *
      * @param millis the milliseconds to convert.

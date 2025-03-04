@@ -14,6 +14,7 @@ import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
 import dev.revere.alley.util.AnimationUtil;
 import dev.revere.alley.util.ScoreboardUtil;
+import dev.revere.alley.util.TimeUtil;
 import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.util.reflection.BukkitReflection;
 import org.bukkit.Bukkit;
@@ -257,12 +258,17 @@ public class ScoreboardVisualizer implements AssembleAdapter {
      * @param profile     The profile to replace the lines for.
      */
     private void replaceBattleRushLines(Player player, List<String> lines, GameParticipant<MatchGamePlayerImpl> opponent, MatchRoundsRegularImpl roundsMatch, Profile profile) {
+        long elapsedTime = System.currentTimeMillis() - profile.getMatch().getStartTime();
+        long remainingTime = Math.max(900_000 - elapsedTime, 0);
+        String formattedTime = TimeUtil.formatTime(remainingTime);
+
         for (String line : Alley.getInstance().getConfigService().getConfig("providers/scoreboard.yml").getStringList("scoreboard.lines.playing.battlerush-match")) {
             lines.add(CC.translate(line)
                     .replaceAll("\\{sidebar}", this.getScoreboardLines(player))
                     .replaceAll("\\{opponent}", opponent.getPlayer().getUsername())
                     .replaceAll("\\{opponent-ping}", String.valueOf(BukkitReflection.getPing(opponent.getPlayer().getPlayer())))
                     .replaceAll("\\{player-ping}", String.valueOf(BukkitReflection.getPing(player)))
+                    .replaceAll("\\{time-left}", formattedTime) // Inject formatted time
                     .replaceAll("\\{goals}", ScoreboardUtil.visualizeGoalsAsCircles(roundsMatch.getParticipantA().getPlayer().getData().getGoals(), 3))
                     .replaceAll("\\{opponent-goals}", ScoreboardUtil.visualizeGoalsAsCircles(roundsMatch.getParticipantB().getPlayer().getData().getGoals(), 3))
                     .replaceAll("\\{kills}", String.valueOf(profile.getMatch().getGamePlayer(player).getData().getKills()))
