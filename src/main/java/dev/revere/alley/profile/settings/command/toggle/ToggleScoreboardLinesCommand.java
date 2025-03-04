@@ -11,7 +11,7 @@ import org.bukkit.entity.Player;
 
 /**
  * @author Emmy
- * @project alley-practice
+ * @project Alley
  * @since 03/03/2025
  */
 public class ToggleScoreboardLinesCommand extends BaseCommand {

@@ -1,12 +1,12 @@
 package dev.revere.alley.feature.leaderboard.menu.button;
 
-import lombok.AllArgsConstructor;
 import dev.revere.alley.Alley;
-import dev.revere.alley.feature.leaderboard.menu.LeaderboardMenu;
+import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.feature.leaderboard.enums.EnumLeaderboardType;
+import dev.revere.alley.feature.leaderboard.menu.LeaderboardMenu;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.util.data.item.ItemBuilder;
-import dev.revere.alley.api.menu.Button;
+import lombok.AllArgsConstructor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
@@ -22,7 +22,6 @@ import java.util.List;
  */
 @AllArgsConstructor
 public class DisplayTypeButton extends Button {
-
     /**
      * Gets the item to display in the menu.
      *

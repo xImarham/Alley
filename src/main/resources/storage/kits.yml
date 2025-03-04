@@ -1,6 +1,6 @@
 kits:
   NoDebuff:
-    displayname: '&bNoDebuff'
+    displayname: '&b&lNoDebuff'
     description: '&7The best experience!'
     enabled: true
     unrankedslot: 10
@@ -190,9 +190,18 @@ kits:
       NoDamage:
         description: Prevent the player from taking damage
         enabled: false
+      NoHunger:
+        description: Prevent the player from getting hungry
+        enabled: false
+      BattleRush:
+        description: The Battle Rush Kit Setting, first having 3 goals wins.
+        enabled: false
+      StickFight:
+        description: The Stick Fight Kit Setting.
+        enabled: false
     disclaimer: '&7Eliminate your opponents! (Diamond Gear, Health Potions)'
   Classic:
-    displayname: '&bClassic'
+    displayname: '&b&lClassic'
     description: '&7Old styled PvP.'
     enabled: true
     unrankedslot: 11
@@ -281,9 +290,18 @@ kits:
       NoDamage:
         description: Prevent the player from taking damage
         enabled: false
+      NoHunger:
+        description: Prevent the player from getting hungry
+        enabled: false
+      BattleRush:
+        description: The Battle Rush Kit Setting, first having 3 goals wins.
+        enabled: false
+      StickFight:
+        description: The Stick Fight Kit Setting.
+        enabled: false
     disclaimer: '&7Eliminate your opponents! (Diamond Gear, Fishing Rod, Bow)'
   Boxing:
-    displayname: '&bBoxing'
+    displayname: '&b&lBoxing'
     description: '&71st to 100 Hits, wins!'
     enabled: true
     unrankedslot: 12
@@ -393,9 +411,18 @@ kits:
       NoDamage:
         description: Prevent the player from taking damage
         enabled: false
+      NoHunger:
+        description: Prevent the player from getting hungry
+        enabled: false
+      BattleRush:
+        description: The Battle Rush Kit Setting, first having 3 goals wins.
+        enabled: false
+      StickFight:
+        description: The Stick Fight Kit Setting.
+        enabled: false
     disclaimer: '&7First to 100 hits wins!'
   Sumo:
-    displayname: '&bSumo'
+    displayname: '&b&lSumo'
     description: '&7Knock off your rival!'
     enabled: true
     unrankedslot: 13
@@ -485,9 +512,18 @@ kits:
       NoDamage:
         description: Prevent the player from taking damage
         enabled: false
+      NoHunger:
+        description: Prevent the player from getting hungry
+        enabled: false
+      BattleRush:
+        description: The Battle Rush Kit Setting, first having 3 goals wins.
+        enabled: false
+      StickFight:
+        description: The Stick Fight Kit Setting.
+        enabled: false
     disclaimer: '&7Throw your opponents off the surface!'
   Spleef:
-    displayname: '&bSpleef'
+    displayname: '&b&lSpleef'
     description: '&7Snowy!'
     enabled: true
     unrankedslot: 14
@@ -585,9 +621,18 @@ kits:
       NoDamage:
         description: Prevent the player from taking damage
         enabled: false
+      NoHunger:
+        description: Prevent the player from getting hungry
+        enabled: false
+      BattleRush:
+        description: The Battle Rush Kit Setting, first having 3 goals wins.
+        enabled: false
+      StickFight:
+        description: The Stick Fight Kit Setting.
+        enabled: false
     disclaimer: '&7Break the snow blocks and make your opponents fall!'
   Parkour:
-    displayname: '&bParkour'
+    displayname: '&b&lParkour'
     description: Classic parkour lol.
     enabled: true
     unrankedslot: 15
@@ -677,9 +722,18 @@ kits:
       NoDamage:
         description: Prevent the player from taking damage
         enabled: false
+      NoHunger:
+        description: Prevent the player from getting hungry
+        enabled: false
+      BattleRush:
+        description: The Battle Rush Kit Setting, first having 3 goals wins.
+        enabled: false
+      StickFight:
+        description: The Stick Fight Kit Setting.
+        enabled: false
     disclaimer: '&7Complete the parkour faster than your opponent to win!'
   BattleRush:
-    displayname: '&bBattleRush'
+    displayname: '&b&lBattleRush'
     description: '&7BattleRush kit description'
     enabled: true
     unrankedslot: 16
@@ -751,7 +805,7 @@ kits:
         enabled: false
       Build:
         description: Allows you to build in matches
-        enabled: false
+        enabled: true
       Ranked:
         description: This is the ranked kit type
         enabled: true
@@ -769,13 +823,22 @@ kits:
         enabled: false
       Lives:
         description: This kit setting enables best of 3 type matches, such as Pearl Fight.
-        enabled: true
+        enabled: false
       NoDamage:
         description: Prevent the player from taking damage
+        enabled: true
+      NoHunger:
+        description: Prevent the player from getting hungry
+        enabled: true
+      BattleRush:
+        description: The Battle Rush Kit Setting, first having 3 goals wins.
+        enabled: true
+      StickFight:
+        description: The Stick Fight Kit Setting.
         enabled: false
     disclaimer: '&7Enter your opponents goal to get the most points!'
   PearlFight:
-    displayname: '&bPearlFight'
+    displayname: '&b&lPearlFight'
     description: '&7PearlFight kit description'
     enabled: true
     unrankedslot: 19
@@ -879,9 +942,18 @@ kits:
       NoDamage:
         description: Prevent the player from taking damage
         enabled: true
+      NoHunger:
+        description: Prevent the player from getting hungry
+        enabled: false
+      BattleRush:
+        description: The Battle Rush Kit Setting, first having 3 goals wins.
+        enabled: false
+      StickFight:
+        description: The Stick Fight Kit Setting.
+        enabled: false
     disclaimer: '&7Hit your opponents off the map! (Kockback Stick, Blocks)'
   StickFight:
-    displayname: '&bStickFight'
+    displayname: '&b&lStickFight'
     description: '&7StickFight kit description'
     enabled: true
     unrankedslot: 20
@@ -979,8 +1051,17 @@ kits:
         enabled: false
       Lives:
         description: This kit setting enables best of 3 type matches, such as Pearl Fight.
-        enabled: true
+        enabled: false
       NoDamage:
         description: Prevent the player from taking damage
         enabled: false
+      NoHunger:
+        description: Prevent the player from getting hungry
+        enabled: false
+      BattleRush:
+        description: The Battle Rush Kit Setting, first having 3 goals wins.
+        enabled: false
+      StickFight:
+        description: The Stick Fight Kit Setting.
+        enabled: true
     disclaimer: '&7Knock your opponent off! (Knockback Stick, Blocks)'
