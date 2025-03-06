@@ -40,7 +40,7 @@ public class ActionBarUtil {
                 }.runTaskLater(Alley.getInstance(), durationSeconds * 20L);
             }
         } catch (Exception exception) {
-            Logger.logException("An error occurred while trying to send an action bar message to " + player.getName() + ".", exception);
+            Logger.logException("An error occurred while trying to send an action bar message to " + player.getName(), exception);
         }
     }
 }

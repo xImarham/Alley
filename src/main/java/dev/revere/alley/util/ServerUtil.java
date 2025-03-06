@@ -21,7 +21,7 @@ public class ServerUtil {
      * Disconnect all players from the server.
      */
     public void disconnectPlayers() {
-        Bukkit.getConsoleSender().sendMessage(CC.translate("&c[&4Alley&c] &cKicked all players due to a server restart."));
+        Bukkit.getConsoleSender().sendMessage(CC.translate(CC.ERROR_PREFIX + "&cKicked all players due to a server restart."));
         Bukkit.getOnlinePlayers().forEach(player -> player.kickPlayer(CC.translate("&cThe server is restarting.")));
     }
 

@@ -16,6 +16,7 @@ import java.util.List;
 public class CC {
     public final String MENU_BAR = translate("&7&m------------------------");
     public final String PREFIX = translate("&f[&b" + Alley.getInstance().getDescription().getName() + "&f] &r");
+    public final String ERROR_PREFIX = translate("&c[&4" + Alley.getInstance().getDescription().getName() + "&c] &r");
 
     /**
      * Translate a string to a colored string.

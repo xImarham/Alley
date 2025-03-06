@@ -1,16 +1,21 @@
-package dev.revere.alley.api.assemble;
+package dev.revere.alley.api.assemble.utility;
 
+import lombok.experimental.UtilityClass;
 import org.bukkit.ChatColor;
 
-public class AssembleUtils {
-
-    public static String[] splitTeamText(String input) {
+@UtilityClass
+public class AssembleUtility {
+    /**
+     * Splits the input into two parts, the prefix and the suffix.
+     *
+     * @param input The input to split
+     * @return The split input
+     */
+    public String[] splitTeamText(String input) {
         final int inputLength = input.length();
         if (inputLength > 16) {
-            // Make the prefix the first 16 characters of our text
             String prefix = input.substring(0, 16);
 
-            // Get the last index of the color char in the prefix
             final int lastColorIndex = prefix.lastIndexOf(ChatColor.COLOR_CHAR);
 
             String suffix;
@@ -31,5 +36,4 @@ public class AssembleUtils {
             return new String[] {input, ""};
         }
     }
-
 }

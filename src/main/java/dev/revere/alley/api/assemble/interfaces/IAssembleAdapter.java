@@ -1,10 +1,10 @@
-package dev.revere.alley.api.assemble;
+package dev.revere.alley.api.assemble.interfaces;
 
 import org.bukkit.entity.Player;
 
 import java.util.List;
 
-public interface AssembleAdapter {
+public interface IAssembleAdapter {
 
 	/**
 	 * Get's the scoreboard title.

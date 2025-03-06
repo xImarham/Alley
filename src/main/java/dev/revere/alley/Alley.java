@@ -1,7 +1,7 @@
 package dev.revere.alley;
 
 import dev.revere.alley.api.assemble.Assemble;
-import dev.revere.alley.api.assemble.AssembleStyle;
+import dev.revere.alley.api.assemble.enums.EnumAssembleStyle;
 import dev.revere.alley.api.command.CommandFramework;
 import dev.revere.alley.api.menu.MenuListener;
 import dev.revere.alley.feature.arena.Arena;
@@ -59,6 +59,7 @@ public class Alley extends JavaPlugin {
 
     @Getter private static Alley instance;
 
+    private Assemble assemble;
     private CommandFramework commandFramework;
     private CosmeticRepository cosmeticRepository;
     private ProfileRepository profileRepository;
@@ -96,7 +97,7 @@ public class Alley extends JavaPlugin {
         this.initializeMongo();
         this.initializeManagers();
         this.registerListeners();
-        this.loadScoreboard();
+        this.initializeScoreboard();
         this.runTasks();
 
         CommandUtility.registerCommands();
@@ -113,6 +114,8 @@ public class Alley extends JavaPlugin {
     public void onDisable() {
         this.profileRepository.getProfiles().forEach((uuid, profile) -> profile.save());
         //this.matchRepository.endPresentMatches();
+
+        this.assemble.interruptAndClose(true);
 
         ServerUtil.disconnectPlayers();
         ServerUtil.clearEntities(EntityType.DROPPED_ITEM);
@@ -191,12 +194,12 @@ public class Alley extends JavaPlugin {
         ).forEach(listener -> getServer().getPluginManager().registerEvents(listener, this));
     }
 
-    private void loadScoreboard() {
+    private void initializeScoreboard() {
         this.scoreboardTitleHandler = new ScoreboardTitleHandler(this.configService.getScoreboardConfig());
 
-        Assemble assemble = new Assemble(this, new ScoreboardVisualizer());
-        assemble.setTicks(2);
-        assemble.setAssembleStyle(AssembleStyle.MODERN);
+        this.assemble = new Assemble(this, new ScoreboardVisualizer());
+        this.assemble.setTicks(2);
+        this.assemble.setAssembleStyle(EnumAssembleStyle.MODERN);
     }
 
     private void runTasks() {

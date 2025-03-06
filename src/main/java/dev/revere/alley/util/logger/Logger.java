@@ -3,9 +3,9 @@ package dev.revere.alley.util.logger;
 import dev.revere.alley.Alley;
 import dev.revere.alley.util.ServerUtil;
 import dev.revere.alley.util.chat.CC;
-import dev.revere.alley.util.chat.Symbol;
 import lombok.experimental.UtilityClass;
 import org.bukkit.Bukkit;
+import org.bukkit.command.ConsoleCommandSender;
 
 import java.util.Arrays;
 
@@ -16,14 +16,34 @@ import java.util.Arrays;
  */
 @UtilityClass
 public class Logger {
+    private static final ConsoleCommandSender consoleSender = Bukkit.getConsoleSender();
+
+    /**
+     * Log a message to the console.
+     *
+     * @param message the message to log
+     */
+    public void log(String message) {
+        consoleSender.sendMessage(CC.translate(CC.PREFIX + message));
+    }
+
+    /**
+     * Log an error to the console.
+     *
+     * @param message the error message to log
+     */
+    public void logError(String message) {
+        consoleSender.sendMessage(CC.translate(CC.ERROR_PREFIX + "&c(ERROR) &8" + message));
+    }
+
     /**
      * Log an exception to the console.
      *
-     * @param message   the message to log
+     * @param message   the info message or the class name
      * @param exception the exception to log
      */
     public void logException(String message, Exception exception) {
-        Bukkit.getConsoleSender().sendMessage(CC.translate("&c" + Symbol.ARROW_R + " &4&l" + Alley.getInstance().getDescription().getName() + " Exception &c" + Symbol.ARROW_L + " &7&o" + message + " &c" + exception.getMessage()));
+        consoleSender.sendMessage(CC.translate(CC.ERROR_PREFIX + "&c(EXCEPTION) &f" + message + ": &r" + exception.getMessage() + "!"));
     }
 
     /**
@@ -38,9 +58,9 @@ public class Logger {
             runnable.run();
             long end = System.currentTimeMillis();
 
-            Bukkit.getConsoleSender().sendMessage(CC.translate(CC.PREFIX + "&fSuccessfully initialized the &b" + taskName + " &fin &b" + (end - start) + "ms&f."));
+            consoleSender.sendMessage(CC.translate(CC.PREFIX + "&fSuccessfully initialized the &b" + taskName + " &fin &b" + (end - start) + "ms&f."));
         } catch (Exception exception) {
-            logException("Failed to run the task: " + taskName, exception);
+            logException("Failed to run the " + taskName + " task", exception);
         }
     }
 
@@ -56,9 +76,9 @@ public class Logger {
             runnable.run();
             long end = System.currentTimeMillis();
 
-            Bukkit.getConsoleSender().sendMessage(CC.translate(CC.PREFIX + "&fSuccessfully ran the &b" + runnableTaskName + " &fin &b" + (end - start) + "ms&f."));
+            consoleSender.sendMessage(CC.translate(CC.PREFIX + "&fSuccessfully ran the &b" + runnableTaskName + " &fin &b" + (end - start) + "ms&f."));
         } catch (Exception exception) {
-            logException("Failed to run the task: " + runnableTaskName, exception);
+            logException("Failed to run the " + runnableTaskName + " task", exception);
         }
     }
 
@@ -73,25 +93,7 @@ public class Logger {
         long start = System.currentTimeMillis();
         runnable.run();
         long runtime = System.currentTimeMillis() - start;
-        Bukkit.getConsoleSender().sendMessage(CC.translate(CC.PREFIX + "&fSuccessfully " + action + "&f the &b" + task + " &fin &b" + runtime + "ms&f."));
-    }
-
-    /**
-     * Log a message to the console.
-     *
-     * @param message the message to log
-     */
-    public void log(String message) {
-        Bukkit.getConsoleSender().sendMessage(CC.translate(CC.PREFIX + message));
-    }
-
-    /**
-     * Log an error to the console.
-     *
-     * @param message the error message to log
-     */
-    public void logError(String message) {
-        Bukkit.getServer().getConsoleSender().sendMessage(CC.translate("&8[&4" + Alley.getInstance().getDescription().getName() + "&8] &cERROR: " + message + "!"));
+        consoleSender.sendMessage(CC.translate(CC.PREFIX + "&fSuccessfully " + action + "&f the &b" + task + " &fin &b" + runtime + "ms&f."));
     }
 
     /**
@@ -126,7 +128,7 @@ public class Logger {
                 " ",
                 "    &fLoaded in &b" + timeTaken + " &bms",
                 " "
-        ).forEach(line -> Bukkit.getConsoleSender().sendMessage(CC.translate(line)));
+        ).forEach(line -> consoleSender.sendMessage(CC.translate(line)));
     }
 
     /**
@@ -137,6 +139,6 @@ public class Logger {
                 "",
                 CC.PREFIX + "&cDisabled.",
                 ""
-        ).forEach(line -> Bukkit.getConsoleSender().sendMessage(CC.translate(line)));
+        ).forEach(line -> consoleSender.sendMessage(CC.translate(line)));
     }
 }

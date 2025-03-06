@@ -1,114 +1,122 @@
 package dev.revere.alley.api.assemble;
 
+import dev.revere.alley.Alley;
+import dev.revere.alley.api.assemble.enums.EnumAssembleStyle;
+import dev.revere.alley.api.assemble.events.AssembleBoardCreateEvent;
+import dev.revere.alley.api.assemble.interfaces.IAssembleAdapter;
+import dev.revere.alley.api.assemble.listener.AssembleListener;
+import dev.revere.alley.util.chat.CC;
 import lombok.Getter;
 import lombok.Setter;
-import dev.revere.alley.api.assemble.events.AssembleBoardCreateEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-@Getter @Setter
+@Getter
+@Setter
 public class Assemble {
+    private final ChatColor[] chatColorCache = ChatColor.values();
 
-	private final JavaPlugin plugin;
+    private Map<UUID, AssembleBoard> boards;
 
-	private AssembleAdapter adapter;
-	private AssembleThread thread;
-	private AssembleListener listeners;
-	private AssembleStyle assembleStyle = AssembleStyle.MODERN;
+    private IAssembleAdapter adapter;
+    private AssembleThread thread;
+    private AssembleListener listeners;
+    private EnumAssembleStyle assembleStyle;
 
-	private Map<UUID, AssembleBoard> boards;
+    private final Alley plugin;
 
-	private long ticks = 2;
-	private boolean hook = false, debugMode = true, callEvents = true;
+    private boolean hook;
+    private boolean debugMode;
+    private boolean callEvents;
 
-	private final ChatColor[] chatColorCache = ChatColor.values();
+    private long ticks;
 
-	/**
-	 * Assemble.
-	 *
-	 * @param plugin instance.
-	 * @param adapter that is being provided.
-	 */
-	public Assemble(JavaPlugin plugin, AssembleAdapter adapter) {
-		if (plugin == null) {
-			throw new RuntimeException("Assemble can not be instantiated without a plugin instance!");
-		}
 
-		this.plugin = plugin;
-		this.adapter = adapter;
-		this.boards = new ConcurrentHashMap<>();
+    /**
+     * Constructor for the Assemble class.
+     *
+     * @param alley   The plugin instance of Alley.
+     * @param adapter The adapter instance.
+     */
+    public Assemble(Alley alley, IAssembleAdapter adapter) {
+        if (alley == null) {
+            throw new RuntimeException("Assemble can not be instantiated without a plugin instance!");
+        }
 
-		this.setup();
-	}
+        this.plugin = alley;
+        this.adapter = adapter;
+        this.assembleStyle = EnumAssembleStyle.MODERN;
+        this.boards = new ConcurrentHashMap<>();
+        this.ticks = 2;
 
-	/**
-	 * Setup Assemble.
-	 */
-	public void setup() {
-		// Register Events.
-		this.listeners = new AssembleListener(this);
-		this.plugin.getServer().getPluginManager().registerEvents(listeners, this.plugin);
+        this.hook = false;
+        this.debugMode = true;
+        this.callEvents = true;
 
-		// Ensure that the thread has stopped running.
-		if (this.thread != null) {
-			this.thread.stop();
-			this.thread = null;
-		}
+        this.setup();
+    }
 
-		// Register new boards for existing online players.
-		for (Player player : this.getPlugin().getServer().getOnlinePlayers()) {
+    public void setup() {
+        this.listeners = new AssembleListener(this);
+        this.plugin.getServer().getPluginManager().registerEvents(this.listeners, this.plugin);
 
-			// Call Events if enabled.
-			if (this.isCallEvents()) {
-				AssembleBoardCreateEvent createEvent = new AssembleBoardCreateEvent(player);
+        if (this.thread != null) {
+            this.thread.interrupt();
+            this.thread = null;
+        }
 
-				Bukkit.getPluginManager().callEvent(createEvent);
-				if (createEvent.isCancelled()) {
-					continue;
-				}
-			}
+        for (Player player : this.getPlugin().getServer().getOnlinePlayers()) {
 
-			getBoards().putIfAbsent(player.getUniqueId(), new AssembleBoard(player, this));
-		}
+            if (this.isCallEvents()) {
+                AssembleBoardCreateEvent createEvent = new AssembleBoardCreateEvent(player);
 
-		// Start Thread.
-		this.thread = new AssembleThread(this);
-	}
+                Bukkit.getPluginManager().callEvent(createEvent);
+                if (createEvent.isCancelled()) {
+                    continue;
+                }
+            }
 
-	/**
-	 * Cleanup Assemble.
-	 */
-	public void cleanup() {
-		// Stop thread.
-		if (this.thread != null) {
-			this.thread.stop();
-			this.thread = null;
-		}
+            this.boards.putIfAbsent(player.getUniqueId(), new AssembleBoard(player, this));
+        }
 
-		// Unregister listeners.
-		if (listeners != null) {
-			HandlerList.unregisterAll(listeners);
-			listeners = null;
-		}
+        this.thread = new AssembleThread(this);
+    }
 
-		// Destroy player scoreboards.
-		for (UUID uuid : getBoards().keySet()) {
-			Player player = Bukkit.getPlayer(uuid);
+    /**
+     * Interrupts the Assemble thread and removes all boards from players.
+     *
+     * @param onDisable whether the server is stopping.
+     */
+    public void interruptAndClose(boolean onDisable) {
+        if (this.thread != null) {
+            this.thread.interrupt();
+            this.thread = null;
+        }
 
-			if (player == null || !player.isOnline()) {
-				continue;
-			}
+        if (this.listeners != null) {
+            HandlerList.unregisterAll(this.listeners);
+            this.listeners = null;
+        }
 
-			getBoards().remove(uuid);
-			player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
-		}
-	}
+        for (UUID uuid : this.boards.keySet()) {
+            Player player = Bukkit.getPlayer(uuid);
 
+            if (player == null || !player.isOnline()) {
+                continue;
+            }
+
+            this.boards.remove(uuid);
+            player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
+        }
+
+        if (onDisable) {
+            Bukkit.getConsoleSender().sendMessage(CC.translate(CC.ERROR_PREFIX + "&cAssemble has been interrupted and closed due to server stop."));
+        }
+    }
 }

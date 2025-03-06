@@ -1,7 +1,7 @@
 package dev.revere.alley.visual.scoreboard;
 
 import dev.revere.alley.Alley;
-import dev.revere.alley.api.assemble.AssembleAdapter;
+import dev.revere.alley.api.assemble.interfaces.IAssembleAdapter;
 import dev.revere.alley.feature.combat.CombatService;
 import dev.revere.alley.feature.kit.settings.impl.KitSettingBattleRushImpl;
 import dev.revere.alley.feature.kit.settings.impl.KitSettingBoxingImpl;
@@ -31,7 +31,7 @@ import java.util.List;
  * @project Alley
  * @date 27/03/2024 - 14:27
  */
-public class ScoreboardVisualizer implements AssembleAdapter {
+public class ScoreboardVisualizer implements IAssembleAdapter {
     /**
      * Get the title of the scoreboard.
      *

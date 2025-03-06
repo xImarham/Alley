@@ -15,116 +15,113 @@ import java.util.UUID;
 
 @Getter
 public class AssembleBoard {
+    private final Assemble assemble;
 
-	private final Assemble assemble;
+    private final List<AssembleBoardEntry> entries;
+    private final List<String> identifiers;
 
-	private final List<AssembleBoardEntry> entries = new ArrayList<>();
-	private final List<String> identifiers = new ArrayList<>();
+    private final UUID uuid;
 
-	private final UUID uuid;
+    /**
+     * Assemble Board.
+     *
+     * @param player   that the board belongs to.
+     * @param assemble instance.
+     */
+    public AssembleBoard(Player player, Assemble assemble) {
+        this.assemble = assemble;
+        this.entries = new ArrayList<>();
+        this.identifiers = new ArrayList<>();
+        this.uuid = player.getUniqueId();
+        this.setup(player);
+    }
 
-	/**
-	 * Assemble Board.
-	 *
-	 * @param player that the board belongs to.
-	 * @param assemble instance.
-	 */
-	public AssembleBoard(Player player, Assemble assemble) {
-		this.uuid = player.getUniqueId();
-		this.assemble = assemble;
-		this.setup(player);
-	}
+    /**
+     * Get's a player's bukkit scoreboard.
+     *
+     * @return either existing scoreboard or new scoreboard.
+     */
+    public Scoreboard getScoreboard() {
+        Player player = Bukkit.getPlayer(getUuid());
+        if (this.assemble.isHook() || player.getScoreboard() != Bukkit.getScoreboardManager().getMainScoreboard()) {
+            return player.getScoreboard();
+        }
 
-	/**
-	 * Get's a player's bukkit scoreboard.
-	 *
-	 * @return either existing scoreboard or new scoreboard.
-	 */
-	public Scoreboard getScoreboard() {
-		Player player = Bukkit.getPlayer(getUuid());
-		if (getAssemble().isHook() || player.getScoreboard() != Bukkit.getScoreboardManager().getMainScoreboard()) {
-			return player.getScoreboard();
-		} else {
-			return Bukkit.getScoreboardManager().getNewScoreboard();
-		}
-	}
+        return Bukkit.getScoreboardManager().getNewScoreboard();
+    }
 
-	/**
-	 * Get's the player's scoreboard objective.
-	 *
-	 * @return either existing objecting or new objective.
-	 */
-	public Objective getObjective() {
-		Scoreboard scoreboard = getScoreboard();
-		if (scoreboard.getObjective("Assemble") == null) {
-			Objective objective = scoreboard.registerNewObjective("Assemble", "dummy");
-			objective.setDisplaySlot(DisplaySlot.SIDEBAR);
-			objective.setDisplayName(getAssemble().getAdapter().getTitle(Bukkit.getPlayer(getUuid())));
-			return objective;
-		} else {
-			return scoreboard.getObjective("Assemble");
-		}
-	}
+    /**
+     * Get's the player's scoreboard objective.
+     *
+     * @return either existing objecting or new objective.
+     */
+    public Objective getObjective() {
+        Scoreboard scoreboard = this.getScoreboard();
+        if (scoreboard.getObjective("Assemble") == null) {
+            Objective objective = scoreboard.registerNewObjective("Assemble", "dummy");
+            objective.setDisplaySlot(DisplaySlot.SIDEBAR);
+            objective.setDisplayName(getAssemble().getAdapter().getTitle(Bukkit.getPlayer(getUuid())));
+            return objective;
+        }
 
-	/**
-	 * Setup the board.
-	 *
-	 * @param player who's board to setup.
-	 */
-	private void setup(Player player) {
-		Scoreboard scoreboard = getScoreboard();
-		player.setScoreboard(scoreboard);
-		getObjective();
+        return scoreboard.getObjective("Assemble");
+    }
 
-		// Call Events if enabled.
-		if (assemble.isCallEvents()) {
-			AssembleBoardCreatedEvent createdEvent = new AssembleBoardCreatedEvent(this);
-			Bukkit.getPluginManager().callEvent(createdEvent);
-		}
-	}
+    /**
+     * Setup the board for a player.
+     *
+     * @param player who's board to setup.
+     */
+    private void setup(Player player) {
+        Scoreboard scoreboard = getScoreboard();
+        player.setScoreboard(scoreboard);
+        this.getObjective();
 
-	/**
-	 * Get the board entry at a specific position.
-	 *
-	 * @param pos to find entry.
-	 * @return entry if it isn't out of range.
-	 */
-	public AssembleBoardEntry getEntryAtPosition(int pos) {
-		return pos >= this.entries.size() ? null : this.entries.get(pos);
-	}
+        if (this.assemble.isCallEvents()) {
+            AssembleBoardCreatedEvent createdEvent = new AssembleBoardCreatedEvent(this);
+            Bukkit.getPluginManager().callEvent(createdEvent);
+        }
+    }
 
-	/**
-	 * Get the unique identifier for position in scoreboard.
-	 *
-	 * @param position for identifier.
-	 * @return unique identifier.
-	 */
-	public String getUniqueIdentifier(int position) {
-		String identifier = getRandomChatColor(position) + ChatColor.WHITE;
+    /**
+     * Get the board entry at a specific position.
+     *
+     * @param pos to find entry.
+     * @return entry if it isn't out of range.
+     */
+    public AssembleBoardEntry getEntryAtPosition(int pos) {
+        return pos >= this.entries.size() ? null : this.entries.get(pos);
+    }
 
-		while (this.identifiers.contains(identifier)) {
-			identifier = identifier + getRandomChatColor(position) + ChatColor.WHITE;
-		}
+    /**
+     * Get the unique identifier for position in scoreboard.
+     *
+     * @param position for identifier.
+     * @return unique identifier.
+     */
+    public String getUniqueIdentifier(int position) {
+        String identifier = this.getRandomChatColor(position) + ChatColor.WHITE;
 
-		// This is rare, but just in case, make the method recursive
-		if (identifier.length() > 16) {
-			return this.getUniqueIdentifier(position);
-		}
+        while (this.identifiers.contains(identifier)) {
+            identifier = identifier + this.getRandomChatColor(position) + ChatColor.WHITE;
+        }
 
-		// Add our identifier to the list so there are no duplicates
-		this.identifiers.add(identifier);
+        if (identifier.length() > 16) {
+            return this.getUniqueIdentifier(position);
+        }
 
-		return identifier;
-	}
+        this.identifiers.add(identifier);
 
-	/**
-	 * Gets a ChatColor based off the position in the collection.
-	 *
-	 * @param position of entry.
-	 * @return ChatColor adjacent to position.
-	 */
-	private String getRandomChatColor(int position) {
-		return assemble.getChatColorCache()[position].toString();
-	}
+        return identifier;
+    }
 
+    /**
+     * Gets a ChatColor based off the position in the collection.
+     *
+     * @param position of entry.
+     * @return ChatColor adjacent to position.
+     */
+    private String getRandomChatColor(int position) {
+        return this.assemble.getChatColorCache()[position].toString();
+    }
 }

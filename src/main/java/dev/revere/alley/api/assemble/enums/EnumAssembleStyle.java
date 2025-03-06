@@ -1,11 +1,15 @@
-package dev.revere.alley.api.assemble;
+package dev.revere.alley.api.assemble.enums;
 
 import lombok.Getter;
 
 @Getter
-public enum AssembleStyle {
+public enum EnumAssembleStyle {
+	KOHI(true, 15),
+	VIPER(true, -1),
+	MODERN(false, 1),
+	CUSTOM(false, 0)
 
-	KOHI(true, 15), VIPER(true, -1), MODERN(false, 1), CUSTOM(false, 0);
+	;
 
 	private boolean descending;
 	private int startNumber;
@@ -16,23 +20,22 @@ public enum AssembleStyle {
 	 * @param descending  whether the positions are going down or up.
 	 * @param startNumber from where to loop from.
 	 */
-	AssembleStyle(boolean descending, int startNumber) {
+	EnumAssembleStyle(boolean descending, int startNumber) {
 		this.descending = descending;
 		this.startNumber = startNumber;
 	}
 
-	public AssembleStyle reverse() {
+	public EnumAssembleStyle reverse() {
 		return descending(!this.descending);
 	}
 
-	public AssembleStyle descending(boolean descending) {
+	public EnumAssembleStyle descending(boolean descending) {
 		this.descending = descending;
 		return this;
 	}
 
-	public AssembleStyle startNumber(int startNumber) {
+	public EnumAssembleStyle startNumber(int startNumber) {
 		this.startNumber = startNumber;
 		return this;
 	}
-
 }
