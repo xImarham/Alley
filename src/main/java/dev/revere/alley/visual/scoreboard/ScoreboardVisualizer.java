@@ -7,6 +7,7 @@ import dev.revere.alley.feature.kit.settings.impl.KitSettingBattleRushImpl;
 import dev.revere.alley.feature.kit.settings.impl.KitSettingBoxingImpl;
 import dev.revere.alley.feature.kit.settings.impl.KitSettingLivesImpl;
 import dev.revere.alley.game.match.enums.EnumMatchState;
+import dev.revere.alley.game.match.impl.MatchRegularImpl;
 import dev.revere.alley.game.match.impl.MatchRoundsRegularImpl;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
@@ -18,6 +19,7 @@ import dev.revere.alley.util.TimeUtil;
 import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.util.reflection.BukkitReflection;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
@@ -200,16 +202,20 @@ public class ScoreboardVisualizer implements AssembleAdapter {
                     }
                     break;
                 case SPECTATING:
-                    for (String line : Alley.getInstance().getConfigService().getConfig("providers/scoreboard.yml").getStringList("scoreboard.lines.spectating")) {
-                        lines.add(CC.translate(line)
-                                .replaceAll("\\{sidebar}", this.getScoreboardLines(player))
-                                .replaceAll("\\{playerA}", profile.getMatch().getParticipants().get(0).getPlayer().getUsername())
-                                .replaceAll("\\{playerB}", profile.getMatch().getParticipants().get(1).getPlayer().getUsername())
-                                .replaceAll("\\{pingA}", String.valueOf(BukkitReflection.getPing(profile.getMatch().getParticipants().get(0).getPlayer().getPlayer())))
-                                .replaceAll("\\{pingB}", String.valueOf(BukkitReflection.getPing(profile.getMatch().getParticipants().get(1).getPlayer().getPlayer())))
-                                .replaceAll("\\{duration}", profile.getMatch().getDuration())
-                                .replaceAll("\\{arena}", profile.getMatch().getArena().getDisplayName() == null ? "&c&lNULL" : profile.getMatch().getArena().getDisplayName())
-                                .replaceAll("\\{kit}", profile.getMatch().getKit().getDisplayName()));
+                    if (profile.getMatch() instanceof MatchRegularImpl) {
+                        for (String line : Alley.getInstance().getConfigService().getConfig("providers/scoreboard.yml").getStringList("scoreboard.lines.spectating")) {
+                            lines.add(CC.translate(line)
+                                    .replaceAll("\\{sidebar}", this.getScoreboardLines(player))
+                                    .replaceAll("\\{playerA}", profile.getMatch().getParticipants().get(0).getPlayer().getUsername())
+                                    .replaceAll("\\{playerB}", profile.getMatch().getParticipants().get(1).getPlayer().getUsername())
+                                    .replaceAll("\\{pingA}", String.valueOf(BukkitReflection.getPing(profile.getMatch().getParticipants().get(0).getPlayer().getPlayer())))
+                                    .replaceAll("\\{pingB}", String.valueOf(BukkitReflection.getPing(profile.getMatch().getParticipants().get(1).getPlayer().getPlayer())))
+                                    .replaceAll("\\{colorA}", String.valueOf(((MatchRegularImpl) profile.getMatch()).getTeamAColor()))
+                                    .replaceAll("\\{colorB}", String.valueOf(((MatchRegularImpl) profile.getMatch()).getTeamBColor()))
+                                    .replaceAll("\\{duration}", profile.getMatch().getDuration())
+                                    .replaceAll("\\{arena}", profile.getMatch().getArena().getDisplayName() == null ? "&c&lNULL" : profile.getMatch().getArena().getDisplayName())
+                                    .replaceAll("\\{kit}", profile.getMatch().getKit().getDisplayName()));
+                        }
                     }
                     break;
                 case FFA:
