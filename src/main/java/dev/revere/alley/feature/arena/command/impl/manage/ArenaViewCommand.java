@@ -49,6 +49,7 @@ public class ArenaViewCommand extends BaseCommand {
             StandAloneArena standAloneArena = (StandAloneArena) arena;
             sender.sendMessage(CC.translate("    &f● &bTeam 1 Portal: &f" + (standAloneArena.getTeam1Portal() != null ? standAloneArena.getTeam1Portal().getX() + ", " + standAloneArena.getTeam1Portal().getY() + ", " + standAloneArena.getTeam1Portal().getZ() + " &7[" + standAloneArena.getTeam1Portal().getWorld().getName() + "]" : "&cNull")));
             sender.sendMessage(CC.translate("    &f● &bTeam 2 Portal: &f" + (standAloneArena.getTeam2Portal() != null ? standAloneArena.getTeam2Portal().getX() + ", " + standAloneArena.getTeam2Portal().getY() + ", " + standAloneArena.getTeam2Portal().getZ() + " &7[" + standAloneArena.getTeam2Portal().getWorld().getName() + "]" : "&cNull")));
+            sender.sendMessage(CC.translate("    &f● &bHeight Limit: &f" + standAloneArena.getHeightLimit()));
         }
 
         sender.sendMessage(CC.translate("    &f● &bCuboid:"));
