@@ -12,10 +12,12 @@ import dev.revere.alley.feature.cosmetic.repository.CosmeticRepository;
 import dev.revere.alley.feature.hotbar.HotbarRepository;
 import dev.revere.alley.feature.hotbar.enums.HotbarType;
 import dev.revere.alley.feature.kit.Kit;
+import dev.revere.alley.feature.kit.settings.impl.KitSettingBattleRushImpl;
 import dev.revere.alley.feature.kit.settings.impl.KitSettingLivesImpl;
 import dev.revere.alley.feature.queue.Queue;
 import dev.revere.alley.game.match.enums.EnumMatchState;
 import dev.revere.alley.game.match.impl.MatchRegularImpl;
+import dev.revere.alley.game.match.impl.MatchRoundsRegularImpl;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.game.match.runnable.MatchRunnable;
@@ -101,6 +103,11 @@ public abstract class AbstractMatch {
         this.runnable = new MatchRunnable(this);
         this.runnable.runTaskTimer(Alley.getInstance(), 0L, 20L);
         this.getParticipants().forEach(this::initializeParticipant);
+
+        if (this.kit.isSettingEnabled(KitSettingBattleRushImpl.class) && ((MatchRoundsRegularImpl) this).getCurrentRound() > 0) {
+            return;
+        }
+
         this.startTime = System.currentTimeMillis();
     }
 
@@ -416,6 +423,7 @@ public abstract class AbstractMatch {
      */
     public void handleRoundStart() {
         this.snapshots.clear();
+        if (this.kit.isSettingEnabled(KitSettingBattleRushImpl.class)) return;
         this.startTime = System.currentTimeMillis();
     }
 

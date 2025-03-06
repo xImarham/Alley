@@ -1,5 +1,6 @@
 package dev.revere.alley.game.match.impl;
 
+import dev.revere.alley.Alley;
 import dev.revere.alley.feature.arena.Arena;
 import dev.revere.alley.feature.kit.Kit;
 import dev.revere.alley.feature.queue.Queue;
@@ -10,10 +11,9 @@ import dev.revere.alley.util.PlayerUtil;
 import lombok.Getter;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
-
-import java.util.Arrays;
 
 /**
  * @author Emmy
@@ -24,9 +24,6 @@ import java.util.Arrays;
 public class MatchRoundsRegularImpl extends MatchRegularImpl {
     private final GameParticipant<MatchGamePlayerImpl> participantA;
     private final GameParticipant<MatchGamePlayerImpl> participantB;
-
-    private final ChatColor teamAColor;
-    private final ChatColor teamBColor;
 
     private GameParticipant<MatchGamePlayerImpl> winner;
     private GameParticipant<MatchGamePlayerImpl> loser;
@@ -48,8 +45,6 @@ public class MatchRoundsRegularImpl extends MatchRegularImpl {
         super(queue, kit, arena, ranked, participantA, participantB);
         this.participantA = participantA;
         this.participantB = participantB;
-        this.teamAColor = ChatColor.BLUE;
-        this.teamBColor = ChatColor.RED;
         this.rounds = rounds;
     }
 
@@ -74,17 +69,12 @@ public class MatchRoundsRegularImpl extends MatchRegularImpl {
         this.winner.getPlayer().getData().incrementGoals();
         this.loser = this.participantA.isAllDead() ? this.participantA : this.participantB;
 
+        this.broadcastScoredMessage();
+
         if (this.canEndMatch()) {
             super.handleRoundEnd();
         } else {
             this.removePlacedBlocks();
-
-            Arrays.asList(
-                    "",
-                    getTeamColor(this.winner) + "&l" + this.winner.getPlayer().getUsername() + " &b&lscored!",
-                    getTeamColor(this.winner) + "&l" + this.winner.getPlayer().getData().getGoals() + " &7- " + getTeamColor(this.loser) + "&l" + this.loser.getPlayer().getData().getGoals(),
-                    ""
-            ).forEach(this::notifyAll);
 
             this.currentRound++;
             this.setState(EnumMatchState.ENDING_ROUND);
@@ -122,13 +112,23 @@ public class MatchRoundsRegularImpl extends MatchRegularImpl {
         this.startRespawnProcess(player);
     }
 
-    /**
-     * Get the team color of a participant.
-     *
-     * @param participant The participant to get the team color of.
-     * @return The team color of the participant.
-     */
-    public ChatColor getTeamColor(GameParticipant<MatchGamePlayerImpl> participant) {
-        return participant == this.participantA ? this.teamAColor : this.teamBColor;
+    private void broadcastScoredMessage() {
+        ChatColor teamWinnerColor = this.getTeamColor(this.winner);
+        ChatColor teamLoserColor = this.getTeamColor(this.loser);
+
+        FileConfiguration config = Alley.getInstance().getConfigService().getMessagesConfig();
+
+        if (config.getBoolean("match.scored.enabled")) {
+            for (String message : config.getStringList("match.scored.format")) {
+                this.notifyAll(message
+                        .replace("{winner-color}", teamWinnerColor.toString())
+                        .replace("{winner}", this.winner.getPlayer().getUsername())
+                        .replace("{winner-goals}", String.valueOf(this.winner.getPlayer().getData().getGoals()))
+                        .replace("{loser-color}", teamLoserColor.toString())
+                        .replace("{loser}", this.loser.getPlayer().getUsername())
+                        .replace("{loser-goals}", String.valueOf(this.loser.getPlayer().getData().getGoals()))
+                );
+            }
+        }
     }
 }

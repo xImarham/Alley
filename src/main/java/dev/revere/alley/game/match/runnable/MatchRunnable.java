@@ -37,12 +37,7 @@ public class MatchRunnable extends BukkitRunnable {
     public void run() {
         this.stage--;
 
-        if (System.currentTimeMillis() - this.match.getStartTime() >= 900_000 && this.match.getKit().isSettingEnabled(KitSettingBattleRushImpl.class)) {
-            this.match.sendMessage(CC.translate("&cMatch has ended due to time limit!"));
-            this.match.setState(EnumMatchState.ENDING_MATCH);
-            this.stage = 4;
-            return;
-        }
+        if (this.endMatchIfTimeUp()) return;
 
         switch (this.match.getState()) {
             case STARTING:
@@ -77,6 +72,21 @@ public class MatchRunnable extends BukkitRunnable {
                 }
                 break;
         }
+    }
+
+    /**
+     * End the match if the time is up in a MatchRoundsRegularImpl match.
+     *
+     * @return If the match ended.
+     */
+    private boolean endMatchIfTimeUp() {
+        if (match.getState() == EnumMatchState.RUNNING && System.currentTimeMillis() - this.match.getStartTime() >= 900_000 && this.match.getKit().isSettingEnabled(KitSettingBattleRushImpl.class)) {
+            this.match.sendMessage(CC.translate("&cMatch has ended due to time limit!"));
+            this.match.setState(EnumMatchState.ENDING_MATCH);
+            this.stage = 4;
+            return true;
+        }
+        return false;
     }
 
     /**

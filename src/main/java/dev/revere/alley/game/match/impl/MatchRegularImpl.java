@@ -15,6 +15,7 @@ import dev.revere.alley.util.elo.result.EloResult;
 import dev.revere.alley.util.elo.result.OldEloResult;
 import lombok.Getter;
 import lombok.Setter;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -34,6 +35,9 @@ public class MatchRegularImpl extends AbstractMatch {
     private final GameParticipant<MatchGamePlayerImpl> participantA;
     private final GameParticipant<MatchGamePlayerImpl> participantB;
 
+    private final ChatColor teamAColor;
+    private final ChatColor teamBColor;
+
     private GameParticipant<MatchGamePlayerImpl> winner;
     private GameParticipant<MatchGamePlayerImpl> loser;
 
@@ -51,6 +55,8 @@ public class MatchRegularImpl extends AbstractMatch {
         super(queue, kit, arena, ranked);
         this.participantA = participantA;
         this.participantB = participantB;
+        this.teamAColor = ChatColor.BLUE;
+        this.teamBColor = ChatColor.RED;
     }
 
     @Override
@@ -64,6 +70,16 @@ public class MatchRegularImpl extends AbstractMatch {
     @Override
     public List<GameParticipant<MatchGamePlayerImpl>> getParticipants() {
         return Arrays.asList(this.participantA, this.participantB);
+    }
+
+    /**
+     * Get the team color of a participant.
+     *
+     * @param participant The participant to get the team color of.
+     * @return The team color of the participant.
+     */
+    public ChatColor getTeamColor(GameParticipant<MatchGamePlayerImpl> participant) {
+        return participant == this.participantA ? this.teamAColor : this.teamBColor;
     }
 
     @Override
