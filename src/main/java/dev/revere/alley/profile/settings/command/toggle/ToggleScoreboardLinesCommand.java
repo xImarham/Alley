@@ -15,7 +15,7 @@ import org.bukkit.entity.Player;
  * @since 03/03/2025
  */
 public class ToggleScoreboardLinesCommand extends BaseCommand {
-    @CommandData(name = "togglescoreboardlines", aliases = "tsl", permission = "alley.command.togglescoreboardlines", description = "Toggle the scoreboard lines.")
+    @CommandData(name = "togglescoreboardlines", aliases = "tsl", description = "Toggle the scoreboard lines.")
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
