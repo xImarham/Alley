@@ -1,11 +1,15 @@
 package dev.revere.alley.game.match.listener.impl;
 
 import dev.revere.alley.Alley;
+import dev.revere.alley.feature.arena.impl.StandAloneArena;
+import dev.revere.alley.feature.kit.settings.impl.KitSettingBattleRushImpl;
 import dev.revere.alley.feature.kit.settings.impl.KitSettingBuildImpl;
 import dev.revere.alley.feature.kit.settings.impl.KitSettingSpleefImpl;
+import dev.revere.alley.game.match.AbstractMatch;
 import dev.revere.alley.game.match.enums.EnumMatchState;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
+import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.util.location.RayTracerUtil;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -45,33 +49,38 @@ public class MatchBlockListener implements Listener {
         Player player = event.getPlayer();
         Profile profile = this.plugin.getProfileRepository().getProfile(player.getUniqueId());
 
+        AbstractMatch match = profile.getMatch();
+        if (match == null) {
+            return;
+        }
+
         switch (profile.getState()) {
             case PLAYING:
-                EnumMatchState matchState = profile.getMatch().getState();
+                EnumMatchState matchState = match.getState();
                 if (matchState == EnumMatchState.STARTING || matchState == EnumMatchState.ENDING_MATCH) {
                     event.setCancelled(true);
                     return;
                 }
 
-                if (profile.getMatch().getKit().isSettingEnabled(KitSettingBuildImpl.class)) {
+                if (match.getKit().isSettingEnabled(KitSettingBuildImpl.class)) {
                     BlockState blockState = event.getBlock().getState();
 
-                    if (profile.getMatch().getPlacedBlocks().containsKey(blockState)) {
-                        profile.getMatch().removeBlockFromPlacedBlocksMap(blockState, event.getBlock().getLocation());
+                    if (match.getPlacedBlocks().containsKey(blockState)) {
+                        match.removeBlockFromPlacedBlocksMap(blockState, event.getBlock().getLocation());
                     } else {
                         event.setCancelled(true);
                     }
                     return;
                 }
 
-                if (profile.getMatch().getKit().isSettingEnabled(KitSettingSpleefImpl.class)) {
+                if (match.getKit().isSettingEnabled(KitSettingSpleefImpl.class)) {
                     Block block = event.getBlock();
                     if (block.getType() != Material.SNOW_BLOCK) {
                         event.setCancelled(true);
                         return;
                     }
 
-                    profile.getMatch().addBlockToBrokenBlocksMap(block.getState(), block.getLocation());
+                    match.addBlockToBrokenBlocksMap(block.getState(), block.getLocation());
                     event.getBlock().setType(Material.AIR);
 
                     int amount = ThreadLocalRandom.current().nextInt(3, 6);
@@ -95,13 +104,26 @@ public class MatchBlockListener implements Listener {
     private void onBlockPlace(BlockPlaceEvent event) {
         Player player = event.getPlayer();
         Profile profile = this.plugin.getProfileRepository().getProfile(player.getUniqueId());
+        int blockY = event.getBlock().getLocation().getBlockY();
+
+        AbstractMatch match = profile.getMatch();
+        if (match == null) {
+            return;
+        }
+
         switch (profile.getState()) {
             case PLAYING:
-                if (profile.getMatch().getState() == EnumMatchState.STARTING) event.setCancelled(true);
-                if (profile.getMatch().getState() == EnumMatchState.ENDING_MATCH) event.setCancelled(true);
+                if (match.getState() == EnumMatchState.STARTING) event.setCancelled(true);
+                if (match.getState() == EnumMatchState.ENDING_MATCH) event.setCancelled(true);
 
-                if (profile.getMatch().getKit().isSettingEnabled(KitSettingBuildImpl.class)) {
-                    profile.getMatch().addBlockToPlacedBlocksMap(event.getBlock().getState(), event.getBlockPlaced().getLocation());
+                if ((match.getArena() instanceof StandAloneArena) && blockY > ((StandAloneArena) profile.getMatch().getArena()).getHeightLimit()) {
+                    player.sendMessage(CC.translate("&cYou cannot place blocks above the height limit!"));
+                    event.setCancelled(true);
+                    return;
+                }
+
+                if (match.getKit().isSettingEnabled(KitSettingBuildImpl.class)) {
+                    match.addBlockToPlacedBlocksMap(event.getBlock().getState(), event.getBlockPlaced().getLocation());
                     return;
                 }
 

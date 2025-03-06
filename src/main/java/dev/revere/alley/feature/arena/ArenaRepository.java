@@ -51,6 +51,7 @@ public class ArenaRepository {
 
             Location team1Portal = LocationUtil.deserialize(config.getString(name + ".team1Portal"));
             Location team2Portal = LocationUtil.deserialize(config.getString(name + ".team2Portal"));
+            int heightLimit = config.getInt(name + ".heightLimit");
 
             Arena arena;
             switch (arenaType) {
@@ -67,7 +68,8 @@ public class ArenaRepository {
                             minimum,
                             maximum,
                             team1Portal,
-                            team2Portal
+                            team2Portal,
+                            heightLimit
                     );
                     break;
                 case FFA:

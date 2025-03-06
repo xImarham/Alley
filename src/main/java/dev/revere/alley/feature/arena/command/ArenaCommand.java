@@ -29,6 +29,7 @@ public class ArenaCommand extends BaseCommand {
      * Register all Arena subcommands in the constructor
      */
     public ArenaCommand() {
+        new ArenaSetHeightLimit();
         new ArenaSetPortalCommand();
         new ArenaSetSafeZoneCommand();
         new ArenaSetCenterCommand();
@@ -128,6 +129,7 @@ public class ArenaCommand extends BaseCommand {
             },
             {
                     " &f● &b/arena setportal &8(&7arenaName&8) &8<&71/2&8> &7| Set portal positions for battlerush",
+                    " &f● &b/arena setheightlimit &8(&7arenaName&8) &7| Set height limit for standalone arenas",
                     " &f● &b/arena setsafezone &8(&7arenaName&8) &8<&7pos1/pos2&8> &7| Set safezone positions for ffa"
             }
     };

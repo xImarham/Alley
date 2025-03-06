@@ -63,7 +63,7 @@ public class ArenaCreateCommand extends BaseCommand {
                 arena = new SharedArena(arenaName, arenaSelection.getMinimum(), arenaSelection.getMaximum());
                 break;
             case STANDALONE:
-                arena = new StandAloneArena(arenaName, arenaSelection.getMinimum(), arenaSelection.getMaximum(), null, null);
+                arena = new StandAloneArena(arenaName, arenaSelection.getMinimum(), arenaSelection.getMaximum(), null, null, 100);
                 break;
             case FFA:
                 arena = new FreeForAllArena(arenaName, arenaSelection.getMinimum(), arenaSelection.getMaximum());
@@ -78,6 +78,12 @@ public class ArenaCreateCommand extends BaseCommand {
         player.sendMessage(CC.translate("&aSuccessfully created a new arena named &b" + arenaName + "&a with type &b" + arenaType.name() + "&a!"));
     }
 
+    /**
+     * Get the default display name for the specified arena type.
+     *
+     * @param arenaType The type of the arena.
+     * @return The default display name.
+     */
     private String getDefaultDisplayName(EnumArenaType arenaType) {
         FileConfiguration config = Alley.getInstance().getConfigService().getSettingsConfig();
 

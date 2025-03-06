@@ -24,7 +24,9 @@ public class StandAloneArena extends Arena {
 
     private Location team1Portal;
     private Location team2Portal;
+
     private int portalRadius;
+    private int heightLimit;
 
     /**
      * Constructor for the StandAloneArena class.
@@ -33,12 +35,13 @@ public class StandAloneArena extends Arena {
      * @param minimum The minimum location of the arena.
      * @param maximum The maximum location of the arena.
      */
-    public StandAloneArena(String name, Location minimum, Location maximum, Location team1Portal, Location team2Portal) {
+    public StandAloneArena(String name, Location minimum, Location maximum, Location team1Portal, Location team2Portal, int heightLimit) {
         super(name, minimum, maximum);
 
         if (team1Portal != null) this.team1Portal = team1Portal;
         if (team2Portal != null) this.team2Portal = team2Portal;
         this.portalRadius = Alley.getInstance().getConfigService().getSettingsConfig().getInt("game.portal-radius");
+        this.heightLimit = heightLimit;
     }
 
     @Override
@@ -71,6 +74,7 @@ public class StandAloneArena extends Arena {
         if (this.team1Portal != null) config.set(name + ".team1Portal", LocationUtil.serialize(this.team1Portal));
         if (this.team2Portal != null) config.set(name + ".team2Portal", LocationUtil.serialize(this.team2Portal));
 
+        config.set(name + ".heightLimit", this.heightLimit);
 
         Alley.getInstance().getConfigService().saveConfig(Alley.getInstance().getConfigService().getConfigFile("storage/arenas.yml"), config);
     }

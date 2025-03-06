@@ -120,9 +120,9 @@ scoreboard:
       - " &fArena: &b{arena}"
       - " &fKit: &b{kit}"
       - ""
-      - " &9{playerA} &f(&b{pingA}ms&f)"
+      - " {colorA}{playerA} &f(&b{pingA}ms&f)"
       - "  &bvs"
-      - " &c{playerB} &f(&b{pingB}ms&f)"
+      - " {colorB}{playerB} &f(&b{pingB}ms&f)"
     ffa:
       - "{sidebar}"
       - "&fPlaying FFA"
