@@ -31,9 +31,9 @@ public class AssembleUtility {
                 suffix = suffix.substring(0, 16);
             }
 
-            return new String[] {prefix, suffix};
+            return new String[]{prefix, suffix};
         } else {
-            return new String[] {input, ""};
+            return new String[]{input, ""};
         }
     }
 }

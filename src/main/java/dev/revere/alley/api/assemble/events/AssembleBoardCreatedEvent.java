@@ -6,12 +6,14 @@ import dev.revere.alley.api.assemble.AssembleBoard;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-@Getter @Setter
+@Getter
+@Setter
 public class AssembleBoardCreatedEvent extends Event {
 
-    @Getter public static HandlerList handlerList = new HandlerList();
+    @Getter
+    public static HandlerList handlerList = new HandlerList();
 
-    private boolean cancelled = false;
+    private boolean cancelled;
     private final AssembleBoard board;
 
     /**
@@ -20,6 +22,7 @@ public class AssembleBoardCreatedEvent extends Event {
      * @param board of player.
      */
     public AssembleBoardCreatedEvent(AssembleBoard board) {
+        this.cancelled = false;
         this.board = board;
     }
 

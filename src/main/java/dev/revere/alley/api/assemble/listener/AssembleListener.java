@@ -15,47 +15,47 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 @Getter
 public class AssembleListener implements Listener {
-	private final Assemble assemble;
+    private final Assemble assemble;
 
-	/**
-	 * Constructor for the AssembleListener class.
-	 *
-	 * @param assemble The Assemble instance
-	 */
-	public AssembleListener(Assemble assemble) {
-		this.assemble = assemble;
-	}
+    /**
+     * Constructor for the AssembleListener class.
+     *
+     * @param assemble The Assemble instance
+     */
+    public AssembleListener(Assemble assemble) {
+        this.assemble = assemble;
+    }
 
-	@EventHandler(priority = EventPriority.LOWEST)
-	public void onPlayerJoin(PlayerJoinEvent event) {
-		Player player = event.getPlayer();
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onPlayerJoin(PlayerJoinEvent event) {
+        Player player = event.getPlayer();
 
-		if (this.assemble.isCallEvents()) {
-			AssembleBoardCreateEvent createEvent = new AssembleBoardCreateEvent(player);
+        if (this.assemble.isCallEvents()) {
+            AssembleBoardCreateEvent createEvent = new AssembleBoardCreateEvent(player);
 
-			Bukkit.getPluginManager().callEvent(createEvent);
-			if (createEvent.isCancelled()) {
-				return;
-			}
-		}
+            Bukkit.getPluginManager().callEvent(createEvent);
+            if (createEvent.isCancelled()) {
+                return;
+            }
+        }
 
-		this.assemble.getBoards().put(player.getUniqueId(), new AssembleBoard(player, this.assemble));
-	}
+        this.assemble.getBoards().put(player.getUniqueId(), new AssembleBoard(player, this.assemble));
+    }
 
-	@EventHandler
-	public void onPlayerQuit(PlayerQuitEvent event) {
-		Player player = event.getPlayer();
+    @EventHandler
+    public void onPlayerQuit(PlayerQuitEvent event) {
+        Player player = event.getPlayer();
 
-		if (this.assemble.isCallEvents()) {
-			AssembleBoardDestroyEvent destroyEvent = new AssembleBoardDestroyEvent(player);
+        if (this.assemble.isCallEvents()) {
+            AssembleBoardDestroyEvent destroyEvent = new AssembleBoardDestroyEvent(player);
 
-			Bukkit.getPluginManager().callEvent(destroyEvent);
-			if (destroyEvent.isCancelled()) {
-				return;
-			}
-		}
+            Bukkit.getPluginManager().callEvent(destroyEvent);
+            if (destroyEvent.isCancelled()) {
+                return;
+            }
+        }
 
-		this.assemble.getBoards().remove(player.getUniqueId());
-		player.setScoreboard(Bukkit.getScoreboardManager().getMainScoreboard());
-	}
+        this.assemble.getBoards().remove(player.getUniqueId());
+        player.setScoreboard(Bukkit.getScoreboardManager().getMainScoreboard());
+    }
 }

@@ -93,7 +93,7 @@ public class AssembleThread extends Thread {
                 if (player.getScoreboard() != scoreboard && !assemble.isHook()) {
                     player.setScoreboard(scoreboard);
                 }
-            } catch(Exception exception) {
+            } catch (Exception exception) {
                 Logger.logException(this.getClass().getSimpleName(), exception);
                 throw new AssembleException("There was an error updating " + player.getName() + "'s scoreboard.");
             }

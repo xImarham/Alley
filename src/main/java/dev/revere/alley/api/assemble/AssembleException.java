@@ -1,7 +1,6 @@
 package dev.revere.alley.api.assemble;
 
 public class AssembleException extends RuntimeException {
-
     /**
      * Assemble Exception.
      *
