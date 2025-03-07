@@ -114,6 +114,6 @@ public class CombatService {
      */
     public String getRemainingTimeFormatted(UUID player) {
         long remainingTime = this.getRemainingTime(player);
-        return TimeUtil.millisToSecondsRaw(remainingTime) + "s";
+        return TimeUtil.millisToSecondsTimer(remainingTime) + "s";
     }
 }

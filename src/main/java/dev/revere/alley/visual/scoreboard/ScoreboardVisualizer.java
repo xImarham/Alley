@@ -6,9 +6,11 @@ import dev.revere.alley.feature.combat.CombatService;
 import dev.revere.alley.feature.kit.settings.impl.KitSettingBattleRushImpl;
 import dev.revere.alley.feature.kit.settings.impl.KitSettingBoxingImpl;
 import dev.revere.alley.feature.kit.settings.impl.KitSettingLivesImpl;
+import dev.revere.alley.feature.kit.settings.impl.KitSettingStickFightImpl;
 import dev.revere.alley.game.match.enums.EnumMatchState;
 import dev.revere.alley.game.match.impl.MatchRegularImpl;
 import dev.revere.alley.game.match.impl.MatchRoundsRegularImpl;
+import dev.revere.alley.game.match.impl.kit.MatchStickFightImpl;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.profile.Profile;
@@ -130,6 +132,8 @@ public class ScoreboardVisualizer implements IAssembleAdapter {
                         if (profile.getMatch().getKit().isSettingEnabled(KitSettingBattleRushImpl.class) && ((MatchRoundsRegularImpl) profile.getMatch()).getCurrentRound() > 0) {
                             MatchRoundsRegularImpl roundsMatch = (MatchRoundsRegularImpl) profile.getMatch();
                             this.replaceBattleRushLines(player, lines, opponent, roundsMatch, profile);
+                        } else if (profile.getMatch().getKit().isSettingEnabled(KitSettingStickFightImpl.class) && ((MatchRoundsRegularImpl) profile.getMatch()).getCurrentRound() > 0) {
+                            this.replaceStickFightLines(player, lines, opponent, (MatchStickFightImpl) profile.getMatch(), profile);
                         } else {
                             for (String line : Alley.getInstance().getConfigService().getConfig("providers/scoreboard.yml").getStringList("scoreboard.lines.starting")) {
                                 lines.add(CC.translate(line)
@@ -174,6 +178,8 @@ public class ScoreboardVisualizer implements IAssembleAdapter {
                     } else if (profile.getMatch().getKit().isSettingEnabled(KitSettingBattleRushImpl.class)) {
                         MatchRoundsRegularImpl roundsMatch = (MatchRoundsRegularImpl) profile.getMatch();
                         this.replaceBattleRushLines(player, lines, opponent, roundsMatch, profile);
+                    } else if (profile.getMatch().getKit().isSettingEnabled(KitSettingStickFightImpl.class)) {
+                        this.replaceStickFightLines(player, lines, opponent, (MatchStickFightImpl) profile.getMatch(), profile);
                     } else if (profile.getMatch().getKit().isSettingEnabled(KitSettingLivesImpl.class)) {
                         for (String line : Alley.getInstance().getConfigService().getConfig("providers/scoreboard.yml").getStringList("scoreboard.lines.playing.lives-match")) {
                             lines.add(CC.translate(line)
@@ -265,7 +271,7 @@ public class ScoreboardVisualizer implements IAssembleAdapter {
     private void replaceBattleRushLines(Player player, List<String> lines, GameParticipant<MatchGamePlayerImpl> opponent, MatchRoundsRegularImpl roundsMatch, Profile profile) {
         long elapsedTime = System.currentTimeMillis() - profile.getMatch().getStartTime();
         long remainingTime = Math.max(900_000 - elapsedTime, 0);
-        String formattedTime = TimeUtil.formatTime(remainingTime);
+        String formattedTime = TimeUtil.millisToFourDigitSecondsTimer(remainingTime);
 
         for (String line : Alley.getInstance().getConfigService().getConfig("providers/scoreboard.yml").getStringList("scoreboard.lines.playing.battlerush-match")) {
             lines.add(CC.translate(line)
@@ -281,6 +287,33 @@ public class ScoreboardVisualizer implements IAssembleAdapter {
                     .replaceAll("\\{duration}", profile.getMatch().getDuration())
                     .replaceAll("\\{color}", String.valueOf(roundsMatch.getTeamAColor()))
                     .replaceAll("\\{opponent-color}", String.valueOf(roundsMatch.getTeamBColor()))
+                    .replaceAll("\\{arena}", profile.getMatch().getArena().getDisplayName() == null ? "&c&lNULL" : profile.getMatch().getArena().getDisplayName())
+                    .replaceAll("\\{kit}", profile.getMatch().getKit().getDisplayName()));
+        }
+    }
+
+    /**
+     * Replace the lines for the Stick Fight match.
+     *
+     * @param player        The player to replace the lines for.
+     * @param lines         The lines to replace.
+     * @param opponent      The opponent to replace the lines for.
+     * @param stickFightMatch The stick fight match to replace the lines for.
+     * @param profile       The profile to replace the lines for.
+     */
+    private void replaceStickFightLines(Player player, List<String> lines, GameParticipant<MatchGamePlayerImpl> opponent, MatchStickFightImpl stickFightMatch, Profile profile) {
+        for (String line : Alley.getInstance().getConfigService().getConfig("providers/scoreboard.yml").getStringList("scoreboard.lines.playing.stickfight-match")) {
+            lines.add(CC.translate(line)
+                    .replaceAll("\\{sidebar}", this.getScoreboardLines(player))
+                    .replaceAll("\\{opponent}", opponent.getPlayer().getUsername())
+                    .replaceAll("\\{opponent-ping}", String.valueOf(BukkitReflection.getPing(opponent.getPlayer().getPlayer())))
+                    .replaceAll("\\{player-ping}", String.valueOf(BukkitReflection.getPing(player)))
+                    .replaceAll("\\{goals}", ScoreboardUtil.visualizeGoalsAsCircles(stickFightMatch.getParticipantA().getPlayer().getData().getGoals(), 5))
+                    .replaceAll("\\{opponent-goals}", ScoreboardUtil.visualizeGoalsAsCircles(stickFightMatch.getParticipantB().getPlayer().getData().getGoals(), 5))
+                    .replaceAll("\\{current-round}", String.valueOf(stickFightMatch.getCurrentRound()))
+                    .replaceAll("\\{duration}", profile.getMatch().getDuration())
+                    .replaceAll("\\{color}", String.valueOf(stickFightMatch.getTeamAColor()))
+                    .replaceAll("\\{opponent-color}", String.valueOf(stickFightMatch.getTeamBColor()))
                     .replaceAll("\\{arena}", profile.getMatch().getArena().getDisplayName() == null ? "&c&lNULL" : profile.getMatch().getArena().getDisplayName())
                     .replaceAll("\\{kit}", profile.getMatch().getKit().getDisplayName()));
         }

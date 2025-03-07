@@ -3,7 +3,6 @@ package dev.revere.alley.util;
 import lombok.experimental.UtilityClass;
 
 import java.sql.Timestamp;
-import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -32,28 +31,24 @@ public final class TimeUtil {
     }
 
     /**
-     * Converts milliseconds to a timer format.
+     * Converts milliseconds to a four digit seconds format. (00:00)
      *
      * @param millis the milliseconds to convert.
      * @return the formatted time.
      */
-    public String formatTime(long millis) {
+    public String millisToFourDigitSecondsTimer(long millis) {
         long minutes = (millis / 1000) / 60;
         long seconds = (millis / 1000) % 60;
         return String.format("%02d:%02d", minutes, seconds);
     }
 
     /**
-     * Converts milliseconds to a seconds format.
+     * Converts milliseconds to a seconds format. (00)
      *
      * @param millis the milliseconds to convert.
      * @return the formatted time.
      */
-    public String millisToSeconds(long millis) {
-        return new DecimalFormat("#0.0").format(millis / 1000.0F);
-    }
-
-    public String millisToSecondsRaw(long millis) {
+    public String millisToSecondsTimer(long millis) {
         return String.valueOf(millis / 1000);
     }
 

@@ -8,11 +8,13 @@ import dev.revere.alley.feature.arena.impl.StandAloneArena;
 import dev.revere.alley.feature.kit.Kit;
 import dev.revere.alley.feature.kit.settings.impl.KitSettingBattleRushImpl;
 import dev.revere.alley.feature.kit.settings.impl.KitSettingLivesImpl;
+import dev.revere.alley.feature.kit.settings.impl.KitSettingStickFightImpl;
 import dev.revere.alley.feature.queue.Queue;
 import dev.revere.alley.game.match.AbstractMatch;
 import dev.revere.alley.game.match.impl.MatchLivesRegularImpl;
 import dev.revere.alley.game.match.impl.MatchRegularImpl;
 import dev.revere.alley.game.match.impl.MatchRoundsRegularImpl;
+import dev.revere.alley.game.match.impl.kit.MatchStickFightImpl;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.game.match.player.participant.TeamGameParticipant;
@@ -116,6 +118,9 @@ public class PartyEventSplitArenaSelectorMenu extends Menu {
                         match.startMatch();
                     } else if (queue.getKit().isSettingEnabled(KitSettingBattleRushImpl.class)) {
                         AbstractMatch match = new MatchRoundsRegularImpl(queue, this.kit, arena, false, participantA, participantB, 3);
+                        match.startMatch();
+                    } else if (queue.getKit().isSettingEnabled(KitSettingStickFightImpl.class)) {
+                        AbstractMatch match = new MatchStickFightImpl(queue, this.kit, arena, false, participantA, participantB, 5);
                         match.startMatch();
                     } else {
                         AbstractMatch match = new MatchRegularImpl(queue, this.kit, this.arena, false, participantA, participantB);

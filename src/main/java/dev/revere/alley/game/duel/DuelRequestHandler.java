@@ -1,7 +1,9 @@
 package dev.revere.alley.game.duel;
 
 import dev.revere.alley.feature.kit.settings.impl.KitSettingBattleRushImpl;
+import dev.revere.alley.feature.kit.settings.impl.KitSettingStickFightImpl;
 import dev.revere.alley.game.match.impl.MatchRoundsRegularImpl;
+import dev.revere.alley.game.match.impl.kit.MatchStickFightImpl;
 import lombok.Getter;
 import lombok.Setter;
 import dev.revere.alley.Alley;
@@ -160,6 +162,9 @@ public class DuelRequestHandler {
                     match.startMatch();
                 } else if (queue.getKit().isSettingEnabled(KitSettingBattleRushImpl.class)) {
                     AbstractMatch match = new MatchRoundsRegularImpl(queue, duelRequest.getKit(), duelRequest.getArena(), false, participantA, participantB, 3);
+                    match.startMatch();
+                } else if (queue.getKit().isSettingEnabled(KitSettingStickFightImpl.class)) {
+                    AbstractMatch match = new MatchStickFightImpl(queue, duelRequest.getKit(), duelRequest.getArena(), false, participantA, participantB, 5);
                     match.startMatch();
                 } else {
                     AbstractMatch match = new MatchRegularImpl(queue, duelRequest.getKit(), duelRequest.getArena(), false, participantA, participantB);

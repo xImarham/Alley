@@ -8,6 +8,7 @@ import dev.revere.alley.game.match.AbstractMatch;
 import dev.revere.alley.game.match.MatchUtility;
 import dev.revere.alley.game.match.enums.EnumMatchState;
 import dev.revere.alley.game.match.impl.MatchRoundsRegularImpl;
+import dev.revere.alley.game.match.impl.kit.MatchStickFightImpl;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.profile.Profile;
@@ -16,7 +17,9 @@ import dev.revere.alley.util.ActionBarUtil;
 import dev.revere.alley.util.ListenerUtil;
 import dev.revere.alley.util.PlayerUtil;
 import dev.revere.alley.util.chat.CC;
-import org.bukkit.*;
+import org.bukkit.GameMode;
+import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -25,7 +28,6 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.*;
 
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -74,10 +76,17 @@ public class MatchListener implements Listener {
                 }
             }
 
-            if (matchKit.isSettingEnabled(KitSettingLivesImpl.class) || matchKit.isSettingEnabled(KitSettingBattleRushImpl.class) || matchKit.isSettingEnabled(KitSettingStickFightImpl.class)) {
-                if (player.getLocation().getY() <= this.plugin.getConfigService().getSettingsConfig().getInt("game.death-y-level")) {
-                    if (player.getGameMode() == GameMode.SPECTATOR) return;
-                    if (player.getGameMode() == GameMode.CREATIVE) return;
+            if (player.getLocation().getY() <= this.plugin.getConfigService().getSettingsConfig().getInt("game.death-y-level")) {
+                if (player.getGameMode() == GameMode.SPECTATOR) return;
+                if (player.getGameMode() == GameMode.CREATIVE) return;
+
+                if (match.getKit().isSettingEnabled(KitSettingStickFightImpl.class)) {
+                    MatchStickFightImpl matchStickFight = (MatchStickFightImpl) match;
+                    matchStickFight.handleDeath(player);
+                    return;
+                }
+
+                if (matchKit.isSettingEnabled(KitSettingLivesImpl.class) || matchKit.isSettingEnabled(KitSettingBattleRushImpl.class)) {
                     player.setHealth(0);
                     player.setAllowFlight(true);
                     player.setFlying(true);
@@ -209,7 +218,8 @@ public class MatchListener implements Listener {
                         return;
                     }
 
-                    if (match.getState() == EnumMatchState.ENDING_ROUND || match.getState() == EnumMatchState.ENDING_MATCH) return;
+                    if (match.getState() == EnumMatchState.ENDING_ROUND || match.getState() == EnumMatchState.ENDING_MATCH)
+                        return;
 
                     GameParticipant<MatchGamePlayerImpl> opponent = match.getParticipantA().containsPlayer(player.getUniqueId()) ? match.getParticipantB() : match.getParticipantA();
                     opponent.getPlayers().forEach(matchGamePlayer -> matchGamePlayer.setDead(true));
@@ -222,6 +232,7 @@ public class MatchListener implements Listener {
                             Location spawnLocation = match.getParticipantA().containsPlayer(player.getUniqueId()) ? match.getArena().getPos1() : match.getArena().getPos2();
                             player.teleport(spawnLocation);
 
+                            match.setEndTime(System.currentTimeMillis());
                             match.setState(EnumMatchState.ENDING_MATCH);
                             match.getRunnable().setStage(4);
                         }

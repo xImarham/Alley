@@ -40,6 +40,7 @@ public class MatchRoundsRegularImpl extends MatchRegularImpl {
      * @param ranked       Whether the match is ranked or not.
      * @param participantA The first participant.
      * @param participantB The second participant.
+     * @param rounds The amount of rounds the match will have.
      */
     public MatchRoundsRegularImpl(Queue queue, Kit kit, Arena arena, boolean ranked, GameParticipant<MatchGamePlayerImpl> participantA, GameParticipant<MatchGamePlayerImpl> participantB, int rounds) {
         super(queue, kit, arena, ranked, participantA, participantB);
@@ -68,17 +69,16 @@ public class MatchRoundsRegularImpl extends MatchRegularImpl {
         this.winner = this.participantA.isAllDead() ? this.participantB : this.participantA;
         this.winner.getPlayer().getData().incrementGoals();
         this.loser = this.participantA.isAllDead() ? this.participantA : this.participantB;
+        this.currentRound++;
 
-        this.broadcastScoredMessage();
+        this.broadcastScoredMessage(this.winner, this.loser);
 
         if (this.canEndMatch()) {
             super.handleRoundEnd();
         } else {
             this.removePlacedBlocks();
 
-            this.currentRound++;
             this.setState(EnumMatchState.ENDING_ROUND);
-            this.getRunnable().setStage(1);
 
             this.getParticipants().forEach(participant -> participant.getPlayers().forEach(playerParticipant -> {
                 Player player = playerParticipant.getPlayer();
@@ -112,9 +112,15 @@ public class MatchRoundsRegularImpl extends MatchRegularImpl {
         this.startRespawnProcess(player);
     }
 
-    private void broadcastScoredMessage() {
-        ChatColor teamWinnerColor = this.getTeamColor(this.winner);
-        ChatColor teamLoserColor = this.getTeamColor(this.loser);
+    /**
+     * Broadcasts a message to all players in the match when a player scores.
+     *
+     * @param winner The player who scored.
+     * @param loser  The player who was scored on.
+     */
+    public void broadcastScoredMessage(GameParticipant<MatchGamePlayerImpl> winner, GameParticipant<MatchGamePlayerImpl> loser) {
+        ChatColor teamWinnerColor = this.getTeamColor(winner);
+        ChatColor teamLoserColor = this.getTeamColor(loser);
 
         FileConfiguration config = Alley.getInstance().getConfigService().getMessagesConfig();
 
@@ -122,11 +128,11 @@ public class MatchRoundsRegularImpl extends MatchRegularImpl {
             for (String message : config.getStringList("match.scored.format")) {
                 this.notifyAll(message
                         .replace("{winner-color}", teamWinnerColor.toString())
-                        .replace("{winner}", this.winner.getPlayer().getUsername())
-                        .replace("{winner-goals}", String.valueOf(this.winner.getPlayer().getData().getGoals()))
+                        .replace("{winner}", winner.getPlayer().getUsername())
+                        .replace("{winner-goals}", String.valueOf(winner.getPlayer().getData().getGoals()))
                         .replace("{loser-color}", teamLoserColor.toString())
-                        .replace("{loser}", this.loser.getPlayer().getUsername())
-                        .replace("{loser-goals}", String.valueOf(this.loser.getPlayer().getData().getGoals()))
+                        .replace("{loser}", loser.getPlayer().getUsername())
+                        .replace("{loser-goals}", String.valueOf(loser.getPlayer().getData().getGoals()))
                 );
             }
         }

@@ -93,6 +93,17 @@ scoreboard:
         - ""
         - "&fYour Ping: &b{player-ping}ms"
         - "&fTheir Ping: &b{opponent-ping}ms"
+      stickfight-match:
+        - "{sidebar}"
+        - "&fOpponent: &b{opponent}"
+        - "&fDuration: &b{duration}"
+        - "&fRound: &b{current-round}"
+        - ""
+        - "{color}&l[B] &r{goals}"
+        - "{opponent-color}&l[R] &r{opponent-goals}"
+        - ""
+        - "&fYour Ping: &b{player-ping}ms"
+        - "&fTheir Ping: &b{opponent-ping}ms"
       lives-match:
         - "{sidebar}"
         - "&fOpponent: &b{opponent}"

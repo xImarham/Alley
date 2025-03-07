@@ -2,6 +2,7 @@ package dev.revere.alley.game.match.runnable;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.feature.kit.settings.impl.KitSettingBattleRushImpl;
+import dev.revere.alley.feature.kit.settings.impl.KitSettingStickFightImpl;
 import dev.revere.alley.game.match.AbstractMatch;
 import dev.revere.alley.game.match.enums.EnumMatchState;
 import dev.revere.alley.game.match.impl.MatchRoundsRegularImpl;
@@ -37,7 +38,7 @@ public class MatchRunnable extends BukkitRunnable {
     public void run() {
         this.stage--;
 
-        if (this.endMatchIfTimeUp()) return;
+        if (this.hasToEnd()) return;
 
         switch (this.match.getState()) {
             case STARTING:
@@ -45,7 +46,7 @@ public class MatchRunnable extends BukkitRunnable {
                     Alley.getInstance().getServer().getScheduler().runTask(Alley.getInstance(), this.match::handleRoundStart);
                     this.match.setState(EnumMatchState.RUNNING);
 
-                    if (this.match.getKit().isSettingEnabled(KitSettingBattleRushImpl.class) && ((MatchRoundsRegularImpl) this.match).getCurrentRound() > 0) {
+                    if (this.match.getKit().isSettingEnabled(KitSettingBattleRushImpl.class) || this.match.getKit().isSettingEnabled(KitSettingStickFightImpl.class) && ((MatchRoundsRegularImpl) this.match).getCurrentRound() > 0) {
                         this.match.sendMessage(CC.translate("&aRound Started!"));
                         this.playSoundStarted();
                     } else {
@@ -59,12 +60,10 @@ public class MatchRunnable extends BukkitRunnable {
                 }
                 break;
             case ENDING_ROUND:
-                if (this.stage == 0) {
                     if (this.match.canStartRound()) {
                         this.match.setState(EnumMatchState.STARTING);
                         this.match.getRunnable().setStage(4);
                     }
-                }
                 break;
             case ENDING_MATCH:
                 if (this.stage == 0) {
@@ -75,12 +74,28 @@ public class MatchRunnable extends BukkitRunnable {
     }
 
     /**
-     * End the match if the time is up in a MatchRoundsRegularImpl match.
+     * End the match if the time is up based on different kit settings.
      *
+     * @return If the time limit has been reached.
+     */
+    private boolean hasToEnd() {
+        long elapsedTime = System.currentTimeMillis() - match.getStartTime();
+        if (this.match.getKit().isSettingEnabled(KitSettingBattleRushImpl.class)) {
+            return checkTime(elapsedTime, 900_000); // 15 minutes
+        } else {
+            return this.checkTime(elapsedTime, 1800_000); // 30 minutes (default)
+        }
+    }
+
+    /**
+     * Check if the time is up in the match.
+     *
+     * @param elapsedTime The elapsed time.
+     * @param timeLimit The time limit.
      * @return If the match ended.
      */
-    private boolean endMatchIfTimeUp() {
-        if (match.getState() == EnumMatchState.RUNNING && System.currentTimeMillis() - this.match.getStartTime() >= 900_000 && this.match.getKit().isSettingEnabled(KitSettingBattleRushImpl.class)) {
+    private boolean checkTime(long elapsedTime, long timeLimit) {
+        if (this.match.getState() == EnumMatchState.RUNNING && elapsedTime >= timeLimit) {
             this.match.sendMessage(CC.translate("&cMatch has ended due to time limit!"));
             this.match.setState(EnumMatchState.ENDING_MATCH);
             this.stage = 4;
@@ -88,6 +103,7 @@ public class MatchRunnable extends BukkitRunnable {
         }
         return false;
     }
+
 
     /**
      * Send the disclaimer to the participants.
@@ -107,16 +123,10 @@ public class MatchRunnable extends BukkitRunnable {
         }
     }
 
-    /**
-     * Play the sound during match countdown.
-     */
     private void playSoundStarting() {
         this.match.getParticipants().forEach(participant -> SoundUtil.playNeutral(participant.getPlayer().getPlayer()));
     }
 
-    /**
-     * Play the sound for the match when it started.
-     */
     private void playSoundStarted() {
         this.match.getParticipants().forEach(participant -> SoundUtil.playBlast(participant.getPlayer().getPlayer()));
     }

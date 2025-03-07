@@ -21,9 +21,9 @@ public class ScoreboardUtil {
         StringBuilder stringBuilder = new StringBuilder();
         for (int i = 0; i < maxGoals; i++) {
             if (i < currentGoals) {
-                stringBuilder.append(CC.translate("&a&l■"));
+                stringBuilder.append(CC.translate("&a■"));
             } else {
-                stringBuilder.append(CC.translate("&7&l■"));
+                stringBuilder.append(CC.translate("&7■"));
             }
         }
 

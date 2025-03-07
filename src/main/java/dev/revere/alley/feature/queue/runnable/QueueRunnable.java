@@ -1,7 +1,9 @@
 package dev.revere.alley.feature.queue.runnable;
 
 import dev.revere.alley.feature.kit.settings.impl.KitSettingBattleRushImpl;
+import dev.revere.alley.feature.kit.settings.impl.KitSettingStickFightImpl;
 import dev.revere.alley.game.match.impl.MatchRoundsRegularImpl;
+import dev.revere.alley.game.match.impl.kit.MatchStickFightImpl;
 import lombok.Getter;
 import dev.revere.alley.Alley;
 import dev.revere.alley.feature.arena.Arena;
@@ -129,6 +131,8 @@ public class QueueRunnable implements Runnable {
             return new MatchLivesRegularImpl(queue, queue.getKit(), arena, queue.isRanked(), gameParticipantList.getParticipantA(), gameParticipantList.getParticipantB());
         } else if (queue.getKit().isSettingEnabled(KitSettingBattleRushImpl.class)) {
             return new MatchRoundsRegularImpl(queue, queue.getKit(), arena, queue.isRanked(), gameParticipantList.getParticipantA(), gameParticipantList.getParticipantB(), 3);
+        } else if (queue.getKit().isSettingEnabled(KitSettingStickFightImpl.class)) {
+            return new MatchStickFightImpl(queue, queue.getKit(), arena, queue.isRanked(), gameParticipantList.getParticipantA(), gameParticipantList.getParticipantB(), 5);
         } else {
             return new MatchRegularImpl(queue, queue.getKit(), arena, queue.isRanked(), gameParticipantList.getParticipantA(), gameParticipantList.getParticipantB());
         }

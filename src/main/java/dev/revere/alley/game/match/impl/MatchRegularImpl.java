@@ -9,6 +9,7 @@ import dev.revere.alley.game.match.MatchUtility;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.profile.Profile;
+import dev.revere.alley.profile.ProfileRepository;
 import dev.revere.alley.util.PlayerUtil;
 import dev.revere.alley.util.elo.EloCalculator;
 import dev.revere.alley.util.elo.result.EloResult;
@@ -35,8 +36,8 @@ public class MatchRegularImpl extends AbstractMatch {
     private final GameParticipant<MatchGamePlayerImpl> participantA;
     private final GameParticipant<MatchGamePlayerImpl> participantB;
 
-    private final ChatColor teamAColor;
-    private final ChatColor teamBColor;
+    public final ChatColor teamAColor;
+    public final ChatColor teamBColor;
 
     private GameParticipant<MatchGamePlayerImpl> winner;
     private GameParticipant<MatchGamePlayerImpl> loser;
@@ -89,22 +90,41 @@ public class MatchRegularImpl extends AbstractMatch {
         this.loser.setEliminated(true);
 
         if (this.participantA.getPlayers().size() == 1 && this.participantB.getPlayers().size() == 1) {
-            MatchUtility.sendMatchResult(this, winner.getPlayer().getPlayer().getName(), loser.getPlayer().getPlayer().getName());
-        //} else {
-        //    MatchUtility.sendMatchResult(this, this.participantA.getConjoinedNames(), this.participantB.getConjoinedNames());
+            MatchUtility.sendMatchResult(this, this.winner.getPlayer().getPlayer().getName(), this.loser.getPlayer().getPlayer().getName());
         }
 
-        if (this.participantA.getPlayers().size() == 1 && this.participantB.getPlayers().size() == 1 && isRanked()) {
-            OldEloResult result = this.getOldEloResult();
-            EloResult eloResult = this.getEloResult(result.oldWinnerElo, result.oldLoserElo);
-            this.handleWinner(eloResult.newWinnerElo);
-            this.handleLoser(eloResult.newLoserElo);
-            this.sendEloResult(this.winner.getPlayer().getPlayer().getName(), this.loser.getPlayer().getPlayer().getName(), result.oldWinnerElo, result.oldLoserElo, eloResult.newWinnerElo, eloResult.newLoserElo);
-        } else if (this.participantA.getPlayers().size() == 1 && this.participantB.getPlayers().size() == 1 && !isRanked()) {
-            this.handleUnrankedData();
-        }
-
+        this.handleData(this.winner, this.loser, this.participantA, this.participantB);
         super.handleRoundEnd();
+    }
+
+    /**
+     * Method to handle the data of the match such as elo changes and unranked stats.
+     *
+     * @param winner      The winner of the match.
+     * @param loser       The loser of the match.
+     * @param participantA The first participant.
+     * @param participantB The second participant.
+     */
+    public void handleData(GameParticipant<MatchGamePlayerImpl> winner, GameParticipant<MatchGamePlayerImpl> loser, GameParticipant<MatchGamePlayerImpl> participantA, GameParticipant<MatchGamePlayerImpl> participantB) {
+        if (participantA.getPlayers().size() == 1 && participantB.getPlayers().size() == 1 && isRanked()) {
+            OldEloResult result = this.getOldEloResult(winner, loser);
+            EloResult eloResult = this.getEloResult(result.oldWinnerElo, result.oldLoserElo);
+
+            this.handleWinner(eloResult.newWinnerElo, winner);
+            this.handleLoser(eloResult.newLoserElo, loser);
+
+            this.sendEloResult(winner.getPlayer().getPlayer().getName(), loser.getPlayer().getPlayer().getName(), result.oldWinnerElo, result.oldLoserElo, eloResult.newWinnerElo, eloResult.newLoserElo);
+        } else if (participantA.getPlayers().size() == 1 && participantB.getPlayers().size() == 1 && !isRanked()) {
+            ProfileRepository profileRepository = Alley.getInstance().getProfileRepository();
+
+            Profile winnerProfile = profileRepository.getProfile(winner.getPlayer().getUuid());
+            winnerProfile.getProfileData().getUnrankedKitData().get(getKit().getName()).incrementWins();
+            winnerProfile.getProfileData().incrementUnrankedWins();
+
+            Profile loserProfile = profileRepository.getProfile(loser.getPlayer().getUuid());
+            loserProfile.getProfileData().getUnrankedKitData().get(getKit().getName()).incrementLosses();
+            loserProfile.getProfileData().incrementUnrankedLosses();
+        }
     }
 
     /**
@@ -117,7 +137,7 @@ public class MatchRegularImpl extends AbstractMatch {
      * @param newEloWinner The new elo of the winner.
      * @param newEloLoser The new elo of the loser.
      */
-    private void sendEloResult(String winnerName, String loserName, int oldEloWinner, int oldEloLoser, int newEloWinner, int newEloLoser) {
+    public void sendEloResult(String winnerName, String loserName, int oldEloWinner, int oldEloLoser, int newEloWinner, int newEloLoser) {
         FileConfiguration config = Alley.getInstance().getConfigService().getMessagesConfig();
 
         List<String> list = config.getStringList("match.ended.elo-changes.format");
@@ -147,9 +167,9 @@ public class MatchRegularImpl extends AbstractMatch {
      *
      * @return The old elo result.
      */
-    private @NotNull OldEloResult getOldEloResult() {
-        int oldWinnerElo = this.winner.getPlayer().getElo();
-        int oldLoserElo = this.loser.getPlayer().getElo();
+    public @NotNull OldEloResult getOldEloResult(GameParticipant<MatchGamePlayerImpl> winner, GameParticipant<MatchGamePlayerImpl> loser) {
+        int oldWinnerElo = winner.getPlayer().getElo();
+        int oldLoserElo = loser.getPlayer().getElo();
         return new OldEloResult(oldWinnerElo, oldLoserElo);
     }
 
@@ -160,7 +180,7 @@ public class MatchRegularImpl extends AbstractMatch {
      * @param oldLoserElo  The old elo of the loser.
      * @return The elo result.
      */
-    private @NotNull EloResult getEloResult(int oldWinnerElo, int oldLoserElo) {
+    public @NotNull EloResult getEloResult(int oldWinnerElo, int oldLoserElo) {
         int newWinnerElo = EloCalculator.determineNewElo(oldWinnerElo, oldLoserElo, true);
         int newLoserElo = EloCalculator.determineNewElo(oldLoserElo, oldWinnerElo, false);
         return new EloResult(newWinnerElo, newLoserElo);
@@ -170,9 +190,10 @@ public class MatchRegularImpl extends AbstractMatch {
      * Method to handle the winner.
      *
      * @param elo The new elo of the winner.
+     * @param winner The winner of the match.
      */
-    private void handleWinner(int elo) {
-        Profile winnerProfile = Alley.getInstance().getProfileRepository().getProfile(this.winner.getPlayer().getUuid());
+    public void handleWinner(int elo, GameParticipant<MatchGamePlayerImpl> winner) {
+        Profile winnerProfile = Alley.getInstance().getProfileRepository().getProfile(winner.getPlayer().getUuid());
         winnerProfile.getProfileData().getRankedKitData().get(getKit().getName()).setElo(elo);
         winnerProfile.getProfileData().getRankedKitData().get(getKit().getName()).incrementWins();
         winnerProfile.getProfileData().incrementRankedWins();
@@ -183,26 +204,14 @@ public class MatchRegularImpl extends AbstractMatch {
      * Method to handle the loser.
      *
      * @param elo The new elo of the loser.
+     * @param loser The loser of the match.
      */
-    private void handleLoser(int elo) {
-        Profile loserProfile = Alley.getInstance().getProfileRepository().getProfile(this.loser.getPlayer().getUuid());
+    public void handleLoser(int elo, GameParticipant<MatchGamePlayerImpl> loser) {
+        Profile loserProfile = Alley.getInstance().getProfileRepository().getProfile(loser.getPlayer().getUuid());
         loserProfile.getProfileData().getRankedKitData().get(getKit().getName()).setElo(elo);
         loserProfile.getProfileData().getRankedKitData().get(getKit().getName()).incrementLosses();
         loserProfile.getProfileData().incrementRankedLosses();
         loserProfile.getProfileData().updateElo(loserProfile);
-    }
-
-    /**
-     * Method to handle unranked data (Incrementing global wins and losses).
-     */
-    private void handleUnrankedData() {
-        Profile winnerProfile = Alley.getInstance().getProfileRepository().getProfile(this.winner.getPlayer().getUuid());
-        winnerProfile.getProfileData().getUnrankedKitData().get(getKit().getName()).incrementWins();
-        winnerProfile.getProfileData().incrementUnrankedWins();
-
-        Profile loserProfile = Alley.getInstance().getProfileRepository().getProfile(this.loser.getPlayer().getUuid());
-        loserProfile.getProfileData().getUnrankedKitData().get(getKit().getName()).incrementLosses();
-        loserProfile.getProfileData().incrementUnrankedLosses();
     }
 
     @Override

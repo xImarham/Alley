@@ -14,10 +14,12 @@ import dev.revere.alley.feature.hotbar.enums.HotbarType;
 import dev.revere.alley.feature.kit.Kit;
 import dev.revere.alley.feature.kit.settings.impl.KitSettingBattleRushImpl;
 import dev.revere.alley.feature.kit.settings.impl.KitSettingLivesImpl;
+import dev.revere.alley.feature.kit.settings.impl.KitSettingStickFightImpl;
 import dev.revere.alley.feature.queue.Queue;
 import dev.revere.alley.game.match.enums.EnumMatchState;
 import dev.revere.alley.game.match.impl.MatchRegularImpl;
 import dev.revere.alley.game.match.impl.MatchRoundsRegularImpl;
+import dev.revere.alley.game.match.impl.kit.MatchStickFightImpl;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.game.match.runnable.MatchRunnable;
@@ -63,7 +65,9 @@ public abstract class AbstractMatch {
     private Map<BlockState, Location> placedBlocks;
 
     private boolean ranked;
+
     private long startTime;
+    private long endTime;
 
     /**
      * Constructor for the AbstractMatch class.
@@ -103,11 +107,6 @@ public abstract class AbstractMatch {
         this.runnable = new MatchRunnable(this);
         this.runnable.runTaskTimer(Alley.getInstance(), 0L, 20L);
         this.getParticipants().forEach(this::initializeParticipant);
-
-        if (this.kit.isSettingEnabled(KitSettingBattleRushImpl.class) && ((MatchRoundsRegularImpl) this).getCurrentRound() > 0) {
-            return;
-        }
-
         this.startTime = System.currentTimeMillis();
     }
 
@@ -193,7 +192,7 @@ public abstract class AbstractMatch {
                     Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
                     profile.setState(EnumProfileState.LOBBY);
                     profile.setMatch(null);
-                    teleportPlayerToSpawn(player);
+                    this.teleportPlayerToSpawn(player);
                 }
             }
         });
@@ -272,6 +271,7 @@ public abstract class AbstractMatch {
                 if (killer != null) {
                     this.handleEffects(player, killer);
                 }
+
                 this.state = EnumMatchState.ENDING_MATCH;
             }
             this.runnable.setStage(4);
@@ -283,11 +283,12 @@ public abstract class AbstractMatch {
     /**
      * Starts the respawn process for a participant.
      *
-     * @param player      The player to start the respawn process for.
+     * @param player The player to start the respawn process for.
      */
     public void startRespawnProcess(Player player) {
         new BukkitRunnable() {
             int count = 3;
+
             @Override
             public void run() {
                 if (count == 0) {
@@ -423,7 +424,12 @@ public abstract class AbstractMatch {
      */
     public void handleRoundStart() {
         this.snapshots.clear();
-        if (this.kit.isSettingEnabled(KitSettingBattleRushImpl.class)) return;
+        if (this.kit.isSettingEnabled(KitSettingBattleRushImpl.class) && ((MatchRoundsRegularImpl) this).getCurrentRound() > 0) {
+            return;
+        } else if (this.kit.isSettingEnabled(KitSettingStickFightImpl.class) && ((MatchStickFightImpl) this).getCurrentRound() > 0) {
+            return;
+        }
+
         this.startTime = System.currentTimeMillis();
     }
 
@@ -431,7 +437,7 @@ public abstract class AbstractMatch {
      * Handles the end of a round.
      */
     public void handleRoundEnd() {
-        this.startTime = System.currentTimeMillis() - this.startTime;
+        this.endTime = System.currentTimeMillis();
         this.getParticipants().forEach(gameParticipant -> {
             if (gameParticipant.isAllDead()) {
                 gameParticipant.getPlayers().forEach(gamePlayer -> {
@@ -521,9 +527,13 @@ public abstract class AbstractMatch {
      * @return The duration of the match.
      */
     public String getDuration() {
-        if (this.state == EnumMatchState.STARTING) return EnumMatchState.STARTING.getDescription();
-        if (this.state == EnumMatchState.ENDING_MATCH) return EnumMatchState.ENDING_MATCH.getDescription();
-        else return getFormattedElapsedTime();
+        if (this.state == EnumMatchState.STARTING) {
+            return this.getFormattedElapsedTime(this.getElapsedTime());
+        } else if (this.state == EnumMatchState.ENDING_MATCH) {
+            return this.getFormattedElapsedTime(this.endTime - this.startTime);
+        } else {
+            return this.getFormattedElapsedTime(this.getElapsedTime());
+        }
     }
 
     /**
@@ -532,7 +542,7 @@ public abstract class AbstractMatch {
      * @return The elapsed time of the match.
      */
     public long getElapsedTime() {
-        return System.currentTimeMillis() - startTime;
+        return System.currentTimeMillis() - this.startTime;
     }
 
     /**
@@ -540,8 +550,8 @@ public abstract class AbstractMatch {
      *
      * @return The formatted elapsed time of the match.
      */
-    public String getFormattedElapsedTime() {
-        long elapsedSeconds = getElapsedTime() / 1000;
+    public String getFormattedElapsedTime(long elapsedMillis) {
+        long elapsedSeconds = elapsedMillis / 1000;
         return String.format("%02d:%02d", elapsedSeconds / 60, elapsedSeconds % 60);
     }
 
@@ -623,6 +633,12 @@ public abstract class AbstractMatch {
         });
     }
 
+    /**
+     * Gets a participant by a player.
+     *
+     * @param player The player to get the participant of.
+     * @return The participant of the player.
+     */
     public GameParticipant<MatchGamePlayerImpl> getParticipant(Player player) {
         return getParticipants().stream()
                 .filter(gameParticipant -> gameParticipant.containsPlayer(player.getUniqueId()))
