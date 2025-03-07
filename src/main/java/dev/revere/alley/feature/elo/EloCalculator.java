@@ -2,7 +2,6 @@ package dev.revere.alley.feature.elo;
 
 import dev.revere.alley.feature.elo.range.EloRangeFactor;
 import lombok.Getter;
-import lombok.experimental.UtilityClass;
 
 /**
  * @author Remi
