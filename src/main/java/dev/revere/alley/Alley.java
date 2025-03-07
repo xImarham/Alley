@@ -17,6 +17,7 @@ import dev.revere.alley.essential.chat.ChatService;
 import dev.revere.alley.essential.chat.listener.ChatListener;
 import dev.revere.alley.essential.spawn.SpawnService;
 import dev.revere.alley.essential.spawn.listener.SpawnListener;
+import dev.revere.alley.feature.elo.EloCalculator;
 import dev.revere.alley.feature.leaderboard.LeaderboardService;
 import dev.revere.alley.game.duel.DuelRequestHandler;
 import dev.revere.alley.game.duel.task.DuelRequestExpiryTask;
@@ -83,6 +84,7 @@ public class Alley extends JavaPlugin {
     private ChatService chatService;
     private CombatService combatService;
     private LeaderboardService leaderboardService;
+    private EloCalculator eloCalculator;
 
     private boolean loaded;
 
@@ -170,6 +172,7 @@ public class Alley extends JavaPlugin {
         managers.put("ChatService", () -> this.chatService = new ChatService());
         managers.put("CombatService", () -> this.combatService = new CombatService());
         managers.put("LeaderboardService", () -> this.leaderboardService = new LeaderboardService());
+        managers.put("EloCalculator", () -> this.eloCalculator = new EloCalculator());
 
         managers.forEach(Logger::logTime);
     }

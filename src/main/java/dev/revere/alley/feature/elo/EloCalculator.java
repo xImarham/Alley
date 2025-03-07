@@ -1,6 +1,7 @@
-package dev.revere.alley.util.elo;
+package dev.revere.alley.feature.elo;
 
-import dev.revere.alley.util.elo.range.EloRangeFactor;
+import dev.revere.alley.feature.elo.range.EloRangeFactor;
+import lombok.Getter;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -8,7 +9,7 @@ import lombok.experimental.UtilityClass;
  * @project Alley
  * @date 6/2/2024
  */
-@UtilityClass
+@Getter
 public class EloCalculator {
     private final EloRangeFactor[] ELO_RANGES = {
             new EloRangeFactor(0, 1100, 25),
@@ -29,7 +30,7 @@ public class EloCalculator {
      */
     public int determineNewElo(int playerElo, int opponentElo, boolean playerWon) {
         int score = playerWon ? 1 : 0;
-        return calculateElo(playerElo, opponentElo, score);
+        return this.calculateElo(playerElo, opponentElo, score);
     }
 
     /**
@@ -41,8 +42,8 @@ public class EloCalculator {
      * @return The updated Elo rating.
      */
     public int calculateElo(int playerElo, int opponentElo, int score) {
-        double range = determineRange(playerElo);
-        double expectedScore = calculateExpectedScore(playerElo, opponentElo);
+        double range = this.determineRange(playerElo);
+        double expectedScore = this.calculateExpectedScore(playerElo, opponentElo);
         int updatedElo = (int) (playerElo + range * (score - expectedScore));
 
         if (score == 1 && updatedElo == playerElo) {
@@ -69,11 +70,11 @@ public class EloCalculator {
      * @return The range factor.
      */
     private double determineRange(int elo) {
-        for (EloRangeFactor range : ELO_RANGES) {
+        for (EloRangeFactor range : this.ELO_RANGES) {
             if (range.isInRange(elo)) {
                 return range.getFactor();
             }
         }
-        return DEFAULT_RANGE_FACTOR;
+        return this.DEFAULT_RANGE_FACTOR;
     }
 }

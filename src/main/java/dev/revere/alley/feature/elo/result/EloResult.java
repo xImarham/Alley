@@ -1,4 +1,4 @@
-package dev.revere.alley.util.elo.result;
+package dev.revere.alley.feature.elo.result;
 
 /**
  * @author Emmy

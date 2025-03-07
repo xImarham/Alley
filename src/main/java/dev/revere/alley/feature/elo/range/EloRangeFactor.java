@@ -1,4 +1,4 @@
-package dev.revere.alley.util.elo.range;
+package dev.revere.alley.feature.elo.range;
 
 import lombok.Getter;
 

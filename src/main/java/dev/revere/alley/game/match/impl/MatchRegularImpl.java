@@ -11,9 +11,9 @@ import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.ProfileRepository;
 import dev.revere.alley.util.PlayerUtil;
-import dev.revere.alley.util.elo.EloCalculator;
-import dev.revere.alley.util.elo.result.EloResult;
-import dev.revere.alley.util.elo.result.OldEloResult;
+import dev.revere.alley.feature.elo.EloCalculator;
+import dev.revere.alley.feature.elo.result.EloResult;
+import dev.revere.alley.feature.elo.result.OldEloResult;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.ChatColor;
@@ -181,8 +181,9 @@ public class MatchRegularImpl extends AbstractMatch {
      * @return The elo result.
      */
     public @NotNull EloResult getEloResult(int oldWinnerElo, int oldLoserElo) {
-        int newWinnerElo = EloCalculator.determineNewElo(oldWinnerElo, oldLoserElo, true);
-        int newLoserElo = EloCalculator.determineNewElo(oldLoserElo, oldWinnerElo, false);
+        EloCalculator eloCalculator = Alley.getInstance().getEloCalculator();
+        int newWinnerElo = eloCalculator.determineNewElo(oldWinnerElo, oldLoserElo, true);
+        int newLoserElo = eloCalculator.determineNewElo(oldLoserElo, oldWinnerElo, false);
         return new EloResult(newWinnerElo, newLoserElo);
     }
 
