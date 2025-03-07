@@ -1,25 +1,24 @@
 package dev.revere.alley.game.match.command.admin.impl;
 
 import dev.revere.alley.Alley;
+import dev.revere.alley.api.command.BaseCommand;
+import dev.revere.alley.api.command.CommandArgs;
+import dev.revere.alley.api.command.annotation.CommandData;
+import dev.revere.alley.api.command.annotation.CompleterData;
 import dev.revere.alley.feature.arena.Arena;
-import dev.revere.alley.feature.arena.enums.EnumArenaType;
 import dev.revere.alley.feature.kit.Kit;
 import dev.revere.alley.feature.kit.settings.impl.KitSettingBattleRushImpl;
 import dev.revere.alley.feature.kit.settings.impl.KitSettingLivesImpl;
 import dev.revere.alley.feature.kit.settings.impl.KitSettingStickFightImpl;
+import dev.revere.alley.feature.queue.Queue;
 import dev.revere.alley.game.match.AbstractMatch;
 import dev.revere.alley.game.match.impl.MatchLivesRegularImpl;
 import dev.revere.alley.game.match.impl.MatchRegularImpl;
 import dev.revere.alley.game.match.impl.MatchRoundsRegularImpl;
 import dev.revere.alley.game.match.impl.kit.MatchStickFightImpl;
-import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
-import dev.revere.alley.feature.queue.Queue;
+import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.util.chat.CC;
-import dev.revere.alley.api.command.BaseCommand;
-import dev.revere.alley.api.command.annotation.CommandData;
-import dev.revere.alley.api.command.CommandArgs;
-import dev.revere.alley.api.command.annotation.CompleterData;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -46,26 +45,21 @@ public class MatchStartCommand extends BaseCommand {
                     }
                     break;
                 case 3:
-                    // all arenas:
-                    // Alley.getInstance().getArenaRepository().getArenas().forEach(arena -> completion.add(arena.getName()));
-
-                    //excluding FFA arenas
-                    Alley.getInstance().getArenaRepository().getArenas().stream().filter(arena -> arena.getType() != EnumArenaType.FFA).forEach(arena -> completion.add(arena.getName()));
+                    Alley.getInstance().getKitRepository().getKits().forEach(kit -> completion.add(kit.getName()));
                     break;
                 case 4:
-                    //Alley.getInstance().getKitRepository().getKits().forEach(kit -> completion.add(kit.getName()));
-
-                    //only add kits that are in the arena of args[2]
-                    Arena arena = Alley.getInstance().getArenaRepository().getArenaByName(command.getArgs()[2]);
-                    if (arena != null) {
-                        Alley.getInstance().getKitRepository().getKits().stream().filter(kit -> arena.getKits().contains(kit.getName())).forEach(kit -> completion.add(kit.getName()));
+                    Kit kit = Alley.getInstance().getKitRepository().getKit(command.getArgs()[2]);
+                    if (kit != null) {
+                        Alley.getInstance().getArenaRepository().getArenas()
+                                .stream()
+                                .filter(arena -> arena.getKits().contains(kit.getName()))
+                                .forEach(arena -> completion.add(arena.getName()));
                     }
                     break;
                 default:
                     break;
             }
         }
-
         return completion;
     }
 
@@ -76,29 +70,29 @@ public class MatchStartCommand extends BaseCommand {
         String[] args = command.getArgs();
 
         if (args.length != 4) {
-            player.sendMessage(CC.translate("&6Usage: &e/match start &b<player1> <player2> <arena> <kit>"));
+            player.sendMessage(CC.translate("&6Usage: &e/match start &b<player1> <player2> <kit> <arena>"));
             return;
         }
 
         Player player1 = player.getServer().getPlayer(args[0]);
         Player player2 = player.getServer().getPlayer(args[1]);
-        String arenaName = args[2];
-        String kitName = args[3];
+        String kitName = args[2];
+        String arenaName = args[3];
 
         if (player1 == null || player2 == null) {
             player.sendMessage(CC.translate("&cPlayer not found."));
             return;
         }
 
-        Arena arena = Alley.getInstance().getArenaRepository().getArenaByName(arenaName);
-        if (arena == null) {
-            player.sendMessage(CC.translate("&cArena not found."));
-            return;
-        }
-
         Kit kit = Alley.getInstance().getKitRepository().getKit(kitName);
         if (kit == null) {
             player.sendMessage(CC.translate("&cKit not found."));
+            return;
+        }
+
+        Arena arena = Alley.getInstance().getArenaRepository().getArenaByName(arenaName);
+        if (arena == null) {
+            player.sendMessage(CC.translate("&cArena not found."));
             return;
         }
 
