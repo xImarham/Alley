@@ -1,15 +1,11 @@
 package dev.revere.alley.util;
 
-import dev.revere.alley.Alley;
 import lombok.experimental.UtilityClass;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.metadata.FixedMetadataValue;
-
-import java.util.UUID;
 
 /**
  * @author Emmy
@@ -18,36 +14,6 @@ import java.util.UUID;
  */
 @UtilityClass
 public class PlayerUtil {
-    /**
-     * Set the last attacker of a player
-     *
-     * @param victim   the player that was attacked
-     * @param attacker the player that attacked
-     */
-    public void setLastAttacker(Player victim, Player attacker) {
-        victim.setMetadata("lastAttacker", new FixedMetadataValue(Alley.getInstance(), attacker.getUniqueId()));
-    }
-
-    /**
-     * Get the last attacker of a player
-     *
-     * @param victim the player that was attacked
-     * @return the last attacker of the player
-     */
-    public Player getLastAttacker(Player victim) {
-        if (victim.hasMetadata("lastAttacker")) {
-            return Bukkit.getPlayer((UUID) victim.getMetadata("lastAttacker").get(0).value());
-        } else {
-            return null;
-        }
-    }
-
-    public void resetLastAttacker(Player victim) {
-        if (victim.hasMetadata("lastAttacker")) {
-            victim.removeMetadata("lastAttacker", Alley.getInstance());
-        }
-    }
-
     /**
      * Reset a player's stats
      *

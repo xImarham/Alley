@@ -70,6 +70,6 @@ public abstract class AbstractFFAMatch {
         this.getPlayers().forEach(online -> online.sendMessage(CC.translate("&7(Combat Log) &c" + player.getName() + " has been killed by " + killer.getName() + ".")));
 
         CombatService combatService = Alley.getInstance().getCombatService();
-        combatService.resetCombat(player.getUniqueId());
+        combatService.resetCombatLog(player);
     }
 }

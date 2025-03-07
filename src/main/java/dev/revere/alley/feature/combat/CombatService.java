@@ -1,119 +1,159 @@
 package dev.revere.alley.feature.combat;
 
+import dev.revere.alley.Alley;
+import dev.revere.alley.profile.enums.EnumProfileState;
 import dev.revere.alley.util.TimeUtil;
 import lombok.Getter;
-import lombok.var;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 
-import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author Emmy
  * @project Alley
- * @since 29/01/2025
+ * @since 07/03/2025
  */
 @Getter
 public class CombatService {
-    private final HashMap<Long, Combat> combatMap;
-    private final long combatTime;
+    private final Map<UUID, Combat> combatMap;
+
+    private final long ffaExpirationTime;
+    private final long defaultExpirationTime;
 
     public CombatService() {
-        this.combatMap = new HashMap<>();
-        this.combatTime = 15 * 1000L;
+        this.combatMap = new ConcurrentHashMap<>();
+        this.ffaExpirationTime = 15 * 1000L; // 15 seconds
+        this.defaultExpirationTime = 5 * 1000L; // 5 seconds
     }
 
     /**
-     * Get the combat of a player.
+     * Records the last attacker of a player and sets the expiration time based on the player's state.
      *
-     * @param player The player.
-     * @return The combat.
+     * @param victim   The player who was attacked.
+     * @param attacker The player who attacked.
      */
-    public Combat getCombat(UUID player) {
-        return this.combatMap.values().stream()
-                .filter(combat -> combat.getAttacker().equals(player) || combat.getVictim().equals(player))
-                .findFirst()
-                .orElse(null);
+    public void setLastAttacker(Player victim, Player attacker) {
+        EnumProfileState profileState = Alley.getInstance().getProfileRepository().getProfile(victim.getUniqueId()).getState();
+
+        long expirationTime = (profileState == EnumProfileState.FFA) ? this.ffaExpirationTime : this.defaultExpirationTime;
+
+        Combat victimCombatData = new Combat(attacker.getUniqueId(), System.currentTimeMillis(), expirationTime);
+        this.combatMap.put(victim.getUniqueId(), victimCombatData);
+
+        Combat attackerCombatData = new Combat(victim.getUniqueId(), System.currentTimeMillis(), expirationTime);
+        this.combatMap.put(attacker.getUniqueId(), attackerCombatData);
     }
 
     /**
-     * Add players to combat.
+     * Gets the last attacker of a player, considering expiration.
      *
-     * @param attacker The attacker.
-     * @param victim   The victim.
+     * @param victim The player who was attacked.
+     * @return The last attacker, or null if expired/not found.
      */
-    public void addPlayersToCombat(UUID attacker, UUID victim) {
-        if (this.isPlayerInCombat(attacker) || this.isPlayerInCombat(victim)) {
-            this.resetCombat(attacker);
+    public Player getLastAttacker(Player victim) {
+        Combat combat = this.combatMap.get(victim.getUniqueId());
+        if (combat == null) return null;
+
+        long attackTime = combat.getAttackTimestamp();
+        long expirationTime = combat.getExpirationTime();
+
+        if (System.currentTimeMillis() - attackTime > expirationTime) {
+            this.removeLastAttacker(victim, false);
+            return null;
         }
 
-        Combat combat = new Combat(attacker, victim);
-        this.combatMap.put(System.currentTimeMillis(), combat);
+        return Bukkit.getPlayer(combat.getAttackerUUID());
+    }
+
+    public void resetCombatLog(Player player) {
+        this.removeLastAttacker(player, false);
     }
 
     /**
-     * Check if a player is in combat.
+     * Checks if a player is in combat.
+     *
+     * @param uuid The player to check.
+     * @return If the player is in combat.
+     */
+    public boolean isPlayerInCombat(UUID uuid) {
+        if (this.isExpired(Bukkit.getPlayer(uuid))) {
+            return false;
+        }
+
+        return this.combatMap.containsKey(uuid);
+    }
+
+    /**
+     * Removes the last attacker record of a player.
      *
      * @param player The player.
-     * @return Whether the player is in combat.
+     * @param removeBoth If true, removes both the attacker and the victim.
      */
-    public boolean isPlayerInCombat(UUID player) {
-        for (var entry : this.combatMap.entrySet()) {
-            Combat combat = entry.getValue();
+    public void removeLastAttacker(Player player, boolean removeBoth) {
+        Combat combat = this.combatMap.get(player.getUniqueId());
+        if (combat != null) {
+            this.combatMap.remove(player.getUniqueId());
 
-            if ((combat.getAttacker().equals(player) || combat.getVictim().equals(player)) && this.isExpired(entry.getKey())) {
-                this.resetCombat(player);
-                return false;
+            if (removeBoth) {
+                UUID victimUUID = combat.getAttackerUUID();
+                Combat victimCombat = this.combatMap.get(victimUUID);
+                if (victimCombat != null) {
+                    this.combatMap.remove(victimUUID);
+                }
             }
+        }
+    }
 
-            if (combat.getAttacker().equals(player) || combat.getVictim().equals(player)) {
-                return true;
-            }
+    /**
+     * Checks if the last attacker record of a player is expired.
+     *
+     * @param player The player.
+     * @return If the record is expired.
+     */
+    private boolean isExpired(Player player) {
+        Combat combat = this.combatMap.get(player.getUniqueId());
+        if (combat == null) return true;
+
+        long attackTime = combat.getAttackTimestamp();
+        long expirationTime = combat.getExpirationTime();
+
+        if (System.currentTimeMillis() - attackTime > expirationTime) {
+            this.removeLastAttacker(player, false);
+            return true;
         }
 
         return false;
     }
 
+
+
     /**
-     * Check if the combat is expired.
+     * Get the remaining time before the last attacker record expires.
      *
-     * @param timestamp The timestamp.
-     * @return Whether the combat is expired.
+     * @param victim The player.
+     * @return The remaining time in milliseconds, or 0 if expired/not found.
      */
-    public boolean isExpired(Long timestamp) {
-        return System.currentTimeMillis() - timestamp >= this.combatTime;
+    public long getRemainingTime(Player victim) {
+        Combat combat = this.combatMap.get(victim.getUniqueId());
+        if (combat == null) return 0;
+
+        long attackTime = combat.getAttackTimestamp();
+        long expirationTime = combat.getExpirationTime();
+
+        long remaining = (attackTime + expirationTime) - System.currentTimeMillis();
+        return Math.max(remaining, 0);
     }
 
     /**
-     * Reset the combat of a player.
+     * Get the remaining time formatted as a string.
      *
-     * @param player The player.
+     * @param victim The player.
+     * @return The remaining time formatted in seconds.
      */
-    public void resetCombat(UUID player) {
-        this.combatMap.values().removeIf(combat -> combat.getAttacker().equals(player) || combat.getVictim().equals(player));
-    }
-
-    /**
-     * Get the remaining time of a player in combat.
-     *
-     * @param player The player.
-     * @return The remaining time.
-     */
-    public long getRemainingTime(UUID player) {
-        return this.combatMap.entrySet().stream()
-                .filter(entry -> entry.getValue().getAttacker().equals(player) || entry.getValue().getVictim().equals(player))
-                .mapToLong(entry -> (entry.getKey() + this.combatTime) - System.currentTimeMillis())
-                .findFirst()
-                .orElse(0);
-    }
-
-    /**
-     * Get the remaining time of a player in combat formatted.
-     *
-     * @param player The player.
-     * @return The remaining time formatted.
-     */
-    public String getRemainingTimeFormatted(UUID player) {
-        long remainingTime = this.getRemainingTime(player);
-        return TimeUtil.millisToSecondsTimer(remainingTime) + "s";
+    public String getRemainingTimeFormatted(Player victim) {
+        return TimeUtil.millisToSecondsTimer(getRemainingTime(victim)) + "s";
     }
 }

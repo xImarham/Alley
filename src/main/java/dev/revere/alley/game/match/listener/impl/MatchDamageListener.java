@@ -7,7 +7,6 @@ import dev.revere.alley.game.match.AbstractMatch;
 import dev.revere.alley.game.match.enums.EnumMatchState;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
-import dev.revere.alley.util.PlayerUtil;
 import org.bukkit.entity.EnderPearl;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
@@ -162,8 +161,8 @@ public class MatchDamageListener implements Listener {
 
             if (profile.getState() == EnumProfileState.PLAYING) {
                 Player player = (Player) event.getEntity();
-                Player damager = (Player) event.getDamager();
-                PlayerUtil.setLastAttacker(player, damager);
+                Player attacker = (Player) event.getDamager();
+                Alley.getInstance().getCombatService().setLastAttacker(player, attacker);
             }
         }
     }

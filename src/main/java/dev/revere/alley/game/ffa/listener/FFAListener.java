@@ -1,15 +1,14 @@
 package dev.revere.alley.game.ffa.listener;
 
 import dev.revere.alley.Alley;
+import dev.revere.alley.feature.combat.CombatService;
 import dev.revere.alley.feature.cooldown.Cooldown;
 import dev.revere.alley.feature.cooldown.CooldownRepository;
 import dev.revere.alley.feature.cooldown.enums.EnumCooldownType;
-import dev.revere.alley.feature.combat.CombatService;
 import dev.revere.alley.game.ffa.cuboid.FFACuboidServiceImpl;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
 import dev.revere.alley.util.ListenerUtil;
-import dev.revere.alley.util.PlayerUtil;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -74,7 +73,7 @@ public class FFAListener implements Listener {
 
         ListenerUtil.clearDroppedItemsOnDeath(event, player);
 
-        Player killer = PlayerUtil.getLastAttacker(player);
+        Player killer = Alley.getInstance().getCombatService().getLastAttacker(player);
 
         this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> player.spigot().respawn(), 1L);
         Bukkit.getScheduler().runTaskLater(this.plugin, () -> profile.getFfaMatch().handleDeath(player, killer), 1L);
@@ -88,7 +87,7 @@ public class FFAListener implements Listener {
 
         CombatService combatService = Alley.getInstance().getCombatService();
         if (combatService.isPlayerInCombat(player.getUniqueId())) {
-            profile.getFfaMatch().handleCombatLog(player, Bukkit.getPlayer(combatService.getCombat(player.getUniqueId()).getAttacker()));
+            profile.getFfaMatch().handleCombatLog(player, combatService.getLastAttacker(player));
         }
 
         profile.getFfaMatch().leave(player);
@@ -102,7 +101,7 @@ public class FFAListener implements Listener {
 
         CombatService combatService = Alley.getInstance().getCombatService();
         if (combatService.isPlayerInCombat(player.getUniqueId())) {
-            profile.getFfaMatch().handleCombatLog(player, Bukkit.getPlayer(combatService.getCombat(player.getUniqueId()).getAttacker()));
+            profile.getFfaMatch().handleCombatLog(player, combatService.getLastAttacker(player));
         }
 
         profile.getFfaMatch().leave(player);
@@ -121,10 +120,10 @@ public class FFAListener implements Listener {
 
             Player player = (Player) event.getEntity();
             Player attacker = (Player) event.getDamager();
-            PlayerUtil.setLastAttacker(player, attacker);
+            Alley.getInstance().getCombatService().setLastAttacker(player, attacker);
 
             CombatService combatService = Alley.getInstance().getCombatService();
-            combatService.addPlayersToCombat(player.getUniqueId(), attacker.getUniqueId());
+            combatService.setLastAttacker(player, attacker);
         }
     }
 

@@ -267,7 +267,7 @@ public abstract class AbstractMatch {
             this.handleRoundEnd();
 
             if (this.canEndMatch()) {
-                Player killer = PlayerUtil.getLastAttacker(player);
+                Player killer = Alley.getInstance().getCombatService().getLastAttacker(player);
                 if (killer != null) {
                     this.handleEffects(player, killer);
                 }

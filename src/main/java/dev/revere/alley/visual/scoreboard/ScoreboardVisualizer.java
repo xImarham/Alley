@@ -233,7 +233,7 @@ public class ScoreboardVisualizer implements IAssembleAdapter {
                             if (combatService.isPlayerInCombat(player.getUniqueId())) {
                                 for (String combatLine : combatTagLines) {
                                     lines.add(CC.translate(combatLine
-                                            .replaceAll("\\{combat-tag}", combatService.getRemainingTimeFormatted(player.getUniqueId()))));
+                                            .replaceAll("\\{combat-tag}", combatService.getRemainingTimeFormatted(player))));
                                 }
                             }
                         } else {

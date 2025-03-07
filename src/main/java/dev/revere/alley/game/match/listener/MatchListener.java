@@ -15,7 +15,6 @@ import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
 import dev.revere.alley.util.ActionBarUtil;
 import dev.revere.alley.util.ListenerUtil;
-import dev.revere.alley.util.PlayerUtil;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -128,7 +127,7 @@ public class MatchListener implements Listener {
     @EventHandler
     private void onPlayerDeath(PlayerDeathEvent event) {
         Player player = event.getEntity();
-        Player killer = PlayerUtil.getLastAttacker(player);
+        Player killer = Alley.getInstance().getCombatService().getLastAttacker(player);
 
         Profile profile = this.plugin.getProfileRepository().getProfile(player.getUniqueId());
         if (profile.getState() != EnumProfileState.PLAYING) return;
