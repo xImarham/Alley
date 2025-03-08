@@ -1,4 +1,4 @@
-package dev.revere.alley.essential.spawn.command;
+package dev.revere.alley.feature.spawn.command;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.feature.hotbar.enums.HotbarType;

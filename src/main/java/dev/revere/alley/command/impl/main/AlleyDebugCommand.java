@@ -93,7 +93,7 @@ public class AlleyDebugCommand extends BaseCommand {
                 "      &f┃ Arenas: &b" + this.formatNumber(this.plugin.getArenaRepository().getArenas().size()),
                 "      &f┃ Snapshots: &b" + this.formatNumber(this.plugin.getSnapshotRepository().getSnapshots().size()),
                 "      &f┃ Duel Requests: &b" + this.formatNumber(this.plugin.getDuelRequestHandler().getDuelRequests().size()),
-                "      &f┃ Emojis: &b" + this.formatNumber(this.plugin.getChatService().getSymbolReplacements().size()),
+                "      &f┃ Emojis: &b" + this.formatNumber(this.plugin.getEmojiRepository().getSymbolReplacements().size()),
                 ""
         ).forEach(line -> player.sendMessage(CC.translate(line)));
     }

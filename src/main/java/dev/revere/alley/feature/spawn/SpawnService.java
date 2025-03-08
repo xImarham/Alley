@@ -1,11 +1,9 @@
-package dev.revere.alley.essential.spawn;
+package dev.revere.alley.feature.spawn;
 
-import lombok.Getter;
-import dev.revere.alley.Alley;
-import dev.revere.alley.util.logger.Logger;
+import dev.revere.alley.config.ConfigService;
 import dev.revere.alley.util.location.LocationUtil;
-import dev.revere.alley.util.chat.CC;
-import org.bukkit.Bukkit;
+import dev.revere.alley.util.logger.Logger;
+import lombok.Getter;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -17,22 +15,24 @@ import org.bukkit.entity.Player;
  */
 @Getter
 public class SpawnService {
+    private final ConfigService configService;
     private Location location;
 
-    public SpawnService() {
-        loadSpawnLocation();
+    /**
+     * Constructor for the SpawnService class.
+     *
+     * @param configService The config service.
+     */
+    public SpawnService(ConfigService configService) {
+        this.configService = configService;
+        this.loadSpawnLocation();
     }
 
-    /**
-     * Load the spawn location from the settings.yml file
-     */
     private void loadSpawnLocation() {
-        FileConfiguration config = Alley.getInstance().getConfigService().getConfig("settings.yml");
-
+        FileConfiguration config = this.configService.getSettingsConfig();
         Location location = LocationUtil.deserialize(config.getString("spawn.join-location"));
-
         if (location == null) {
-            Bukkit.getConsoleSender().sendMessage(CC.translate("&4&l(!) SPAWN LOCATION IS NULL (!)"));
+            Logger.logError("Spawn location is null.");
             return;
         }
 
@@ -45,12 +45,11 @@ public class SpawnService {
      * @param location the location to set
      */
     public void updateSpawnLocation(Location location) {
-        this.location = location;
-        FileConfiguration config = Alley.getInstance().getConfigService().getConfig("settings.yml");
-
+        FileConfiguration config = this.configService.getSettingsConfig();
         config.set("spawn.join-location", LocationUtil.serialize(location));
 
-        Alley.getInstance().getConfigService().saveConfig(Alley.getInstance().getConfigService().getConfigFile("settings.yml"), config);
+        this.location = location;
+        this.configService.saveConfig(this.configService.getConfigFile("settings.yml"), config);
     }
 
     /**
@@ -59,7 +58,7 @@ public class SpawnService {
      * @param player the player to teleport
      */
     public void teleportToSpawn(Player player) {
-        Location spawnLocation = getLocation();
+        Location spawnLocation = this.location;
         if (spawnLocation != null) {
             player.teleport(spawnLocation);
         } else {

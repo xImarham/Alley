@@ -13,10 +13,10 @@ import dev.revere.alley.feature.cooldown.CooldownRepository;
 import dev.revere.alley.feature.cosmetic.repository.CosmeticRepository;
 import dev.revere.alley.database.MongoService;
 import dev.revere.alley.feature.division.DivisionRepository;
-import dev.revere.alley.essential.chat.ChatService;
-import dev.revere.alley.essential.chat.listener.ChatListener;
-import dev.revere.alley.essential.spawn.SpawnService;
-import dev.revere.alley.essential.spawn.listener.SpawnListener;
+import dev.revere.alley.essential.emoji.EmojiRepository;
+import dev.revere.alley.essential.emoji.listener.EmojiListener;
+import dev.revere.alley.feature.spawn.SpawnService;
+import dev.revere.alley.feature.spawn.listener.SpawnListener;
 import dev.revere.alley.feature.elo.EloCalculator;
 import dev.revere.alley.feature.leaderboard.LeaderboardService;
 import dev.revere.alley.game.duel.DuelRequestHandler;
@@ -81,7 +81,7 @@ public class Alley extends JavaPlugin {
     private SpawnService spawnService;
     private HotbarRepository hotbarRepository;
     private DuelRequestHandler duelRequestHandler;
-    private ChatService chatService;
+    private EmojiRepository emojiRepository;
     private CombatService combatService;
     private LeaderboardService leaderboardService;
     private EloCalculator eloCalculator;
@@ -166,10 +166,10 @@ public class Alley extends JavaPlugin {
         managers.put("SnapshotRepository", () -> this.snapshotRepository = new SnapshotRepository());
         managers.put("MatchRepository", () -> this.matchRepository = new MatchRepository());
         managers.put("PartyHandler", () -> this.partyHandler = new PartyHandler());
-        managers.put("SpawnService", () -> this.spawnService = new SpawnService());
+        managers.put("SpawnService", () -> this.spawnService = new SpawnService(this.configService));
         managers.put("FFACuboidService", () -> this.ffaCuboidService = new FFACuboidServiceImpl());
         managers.put("DuelRequestHandler", () -> this.duelRequestHandler = new DuelRequestHandler());
-        managers.put("ChatService", () -> this.chatService = new ChatService());
+        managers.put("EmojiRepository", () -> this.emojiRepository = new EmojiRepository());
         managers.put("CombatService", () -> this.combatService = new CombatService());
         managers.put("LeaderboardService", () -> this.leaderboardService = new LeaderboardService());
         managers.put("EloCalculator", () -> this.eloCalculator = new EloCalculator());
@@ -193,7 +193,7 @@ public class Alley extends JavaPlugin {
                 new FFAListener(this),
                 new FFACuboidListener(this.ffaCuboidService.getCuboid(), this),
                 new WorldListener(),
-                new ChatListener()
+                new EmojiListener()
         ).forEach(listener -> getServer().getPluginManager().registerEvents(listener, this));
     }
 

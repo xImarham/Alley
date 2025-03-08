@@ -1,6 +1,6 @@
-package dev.revere.alley.essential.chat;
+package dev.revere.alley.essential.emoji;
 
-import dev.revere.alley.essential.chat.enums.EnumEmojiType;
+import dev.revere.alley.essential.emoji.enums.EnumEmojiType;
 import lombok.Getter;
 
 import java.util.HashMap;
@@ -12,10 +12,10 @@ import java.util.Map;
  * @date 10/11/2024 - 09:41
  */
 @Getter
-public class ChatService {
+public class EmojiRepository {
     private final Map<String, String> symbolReplacements;
 
-    public ChatService() {
+    public EmojiRepository() {
         this.symbolReplacements = new HashMap<>();
 
         for (EnumEmojiType value : EnumEmojiType.values()) {

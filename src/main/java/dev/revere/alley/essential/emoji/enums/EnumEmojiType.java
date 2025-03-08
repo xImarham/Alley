@@ -1,4 +1,4 @@
-package dev.revere.alley.essential.chat.enums;
+package dev.revere.alley.essential.emoji.enums;
 
 import dev.revere.alley.util.chat.Symbol;
 import lombok.Getter;

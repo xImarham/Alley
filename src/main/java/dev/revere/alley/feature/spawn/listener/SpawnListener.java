@@ -1,11 +1,8 @@
-package dev.revere.alley.essential.spawn.listener;
+package dev.revere.alley.feature.spawn.listener;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
-import dev.revere.alley.util.chat.CC;
-import dev.revere.alley.util.logger.Logger;
-import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

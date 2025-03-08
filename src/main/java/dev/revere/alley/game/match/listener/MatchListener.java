@@ -98,7 +98,7 @@ public class MatchListener implements Listener {
             if (match.getState() == EnumMatchState.STARTING || match.getState() == EnumMatchState.ENDING_ROUND) {
                 if (matchKit.isSettingEnabled(KitSettingDenyMovementImpl.class)) {
                     List<GameParticipant<MatchGamePlayerImpl>> participants = match.getParticipants();
-                    MatchUtility.denyPlayerMovement(participants, player, match);
+                    MatchUtility.denyPlayerMovement(participants, match);
                 }
             }
         }

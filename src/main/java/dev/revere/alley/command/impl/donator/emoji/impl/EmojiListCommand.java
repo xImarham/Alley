@@ -3,7 +3,7 @@ package dev.revere.alley.command.impl.donator.emoji.impl;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.CommandArgs;
-import dev.revere.alley.essential.chat.enums.EnumEmojiType;
+import dev.revere.alley.essential.emoji.enums.EnumEmojiType;
 import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.util.chat.Symbol;
 import net.md_5.bungee.api.chat.*;

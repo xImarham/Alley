@@ -1,4 +1,4 @@
-package dev.revere.alley.essential.chat.listener;
+package dev.revere.alley.essential.emoji.listener;
 
 import dev.revere.alley.Alley;
 import org.bukkit.entity.Player;
@@ -13,7 +13,7 @@ import java.util.Map;
  * @project Alley
  * @date 10/11/2024 - 09:34
  */
-public class ChatListener implements Listener {
+public class EmojiListener implements Listener {
 
     @EventHandler
     private void onAsyncChat(AsyncPlayerChatEvent event) {
@@ -24,7 +24,7 @@ public class ChatListener implements Listener {
             return;
         }
 
-        for (Map.Entry<String, String> entry : Alley.getInstance().getChatService().getSymbolReplacements().entrySet()) {
+        for (Map.Entry<String, String> entry : Alley.getInstance().getEmojiRepository().getSymbolReplacements().entrySet()) {
             if (message.contains(entry.getKey())) {
                 message = message.replace(entry.getKey(), entry.getValue());
             }
