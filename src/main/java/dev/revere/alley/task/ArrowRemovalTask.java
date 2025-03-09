@@ -1,4 +1,4 @@
-package dev.revere.alley.world.task;
+package dev.revere.alley.task;
 
 import org.bukkit.Bukkit;
 import org.bukkit.World;

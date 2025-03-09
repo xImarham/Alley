@@ -1,7 +1,7 @@
 package dev.revere.alley.world;
 
 import dev.revere.alley.Alley;
-import dev.revere.alley.world.task.ArrowRemovalTask;
+import dev.revere.alley.task.ArrowRemovalTask;
 import org.bukkit.Difficulty;
 import org.bukkit.Material;
 import org.bukkit.entity.Arrow;

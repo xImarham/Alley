@@ -35,7 +35,7 @@ public class Cooldown {
      * @return the end time of the cooldown
      */
     public long calculateEndTime() {
-        return startTime + type.getCooldownDuration();
+        return this.startTime + this.type.getCooldownDuration();
     }
 
     /**
@@ -44,24 +44,24 @@ public class Cooldown {
      * @return true if the cooldown is active, false otherwise
      */
     public boolean isActive() {
-        return calculateEndTime() > System.currentTimeMillis() && cooldownTask != null;
+        return this.calculateEndTime() > System.currentTimeMillis() && this.cooldownTask != null;
     }
 
     /**
      * Reset the cooldown time and start a new task.
      */
     public void resetCooldown() {
-        startTime = System.currentTimeMillis();
-        cancelExistingTask();
-        startNewCooldownTask();
+        this.startTime = System.currentTimeMillis();
+        this.cancelExistingTask();
+        this.startNewCooldownTask();
     }
 
     /**
      * Cancel the cooldown.
      */
     public void cancelCooldown() {
-        startTime = 0L;
-        cancelExistingTask();
+        this.startTime = 0L;
+        this.cancelExistingTask();
     }
 
     /**
@@ -70,7 +70,7 @@ public class Cooldown {
      * @return the remaining time of the cooldown
      */
     public int remainingTime() {
-        return (int) ((calculateEndTime() - System.currentTimeMillis()) / 1000);
+        return (int) ((this.calculateEndTime() - System.currentTimeMillis()) / 1000);
     }
 
     /**
@@ -79,16 +79,16 @@ public class Cooldown {
      * @return the remaining time of the cooldown in minutes
      */
     public String remainingTimeInMinutes() {
-        return String.format("%02d:%02d", remainingTime() / 60, remainingTime() % 60);
+        return String.format("%02d:%02d", this.remainingTime() / 60, this.remainingTime() % 60);
     }
 
     /**
      * Cancel the existing task.
      */
     private void cancelExistingTask() {
-        if (cooldownTask != null) {
-            cooldownTask.cancel();
-            cooldownTask = null;
+        if (this.cooldownTask != null) {
+            this.cooldownTask.cancel();
+            this.cooldownTask = null;
         }
     }
 
@@ -96,9 +96,9 @@ public class Cooldown {
      * Start a new cooldown task.
      */
     private void startNewCooldownTask() {
-        cooldownTask = TaskUtil.runLaterAsync(() -> {
-            actionToRun.run();
-            cancelExistingTask();
-        }, type.getCooldownDuration() / 50L);
+        this.cooldownTask = TaskUtil.runLaterAsync(() -> {
+            this.actionToRun.run();
+            this.cancelExistingTask();
+        }, this.type.getCooldownDuration() / 50L);
     }
 }

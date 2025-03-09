@@ -29,8 +29,8 @@ public class CooldownRepository {
      * @param cooldown the cooldown
      */
     public void addCooldown(UUID uuid, EnumCooldownType type, Cooldown cooldown) {
-        cooldowns.removeIf(triple -> triple.getA().equals(uuid) && triple.getB().equals(type));
-        cooldowns.add(new MutableTriple<>(uuid, type, cooldown));
+        this.cooldowns.removeIf(triple -> triple.getA().equals(uuid) && triple.getB().equals(type));
+        this.cooldowns.add(new MutableTriple<>(uuid, type, cooldown));
     }
 
     /**
@@ -41,7 +41,7 @@ public class CooldownRepository {
      * @return the cooldown
      */
     public Cooldown getCooldown(UUID uuid, EnumCooldownType type) {
-        return cooldowns.stream()
+        return this.cooldowns.stream()
                 .filter(triple -> triple.getA().equals(uuid) && triple.getB().equals(type))
                 .map(MutableTriple::getC)
                 .findFirst()
