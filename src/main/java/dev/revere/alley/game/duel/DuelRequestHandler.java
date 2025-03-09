@@ -7,7 +7,7 @@ import dev.revere.alley.game.match.impl.kit.MatchStickFightImpl;
 import lombok.Getter;
 import lombok.Setter;
 import dev.revere.alley.Alley;
-import dev.revere.alley.feature.arena.Arena;
+import dev.revere.alley.feature.arena.AbstractArena;
 import dev.revere.alley.game.match.AbstractMatch;
 import dev.revere.alley.game.match.impl.MatchLivesRegularImpl;
 import dev.revere.alley.game.match.impl.MatchRegularImpl;
@@ -85,7 +85,7 @@ public class DuelRequestHandler {
      * @param kit    the kit
      */
     public void sendDuelRequest(Player sender, Player target, Kit kit) {
-        Arena arena = Alley.getInstance().getArenaRepository().getRandomArena(kit);
+        AbstractArena arena = Alley.getInstance().getArenaRepository().getRandomArena(kit);
         DuelRequest duelRequest = new DuelRequest(sender, target, kit, arena);
         this.addDuelRequest(duelRequest);
 
@@ -107,7 +107,7 @@ public class DuelRequestHandler {
      * @param kit    the kit
      * @param arena  the arena
      */
-    public void sendDuelRequest(Player sender, Player target, Kit kit, Arena arena) {
+    public void sendDuelRequest(Player sender, Player target, Kit kit, AbstractArena arena) {
         DuelRequest duelRequest = new DuelRequest(sender, target, kit, arena);
         this.addDuelRequest(duelRequest);
 
@@ -130,7 +130,7 @@ public class DuelRequestHandler {
      * @param arena       the arena
      * @param invitation  the invitation
      */
-    private void sendInvite(Player sender, Player target, Kit kit, Arena arena, TextComponent invitation) {
+    private void sendInvite(Player sender, Player target, Kit kit, AbstractArena arena, TextComponent invitation) {
         target.sendMessage("");
         target.sendMessage(CC.translate("&b&lDuel Request"));
         target.sendMessage(CC.translate("&f&l ● &fFrom: &b" + sender.getName()));

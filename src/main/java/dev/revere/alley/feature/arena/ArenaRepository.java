@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
  */
 @Getter
 public class ArenaRepository {
-    private final List<Arena> arenas;
+    private final List<AbstractArena> arenas;
 
     public ArenaRepository() {
         this.arenas = new ArrayList<>();
@@ -53,7 +53,7 @@ public class ArenaRepository {
             Location team2Portal = LocationUtil.deserialize(config.getString(name + ".team2Portal"));
             int heightLimit = config.getInt(name + ".heightLimit");
 
-            Arena arena;
+            AbstractArena arena;
             switch (arenaType) {
                 case SHARED:
                     arena = new SharedArena(
@@ -123,7 +123,7 @@ public class ArenaRepository {
      *
      * @param arena the arena to save
      */
-    public void saveArena(Arena arena) {
+    public void saveArena(AbstractArena arena) {
         arena.saveArena();
     }
 
@@ -132,7 +132,7 @@ public class ArenaRepository {
      *
      * @param arena the arena to delete
      */
-    public void deleteArena(Arena arena) {
+    public void deleteArena(AbstractArena arena) {
         arena.deleteArena();
     }
 
@@ -142,7 +142,7 @@ public class ArenaRepository {
      * @param name the name of the arena
      * @return the arena
      */
-    public Arena getArenaByName(String name) {
+    public AbstractArena getArenaByName(String name) {
         return this.arenas.stream().filter(arena -> arena.getName().equalsIgnoreCase(name)).findFirst().orElse(null);
     }
 
@@ -152,10 +152,10 @@ public class ArenaRepository {
      * @param kit the kit
      * @return the arena
      */
-    public Arena getRandomArena(Kit kit) {
-        List<Arena> availableArenas = this.arenas.stream()
+    public AbstractArena getRandomArena(Kit kit) {
+        List<AbstractArena> availableArenas = this.arenas.stream()
                 .filter(arena -> arena.getKits().contains(kit.getName()))
-                .filter(Arena::isEnabled)
+                .filter(AbstractArena::isEnabled)
                 .filter(arena -> !(arena instanceof StandAloneArena) || !((StandAloneArena) arena).isActive())
                 .collect(Collectors.toList());
 
@@ -163,7 +163,7 @@ public class ArenaRepository {
             return null;
         }
 
-        Arena selectedArena = availableArenas.get(ThreadLocalRandom.current().nextInt(availableArenas.size()));
+        AbstractArena selectedArena = availableArenas.get(ThreadLocalRandom.current().nextInt(availableArenas.size()));
         if (selectedArena instanceof StandAloneArena) {
             ((StandAloneArena) selectedArena).setActive(true);
         }

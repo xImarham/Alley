@@ -3,7 +3,7 @@ package dev.revere.alley.feature.arena.command.impl.data;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
-import dev.revere.alley.feature.arena.Arena;
+import dev.revere.alley.feature.arena.AbstractArena;
 import dev.revere.alley.feature.arena.ArenaRepository;
 import dev.revere.alley.feature.arena.enums.EnumArenaType;
 import dev.revere.alley.feature.arena.impl.StandAloneArena;
@@ -28,7 +28,7 @@ public class ArenaSetHeightLimit extends BaseCommand {
         }
 
         ArenaRepository arenaRepository = this.alley.getArenaRepository();
-        Arena arena = arenaRepository.getArenaByName(args[0]);
+        AbstractArena arena = arenaRepository.getArenaByName(args[0]);
         if (arena == null) {
             player.sendMessage(CC.translate("&cAn arena with that name does not exist!"));
             return;

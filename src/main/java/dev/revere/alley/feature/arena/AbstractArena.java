@@ -16,7 +16,7 @@ import lombok.Getter;
  */
 @Getter
 @Setter
-public abstract class Arena {
+public abstract class AbstractArena {
     private List<String> kits = new ArrayList<>();
 
     private String name;
@@ -41,7 +41,7 @@ public abstract class Arena {
      * @param minimum The minimum location of the arena.
      * @param maximum The maximum location of the arena.
      */
-    public Arena(String name, Location minimum, Location maximum) {
+    public AbstractArena(String name, Location minimum, Location maximum) {
         this.name = name;
         this.minimum = minimum;
         this.maximum = maximum;

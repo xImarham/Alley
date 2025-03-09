@@ -7,7 +7,7 @@ import dev.revere.alley.profile.ProfileRepository;
 import dev.revere.alley.util.chat.CC;
 import lombok.Getter;
 import lombok.Setter;
-import dev.revere.alley.feature.arena.Arena;
+import dev.revere.alley.feature.arena.AbstractArena;
 import dev.revere.alley.game.ffa.enums.EnumFFAState;
 import dev.revere.alley.feature.kit.Kit;
 import org.bukkit.entity.Player;
@@ -26,7 +26,7 @@ public abstract class AbstractFFAMatch {
     private EnumFFAState state = EnumFFAState.SPAWN;
 
     private final String name;
-    private final Arena arena;
+    private final AbstractArena arena;
     private final Kit kit;
     private int maxPlayers;
     private List<Player> players;
@@ -39,7 +39,7 @@ public abstract class AbstractFFAMatch {
      * @param kit The kit the players are using
      * @param maxPlayers The maximum amount of players allowed in the match
      */
-    public AbstractFFAMatch(String name, Arena arena, Kit kit, int maxPlayers) {
+    public AbstractFFAMatch(String name, AbstractArena arena, Kit kit, int maxPlayers) {
         this.name = name;
         this.arena = arena;
         this.kit = kit;

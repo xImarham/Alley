@@ -1,7 +1,7 @@
 package dev.revere.alley.feature.queue.runnable;
 
 import dev.revere.alley.Alley;
-import dev.revere.alley.feature.arena.Arena;
+import dev.revere.alley.feature.arena.AbstractArena;
 import dev.revere.alley.feature.arena.enums.EnumArenaType;
 import dev.revere.alley.feature.hotbar.enums.HotbarType;
 import dev.revere.alley.feature.kit.settings.impl.KitSettingBattleRushImpl;
@@ -108,7 +108,7 @@ public class QueueRunnable implements Runnable {
      * @param gameParticipantList The game participant list.
      */
     private void processGame(Queue queue, GameParticipantList gameParticipantList) {
-        Arena arena = getArena(queue);
+        AbstractArena arena = getArena(queue);
 
         if (arena == null || arena.getType().equals(EnumArenaType.FFA)) {
             gameParticipantList.getParticipants().forEach(participant -> {
@@ -130,7 +130,7 @@ public class QueueRunnable implements Runnable {
      * @param arena               The arena.
      * @return The match type.
      */
-    private @NotNull AbstractMatch getMatchType(Queue queue, GameParticipantList gameParticipantList, Arena arena) {
+    private @NotNull AbstractMatch getMatchType(Queue queue, GameParticipantList gameParticipantList, AbstractArena arena) {
         if (queue.getKit().isSettingEnabled(KitSettingLivesImpl.class)) {
             return new MatchLivesRegularImpl(queue, queue.getKit(), arena, queue.isRanked(), gameParticipantList.getParticipantA(), gameParticipantList.getParticipantB());
         } else if (queue.getKit().isSettingEnabled(KitSettingBattleRushImpl.class)) {
@@ -148,7 +148,7 @@ public class QueueRunnable implements Runnable {
      * @param queue The queue.
      * @return The arena.
      */
-    private Arena getArena(Queue queue) {
+    private AbstractArena getArena(Queue queue) {
         return Alley.getInstance().getArenaRepository().getRandomArena(queue.getKit());
     }
 

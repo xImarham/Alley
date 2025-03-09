@@ -3,7 +3,7 @@ package dev.revere.alley.game.party.menu.event.impl.split;
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.api.menu.Menu;
-import dev.revere.alley.feature.arena.Arena;
+import dev.revere.alley.feature.arena.AbstractArena;
 import dev.revere.alley.feature.kit.Kit;
 import dev.revere.alley.feature.kit.settings.impl.KitSettingBattleRushImpl;
 import dev.revere.alley.feature.kit.settings.impl.KitSettingLivesImpl;
@@ -120,7 +120,7 @@ public class PartyEventSplitMenu extends Menu {
                 }
             }
 
-            Arena arena = Alley.getInstance().getArenaRepository().getRandomArena(this.kit);
+            AbstractArena arena = Alley.getInstance().getArenaRepository().getRandomArena(this.kit);
 
             for (Queue queue : Alley.getInstance().getQueueRepository().getQueues()) {
                 if (queue.getKit().equals(this.kit) && !queue.isRanked()) {

@@ -1,7 +1,7 @@
 package dev.revere.alley.game.ffa;
 
 import dev.revere.alley.Alley;
-import dev.revere.alley.feature.arena.Arena;
+import dev.revere.alley.feature.arena.AbstractArena;
 import dev.revere.alley.game.ffa.impl.DefaultFFAMatchImpl;
 import dev.revere.alley.feature.kit.Kit;
 import dev.revere.alley.util.logger.Logger;
@@ -48,7 +48,7 @@ public class FFARepository {
             }
 
             String arenaName = config.getString(name + ".arena");
-            Arena arena = Alley.getInstance().getArenaRepository().getArenaByName(arenaName);
+            AbstractArena arena = Alley.getInstance().getArenaRepository().getArenaByName(arenaName);
             if (arena == null) {
                 Logger.logError("FFA Match (" + name + ") arena not found: " + arenaName);
                 continue;
@@ -87,7 +87,7 @@ public class FFARepository {
      * @param kit The kit the players are using
      * @param maxPlayers The maximum amount of players allowed in the match
      */
-    public void createFFAMatch(Arena arena, Kit kit, int maxPlayers) {
+    public void createFFAMatch(AbstractArena arena, Kit kit, int maxPlayers) {
         DefaultFFAMatchImpl match = new DefaultFFAMatchImpl(kit.getName(), arena, kit, maxPlayers);
         matches.add(match);
         this.saveFFAMatch(match);

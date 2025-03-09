@@ -4,7 +4,7 @@ import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.CommandArgs;
-import dev.revere.alley.feature.arena.Arena;
+import dev.revere.alley.feature.arena.AbstractArena;
 import dev.revere.alley.feature.arena.ArenaRepository;
 import dev.revere.alley.feature.arena.impl.StandAloneArena;
 import dev.revere.alley.util.chat.CC;
@@ -29,7 +29,7 @@ public class ArenaViewCommand extends BaseCommand {
 
         ArenaRepository arenaRepository = Alley.getInstance().getArenaRepository();
 
-        Arena arena = arenaRepository.getArenaByName(args[0]);
+        AbstractArena arena = arenaRepository.getArenaByName(args[0]);
         if (arena == null) {
             sender.sendMessage(CC.translate("&6Usage: &e/arena view &b<arenaName>"));
             return;

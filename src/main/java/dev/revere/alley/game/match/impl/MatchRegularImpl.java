@@ -1,7 +1,7 @@
 package dev.revere.alley.game.match.impl;
 
 import dev.revere.alley.Alley;
-import dev.revere.alley.feature.arena.Arena;
+import dev.revere.alley.feature.arena.AbstractArena;
 import dev.revere.alley.feature.kit.Kit;
 import dev.revere.alley.feature.queue.Queue;
 import dev.revere.alley.game.match.AbstractMatch;
@@ -52,7 +52,7 @@ public class MatchRegularImpl extends AbstractMatch {
      * @param participantA The first participant.
      * @param participantB The second participant.
      */
-    public MatchRegularImpl(Queue queue, Kit kit, Arena arena, boolean ranked, GameParticipant<MatchGamePlayerImpl> participantA, GameParticipant<MatchGamePlayerImpl> participantB) {
+    public MatchRegularImpl(Queue queue, Kit kit, AbstractArena arena, boolean ranked, GameParticipant<MatchGamePlayerImpl> participantA, GameParticipant<MatchGamePlayerImpl> participantB) {
         super(queue, kit, arena, ranked);
         this.participantA = participantA;
         this.participantB = participantB;

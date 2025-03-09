@@ -2,7 +2,7 @@ package dev.revere.alley.game.duel;
 
 import lombok.Getter;
 import lombok.Setter;
-import dev.revere.alley.feature.arena.Arena;
+import dev.revere.alley.feature.arena.AbstractArena;
 import dev.revere.alley.feature.kit.Kit;
 import org.bukkit.entity.Player;
 
@@ -19,7 +19,7 @@ public class DuelRequest {
     
     private Kit kit;
     
-    private Arena arena;
+    private AbstractArena arena;
 
     private final long expireTime;
 
@@ -31,7 +31,7 @@ public class DuelRequest {
      * @param kit    the kit
      * @param arena  the arena
      */
-    public DuelRequest(Player sender, Player target, Kit kit, Arena arena) {
+    public DuelRequest(Player sender, Player target, Kit kit, AbstractArena arena) {
         this.sender = sender;
         this.target = target;
         this.kit = kit;

@@ -1,12 +1,10 @@
 package dev.revere.alley.game.match.impl;
 
-import dev.revere.alley.feature.arena.Arena;
+import dev.revere.alley.feature.arena.AbstractArena;
 import dev.revere.alley.feature.kit.Kit;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.feature.queue.Queue;
-import org.bukkit.Location;
-import org.bukkit.entity.Player;
 
 /**
  * @author Remi
@@ -24,7 +22,7 @@ public class MatchBedRegularImpl extends MatchRegularImpl {
      * @param participantA The first participant.
      * @param participantB The second participant.
      */
-    public MatchBedRegularImpl(Queue queue, Kit kit, Arena arena, boolean ranked, GameParticipant<MatchGamePlayerImpl> participantA, GameParticipant<MatchGamePlayerImpl> participantB) {
+    public MatchBedRegularImpl(Queue queue, Kit kit, AbstractArena arena, boolean ranked, GameParticipant<MatchGamePlayerImpl> participantA, GameParticipant<MatchGamePlayerImpl> participantB) {
         super(queue, kit, arena, ranked, participantA, participantB);
     }
 }

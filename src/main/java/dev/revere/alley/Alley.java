@@ -9,7 +9,7 @@ import dev.revere.alley.config.ConfigService;
 import dev.revere.alley.database.MongoService;
 import dev.revere.alley.essential.emoji.EmojiRepository;
 import dev.revere.alley.essential.emoji.listener.EmojiListener;
-import dev.revere.alley.feature.arena.Arena;
+import dev.revere.alley.feature.arena.AbstractArena;
 import dev.revere.alley.feature.arena.ArenaRepository;
 import dev.revere.alley.feature.arena.listener.ArenaListener;
 import dev.revere.alley.feature.combat.CombatService;
@@ -125,7 +125,7 @@ public class Alley extends JavaPlugin {
 
         this.kitRepository.saveKits();
         this.ffaRepository.saveFFAMatches();
-        this.arenaRepository.getArenas().forEach(Arena::saveArena);
+        this.arenaRepository.getArenas().forEach(AbstractArena::saveArena);
         this.divisionRepository.saveDivisions();
 
         Logger.pluginDisabled();

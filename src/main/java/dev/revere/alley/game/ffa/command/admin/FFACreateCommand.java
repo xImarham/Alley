@@ -1,7 +1,7 @@
 package dev.revere.alley.game.ffa.command.admin;
 
 import dev.revere.alley.Alley;
-import dev.revere.alley.feature.arena.Arena;
+import dev.revere.alley.feature.arena.AbstractArena;
 import dev.revere.alley.feature.arena.enums.EnumArenaType;
 import dev.revere.alley.feature.kit.Kit;
 import dev.revere.alley.locale.impl.KitLocale;
@@ -29,7 +29,7 @@ public class FFACreateCommand extends BaseCommand {
         }
 
         String arenaName = args[0];
-        Arena arena = Alley.getInstance().getArenaRepository().getArenaByName(arenaName);
+        AbstractArena arena = Alley.getInstance().getArenaRepository().getArenaByName(arenaName);
         if (arena == null) {
             player.sendMessage(CC.translate("&cArena not found."));
             return;

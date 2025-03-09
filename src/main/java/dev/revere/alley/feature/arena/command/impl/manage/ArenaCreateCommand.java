@@ -4,7 +4,7 @@ import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.CommandArgs;
-import dev.revere.alley.feature.arena.Arena;
+import dev.revere.alley.feature.arena.AbstractArena;
 import dev.revere.alley.feature.arena.enums.EnumArenaType;
 import dev.revere.alley.feature.arena.impl.FreeForAllArena;
 import dev.revere.alley.feature.arena.impl.SharedArena;
@@ -57,7 +57,7 @@ public class ArenaCreateCommand extends BaseCommand {
             return;
         }
 
-        Arena arena;
+        AbstractArena arena;
         switch (arenaType) {
             case SHARED:
                 arena = new SharedArena(arenaName, arenaSelection.getMinimum(), arenaSelection.getMaximum());

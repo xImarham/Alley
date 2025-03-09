@@ -1,7 +1,7 @@
 package dev.revere.alley.feature.arena.impl;
 
 import dev.revere.alley.Alley;
-import dev.revere.alley.feature.arena.Arena;
+import dev.revere.alley.feature.arena.AbstractArena;
 import dev.revere.alley.feature.arena.enums.EnumArenaType;
 import dev.revere.alley.util.location.LocationUtil;
 import org.bukkit.Location;
@@ -12,7 +12,7 @@ import org.bukkit.configuration.file.FileConfiguration;
  * @project Alley
  * @date 20/05/2024 - 19:15
  */
-public class FreeForAllArena extends Arena {
+public class FreeForAllArena extends AbstractArena {
     /**
      * Constructor for the FreeForAllArena class.
      *

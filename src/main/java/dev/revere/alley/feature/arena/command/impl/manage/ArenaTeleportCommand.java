@@ -1,7 +1,7 @@
 package dev.revere.alley.feature.arena.command.impl.manage;
 
 import dev.revere.alley.Alley;
-import dev.revere.alley.feature.arena.Arena;
+import dev.revere.alley.feature.arena.AbstractArena;
 import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.annotation.CommandData;
@@ -42,7 +42,7 @@ public class ArenaTeleportCommand extends BaseCommand {
         }
 
         String arenaName = args[0];
-        Arena arena = Alley.getInstance().getArenaRepository().getArenaByName(arenaName);
+        AbstractArena arena = Alley.getInstance().getArenaRepository().getArenaByName(arenaName);
 
         if (arena == null) {
             player.sendMessage(CC.translate("&cAn arena with that name does not exist."));

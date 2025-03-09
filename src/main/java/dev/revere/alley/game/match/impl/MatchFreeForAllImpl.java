@@ -1,6 +1,6 @@
 package dev.revere.alley.game.match.impl;
 
-import dev.revere.alley.feature.arena.Arena;
+import dev.revere.alley.feature.arena.AbstractArena;
 import dev.revere.alley.game.match.AbstractMatch;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
@@ -19,7 +19,7 @@ import java.util.List;
 public class MatchFreeForAllImpl extends AbstractMatch {
     private final List<GameParticipant<MatchGamePlayerImpl>> participants;
 
-    public MatchFreeForAllImpl(Queue queue, Kit kit, Arena arena, List<GameParticipant<MatchGamePlayerImpl>> participants) {
+    public MatchFreeForAllImpl(Queue queue, Kit kit, AbstractArena arena, List<GameParticipant<MatchGamePlayerImpl>> participants) {
         super(queue, kit, arena, false);
         this.participants = participants;
     }

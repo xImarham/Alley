@@ -5,7 +5,7 @@ import dev.revere.alley.Alley;
 import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.api.menu.Menu;
 import dev.revere.alley.util.data.item.ItemBuilder;
-import dev.revere.alley.feature.arena.Arena;
+import dev.revere.alley.feature.arena.AbstractArena;
 import dev.revere.alley.feature.arena.impl.StandAloneArena;
 import dev.revere.alley.feature.kit.Kit;
 import dev.revere.alley.util.chat.CC;
@@ -39,7 +39,7 @@ public class DuelArenaSelectorMenu extends Menu {
 
         int slot = 0;
 
-        for (Arena arena : Alley.getInstance().getArenaRepository().getArenas()) {
+        for (AbstractArena arena : Alley.getInstance().getArenaRepository().getArenas()) {
             if (arena.getKits().contains(kit.getName()) && arena.isEnabled() &&
                     (!(arena instanceof StandAloneArena) || !((StandAloneArena) arena).isActive())) {
                 buttons.put(slot++, new DuelArenaSelectorButton(targetPlayer, kit, arena));
@@ -53,7 +53,7 @@ public class DuelArenaSelectorMenu extends Menu {
     private static class DuelArenaSelectorButton extends Button {
         private Player targetPlayer;
         private Kit kit;
-        private Arena arena;
+        private AbstractArena arena;
 
         @Override
         public ItemStack getButtonItem(Player player) {

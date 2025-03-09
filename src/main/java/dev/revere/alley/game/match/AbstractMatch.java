@@ -1,7 +1,7 @@
 package dev.revere.alley.game.match;
 
 import dev.revere.alley.Alley;
-import dev.revere.alley.feature.arena.Arena;
+import dev.revere.alley.feature.arena.AbstractArena;
 import dev.revere.alley.feature.arena.impl.StandAloneArena;
 import dev.revere.alley.feature.cosmetic.impl.killeffects.AbstractKillEffect;
 import dev.revere.alley.feature.cosmetic.impl.killeffects.KillEffectRepository;
@@ -50,7 +50,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 @Getter
 @Setter
 public abstract class AbstractMatch {
-    private final Arena arena;
+    private final AbstractArena arena;
     private final Kit kit;
     private final Queue queue;
 
@@ -76,7 +76,7 @@ public abstract class AbstractMatch {
      * @param kit   The kit of the match.
      * @param arena The matchArena of the match.
      */
-    public AbstractMatch(Queue queue, Kit kit, Arena arena, boolean ranked) {
+    public AbstractMatch(Queue queue, Kit kit, AbstractArena arena, boolean ranked) {
         this.queue = queue;
         this.kit = kit;
         this.arena = arena;

@@ -1,7 +1,7 @@
 package dev.revere.alley.game.ffa.impl;
 
 import dev.revere.alley.Alley;
-import dev.revere.alley.feature.arena.Arena;
+import dev.revere.alley.feature.arena.AbstractArena;
 import dev.revere.alley.game.ffa.AbstractFFAMatch;
 import dev.revere.alley.feature.hotbar.enums.HotbarType;
 import dev.revere.alley.feature.kit.Kit;
@@ -27,7 +27,7 @@ public class DefaultFFAMatchImpl extends AbstractFFAMatch {
      * @param kit        The kit the players are using
      * @param maxPlayers The maximum amount of players allowed in the match
      */
-    public DefaultFFAMatchImpl(String name, Arena arena, Kit kit, int maxPlayers) {
+    public DefaultFFAMatchImpl(String name, AbstractArena arena, Kit kit, int maxPlayers) {
         super(name, arena, kit, maxPlayers);
     }
 
@@ -80,7 +80,7 @@ public class DefaultFFAMatchImpl extends AbstractFFAMatch {
         profile.setState(EnumProfileState.FFA);
         profile.setFfaMatch(this);
 
-        Arena arena = getArena();
+        AbstractArena arena = getArena();
         player.teleport(arena.getPos1());
 
         Kit kit = getKit();
@@ -98,7 +98,7 @@ public class DefaultFFAMatchImpl extends AbstractFFAMatch {
         profile.setState(EnumProfileState.FFA);
         profile.setFfaMatch(this);
 
-        Arena arena = getArena();
+        AbstractArena arena = getArena();
 
         Bukkit.getScheduler().runTaskLater(Alley.getInstance(), () -> {
             player.teleport(arena.getPos1());

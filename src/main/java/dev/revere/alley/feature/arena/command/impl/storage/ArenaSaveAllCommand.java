@@ -1,7 +1,7 @@
 package dev.revere.alley.feature.arena.command.impl.storage;
 
 import dev.revere.alley.Alley;
-import dev.revere.alley.feature.arena.Arena;
+import dev.revere.alley.feature.arena.AbstractArena;
 import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.annotation.CommandData;
@@ -19,7 +19,7 @@ public class ArenaSaveAllCommand extends BaseCommand {
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
 
-        for (Arena arena : Alley.getInstance().getArenaRepository().getArenas()) {
+        for (AbstractArena arena : Alley.getInstance().getArenaRepository().getArenas()) {
             Alley.getInstance().getArenaRepository().saveArena(arena);
         }
 

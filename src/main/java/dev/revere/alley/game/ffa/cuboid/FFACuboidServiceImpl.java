@@ -1,7 +1,7 @@
 package dev.revere.alley.game.ffa.cuboid;
 
 import dev.revere.alley.Alley;
-import dev.revere.alley.feature.arena.Arena;
+import dev.revere.alley.feature.arena.AbstractArena;
 import dev.revere.alley.feature.arena.enums.EnumArenaType;
 import dev.revere.alley.util.data.cuboid.Cuboid;
 import dev.revere.alley.util.data.cuboid.CuboidService;
@@ -32,7 +32,7 @@ public class FFACuboidServiceImpl extends CuboidService {
      */
     public void loadCuboid() {
         FileConfiguration config = Alley.getInstance().getConfigService().getArenasConfig();
-        Arena arena = Alley.getInstance().getArenaRepository().getArenas().stream()
+        AbstractArena arena = Alley.getInstance().getArenaRepository().getArenas().stream()
                 .filter(a -> a.getType() == EnumArenaType.FFA)
                 .findFirst()
                 .orElse(null);

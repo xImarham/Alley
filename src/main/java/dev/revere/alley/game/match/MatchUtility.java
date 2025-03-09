@@ -1,7 +1,7 @@
 package dev.revere.alley.game.match;
 
 import dev.revere.alley.Alley;
-import dev.revere.alley.feature.arena.Arena;
+import dev.revere.alley.feature.arena.AbstractArena;
 import dev.revere.alley.game.match.enums.EnumMatchState;
 import dev.revere.alley.game.match.player.GamePlayer;
 import dev.revere.alley.profile.Profile;
@@ -81,7 +81,7 @@ public class MatchUtility {
      * @return if the location is beyond the bounds
      */
     public boolean isBeyondBounds(Location location, Profile profile) {
-        Arena arena = profile.getMatch().getArena();
+        AbstractArena arena = profile.getMatch().getArena();
         Location corner1 = arena.getMinimum();
         Location corner2 = arena.getMaximum();
 

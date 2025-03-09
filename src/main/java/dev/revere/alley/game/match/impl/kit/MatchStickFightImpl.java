@@ -1,6 +1,6 @@
 package dev.revere.alley.game.match.impl.kit;
 
-import dev.revere.alley.feature.arena.Arena;
+import dev.revere.alley.feature.arena.AbstractArena;
 import dev.revere.alley.feature.kit.Kit;
 import dev.revere.alley.feature.queue.Queue;
 import dev.revere.alley.game.match.MatchUtility;
@@ -40,7 +40,7 @@ public class MatchStickFightImpl extends MatchRoundsRegularImpl {
      * @param participantB The second participant.
      * @param rounds       The amount of rounds the match will have.
      */
-    public MatchStickFightImpl(Queue queue, Kit kit, Arena arena, boolean ranked, GameParticipant<MatchGamePlayerImpl> participantA, GameParticipant<MatchGamePlayerImpl> participantB, int rounds) {
+    public MatchStickFightImpl(Queue queue, Kit kit, AbstractArena arena, boolean ranked, GameParticipant<MatchGamePlayerImpl> participantA, GameParticipant<MatchGamePlayerImpl> participantB, int rounds) {
         super(queue, kit, arena, ranked, participantA, participantB, rounds);
         this.participantA = participantA;
         this.participantB = participantB;

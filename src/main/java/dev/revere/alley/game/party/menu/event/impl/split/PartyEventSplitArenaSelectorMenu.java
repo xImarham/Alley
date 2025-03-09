@@ -3,7 +3,7 @@ package dev.revere.alley.game.party.menu.event.impl.split;
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.api.menu.Menu;
-import dev.revere.alley.feature.arena.Arena;
+import dev.revere.alley.feature.arena.AbstractArena;
 import dev.revere.alley.feature.arena.impl.StandAloneArena;
 import dev.revere.alley.feature.kit.Kit;
 import dev.revere.alley.feature.kit.settings.impl.KitSettingBattleRushImpl;
@@ -53,7 +53,7 @@ public class PartyEventSplitArenaSelectorMenu extends Menu {
     public Map<Integer, Button> getButtons(Player player) {
         Map<Integer, Button> buttons = new HashMap<>();
 
-        for (Arena arena : Alley.getInstance().getArenaRepository().getArenas()) {
+        for (AbstractArena arena : Alley.getInstance().getArenaRepository().getArenas()) {
             if (arena.getKits().contains(kit.getName()) && arena.isEnabled() &&
                     (!(arena instanceof StandAloneArena) || !((StandAloneArena) arena).isActive())) {
                 buttons.put(buttons.size(), new PartyEventSplitArenaSelectorButton(kit, arena));
@@ -66,7 +66,7 @@ public class PartyEventSplitArenaSelectorMenu extends Menu {
     @AllArgsConstructor
     private static class PartyEventSplitArenaSelectorButton extends Button {
         private Kit kit;
-        private Arena arena;
+        private AbstractArena arena;
 
         @Override
         public ItemStack getButtonItem(Player player) {

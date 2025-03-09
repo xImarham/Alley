@@ -6,7 +6,7 @@ import dev.revere.alley.game.match.player.participant.GameParticipant;
 import lombok.Getter;
 import lombok.Setter;
 import dev.revere.alley.Alley;
-import dev.revere.alley.feature.arena.Arena;
+import dev.revere.alley.feature.arena.AbstractArena;
 import dev.revere.alley.feature.arena.enums.EnumArenaType;
 import dev.revere.alley.util.location.LocationUtil;
 import org.bukkit.Location;
@@ -19,7 +19,7 @@ import org.bukkit.configuration.file.FileConfiguration;
  */
 @Setter
 @Getter
-public class StandAloneArena extends Arena {
+public class StandAloneArena extends AbstractArena {
     private boolean active = false;
 
     private Location team1Portal;
