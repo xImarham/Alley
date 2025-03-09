@@ -1,14 +1,14 @@
 package dev.revere.alley.feature.hotbar.listener;
 
 import dev.revere.alley.Alley;
+import dev.revere.alley.feature.hotbar.HotbarItem;
+import dev.revere.alley.feature.leaderboard.menu.LeaderboardMenu;
+import dev.revere.alley.feature.queue.menu.QueuesMenu;
+import dev.revere.alley.feature.queue.menu.RankedMenu;
 import dev.revere.alley.game.match.menu.CurrentMatchesMenu;
 import dev.revere.alley.game.party.menu.duel.DuelOtherPartyMenu;
 import dev.revere.alley.game.party.menu.event.PartyEventMenu;
-import dev.revere.alley.feature.hotbar.HotbarItem;
-import dev.revere.alley.feature.leaderboard.menu.LeaderboardMenu;
 import dev.revere.alley.profile.Profile;
-import dev.revere.alley.feature.queue.menu.QueuesMenu;
-import dev.revere.alley.feature.queue.menu.RankedMenu;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -17,8 +17,6 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -27,8 +25,8 @@ import java.util.UUID;
  * @date 5/27/2024
  */
 public class HotbarListener implements Listener {
-    private final Map<UUID, Long> lastInteraction = new HashMap<>();
-    private static final long COOLDOWN_TIME = 300;
+    /*private final Map<UUID, Long> lastInteraction = new HashMap<>();
+    protected final long COOLDOWN_TIME = 300;*/
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
@@ -38,14 +36,14 @@ public class HotbarListener implements Listener {
         }
 
         Player player = event.getPlayer();
-        UUID playerId = player.getUniqueId();
+        /*UUID playerId = player.getUniqueId();
         long currentTime = System.currentTimeMillis();
 
-        if (lastInteraction.containsKey(playerId) && (currentTime - lastInteraction.get(playerId)) < COOLDOWN_TIME) {
+        if (this.lastInteraction.containsKey(playerId) && (currentTime - this.lastInteraction.get(playerId)) < this.COOLDOWN_TIME) {
             return;
         }
 
-        lastInteraction.put(playerId, currentTime);
+        this.lastInteraction.put(playerId, currentTime);*/
 
         ItemStack item = player.getItemInHand();
         if (item == null || !item.hasItemMeta() || !item.getItemMeta().hasDisplayName()) {
