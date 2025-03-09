@@ -41,7 +41,7 @@ import dev.revere.alley.game.party.PartyHandler;
 import dev.revere.alley.game.party.listener.PartyListener;
 import dev.revere.alley.profile.ProfileRepository;
 import dev.revere.alley.profile.listener.ProfileListener;
-import dev.revere.alley.service.ServerService;
+import dev.revere.alley.feature.service.ServerService;
 import dev.revere.alley.task.RepositoryCleanupTask;
 import dev.revere.alley.util.ServerUtil;
 import dev.revere.alley.util.logger.Logger;

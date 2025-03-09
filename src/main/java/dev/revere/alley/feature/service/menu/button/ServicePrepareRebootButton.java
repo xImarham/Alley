@@ -1,8 +1,8 @@
-package dev.revere.alley.service.menu.button;
+package dev.revere.alley.feature.service.menu.button;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.menu.Button;
-import dev.revere.alley.service.ServerService;
+import dev.revere.alley.feature.service.ServerService;
 import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.util.data.item.ItemBuilder;
 import org.bukkit.Bukkit;

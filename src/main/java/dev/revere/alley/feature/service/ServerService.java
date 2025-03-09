@@ -1,4 +1,4 @@
-package dev.revere.alley.service;
+package dev.revere.alley.feature.service;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.feature.hotbar.enums.HotbarType;
