@@ -86,6 +86,7 @@ public class AlleyDebugCommand extends BaseCommand {
                 "      &f┃ Queues: &b" + this.formatNumber(this.plugin.getQueueRepository().getQueues().size()),
                 "      &f┃ Queue profiles: &b" + this.formatNumber(Arrays.stream(this.plugin.getQueueRepository().getQueues().stream().mapToInt(queue -> queue.getProfiles().size()).toArray()).sum()),
                 "      &f┃ Cooldowns: &b" + this.formatNumber(this.plugin.getCooldownRepository().getCooldowns().size()),
+                "      &f┃ Active Cooldowns: &b" + this.formatNumber((int) this.plugin.getCooldownRepository().getCooldowns().stream().filter(cooldown -> cooldown.getC().isActive()).count()),
                 "      &f┃ Combats: &b" + this.formatNumber(this.plugin.getCombatService().getCombatMap().size()),
                 "      &f┃ Kits: &b" + this.formatNumber(this.plugin.getKitRepository().getKits().size()),
                 "      &f┃ Kit Settings: &b" + this.formatNumber(this.plugin.getKitSettingRepository().getSettings().size()),
