@@ -13,6 +13,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -52,7 +53,7 @@ public class ServerService {
      */
     public void disbandMatches(Player player, Alley plugin) {
         MatchRepository matchRepository = plugin.getMatchRepository();
-        List<AbstractMatch> matches = matchRepository.getMatches();
+        List<AbstractMatch> matches = new ArrayList<>(matchRepository.getMatches());
         if (matches.isEmpty()) {
             player.sendMessage(CC.translate("&cCould not find any matches to end."));
         } else {
@@ -72,6 +73,7 @@ public class ServerService {
         }
     }
 
+
     /**
      * Disband all parties on the server.
      *
@@ -80,15 +82,14 @@ public class ServerService {
      */
     public void disbandParties(Player player, Alley plugin) {
         PartyHandler partyHandler = plugin.getPartyHandler();
-        List<Party> parties = partyHandler.getParties();
+        List<Party> parties = new ArrayList<>(partyHandler.getParties());
 
         if (parties.isEmpty()) {
             player.sendMessage(CC.translate("&cCould not find any parties to disband."));
         } else {
             player.sendMessage(CC.translate("&cDisbanding a total of &f" + parties.size() + " &cparties."));
 
-            for (int i = 0; i < parties.size(); i++) {
-                Party party = parties.get(i);
+            for (Party party : parties) {
                 partyHandler.disbandParty(party.getLeader());
             }
         }
