@@ -3,6 +3,7 @@ package dev.revere.alley.game.match;
 import dev.revere.alley.Alley;
 import dev.revere.alley.feature.arena.Arena;
 import dev.revere.alley.game.match.enums.EnumMatchState;
+import dev.revere.alley.game.match.player.GamePlayer;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
@@ -32,32 +33,43 @@ public class MatchUtility {
      * Intentionally made to deny player movement during a match countdown.
      *
      * @param participants the participants
-     * @param player       the player
      * @param match        the match
      */
-    public void denyPlayerMovement(List<GameParticipant<MatchGamePlayerImpl>> participants, Player player, AbstractMatch match) {
+    public void denyPlayerMovement(List<GameParticipant<MatchGamePlayerImpl>> participants, AbstractMatch match) {
         if (participants.size() == 2) {
             GameParticipant<?> participantA = participants.get(0);
             GameParticipant<?> participantB = participants.get(1);
 
-            Player playerA = participantA.getPlayer().getPlayer();
-            Player playerB = participantB.getPlayer().getPlayer();
-
-            Location playerLocation = player.getLocation();
             Location locationA = match.getArena().getPos1();
             Location locationB = match.getArena().getPos2();
 
-            if (player.equals(playerA)) {
-                if (playerLocation.getBlockX() != locationA.getBlockX() || playerLocation.getBlockZ() != locationA.getBlockZ()) {
-                    player.teleport(new Location(locationA.getWorld(), locationA.getX(), playerLocation.getY(), locationA.getZ(), playerLocation.getYaw(), playerLocation.getPitch()));
-                    //player.sendMessage(CC.translate("&cYou can't move during the countdown!"));
-                }
-            } else if (player.equals(playerB)) {
-                if (playerLocation.getBlockX() != locationB.getBlockX() || playerLocation.getBlockZ() != locationB.getBlockZ()) {
-                    player.teleport(new Location(locationB.getWorld(), locationB.getX(), playerLocation.getY(), locationB.getZ(), playerLocation.getYaw(), playerLocation.getPitch()));
-                    //player.sendMessage(CC.translate("&cYou can't move during the countdown!"));
+            for (GamePlayer gamePlayer : participantA.getPlayers()) {
+                Player participantPlayer = gamePlayer.getPlayer();
+                if (participantPlayer != null) {
+                    teleportBackIfMoved(participantPlayer, locationA);
                 }
             }
+
+            for (GamePlayer gamePlayer : participantB.getPlayers()) {
+                Player participantPlayer = gamePlayer.getPlayer();
+                if (participantPlayer != null) {
+                    teleportBackIfMoved(participantPlayer, locationB);
+                }
+            }
+        }
+    }
+
+    /**
+     * Teleports the player back to their designated position if they moved.
+     *
+     * @param player   The player to check.
+     * @param location The designated location.
+     */
+    private void teleportBackIfMoved(Player player, Location location) {
+        Location playerLocation = player.getLocation();
+
+        if (playerLocation.getBlockX() != location.getBlockX() || playerLocation.getBlockZ() != location.getBlockZ()) {
+            player.teleport(new Location(location.getWorld(), location.getX(), playerLocation.getY(), location.getZ(), playerLocation.getYaw(), playerLocation.getPitch()));
         }
     }
 
