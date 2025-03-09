@@ -3,14 +3,14 @@ package dev.revere.alley.api.command;
 import dev.revere.alley.Alley;
 
 public abstract class BaseCommand {
-    public Alley plugin;
+    public Alley alley;
 
     /**
      * Constructor for the BaseCommand class.
      */
     public BaseCommand() {
-        this.plugin = Alley.getInstance();
-        this.plugin.getCommandFramework().registerCommands(this);
+        this.alley = Alley.getInstance();
+        this.alley.getCommandFramework().registerCommands(this);
     }
 
     /**

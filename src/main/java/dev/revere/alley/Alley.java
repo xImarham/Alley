@@ -26,7 +26,6 @@ import dev.revere.alley.feature.queue.QueueRepository;
 import dev.revere.alley.feature.spawn.SpawnService;
 import dev.revere.alley.feature.spawn.listener.SpawnListener;
 import dev.revere.alley.game.duel.DuelRequestHandler;
-import dev.revere.alley.game.duel.task.DuelRequestExpiryTask;
 import dev.revere.alley.game.ffa.FFARepository;
 import dev.revere.alley.game.ffa.cuboid.FFACuboidServiceImpl;
 import dev.revere.alley.game.ffa.listener.FFAListener;
@@ -40,9 +39,10 @@ import dev.revere.alley.game.match.listener.impl.MatchInteractListener;
 import dev.revere.alley.game.match.snapshot.SnapshotRepository;
 import dev.revere.alley.game.party.PartyHandler;
 import dev.revere.alley.game.party.listener.PartyListener;
-import dev.revere.alley.game.party.task.PartyRequestExpiryTask;
 import dev.revere.alley.profile.ProfileRepository;
 import dev.revere.alley.profile.listener.ProfileListener;
+import dev.revere.alley.service.ServerService;
+import dev.revere.alley.task.RepositoryCleanupTask;
 import dev.revere.alley.util.ServerUtil;
 import dev.revere.alley.util.logger.Logger;
 import dev.revere.alley.visual.scoreboard.ScoreboardVisualizer;
@@ -85,6 +85,7 @@ public class Alley extends JavaPlugin {
     private CombatService combatService;
     private LeaderboardService leaderboardService;
     private EloCalculator eloCalculator;
+    private ServerService serverService;
 
     private boolean loaded;
 
@@ -173,6 +174,7 @@ public class Alley extends JavaPlugin {
         managers.put("CombatService", () -> this.combatService = new CombatService());
         managers.put("LeaderboardService", () -> this.leaderboardService = new LeaderboardService());
         managers.put("EloCalculator", () -> this.eloCalculator = new EloCalculator());
+        managers.put("ServerService", () -> this.serverService = new ServerService());
 
         managers.forEach(Logger::logTime);
     }
@@ -208,14 +210,9 @@ public class Alley extends JavaPlugin {
     private void runTasks() {
         final Map<String, Runnable> runnables = new LinkedHashMap<>();
 
-        runnables.put("PartyRequestExpiryTask", () -> {
-            PartyRequestExpiryTask partyRequestExpiryTask = new PartyRequestExpiryTask();
-            partyRequestExpiryTask.runTaskTimerAsynchronously(this, 40L, 40L);
-        });
-
-        runnables.put("DuelRequestExpiryTask", () -> {
-            DuelRequestExpiryTask duelRequestExpiryTask = new DuelRequestExpiryTask();
-            duelRequestExpiryTask.runTaskTimerAsynchronously(this, 40L, 40L);
+        runnables.put("RepositoryCleanupTask", () -> {
+            RepositoryCleanupTask repositoryCleanupTask = new RepositoryCleanupTask();
+            repositoryCleanupTask.runTaskTimer(this, 0L, 40L);
         });
 
         if (this.configService.getTablistConfig().getBoolean("tablist.enabled")) {

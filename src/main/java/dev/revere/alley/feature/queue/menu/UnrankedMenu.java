@@ -75,9 +75,9 @@ public class UnrankedMenu extends Menu {
 
         @Override
         public void clicked(Player player, int slot, ClickType clickType, int hotbarSlot) {
-            if (clickType == ClickType.MIDDLE || clickType == ClickType.RIGHT || clickType == ClickType.NUMBER_KEY || clickType == ClickType.DROP || clickType == ClickType.SHIFT_LEFT || clickType == ClickType.SHIFT_RIGHT) {
-                return;
-            }
+            if (clickType != ClickType.LEFT) return;
+
+            if (Alley.getInstance().getServerService().check(player)) return;
 
             Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
             queue.addPlayer(player, queue.isRanked() ? profile.getProfileData().getRankedKitData().get(queue.getKit().getName()).getElo() : 0);

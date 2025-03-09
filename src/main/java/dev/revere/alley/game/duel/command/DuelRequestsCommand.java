@@ -24,6 +24,10 @@ public class DuelRequestsCommand extends BaseCommand {
             return;
         }
 
+        if (Alley.getInstance().getServerService().check(player)) {
+            return;
+        }
+
         new DuelRequestsMenu().openMenu(player);
     }
 }

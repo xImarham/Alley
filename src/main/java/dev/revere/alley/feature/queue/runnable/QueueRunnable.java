@@ -1,25 +1,26 @@
 package dev.revere.alley.feature.queue.runnable;
 
-import dev.revere.alley.feature.kit.settings.impl.KitSettingBattleRushImpl;
-import dev.revere.alley.feature.kit.settings.impl.KitSettingStickFightImpl;
-import dev.revere.alley.game.match.impl.MatchRoundsRegularImpl;
-import dev.revere.alley.game.match.impl.kit.MatchStickFightImpl;
-import lombok.Getter;
 import dev.revere.alley.Alley;
 import dev.revere.alley.feature.arena.Arena;
 import dev.revere.alley.feature.arena.enums.EnumArenaType;
 import dev.revere.alley.feature.hotbar.enums.HotbarType;
+import dev.revere.alley.feature.kit.settings.impl.KitSettingBattleRushImpl;
 import dev.revere.alley.feature.kit.settings.impl.KitSettingLivesImpl;
+import dev.revere.alley.feature.kit.settings.impl.KitSettingStickFightImpl;
+import dev.revere.alley.feature.queue.Queue;
+import dev.revere.alley.feature.queue.QueueProfile;
 import dev.revere.alley.game.match.AbstractMatch;
 import dev.revere.alley.game.match.impl.MatchLivesRegularImpl;
 import dev.revere.alley.game.match.impl.MatchRegularImpl;
-import dev.revere.alley.game.match.player.participant.GameParticipant;
+import dev.revere.alley.game.match.impl.MatchRoundsRegularImpl;
+import dev.revere.alley.game.match.impl.kit.MatchStickFightImpl;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
+import dev.revere.alley.game.match.player.participant.GameParticipant;
+import dev.revere.alley.profile.ProfileRepository;
 import dev.revere.alley.profile.enums.EnumProfileState;
-import dev.revere.alley.feature.queue.Queue;
-import dev.revere.alley.feature.queue.QueueProfile;
 import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.util.logger.Logger;
+import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -48,15 +49,18 @@ public class QueueRunnable implements Runnable {
     public void processQueue(Queue queue) {
         queue.getProfiles().forEach(QueueProfile::queueRange);
         queue.getProfiles().forEach(profile -> {
-            if (profile.getElapsedTime() >= 300000) {
+            if (profile.getElapsedTime() >= 300000) { // 5 minutes
                 if (queue.getProfile(profile.getUuid()).getState().equals(EnumProfileState.WAITING)) {
                     queue.getProfiles().remove(profile);
                     queue.removePlayer(profile);
                     Player player = Alley.getInstance().getServer().getPlayer(profile.getUuid());
                     player.sendMessage(CC.translate("&cYou have been removed from the queue due to inactivity."));
+                    Alley.getInstance().getProfileRepository().getProfile(profile.getUuid()).setQueueProfile(null);
                     Alley.getInstance().getHotbarRepository().applyHotbarItems(player, HotbarType.LOBBY);
                 } else {
                     Logger.logError("&cPlayer &4" + Bukkit.getPlayer(profile.getUuid()) + "&c couldn't be removed from the queue because their state was changed.");
+                    Alley.getInstance().getProfileRepository().getProfile(profile.getUuid()).setQueueProfile(null);
+                    queue.getProfiles().remove(profile);
                 }
             }
         });
@@ -156,6 +160,10 @@ public class QueueRunnable implements Runnable {
      * @param secondProfile The second profile.
      */
     private void clearQueueProfiles(Queue queue, QueueProfile firstProfile, QueueProfile secondProfile) {
+        ProfileRepository profileRepository = Alley.getInstance().getProfileRepository();
+        profileRepository.getProfile(firstProfile.getUuid()).setQueueProfile(null);
+        profileRepository.getProfile(secondProfile.getUuid()).setQueueProfile(null);
+
         queue.getProfiles().remove(firstProfile);
         queue.getProfiles().remove(secondProfile);
     }

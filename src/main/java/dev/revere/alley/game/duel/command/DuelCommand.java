@@ -55,6 +55,10 @@ public class DuelCommand extends BaseCommand {
             return;
         }
 
+        if (Alley.getInstance().getServerService().check(player)) {
+            return;
+        }
+
         new DuelKitSelectorMenu(target).openMenu(player);
     }
 }

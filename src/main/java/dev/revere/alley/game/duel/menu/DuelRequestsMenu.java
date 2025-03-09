@@ -33,7 +33,7 @@ public class DuelRequestsMenu extends PaginatedMenu {
     public Map<Integer, Button> getGlobalButtons(Player player) {
         Map<Integer, Button> buttons = new HashMap<>();
 
-        addGlassHeader(buttons, 15);
+        this.addGlassHeader(buttons, 15);
 
         buttons.put(4, new RefreshDuelRequestsButton());
 
@@ -56,14 +56,15 @@ public class DuelRequestsMenu extends PaginatedMenu {
     @AllArgsConstructor
     private static class DuelRequestsButton extends Button {
         private DuelRequest duelRequest;
+
         @Override
         public ItemStack getButtonItem(Player player) {
-            return new ItemBuilder(Material.PAPER).name("&b&l" + duelRequest.getSender().getName()).durability(0).hideMeta()
+            return new ItemBuilder(Material.PAPER).name("&b&l" + this.duelRequest.getSender().getName()).durability(0).hideMeta()
                     .lore(Arrays.asList(
-                            "&fKit: &f" + duelRequest.getKit().getDisplayName(),
-                            "&fArena: &f" + duelRequest.getArena().getDisplayName(),
+                            "&fKit: &f" + this.duelRequest.getKit().getDisplayName(),
+                            "&fArena: &f" + this.duelRequest.getArena().getDisplayName(),
                             "",
-                            "&fExpires in: &b" + duelRequest.getRemainingTimeFormatted(),
+                            "&fExpires in: &b" + this.duelRequest.getRemainingTimeFormatted(),
                             "",
                             "&aClick to accept!"
                     ))
@@ -74,13 +75,13 @@ public class DuelRequestsMenu extends PaginatedMenu {
         public void clicked(Player player, ClickType clickType) {
             if (clickType != ClickType.LEFT) return;
 
-            if (duelRequest.hasExpired()) {
+            if (this.duelRequest.hasExpired()) {
                 player.sendMessage(CC.translate("&cThis duel request has expired."));
                 new DuelRequestsMenu().openMenu(player);
                 return;
             }
 
-            if (duelRequest.getArena() == null) {
+            if (this.duelRequest.getArena() == null) {
                 player.sendMessage(CC.translate("&cThis duel request has no setup arena."));
                 new DuelRequestsMenu().openMenu(player);
                 return;
@@ -91,7 +92,11 @@ public class DuelRequestsMenu extends PaginatedMenu {
                 return;
             }
 
-            Alley.getInstance().getDuelRequestHandler().acceptPendingRequest(duelRequest);
+            if (Alley.getInstance().getServerService().check(player)) {
+                return;
+            }
+
+            Alley.getInstance().getDuelRequestHandler().acceptPendingRequest(this.duelRequest);
             player.closeInventory();
         }
     }

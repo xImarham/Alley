@@ -37,6 +37,10 @@ public class AcceptCommand extends BaseCommand {
             return;
         }
 
+        if (Alley.getInstance().getServerService().check(player)) {
+            return;
+        }
+
         Alley.getInstance().getDuelRequestHandler().acceptPendingRequest(duelRequest);
         player.sendMessage(CC.translate("&aYou have accepted the duel request from " + target.getName() + "."));
     }

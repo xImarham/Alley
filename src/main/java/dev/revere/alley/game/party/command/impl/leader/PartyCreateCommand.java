@@ -41,6 +41,10 @@ public class PartyCreateCommand extends BaseCommand {
             return;
         }
 
+        if (Alley.getInstance().getServerService().check(player)) {
+            return;
+        }
+
         partyHandler.createParty(player);
         player.sendMessage(CC.translate(PartyLocale.PARTY_CREATED.getMessage()));
     }

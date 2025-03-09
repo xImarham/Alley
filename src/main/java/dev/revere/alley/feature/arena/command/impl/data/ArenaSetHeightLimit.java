@@ -27,7 +27,7 @@ public class ArenaSetHeightLimit extends BaseCommand {
             return;
         }
 
-        ArenaRepository arenaRepository = this.plugin.getArenaRepository();
+        ArenaRepository arenaRepository = this.alley.getArenaRepository();
         Arena arena = arenaRepository.getArenaByName(args[0]);
         if (arena == null) {
             player.sendMessage(CC.translate("&cAn arena with that name does not exist!"));

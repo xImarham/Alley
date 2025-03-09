@@ -113,7 +113,7 @@ public class CombatService {
      * @param player The player.
      * @return If the record is expired.
      */
-    private boolean isExpired(Player player) {
+    public boolean isExpired(Player player) {
         Combat combat = this.combatMap.get(player.getUniqueId());
         if (combat == null) return true;
 
@@ -155,5 +155,9 @@ public class CombatService {
      */
     public String getRemainingTimeFormatted(Player victim) {
         return TimeUtil.millisToSecondsTimer(getRemainingTime(victim)) + "s";
+    }
+
+    public void removeExpiredCombats() {
+        this.combatMap.entrySet().removeIf(entry -> this.isExpired(Bukkit.getPlayer(entry.getKey())));
     }
 }
