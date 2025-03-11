@@ -53,6 +53,11 @@ public class PartyInviteCommand extends BaseCommand {
             return;
         }
 
+        if (party.getMembers().contains(targetPlayer.getUniqueId())) {
+            player.sendMessage(CC.translate("&b" + targetPlayer.getName() + " &cis already in your party."));
+            return;
+        }
+
         Alley.getInstance().getPartyHandler().sendInvite(party, player, targetPlayer);
         party.notifyParty("&b" + targetPlayer.getName() + " &awas invited to the party by &b" + player.getName() + "&a.");
     }
