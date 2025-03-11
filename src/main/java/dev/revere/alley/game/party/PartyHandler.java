@@ -121,6 +121,11 @@ public class PartyHandler {
             return;
         }
 
+        if (party.getBannedPlayers().contains(player.getUniqueId())) {
+            player.sendMessage(CC.translate("&cYou are banned from &b" + leader.getName() + "&c's party."));
+            return;
+        }
+
         party.getMembers().add(player.getUniqueId());
         party.notifyParty("&a" + player.getName() + " has joined the party.");
         this.setupProfile(player, true);
