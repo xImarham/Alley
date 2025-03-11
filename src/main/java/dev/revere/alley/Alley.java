@@ -116,7 +116,7 @@ public class Alley extends JavaPlugin {
     @Override
     public void onDisable() {
         this.profileRepository.getProfiles().forEach((uuid, profile) -> profile.save());
-        //this.matchRepository.endPresentMatches();
+        this.matchRepository.endPresentMatches();
 
         this.assemble.interruptAndClose(true);
 
