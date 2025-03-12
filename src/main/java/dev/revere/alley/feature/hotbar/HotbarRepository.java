@@ -1,9 +1,11 @@
 package dev.revere.alley.feature.hotbar;
 
+import dev.revere.alley.Alley;
 import lombok.Getter;
 import dev.revere.alley.feature.hotbar.enums.HotbarItems;
 import dev.revere.alley.feature.hotbar.enums.HotbarType;
 import dev.revere.alley.util.data.item.ItemBuilder;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
@@ -61,16 +63,16 @@ public class HotbarRepository {
         player.getInventory().clear();
         for (HotbarItem item : hotbarItemsByType.get(type)) {
             ItemStack itemStack = item.getItemStack();
-            /*if (item.getHotbarItems() == HotbarItems.SETTINGS) {
+            if (item.getHotbarItems() == HotbarItems.SETTINGS) {
                 SkullMeta meta = (SkullMeta) itemStack.getItemMeta();
                 meta.setOwner(player.getName());
                 itemStack.setItemMeta(meta);
-            }*/
+            }
             itemStack.setDurability((short) item.getHotbarItems().getDurability());
             player.getInventory().setItem(item.getSlot(), itemStack);
         }
 
-        player.updateInventory();
+        Bukkit.getScheduler().runTaskLater(Alley.getInstance(), player::updateInventory, 1L);
     }
 
     /**
