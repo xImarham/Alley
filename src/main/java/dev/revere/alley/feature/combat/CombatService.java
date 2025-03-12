@@ -68,6 +68,11 @@ public class CombatService {
         return Bukkit.getPlayer(combat.getAttackerUUID());
     }
 
+    /**
+     * Resets the combat log of a player.
+     *
+     * @param player The player.
+     */
     public void resetCombatLog(Player player) {
         this.removeLastAttacker(player, false);
     }
@@ -89,7 +94,7 @@ public class CombatService {
     /**
      * Removes the last attacker record of a player.
      *
-     * @param player The player.
+     * @param player     The player.
      * @param removeBoth If true, removes both the attacker and the victim.
      */
     public void removeLastAttacker(Player player, boolean removeBoth) {
@@ -128,8 +133,6 @@ public class CombatService {
         return false;
     }
 
-
-
     /**
      * Get the remaining time before the last attacker record expires.
      *
@@ -154,10 +157,6 @@ public class CombatService {
      * @return The remaining time formatted in seconds.
      */
     public String getRemainingTimeFormatted(Player victim) {
-        return TimeUtil.millisToSecondsTimer(getRemainingTime(victim)) + "s";
-    }
-
-    public void removeExpiredCombats() {
-        this.combatMap.entrySet().removeIf(entry -> this.isExpired(Bukkit.getPlayer(entry.getKey())));
+        return TimeUtil.millisToSecondsTimer(this.getRemainingTime(victim)) + "s";
     }
 }

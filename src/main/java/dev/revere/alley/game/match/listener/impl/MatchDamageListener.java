@@ -138,6 +138,11 @@ public class MatchDamageListener implements Listener {
                     return;
                 }
 
+                if (match.isInSameTeam(attacker, damaged)) {
+                    event.setCancelled(true);
+                    return;
+                }
+
                 attackerProfile.getMatch().getGamePlayer(attacker).getData().handleAttack();
                 damagedprofile.getMatch().getGamePlayer(damaged).getData().resetCombo();
 

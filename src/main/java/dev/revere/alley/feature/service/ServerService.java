@@ -73,7 +73,6 @@ public class ServerService {
         }
     }
 
-
     /**
      * Disband all parties on the server.
      *

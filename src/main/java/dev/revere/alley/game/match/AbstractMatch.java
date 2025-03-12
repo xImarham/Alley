@@ -145,9 +145,6 @@ public abstract class AbstractMatch {
         }
     }
 
-    /**
-     * Ends the match.
-     */
     public void endMatch() {
         this.removePlacedBlocks();
         this.placeBrokenBlocks();
@@ -251,7 +248,7 @@ public abstract class AbstractMatch {
     public void handleDeath(Player player) {
         if (!(this.state == EnumMatchState.STARTING || this.state == EnumMatchState.RUNNING)) return;
 
-        MatchGamePlayerImpl gamePlayer = getGamePlayer(player);
+        MatchGamePlayerImpl gamePlayer = this.getGamePlayer(player);
         if (gamePlayer.isDead()) {
             return;
         }
@@ -291,17 +288,19 @@ public abstract class AbstractMatch {
 
             @Override
             public void run() {
-                if (count == 0) {
-                    cancel();
+                if (this.count == 0) {
+                    this.cancel();
                     handleRespawn(player);
                     return;
                 }
+
                 if (getState() == EnumMatchState.ENDING_MATCH || getState() == EnumMatchState.ENDING_ROUND) {
-                    cancel();
+                    this.cancel();
                     return;
                 }
-                player.sendMessage(CC.translate("&a" + count + "..."));
-                count--;
+
+                player.sendMessage(CC.translate("&a" + this.count + "..."));
+                this.count--;
             }
         }.runTaskTimer(Alley.getInstance(), 0L, 20L);
     }
@@ -644,6 +643,20 @@ public abstract class AbstractMatch {
                 .filter(gameParticipant -> gameParticipant.containsPlayer(player.getUniqueId()))
                 .findFirst()
                 .orElse(null);
+    }
+
+    /**
+     * Checks if the attacker is in the same participant team as the supposed victim.
+     *
+     * @param attacker The attacker.
+     * @param victim   The victim.
+     * @return If the attacker is in the same participant team as the victim.
+     */
+    public boolean isInSameTeam(Player attacker, Player victim) {
+        GameParticipant<MatchGamePlayerImpl> attackerParticipant = this.getParticipant(attacker);
+        GameParticipant<MatchGamePlayerImpl> victimParticipant = this.getParticipant(victim);
+
+        return attackerParticipant.equals(victimParticipant);
     }
 
     /**

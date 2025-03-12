@@ -151,7 +151,19 @@ public class MatchListener implements Listener {
         ListenerUtil.clearDroppedItemsOnDeath(event, player);
 
         this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> player.spigot().respawn(), 1L);
+
         profile.getMatch().handleDeath(player);
+
+        if (!profile.getMatch().getParticipant(player).isAllDead()) {
+            Kit matchKit = profile.getMatch().getKit();
+            if (matchKit.isSettingEnabled(KitSettingLivesImpl.class)
+                    || matchKit.isSettingEnabled(KitSettingBattleRushImpl.class)
+                    || matchKit.isSettingEnabled(KitSettingStickFightImpl.class)) {
+                return;
+            }
+
+            profile.getMatch().addSpectator(player);
+        }
     }
 
     @EventHandler
