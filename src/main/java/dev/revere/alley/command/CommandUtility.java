@@ -20,8 +20,6 @@ import dev.revere.alley.feature.leaderboard.command.LeaderboardCommand;
 import dev.revere.alley.feature.queue.command.admin.QueueCommand;
 import dev.revere.alley.feature.queue.command.player.LeaveQueueCommand;
 import dev.revere.alley.feature.queue.command.player.QueuesCommand;
-import dev.revere.alley.feature.queue.command.player.RankedCommand;
-import dev.revere.alley.feature.queue.command.player.UnrankedCommand;
 import dev.revere.alley.game.duel.command.AcceptCommand;
 import dev.revere.alley.game.duel.command.DuelCommand;
 import dev.revere.alley.game.duel.command.DuelRequestsCommand;
@@ -120,8 +118,6 @@ public class CommandUtility {
             new DuelCommand();
             new DuelRequestsCommand();
             new InventoryCommand();
-            new UnrankedCommand();
-            new RankedCommand();
             new PracticeSettingsCommand();
             new LeaderboardCommand();
             new ResetStatsCommand();

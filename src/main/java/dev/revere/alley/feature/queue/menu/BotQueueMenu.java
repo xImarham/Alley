@@ -1,10 +1,10 @@
 package dev.revere.alley.feature.queue.menu;
 
-import lombok.AllArgsConstructor;
-import dev.revere.alley.feature.queue.Queue;
 import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.api.menu.Menu;
 import dev.revere.alley.api.menu.impl.BackButton;
+import dev.revere.alley.feature.queue.Queue;
+import lombok.AllArgsConstructor;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
@@ -17,7 +17,6 @@ import java.util.Map;
  */
 @AllArgsConstructor
 public class BotQueueMenu extends Menu {
-
     private final Queue queue;
 
     @Override

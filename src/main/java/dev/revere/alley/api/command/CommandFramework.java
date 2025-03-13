@@ -91,7 +91,8 @@ public class CommandFramework implements CommandExecutor {
                     method.invoke(methodObject,
                             new CommandArgs(sender, cmd, label, args, cmdLabel.split("\\.").length - 1));
                 } catch (IllegalArgumentException | IllegalAccessException | InvocationTargetException e) {
-                    Bukkit.getConsoleSender().sendMessage("Failed to execute command: " + cmdLabel);
+                    Bukkit.getConsoleSender().sendMessage("Failed to execute command: " + cmdLabel + " - " + e.getMessage());
+                    e.printStackTrace();
                 }
                 return true;
             }

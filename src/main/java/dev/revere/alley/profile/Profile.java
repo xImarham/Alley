@@ -1,6 +1,7 @@
 package dev.revere.alley.profile;
 
 import dev.revere.alley.Alley;
+import dev.revere.alley.feature.queue.enums.EnumQueueType;
 import dev.revere.alley.game.ffa.AbstractFFAMatch;
 import dev.revere.alley.game.match.AbstractMatch;
 import dev.revere.alley.game.party.Party;
@@ -37,6 +38,7 @@ public class Profile {
     private EnumProfileState state;
 
     private EnumLeaderboardType leaderboardType;
+    private EnumQueueType queueType;
 
     private AbstractFFAMatch ffaMatch;
     private AbstractMatch match;
@@ -56,6 +58,7 @@ public class Profile {
         this.profileData = new ProfileData();
         this.name = Bukkit.getOfflinePlayer(this.uuid).getName();
         this.leaderboardType = EnumLeaderboardType.RANKED;
+        this.queueType = EnumQueueType.UNRANKED;
     }
 
     /**
