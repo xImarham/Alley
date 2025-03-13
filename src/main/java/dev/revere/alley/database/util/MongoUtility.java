@@ -43,6 +43,8 @@ public class MongoUtility {
         profileDataDocument.put("rankedWins", profileData.getRankedWins());
         profileDataDocument.put("rankedLosses", profileData.getRankedLosses());
 
+        profileDataDocument.put("rankedBanned", profileData.isRankedBanned());
+
         profileDataDocument.put("unrankedKitData", convertUnrankedKitData(profileData.getUnrankedKitData()));
         profileDataDocument.put("rankedKitData", convertRankedKitData(profileData.getRankedKitData()));
         profileDataDocument.put("ffaData", convertFFAData(profileData.getFfaData()));
@@ -155,6 +157,8 @@ public class MongoUtility {
             profileData.setUnrankedLosses(profileDataDocument.getInteger("unrankedLosses"));
             profileData.setRankedWins(profileDataDocument.getInteger("rankedWins"));
             profileData.setRankedLosses(profileDataDocument.getInteger("rankedLosses"));
+
+            profileData.setRankedBanned(profileDataDocument.getBoolean("rankedBanned"));
 
             Map<String, ProfileUnrankedKitData> existingUnrankedKitData = profileData.getUnrankedKitData();
             Map<String, ProfileUnrankedKitData> newUnrankedKitData = parseUnrankedKitData((Document) profileDataDocument.get("unrankedKitData"));

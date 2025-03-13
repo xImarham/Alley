@@ -64,6 +64,7 @@ public class HotbarListener implements Listener {
                                 break;
                             case RANKED_QUEUES:
                                 new RankedMenu().openMenu(player);
+                                break;
                             case CURRENT_MATCHES:
                                 new CurrentMatchesMenu().openMenu(player);
                                 break;

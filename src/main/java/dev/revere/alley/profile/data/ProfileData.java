@@ -1,13 +1,12 @@
 package dev.revere.alley.profile.data;
 
 import com.google.common.collect.Maps;
-import dev.revere.alley.feature.kit.Kit;
+import dev.revere.alley.Alley;
 import dev.revere.alley.feature.kit.settings.impl.KitSettingRankedImpl;
 import dev.revere.alley.profile.Profile;
+import dev.revere.alley.profile.data.impl.*;
 import lombok.Getter;
 import lombok.Setter;
-import dev.revere.alley.Alley;
-import dev.revere.alley.profile.data.impl.*;
 import lombok.var;
 
 import java.util.Map;
@@ -34,10 +33,13 @@ public class ProfileData {
     private int rankedWins = 0;
     private int rankedLosses = 0;
 
+    private boolean rankedBanned;
+
     public ProfileData() {
         this.initializeMaps();
         this.feedDataClasses();
         this.initializeDataClasses();
+        this.rankedBanned = false;
     }
 
     private void initializeDataClasses() {

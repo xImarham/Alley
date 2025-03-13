@@ -54,6 +54,11 @@ public class QueueForceCommand extends BaseCommand {
                 SoundUtil.playBanHammer(target);
                 Alley.getInstance().getHotbarRepository().applyHotbarItems(target, HotbarType.QUEUE);
                 player.sendMessage(CC.translate("&aYou've added &b" + target.getName() + " &ato the &b" + queue.getQueueType() + " &aqueue."));
+
+                if (ranked && profile.getProfileData().isRankedBanned()) {
+                    player.sendMessage(CC.translate("&cKeep in mind that &b" + target.getName() + " &cis currently banned from ranked queues!"));
+                }
+
                 return;
             }
         }

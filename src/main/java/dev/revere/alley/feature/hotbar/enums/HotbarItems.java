@@ -18,8 +18,8 @@ public enum HotbarItems {
     // Example of how you can have one hotbar item in 2 specific states:
     // EXAMPLE_ITEM("&bEmmy is smart", Material.ZIUES_SKULL, 0, 2, "alley", HotbarType.LOBBY, HotbarType.QUEUE)
 
-    UNRANKED_QUEUES("&bUnranked Queues &7(Right Click)", Material.IRON_SWORD, 0, 0, "queues", HotbarType.LOBBY),
-    RANKED_QUEUES("&bRanked Queues &7(Right Click)", Material.DIAMOND_SWORD, 0, 1, "ranked", HotbarType.LOBBY),
+    UNRANKED_QUEUES("&bUnranked Queues &7(Right Click)", Material.IRON_SWORD, 0, 0, "", HotbarType.LOBBY),
+    RANKED_QUEUES("&bRanked Queues &7(Right Click)", Material.DIAMOND_SWORD, 0, 1, "", HotbarType.LOBBY),
     KIT_EDITOR("&bKit Editor &7(Right Click)", Material.BOOK, 0, 2, "kiteditor", HotbarType.LOBBY),
     CURRENT_MATCHES("&bCurrent Matches &7(Right Click)", Material.COMPASS, 0, 3, "currentmatches", HotbarType.LOBBY),
     PARTY("&bCreate Party &7(Right Click)", Material.NAME_TAG, 0, 5, "party create", HotbarType.LOBBY),

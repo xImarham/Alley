@@ -1,18 +1,18 @@
 package dev.revere.alley.profile;
 
 import dev.revere.alley.Alley;
+import dev.revere.alley.feature.kit.Kit;
+import dev.revere.alley.feature.leaderboard.enums.EnumLeaderboardType;
+import dev.revere.alley.feature.queue.QueueProfile;
 import dev.revere.alley.feature.queue.enums.EnumQueueType;
 import dev.revere.alley.game.ffa.AbstractFFAMatch;
 import dev.revere.alley.game.match.AbstractMatch;
 import dev.revere.alley.game.party.Party;
-import dev.revere.alley.feature.kit.Kit;
-import dev.revere.alley.feature.leaderboard.enums.EnumLeaderboardType;
 import dev.revere.alley.profile.data.ProfileData;
 import dev.revere.alley.profile.data.impl.ProfileFFAData;
 import dev.revere.alley.profile.data.impl.ProfileRankedKitData;
 import dev.revere.alley.profile.data.impl.ProfileUnrankedKitData;
 import dev.revere.alley.profile.enums.EnumProfileState;
-import dev.revere.alley.feature.queue.QueueProfile;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Bukkit;
@@ -42,7 +42,6 @@ public class Profile {
 
     private AbstractFFAMatch ffaMatch;
     private AbstractMatch match;
-
     private Party party;
 
     private boolean online;

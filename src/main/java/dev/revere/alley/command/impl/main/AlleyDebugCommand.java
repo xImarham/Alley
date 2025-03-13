@@ -106,6 +106,7 @@ public class AlleyDebugCommand extends BaseCommand {
      * @param player  The player to send the information to.
      */
     private void sendProfileInfo(Profile profile, Player player) {
+        String banned = profile.getProfileData().isRankedBanned() ? "&c&lBANNED" : "&a&lNOT BANNED";
         Arrays.asList(
                 "",
                 "     &b&lProfile &7┃ &f" + profile.getName(),
@@ -113,7 +114,8 @@ public class AlleyDebugCommand extends BaseCommand {
                 "      &f┃ Elo: &b" + this.formatNumber(profile.getProfileData().getElo()),
                 "      &f┃ Coins: &b" + this.formatNumber(profile.getProfileData().getCoins()),
                 "      &f┃ State: &b" + profile.getState() + " &7(" + profile.getState().getDescription() + ")",
-                "      &f┃ Queue Profile: &b" + (profile.getQueueProfile() != null ? profile.getQueueProfile().getQueue().getKit().getName() : "null"),
+                "      &f┃ Queue Profile: &b" + (profile.getQueueProfile() != null ? profile.getQueueProfile().getQueue().getKit().getName() : "&c&lNULL"),
+                "      &f┃ Ranked: &b" + banned,
                 ""
         ).forEach(line -> player.sendMessage(CC.translate(line).replace("The player", profile.getName())));
     }

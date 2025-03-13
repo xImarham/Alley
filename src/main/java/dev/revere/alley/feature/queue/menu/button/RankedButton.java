@@ -7,6 +7,7 @@ import dev.revere.alley.feature.kit.Kit;
 import dev.revere.alley.feature.queue.Queue;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.util.PlayerUtil;
+import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.util.data.item.ItemBuilder;
 import lombok.AllArgsConstructor;
 import org.bukkit.entity.Player;
@@ -49,6 +50,18 @@ public class RankedButton extends Button {
         if (Alley.getInstance().getServerService().check(player)) return;
 
         Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
+        if (profile.getProfileData().isRankedBanned()) {
+            player.closeInventory();
+            Arrays.asList(
+                    "",
+                    "&c&lRANKED BAN",
+                    "&cYou are currently banned from ranked queues.",
+                    "&7You may appeal at &b&ndiscord.gg/alley-practice&7.",
+                    ""
+            ).forEach(line -> player.sendMessage(CC.translate(line)));
+            return;
+        }
+
         queue.addPlayer(player, queue.isRanked() ? profile.getProfileData().getRankedKitData().get(queue.getKit().getName()).getElo() : 0);
         PlayerUtil.reset(player, false);
         player.closeInventory();
