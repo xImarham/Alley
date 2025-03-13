@@ -70,7 +70,6 @@ public class ProfileListener implements Listener {
         PlayerUtil.reset(player, false);
         Alley.getInstance().getSpawnService().teleportToSpawn(player);
         Alley.getInstance().getHotbarRepository().applyHotbarItems(player, HotbarType.LOBBY);
-        player.updateInventory();
 
         player.setFlySpeed(1 * 0.1F);
         player.setWalkSpeed(2 * 0.1F);
@@ -89,6 +88,11 @@ public class ProfileListener implements Listener {
                         .replace("{author}", Alley.getInstance().getDescription().getAuthors().toString().replace("[", "").replace("]", ""))
                 );
             }
+        }
+
+        if (player.hasPermission("alley.donator.fly")) {
+            player.setAllowFlight(true);
+            player.setFlying(true);
         }
     }
 
