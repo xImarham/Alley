@@ -200,6 +200,7 @@ kits:
         description: The Stick Fight Kit Setting.
         enabled: false
     disclaimer: '&7Eliminate your opponents! (Diamond Gear, Health Potions)'
+    potioneffects: []
   Classic:
     displayname: '&b&lClassic'
     description: '&7Old styled PvP.'
@@ -300,6 +301,7 @@ kits:
         description: The Stick Fight Kit Setting.
         enabled: false
     disclaimer: '&7Eliminate your opponents! (Diamond Gear, Fishing Rod, Bow)'
+    potioneffects: []
   Boxing:
     displayname: '&b&lBoxing'
     description: '&71st to 100 Hits, wins!'
@@ -317,19 +319,7 @@ kits:
           enchants:
             DAMAGE_ALL: 10
           Unbreakable: true
-      - ==: org.bukkit.inventory.ItemStack
-        type: POTION
-        damage: 8226
-        meta:
-          ==: ItemMeta
-          meta-type: POTION
-          custom-effects:
-            - ==: PotionEffect
-              effect: 1
-              duration: 36000
-              amplifier: 1
-              ambient: false
-              has-particles: false
+      - null
       - null
       - null
       - null
@@ -413,7 +403,7 @@ kits:
         enabled: false
       NoHunger:
         description: Prevent the player from getting hungry
-        enabled: false
+        enabled: true
       BattleRush:
         description: The Battle Rush Kit Setting, first having 3 goals wins.
         enabled: false
@@ -421,6 +411,8 @@ kits:
         description: The Stick Fight Kit Setting.
         enabled: false
     disclaimer: '&7First to 100 hits wins!'
+    potioneffects:
+      - SPEED:2147483647:1
   Sumo:
     displayname: '&b&lSumo'
     description: '&7Knock off your rival!'
@@ -522,6 +514,7 @@ kits:
         description: The Stick Fight Kit Setting.
         enabled: false
     disclaimer: '&7Throw your opponents off the surface!'
+    potioneffects: []
   Spleef:
     displayname: '&b&lSpleef'
     description: '&7Snowy!'
@@ -631,6 +624,7 @@ kits:
         description: The Stick Fight Kit Setting.
         enabled: false
     disclaimer: '&7Break the snow blocks and make your opponents fall!'
+    potioneffects: []
   Parkour:
     displayname: '&b&lParkour'
     description: Classic parkour lol.
@@ -732,6 +726,7 @@ kits:
         description: The Stick Fight Kit Setting.
         enabled: false
     disclaimer: '&7Complete the parkour faster than your opponent to win!'
+    potioneffects: []
   BattleRush:
     displayname: '&b&lBattleRush'
     description: '&7BattleRush kit description'
@@ -837,6 +832,7 @@ kits:
         description: The Stick Fight Kit Setting.
         enabled: false
     disclaimer: '&7Enter your opponents goal to get the most points!'
+    potioneffects: []
   PearlFight:
     displayname: '&b&lPearlFight'
     description: '&7PearlFight kit description'
@@ -952,6 +948,7 @@ kits:
         description: The Stick Fight Kit Setting.
         enabled: false
     disclaimer: '&7Hit your opponents off the map! (Kockback Stick, Blocks)'
+    potioneffects: []
   StickFight:
     displayname: '&b&lStickFight'
     description: '&7StickFight kit description'
@@ -1065,3 +1062,4 @@ kits:
         description: The Stick Fight Kit Setting.
         enabled: true
     disclaimer: '&7Knock your opponent off! (Knockback Stick, Blocks)'
+    potioneffects: []
