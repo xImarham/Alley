@@ -5,7 +5,6 @@ import dev.revere.alley.feature.hotbar.enums.HotbarType;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.ProfileRepository;
 import dev.revere.alley.profile.enums.EnumProfileState;
-import dev.revere.alley.util.PlayerUtil;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.GameMode;
 import org.bukkit.Material;

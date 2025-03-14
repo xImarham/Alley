@@ -13,6 +13,7 @@ import dev.revere.alley.feature.arena.AbstractArena;
 import dev.revere.alley.feature.arena.ArenaRepository;
 import dev.revere.alley.feature.arena.listener.ArenaListener;
 import dev.revere.alley.feature.combat.CombatService;
+import dev.revere.alley.feature.combat.listener.CombatListener;
 import dev.revere.alley.feature.cooldown.CooldownRepository;
 import dev.revere.alley.feature.cosmetic.repository.CosmeticRepository;
 import dev.revere.alley.feature.division.DivisionRepository;
@@ -195,7 +196,8 @@ public class Alley extends JavaPlugin {
                 new FFAListener(this),
                 new FFACuboidListener(this.ffaCuboidService.getCuboid(), this),
                 new WorldListener(),
-                new EmojiListener()
+                new EmojiListener(),
+                new CombatListener(this)
         ).forEach(listener -> getServer().getPluginManager().registerEvents(listener, this));
     }
 
