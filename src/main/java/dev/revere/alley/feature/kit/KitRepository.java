@@ -4,6 +4,7 @@ import dev.revere.alley.Alley;
 import dev.revere.alley.feature.kit.settings.KitSetting;
 import dev.revere.alley.feature.kit.settings.impl.KitSettingRankedImpl;
 import dev.revere.alley.feature.queue.Queue;
+import dev.revere.alley.util.PotionUtil;
 import dev.revere.alley.util.chat.CC;
 import lombok.Getter;
 import org.bukkit.Bukkit;
@@ -11,6 +12,7 @@ import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -53,19 +55,9 @@ public class KitRepository {
             ItemStack[] inventory = config.getList(key + ".items").toArray(new ItemStack[0]);
             ItemStack[] armor = config.getList(key + ".armor").toArray(new ItemStack[0]);
 
-            /* According to IntelliJ, an object is expected here. So this is the 'correct' way to do it.
-             *
-             * List<?> itemList = config.getList(key + ".items");
-             * ItemStack[] inventory = itemList.stream().filter(ItemStack.class::isInstance).map(ItemStack.class::cast).toArray(ItemStack[]::new);
-             *
-             * List<?> armorList = config.getList(key + ".armor");
-             * ItemStack[] armor = armorList.stream().filter(ItemStack.class::isInstance).map(ItemStack.class::cast).toArray(ItemStack[]::new);
-             */
-
             Material icon = Material.matchMaterial(config.getString(key + ".icon"));
             int iconData = config.getInt(key + ".icondata");
             String disclaimer = config.getString(key + ".disclaimer");
-            //PotionEffect[] potionEffects = config.getList(key + ".potioneffects").toArray(new PotionEffect[0]);
 
             Kit kit = new Kit(
                     name,
@@ -80,10 +72,10 @@ public class KitRepository {
                     icon,
                     iconData,
                     disclaimer
-                    //potionEffects
             );
 
             this.loadKitSettings(config, key, kit);
+            this.loadPotionEffects(config, key, kit);
             this.addMissingKitSettings(kit, config, key);
             this.kits.add(kit);
             this.addKitToQueue(kit);
@@ -108,8 +100,8 @@ public class KitRepository {
             config.set(key + ".icon", kit.getIcon().name());
             config.set(key + ".icondata", kit.getIconData());
             config.set(key + ".disclaimer", kit.getDisclaimer());
-            //config.set(key + ".potioneffects", kit.getPotionEffects());
             this.saveKitSettings(config, key, kit);
+            this.savePotionEffects(config, key, kit);
             Alley.getInstance().getConfigService().saveConfig(Alley.getInstance().getConfigService().getConfigFile("storage/kits.yml"), config);
         }
     }
@@ -127,6 +119,18 @@ public class KitRepository {
             config.set(settingKey + ".description", kitSetting.getDescription());
             config.set(settingKey + ".enabled", kitSetting.isEnabled());
         }
+    }
+
+    /**
+     * Method to save the potion effects of a kit.
+     *
+     * @param config The configuration file.
+     * @param key    The path key.
+     * @param kit    The kit.
+     */
+    private void savePotionEffects(FileConfiguration config, String key, Kit kit) {
+        List<String> potionEffects = PotionUtil.serialize(kit.getPotionEffects());
+        config.set(key + ".potioneffects", potionEffects);
     }
 
     /**
@@ -154,6 +158,22 @@ public class KitRepository {
                 kitSetting.setEnabled(enabled);
                 kit.addKitSetting(kitSetting);
             }
+        }
+    }
+
+    /**
+     * Method to load the potion effects of a kit.
+     *
+     * @param config The configuration file.
+     * @param key    The path key.
+     * @param kit    The kit.
+     */
+    private void loadPotionEffects(FileConfiguration config, String key, Kit kit) {
+        try {
+            List<PotionEffect> potionEffects = PotionUtil.deserialize(config.getStringList(key + ".potioneffects"));
+            kit.setPotionEffects(potionEffects);
+        } catch (Exception e) {
+            Bukkit.getConsoleSender().sendMessage(CC.translate("&cFailed to load potion effects for kit " + kit.getName() + "."));
         }
     }
 
@@ -193,12 +213,15 @@ public class KitRepository {
         config.set(key + ".icon", kit.getIcon().name());
         config.set(key + ".icondata", kit.getIconData());
         config.set(key + ".disclaimer", kit.getDisclaimer());
-        //config.set(key + ".potioneffects", kit.getPotionEffects());
 
         if (kit.getKitSettings() == null) {
             this.applyDefaultSettings(config, key, kit);
         } else {
             this.saveKitSettings(config, key, kit);
+        }
+
+        if (kit.getPotionEffects() != null) {
+            this.savePotionEffects(config, key, kit);
         }
 
         Alley.getInstance().getConfigService().saveConfig(Alley.getInstance().getConfigService().getConfigFile("storage/kits.yml"), config);
@@ -237,6 +260,7 @@ public class KitRepository {
     }
 
     //deletes a kit
+
     /**
      * Method to delete a kit.
      *
@@ -255,7 +279,7 @@ public class KitRepository {
     /**
      * Method to create a kit.
      *
-     * @param kitName  The name of the kit.
+     * @param kitName   The name of the kit.
      * @param inventory The inventory of the kit.
      * @param armor     The armor of the kit.
      * @param icon      The icon of the kit.

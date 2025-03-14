@@ -1,11 +1,14 @@
 package dev.revere.alley.util;
 
 import lombok.experimental.UtilityClass;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.Potion;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * @author Emmy
@@ -64,23 +67,34 @@ public class PotionUtil {
     }
 
     /**
-     * Serialize a potion effect and convert it into a string.
+     * Serialize a list of potion effects.
      *
-     * @param potionEffect The potion effect.
-     * @return The serialized potion effect.
+     * @param potionEffects The potion effects.
+     * @return The serialized potion effects.
      */
-    public String serialize(PotionEffect potionEffect) {
-        return potionEffect.getType().getName() + ":" + potionEffect.getDuration() + ":" + potionEffect.getAmplifier();
+    public List<String> serialize(List<PotionEffect> potionEffects) {
+        return potionEffects.stream()
+                .map(effect -> effect.getType().getName() + ":" + effect.getDuration() + ":" + effect.getAmplifier())
+                .collect(Collectors.toList());
     }
 
     /**
-     * Deserialize a potion effect and convert it into a new potion effect.
+     * Deserialize a list of potion effects.
      *
-     * @param string The serialized potion effect.
-     * @return The potion effect.
+     * @param serializedEffects The serialized potion effects.
+     * @return The potion effects.
      */
-    public PotionEffect deserialize(String string) {
-        String[] parts = string.split(":");
-        return new PotionEffect(PotionEffectType.getByName(parts[0]), Integer.parseInt(parts[1]), Integer.parseInt(parts[2]));
+    public List<PotionEffect> deserialize(List<String> serializedEffects) {
+        return serializedEffects.stream()
+                .map(s -> {
+                    String[] parts = s.split(":");
+                    if (parts.length < 3) return null;
+                    PotionEffectType type = PotionEffectType.getByName(parts[0]);
+                    int duration = Integer.parseInt(parts[1]);
+                    int amplifier = Integer.parseInt(parts[2]);
+                    return type != null ? new PotionEffect(type, duration, amplifier) : null;
+                })
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
     }
 }

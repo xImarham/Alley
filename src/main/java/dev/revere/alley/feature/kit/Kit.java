@@ -8,6 +8,7 @@ import dev.revere.alley.feature.kit.settings.KitSetting;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +41,7 @@ public class Kit {
 
     private String disclaimer;
 
-    //private PotionEffect[] potionEffects;
+    private List<PotionEffect> potionEffects;
 
     /**
      * Constructor for the Kit class.
@@ -57,7 +58,7 @@ public class Kit {
      * @param icon         The icon of the kit.
      * @param iconData     The icon data of the kit.
      */
-    public Kit(String name, String displayName, String description, boolean enabled, int unrankedslot, int rankedslot, int editorslot, ItemStack[] inventory, ItemStack[] armor, Material icon, int iconData, String disclaimer/*, PotionEffect[] potionEffects*/) {
+    public Kit(String name, String displayName, String description, boolean enabled, int unrankedslot, int rankedslot, int editorslot, ItemStack[] inventory, ItemStack[] armor, Material icon, int iconData, String disclaimer) {
         this.name = name;
         this.displayName = displayName;
         this.description = description;
@@ -71,7 +72,7 @@ public class Kit {
         this.iconData = iconData;
         this.kitSettings = new ArrayList<>();
         this.disclaimer = disclaimer;
-        //this.potionEffects = potionEffects;
+        this.potionEffects = new ArrayList<>();
     }
 
     /**
@@ -134,9 +135,9 @@ public class Kit {
      * @param player The player to apply the potion effects to.
      */
     public void applyPotionEffects(Player player) {
-        /*for (PotionEffect effect : potionEffects) {
+        for (PotionEffect effect : this.potionEffects) {
             player.addPotionEffect(effect);
-        }*/
+        }
     }
 
     /**

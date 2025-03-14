@@ -1,10 +1,7 @@
 package dev.revere.alley.feature.kit.command;
 
 import dev.revere.alley.api.command.annotation.CompleterData;
-import dev.revere.alley.feature.kit.command.impl.data.KitSetDescriptionCommand;
-import dev.revere.alley.feature.kit.command.impl.data.KitSetDisclaimerCommand;
-import dev.revere.alley.feature.kit.command.impl.data.KitSetDisplayNameCommand;
-import dev.revere.alley.feature.kit.command.impl.data.KitSetIconCommand;
+import dev.revere.alley.feature.kit.command.impl.data.*;
 import dev.revere.alley.feature.kit.command.impl.data.inventory.KitGetInvCommand;
 import dev.revere.alley.feature.kit.command.impl.data.inventory.KitSetInvCommand;
 import dev.revere.alley.feature.kit.command.impl.data.slot.KitSetEditorSlotCommand;
@@ -52,6 +49,7 @@ public class KitCommand extends BaseCommand {
         new KitSetSettingCommand();
         new KitSettingsCommand();
         new KitSetIconCommand();
+        new KitSetPotionCommand();
         new KitViewCommand();
         new KitViewSettingsCommand();
     }
@@ -79,6 +77,7 @@ public class KitCommand extends BaseCommand {
             completion.add("setunrankedslot");
             completion.add("setsetting");
             completion.add("setdisplayname");
+            completion.add("setpotion");
         }
 
         return completion;
@@ -136,6 +135,7 @@ public class KitCommand extends BaseCommand {
                     " &f● &b/kit setsetting &8(&7kitName&8) &8(&7setting&8) &8(&7enabled&8) &7| Set kit setting",
                     " &f● &b/kit setdisclaimer &8(&7kitName&8) &8(&7disclaimer&8) &7| Set disclaimer",
                     " &f● &b/kit setdisplayname &8(&7kitName&8) &8(&7displayname&8) &7| Set display-name of a kit",
+                    " &f● &b/kit setpotion &8(&7kitName&8) &7| Set potion effects of a kit"
             },
             {
                     " &f● &b/kit setslotall &8(&7kitName&8) &8(&7slot&8) &7| Set all menu slots",

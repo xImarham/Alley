@@ -104,6 +104,8 @@ public class MatchLivesRegularImpl extends MatchRegularImpl {
         player.getInventory().setArmorContents(getKit().getArmor());
         player.getInventory().setContents(getKit().getInventory());
 
+        this.getKit().applyPotionEffects(player);
+
         this.notifyParticipants("&b" + player.getName() + " &ahas respawned");
         this.notifySpectators("&b" + player.getName() + " &ahas respawned");
     }
