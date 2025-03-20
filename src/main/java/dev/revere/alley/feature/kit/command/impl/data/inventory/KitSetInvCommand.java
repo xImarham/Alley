@@ -3,12 +3,14 @@ package dev.revere.alley.feature.kit.command.impl.data.inventory;
 import dev.revere.alley.Alley;
 import dev.revere.alley.feature.kit.Kit;
 import dev.revere.alley.locale.impl.KitLocale;
+import dev.revere.alley.util.InventoryUtil;
 import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.CommandArgs;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 /**
  * @author Emmy
@@ -38,8 +40,11 @@ public class KitSetInvCommand extends BaseCommand {
             return;
         }
 
-        kit.setInventory(player.getInventory().getContents());
-        kit.setArmor(player.getInventory().getArmorContents());
+        ItemStack[] inventory = InventoryUtil.cloneItemStackArray(player.getInventory().getContents());
+        ItemStack[] armor = InventoryUtil.cloneItemStackArray(player.getInventory().getArmorContents());
+
+        kit.setInventory(inventory);
+        kit.setArmor(armor);
         Alley.getInstance().getKitRepository().saveKit(kit);
         player.sendMessage(CC.translate(KitLocale.KIT_INVENTORY_SET.getMessage().replace("{kit-name}", kit.getName())));
     }

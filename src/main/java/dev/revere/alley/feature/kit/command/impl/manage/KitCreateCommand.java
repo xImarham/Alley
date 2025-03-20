@@ -8,6 +8,7 @@ import dev.revere.alley.feature.kit.Kit;
 import dev.revere.alley.feature.kit.KitRepository;
 import dev.revere.alley.locale.impl.KitLocale;
 import dev.revere.alley.util.ActionBarUtil;
+import dev.revere.alley.util.InventoryUtil;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -38,8 +39,8 @@ public class KitCreateCommand extends BaseCommand {
             return;
         }
 
-        ItemStack[] inventory = player.getInventory().getContents();
-        ItemStack[] armor = player.getInventory().getArmorContents();
+        ItemStack[] inventory = InventoryUtil.cloneItemStackArray(player.getInventory().getContents());
+        ItemStack[] armor = InventoryUtil.cloneItemStackArray(player.getInventory().getArmorContents());
 
         Material icon = Material.DIAMOND_SWORD;
         if (player.getItemInHand() != null && player.getItemInHand().getType() != Material.AIR) {
