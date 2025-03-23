@@ -3,8 +3,7 @@ package dev.revere.alley.feature.hotbar.listener;
 import dev.revere.alley.Alley;
 import dev.revere.alley.feature.hotbar.HotbarItem;
 import dev.revere.alley.feature.leaderboard.menu.LeaderboardMenu;
-import dev.revere.alley.feature.queue.menu.QueuesMenu;
-import dev.revere.alley.feature.queue.menu.RankedMenu;
+import dev.revere.alley.feature.queue.menu.sub.RankedMenu;
 import dev.revere.alley.game.match.menu.CurrentMatchesMenu;
 import dev.revere.alley.game.party.menu.duel.DuelOtherPartyMenu;
 import dev.revere.alley.game.party.menu.event.PartyEventMenu;
@@ -60,7 +59,7 @@ public class HotbarListener implements Listener {
                     case LOBBY:
                         switch (hotbarItem.getHotbarItems()) {
                             case UNRANKED_QUEUES:
-                                new QueuesMenu().openMenu(player);
+                                Alley.getInstance().getQueueRepository().getQueueMenu().openMenu(player);
                                 break;
                             case RANKED_QUEUES:
                                 new RankedMenu().openMenu(player);

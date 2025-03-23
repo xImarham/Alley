@@ -1,12 +1,16 @@
 package dev.revere.alley.feature.queue;
 
 import dev.revere.alley.Alley;
+import dev.revere.alley.api.menu.Menu;
 import dev.revere.alley.feature.kit.settings.impl.KitSettingRankedImpl;
+import dev.revere.alley.feature.queue.menu.QueuesMenuDefault;
+import dev.revere.alley.feature.queue.menu.QueuesMenuModern;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
 import dev.revere.alley.feature.queue.runnable.QueueRunnable;
 import lombok.Getter;
 import lombok.Setter;
+import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +25,7 @@ import java.util.List;
 public class QueueRepository {
     private final List<Queue> queues;
     private final Alley plugin;
+    private Menu queueMenu;
 
     /**
      * Constructor for the QueueRepository class.
@@ -31,10 +36,22 @@ public class QueueRepository {
         this.queues = new ArrayList<>();
         this.plugin = plugin;
         this.initialize();
+        this.determineMenu();
     }
 
     public void initialize() {
         Alley.getInstance().getServer().getScheduler().runTaskTimer(Alley.getInstance(), new QueueRunnable(), 10L, 10L);
+    }
+
+    private void determineMenu() {
+        FileConfiguration config = Alley.getInstance().getConfigService().getMenusConfig();
+        String menuType = config.getString("queues-menu.type");
+
+        if (menuType.equalsIgnoreCase("MODERN")) {
+            this.queueMenu = new QueuesMenuModern();
+        } else if (menuType.equalsIgnoreCase("DEFAULT")) {
+            this.queueMenu = new QueuesMenuDefault();
+        }
     }
 
     public void reloadQueues() {

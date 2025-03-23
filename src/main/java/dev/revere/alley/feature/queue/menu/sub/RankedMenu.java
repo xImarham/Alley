@@ -1,10 +1,10 @@
-package dev.revere.alley.feature.queue.menu;
+package dev.revere.alley.feature.queue.menu.sub;
 
+import dev.revere.alley.Alley;
 import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.api.menu.Menu;
-import dev.revere.alley.api.menu.impl.BackButton;
 import dev.revere.alley.feature.queue.Queue;
-import lombok.AllArgsConstructor;
+import dev.revere.alley.feature.queue.menu.button.RankedButton;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
@@ -13,22 +13,26 @@ import java.util.Map;
 /**
  * @author Emmy
  * @project Alley
- * @date 14/09/2024 - 23:58
+ * @date 23/05/2024 - 01:28
  */
-@AllArgsConstructor
-public class BotQueueMenu extends Menu {
-    private final Queue queue;
+public class RankedMenu extends Menu {
 
     @Override
     public String getTitle(Player player) {
-        return "&b&lBot Queue";
+        return "&b&lSolo Ranked Queue";
     }
 
     @Override
     public Map<Integer, Button> getButtons(Player player) {
         Map<Integer, Button> buttons = new HashMap<>();
 
-        buttons.put(0, new BackButton(new QueuesMenu()));
+        //buttons.put(0, new BackButton(new QueuesMenu()));
+
+        for (Queue queue : Alley.getInstance().getQueueRepository().getQueues()) {
+            if (queue.isRanked()) {
+                buttons.put(queue.getKit().getRankedslot(), new RankedButton(queue));
+            }
+        }
 
         addBorder(buttons, (byte) 15, 5);
 
