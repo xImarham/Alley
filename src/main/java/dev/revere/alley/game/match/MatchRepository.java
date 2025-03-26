@@ -27,6 +27,6 @@ public class MatchRepository {
         List<AbstractMatch> matchList = new ArrayList<>(this.matches);
         matchList.forEach(AbstractMatch::endMatch);
 
-        Logger.log(this.matches.size()+" matches have been ended.");
+        Logger.log(this.matches.size() + " matches have been ended.");
     }
 }
