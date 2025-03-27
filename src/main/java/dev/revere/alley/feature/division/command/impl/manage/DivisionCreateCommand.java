@@ -5,7 +5,7 @@ import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.feature.division.Division;
-import dev.revere.alley.feature.division.DivisionRepository;
+import dev.revere.alley.feature.division.DivisionService;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.entity.Player;
 
@@ -35,14 +35,14 @@ public class DivisionCreateCommand extends BaseCommand {
             return;
         }
 
-        DivisionRepository divisionRepository = Alley.getInstance().getDivisionRepository();
-        Division division = divisionRepository.getDivision(name);
+        DivisionService divisionService = Alley.getInstance().getDivisionService();
+        Division division = divisionService.getDivision(name);
         if (division != null) {
             player.sendMessage(CC.translate("&cA division with that name already exists."));
             return;
         }
 
-        divisionRepository.createDivision(name, requiredWins);
+        divisionService.createDivision(name, requiredWins);
         player.sendMessage(CC.translate("&aSuccessfully created a new division named &b" + name + "&a with &b" + requiredWins + " &awins."));
     }
 }

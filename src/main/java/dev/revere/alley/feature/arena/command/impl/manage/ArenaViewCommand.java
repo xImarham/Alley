@@ -5,7 +5,7 @@ import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.feature.arena.AbstractArena;
-import dev.revere.alley.feature.arena.ArenaRepository;
+import dev.revere.alley.feature.arena.ArenaService;
 import dev.revere.alley.feature.arena.impl.StandAloneArena;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.command.CommandSender;
@@ -27,9 +27,9 @@ public class ArenaViewCommand extends BaseCommand {
             return;
         }
 
-        ArenaRepository arenaRepository = Alley.getInstance().getArenaRepository();
+        ArenaService arenaService = Alley.getInstance().getArenaService();
 
-        AbstractArena arena = arenaRepository.getArenaByName(args[0]);
+        AbstractArena arena = arenaService.getArenaByName(args[0]);
         if (arena == null) {
             sender.sendMessage(CC.translate("&6Usage: &e/arena view &b<arenaName>"));
             return;

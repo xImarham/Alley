@@ -5,7 +5,7 @@ import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.feature.division.Division;
-import dev.revere.alley.feature.division.DivisionRepository;
+import dev.revere.alley.feature.division.DivisionService;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.entity.Player;
 
@@ -27,14 +27,14 @@ public class DivisionDeleteCommand extends BaseCommand {
         }
         
         String name = args[0];
-        DivisionRepository divisionRepository = Alley.getInstance().getDivisionRepository();
-        Division division = divisionRepository.getDivision(name);
+        DivisionService divisionService = Alley.getInstance().getDivisionService();
+        Division division = divisionService.getDivision(name);
         if (division == null) {
             player.sendMessage(CC.translate("&cA division with that name does not exist."));
             return;
         }
         
-        divisionRepository.deleteDivision(division.getName());
+        divisionService.deleteDivision(division.getName());
         player.sendMessage(CC.translate("&aSuccessfully deleted the division named &b" + name + "&a."));
     }
 }

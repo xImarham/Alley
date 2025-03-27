@@ -5,7 +5,7 @@ import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.feature.arena.AbstractArena;
-import dev.revere.alley.feature.arena.ArenaRepository;
+import dev.revere.alley.feature.arena.ArenaService;
 import dev.revere.alley.feature.arena.enums.EnumArenaType;
 import dev.revere.alley.feature.arena.impl.StandAloneArena;
 import dev.revere.alley.util.chat.CC;
@@ -28,10 +28,10 @@ public class ArenaSetPortalCommand extends BaseCommand {
             return;
         }
 
-        ArenaRepository arenaRepository = Alley.getInstance().getArenaRepository();
+        ArenaService arenaService = Alley.getInstance().getArenaService();
         String name = args[0];
 
-        AbstractArena arena = arenaRepository.getArenaByName(name);
+        AbstractArena arena = arenaService.getArenaByName(name);
         if (arena == null) {
             player.sendMessage(CC.translate("&cAn arena with that name does not exist."));
             return;

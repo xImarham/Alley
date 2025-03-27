@@ -23,7 +23,7 @@ public class ArenaSetCenterCommand extends BaseCommand {
         List<String> completion = new ArrayList<>();
 
         if (command.getArgs().length == 1 && command.getPlayer().hasPermission("alley.admin")) {
-            Alley.getInstance().getArenaRepository().getArenas().forEach(arena -> completion.add(arena.getName()));
+            Alley.getInstance().getArenaService().getArenas().forEach(arena -> completion.add(arena.getName()));
         }
 
         return completion;
@@ -42,13 +42,13 @@ public class ArenaSetCenterCommand extends BaseCommand {
         }
 
         String arenaName = args[0];
-        if (Alley.getInstance().getArenaRepository().getArenaByName(arenaName) == null) {
+        if (Alley.getInstance().getArenaService().getArenaByName(arenaName) == null) {
             player.sendMessage(CC.translate("&cAn arena with that name does not exist!"));
             return;
         }
 
-        Alley.getInstance().getArenaRepository().getArenaByName(arenaName).setCenter(player.getLocation());
-        Alley.getInstance().getArenaRepository().saveArena(Alley.getInstance().getArenaRepository().getArenaByName(arenaName));
+        Alley.getInstance().getArenaService().getArenaByName(arenaName).setCenter(player.getLocation());
+        Alley.getInstance().getArenaService().saveArena(Alley.getInstance().getArenaService().getArenaByName(arenaName));
         player.sendMessage(CC.translate("&aCenter has been set for arena &b" + arenaName + "&a!"));
     }
 }

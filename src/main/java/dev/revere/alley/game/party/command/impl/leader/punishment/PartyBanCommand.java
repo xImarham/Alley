@@ -35,6 +35,6 @@ public class PartyBanCommand extends BaseCommand {
             return;
         }
 
-        Alley.getInstance().getPartyHandler().banMember(player, target);
+        Alley.getInstance().getPartyService().banMember(player, target);
     }
 }

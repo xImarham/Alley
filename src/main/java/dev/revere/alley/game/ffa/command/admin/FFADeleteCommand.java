@@ -26,13 +26,13 @@ public class FFADeleteCommand extends BaseCommand {
         }
 
         String kitName = args[0];
-        AbstractFFAMatch match = Alley.getInstance().getFfaRepository().getFFAMatch(kitName);
+        AbstractFFAMatch match = Alley.getInstance().getFfaService().getFFAMatch(kitName);
         if (match == null) {
             player.sendMessage(CC.translate("&cThere is no FFA match with the name " + kitName + "."));
             return;
         }
 
-        Alley.getInstance().getFfaRepository().deleteFFAMatch(match);
+        Alley.getInstance().getFfaService().deleteFFAMatch(match);
         player.sendMessage(CC.translate("&aSuccessfully deleted the FFA match."));
     }
 }

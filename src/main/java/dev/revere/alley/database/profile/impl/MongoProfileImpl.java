@@ -22,7 +22,7 @@ public class MongoProfileImpl implements IProfile {
     @Override
     public void saveProfile(Profile profile) {
         Document document = MongoUtility.toDocument(profile);
-        Alley.getInstance().getProfileRepository().getCollection()
+        Alley.getInstance().getProfileService().getCollection()
                 .replaceOne(Filters.eq("uuid", profile.getUuid().toString()), document, new ReplaceOptions().upsert(true));
     }
 
@@ -34,9 +34,9 @@ public class MongoProfileImpl implements IProfile {
     @Override
     public void loadProfile(Profile profile) {
         if (profile.getUuid() == null) return;
-        if (Alley.getInstance().getProfileRepository().getCollection() == null) return;
+        if (Alley.getInstance().getProfileService().getCollection() == null) return;
 
-        Document document = Alley.getInstance().getProfileRepository().getCollection().find(Filters.eq("uuid", profile.getUuid().toString())).first();
+        Document document = Alley.getInstance().getProfileService().getCollection().find(Filters.eq("uuid", profile.getUuid().toString())).first();
         if (document == null) {
             this.saveProfile(profile);
             return;

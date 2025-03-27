@@ -46,7 +46,7 @@ public class ArenaCreateCommand extends BaseCommand {
             return;
         }
 
-        if (Alley.getInstance().getArenaRepository().getArenaByName(arenaName) != null) {
+        if (Alley.getInstance().getArenaService().getArenaByName(arenaName) != null) {
             player.sendMessage(CC.translate("&cAn arena with that name already exists!"));
             return;
         }

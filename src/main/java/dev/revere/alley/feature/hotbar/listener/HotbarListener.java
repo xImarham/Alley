@@ -47,8 +47,8 @@ public class HotbarListener implements Listener {
             return;
         }
 
-        Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
-        HotbarItem hotbarItem = Alley.getInstance().getHotbarRepository().getItemByStack(item);
+        Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
+        HotbarItem hotbarItem = Alley.getInstance().getHotbarService().getItemByStack(item);
 
         if (hotbarItem != null) {
             String command = hotbarItem.getHotbarItems().getCommand();
@@ -59,7 +59,7 @@ public class HotbarListener implements Listener {
                     case LOBBY:
                         switch (hotbarItem.getHotbarItems()) {
                             case UNRANKED_QUEUES:
-                                Alley.getInstance().getQueueRepository().getQueueMenu().openMenu(player);
+                                Alley.getInstance().getQueueService().getQueueMenu().openMenu(player);
                                 break;
                             case RANKED_QUEUES:
                                 new RankedMenu().openMenu(player);

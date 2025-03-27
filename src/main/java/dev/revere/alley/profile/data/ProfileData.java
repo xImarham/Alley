@@ -49,9 +49,9 @@ public class ProfileData {
 
     private void feedDataClasses() {
         //Alley.getInstance().getKitRepository().getKits().stream().filter(Kit -> Kit.isSettingEnabled(KitSettingRankedImpl.class)).forEach(kit -> this.rankedKitData.put(kit.getName(), new ProfileRankedKitData()));
-        Alley.getInstance().getKitRepository().getKits().forEach(kit -> this.rankedKitData.put(kit.getName(), new ProfileRankedKitData()));
-        Alley.getInstance().getKitRepository().getKits().forEach(kit -> this.unrankedKitData.put(kit.getName(), new ProfileUnrankedKitData()));
-        Alley.getInstance().getFfaRepository().getMatches().forEach(kit -> this.ffaData.put(kit.getName(), new ProfileFFAData()));
+        Alley.getInstance().getKitService().getKits().forEach(kit -> this.rankedKitData.put(kit.getName(), new ProfileRankedKitData()));
+        Alley.getInstance().getKitService().getKits().forEach(kit -> this.unrankedKitData.put(kit.getName(), new ProfileUnrankedKitData()));
+        Alley.getInstance().getFfaService().getMatches().forEach(kit -> this.ffaData.put(kit.getName(), new ProfileFFAData()));
     }
 
     private void initializeMaps() {
@@ -67,7 +67,7 @@ public class ProfileData {
      * @return the global elo of the player
      */
     private int calculateGlobalElo(Profile profile) {
-        var rankedKits = Alley.getInstance().getKitRepository().getKits().stream()
+        var rankedKits = Alley.getInstance().getKitService().getKits().stream()
                 .filter(kit -> kit.isSettingEnabled(KitSettingRankedImpl.class))
                 .collect(Collectors.toList());
 

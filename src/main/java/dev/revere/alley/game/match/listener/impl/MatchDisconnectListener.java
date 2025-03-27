@@ -5,7 +5,6 @@ import dev.revere.alley.feature.kit.settings.impl.KitSettingBattleRushImpl;
 import dev.revere.alley.feature.kit.settings.impl.KitSettingLivesImpl;
 import dev.revere.alley.game.match.AbstractMatch;
 import dev.revere.alley.game.match.enums.EnumMatchState;
-import dev.revere.alley.game.match.impl.MatchRoundsRegularImpl;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
 import org.bukkit.entity.Player;
@@ -34,7 +33,7 @@ public class MatchDisconnectListener implements Listener {
     @EventHandler
     private void onPlayerQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
-        Profile profile = this.plugin.getProfileRepository().getProfile(player.getUniqueId());
+        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
 
         if (profile.getState() == EnumProfileState.PLAYING) {
             profile.setState(EnumProfileState.LOBBY);
@@ -50,7 +49,7 @@ public class MatchDisconnectListener implements Listener {
     @EventHandler
     private void onPlayerKick(PlayerKickEvent event) {
         Player player = event.getPlayer();
-        Profile profile = this.plugin.getProfileRepository().getProfile(player.getUniqueId());
+        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
 
         if (profile.getState() == EnumProfileState.PLAYING) {
             AbstractMatch match = profile.getMatch();

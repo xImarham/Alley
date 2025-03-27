@@ -19,7 +19,7 @@ public class FFALeaveCommand extends BaseCommand {
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
-        Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
+        Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
 
         if (profile.getFfaMatch() == null) {
             player.sendMessage(CC.translate("&cYou are not in a FFA match."));

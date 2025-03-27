@@ -5,7 +5,7 @@ import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.feature.division.Division;
-import dev.revere.alley.feature.division.DivisionRepository;
+import dev.revere.alley.feature.division.DivisionService;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.entity.Player;
 
@@ -26,8 +26,8 @@ public class DivisionSetDisplayNameCommand extends BaseCommand {
             return;
         }
 
-        DivisionRepository divisionRepository = Alley.getInstance().getDivisionRepository();
-        Division division = divisionRepository.getDivision(args[0]);
+        DivisionService divisionService = Alley.getInstance().getDivisionService();
+        Division division = divisionService.getDivision(args[0]);
         if (division == null) {
             player.sendMessage(CC.translate("&cA division with that name does not exist."));
             return;
@@ -35,7 +35,7 @@ public class DivisionSetDisplayNameCommand extends BaseCommand {
         
         String displayName = args[1];
         division.setDisplayName(displayName);
-        divisionRepository.saveDivision(division);
+        divisionService.saveDivision(division);
         player.sendMessage(CC.translate("&aSuccessfully set the display name of the division &b" + division.getName() + " &ato &b" + displayName + "&a."));
     }
 }

@@ -28,12 +28,12 @@ public class ArenaSetSafeZoneCommand extends BaseCommand {
         String arenaName = args[0];
         String spawnType = args[1];
 
-        if (Alley.getInstance().getArenaRepository().getArenaByName(arenaName) == null) {
+        if (Alley.getInstance().getArenaService().getArenaByName(arenaName) == null) {
             player.sendMessage(CC.translate("&cAn arena with that name does not exist!"));
             return;
         }
 
-        if (Alley.getInstance().getArenaRepository().getArenaByName(arenaName).getType() != EnumArenaType.FFA) {
+        if (Alley.getInstance().getArenaService().getArenaByName(arenaName).getType() != EnumArenaType.FFA) {
             player.sendMessage(CC.translate("&cYou can only set the safezone for Free-For-All arenas!"));
             return;
         }
@@ -44,13 +44,13 @@ public class ArenaSetSafeZoneCommand extends BaseCommand {
         }
 
         if (spawnType.equalsIgnoreCase("pos1")) {
-            Alley.getInstance().getArenaRepository().getArenaByName(arenaName).setMaximum(player.getLocation());
+            Alley.getInstance().getArenaService().getArenaByName(arenaName).setMaximum(player.getLocation());
             player.sendMessage(CC.translate("&aSafe Zone position 1 has been set for arena &b" + arenaName + "&a!"));
         } else {
-            Alley.getInstance().getArenaRepository().getArenaByName(arenaName).setMinimum(player.getLocation());
+            Alley.getInstance().getArenaService().getArenaByName(arenaName).setMinimum(player.getLocation());
             player.sendMessage(CC.translate("&aSafe Zone position 2 has been set for arena &b" + arenaName + "&a!"));
         }
 
-        Alley.getInstance().getArenaRepository().saveArena(Alley.getInstance().getArenaRepository().getArenaByName(arenaName));
+        Alley.getInstance().getArenaService().saveArena(Alley.getInstance().getArenaService().getArenaByName(arenaName));
     }
 }

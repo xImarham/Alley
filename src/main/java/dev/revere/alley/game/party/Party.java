@@ -35,7 +35,7 @@ public class Party {
         this.members.add(leader.getUniqueId());
         this.bannedPlayers = new ArrayList<>();
         this.state = EnumPartyState.PRIVATE;
-        Alley.getInstance().getPartyHandler().getParties().add(this);
+        Alley.getInstance().getPartyService().getParties().add(this);
     }
 
     /**

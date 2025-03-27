@@ -27,7 +27,7 @@ public class LeaderboardMenu extends Menu {
 
     @Override
     public String getTitle(Player player) {
-        Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
+        Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
 
         switch (profile.getLeaderboardType()) {
             case RANKED:
@@ -50,14 +50,14 @@ public class LeaderboardMenu extends Menu {
     @Override
     public Map<Integer, Button> getButtons(Player player) {
         final Map<Integer, Button> buttons = Maps.newHashMap();
-        Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
+        Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
         EnumLeaderboardType currentType = profile.getLeaderboardType();
         LeaderboardService leaderboardService = Alley.getInstance().getLeaderboardService();
 
         buttons.put(2, new StatisticsButton());
         buttons.put(6, new DisplayTypeButton());
 
-        Alley.getInstance().getKitRepository().getKits().stream()
+        Alley.getInstance().getKitService().getKits().stream()
                 .filter(Kit::isEnabled)
                 .filter(kit -> kit.getIcon() != null)
                 .forEach(kit -> {

@@ -45,12 +45,12 @@ public class MatchStartCommand extends BaseCommand {
                     }
                     break;
                 case 3:
-                    Alley.getInstance().getKitRepository().getKits().forEach(kit -> completion.add(kit.getName()));
+                    Alley.getInstance().getKitService().getKits().forEach(kit -> completion.add(kit.getName()));
                     break;
                 case 4:
-                    Kit kit = Alley.getInstance().getKitRepository().getKit(command.getArgs()[2]);
+                    Kit kit = Alley.getInstance().getKitService().getKit(command.getArgs()[2]);
                     if (kit != null) {
-                        Alley.getInstance().getArenaRepository().getArenas()
+                        Alley.getInstance().getArenaService().getArenas()
                                 .stream()
                                 .filter(arena -> arena.getKits().contains(kit.getName()))
                                 .forEach(arena -> completion.add(arena.getName()));
@@ -84,13 +84,13 @@ public class MatchStartCommand extends BaseCommand {
             return;
         }
 
-        Kit kit = Alley.getInstance().getKitRepository().getKit(kitName);
+        Kit kit = Alley.getInstance().getKitService().getKit(kitName);
         if (kit == null) {
             player.sendMessage(CC.translate("&cKit not found."));
             return;
         }
 
-        AbstractArena arena = Alley.getInstance().getArenaRepository().getArenaByName(arenaName);
+        AbstractArena arena = Alley.getInstance().getArenaService().getArenaByName(arenaName);
         if (arena == null) {
             player.sendMessage(CC.translate("&cArena not found."));
             return;
@@ -102,7 +102,7 @@ public class MatchStartCommand extends BaseCommand {
         GameParticipant<MatchGamePlayerImpl> participantA = new GameParticipant<>(playerA);
         GameParticipant<MatchGamePlayerImpl> participantB = new GameParticipant<>(playerB);
 
-        for (Queue queue : Alley.getInstance().getQueueRepository().getQueues()) {
+        for (Queue queue : Alley.getInstance().getQueueService().getQueues()) {
             if (queue.getKit().equals(kit) && !queue.isRanked()) {
                 if (queue.getKit().isSettingEnabled(KitSettingLivesImpl.class)) {
                     AbstractMatch match = new MatchLivesRegularImpl(queue, kit, arena, false, participantA, participantB);

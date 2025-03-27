@@ -6,7 +6,7 @@ import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.api.menu.pagination.PaginatedMenu;
 import dev.revere.alley.game.duel.DuelRequest;
 import dev.revere.alley.util.chat.CC;
-import dev.revere.alley.util.data.item.ItemBuilder;
+import dev.revere.alley.util.item.ItemBuilder;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
@@ -44,7 +44,7 @@ public class DuelRequestsMenu extends PaginatedMenu {
     public Map<Integer, Button> getAllPagesButtons(Player player) {
         Map<Integer, Button> buttons = new HashMap<>();
 
-        Alley.getInstance().getDuelRequestHandler().getDuelRequests()
+        Alley.getInstance().getDuelRequestService().getDuelRequests()
                 .stream()
                 .filter(duelRequest -> !duelRequest.getSender().equals(player))
                 .forEach(duelRequest -> buttons.put(buttons.size(), new DuelRequestsButton(duelRequest)));
@@ -87,7 +87,7 @@ public class DuelRequestsMenu extends PaginatedMenu {
                 return;
             }
 
-            if (Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId()).getMatch() != null) {
+            if (Alley.getInstance().getProfileService().getProfile(player.getUniqueId()).getMatch() != null) {
                 player.sendMessage(CC.translate("&cYou are already in a match."));
                 return;
             }
@@ -96,7 +96,7 @@ public class DuelRequestsMenu extends PaginatedMenu {
                 return;
             }
 
-            Alley.getInstance().getDuelRequestHandler().acceptPendingRequest(this.duelRequest);
+            Alley.getInstance().getDuelRequestService().acceptPendingRequest(this.duelRequest);
             player.closeInventory();
         }
     }

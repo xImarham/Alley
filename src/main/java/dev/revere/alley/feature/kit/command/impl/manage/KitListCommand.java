@@ -19,11 +19,11 @@ public class KitListCommand extends BaseCommand {
         CommandSender sender = command.getSender();
 
         sender.sendMessage("");
-        sender.sendMessage(CC.translate("     &b&lKit List &f(" + Alley.getInstance().getKitRepository().getKits().size() + "&f)"));
-        if (Alley.getInstance().getKitRepository().getKits().isEmpty()) {
+        sender.sendMessage(CC.translate("     &b&lKit List &f(" + Alley.getInstance().getKitService().getKits().size() + "&f)"));
+        if (Alley.getInstance().getKitService().getKits().isEmpty()) {
             sender.sendMessage(CC.translate("      &f● &cNo Kits available."));
         }
-        Alley.getInstance().getKitRepository().getKits().forEach(kit -> sender.sendMessage(CC.translate("      &f● &b" + kit.getDisplayName() + " &f(" + (kit.isEnabled() ? "&aEnabled" : "&cDisabled") + "&f)")));
+        Alley.getInstance().getKitService().getKits().forEach(kit -> sender.sendMessage(CC.translate("      &f● &b" + kit.getDisplayName() + " &f(" + (kit.isEnabled() ? "&aEnabled" : "&cDisabled") + "&f)")));
         sender.sendMessage("");
     }
 }

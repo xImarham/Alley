@@ -4,7 +4,7 @@ import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.feature.arena.AbstractArena;
-import dev.revere.alley.feature.arena.ArenaRepository;
+import dev.revere.alley.feature.arena.ArenaService;
 import dev.revere.alley.feature.arena.enums.EnumArenaType;
 import dev.revere.alley.feature.arena.impl.StandAloneArena;
 import dev.revere.alley.util.chat.CC;
@@ -27,8 +27,8 @@ public class ArenaSetHeightLimit extends BaseCommand {
             return;
         }
 
-        ArenaRepository arenaRepository = this.alley.getArenaRepository();
-        AbstractArena arena = arenaRepository.getArenaByName(args[0]);
+        ArenaService arenaService = this.alley.getArenaService();
+        AbstractArena arena = arenaService.getArenaByName(args[0]);
         if (arena == null) {
             player.sendMessage(CC.translate("&cAn arena with that name does not exist!"));
             return;
@@ -41,7 +41,7 @@ public class ArenaSetHeightLimit extends BaseCommand {
 
         int limit = player.getLocation().getBlockY();
         ((StandAloneArena) arena).setHeightLimit(limit);
-        arenaRepository.saveArena(arena);
+        arenaService.saveArena(arena);
         player.sendMessage(CC.translate("&aHeight limit for arena &b" + arena.getName() + "&a has been set to &b" + limit + "&a!"));
     }
 }

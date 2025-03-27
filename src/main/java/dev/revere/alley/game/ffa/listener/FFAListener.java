@@ -5,7 +5,7 @@ import dev.revere.alley.feature.combat.CombatService;
 import dev.revere.alley.feature.cooldown.Cooldown;
 import dev.revere.alley.feature.cooldown.CooldownRepository;
 import dev.revere.alley.feature.cooldown.enums.EnumCooldownType;
-import dev.revere.alley.game.ffa.cuboid.FFACuboidServiceImpl;
+import dev.revere.alley.game.ffa.cuboid.FFASpawnService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
 import dev.revere.alley.util.ListenerUtil;
@@ -52,7 +52,7 @@ public class FFAListener implements Listener {
      * @return The profile
      */
     private Profile accessProfile(Player player) {
-        return this.plugin.getProfileRepository().getProfile(player.getUniqueId());
+        return this.plugin.getProfileService().getProfile(player.getUniqueId());
     }
 
     @EventHandler
@@ -115,7 +115,7 @@ public class FFAListener implements Listener {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onEntityDamageByEntityMonitor(EntityDamageByEntityEvent event) {
         if (event.getEntity() instanceof Player && event.getDamager() instanceof Player) {
-            Profile profile = this.plugin.getProfileRepository().getProfile(event.getEntity().getUniqueId());
+            Profile profile = this.plugin.getProfileService().getProfile(event.getEntity().getUniqueId());
             if (profile.getState() != EnumProfileState.FFA) return;
 
             Player player = (Player) event.getEntity();
@@ -129,17 +129,17 @@ public class FFAListener implements Listener {
 
     @EventHandler
     public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
-        Profile profile = this.plugin.getProfileRepository().getProfile(event.getEntity().getUniqueId());
+        Profile profile = this.plugin.getProfileService().getProfile(event.getEntity().getUniqueId());
         if (profile.getState() != EnumProfileState.FFA) return;
         if (!(event.getDamager() instanceof Player) || !(event.getEntity() instanceof Player)) return;
 
         Player victim = (Player) event.getEntity();
         Player attacker = (Player) event.getDamager();
         
-        FFACuboidServiceImpl ffaCuboidService = this.plugin.getFfaCuboidService();
-        if (ffaCuboidService.getCuboid().isIn((victim)) && ffaCuboidService.getCuboid().isIn((attacker)) 
-                || !ffaCuboidService.getCuboid().isIn(victim) && ffaCuboidService.getCuboid().isIn(attacker) 
-                || ffaCuboidService.getCuboid().isIn(victim) && !ffaCuboidService.getCuboid().isIn(attacker)) {
+        FFASpawnService ffaSpawnService = this.plugin.getFfaSpawnService();
+        if (ffaSpawnService.getCuboid().isIn((victim)) && ffaSpawnService.getCuboid().isIn((attacker))
+                || !ffaSpawnService.getCuboid().isIn(victim) && ffaSpawnService.getCuboid().isIn(attacker)
+                || ffaSpawnService.getCuboid().isIn(victim) && !ffaSpawnService.getCuboid().isIn(attacker)) {
 
             CombatService combatService = Alley.getInstance().getCombatService();
             if (combatService.isPlayerInCombat(victim.getUniqueId() ) && combatService.isPlayerInCombat(attacker.getUniqueId())) {
@@ -194,7 +194,7 @@ public class FFAListener implements Listener {
         if (item.getType() != Material.ENDER_PEARL) return;
 
         if (event.getAction().name().contains("RIGHT_CLICK")) {
-            if (this.plugin.getFfaCuboidService().getCuboid().isIn(player)) {
+            if (this.plugin.getFfaSpawnService().getCuboid().isIn(player)) {
                 event.setCancelled(true);
                 player.updateInventory();
                 player.sendMessage(CC.translate("&cYou cannot use ender pearls at spawn."));

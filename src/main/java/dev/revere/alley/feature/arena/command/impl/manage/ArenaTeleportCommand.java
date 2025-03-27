@@ -24,7 +24,7 @@ public class ArenaTeleportCommand extends BaseCommand {
         List<String> completion = new ArrayList<>();
 
         if (command.getArgs().length == 1 && command.getPlayer().hasPermission("alley.admin")) {
-            Alley.getInstance().getArenaRepository().getArenas().forEach(arena -> completion.add(arena.getName()));
+            Alley.getInstance().getArenaService().getArenas().forEach(arena -> completion.add(arena.getName()));
         }
 
         return completion;
@@ -42,7 +42,7 @@ public class ArenaTeleportCommand extends BaseCommand {
         }
 
         String arenaName = args[0];
-        AbstractArena arena = Alley.getInstance().getArenaRepository().getArenaByName(arenaName);
+        AbstractArena arena = Alley.getInstance().getArenaService().getArenaByName(arenaName);
 
         if (arena == null) {
             player.sendMessage(CC.translate("&cAn arena with that name does not exist."));

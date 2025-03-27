@@ -41,7 +41,7 @@ public class MatchInteractListener implements Listener {
     @EventHandler
     private void handleParkourInteraction(PlayerInteractEvent event) {
         Player player = event.getPlayer();
-        Profile profile = this.plugin.getProfileRepository().getProfile(player.getUniqueId());
+        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
 
         if (profile.getState() != EnumProfileState.PLAYING) return;
         if (!profile.getMatch().getKit().isSettingEnabled(KitSettingParkourImpl.class)) return;
@@ -59,7 +59,7 @@ public class MatchInteractListener implements Listener {
     @EventHandler
     private void onPlayerPearl(PlayerInteractEvent event) {
         Player player = event.getPlayer();
-        Profile profile = this.plugin.getProfileRepository().getProfile(player.getUniqueId());
+        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
         ItemStack item = event.getItem();
 
         if (profile.getMatch() == null) return;

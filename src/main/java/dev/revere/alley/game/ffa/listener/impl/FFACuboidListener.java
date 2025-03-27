@@ -6,7 +6,7 @@ import dev.revere.alley.game.ffa.enums.EnumFFAState;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
 import dev.revere.alley.util.chat.CC;
-import dev.revere.alley.util.data.cuboid.Cuboid;
+import dev.revere.alley.util.cuboid.Cuboid;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -40,7 +40,7 @@ public class FFACuboidListener implements Listener {
 
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
-        for (AbstractFFAMatch ffaMatch : this.plugin.getFfaRepository().getMatches()) {
+        for (AbstractFFAMatch ffaMatch : this.plugin.getFfaService().getMatches()) {
             if (ffaMatch.getPlayers().isEmpty()) {
                 return;
             }
@@ -53,7 +53,7 @@ public class FFACuboidListener implements Listener {
             return;
         }
 
-        Profile profile = this.plugin.getProfileRepository().getProfile(playerId);
+        Profile profile = this.plugin.getProfileService().getProfile(playerId);
         if (profile == null || profile.getState() != EnumProfileState.FFA) {
             return;
         }
@@ -65,10 +65,10 @@ public class FFACuboidListener implements Listener {
             if (isInCuboid) {
                 if (this.plugin.getCombatService().isPlayerInCombat(playerId)) return;
                 player.sendMessage(CC.translate("&aYou have entered the FFA spawn area."));
-                this.plugin.getFfaRepository().getMatchByPlayer(player).ifPresent(match -> match.setState(EnumFFAState.SPAWN));
+                this.plugin.getFfaService().getMatchByPlayer(player).ifPresent(match -> match.setState(EnumFFAState.SPAWN));
             } else {
                 player.sendMessage(CC.translate("&cYou have left the FFA spawn area."));
-                this.plugin.getFfaRepository().getMatchByPlayer(player).ifPresent(match -> match.setState(EnumFFAState.FIGHTING));
+                this.plugin.getFfaService().getMatchByPlayer(player).ifPresent(match -> match.setState(EnumFFAState.FIGHTING));
             }
 
             this.playerStates.put(playerId, isInCuboid);

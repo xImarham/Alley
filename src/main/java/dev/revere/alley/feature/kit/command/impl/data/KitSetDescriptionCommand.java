@@ -31,14 +31,14 @@ public class KitSetDescriptionCommand extends BaseCommand {
         String kitName = args[0];
         String description = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
 
-        Kit kit = Alley.getInstance().getKitRepository().getKit(kitName);
+        Kit kit = Alley.getInstance().getKitService().getKit(kitName);
         if (kit == null) {
             sender.sendMessage(CC.translate(KitLocale.KIT_NOT_FOUND.getMessage()));
             return;
         }
 
         kit.setDescription(description);
-        Alley.getInstance().getKitRepository().saveKit(kit);
+        Alley.getInstance().getKitService().saveKit(kit);
         sender.sendMessage(CC.translate(KitLocale.KIT_DESCRIPTION_SET.getMessage().replace("{kit-name}", kitName).replace("{kit-description}", description)));
     }
 }

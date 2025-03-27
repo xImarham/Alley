@@ -33,7 +33,7 @@ public class FFAKickCommand extends BaseCommand {
             return;
         }
 
-        AbstractFFAMatch match = Alley.getInstance().getFfaRepository().getFFAMatch(target);
+        AbstractFFAMatch match = Alley.getInstance().getFfaService().getFFAMatch(target);
         if (match == null) {
             player.sendMessage(CC.translate("&cThis player is not in a FFA match."));
             return;

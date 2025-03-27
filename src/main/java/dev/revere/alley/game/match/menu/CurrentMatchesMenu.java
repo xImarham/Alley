@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 import dev.revere.alley.Alley;
 import dev.revere.alley.game.match.AbstractMatch;
 import dev.revere.alley.api.menu.Button;
-import dev.revere.alley.util.data.item.ItemBuilder;
+import dev.revere.alley.util.item.ItemBuilder;
 import dev.revere.alley.api.menu.pagination.PaginatedMenu;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -102,7 +102,7 @@ public class CurrentMatchesMenu extends PaginatedMenu {
         public void clicked(Player player, int slot, ClickType clickType, int hotbarButton) {
             if (clickType != ClickType.LEFT) return;
 
-            if (Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId()).getMatch() != null) {
+            if (Alley.getInstance().getProfileService().getProfile(player.getUniqueId()).getMatch() != null) {
                 player.sendMessage(CC.translate("&cYou can't spectate a match in your current state."));
                 return;
             }

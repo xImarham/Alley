@@ -29,7 +29,7 @@ public class FFACreateCommand extends BaseCommand {
         }
 
         String arenaName = args[0];
-        AbstractArena arena = Alley.getInstance().getArenaRepository().getArenaByName(arenaName);
+        AbstractArena arena = Alley.getInstance().getArenaService().getArenaByName(arenaName);
         if (arena == null) {
             player.sendMessage(CC.translate("&cArena not found."));
             return;
@@ -41,7 +41,7 @@ public class FFACreateCommand extends BaseCommand {
         }
 
         String kitName = args[1];
-        Kit kit = Alley.getInstance().getKitRepository().getKit(kitName);
+        Kit kit = Alley.getInstance().getKitService().getKit(kitName);
         if (kit == null) {
             player.sendMessage(CC.translate(KitLocale.KIT_NOT_FOUND.getMessage()));
             return;
@@ -49,14 +49,14 @@ public class FFACreateCommand extends BaseCommand {
 
         int maxPlayers = Integer.parseInt(args[2]);
 
-        if (Alley.getInstance().getFfaRepository().getFFAMatch(kitName) != null) {
+        if (Alley.getInstance().getFfaService().getFFAMatch(kitName) != null) {
             player.sendMessage(CC.translate("&cThere is already a FFA match with the name " + kitName + "."));
             return;
         }
 
-        Alley.getInstance().getFfaRepository().createFFAMatch(arena, kit, maxPlayers);
+        Alley.getInstance().getFfaService().createFFAMatch(arena, kit, maxPlayers);
         player.sendMessage(CC.translate("&aSuccessfully created the FFA match."));
-        Alley.getInstance().getProfileRepository().loadProfiles();
+        Alley.getInstance().getProfileService().loadProfiles();
         player.sendMessage(CC.translate("&7Additionally, all profiles have been reloaded."));
     }
 }

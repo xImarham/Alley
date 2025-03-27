@@ -33,7 +33,7 @@ public class CosmeticGetSelectedCommand extends BaseCommand {
             return;
         }
 
-        Profile profile = Alley.getInstance().getProfileRepository().getProfile(target.getUniqueId());
+        Profile profile = Alley.getInstance().getProfileService().getProfile(target.getUniqueId());
         player.sendMessage(CC.translate("     &b&lSelected Cosmetics for " + target.getName()));
 
         ProfileCosmeticData cosmeticData = profile.getProfileData().getProfileCosmeticData();

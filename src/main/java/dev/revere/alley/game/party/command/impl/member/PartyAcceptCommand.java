@@ -5,7 +5,7 @@ import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.game.party.Party;
-import dev.revere.alley.game.party.PartyHandler;
+import dev.revere.alley.game.party.PartyService;
 import dev.revere.alley.game.party.PartyRequest;
 import dev.revere.alley.locale.impl.PartyLocale;
 import dev.revere.alley.util.chat.CC;
@@ -36,28 +36,28 @@ public class PartyAcceptCommand extends BaseCommand {
             return;
         }
 
-        PartyHandler partyHandler = Alley.getInstance().getPartyHandler();
+        PartyService partyService = Alley.getInstance().getPartyService();
 
-        Party party = partyHandler.getPartyByLeader(target);
+        Party party = partyService.getPartyByLeader(target);
         if (party == null) {
             player.sendMessage(CC.translate("&cThe player you are trying to join does not have a party."));
             return;
         }
 
-        PartyRequest partyRequest = partyHandler.getRequest(player);
+        PartyRequest partyRequest = partyService.getRequest(player);
         if (partyRequest == null || !partyRequest.getSender().equals(target)) {
             player.sendMessage(CC.translate(PartyLocale.NO_PARTY_INVITE.getMessage().replace("{player}", target.getName())));
             return;
         }
 
         if (partyRequest.hasExpired()) {
-            partyHandler.removeRequest(partyRequest);
+            partyService.removeRequest(partyRequest);
             player.sendMessage(CC.translate("&cThe party request has expired."));
             return;
         }
 
-        partyHandler.joinParty(player, target);
-        partyHandler.removeRequest(partyRequest);
+        partyService.joinParty(player, target);
+        partyService.removeRequest(partyRequest);
         player.sendMessage(CC.translate(PartyLocale.JOINED_PARTY.getMessage().replace("{player}", target.getName())));
     }
 }

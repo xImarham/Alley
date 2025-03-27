@@ -11,7 +11,7 @@ import dev.revere.alley.profile.data.impl.ProfileUnrankedKitData;
 import dev.revere.alley.profile.stats.menu.button.GlobalStatButton;
 import dev.revere.alley.profile.stats.menu.button.LeaderboardButton;
 import dev.revere.alley.profile.stats.menu.button.StatisticsButton;
-import dev.revere.alley.util.data.item.ItemBuilder;
+import dev.revere.alley.util.item.ItemBuilder;
 import lombok.AllArgsConstructor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -41,7 +41,7 @@ public class StatisticsMenu extends Menu {
         buttons.put(4, new GlobalStatButton());
         buttons.put(6, new LeaderboardButton());
 
-        Profile profile = Alley.getInstance().getProfileRepository().getProfile(this.target == player ? player.getUniqueId() : this.target.getUniqueId());
+        Profile profile = Alley.getInstance().getProfileService().getProfile(this.target == player ? player.getUniqueId() : this.target.getUniqueId());
         List<Kit> sortedKits = profile.getSortedKits();
 
         int slot = 10;

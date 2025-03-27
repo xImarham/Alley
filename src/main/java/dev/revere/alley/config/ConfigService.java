@@ -32,16 +32,12 @@ public class ConfigService {
     private final FileConfiguration menusConfig;
 
     private final String[] configFileNames = {
-            "settings.yml", "messages.yml",
+            "settings.yml", "messages.yml", "menus.yml",
             "database/database.yml",
             "storage/ffa.yml", "storage/kits.yml", "storage/arenas.yml", "storage/divisions.yml",
-            "providers/scoreboard.yml", "providers/tablist.yml",
-            "menus.yml"
+            "providers/scoreboard.yml", "providers/tablist.yml"
     };
 
-    /**
-     * Constructor for the ConfigHandler class.
-     */
     public ConfigService() {
         this.configFiles = new HashMap<>();
         this.fileConfigurations = new HashMap<>();

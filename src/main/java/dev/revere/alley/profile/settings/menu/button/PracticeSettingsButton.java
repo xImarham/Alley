@@ -7,7 +7,7 @@ import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumWorldTime;
 import dev.revere.alley.profile.settings.menu.MatchSettingsMenu;
 import dev.revere.alley.util.chat.CC;
-import dev.revere.alley.util.data.item.ItemBuilder;
+import dev.revere.alley.util.item.ItemBuilder;
 import lombok.AllArgsConstructor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -40,7 +40,7 @@ public class PracticeSettingsButton extends Button {
 
     @Override
     public void clicked(Player player, int slot, ClickType clickType, int hotbarSlot) {
-        Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
+        Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
 
         if (this.material == Material.WATCH) {
             EnumWorldTime newTime = this.getNextWorldTime(clickType, profile);

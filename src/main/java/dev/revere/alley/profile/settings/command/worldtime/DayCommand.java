@@ -18,7 +18,7 @@ public class DayCommand extends BaseCommand {
     @CommandData(name = "day")
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
-        Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
+        Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
 
         profile.getProfileData().getProfileSettingData().setTimeDay(player);
         player.sendMessage(CC.translate("&aYou have set the time to day."));

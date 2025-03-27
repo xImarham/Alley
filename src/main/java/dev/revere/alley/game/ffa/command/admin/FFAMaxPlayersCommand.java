@@ -28,14 +28,14 @@ public class FFAMaxPlayersCommand extends BaseCommand {
         String kitName = args[0];
         int maxPlayers = Integer.parseInt(args[1]);
 
-        AbstractFFAMatch match = Alley.getInstance().getFfaRepository().getFFAMatch(kitName);
+        AbstractFFAMatch match = Alley.getInstance().getFfaService().getFFAMatch(kitName);
         if (match == null) {
             player.sendMessage(CC.translate("&cThere is no FFA match with the name " + kitName + "."));
             return;
         }
 
         match.setMaxPlayers(maxPlayers);
-        Alley.getInstance().getFfaRepository().saveFFAMatch(match);
+        Alley.getInstance().getFfaService().saveFFAMatch(match);
         player.sendMessage(CC.translate("&aSuccessfully set the max players for the FFA match."));
     }
 }

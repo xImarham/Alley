@@ -36,7 +36,7 @@ public class KitSetSlotAllCommand extends BaseCommand {
             return;
         }
 
-        Kit kit = Alley.getInstance().getKitRepository().getKit(kitName);
+        Kit kit = Alley.getInstance().getKitService().getKit(kitName);
         if (kit == null) {
             sender.sendMessage(CC.translate(KitLocale.KIT_NOT_FOUND.getMessage()));
             return;
@@ -45,7 +45,7 @@ public class KitSetSlotAllCommand extends BaseCommand {
         kit.setEditorslot(slot);
         kit.setRankedslot(slot);
         kit.setUnrankedslot(slot);
-        Alley.getInstance().getKitRepository().saveKit(kit);
+        Alley.getInstance().getKitService().saveKit(kit);
         sender.sendMessage(CC.translate(Alley.getInstance().getConfigService().getMessagesConfig().getString("kit.slots-set")).replace("{kit-name}", kitName).replace("{slot}", args[1]));
     }
 }

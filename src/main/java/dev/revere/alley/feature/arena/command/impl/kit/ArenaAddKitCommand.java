@@ -24,7 +24,7 @@ public class ArenaAddKitCommand extends BaseCommand {
         List<String> completion = new ArrayList<>();
 
         if (command.getArgs().length == 1 && command.getPlayer().hasPermission("alley.admin")) {
-            Alley.getInstance().getArenaRepository().getArenas().forEach(arena -> completion.add(arena.getName()));
+            Alley.getInstance().getArenaService().getArenas().forEach(arena -> completion.add(arena.getName()));
         }
 
         return completion;
@@ -44,28 +44,28 @@ public class ArenaAddKitCommand extends BaseCommand {
         String arenaName = args[0];
         String kitName = args[1];
 
-        if (Alley.getInstance().getArenaRepository().getArenaByName(arenaName) == null) {
+        if (Alley.getInstance().getArenaService().getArenaByName(arenaName) == null) {
             player.sendMessage(CC.translate("&cAn arena with that name does not exist!"));
             return;
         }
 
-        if (Alley.getInstance().getArenaRepository().getArenaByName(arenaName).getType() == EnumArenaType.FFA) {
+        if (Alley.getInstance().getArenaService().getArenaByName(arenaName).getType() == EnumArenaType.FFA) {
             player.sendMessage(CC.translate("&cYou cannot add kits to Free-For-All arenas!"));
             return;
         }
 
-        if (Alley.getInstance().getKitRepository().getKit(kitName) == null) {
+        if (Alley.getInstance().getKitService().getKit(kitName) == null) {
             player.sendMessage(CC.translate("&cA kit with that name does not exist!"));
             return;
         }
 
-        if (Alley.getInstance().getArenaRepository().getArenaByName(arenaName).getKits().contains(kitName)) {
+        if (Alley.getInstance().getArenaService().getArenaByName(arenaName).getKits().contains(kitName)) {
             player.sendMessage(CC.translate("&cThis arena already has this kit!"));
             return;
         }
 
         player.sendMessage(CC.translate("&aKit &b" + kitName + "&a has been added to arena &b" + arenaName + "&a!"));
-        Alley.getInstance().getArenaRepository().getArenaByName(arenaName).getKits().add(Alley.getInstance().getKitRepository().getKit(kitName).getName());
-        Alley.getInstance().getArenaRepository().saveArena(Alley.getInstance().getArenaRepository().getArenaByName(arenaName));
+        Alley.getInstance().getArenaService().getArenaByName(arenaName).getKits().add(Alley.getInstance().getKitService().getKit(kitName).getName());
+        Alley.getInstance().getArenaService().saveArena(Alley.getInstance().getArenaService().getArenaByName(arenaName));
     }
 }

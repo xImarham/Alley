@@ -8,7 +8,7 @@ import dev.revere.alley.feature.queue.Queue;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.util.PlayerUtil;
 import dev.revere.alley.util.chat.CC;
-import dev.revere.alley.util.data.item.ItemBuilder;
+import dev.revere.alley.util.item.ItemBuilder;
 import lombok.AllArgsConstructor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
@@ -35,9 +35,9 @@ public class RankedButton extends Button {
                 "&fIn Queue: &b" + queue.getProfiles().size(),
                 "&fIn Fights: &b" + queue.getQueueFightCount(),
                 "",
-                "&fTotal Wins: &b" + Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId()).getProfileData().getRankedKitData().get(kit.getName()).getWins(),
-                "&fTotal Losses: &b" + Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId()).getProfileData().getRankedKitData().get(kit.getName()).getLosses(),
-                "&fElo: &b" + Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId()).getProfileData().getRankedKitData().get(kit.getName()).getElo(),
+                "&fTotal Wins: &b" + Alley.getInstance().getProfileService().getProfile(player.getUniqueId()).getProfileData().getRankedKitData().get(kit.getName()).getWins(),
+                "&fTotal Losses: &b" + Alley.getInstance().getProfileService().getProfile(player.getUniqueId()).getProfileData().getRankedKitData().get(kit.getName()).getLosses(),
+                "&fElo: &b" + Alley.getInstance().getProfileService().getProfile(player.getUniqueId()).getProfileData().getRankedKitData().get(kit.getName()).getElo(),
                 "",
                 "&fClick to join the &b" + kit.getName() + " &fqueue!")
         ).hideMeta().build();
@@ -49,7 +49,7 @@ public class RankedButton extends Button {
 
         if (Alley.getInstance().getServerService().check(player)) return;
 
-        Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
+        Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
         if (profile.getProfileData().isRankedBanned()) {
             player.closeInventory();
             Arrays.asList(
@@ -66,6 +66,6 @@ public class RankedButton extends Button {
         PlayerUtil.reset(player, false);
         player.closeInventory();
         playNeutral(player);
-        Alley.getInstance().getHotbarRepository().applyHotbarItems(player, HotbarType.QUEUE);
+        Alley.getInstance().getHotbarService().applyHotbarItems(player, HotbarType.QUEUE);
     }
 }

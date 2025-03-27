@@ -5,7 +5,7 @@ import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.feature.cosmetic.interfaces.ICosmetic;
 import dev.revere.alley.util.chat.CC;
-import dev.revere.alley.util.data.item.ItemBuilder;
+import dev.revere.alley.util.item.ItemBuilder;
 import lombok.AllArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -60,7 +60,7 @@ public class ShopEffectButton extends Button {
         }
         playNeutral(player);
 
-        Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
+        Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
         if (player.hasPermission(cosmetic.getPermission())) {
             player.sendMessage(CC.translate("&cYou already own this cosmetic."));
             return;

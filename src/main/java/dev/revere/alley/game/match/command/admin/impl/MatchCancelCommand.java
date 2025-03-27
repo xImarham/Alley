@@ -32,7 +32,7 @@ public class MatchCancelCommand extends BaseCommand {
             return;
         }
 
-        Profile profile = Alley.getInstance().getProfileRepository().getProfile(target.getUniqueId());
+        Profile profile = Alley.getInstance().getProfileService().getProfile(target.getUniqueId());
 
         if (profile.getState() != EnumProfileState.PLAYING || profile.getMatch() == null) {
             player.sendMessage(CC.translate("&cThat player is not in a match."));

@@ -31,7 +31,7 @@ public class FreeForAllArena extends AbstractArena {
 
     @Override
     public void createArena() {
-        Alley.getInstance().getArenaRepository().getArenas().add(this);
+        Alley.getInstance().getArenaService().getArenas().add(this);
         saveArena();
     }
 
@@ -57,7 +57,7 @@ public class FreeForAllArena extends AbstractArena {
         FileConfiguration config = Alley.getInstance().getConfigService().getConfig("storage/arenas.yml");
         config.set("arenas." + getName(), null);
 
-        Alley.getInstance().getArenaRepository().getArenas().remove(this);
+        Alley.getInstance().getArenaService().getArenas().remove(this);
         Alley.getInstance().getConfigService().saveConfig(Alley.getInstance().getConfigService().getConfigFile("storage/arenas.yml"), config);
     }
 }

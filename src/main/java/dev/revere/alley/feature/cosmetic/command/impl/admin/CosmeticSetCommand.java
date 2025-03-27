@@ -36,7 +36,7 @@ public class CosmeticSetCommand extends BaseCommand {
             return;
         }
 
-        Profile profile = Alley.getInstance().getProfileRepository().getProfile(target.getUniqueId());
+        Profile profile = Alley.getInstance().getProfileService().getProfile(target.getUniqueId());
 
         String type = args[1];
         String cosmeticName = args[2];

@@ -24,7 +24,7 @@ public class EmojiListener implements Listener {
             return;
         }
 
-        for (Map.Entry<String, String> entry : Alley.getInstance().getEmojiRepository().getSymbolReplacements().entrySet()) {
+        for (Map.Entry<String, String> entry : Alley.getInstance().getEmojiRepository().getEmojis().entrySet()) {
             if (message.contains(entry.getKey())) {
                 message = message.replace(entry.getKey(), entry.getValue());
             }

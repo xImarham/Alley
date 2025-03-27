@@ -29,7 +29,7 @@ public class KitSetInvCommand extends BaseCommand {
             return;
         }
 
-        Kit kit = Alley.getInstance().getKitRepository().getKit(args[0]);
+        Kit kit = Alley.getInstance().getKitService().getKit(args[0]);
         if (kit == null) {
             player.sendMessage(CC.translate(KitLocale.KIT_NOT_FOUND.getMessage()));
             return;
@@ -45,7 +45,7 @@ public class KitSetInvCommand extends BaseCommand {
 
         kit.setInventory(inventory);
         kit.setArmor(armor);
-        Alley.getInstance().getKitRepository().saveKit(kit);
+        Alley.getInstance().getKitService().saveKit(kit);
         player.sendMessage(CC.translate(KitLocale.KIT_INVENTORY_SET.getMessage().replace("{kit-name}", kit.getName())));
     }
 }

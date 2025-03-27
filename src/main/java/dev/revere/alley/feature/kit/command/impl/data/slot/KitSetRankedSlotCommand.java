@@ -29,14 +29,14 @@ public class KitSetRankedSlotCommand extends BaseCommand {
         String kitName = args[0];
         int slot = Integer.parseInt(args[1]);
 
-        Kit kit = Alley.getInstance().getKitRepository().getKit(kitName);
+        Kit kit = Alley.getInstance().getKitService().getKit(kitName);
         if (kit == null) {
             player.sendMessage(CC.translate(KitLocale.KIT_NOT_FOUND.getMessage()));
             return;
         }
 
         kit.setRankedslot(slot);
-        Alley.getInstance().getKitRepository().saveKit(kit);
+        Alley.getInstance().getKitService().saveKit(kit);
         player.sendMessage(CC.translate(KitLocale.KIT_RANKEDSLOT_SET.getMessage()).replace("{kit-name}", kitName).replace("{slot}", args[1]));
     }
 }

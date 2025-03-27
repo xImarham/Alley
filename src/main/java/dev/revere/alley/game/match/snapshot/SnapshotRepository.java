@@ -22,7 +22,7 @@ public class SnapshotRepository {
     }
 
     /**
-     * Get a snapshot by UUID
+     * Get a snapshot by UUID.
      *
      * @param uuid the UUID of the snapshot
      * @return the snapshot

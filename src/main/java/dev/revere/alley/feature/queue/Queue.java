@@ -35,7 +35,7 @@ public class Queue {
     public Queue(Kit kit, boolean ranked) {
         this.kit = kit;
         this.ranked = ranked;
-        Alley.getInstance().getQueueRepository().getQueues().add(this);
+        Alley.getInstance().getQueueService().getQueues().add(this);
     }
 
     /**
@@ -72,7 +72,7 @@ public class Queue {
         QueueProfile queueProfile = new QueueProfile(this, uuid);
         queueProfile.setElo(elo);
 
-        Profile profile = Alley.getInstance().getProfileRepository().getProfile(uuid);
+        Profile profile = Alley.getInstance().getProfileService().getProfile(uuid);
         profile.setQueueProfile(queueProfile);
         profile.setState(EnumProfileState.WAITING);
 
@@ -89,7 +89,7 @@ public class Queue {
     public void removePlayer(QueueProfile queueProfile) {
         this.profiles.remove(queueProfile);
 
-        Profile profile = Alley.getInstance().getProfileRepository().getProfile(queueProfile.getUuid());
+        Profile profile = Alley.getInstance().getProfileService().getProfile(queueProfile.getUuid());
         profile.setQueueProfile(null);
         profile.setState(EnumProfileState.LOBBY);
 
@@ -98,7 +98,7 @@ public class Queue {
             return;
         }
 
-        Alley.getInstance().getHotbarRepository().applyHotbarItems(player, HotbarType.LOBBY);
+        Alley.getInstance().getHotbarService().applyHotbarItems(player, HotbarType.LOBBY);
         player.sendMessage(CC.translate("&cYou've left the queue."));
     }
 
@@ -109,6 +109,6 @@ public class Queue {
      * @return The profile object.
      */
     public Profile getProfile(UUID uuid) {
-        return Alley.getInstance().getProfileRepository().getProfile(uuid);
+        return Alley.getInstance().getProfileService().getProfile(uuid);
     }
 }

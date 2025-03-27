@@ -25,7 +25,7 @@ public class ArenaSetCuboidCommand extends BaseCommand {
         List<String> completion = new ArrayList<>();
 
         if (command.getArgs().length == 1 && command.getPlayer().hasPermission("alley.admin")) {
-            Alley.getInstance().getArenaRepository().getArenas().forEach(arena -> completion.add(arena.getName()));
+            Alley.getInstance().getArenaService().getArenas().forEach(arena -> completion.add(arena.getName()));
         }
 
         return completion;
@@ -49,20 +49,20 @@ public class ArenaSetCuboidCommand extends BaseCommand {
         }
 
         String arenaName = args[0];
-        if (Alley.getInstance().getArenaRepository().getArenaByName(arenaName) == null) {
+        if (Alley.getInstance().getArenaService().getArenaByName(arenaName) == null) {
             player.sendMessage(CC.translate("&cAn arena with that name does not exist!"));
             return;
         }
 
-        if (Alley.getInstance().getArenaRepository().getArenaByName(arenaName).getType() == EnumArenaType.FFA) {
+        if (Alley.getInstance().getArenaService().getArenaByName(arenaName).getType() == EnumArenaType.FFA) {
             player.sendMessage(CC.translate("&cYou cannot set cuboids for Free-For-All arenas! You must use: &4/arena setsafezone pos1/pos2&c."));
             return;
         }
 
-        Alley.getInstance().getArenaRepository().getArenaByName(arenaName).setMinimum(arenaSelection.getMinimum());
-        Alley.getInstance().getArenaRepository().getArenaByName(arenaName).setMaximum(arenaSelection.getMaximum());
+        Alley.getInstance().getArenaService().getArenaByName(arenaName).setMinimum(arenaSelection.getMinimum());
+        Alley.getInstance().getArenaService().getArenaByName(arenaName).setMaximum(arenaSelection.getMaximum());
         player.sendMessage(CC.translate("&aCuboid has been set for arena &b" + arenaName + "&a!"));
 
-        Alley.getInstance().getArenaRepository().saveArena(Alley.getInstance().getArenaRepository().getArenaByName(arenaName));
+        Alley.getInstance().getArenaService().saveArena(Alley.getInstance().getArenaService().getArenaByName(arenaName));
     }
 }

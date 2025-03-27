@@ -33,7 +33,7 @@ public class PartyLookupCommand extends BaseCommand {
             return;
         }
 
-        Party party = Alley.getInstance().getPartyHandler().getParty(target);
+        Party party = Alley.getInstance().getPartyService().getParty(target);
         if (party == null) {
             player.sendMessage(CC.translate("&cThis player is not in a party."));
             return;

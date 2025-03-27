@@ -33,7 +33,7 @@ public class KitSetPotionCommand extends BaseCommand {
         }
 
         String kitName = args[0];
-        Kit kit = this.alley.getKitRepository().getKit(kitName);
+        Kit kit = this.alley.getKitService().getKit(kitName);
         if (kit == null) {
             sender.sendMessage(CC.translate(KitLocale.KIT_NOT_FOUND.getMessage()));
             return;
@@ -59,7 +59,7 @@ public class KitSetPotionCommand extends BaseCommand {
         }
 
         kit.setPotionEffects(effects);
-        this.alley.getKitRepository().saveKit(kit);
+        this.alley.getKitService().saveKit(kit);
         sender.sendMessage(CC.translate("&aSuccessfully set potion effects for kit &e" + kitName + "&a!"));
     }
 }

@@ -9,7 +9,7 @@ import dev.revere.alley.feature.cosmetic.impl.soundeffect.AbstractSoundEffect;
 import dev.revere.alley.feature.cosmetic.impl.soundeffect.SoundEffectRepository;
 import dev.revere.alley.feature.cosmetic.interfaces.ICosmeticRepository;
 import dev.revere.alley.feature.cosmetic.repository.CosmeticRepository;
-import dev.revere.alley.feature.hotbar.HotbarRepository;
+import dev.revere.alley.feature.hotbar.HotbarService;
 import dev.revere.alley.feature.hotbar.enums.HotbarType;
 import dev.revere.alley.feature.kit.Kit;
 import dev.revere.alley.feature.kit.settings.impl.KitSettingBattleRushImpl;
@@ -119,7 +119,7 @@ public abstract class AbstractMatch {
         gameParticipant.getPlayers().forEach(gamePlayer -> {
             Player player = Alley.getInstance().getServer().getPlayer(gamePlayer.getUuid());
             if (player != null) {
-                Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
+                Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
                 profile.setState(EnumProfileState.PLAYING);
                 profile.setMatch(this);
                 this.setupPlayer(player);
@@ -145,6 +145,14 @@ public abstract class AbstractMatch {
                 this.kit.applyPotionEffects(player);
             }
         }
+    }
+
+    public void endMatchOnServerStop() {
+        this.removePlacedBlocks();
+        this.placeBrokenBlocks();
+
+        Alley.getInstance().getMatchRepository().getMatches().remove(this);
+        this.runnable.cancel();
     }
 
     public void endMatch() {
@@ -188,7 +196,7 @@ public abstract class AbstractMatch {
                 Player player = Alley.getInstance().getServer().getPlayer(gamePlayer.getUuid());
                 if (player != null) {
                     this.resetPlayerState(player);
-                    Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
+                    Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
                     profile.setState(EnumProfileState.LOBBY);
                     profile.setMatch(null);
                     this.teleportPlayerToSpawn(player);
@@ -203,16 +211,17 @@ public abstract class AbstractMatch {
      * @param player The player to teleport.
      */
     private void teleportPlayerToSpawn(Player player) {
-        Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
+        if (player == null) return;
+        Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
         Alley.getInstance().getSpawnService().teleportToSpawn(player);
 
-        HotbarRepository hotbarRepository = Alley.getInstance().getHotbarRepository();
+        HotbarService hotbarService = Alley.getInstance().getHotbarService();
         if (profile.getParty() == null) {
-            hotbarRepository.applyHotbarItems(player, HotbarType.LOBBY);
+            hotbarService.applyHotbarItems(player, HotbarType.LOBBY);
             return;
         }
 
-        hotbarRepository.applyHotbarItems(player, HotbarType.PARTY);
+        hotbarService.applyHotbarItems(player, HotbarType.PARTY);
     }
 
     /**
@@ -332,7 +341,7 @@ public abstract class AbstractMatch {
      * @param killer The killer of the player.
      */
     private void handleEffects(Player player, Player killer) {
-        Profile profile = Alley.getInstance().getProfileRepository().getProfile(killer.getUniqueId());
+        Profile profile = Alley.getInstance().getProfileService().getProfile(killer.getUniqueId());
         String selectedKillEffectName = profile.getProfileData().getProfileCosmeticData().getSelectedKillEffect();
         String selectedSoundEffectName = profile.getProfileData().getProfileCosmeticData().getSelectedSoundEffect();
 
@@ -479,10 +488,10 @@ public abstract class AbstractMatch {
      * @param player The player to add.
      */
     public void addSpectator(Player player) {
-        Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
+        Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
         profile.setState(EnumProfileState.SPECTATING);
         profile.setMatch(this);
-        Alley.getInstance().getHotbarRepository().applyHotbarItems(player, HotbarType.SPECTATOR);
+        Alley.getInstance().getHotbarService().applyHotbarItems(player, HotbarType.SPECTATOR);
 
         if (arena.getCenter() == null) {
             player.sendMessage(CC.translate("&cThe arena is not set up for spectating"));
@@ -505,7 +514,7 @@ public abstract class AbstractMatch {
      * @param player The player to remove from spectating.
      */
     public void removeSpectator(Player player, boolean notify) {
-        Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
+        Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
         profile.setState(EnumProfileState.LOBBY);
         profile.setMatch(null);
 

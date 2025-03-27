@@ -28,13 +28,13 @@ public class ArenaSetDisplayNameCommand extends BaseCommand {
 
         String arenaName = args[0];
         String displayName = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
-        if (Alley.getInstance().getArenaRepository().getArenaByName(arenaName) == null) {
+        if (Alley.getInstance().getArenaService().getArenaByName(arenaName) == null) {
             sender.sendMessage(CC.translate("&cAn arena with that name does not exist!"));
             return;
         }
 
-        Alley.getInstance().getArenaRepository().getArenaByName(arenaName).setDisplayName(displayName);
-        Alley.getInstance().getArenaRepository().getArenaByName(arenaName).saveArena();
+        Alley.getInstance().getArenaService().getArenaByName(arenaName).setDisplayName(displayName);
+        Alley.getInstance().getArenaService().getArenaByName(arenaName).saveArena();
         sender.sendMessage(CC.translate("&aSuccessfully set the display name of the arena &e" + arenaName + " &ato &e" + displayName + "&a."));
     }
 }

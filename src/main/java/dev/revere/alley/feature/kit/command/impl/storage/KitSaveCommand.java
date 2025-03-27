@@ -28,13 +28,13 @@ public class KitSaveCommand extends BaseCommand {
 
         String kitName = args[0];
 
-        Kit kit = Alley.getInstance().getKitRepository().getKit(kitName);
+        Kit kit = Alley.getInstance().getKitService().getKit(kitName);
         if (kit == null) {
             player.sendMessage(CC.translate(KitLocale.KIT_NOT_FOUND.getMessage()));
             return;
         }
 
-        Alley.getInstance().getKitRepository().saveKit(kit);
+        Alley.getInstance().getKitService().saveKit(kit);
         player.sendMessage(CC.translate(KitLocale.KIT_SAVED.getMessage().replace("{kit-name}", kitName)));
     }
 }

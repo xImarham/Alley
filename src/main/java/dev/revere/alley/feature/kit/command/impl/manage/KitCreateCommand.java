@@ -5,9 +5,9 @@ import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.feature.kit.Kit;
-import dev.revere.alley.feature.kit.KitRepository;
+import dev.revere.alley.feature.kit.KitService;
 import dev.revere.alley.locale.impl.KitLocale;
-import dev.revere.alley.util.ActionBarUtil;
+import dev.revere.alley.util.visual.ActionBarUtil;
 import dev.revere.alley.util.InventoryUtil;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.Material;
@@ -33,8 +33,8 @@ public class KitCreateCommand extends BaseCommand {
 
         String kitName = args[0];
 
-        KitRepository kitRepository = Alley.getInstance().getKitRepository();
-        if (kitRepository.getKit(kitName) != null) {
+        KitService kitService = Alley.getInstance().getKitService();
+        if (kitService.getKit(kitName) != null) {
             player.sendMessage(CC.translate(KitLocale.KIT_ALREADY_EXISTS.getMessage()));
             return;
         }
@@ -50,7 +50,7 @@ public class KitCreateCommand extends BaseCommand {
         int slot;
         try {
             boolean slotTaken = false;
-            for (Kit kit : kitRepository.getKits()) {
+            for (Kit kit : kitService.getKits()) {
                 if (kit.getUnrankedslot() == Integer.parseInt(args[1])) {
                     player.sendMessage(CC.translate("&cThat slot is already taken by the &7" + kit.getName() + " &ckit!"));
                     slotTaken = true;
@@ -70,8 +70,8 @@ public class KitCreateCommand extends BaseCommand {
             return;
         }
 
-        kitRepository.createKit(kitName, inventory, armor, icon, slot);
-        Alley.getInstance().getProfileRepository().loadProfiles(); // to update the kits in the database
+        kitService.createKit(kitName, inventory, armor, icon, slot);
+        Alley.getInstance().getProfileService().loadProfiles(); // to update the kits in the database
         ActionBarUtil.sendMessage(player, KitLocale.KIT_CREATED.getMessage().replace("{kit-name}", kitName), 5);
 
         player.sendMessage(CC.translate(KitLocale.KIT_CREATED.getMessage().replace("{kit-name}", kitName)));

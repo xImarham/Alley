@@ -4,7 +4,7 @@ import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
-import dev.revere.alley.game.party.PartyHandler;
+import dev.revere.alley.game.party.PartyService;
 import dev.revere.alley.locale.impl.PartyLocale;
 import dev.revere.alley.profile.enums.EnumProfileState;
 import dev.revere.alley.util.chat.CC;
@@ -24,19 +24,19 @@ public class PartyCreateCommand extends BaseCommand {
         Player player = command.getPlayer();
         UUID playerUUID = player.getUniqueId();
 
-        PartyHandler partyHandler = Alley.getInstance().getPartyHandler();
+        PartyService partyService = Alley.getInstance().getPartyService();
 
-        if (Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId()).getState() != EnumProfileState.LOBBY) {
+        if (Alley.getInstance().getProfileService().getProfile(player.getUniqueId()).getState() != EnumProfileState.LOBBY) {
             player.sendMessage(CC.translate("&cYou must be at spawn in order to execute this command :v"));
             return;
         }
 
-        if (partyHandler.getPartyByLeader(player) != null) {
+        if (partyService.getPartyByLeader(player) != null) {
             player.sendMessage(CC.translate(PartyLocale.ALREADY_IN_PARTY.getMessage()));
             return;
         }
 
-        if (partyHandler.getPartyByMember(playerUUID) != null) {
+        if (partyService.getPartyByMember(playerUUID) != null) {
             player.sendMessage(CC.translate(PartyLocale.ALREADY_IN_PARTY.getMessage()));
             return;
         }
@@ -45,7 +45,7 @@ public class PartyCreateCommand extends BaseCommand {
             return;
         }
 
-        partyHandler.createParty(player);
+        partyService.createParty(player);
         player.sendMessage(CC.translate(PartyLocale.PARTY_CREATED.getMessage()));
     }
 }

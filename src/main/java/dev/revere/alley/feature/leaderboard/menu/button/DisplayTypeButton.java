@@ -5,7 +5,7 @@ import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.feature.leaderboard.enums.EnumLeaderboardType;
 import dev.revere.alley.feature.leaderboard.menu.LeaderboardMenu;
 import dev.revere.alley.profile.Profile;
-import dev.revere.alley.util.data.item.ItemBuilder;
+import dev.revere.alley.util.item.ItemBuilder;
 import lombok.AllArgsConstructor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -30,7 +30,7 @@ public class DisplayTypeButton extends Button {
      */
     @Override
     public ItemStack getButtonItem(Player player) {
-        Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
+        Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
         EnumLeaderboardType currentType = profile.getLeaderboardType();
 
         List<String> lore = new ArrayList<>();
@@ -54,7 +54,7 @@ public class DisplayTypeButton extends Button {
      */
     @Override
     public void clicked(Player player, ClickType clickType) {
-        Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
+        Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
 
         EnumLeaderboardType currentType = profile.getLeaderboardType();
         EnumLeaderboardType[] types = EnumLeaderboardType.values();

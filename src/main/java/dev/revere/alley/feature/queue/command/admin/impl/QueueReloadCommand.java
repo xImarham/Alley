@@ -18,7 +18,7 @@ public class QueueReloadCommand extends BaseCommand {
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
 
-        Alley.getInstance().getQueueRepository().reloadQueues();
+        Alley.getInstance().getQueueService().reloadQueues();
         player.sendMessage(CC.translate("&aYou've reloaded the queues."));
     }
 }

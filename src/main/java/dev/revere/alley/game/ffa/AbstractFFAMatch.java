@@ -3,7 +3,7 @@ package dev.revere.alley.game.ffa;
 import dev.revere.alley.Alley;
 import dev.revere.alley.feature.combat.CombatService;
 import dev.revere.alley.profile.Profile;
-import dev.revere.alley.profile.ProfileRepository;
+import dev.revere.alley.profile.ProfileService;
 import dev.revere.alley.util.chat.CC;
 import lombok.Getter;
 import lombok.Setter;
@@ -60,9 +60,9 @@ public abstract class AbstractFFAMatch {
      * @param killer The killer
      */
     public void handleCombatLog(Player player, Player killer) {
-        ProfileRepository profileRepository = Alley.getInstance().getProfileRepository();
-        Profile profile = profileRepository.getProfile(player.getUniqueId());
-        Profile killerProfile = profileRepository.getProfile(killer.getUniqueId());
+        ProfileService profileService = Alley.getInstance().getProfileService();
+        Profile profile = profileService.getProfile(player.getUniqueId());
+        Profile killerProfile = profileService.getProfile(killer.getUniqueId());
 
         profile.getProfileData().getFfaData().get(this.getKit().getName()).incrementDeaths();
         killerProfile.getProfileData().getFfaData().get(this.getKit().getName()).incrementKills();

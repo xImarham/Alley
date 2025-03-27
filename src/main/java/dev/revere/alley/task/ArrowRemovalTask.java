@@ -14,11 +14,16 @@ import org.bukkit.scheduler.BukkitRunnable;
 public class ArrowRemovalTask extends BukkitRunnable {
     @Override
     public void run() {
+        Bukkit.getLogger().info("[ArrowRemovalTask] Running arrow removal check...");
+
         for (World world : Bukkit.getWorlds()) {
             for (Entity entity : world.getEntities()) {
                 if (entity instanceof Arrow) {
                     Arrow arrow = (Arrow) entity;
-                    if (!arrow.isOnGround()) {
+                    Bukkit.getLogger().info("[ArrowRemovalTask] Found arrow: " + arrow.getUniqueId());
+
+                    if (arrow.isOnGround()) {
+                        Bukkit.getLogger().info("[ArrowRemovalTask] Removing arrow: " + arrow.getUniqueId());
                         arrow.remove();
                     }
                 }

@@ -5,7 +5,7 @@ import dev.revere.alley.feature.hotbar.enums.HotbarType;
 import dev.revere.alley.game.match.AbstractMatch;
 import dev.revere.alley.game.match.MatchRepository;
 import dev.revere.alley.game.party.Party;
-import dev.revere.alley.game.party.PartyHandler;
+import dev.revere.alley.game.party.PartyService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
 import dev.revere.alley.util.chat.CC;
@@ -80,8 +80,8 @@ public class ServerService {
      * @param plugin the instance of the plugin
      */
     public void disbandParties(Player player, Alley plugin) {
-        PartyHandler partyHandler = plugin.getPartyHandler();
-        List<Party> parties = new ArrayList<>(partyHandler.getParties());
+        PartyService partyService = plugin.getPartyService();
+        List<Party> parties = new ArrayList<>(partyService.getParties());
 
         if (parties.isEmpty()) {
             player.sendMessage(CC.translate("&cCould not find any parties to disband."));
@@ -89,7 +89,7 @@ public class ServerService {
             player.sendMessage(CC.translate("&cDisbanding a total of &f" + parties.size() + " &cparties."));
 
             for (Party party : parties) {
-                partyHandler.disbandParty(party.getLeader());
+                partyService.disbandParty(party.getLeader());
             }
         }
     }
@@ -101,13 +101,13 @@ public class ServerService {
      * @param plugin the instance of the plugin
      */
     public void removePlayersFromQueue(Player player, Alley plugin) {
-        for (Profile profile : plugin.getProfileRepository().getProfiles().values()) {
+        for (Profile profile : plugin.getProfileService().getProfiles().values()) {
             if (profile.getState() == EnumProfileState.WAITING) {
                 Player queuePlayer = plugin.getServer().getPlayer(profile.getUuid());
                 profile.setState(EnumProfileState.LOBBY);
-                plugin.getQueueRepository().getQueues().remove(profile.getQueueProfile().getQueue());
+                plugin.getQueueService().getQueues().remove(profile.getQueueProfile().getQueue());
                 profile.setQueueProfile(null);
-                plugin.getHotbarRepository().applyHotbarItems(queuePlayer, HotbarType.LOBBY);
+                plugin.getHotbarService().applyHotbarItems(queuePlayer, HotbarType.LOBBY);
                 plugin.getSpawnService().teleportToSpawn(queuePlayer);
                 queuePlayer.sendMessage(CC.translate("&cYou've been removed from the queue due to a server reboot."));
             }

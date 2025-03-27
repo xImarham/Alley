@@ -6,7 +6,7 @@ import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.annotation.CompleterData;
 import dev.revere.alley.feature.division.Division;
-import dev.revere.alley.feature.division.DivisionRepository;
+import dev.revere.alley.feature.division.DivisionService;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.entity.Player;
 
@@ -24,9 +24,9 @@ public class DivisionSetWinsCommand extends BaseCommand {
     public List<String> DivisionSetWinsCompleter(CommandArgs command) {
         List<String> completion = new ArrayList<>();
         if (command.getArgs().length == 1 && command.getPlayer().hasPermission("alley.admin")) {
-            Alley.getInstance().getDivisionRepository().getDivisions().forEach(division -> completion.add(division.getName()));
+            Alley.getInstance().getDivisionService().getDivisions().forEach(division -> completion.add(division.getName()));
         } else if (command.getArgs().length == 2 && command.getPlayer().hasPermission("alley.admin")) {
-            Division division = Alley.getInstance().getDivisionRepository().getDivision(command.getArgs()[0]);
+            Division division = Alley.getInstance().getDivisionService().getDivision(command.getArgs()[0]);
             if (division != null) {
                 division.getTiers().forEach(tier -> completion.add(tier.getName()));
             }
@@ -46,8 +46,8 @@ public class DivisionSetWinsCommand extends BaseCommand {
             return;
         }
 
-        DivisionRepository divisionRepository = Alley.getInstance().getDivisionRepository();
-        Division division = divisionRepository.getDivision(args[0]);
+        DivisionService divisionService = Alley.getInstance().getDivisionService();
+        Division division = divisionService.getDivision(args[0]);
         if (division == null) {
             player.sendMessage(CC.translate("&cA division with that name does not exist."));
             return;
@@ -73,7 +73,7 @@ public class DivisionSetWinsCommand extends BaseCommand {
         }
 
         division.getTier(tier).setRequiredWins(wins);
-        divisionRepository.saveDivision(division);
+        divisionService.saveDivision(division);
         player.sendMessage(CC.translate("&aSuccessfully set the required wins for the " + division.getDisplayName() + " division's " + tier + " tier to " + wins + "."));
     }
 }

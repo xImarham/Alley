@@ -32,7 +32,7 @@ public class PartyJoinCommand extends BaseCommand {
             return;
         }
 
-        Party party = Alley.getInstance().getPartyHandler().getPartyByLeader(target);
+        Party party = Alley.getInstance().getPartyService().getPartyByLeader(target);
         if (party == null) {
             player.sendMessage(CC.translate("&cThat player is not in a party."));
             return;
@@ -43,6 +43,6 @@ public class PartyJoinCommand extends BaseCommand {
             return;
         }
 
-        Alley.getInstance().getPartyHandler().joinParty(player, target);
+        Alley.getInstance().getPartyService().joinParty(player, target);
     }
 }

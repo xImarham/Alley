@@ -2,7 +2,6 @@ package dev.revere.alley.game.match.listener.impl;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.feature.arena.impl.StandAloneArena;
-import dev.revere.alley.feature.kit.settings.impl.KitSettingBattleRushImpl;
 import dev.revere.alley.feature.kit.settings.impl.KitSettingBuildImpl;
 import dev.revere.alley.feature.kit.settings.impl.KitSettingSpleefImpl;
 import dev.revere.alley.game.match.AbstractMatch;
@@ -47,7 +46,7 @@ public class MatchBlockListener implements Listener {
     @EventHandler
     private void onBlockBreak(BlockBreakEvent event) {
         Player player = event.getPlayer();
-        Profile profile = this.plugin.getProfileRepository().getProfile(player.getUniqueId());
+        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
 
         AbstractMatch match = profile.getMatch();
         if (match == null) {
@@ -103,7 +102,7 @@ public class MatchBlockListener implements Listener {
     @EventHandler
     private void onBlockPlace(BlockPlaceEvent event) {
         Player player = event.getPlayer();
-        Profile profile = this.plugin.getProfileRepository().getProfile(player.getUniqueId());
+        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
         int blockY = event.getBlock().getLocation().getBlockY();
 
         AbstractMatch match = profile.getMatch();
@@ -139,7 +138,7 @@ public class MatchBlockListener implements Listener {
     private void onProjectileHit(ProjectileHitEvent event) {
         if (event.getEntityType() == EntityType.SNOWBALL && event.getEntity().getShooter() instanceof Player) {
             Player player = (Player) event.getEntity().getShooter();
-            Profile profile = this.plugin.getProfileRepository().getProfile(player.getUniqueId());
+            Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
 
             if (profile.getState() != EnumProfileState.PLAYING) return;
             if (profile.getMatch().getState() != EnumMatchState.RUNNING) return;

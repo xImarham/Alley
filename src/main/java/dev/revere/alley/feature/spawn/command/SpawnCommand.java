@@ -21,7 +21,7 @@ public class SpawnCommand extends BaseCommand {
     @CommandData(name = "spawn", permission = "alley.admin")
     public void onCommand(CommandArgs args) {
         Player player = args.getPlayer();
-        Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
+        Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
         if (profile.getState() == EnumProfileState.FFA || profile.getState() == EnumProfileState.PLAYING) {
             player.sendMessage(CC.translate("&cYou cannot teleport to spawn while in this state."));
             return;
@@ -29,7 +29,7 @@ public class SpawnCommand extends BaseCommand {
 
         PlayerUtil.reset(player, false);
         Alley.getInstance().getSpawnService().teleportToSpawn(player);
-        Alley.getInstance().getHotbarRepository().applyHotbarItems(player, HotbarType.LOBBY);
+        Alley.getInstance().getHotbarService().applyHotbarItems(player, HotbarType.LOBBY);
         player.sendMessage(CC.translate(Alley.getInstance().getConfigService().getMessagesConfig().getString("spawn.teleported")));
     }
 }

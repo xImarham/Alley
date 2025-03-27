@@ -25,7 +25,7 @@ public class DivisionsMenu extends Menu {
         final Map<Integer, Button> buttons = new HashMap<>();
 
         int slot = 10;
-        for (Division division : Alley.getInstance().getDivisionRepository().getDivisions()) {
+        for (Division division : Alley.getInstance().getDivisionService().getDivisions()) {
             buttons.put(slot++, new DivisionButton(division));
             if (slot == 17 || slot == 26 || slot == 35 || slot == 44 || slot == 53) {
                 slot += 2;

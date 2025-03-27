@@ -19,7 +19,7 @@ public class QueueListener implements Listener {
     @EventHandler
     private void onPlayerQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
-        Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
+        Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
 
         if (profile.getState() == EnumProfileState.WAITING) {
             if (profile.getQueueProfile().getQueue() != null) {
@@ -31,7 +31,7 @@ public class QueueListener implements Listener {
     @EventHandler
     private void onPlayerKick(PlayerKickEvent event) {
         Player player = event.getPlayer();
-        Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
+        Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
 
         if (profile.getState() == EnumProfileState.WAITING) {
             if (profile.getQueueProfile().getQueue() != null) {

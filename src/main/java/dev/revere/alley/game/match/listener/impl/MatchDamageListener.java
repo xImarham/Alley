@@ -37,7 +37,7 @@ public class MatchDamageListener implements Listener {
     private void onEntityDamage(EntityDamageEvent event) {
         if (!(event.getEntity() instanceof Player)) return;
         Player player = (Player) event.getEntity();
-        Profile profile = this.plugin.getProfileRepository().getProfile(player.getUniqueId());
+        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
 
         if (profile.getState() == EnumProfileState.SPECTATING) event.setCancelled(true);
         if (profile.getState() == EnumProfileState.PLAYING) {
@@ -72,7 +72,7 @@ public class MatchDamageListener implements Listener {
             EnderPearl enderPearl = (EnderPearl) event.getDamager();
             if (enderPearl.getShooter() instanceof Player) {
                 Player player = (Player) enderPearl.getShooter();
-                Profile profile = this.plugin.getProfileRepository().getProfile(player.getUniqueId());
+                Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
                 if (profile.getState() == EnumProfileState.PLAYING) {
                     Kit matchKit = profile.getMatch().getKit();
                     if (matchKit.isSettingEnabled(KitSettingBoxingImpl.class)
@@ -108,8 +108,8 @@ public class MatchDamageListener implements Listener {
 
         if (attacker != null && event.getEntity() instanceof Player) {
             Player damaged = (Player) event.getEntity();
-            Profile damagedprofile = this.plugin.getProfileRepository().getProfile(damaged.getUniqueId());
-            Profile attackerProfile = this.plugin.getProfileRepository().getProfile(attacker.getUniqueId());
+            Profile damagedprofile = this.plugin.getProfileService().getProfile(damaged.getUniqueId());
+            Profile attackerProfile = this.plugin.getProfileService().getProfile(attacker.getUniqueId());
 
             if (damagedprofile.getState() == EnumProfileState.SPECTATING) {
                 event.setCancelled(true);
@@ -158,7 +158,7 @@ public class MatchDamageListener implements Listener {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     private void onEntityDamageByEntityMonitor(EntityDamageByEntityEvent event) {
         if (event.getEntity() instanceof Player && event.getDamager() instanceof Player) {
-            Profile profile = this.plugin.getProfileRepository().getProfile(event.getEntity().getUniqueId());
+            Profile profile = this.plugin.getProfileService().getProfile(event.getEntity().getUniqueId());
             if (profile.getState() == EnumProfileState.SPECTATING) {
                 event.setCancelled(true);
                 return;

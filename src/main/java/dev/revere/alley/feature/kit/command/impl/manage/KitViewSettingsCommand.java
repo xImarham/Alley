@@ -26,7 +26,7 @@ public class KitViewSettingsCommand extends BaseCommand {
             return;
         }
 
-        Kit kit = Alley.getInstance().getKitRepository().getKit(args[0]);
+        Kit kit = Alley.getInstance().getKitService().getKit(args[0]);
         if (kit == null) {
             sender.sendMessage(CC.translate(KitLocale.KIT_NOT_FOUND.getMessage()));
             return;

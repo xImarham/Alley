@@ -3,7 +3,7 @@ package dev.revere.alley.profile.listener;
 import dev.revere.alley.Alley;
 import dev.revere.alley.feature.hotbar.enums.HotbarType;
 import dev.revere.alley.profile.Profile;
-import dev.revere.alley.profile.ProfileRepository;
+import dev.revere.alley.profile.ProfileService;
 import dev.revere.alley.profile.enums.EnumProfileState;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.GameMode;
@@ -23,15 +23,15 @@ import org.bukkit.inventory.InventoryHolder;
 
 
 public class ProfileListener implements Listener {
-    private final ProfileRepository profileRepository;
+    private final ProfileService profileService;
 
     /**
      * Constructor for the ProfileListener class.
      *
-     * @param profileRepository The profile repository.
+     * @param profileService The profile repository.
      */
-    public ProfileListener(ProfileRepository profileRepository) {
-        this.profileRepository = profileRepository;
+    public ProfileListener(ProfileService profileService) {
+        this.profileService = profileService;
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -48,7 +48,7 @@ public class ProfileListener implements Listener {
         Profile profile = new Profile(event.getPlayer().getUniqueId());
         profile.load();
 
-        this.profileRepository.addProfile(profile);
+        this.profileService.addProfile(profile);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -59,7 +59,7 @@ public class ProfileListener implements Listener {
         }
 
         Player player = event.getPlayer();
-        Profile profile = this.profileRepository.getProfile(player.getUniqueId());
+        Profile profile = this.profileService.getProfile(player.getUniqueId());
         profile.setState(EnumProfileState.LOBBY);
         profile.setName(player.getName());
         profile.setFfaMatch(null);
@@ -67,7 +67,7 @@ public class ProfileListener implements Listener {
         profile.setMatch(null);
 
         Alley.getInstance().getSpawnService().teleportToSpawn(player);
-        Alley.getInstance().getHotbarRepository().applyHotbarItems(player, HotbarType.LOBBY);
+        Alley.getInstance().getHotbarService().applyHotbarItems(player, HotbarType.LOBBY);
 
         player.setFlySpeed(1 * 0.1F);
         player.setWalkSpeed(2 * 0.1F);
@@ -98,7 +98,7 @@ public class ProfileListener implements Listener {
     private void onEntityDamage(EntityDamageEvent event) {
         if (!(event.getEntity() instanceof Player)) return;
         Player player = (Player) event.getEntity();
-        Profile profile = this.profileRepository.getProfile(player.getUniqueId());
+        Profile profile = this.profileService.getProfile(player.getUniqueId());
         if (profile.getState() == EnumProfileState.LOBBY
                 || profile.getState() == EnumProfileState.SPECTATING
                 || profile.getState() == EnumProfileState.EDITING
@@ -110,7 +110,7 @@ public class ProfileListener implements Listener {
     @EventHandler
     public void onPlayerQuitEvent(PlayerQuitEvent event) {
         Player player = event.getPlayer();
-        Profile profile = this.profileRepository.getProfile(player.getUniqueId());
+        Profile profile = this.profileService.getProfile(player.getUniqueId());
         event.setQuitMessage(null);
         profile.setOnline(false);
         profile.save();
@@ -119,7 +119,7 @@ public class ProfileListener implements Listener {
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
-        Profile profile = this.profileRepository.getProfile(player.getUniqueId());
+        Profile profile = this.profileService.getProfile(player.getUniqueId());
         if (profile.getState() == EnumProfileState.LOBBY) {
             if (player.getGameMode() == GameMode.CREATIVE) return;
             event.setCancelled(true);

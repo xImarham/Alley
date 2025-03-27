@@ -18,8 +18,8 @@ public class KillEffectRepository extends BaseCosmeticRepository<AbstractKillEff
      * Constructor to register all kill effects
      */
     public KillEffectRepository() {
-        registerCosmetic(NoneKillEffect.class);
-        registerCosmetic(ThunderKillEffect.class);
-        registerCosmetic(BloodKillEffect.class);
+        this.registerCosmetic(NoneKillEffect.class);
+        this.registerCosmetic(ThunderKillEffect.class);
+        this.registerCosmetic(BloodKillEffect.class);
     }
 }

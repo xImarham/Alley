@@ -26,7 +26,7 @@ public class PartyAnnounceCommand extends BaseCommand {
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
-        Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
+        Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
         if (profile.getParty() == null) {
             player.sendMessage(CC.translate(PartyLocale.NOT_IN_PARTY.getMessage()));
             return;
@@ -57,6 +57,6 @@ public class PartyAnnounceCommand extends BaseCommand {
 
         cooldown.resetCooldown();
 
-        Alley.getInstance().getPartyHandler().announceParty(profile.getParty());
+        Alley.getInstance().getPartyService().announceParty(profile.getParty());
     }
 }

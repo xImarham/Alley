@@ -20,7 +20,7 @@ public class ToggleScoreboardLinesCommand extends BaseCommand {
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
 
-        Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
+        Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
         profile.getProfileData().getProfileSettingData().setShowScoreboardLines(!profile.getProfileData().getProfileSettingData().isShowScoreboardLines());
 
         player.sendMessage(CC.translate(ProfileLocale.TOGGLED_SCOREBOARD_LINES.getMessage().replace("{status}", profile.getProfileData().getProfileSettingData().isShowScoreboardLines() ? "&aenabled" : "&cdisabled")));

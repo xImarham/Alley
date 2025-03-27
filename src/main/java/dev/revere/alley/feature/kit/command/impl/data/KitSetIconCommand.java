@@ -28,7 +28,7 @@ public class KitSetIconCommand extends BaseCommand {
 
         String kitName = args[0];
 
-        Kit kit = Alley.getInstance().getKitRepository().getKit(kitName);
+        Kit kit = Alley.getInstance().getKitService().getKit(kitName);
         if (kit == null) {
             player.sendMessage(CC.translate(KitLocale.KIT_NOT_FOUND.getMessage()));
             return;
@@ -36,7 +36,7 @@ public class KitSetIconCommand extends BaseCommand {
 
         kit.setIcon(player.getItemInHand().getType());
         kit.setIconData(player.getItemInHand().getDurability());
-        Alley.getInstance().getKitRepository().saveKit(kit);
+        Alley.getInstance().getKitService().saveKit(kit);
         player.sendMessage(CC.translate(KitLocale.KIT_ICON_SET.getMessage()).replace("{kit-name}", kit.getName()).replace("{icon}", player.getItemInHand().getType().name().toUpperCase() + ":" + player.getItemInHand().getDurability()));
     }
 }

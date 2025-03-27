@@ -24,7 +24,7 @@ public class ArenaSetSpawnCommand extends BaseCommand {
         List<String> completion = new ArrayList<>();
 
         if (command.getArgs().length == 1 && command.getPlayer().hasPermission("alley.admin")) {
-            Alley.getInstance().getArenaRepository().getArenas().forEach(arena -> completion.add(arena.getName()));
+            Alley.getInstance().getArenaService().getArenas().forEach(arena -> completion.add(arena.getName()));
         }
 
         return completion;
@@ -44,7 +44,7 @@ public class ArenaSetSpawnCommand extends BaseCommand {
         String arenaName = args[0];
         String spawnType = args[1];
 
-        if (Alley.getInstance().getArenaRepository().getArenaByName(arenaName) == null) {
+        if (Alley.getInstance().getArenaService().getArenaByName(arenaName) == null) {
             player.sendMessage(CC.translate("&cAn arena with that name does not exist!"));
             return;
         }
@@ -56,31 +56,31 @@ public class ArenaSetSpawnCommand extends BaseCommand {
 
         switch (spawnType.toLowerCase()) {
             case "pos1":
-                if (Alley.getInstance().getArenaRepository().getArenaByName(arenaName).getType() == EnumArenaType.FFA) {
+                if (Alley.getInstance().getArenaService().getArenaByName(arenaName).getType() == EnumArenaType.FFA) {
                     player.sendMessage(CC.translate("&cFFA Arenas do not need a spawn position!"));
                     return;
                 }
-                Alley.getInstance().getArenaRepository().getArenaByName(arenaName).setPos1(player.getLocation());
+                Alley.getInstance().getArenaService().getArenaByName(arenaName).setPos1(player.getLocation());
                 player.sendMessage(CC.translate("&aSpawn Position 1 has been set for arena &b" + arenaName + "&a!"));
                 break;
             case "ffa":
-                if (Alley.getInstance().getArenaRepository().getArenaByName(arenaName).getType() != EnumArenaType.FFA) {
+                if (Alley.getInstance().getArenaService().getArenaByName(arenaName).getType() != EnumArenaType.FFA) {
                     player.sendMessage(CC.translate("&cThis arena is not an FFA arena!"));
                     return;
                 }
-                Alley.getInstance().getArenaRepository().getArenaByName(arenaName).setPos1(player.getLocation());
+                Alley.getInstance().getArenaService().getArenaByName(arenaName).setPos1(player.getLocation());
                 player.sendMessage(CC.translate("&aSpawn Position has been set for arena &b" + arenaName + "&a!"));
                 break;
             default:
-                if (Alley.getInstance().getArenaRepository().getArenaByName(arenaName).getType() == EnumArenaType.FFA) {
+                if (Alley.getInstance().getArenaService().getArenaByName(arenaName).getType() == EnumArenaType.FFA) {
                     player.sendMessage(CC.translate("&cFFA Arenas do not need a spawn position!"));
                     return;
                 }
-                Alley.getInstance().getArenaRepository().getArenaByName(arenaName).setPos2(player.getLocation());
+                Alley.getInstance().getArenaService().getArenaByName(arenaName).setPos2(player.getLocation());
                 player.sendMessage(CC.translate("&aSpawn Position 2 has been set for arena &b" + arenaName + "&a!"));
                 break;
         }
 
-        Alley.getInstance().getArenaRepository().saveArena(Alley.getInstance().getArenaRepository().getArenaByName(arenaName));
+        Alley.getInstance().getArenaService().saveArena(Alley.getInstance().getArenaService().getArenaByName(arenaName));
     }
 }

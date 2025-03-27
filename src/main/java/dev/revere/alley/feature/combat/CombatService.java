@@ -36,7 +36,7 @@ public class CombatService {
      * @param attacker The player who attacked.
      */
     public void setLastAttacker(Player victim, Player attacker) {
-        EnumProfileState profileState = Alley.getInstance().getProfileRepository().getProfile(victim.getUniqueId()).getState();
+        EnumProfileState profileState = Alley.getInstance().getProfileService().getProfile(victim.getUniqueId()).getState();
 
         long expirationTime = (profileState == EnumProfileState.FFA) ? this.ffaExpirationTime : this.defaultExpirationTime;
 

@@ -3,11 +3,11 @@ package dev.revere.alley.feature.queue.menu;
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.api.menu.Menu;
-import dev.revere.alley.feature.queue.QueueRepository;
+import dev.revere.alley.feature.queue.QueueService;
 import dev.revere.alley.feature.queue.menu.sub.UnrankedMenu;
 import dev.revere.alley.game.ffa.menu.FFAMenu;
 import dev.revere.alley.util.chat.CC;
-import dev.revere.alley.util.data.item.ItemBuilder;
+import dev.revere.alley.util.item.ItemBuilder;
 import lombok.AllArgsConstructor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -53,13 +53,13 @@ public class QueuesMenuDefault extends Menu {
     public Map<Integer, Button> getButtons(Player player) {
         Map<Integer, Button> buttons = new HashMap<>();
 
-        QueueRepository queueRepository = this.plugin.getQueueRepository();
+        QueueService queueService = this.plugin.getQueueService();
 
         buttons.put(11, new QueuesButtonDefault("&b&lSolos", Material.DIAMOND_SWORD, 0, Arrays.asList(
                 "&7Casual 1v1s with",
                 "&7no loss penalty.",
                 "",
-                "&bPlayers: &f" + queueRepository.getPlayerCountOfGameType("Unranked"),
+                "&bPlayers: &f" + queueService.getPlayerCountOfGameType("Unranked"),
                 "",
                 "&aClick to play!"
         )));
@@ -68,7 +68,7 @@ public class QueuesMenuDefault extends Menu {
                 "&7Practice against bots",
                 "&7to improve your skills.",
                 "",
-                "&bPlayers: &f" + queueRepository.getPlayerCountOfGameType("Bots"),
+                "&bPlayers: &f" + queueService.getPlayerCountOfGameType("Bots"),
                 "",
                 "&aClick to play!"
         )));
@@ -77,7 +77,7 @@ public class QueuesMenuDefault extends Menu {
                 "&7Free for all with",
                 "&7infinity respawns.",
                 "",
-                "&bPlayers: &f" + queueRepository.getPlayerCountOfGameType("FFA"),
+                "&bPlayers: &f" + queueService.getPlayerCountOfGameType("FFA"),
                 "",
                 "&aClick to play!"
         )));

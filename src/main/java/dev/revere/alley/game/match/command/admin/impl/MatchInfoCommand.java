@@ -34,7 +34,7 @@ public class MatchInfoCommand extends BaseCommand {
             return;
         }
 
-        Profile profile = Alley.getInstance().getProfileRepository().getProfile(target.getUniqueId());
+        Profile profile = Alley.getInstance().getProfileService().getProfile(target.getUniqueId());
         if (profile.getMatch() == null) {
             sender.sendMessage(CC.translate("&cThis player is not in a match."));
             return;

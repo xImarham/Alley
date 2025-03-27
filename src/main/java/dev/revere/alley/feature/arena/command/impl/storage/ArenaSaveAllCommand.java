@@ -19,8 +19,8 @@ public class ArenaSaveAllCommand extends BaseCommand {
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
 
-        for (AbstractArena arena : Alley.getInstance().getArenaRepository().getArenas()) {
-            Alley.getInstance().getArenaRepository().saveArena(arena);
+        for (AbstractArena arena : Alley.getInstance().getArenaService().getArenas()) {
+            Alley.getInstance().getArenaService().saveArena(arena);
         }
 
         player.sendMessage(CC.translate("&aAll arenas have been saved!"));

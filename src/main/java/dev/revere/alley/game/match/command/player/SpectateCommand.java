@@ -33,13 +33,13 @@ public class SpectateCommand extends BaseCommand {
             return;
         }
 
-        Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
+        Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
         if (profile.getState() != EnumProfileState.LOBBY) {
             player.sendMessage(CC.translate("&cYou can only spectate players in the lobby."));
             return;
         }
 
-        Profile targetProfile = Alley.getInstance().getProfileRepository().getProfile(target.getUniqueId());
+        Profile targetProfile = Alley.getInstance().getProfileService().getProfile(target.getUniqueId());
         if (targetProfile.getState() != EnumProfileState.PLAYING) {
             player.sendMessage(CC.translate("&cYou are unable to spectate that player."));
             return;

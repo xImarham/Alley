@@ -21,7 +21,7 @@ import dev.revere.alley.game.match.player.participant.TeamGameParticipant;
 import dev.revere.alley.game.party.Party;
 import dev.revere.alley.locale.impl.PartyLocale;
 import dev.revere.alley.util.chat.CC;
-import dev.revere.alley.util.data.item.ItemBuilder;
+import dev.revere.alley.util.item.ItemBuilder;
 import lombok.AllArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -53,7 +53,7 @@ public class PartyEventSplitArenaSelectorMenu extends Menu {
     public Map<Integer, Button> getButtons(Player player) {
         Map<Integer, Button> buttons = new HashMap<>();
 
-        for (AbstractArena arena : Alley.getInstance().getArenaRepository().getArenas()) {
+        for (AbstractArena arena : Alley.getInstance().getArenaService().getArenas()) {
             if (arena.getKits().contains(kit.getName()) && arena.isEnabled() &&
                     (!(arena instanceof StandAloneArena) || !((StandAloneArena) arena).isActive())) {
                 buttons.put(buttons.size(), new PartyEventSplitArenaSelectorButton(kit, arena));
@@ -81,7 +81,7 @@ public class PartyEventSplitArenaSelectorMenu extends Menu {
         public void clicked(Player player, ClickType clickType) {
             if (clickType != ClickType.LEFT) return;
 
-            Party party = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId()).getParty();
+            Party party = Alley.getInstance().getProfileService().getProfile(player.getUniqueId()).getParty();
             if (party == null) {
                 player.closeInventory();
                 player.sendMessage(CC.translate(PartyLocale.NOT_IN_PARTY.getMessage()));
@@ -111,7 +111,7 @@ public class PartyEventSplitArenaSelectorMenu extends Menu {
                 }
             }
 
-            for (Queue queue : Alley.getInstance().getQueueRepository().getQueues()) {
+            for (Queue queue : Alley.getInstance().getQueueService().getQueues()) {
                 if (queue.getKit().equals(this.kit) && !queue.isRanked()) {
                     if (queue.getKit().isSettingEnabled(KitSettingLivesImpl.class)) {
                         AbstractMatch match = new MatchLivesRegularImpl(queue, this.kit, this.arena, false, participantA, participantB);

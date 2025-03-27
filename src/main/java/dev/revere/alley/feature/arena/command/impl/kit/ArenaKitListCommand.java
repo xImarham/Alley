@@ -23,7 +23,7 @@ public class ArenaKitListCommand extends BaseCommand {
         List<String> completion = new ArrayList<>();
 
         if (command.getArgs().length == 1 && command.getPlayer().hasPermission("alley.admin")) {
-            Alley.getInstance().getArenaRepository().getArenas().forEach(arena -> completion.add(arena.getName()));
+            Alley.getInstance().getArenaService().getArenas().forEach(arena -> completion.add(arena.getName()));
         }
 
         return completion;
@@ -41,17 +41,17 @@ public class ArenaKitListCommand extends BaseCommand {
         }
 
         String arenaName = args[0];
-        if (Alley.getInstance().getArenaRepository().getArenaByName(arenaName) == null) {
+        if (Alley.getInstance().getArenaService().getArenaByName(arenaName) == null) {
             player.sendMessage(CC.translate("&cAn arena with that name does not exist!"));
             return;
         }
 
         player.sendMessage("");
-        player.sendMessage(CC.translate("     &b&l" + arenaName + " Kit List &f(" + Alley.getInstance().getArenaRepository().getArenaByName(arenaName).getKits().size() + "&f)"));
-        if (Alley.getInstance().getArenaRepository().getArenaByName(arenaName).getKits().isEmpty()) {
+        player.sendMessage(CC.translate("     &b&l" + arenaName + " Kit List &f(" + Alley.getInstance().getArenaService().getArenaByName(arenaName).getKits().size() + "&f)"));
+        if (Alley.getInstance().getArenaService().getArenaByName(arenaName).getKits().isEmpty()) {
             player.sendMessage(CC.translate("      &f● &cNo Arena Kits available."));
         }
-        Alley.getInstance().getArenaRepository().getArenaByName(arenaName).getKits().forEach(kit -> player.sendMessage(CC.translate("      &f● &b" + kit)));
+        Alley.getInstance().getArenaService().getArenaByName(arenaName).getKits().forEach(kit -> player.sendMessage(CC.translate("      &f● &b" + kit)));
         player.sendMessage("");
     }
 }

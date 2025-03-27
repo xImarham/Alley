@@ -40,7 +40,7 @@ public class ResetStatsCommand extends BaseCommand {
             return;
         }
 
-        Profile profile = Alley.getInstance().getProfileRepository().getProfile(uuid);
+        Profile profile = Alley.getInstance().getProfileService().getProfile(uuid);
         if (profile == null) {
             player.sendMessage(CC.translate("&cThat player does not exist."));
             return;

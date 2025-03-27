@@ -27,7 +27,6 @@ public class TitleUtil {
     public void sendTitle(Player player, String title, String subtitle, int fadeIn, int stay, int fadeOut) {
         player.sendMessage(ChatColor.translateAlternateColorCodes('&', title));
 
-        // Convert text to JSON format
         IChatBaseComponent titleComponent = IChatBaseComponent.ChatSerializer.a("{\"text\":\"" + ChatColor.translateAlternateColorCodes('&', title) + "\"}");
         IChatBaseComponent subtitleComponent = IChatBaseComponent.ChatSerializer.a("{\"text\":\"" + ChatColor.translateAlternateColorCodes('&', subtitle) + "\"}");
 

@@ -7,7 +7,7 @@ import dev.revere.alley.feature.cosmetic.impl.soundeffect.AbstractSoundEffect;
 import dev.revere.alley.feature.cosmetic.impl.killeffects.AbstractKillEffect;
 import dev.revere.alley.feature.cosmetic.interfaces.ICosmetic;
 import dev.revere.alley.util.chat.CC;
-import dev.revere.alley.util.data.item.ItemBuilder;
+import dev.revere.alley.util.item.ItemBuilder;
 import dev.revere.alley.api.menu.Button;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
@@ -25,7 +25,7 @@ public class CosmeticButton extends Button {
 
     @Override
     public ItemStack getButtonItem(Player player) {
-        Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
+        Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
         boolean hasPermission = player.hasPermission(cosmetic.getPermission());
         boolean isSelected = profile.getProfileData().getProfileCosmeticData().isSelectedCosmetic(cosmetic);
 
@@ -61,7 +61,7 @@ public class CosmeticButton extends Button {
         }
         playNeutral(player);
 
-        Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
+        Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
         if (profile.getProfileData().getProfileCosmeticData().isSelectedCosmetic(cosmetic)) {
             player.sendMessage(CC.translate("&cYou already have this cosmetic selected."));
             return;

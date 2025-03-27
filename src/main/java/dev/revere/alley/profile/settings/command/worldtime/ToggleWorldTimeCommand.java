@@ -18,7 +18,7 @@ public class ToggleWorldTimeCommand extends BaseCommand {
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
-        Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
+        Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
 
         switch (profile.getProfileData().getProfileSettingData().getWorldTime()) {
             case DEFAULT:

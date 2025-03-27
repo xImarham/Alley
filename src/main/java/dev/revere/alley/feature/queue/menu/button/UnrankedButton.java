@@ -7,7 +7,7 @@ import dev.revere.alley.feature.kit.Kit;
 import dev.revere.alley.feature.queue.Queue;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.util.PlayerUtil;
-import dev.revere.alley.util.data.item.ItemBuilder;
+import dev.revere.alley.util.item.ItemBuilder;
 import lombok.AllArgsConstructor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
@@ -33,8 +33,8 @@ public class UnrankedButton extends Button {
                 "&fIn Queue: &b" + queue.getProfiles().size(),
                 "&fIn Fights: &b" + queue.getQueueFightCount(),
                 "",
-                "&fTotal Wins: &b" + Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId()).getProfileData().getUnrankedKitData().get(kit.getName()).getWins(),
-                "&fTotal Losses: &b" + Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId()).getProfileData().getUnrankedKitData().get(kit.getName()).getLosses(),
+                "&fTotal Wins: &b" + Alley.getInstance().getProfileService().getProfile(player.getUniqueId()).getProfileData().getUnrankedKitData().get(kit.getName()).getWins(),
+                "&fTotal Losses: &b" + Alley.getInstance().getProfileService().getProfile(player.getUniqueId()).getProfileData().getUnrankedKitData().get(kit.getName()).getLosses(),
                 "",
                 "&fClick to join the &b" + kit.getName() + " &fqueue!")
         ).hideMeta().build();
@@ -46,11 +46,11 @@ public class UnrankedButton extends Button {
 
         if (Alley.getInstance().getServerService().check(player)) return;
 
-        Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
+        Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
         queue.addPlayer(player, queue.isRanked() ? profile.getProfileData().getRankedKitData().get(queue.getKit().getName()).getElo() : 0);
         PlayerUtil.reset(player, false);
         player.closeInventory();
         playNeutral(player);
-        Alley.getInstance().getHotbarRepository().applyHotbarItems(player, HotbarType.QUEUE);
+        Alley.getInstance().getHotbarService().applyHotbarItems(player, HotbarType.QUEUE);
     }
 }

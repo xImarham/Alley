@@ -41,13 +41,13 @@ public class PartyInviteCommand extends BaseCommand {
             return;
         }
 
-        Party party = Alley.getInstance().getPartyHandler().getPartyByMember(player.getUniqueId());
+        Party party = Alley.getInstance().getPartyService().getPartyByMember(player.getUniqueId());
         if (party == null) {
             player.sendMessage(CC.translate(PartyLocale.NOT_IN_PARTY.getMessage()));
             return;
         }
 
-        Profile targetProfile = Alley.getInstance().getProfileRepository().getProfile(targetPlayer.getUniqueId());
+        Profile targetProfile = Alley.getInstance().getProfileService().getProfile(targetPlayer.getUniqueId());
         if (!targetProfile.getProfileData().getProfileSettingData().isPartyInvitesEnabled()) {
             player.sendMessage(CC.translate(PartyLocale.PLAYER_DISABLED_PARTY_INVITES.getMessage().replace("{player}", target)));
             return;
@@ -58,7 +58,7 @@ public class PartyInviteCommand extends BaseCommand {
             return;
         }
 
-        Alley.getInstance().getPartyHandler().sendInvite(party, player, targetPlayer);
+        Alley.getInstance().getPartyService().sendInvite(party, player, targetPlayer);
         party.notifyParty("&b" + targetPlayer.getName() + " &awas invited to the party by &b" + player.getName() + "&a.");
     }
 }

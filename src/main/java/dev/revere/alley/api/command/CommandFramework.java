@@ -28,7 +28,7 @@ public class CommandFramework implements CommandExecutor {
     private CommandMap map;
 
     /**
-     * Instantiates a new Command framework.
+     * Constructor for the CommandFramework class.
      *
      * @param plugin the plugin
      */

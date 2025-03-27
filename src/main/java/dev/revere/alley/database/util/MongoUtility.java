@@ -195,7 +195,7 @@ public class MongoUtility {
             ProfileUnrankedKitData kit = new ProfileUnrankedKitData();
 
             String storedDivision = kitEntry.getString("division");
-            Division division = Alley.getInstance().getDivisionRepository().getDivision(storedDivision);
+            Division division = Alley.getInstance().getDivisionService().getDivision(storedDivision);
             kit.setDivision(division.getName());
 
             String storedTier = kitEntry.getString("tier");

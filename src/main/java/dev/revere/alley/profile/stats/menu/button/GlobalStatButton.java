@@ -3,7 +3,7 @@ package dev.revere.alley.profile.stats.menu.button;
 import dev.revere.alley.Alley;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.data.impl.ProfileFFAData;
-import dev.revere.alley.util.data.item.ItemBuilder;
+import dev.revere.alley.util.item.ItemBuilder;
 import dev.revere.alley.api.menu.Button;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -24,7 +24,7 @@ public class GlobalStatButton extends Button {
      */
     @Override
     public ItemStack getButtonItem(Player player) {
-        Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
+        Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
         return new ItemBuilder(Material.NETHER_STAR)
                 .name("&b&lGlobal")
                 .lore(

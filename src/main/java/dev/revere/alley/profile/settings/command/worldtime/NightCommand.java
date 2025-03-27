@@ -18,7 +18,7 @@ public class NightCommand extends BaseCommand {
     @CommandData(name = "night")
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
-        Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
+        Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
 
         profile.getProfileData().getProfileSettingData().setTimeNight(player);
         player.sendMessage(CC.translate("&aYou have set the time to night."));

@@ -18,7 +18,7 @@ public class SunsetCommand extends BaseCommand {
     @CommandData(name = "sunset", aliases = "sunrise")
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
-        Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
+        Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
 
         profile.getProfileData().getProfileSettingData().setTimeSunset(player);
         player.sendMessage(CC.translate("&aYou have set the time to sunset."));

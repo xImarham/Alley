@@ -1,7 +1,7 @@
 package dev.revere.alley.game.ffa.command.player;
 
 import dev.revere.alley.Alley;
-import dev.revere.alley.game.ffa.FFARepository;
+import dev.revere.alley.game.ffa.FFAService;
 import dev.revere.alley.feature.kit.Kit;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.annotation.CommandData;
@@ -28,20 +28,20 @@ public class FFAJoinCommand extends BaseCommand {
         }
 
         String kitName = args[0];
-        Kit kit = Alley.getInstance().getKitRepository().getKit(kitName);
+        Kit kit = Alley.getInstance().getKitService().getKit(kitName);
         if (kit == null) {
             player.sendMessage("Kit not found.");
             return;
         }
 
-        Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
+        Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
         if (profile.getParty() != null) {
             player.sendMessage(CC.translate("&cYou must leave your party to join FFA."));
             return;
         }
 
-        FFARepository ffaRepository = Alley.getInstance().getFfaRepository();
-        ffaRepository.getMatches().stream()
+        FFAService ffaService = Alley.getInstance().getFfaService();
+        ffaService.getMatches().stream()
                 .filter(match -> match.getKit().equals(kit))
                 .filter(match -> match.getPlayers().size() < match.getMaxPlayers())
                 .findFirst()

@@ -2,9 +2,9 @@ package dev.revere.alley.task;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.feature.combat.CombatService;
-import dev.revere.alley.game.duel.DuelRequestHandler;
+import dev.revere.alley.game.duel.DuelRequestService;
 import dev.revere.alley.game.duel.DuelRequest;
-import dev.revere.alley.game.party.PartyHandler;
+import dev.revere.alley.game.party.PartyService;
 import dev.revere.alley.game.party.PartyRequest;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.entity.Player;
@@ -32,11 +32,11 @@ public class RepositoryCleanupTask extends BukkitRunnable {
             });
         }
 
-        DuelRequestHandler duelRequestHandler = Alley.getInstance().getDuelRequestHandler();
-        if (!duelRequestHandler.getDuelRequests().isEmpty()) {
+        DuelRequestService duelRequestService = Alley.getInstance().getDuelRequestService();
+        if (!duelRequestService.getDuelRequests().isEmpty()) {
             List<DuelRequest> expiredRequests = new ArrayList<>();
-            synchronized (duelRequestHandler.getDuelRequests()) {
-                duelRequestHandler.getDuelRequests().removeIf(duelRequest -> {
+            synchronized (duelRequestService.getDuelRequests()) {
+                duelRequestService.getDuelRequests().removeIf(duelRequest -> {
                     if (duelRequest.hasExpired()) {
                         expiredRequests.add(duelRequest);
                         return true;
@@ -47,11 +47,11 @@ public class RepositoryCleanupTask extends BukkitRunnable {
             this.notifyDuelRequestIndividuals(expiredRequests);
         }
 
-        PartyHandler partyHandler = Alley.getInstance().getPartyHandler();
-        if (!partyHandler.getParties().isEmpty()) {
+        PartyService partyService = Alley.getInstance().getPartyService();
+        if (!partyService.getParties().isEmpty()) {
             List<PartyRequest> expiredRequests = new ArrayList<>();
-            synchronized (partyHandler.getPartyRequests()) {
-                partyHandler.getPartyRequests().removeIf(request -> {
+            synchronized (partyService.getPartyRequests()) {
+                partyService.getPartyRequests().removeIf(request -> {
                     if (request.hasExpired()) {
                         expiredRequests.add(request);
                         return true;

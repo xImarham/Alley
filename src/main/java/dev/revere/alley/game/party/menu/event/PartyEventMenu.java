@@ -8,7 +8,7 @@ import dev.revere.alley.game.party.menu.event.impl.ffa.PartyEventFFAMenu;
 import dev.revere.alley.game.party.menu.event.impl.split.PartyEventSplitMenu;
 import dev.revere.alley.locale.impl.PartyLocale;
 import dev.revere.alley.util.chat.CC;
-import dev.revere.alley.util.data.item.ItemBuilder;
+import dev.revere.alley.util.item.ItemBuilder;
 import lombok.AllArgsConstructor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -101,7 +101,7 @@ public class PartyEventMenu extends Menu {
         public void clicked(Player player, ClickType clickType) {
             if (clickType != ClickType.LEFT) return;
 
-            Party party = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId()).getParty();
+            Party party = Alley.getInstance().getProfileService().getProfile(player.getUniqueId()).getParty();
             if (party == null) {
                 player.sendMessage(CC.translate(PartyLocale.NOT_IN_PARTY.getMessage()));
                 return;

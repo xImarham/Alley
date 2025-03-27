@@ -6,7 +6,6 @@ import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.api.menu.Menu;
 import dev.revere.alley.api.menu.impl.BackButton;
 import dev.revere.alley.feature.queue.menu.QueuesMenuDefault;
-import dev.revere.alley.feature.queue.menu.QueuesMenuModern;
 import dev.revere.alley.feature.queue.menu.button.UnrankedButton;
 import org.bukkit.entity.Player;
 
@@ -31,7 +30,7 @@ public class UnrankedMenu extends Menu {
 
         buttons.put(0, new BackButton(new QueuesMenuDefault()));
 
-        for (Queue queue : Alley.getInstance().getQueueRepository().getQueues()) {
+        for (Queue queue : Alley.getInstance().getQueueService().getQueues()) {
             if (!queue.isRanked()) {
                 buttons.put(queue.getKit().getUnrankedslot(), new UnrankedButton(queue));
             }

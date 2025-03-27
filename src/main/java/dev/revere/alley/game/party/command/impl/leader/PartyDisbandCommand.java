@@ -4,7 +4,7 @@ import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
-import dev.revere.alley.game.party.PartyHandler;
+import dev.revere.alley.game.party.PartyService;
 import dev.revere.alley.locale.impl.PartyLocale;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
@@ -21,9 +21,9 @@ public class PartyDisbandCommand extends BaseCommand {
     @CommandData(name = "party.disband", aliases = {"p.disband"})
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
-        Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
+        Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
 
-        if (Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId()).getState() != EnumProfileState.LOBBY) {
+        if (Alley.getInstance().getProfileService().getProfile(player.getUniqueId()).getState() != EnumProfileState.LOBBY) {
             player.sendMessage(CC.translate("&cYou must be at spawn in order to execute this command :v"));
             return;
         }
@@ -33,9 +33,9 @@ public class PartyDisbandCommand extends BaseCommand {
             return;
         }
 
-        PartyHandler partyHandler = Alley.getInstance().getPartyHandler();
-        if (partyHandler.getPartyByLeader(player) != null) {
-            partyHandler.disbandParty(player);
+        PartyService partyService = Alley.getInstance().getPartyService();
+        if (partyService.getPartyByLeader(player) != null) {
+            partyService.disbandParty(player);
             player.sendMessage(CC.translate(PartyLocale.PARTY_DISBANDED.getMessage()));
             return;
         }

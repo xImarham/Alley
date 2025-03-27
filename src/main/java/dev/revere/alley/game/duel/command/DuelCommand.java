@@ -38,13 +38,13 @@ public class DuelCommand extends BaseCommand {
             return;
         }
 
-        Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
+        Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
         if (profile.getState() != EnumProfileState.LOBBY) {
             player.sendMessage(CC.translate("&cYou must be in the lobby to duel a player."));
             return;
         }
 
-        Profile targetProfile = Alley.getInstance().getProfileRepository().getProfile(target.getUniqueId());
+        Profile targetProfile = Alley.getInstance().getProfileService().getProfile(target.getUniqueId());
         if (targetProfile.getParty() != null && profile.getParty() == null) {
             player.sendMessage(CC.translate("&cThat player is in a party and you're not. You can't duel them."));
             return;

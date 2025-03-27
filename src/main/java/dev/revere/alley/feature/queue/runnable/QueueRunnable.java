@@ -16,7 +16,7 @@ import dev.revere.alley.game.match.impl.MatchRoundsRegularImpl;
 import dev.revere.alley.game.match.impl.kit.MatchStickFightImpl;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
-import dev.revere.alley.profile.ProfileRepository;
+import dev.revere.alley.profile.ProfileService;
 import dev.revere.alley.profile.enums.EnumProfileState;
 import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.util.logger.Logger;
@@ -37,7 +37,7 @@ import java.util.Optional;
 public class QueueRunnable implements Runnable {
     @Override
     public void run() {
-        Alley.getInstance().getQueueRepository().getQueues()
+        Alley.getInstance().getQueueService().getQueues()
                 .forEach(this::processQueue);
     }
 
@@ -55,11 +55,11 @@ public class QueueRunnable implements Runnable {
                     queue.removePlayer(profile);
                     Player player = Alley.getInstance().getServer().getPlayer(profile.getUuid());
                     player.sendMessage(CC.translate("&cYou have been removed from the queue due to inactivity."));
-                    Alley.getInstance().getProfileRepository().getProfile(profile.getUuid()).setQueueProfile(null);
-                    Alley.getInstance().getHotbarRepository().applyHotbarItems(player, HotbarType.LOBBY);
+                    Alley.getInstance().getProfileService().getProfile(profile.getUuid()).setQueueProfile(null);
+                    Alley.getInstance().getHotbarService().applyHotbarItems(player, HotbarType.LOBBY);
                 } else {
                     Logger.logError("&cPlayer &4" + Bukkit.getPlayer(profile.getUuid()) + "&c couldn't be removed from the queue because their state was changed.");
-                    Alley.getInstance().getProfileRepository().getProfile(profile.getUuid()).setQueueProfile(null);
+                    Alley.getInstance().getProfileService().getProfile(profile.getUuid()).setQueueProfile(null);
                     queue.getProfiles().remove(profile);
                 }
             }
@@ -149,7 +149,7 @@ public class QueueRunnable implements Runnable {
      * @return The arena.
      */
     private AbstractArena getArena(Queue queue) {
-        return Alley.getInstance().getArenaRepository().getRandomArena(queue.getKit());
+        return Alley.getInstance().getArenaService().getRandomArena(queue.getKit());
     }
 
     /**
@@ -160,9 +160,9 @@ public class QueueRunnable implements Runnable {
      * @param secondProfile The second profile.
      */
     private void clearQueueProfiles(Queue queue, QueueProfile firstProfile, QueueProfile secondProfile) {
-        ProfileRepository profileRepository = Alley.getInstance().getProfileRepository();
-        profileRepository.getProfile(firstProfile.getUuid()).setQueueProfile(null);
-        profileRepository.getProfile(secondProfile.getUuid()).setQueueProfile(null);
+        ProfileService profileService = Alley.getInstance().getProfileService();
+        profileService.getProfile(firstProfile.getUuid()).setQueueProfile(null);
+        profileService.getProfile(secondProfile.getUuid()).setQueueProfile(null);
 
         queue.getProfiles().remove(firstProfile);
         queue.getProfiles().remove(secondProfile);

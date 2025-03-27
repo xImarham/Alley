@@ -31,7 +31,7 @@ public class SetCoinsCommand extends BaseCommand {
             return;
         }
 
-        Profile profile = Alley.getInstance().getProfileRepository().getProfile(target.getUniqueId());
+        Profile profile = Alley.getInstance().getProfileService().getProfile(target.getUniqueId());
 
         try {
             int amount = Integer.parseInt(args[1]);

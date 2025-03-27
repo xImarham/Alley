@@ -4,7 +4,7 @@ import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.CommandArgs;
-import dev.revere.alley.feature.kit.KitRepository;
+import dev.revere.alley.feature.kit.KitService;
 import dev.revere.alley.locale.impl.KitLocale;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.command.CommandSender;
@@ -28,17 +28,17 @@ public class KitSetDisclaimerCommand extends BaseCommand {
             return;
         }
 
-        KitRepository kitRepository = Alley.getInstance().getKitRepository();
+        KitService kitService = Alley.getInstance().getKitService();
         String kitName = args[0];
         String disclaimer = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
 
-        if (kitRepository.getKit(kitName) == null) {
+        if (kitService.getKit(kitName) == null) {
             sender.sendMessage(CC.translate(KitLocale.KIT_NOT_FOUND.getMessage()));
             return;
         }
 
-        kitRepository.getKit(kitName).setDisclaimer(disclaimer);
-        kitRepository.saveKit(kitRepository.getKit(kitName));
+        kitService.getKit(kitName).setDisclaimer(disclaimer);
+        kitService.saveKit(kitService.getKit(kitName));
         sender.sendMessage(CC.translate(KitLocale.KIT_DISCLAIMER_SET.getMessage()).replace("{kit-name}", kitName).replace("{disclaimer}", disclaimer));
     }
 }

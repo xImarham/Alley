@@ -19,7 +19,7 @@ public class KitSaveAllCommand extends BaseCommand {
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
 
-        Alley.getInstance().getKitRepository().saveKits();
+        Alley.getInstance().getKitService().saveKits();
         player.sendMessage(CC.translate(KitLocale.KIT_SAVED_ALL.getMessage()));
     }
 }

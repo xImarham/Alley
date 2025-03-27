@@ -31,14 +31,14 @@ public class KitSetDisplayNameCommand extends BaseCommand {
         String kitName = args[0];
         String displayName = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
 
-        Kit kit = Alley.getInstance().getKitRepository().getKit(kitName);
+        Kit kit = Alley.getInstance().getKitService().getKit(kitName);
         if (kit == null) {
             player.sendMessage(CC.translate(KitLocale.KIT_NOT_FOUND.getMessage()));
             return;
         }
 
         kit.setDisplayName(displayName);
-        Alley.getInstance().getKitRepository().saveKit(kit);
+        Alley.getInstance().getKitService().saveKit(kit);
         player.sendMessage(CC.translate(KitLocale.KIT_DISPLAYNAME_SET.getMessage()).replace("{kit-name}", kit.getName()).replace("{display-name}", displayName));
     }
 }

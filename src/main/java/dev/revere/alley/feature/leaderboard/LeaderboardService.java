@@ -6,7 +6,7 @@ import dev.revere.alley.feature.leaderboard.data.LeaderboardPlayerData;
 import dev.revere.alley.feature.leaderboard.enums.EnumLeaderboardType;
 import dev.revere.alley.feature.leaderboard.record.LeaderboardRecord;
 import dev.revere.alley.profile.Profile;
-import dev.revere.alley.profile.ProfileRepository;
+import dev.revere.alley.profile.ProfileService;
 import dev.revere.alley.profile.data.impl.ProfileRankedKitData;
 import lombok.Getter;
 
@@ -27,10 +27,10 @@ public class LeaderboardService {
     }
 
     private void initializeLeaderboards() {
-        ProfileRepository profileRepository = Alley.getInstance().getProfileRepository();
-        Collection<Profile> profiles = profileRepository.getProfiles().values();
+        ProfileService profileService = Alley.getInstance().getProfileService();
+        Collection<Profile> profiles = profileService.getProfiles().values();
 
-        for (Kit kit : Alley.getInstance().getKitRepository().getKits()) {
+        for (Kit kit : Alley.getInstance().getKitService().getKits()) {
             this.leaderboardEntries.put(kit, new ArrayList<>());
 
             for (EnumLeaderboardType type : EnumLeaderboardType.values()) {

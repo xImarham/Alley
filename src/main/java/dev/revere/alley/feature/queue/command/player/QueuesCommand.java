@@ -20,7 +20,7 @@ public class QueuesCommand extends BaseCommand {
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
 
-        Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
+        Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
         if (!profile.getState().equals(EnumProfileState.LOBBY)) {
             player.sendMessage(CC.translate("&cYou must be at spawn in order to execute this command :v"));
             return;
@@ -31,6 +31,6 @@ public class QueuesCommand extends BaseCommand {
             return;
         }
 
-        this.alley.getQueueRepository().getQueueMenu().openMenu(player);
+        this.alley.getQueueService().getQueueMenu().openMenu(player);
     }
 }

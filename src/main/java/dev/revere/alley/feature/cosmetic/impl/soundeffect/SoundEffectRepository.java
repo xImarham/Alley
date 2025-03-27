@@ -17,7 +17,7 @@ public class SoundEffectRepository extends BaseCosmeticRepository<AbstractSoundE
      * Constructor to register all kill effects
      */
     public SoundEffectRepository() {
-        registerCosmetic(NoneSoundEffect.class);
-        registerCosmetic(StepSoundEffect.class);
+        this.registerCosmetic(NoneSoundEffect.class);
+        this.registerCosmetic(StepSoundEffect.class);
     }
 }

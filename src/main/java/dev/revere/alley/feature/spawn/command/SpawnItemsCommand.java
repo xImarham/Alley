@@ -19,7 +19,7 @@ public class SpawnItemsCommand extends BaseCommand {
     public void onCommand(CommandArgs args) {
         Player player = args.getPlayer();
 
-        Alley.getInstance().getHotbarRepository().applyHotbarItems(player, HotbarType.LOBBY);
+        Alley.getInstance().getHotbarService().applyHotbarItems(player, HotbarType.LOBBY);
         player.sendMessage(CC.translate("&aYou were given the spawn items!"));
     }
 }

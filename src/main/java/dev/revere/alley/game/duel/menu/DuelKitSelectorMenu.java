@@ -7,7 +7,7 @@ import dev.revere.alley.api.menu.Menu;
 import dev.revere.alley.feature.kit.Kit;
 import dev.revere.alley.feature.kit.settings.impl.KitSettingRankedImpl;
 import dev.revere.alley.util.chat.CC;
-import dev.revere.alley.util.data.item.ItemBuilder;
+import dev.revere.alley.util.item.ItemBuilder;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
@@ -34,7 +34,7 @@ public class DuelKitSelectorMenu extends Menu {
     public Map<Integer, Button> getButtons(Player player) {
         Map<Integer, Button> buttons = new HashMap<>();
 
-        Alley.getInstance().getKitRepository().getKits().stream()
+        Alley.getInstance().getKitService().getKits().stream()
                 .filter(Kit::isEnabled)
                 .filter(kit -> kit.isSettingEnabled(KitSettingRankedImpl.class))
                 .forEach(kit -> buttons.put(buttons.size(), new DuelButton(targetPlayer, kit)));
@@ -68,8 +68,8 @@ public class DuelKitSelectorMenu extends Menu {
             }
 
             player.closeInventory();
-            Alley.getInstance().getDuelRequestHandler().sendDuelRequest(player, targetPlayer, kit);
-            player.sendMessage(CC.translate("&aYou have sent a duel request to " + targetPlayer.getName() + " in the " + Alley.getInstance().getDuelRequestHandler().getDuelRequest(player, targetPlayer).getArena().getName() + " arena with the " + kit.getName() + " kit."));
+            Alley.getInstance().getDuelRequestService().sendDuelRequest(player, targetPlayer, kit);
+            player.sendMessage(CC.translate("&aYou have sent a duel request to " + targetPlayer.getName() + " in the " + Alley.getInstance().getDuelRequestService().getDuelRequest(player, targetPlayer).getArena().getName() + " arena with the " + kit.getName() + " kit."));
         }
     }
 }

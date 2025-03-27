@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.api.menu.Menu;
-import dev.revere.alley.util.data.item.ItemBuilder;
+import dev.revere.alley.util.item.ItemBuilder;
 import dev.revere.alley.feature.arena.AbstractArena;
 import dev.revere.alley.feature.arena.impl.StandAloneArena;
 import dev.revere.alley.feature.kit.Kit;
@@ -39,7 +39,7 @@ public class DuelArenaSelectorMenu extends Menu {
 
         int slot = 0;
 
-        for (AbstractArena arena : Alley.getInstance().getArenaRepository().getArenas()) {
+        for (AbstractArena arena : Alley.getInstance().getArenaService().getArenas()) {
             if (arena.getKits().contains(kit.getName()) && arena.isEnabled() &&
                     (!(arena instanceof StandAloneArena) || !((StandAloneArena) arena).isActive())) {
                 buttons.put(slot++, new DuelArenaSelectorButton(targetPlayer, kit, arena));
@@ -69,7 +69,7 @@ public class DuelArenaSelectorMenu extends Menu {
         @Override
         public void clicked(Player player, ClickType clickType) {
             player.closeInventory();
-            Alley.getInstance().getDuelRequestHandler().sendDuelRequest(player, targetPlayer, kit, arena);
+            Alley.getInstance().getDuelRequestService().sendDuelRequest(player, targetPlayer, kit, arena);
             player.sendMessage(CC.translate("&aYou have sent a duel request to " + targetPlayer.getName() + " in the " + arena.getName() + " arena with the " + kit.getName() + " kit."));
         }
     }

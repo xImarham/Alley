@@ -64,14 +64,14 @@ public class Profile {
      * Loads the profile from the database.
      */
     public void load() {
-        Alley.getInstance().getProfileRepository().getIProfile().loadProfile(this);
+        Alley.getInstance().getProfileService().getIProfile().loadProfile(this);
     }
 
     /**
      * Saves the profile to the database.
      */
     public void save() {
-        Alley.getInstance().getProfileRepository().getIProfile().saveProfile(this);
+        Alley.getInstance().getProfileService().getIProfile().saveProfile(this);
     }
 
     /**
@@ -81,7 +81,7 @@ public class Profile {
      * @return A sorted list of kits that the profile has participated in.
      */
     public List<Kit> getSortedKits() {
-        return Alley.getInstance().getKitRepository().getKits()
+        return Alley.getInstance().getKitService().getKits()
                 .stream()
                 .filter(kit -> {
                     ProfileRankedKitData rankedData = this.profileData.getRankedKitData().get(kit.getName());

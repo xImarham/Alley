@@ -146,7 +146,7 @@ public class Kit {
      * @return Whether the kit is a FFA kit.
      */
     public boolean isFfaKit() {
-        for (AbstractFFAMatch match : Alley.getInstance().getFfaRepository().getMatches()) {
+        for (AbstractFFAMatch match : Alley.getInstance().getFfaService().getMatches()) {
             if (match.getKit().getName().equals(this.name)) {
                 return true;
             }

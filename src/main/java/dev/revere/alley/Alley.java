@@ -1,7 +1,6 @@
 package dev.revere.alley;
 
 import dev.revere.alley.api.assemble.Assemble;
-import dev.revere.alley.api.assemble.enums.EnumAssembleStyle;
 import dev.revere.alley.api.command.CommandFramework;
 import dev.revere.alley.api.menu.MenuListener;
 import dev.revere.alley.command.CommandUtility;
@@ -10,25 +9,30 @@ import dev.revere.alley.database.MongoService;
 import dev.revere.alley.essential.emoji.EmojiRepository;
 import dev.revere.alley.essential.emoji.listener.EmojiListener;
 import dev.revere.alley.feature.arena.AbstractArena;
-import dev.revere.alley.feature.arena.ArenaRepository;
+import dev.revere.alley.feature.arena.ArenaService;
 import dev.revere.alley.feature.arena.listener.ArenaListener;
 import dev.revere.alley.feature.combat.CombatService;
 import dev.revere.alley.feature.combat.listener.CombatListener;
 import dev.revere.alley.feature.cooldown.CooldownRepository;
 import dev.revere.alley.feature.cosmetic.repository.CosmeticRepository;
-import dev.revere.alley.feature.division.DivisionRepository;
+import dev.revere.alley.feature.division.DivisionService;
 import dev.revere.alley.feature.elo.EloCalculator;
-import dev.revere.alley.feature.hotbar.HotbarRepository;
+import dev.revere.alley.feature.hotbar.HotbarService;
 import dev.revere.alley.feature.hotbar.listener.HotbarListener;
-import dev.revere.alley.feature.kit.KitRepository;
-import dev.revere.alley.feature.kit.settings.KitSettingRepository;
+import dev.revere.alley.feature.kit.KitService;
+import dev.revere.alley.feature.kit.settings.KitSettingService;
 import dev.revere.alley.feature.leaderboard.LeaderboardService;
-import dev.revere.alley.feature.queue.QueueRepository;
+import dev.revere.alley.feature.queue.QueueService;
+import dev.revere.alley.feature.scoreboard.ScoreboardTitleAnimator;
+import dev.revere.alley.feature.scoreboard.ScoreboardVisualizer;
+import dev.revere.alley.feature.service.ServerService;
 import dev.revere.alley.feature.spawn.SpawnService;
 import dev.revere.alley.feature.spawn.listener.SpawnListener;
-import dev.revere.alley.game.duel.DuelRequestHandler;
-import dev.revere.alley.game.ffa.FFARepository;
-import dev.revere.alley.game.ffa.cuboid.FFACuboidServiceImpl;
+import dev.revere.alley.feature.tablist.task.TablistUpdateTask;
+import dev.revere.alley.feature.world.WorldListener;
+import dev.revere.alley.game.duel.DuelRequestService;
+import dev.revere.alley.game.ffa.FFAService;
+import dev.revere.alley.game.ffa.cuboid.FFASpawnService;
 import dev.revere.alley.game.ffa.listener.FFAListener;
 import dev.revere.alley.game.ffa.listener.impl.FFACuboidListener;
 import dev.revere.alley.game.match.MatchRepository;
@@ -38,18 +42,14 @@ import dev.revere.alley.game.match.listener.impl.MatchDamageListener;
 import dev.revere.alley.game.match.listener.impl.MatchDisconnectListener;
 import dev.revere.alley.game.match.listener.impl.MatchInteractListener;
 import dev.revere.alley.game.match.snapshot.SnapshotRepository;
-import dev.revere.alley.game.party.PartyHandler;
+import dev.revere.alley.game.party.PartyService;
 import dev.revere.alley.game.party.listener.PartyListener;
-import dev.revere.alley.profile.ProfileRepository;
+import dev.revere.alley.profile.ProfileService;
 import dev.revere.alley.profile.listener.ProfileListener;
-import dev.revere.alley.feature.service.ServerService;
+import dev.revere.alley.task.ArrowRemovalTask;
 import dev.revere.alley.task.RepositoryCleanupTask;
 import dev.revere.alley.util.ServerUtil;
 import dev.revere.alley.util.logger.Logger;
-import dev.revere.alley.visual.scoreboard.ScoreboardVisualizer;
-import dev.revere.alley.visual.scoreboard.animation.ScoreboardTitleHandler;
-import dev.revere.alley.visual.tablist.task.TablistUpdateTask;
-import dev.revere.alley.world.WorldListener;
 import lombok.Getter;
 import org.bukkit.entity.EntityType;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -64,24 +64,24 @@ public class Alley extends JavaPlugin {
     private Assemble assemble;
     private CommandFramework commandFramework;
     private CosmeticRepository cosmeticRepository;
-    private ProfileRepository profileRepository;
-    private DivisionRepository divisionRepository;
-    private FFACuboidServiceImpl ffaCuboidService;
+    private ProfileService profileService;
+    private DivisionService divisionService;
+    private FFASpawnService ffaSpawnService;
     private MongoService mongoService;
-    private ArenaRepository arenaRepository;
-    private QueueRepository queueRepository;
+    private ArenaService arenaService;
+    private QueueService queueService;
     private ConfigService configService;
     private MatchRepository matchRepository;
-    private PartyHandler partyHandler;
+    private PartyService partyService;
     private CooldownRepository cooldownRepository;
-    private KitRepository kitRepository;
-    private ScoreboardTitleHandler scoreboardTitleHandler;
-    private KitSettingRepository kitSettingRepository;
+    private KitService kitService;
+    private ScoreboardTitleAnimator scoreboardTitleAnimator;
+    private KitSettingService kitSettingService;
     private SnapshotRepository snapshotRepository;
-    private FFARepository ffaRepository;
+    private FFAService ffaService;
     private SpawnService spawnService;
-    private HotbarRepository hotbarRepository;
-    private DuelRequestHandler duelRequestHandler;
+    private HotbarService hotbarService;
+    private DuelRequestService duelRequestService;
     private EmojiRepository emojiRepository;
     private CombatService combatService;
     private LeaderboardService leaderboardService;
@@ -97,11 +97,8 @@ public class Alley extends JavaPlugin {
         long start = System.currentTimeMillis();
 
         this.checkDescription();
-        this.initializeConfigService();
-        this.initializeMongo();
-        this.initializeManagers();
+        this.initializeServices();
         this.registerListeners();
-        this.initializeScoreboard();
         this.runTasks();
 
         CommandUtility.registerCommands();
@@ -116,7 +113,7 @@ public class Alley extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        this.profileRepository.getProfiles().forEach((uuid, profile) -> profile.save());
+        this.profileService.getProfiles().forEach((uuid, profile) -> profile.save());
         this.matchRepository.endPresentMatches();
 
         this.assemble.interruptAndClose(true);
@@ -124,10 +121,10 @@ public class Alley extends JavaPlugin {
         ServerUtil.disconnectPlayers();
         ServerUtil.clearEntities(EntityType.DROPPED_ITEM);
 
-        this.kitRepository.saveKits();
-        this.ffaRepository.saveFFAMatches();
-        this.arenaRepository.getArenas().forEach(AbstractArena::saveArena);
-        this.divisionRepository.saveDivisions();
+        this.kitService.saveKits();
+        this.ffaService.saveFFAMatches();
+        this.arenaService.getArenas().forEach(AbstractArena::saveArena);
+        this.divisionService.saveDivisions();
 
         Logger.pluginDisabled();
     }
@@ -140,49 +137,42 @@ public class Alley extends JavaPlugin {
         }
     }
 
-    private void initializeConfigService() {
-        this.configService = new ConfigService();
-    }
-
-    private void initializeMongo() {
-        Logger.logTime("MongoService", () -> this.mongoService = new MongoService(
-                this.configService.getDatabaseConfig().getString("mongo.uri"),
-                this.configService.getDatabaseConfig().getString("mongo.database")
-        ));
-    }
-
-    private void initializeManagers() {
+    private void initializeServices() {
         final Map<String, Runnable> managers = new LinkedHashMap<>();
 
-        managers.put("CommandFramework", () -> this.commandFramework = new CommandFramework(this));
-        managers.put("QueueRepository", () -> this.queueRepository = new QueueRepository(this));
-        managers.put("KitSettingRepository", () -> this.kitSettingRepository = new KitSettingRepository());
-        managers.put("KitRepository", () -> this.kitRepository = new KitRepository(this));
-        managers.put("ArenaRepository", () -> this.arenaRepository = new ArenaRepository());
-        managers.put("FFARepository", () -> this.ffaRepository = new FFARepository());
-        managers.put("CosmeticRepository", () -> this.cosmeticRepository = new CosmeticRepository());
-        managers.put("DivisionRepository", () -> this.divisionRepository = new DivisionRepository(this));
-        managers.put("ProfileRepository", () -> { this.profileRepository = new ProfileRepository(); this.profileRepository.loadProfiles(); });
-        managers.put("HotbarRepository", () -> this.hotbarRepository = new HotbarRepository());
-        managers.put("CooldownRepository", () -> this.cooldownRepository = new CooldownRepository());
-        managers.put("SnapshotRepository", () -> this.snapshotRepository = new SnapshotRepository());
-        managers.put("MatchRepository", () -> this.matchRepository = new MatchRepository());
-        managers.put("PartyHandler", () -> this.partyHandler = new PartyHandler());
-        managers.put("SpawnService", () -> this.spawnService = new SpawnService(this.configService));
-        managers.put("FFACuboidService", () -> this.ffaCuboidService = new FFACuboidServiceImpl());
-        managers.put("DuelRequestHandler", () -> this.duelRequestHandler = new DuelRequestHandler());
-        managers.put("EmojiRepository", () -> this.emojiRepository = new EmojiRepository());
-        managers.put("CombatService", () -> this.combatService = new CombatService());
-        managers.put("LeaderboardService", () -> this.leaderboardService = new LeaderboardService());
-        managers.put("EloCalculator", () -> this.eloCalculator = new EloCalculator());
-        managers.put("ServerService", () -> this.serverService = new ServerService());
+        managers.put(ConfigService.class.getSimpleName(), () -> this.configService = new ConfigService());
+        managers.put(MongoService.class.getSimpleName(), () -> this.mongoService = new MongoService(this.configService.getDatabaseConfig().getString("mongo.uri"), this.configService.getDatabaseConfig().getString("mongo.database")));
+        managers.put(CommandFramework.class.getSimpleName(), () -> this.commandFramework = new CommandFramework(this));
+        managers.put(QueueService.class.getSimpleName(), () -> this.queueService = new QueueService(this));
+        managers.put(KitSettingService.class.getSimpleName(), () -> this.kitSettingService = new KitSettingService());
+        managers.put(KitService.class.getSimpleName(), () -> this.kitService = new KitService(this));
+        managers.put(ArenaService.class.getSimpleName(), () -> this.arenaService = new ArenaService());
+        managers.put(FFAService.class.getSimpleName(), () -> this.ffaService = new FFAService());
+        managers.put(CosmeticRepository.class.getSimpleName(), () -> this.cosmeticRepository = new CosmeticRepository());
+        managers.put(DivisionService.class.getSimpleName(), () -> this.divisionService = new DivisionService(this));
+        managers.put(ProfileService.class.getSimpleName(), () -> { this.profileService = new ProfileService(); this.profileService.loadProfiles(); });
+        managers.put(HotbarService.class.getSimpleName(), () -> this.hotbarService = new HotbarService());
+        managers.put(CooldownRepository.class.getSimpleName(), () -> this.cooldownRepository = new CooldownRepository());
+        managers.put(SnapshotRepository.class.getSimpleName(), () -> this.snapshotRepository = new SnapshotRepository());
+        managers.put(MatchRepository.class.getSimpleName(), () -> this.matchRepository = new MatchRepository());
+        managers.put(PartyService.class.getSimpleName(), () -> this.partyService = new PartyService());
+        managers.put(SpawnService.class.getSimpleName(), () -> this.spawnService = new SpawnService(this.configService));
+        managers.put(FFASpawnService.class.getSimpleName(), () -> this.ffaSpawnService = new FFASpawnService());
+        managers.put(DuelRequestService.class.getSimpleName(), () -> this.duelRequestService = new DuelRequestService());
+        managers.put(EmojiRepository.class.getSimpleName(), () -> this.emojiRepository = new EmojiRepository());
+        managers.put(CombatService.class.getSimpleName(), () -> this.combatService = new CombatService());
+        managers.put(LeaderboardService.class.getSimpleName(), () -> this.leaderboardService = new LeaderboardService());
+        managers.put(EloCalculator.class.getSimpleName(), () -> this.eloCalculator = new EloCalculator());
+        managers.put(ServerService.class.getSimpleName(), () -> this.serverService = new ServerService());
+        managers.put(ScoreboardTitleAnimator.class.getSimpleName(), () -> this.scoreboardTitleAnimator = new ScoreboardTitleAnimator(this.configService.getScoreboardConfig()));
+        managers.put(Assemble.class.getSimpleName() + " API", () -> this.assemble = new Assemble(this, new ScoreboardVisualizer()));
 
         managers.forEach(Logger::logTime);
     }
 
     private void registerListeners() {
         Arrays.asList(
-                new ProfileListener(this.profileRepository),
+                new ProfileListener(this.profileService),
                 new HotbarListener(),
                 new PartyListener(),
                 new MatchListener(this),
@@ -194,34 +184,21 @@ public class Alley extends JavaPlugin {
                 new MenuListener(),
                 new SpawnListener(),
                 new FFAListener(this),
-                new FFACuboidListener(this.ffaCuboidService.getCuboid(), this),
+                new FFACuboidListener(this.ffaSpawnService.getCuboid(), this),
                 new WorldListener(),
                 new EmojiListener(),
                 new CombatListener(this)
         ).forEach(listener -> getServer().getPluginManager().registerEvents(listener, this));
     }
 
-    private void initializeScoreboard() {
-        this.scoreboardTitleHandler = new ScoreboardTitleHandler(this.configService.getScoreboardConfig());
-
-        this.assemble = new Assemble(this, new ScoreboardVisualizer());
-        this.assemble.setTicks(2);
-        this.assemble.setAssembleStyle(EnumAssembleStyle.MODERN);
-    }
-
     private void runTasks() {
         final Map<String, Runnable> runnables = new LinkedHashMap<>();
 
-        runnables.put("RepositoryCleanupTask", () -> {
-            RepositoryCleanupTask repositoryCleanupTask = new RepositoryCleanupTask();
-            repositoryCleanupTask.runTaskTimer(this, 0L, 40L);
-        });
+        runnables.put(RepositoryCleanupTask.class.getSimpleName(), () -> new RepositoryCleanupTask().runTaskTimer(this, 0L, 40L));
+        runnables.put(ArrowRemovalTask.class.getSimpleName(), () -> new ArrowRemovalTask().runTaskTimer(this, 20L, 20L));
 
         if (this.configService.getTablistConfig().getBoolean("tablist.enabled")) {
-            runnables.put("TablistUpdateTask", () -> {
-                TablistUpdateTask tablistUpdateTask = new TablistUpdateTask();
-                tablistUpdateTask.runTaskTimer(this, 0L, 20L);
-            });
+            runnables.put(TablistUpdateTask.class.getSimpleName(), () -> new TablistUpdateTask().runTaskTimer(this, 0L, 20L));
         }
 
         runnables.forEach(Logger::logTimeTask);

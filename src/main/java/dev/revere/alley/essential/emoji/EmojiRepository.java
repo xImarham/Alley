@@ -13,13 +13,13 @@ import java.util.Map;
  */
 @Getter
 public class EmojiRepository {
-    private final Map<String, String> symbolReplacements;
+    private final Map<String, String> emojis;
 
     public EmojiRepository() {
-        this.symbolReplacements = new HashMap<>();
+        this.emojis = new HashMap<>();
 
         for (EnumEmojiType value : EnumEmojiType.values()) {
-            this.symbolReplacements.put(value.getIdentifier(), value.getFormat());
+            this.emojis.put(value.getIdentifier(), value.getFormat());
         }
     }
 }

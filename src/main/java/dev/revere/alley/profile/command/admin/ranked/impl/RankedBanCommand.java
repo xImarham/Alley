@@ -34,7 +34,7 @@ public class RankedBanCommand extends BaseCommand {
             return;
         }
 
-        Profile profile = this.alley.getProfileRepository().getProfile(target.getUniqueId());
+        Profile profile = this.alley.getProfileService().getProfile(target.getUniqueId());
         if (profile == null) {
             player.sendMessage(CC.translate("&cProfile not found."));
             return;

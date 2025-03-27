@@ -20,7 +20,7 @@ public class PartyOpenCommand extends BaseCommand {
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
-        Profile profile = Alley.getInstance().getProfileRepository().getProfile(player.getUniqueId());
+        Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
         if (profile.getParty() == null) {
             player.sendMessage(CC.translate("&cYou are not in a party."));
             return;

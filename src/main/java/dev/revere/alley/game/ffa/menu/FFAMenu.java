@@ -33,7 +33,7 @@ public class FFAMenu extends Menu {
 
         int slot = 10;
 
-        for (AbstractFFAMatch match : Alley.getInstance().getFfaRepository().getMatches()) {
+        for (AbstractFFAMatch match : Alley.getInstance().getFfaService().getMatches()) {
             buttons.put(slot, new FFAButton(match));
             slot++;
         }

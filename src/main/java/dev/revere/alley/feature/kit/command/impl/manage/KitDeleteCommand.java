@@ -3,7 +3,7 @@ package dev.revere.alley.feature.kit.command.impl.manage;
 import dev.revere.alley.Alley;
 import dev.revere.alley.feature.kit.Kit;
 import dev.revere.alley.locale.impl.KitLocale;
-import dev.revere.alley.util.ActionBarUtil;
+import dev.revere.alley.util.visual.ActionBarUtil;
 import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.annotation.CommandData;
@@ -28,18 +28,18 @@ public class KitDeleteCommand extends BaseCommand {
         }
 
         String kitName = args[0];
-        Kit kit = Alley.getInstance().getKitRepository().getKit(kitName);
+        Kit kit = Alley.getInstance().getKitService().getKit(kitName);
 
         if (kit == null) {
             player.sendMessage(CC.translate(KitLocale.KIT_NOT_FOUND.getMessage()));
             return;
         }
 
-        Alley.getInstance().getKitRepository().deleteKit(kit);
+        Alley.getInstance().getKitService().deleteKit(kit);
         player.sendMessage(CC.translate(KitLocale.KIT_DELETED.getMessage().replace("{kit-name}", kitName)));
         ActionBarUtil.sendMessage(player, KitLocale.KIT_DELETED.getMessage().replace("{kit-name}", kitName), 5);
 
-        Alley.getInstance().getArenaRepository().getArenas().forEach(arena -> {
+        Alley.getInstance().getArenaService().getArenas().forEach(arena -> {
             if (arena.getKits().contains(kitName)) {
                 arena.getKits().remove(kitName);
                 arena.saveArena();

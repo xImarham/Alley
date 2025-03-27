@@ -23,7 +23,7 @@ public class AlleyDebugCommand extends BaseCommand {
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
         String[] args = command.getArgs();
-        Profile profile = this.alley.getProfileRepository().getProfile(player.getUniqueId());
+        Profile profile = this.alley.getProfileService().getProfile(player.getUniqueId());
 
         if (args.length < 1) {
             player.sendMessage(CC.translate("&6Usage: &e/alley debug &b<memory/instance/profile/profiledata>"));
@@ -81,20 +81,20 @@ public class AlleyDebugCommand extends BaseCommand {
         Arrays.asList(
                 "",
                 "     &b&lAlley &7┃ &fInstance Information",
-                "      &f┃ Profiles: &b" + this.formatNumber(this.alley.getProfileRepository().getProfiles().size()),
+                "      &f┃ Profiles: &b" + this.formatNumber(this.alley.getProfileService().getProfiles().size()),
                 "      &f┃ Matches: &b" + this.formatNumber(this.alley.getMatchRepository().getMatches().size()),
-                "      &f┃ Queues: &b" + this.formatNumber(this.alley.getQueueRepository().getQueues().size()),
-                "      &f┃ Queue profiles: &b" + this.formatNumber(Arrays.stream(this.alley.getQueueRepository().getQueues().stream().mapToInt(queue -> queue.getProfiles().size()).toArray()).sum()),
+                "      &f┃ Queues: &b" + this.formatNumber(this.alley.getQueueService().getQueues().size()),
+                "      &f┃ Queue profiles: &b" + this.formatNumber(Arrays.stream(this.alley.getQueueService().getQueues().stream().mapToInt(queue -> queue.getProfiles().size()).toArray()).sum()),
                 "      &f┃ Cooldowns: &b" + this.formatNumber(this.alley.getCooldownRepository().getCooldowns().size()),
                 "      &f┃ Active Cooldowns: &b" + this.formatNumber((int) this.alley.getCooldownRepository().getCooldowns().stream().filter(cooldown -> cooldown.getC().isActive()).count()),
                 "      &f┃ Combats: &b" + this.formatNumber(this.alley.getCombatService().getCombatMap().size()),
-                "      &f┃ Kits: &b" + this.formatNumber(this.alley.getKitRepository().getKits().size()),
-                "      &f┃ Kit Settings: &b" + this.formatNumber(this.alley.getKitSettingRepository().getSettings().size()),
-                "      &f┃ Parties: &b" + this.formatNumber(this.alley.getPartyHandler().getParties().size()),
-                "      &f┃ Arenas: &b" + this.formatNumber(this.alley.getArenaRepository().getArenas().size()),
+                "      &f┃ Kits: &b" + this.formatNumber(this.alley.getKitService().getKits().size()),
+                "      &f┃ Kit Settings: &b" + this.formatNumber(this.alley.getKitSettingService().getSettings().size()),
+                "      &f┃ Parties: &b" + this.formatNumber(this.alley.getPartyService().getParties().size()),
+                "      &f┃ Arenas: &b" + this.formatNumber(this.alley.getArenaService().getArenas().size()),
                 "      &f┃ Snapshots: &b" + this.formatNumber(this.alley.getSnapshotRepository().getSnapshots().size()),
-                "      &f┃ Duel Requests: &b" + this.formatNumber(this.alley.getDuelRequestHandler().getDuelRequests().size()),
-                "      &f┃ Emojis: &b" + this.formatNumber(this.alley.getEmojiRepository().getSymbolReplacements().size()),
+                "      &f┃ Duel Requests: &b" + this.formatNumber(this.alley.getDuelRequestService().getDuelRequests().size()),
+                "      &f┃ Emojis: &b" + this.formatNumber(this.alley.getEmojiRepository().getEmojis().size()),
                 ""
         ).forEach(line -> player.sendMessage(CC.translate(line)));
     }
