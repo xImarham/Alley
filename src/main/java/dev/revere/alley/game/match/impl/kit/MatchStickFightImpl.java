@@ -95,6 +95,10 @@ public class MatchStickFightImpl extends MatchRoundsRegularImpl {
                 MatchUtility.sendMatchResult(this, winner.getPlayer().getPlayer().getName(), loser.getPlayer().getPlayer().getName());
             }
 
+            if (!this.isRanked()) {
+                this.sendProgressToWinner(this.winner.getPlayer().getPlayer());
+            }
+
             this.handleData(this.winner, this.loser, this.participantA, this.participantB);
 
             this.getParticipants().forEach(gameParticipant -> {

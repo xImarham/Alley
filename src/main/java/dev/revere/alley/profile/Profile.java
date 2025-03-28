@@ -1,6 +1,8 @@
 package dev.revere.alley.profile;
 
 import dev.revere.alley.Alley;
+import dev.revere.alley.feature.division.Division;
+import dev.revere.alley.feature.division.tier.DivisionTier;
 import dev.revere.alley.feature.kit.Kit;
 import dev.revere.alley.feature.leaderboard.enums.EnumLeaderboardType;
 import dev.revere.alley.feature.queue.QueueProfile;
@@ -132,5 +134,57 @@ public class Profile {
      */
     public boolean hasParticipatedInFFA() {
         return this.profileData.getFfaData().values().stream().anyMatch(data -> data.getKills() > 0 || data.getDeaths() > 0);
+    }
+
+    /**
+     * Get the next division or tier string for a given profile and kit.
+     *
+     * @param profileData The profile data.
+     * @param kitName     The name of the kit.
+     * @return The next division or tier string.
+     */
+    public String getNextDivisionAndTier(ProfileData profileData, String kitName) {
+        ProfileUnrankedKitData profileUnrankedKitData = profileData.getUnrankedKitData().get(kitName);
+        Division division = profileUnrankedKitData.getDivision();
+        DivisionTier tier = profileUnrankedKitData.getTier();
+
+        List<DivisionTier> tiers = division.getTiers();
+        int tierIndex = tiers.indexOf(tier);
+
+        if (tierIndex < tiers.size() - 1) {
+            DivisionTier nextTier = tiers.get(tierIndex + 1);
+            return division.getName() + " " + nextTier.getName();
+        }
+
+        List<Division> divisions = Alley.getInstance().getDivisionService().getDivisions();
+        int divisionIndex = divisions.indexOf(division);
+
+        if (divisionIndex < divisions.size() - 1) {
+            Division nextDivision = divisions.get(divisionIndex + 1);
+            return nextDivision.getName() + " " + nextDivision.getTiers().get(0).getName();
+        }
+
+        return profileUnrankedKitData.getDivision().getName() + " " + profileUnrankedKitData.getTier().getName();
+    }
+
+    /**
+     * Get the next division for a given profile and kit.
+     *
+     * @param profileData The profile data.
+     * @param kitName     The name of the kit.
+     * @return The next division.
+     */
+    public Division getNextDivision(ProfileData profileData, String kitName) {
+        ProfileUnrankedKitData profileUnrankedKitData = profileData.getUnrankedKitData().get(kitName);
+        Division division = profileUnrankedKitData.getDivision();
+
+        List<Division> divisions = Alley.getInstance().getDivisionService().getDivisions();
+        int divisionIndex = divisions.indexOf(division);
+
+        if (divisionIndex < divisions.size() - 1) {
+            return divisions.get(divisionIndex + 1);
+        }
+
+        return null;
     }
 }

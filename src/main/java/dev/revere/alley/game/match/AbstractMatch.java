@@ -9,6 +9,8 @@ import dev.revere.alley.feature.cosmetic.impl.soundeffect.AbstractSoundEffect;
 import dev.revere.alley.feature.cosmetic.impl.soundeffect.SoundEffectRepository;
 import dev.revere.alley.feature.cosmetic.interfaces.ICosmeticRepository;
 import dev.revere.alley.feature.cosmetic.repository.CosmeticRepository;
+import dev.revere.alley.feature.division.Division;
+import dev.revere.alley.feature.division.tier.DivisionTier;
 import dev.revere.alley.feature.hotbar.HotbarService;
 import dev.revere.alley.feature.hotbar.enums.HotbarType;
 import dev.revere.alley.feature.kit.Kit;
@@ -25,9 +27,11 @@ import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.game.match.runnable.MatchRunnable;
 import dev.revere.alley.game.match.snapshot.Snapshot;
 import dev.revere.alley.profile.Profile;
+import dev.revere.alley.profile.data.ProfileData;
 import dev.revere.alley.profile.enums.EnumProfileState;
 import dev.revere.alley.util.PlayerUtil;
 import dev.revere.alley.util.chat.CC;
+import dev.revere.alley.util.visual.ProgressBarUtil;
 import lombok.Getter;
 import lombok.Setter;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -668,6 +672,47 @@ public abstract class AbstractMatch {
         GameParticipant<MatchGamePlayerImpl> victimParticipant = this.getParticipant(victim);
 
         return attackerParticipant.equals(victimParticipant);
+    }
+
+    /**
+     * Sends the division progress to the winner of the match.
+     *
+     * @param winner The winner of the match.
+     */
+    public void sendProgressToWinner(Player winner) {
+        Profile winnerProfile = Alley.getInstance().getProfileService().getProfile(winner.getUniqueId());
+        ProfileData profileData = winnerProfile.getProfileData();
+        int wins = profileData.getUnrankedKitData().get(this.getKit().getName()).getWins();
+
+        Division currentDivision = profileData.getUnrankedKitData().get(this.getKit().getName()).getDivision();
+        DivisionTier currentTier = profileData.getUnrankedKitData().get(this.getKit().getName()).getTier();
+
+        List<DivisionTier> tiers = currentDivision.getTiers();
+        int tierIndex = tiers.indexOf(currentTier);
+
+        int nextTierWins;
+        if (tierIndex < tiers.size() - 1) {
+            nextTierWins = tiers.get(tierIndex + 1).getRequiredWins();
+        } else if (winnerProfile.getNextDivision(profileData, this.getKit().getName()) != null) {
+            nextTierWins = winnerProfile.getNextDivision(profileData, this.getKit().getName()).getTiers().get(0).getRequiredWins();
+        } else {
+            nextTierWins = currentTier.getRequiredWins();
+        }
+
+        String nextRank = winnerProfile.getNextDivisionAndTier(profileData, this.getKit().getName());
+        String progressBar = ProgressBarUtil.generate(wins, nextTierWins, 12, "■");
+        String progressPercent = nextTierWins > 0 ? Math.round((float) wins / nextTierWins * 100) + "%" : "100%";
+        int requiredWinsToUnlock = nextTierWins - wins;
+        String winOrWins = requiredWinsToUnlock == 1 ? "win" : "wins";
+
+        Arrays.asList(
+                "&b&lProgress",
+                " &b&l● &fUnlock &b" + nextRank + " &fwith " + requiredWinsToUnlock + " more " + winOrWins + "!",
+                "  &7(" + progressBar + "&7) " + progressPercent,
+                " &b&l● &fDaily Streak: &b" + "N/A" + " &f(Best: " + "N/A" + ")",
+                " &b&l● &fWin Streak: &b" + "N/A" + " &f(Best: " + "N/A" + ")",
+                ""
+        ).forEach(line -> winner.sendMessage(CC.translate(line)));
     }
 
     /**

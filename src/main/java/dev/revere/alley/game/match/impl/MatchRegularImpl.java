@@ -120,6 +120,10 @@ public class MatchRegularImpl extends AbstractMatch {
             MatchUtility.sendMatchResult(this, this.winner.getPlayer().getPlayer().getName(), this.loser.getPlayer().getPlayer().getName());
         }
 
+        if (!this.isRanked()) {
+            this.sendProgressToWinner(this.winner.getPlayer().getPlayer());
+        }
+
         this.handleData(this.winner, this.loser, this.participantA, this.participantB);
         super.handleRoundEnd();
     }
