@@ -117,9 +117,9 @@ public class Profile {
     }
 
     /**
-     * Checks if the profile has participated in unranked matches.
+     * Checks if the profile has participated in tournaments.
      *
-     * @return True if the profile has participated in unranked matches, otherwise false.
+     * @return True if the profile has participated in tournaments, otherwise false.
      */
     public boolean hasParticipatedInTournament() {
         return false; //TODO: Implement tournament system
