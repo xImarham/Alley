@@ -139,12 +139,11 @@ public class Profile {
     /**
      * Get the next division or tier string for a given profile and kit.
      *
-     * @param profileData The profile data.
      * @param kitName     The name of the kit.
      * @return The next division or tier string.
      */
-    public String getNextDivisionAndTier(ProfileData profileData, String kitName) {
-        ProfileUnrankedKitData profileUnrankedKitData = profileData.getUnrankedKitData().get(kitName);
+    public String getNextDivisionAndTier(String kitName) {
+        ProfileUnrankedKitData profileUnrankedKitData = this.profileData.getUnrankedKitData().get(kitName);
         Division division = profileUnrankedKitData.getDivision();
         DivisionTier tier = profileUnrankedKitData.getTier();
 
@@ -170,12 +169,11 @@ public class Profile {
     /**
      * Get the next division for a given profile and kit.
      *
-     * @param profileData The profile data.
      * @param kitName     The name of the kit.
      * @return The next division.
      */
-    public Division getNextDivision(ProfileData profileData, String kitName) {
-        ProfileUnrankedKitData profileUnrankedKitData = profileData.getUnrankedKitData().get(kitName);
+    public Division getNextDivision(String kitName) {
+        ProfileUnrankedKitData profileUnrankedKitData = this.profileData.getUnrankedKitData().get(kitName);
         Division division = profileUnrankedKitData.getDivision();
 
         List<Division> divisions = Alley.getInstance().getDivisionService().getDivisions();

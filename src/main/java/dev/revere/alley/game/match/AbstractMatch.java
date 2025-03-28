@@ -693,13 +693,13 @@ public abstract class AbstractMatch {
         int nextTierWins;
         if (tierIndex < tiers.size() - 1) {
             nextTierWins = tiers.get(tierIndex + 1).getRequiredWins();
-        } else if (winnerProfile.getNextDivision(profileData, this.getKit().getName()) != null) {
-            nextTierWins = winnerProfile.getNextDivision(profileData, this.getKit().getName()).getTiers().get(0).getRequiredWins();
+        } else if (winnerProfile.getNextDivision(this.getKit().getName()) != null) {
+            nextTierWins = winnerProfile.getNextDivision(this.getKit().getName()).getTiers().get(0).getRequiredWins();
         } else {
             nextTierWins = currentTier.getRequiredWins();
         }
 
-        String nextRank = winnerProfile.getNextDivisionAndTier(profileData, this.getKit().getName());
+        String nextRank = winnerProfile.getNextDivisionAndTier(this.getKit().getName());
         String progressBar = ProgressBarUtil.generate(wins, nextTierWins, 12, "■");
         String progressPercent = nextTierWins > 0 ? Math.round((float) wins / nextTierWins * 100) + "%" : "100%";
         int requiredWinsToUnlock = nextTierWins - wins;
