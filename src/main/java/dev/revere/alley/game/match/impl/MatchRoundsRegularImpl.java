@@ -99,6 +99,7 @@ public class MatchRoundsRegularImpl extends MatchRegularImpl {
 
         player.getInventory().setArmorContents(this.getKit().getArmor());
         player.getInventory().setContents(this.getKit().getInventory());
+        this.applyWoolColor(player);
 
         this.getKit().applyPotionEffects(player);
 
