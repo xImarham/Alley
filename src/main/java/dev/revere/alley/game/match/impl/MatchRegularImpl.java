@@ -2,6 +2,9 @@ package dev.revere.alley.game.match.impl;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.feature.arena.AbstractArena;
+import dev.revere.alley.feature.elo.EloCalculator;
+import dev.revere.alley.feature.elo.result.EloResult;
+import dev.revere.alley.feature.elo.result.OldEloResult;
 import dev.revere.alley.feature.kit.Kit;
 import dev.revere.alley.feature.queue.Queue;
 import dev.revere.alley.game.match.AbstractMatch;
@@ -11,13 +14,12 @@ import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.ProfileService;
 import dev.revere.alley.util.PlayerUtil;
-import dev.revere.alley.feature.elo.EloCalculator;
-import dev.revere.alley.feature.elo.result.EloResult;
-import dev.revere.alley.feature.elo.result.OldEloResult;
+import dev.revere.alley.util.item.ItemBuilder;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -63,6 +65,7 @@ public class MatchRegularImpl extends AbstractMatch {
     @Override
     public void setupPlayer(Player player) {
         super.setupPlayer(player);
+        this.applyWoolColor(player);
 
         Location spawnLocation = this.participantA.containsPlayer(player.getUniqueId()) ? getArena().getPos1() : getArena().getPos2();
         player.teleport(spawnLocation);
@@ -81,6 +84,30 @@ public class MatchRegularImpl extends AbstractMatch {
      */
     public ChatColor getTeamColor(GameParticipant<MatchGamePlayerImpl> participant) {
         return participant == this.participantA ? this.teamAColor : this.teamBColor;
+    }
+
+    /**
+     * Applies the wool color to the player based on their team.
+     *
+     * @param player The player to apply the wool color to.
+     */
+    public void applyWoolColor(Player player) {
+        GameParticipant<MatchGamePlayerImpl> participant = this.getParticipant(player);
+        if (participant == null) {
+            return;
+        }
+
+        int woolColor = (participant == this.participantA) ? 11 : 14;
+
+        participant.getPlayers().forEach(gamePlayer -> {
+            Player teamPlayer = gamePlayer.getPlayer();
+
+            teamPlayer.getInventory().all(Material.WOOL).forEach((key, value) -> {
+                teamPlayer.getInventory().setItem(key, new ItemBuilder(Material.WOOL).durability(woolColor).amount(64).build());
+            });
+
+            teamPlayer.updateInventory();
+        });
     }
 
     @Override
