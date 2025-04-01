@@ -1,9 +1,7 @@
 package dev.revere.alley.feature.cosmetic.impl.killeffects;
 
+import dev.revere.alley.feature.cosmetic.impl.killeffects.impl.*;
 import lombok.Getter;
-import dev.revere.alley.feature.cosmetic.impl.killeffects.impl.BloodKillEffect;
-import dev.revere.alley.feature.cosmetic.impl.killeffects.impl.NoneKillEffect;
-import dev.revere.alley.feature.cosmetic.impl.killeffects.impl.ThunderKillEffect;
 import dev.revere.alley.feature.cosmetic.interfaces.ICosmeticRepository;
 import dev.revere.alley.feature.cosmetic.repository.BaseCosmeticRepository;
 
@@ -18,8 +16,12 @@ public class KillEffectRepository extends BaseCosmeticRepository<AbstractKillEff
      * Constructor to register all kill effects
      */
     public KillEffectRepository() {
+        this.registerCosmetic(BloodKillEffect.class);
+        this.registerCosmetic(BodyFallKillEffect.class);
+        this.registerCosmetic(ExplosionKillEffect.class);
+        this.registerCosmetic(FireworkKillEffect.class);
+        this.registerCosmetic(HeartKillEffect.class);
         this.registerCosmetic(NoneKillEffect.class);
         this.registerCosmetic(ThunderKillEffect.class);
-        this.registerCosmetic(BloodKillEffect.class);
     }
 }

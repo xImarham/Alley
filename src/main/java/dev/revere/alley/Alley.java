@@ -8,6 +8,7 @@ import dev.revere.alley.config.ConfigService;
 import dev.revere.alley.database.MongoService;
 import dev.revere.alley.essential.emoji.EmojiRepository;
 import dev.revere.alley.essential.emoji.listener.EmojiListener;
+import dev.revere.alley.reflection.DeathReflectionService;
 import dev.revere.alley.feature.arena.AbstractArena;
 import dev.revere.alley.feature.arena.ArenaService;
 import dev.revere.alley.feature.arena.listener.ArenaListener;
@@ -87,6 +88,7 @@ public class Alley extends JavaPlugin {
     private LeaderboardService leaderboardService;
     private EloCalculator eloCalculator;
     private ServerService serverService;
+    private DeathReflectionService deathReflectionService;
 
     private boolean loaded;
 
@@ -138,36 +140,37 @@ public class Alley extends JavaPlugin {
     }
 
     private void initializeServices() {
-        final Map<String, Runnable> managers = new LinkedHashMap<>();
+        final Map<String, Runnable> services = new LinkedHashMap<>();
 
-        managers.put(ConfigService.class.getSimpleName(), () -> this.configService = new ConfigService());
-        managers.put(MongoService.class.getSimpleName(), () -> this.mongoService = new MongoService(this.configService.getDatabaseConfig().getString("mongo.uri"), this.configService.getDatabaseConfig().getString("mongo.database")));
-        managers.put(CommandFramework.class.getSimpleName(), () -> this.commandFramework = new CommandFramework(this));
-        managers.put(QueueService.class.getSimpleName(), () -> this.queueService = new QueueService(this));
-        managers.put(KitSettingService.class.getSimpleName(), () -> this.kitSettingService = new KitSettingService());
-        managers.put(KitService.class.getSimpleName(), () -> this.kitService = new KitService(this));
-        managers.put(ArenaService.class.getSimpleName(), () -> this.arenaService = new ArenaService());
-        managers.put(FFAService.class.getSimpleName(), () -> this.ffaService = new FFAService());
-        managers.put(CosmeticRepository.class.getSimpleName(), () -> this.cosmeticRepository = new CosmeticRepository());
-        managers.put(DivisionService.class.getSimpleName(), () -> this.divisionService = new DivisionService(this));
-        managers.put(ProfileService.class.getSimpleName(), () -> { this.profileService = new ProfileService(); this.profileService.loadProfiles(); });
-        managers.put(HotbarService.class.getSimpleName(), () -> this.hotbarService = new HotbarService());
-        managers.put(CooldownRepository.class.getSimpleName(), () -> this.cooldownRepository = new CooldownRepository());
-        managers.put(SnapshotRepository.class.getSimpleName(), () -> this.snapshotRepository = new SnapshotRepository());
-        managers.put(MatchRepository.class.getSimpleName(), () -> this.matchRepository = new MatchRepository());
-        managers.put(PartyService.class.getSimpleName(), () -> this.partyService = new PartyService());
-        managers.put(SpawnService.class.getSimpleName(), () -> this.spawnService = new SpawnService(this.configService));
-        managers.put(FFASpawnService.class.getSimpleName(), () -> this.ffaSpawnService = new FFASpawnService());
-        managers.put(DuelRequestService.class.getSimpleName(), () -> this.duelRequestService = new DuelRequestService());
-        managers.put(EmojiRepository.class.getSimpleName(), () -> this.emojiRepository = new EmojiRepository());
-        managers.put(CombatService.class.getSimpleName(), () -> this.combatService = new CombatService());
-        managers.put(LeaderboardService.class.getSimpleName(), () -> this.leaderboardService = new LeaderboardService());
-        managers.put(EloCalculator.class.getSimpleName(), () -> this.eloCalculator = new EloCalculator());
-        managers.put(ServerService.class.getSimpleName(), () -> this.serverService = new ServerService());
-        managers.put(ScoreboardTitleAnimator.class.getSimpleName(), () -> this.scoreboardTitleAnimator = new ScoreboardTitleAnimator(this.configService.getScoreboardConfig()));
-        managers.put(Assemble.class.getSimpleName() + " API", () -> this.assemble = new Assemble(this, new ScoreboardVisualizer()));
+        services.put(ConfigService.class.getSimpleName(), () -> this.configService = new ConfigService());
+        services.put(MongoService.class.getSimpleName(), () -> this.mongoService = new MongoService(this.configService.getDatabaseConfig().getString("mongo.uri"), this.configService.getDatabaseConfig().getString("mongo.database")));
+        services.put(CommandFramework.class.getSimpleName(), () -> this.commandFramework = new CommandFramework(this));
+        services.put(QueueService.class.getSimpleName(), () -> this.queueService = new QueueService(this));
+        services.put(KitSettingService.class.getSimpleName(), () -> this.kitSettingService = new KitSettingService());
+        services.put(KitService.class.getSimpleName(), () -> this.kitService = new KitService(this));
+        services.put(ArenaService.class.getSimpleName(), () -> this.arenaService = new ArenaService());
+        services.put(FFAService.class.getSimpleName(), () -> this.ffaService = new FFAService());
+        services.put(CosmeticRepository.class.getSimpleName(), () -> this.cosmeticRepository = new CosmeticRepository());
+        services.put(DivisionService.class.getSimpleName(), () -> this.divisionService = new DivisionService(this));
+        services.put(ProfileService.class.getSimpleName(), () -> { this.profileService = new ProfileService(); this.profileService.loadProfiles(); });
+        services.put(HotbarService.class.getSimpleName(), () -> this.hotbarService = new HotbarService());
+        services.put(CooldownRepository.class.getSimpleName(), () -> this.cooldownRepository = new CooldownRepository());
+        services.put(SnapshotRepository.class.getSimpleName(), () -> this.snapshotRepository = new SnapshotRepository());
+        services.put(MatchRepository.class.getSimpleName(), () -> this.matchRepository = new MatchRepository());
+        services.put(PartyService.class.getSimpleName(), () -> this.partyService = new PartyService());
+        services.put(SpawnService.class.getSimpleName(), () -> this.spawnService = new SpawnService(this.configService));
+        services.put(FFASpawnService.class.getSimpleName(), () -> this.ffaSpawnService = new FFASpawnService());
+        services.put(DuelRequestService.class.getSimpleName(), () -> this.duelRequestService = new DuelRequestService());
+        services.put(EmojiRepository.class.getSimpleName(), () -> this.emojiRepository = new EmojiRepository());
+        services.put(CombatService.class.getSimpleName(), () -> this.combatService = new CombatService());
+        services.put(LeaderboardService.class.getSimpleName(), () -> this.leaderboardService = new LeaderboardService());
+        services.put(EloCalculator.class.getSimpleName(), () -> this.eloCalculator = new EloCalculator());
+        services.put(ServerService.class.getSimpleName(), () -> this.serverService = new ServerService());
+        services.put(ScoreboardTitleAnimator.class.getSimpleName(), () -> this.scoreboardTitleAnimator = new ScoreboardTitleAnimator(this.configService.getScoreboardConfig()));
+        services.put(Assemble.class.getSimpleName() + " API", () -> this.assemble = new Assemble(this, new ScoreboardVisualizer()));
+        services.put(DeathReflectionService.class.getSimpleName(), () -> this.deathReflectionService = new DeathReflectionService());
 
-        managers.forEach(Logger::logTime);
+        services.forEach(Logger::logTime);
     }
 
     private void registerListeners() {

@@ -11,7 +11,7 @@ import org.bukkit.entity.Player;
  * @project Alley
  * @date 01/06/2024
  */
-@SoundEffectData(name = "Step", description = "Play step sound upon kill", permission = "step", icon = Material.REDSTONE, slot = 11)
+@SoundEffectData(name = "Step", description = "Play step sound upon kill", permission = "alley.cosmetic.soundeffect.step", icon = Material.REDSTONE, slot = 11)
 public class StepSoundEffect extends AbstractSoundEffect {
 
     @Override

@@ -1,5 +1,6 @@
 package dev.revere.alley.feature.cosmetic.impl.soundeffect;
 
+import dev.revere.alley.feature.cosmetic.impl.soundeffect.impl.ExplosionSoundEffect;
 import lombok.Getter;
 import dev.revere.alley.feature.cosmetic.impl.soundeffect.impl.NoneSoundEffect;
 import dev.revere.alley.feature.cosmetic.impl.soundeffect.impl.StepSoundEffect;
@@ -17,6 +18,7 @@ public class SoundEffectRepository extends BaseCosmeticRepository<AbstractSoundE
      * Constructor to register all kill effects
      */
     public SoundEffectRepository() {
+        this.registerCosmetic(ExplosionSoundEffect.class);
         this.registerCosmetic(NoneSoundEffect.class);
         this.registerCosmetic(StepSoundEffect.class);
     }
