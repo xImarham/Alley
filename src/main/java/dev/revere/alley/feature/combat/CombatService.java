@@ -39,12 +39,45 @@ public class CombatService {
         EnumProfileState profileState = Alley.getInstance().getProfileService().getProfile(victim.getUniqueId()).getState();
 
         long expirationTime = (profileState == EnumProfileState.FFA) ? this.ffaExpirationTime : this.defaultExpirationTime;
+        long currentTime = System.currentTimeMillis();
 
-        Combat victimCombatData = new Combat(attacker.getUniqueId(), System.currentTimeMillis(), expirationTime);
-        this.combatMap.put(victim.getUniqueId(), victimCombatData);
+        Combat victimCombat = this.combatMap.get(victim.getUniqueId());
+        this.updateCombatIfPresent(victim, attacker, victimCombat, currentTime, expirationTime);
 
-        Combat attackerCombatData = new Combat(victim.getUniqueId(), System.currentTimeMillis(), expirationTime);
-        this.combatMap.put(attacker.getUniqueId(), attackerCombatData);
+        Combat attackerCombat = this.combatMap.get(attacker.getUniqueId());
+        this.updateCombatIfPresent(attacker, victim, attackerCombat, currentTime, expirationTime);
+    }
+
+    /**
+     * Updates the combat map with the last attacker information if it exists.
+     * Otherwise, it creates a new entry.
+     *
+     * @param victim          The player who was attacked.
+     * @param attacker        The player who attacked.
+     * @param combat          The combat instance.
+     * @param currentTime     The current time in milliseconds.
+     * @param expirationTime  The expiration time in milliseconds.
+     */
+    private void updateCombatIfPresent(Player victim, Player attacker, Combat combat, long currentTime, long expirationTime) {
+        if (combat == null) {
+            this.combatMap.put(victim.getUniqueId(), new Combat(attacker.getUniqueId(), currentTime, expirationTime));
+        } else {
+            this.updateCombatProperties(attacker, combat, currentTime, expirationTime);
+        }
+    }
+
+    /**
+     * Updates the combat properties of a player.
+     *
+     * @param victim          The player who was attacked.
+     * @param combat           The combat instance.
+     * @param currentTime     The current time in milliseconds.
+     * @param expirationTime  The expiration time in milliseconds.
+     */
+    private void updateCombatProperties(Player victim, Combat combat, long currentTime, long expirationTime) {
+        combat.setAttackerUUID(victim.getUniqueId());
+        combat.setAttackTimestamp(currentTime);
+        combat.setExpirationTime(expirationTime);
     }
 
     /**
