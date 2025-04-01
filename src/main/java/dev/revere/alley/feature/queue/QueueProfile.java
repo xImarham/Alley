@@ -1,10 +1,11 @@
 package dev.revere.alley.feature.queue;
 
-import lombok.Data;
 import dev.revere.alley.util.chat.CC;
-import org.bukkit.Bukkit;
+import dev.revere.alley.util.chat.Symbol;
+import lombok.Data;
 import org.bukkit.entity.Player;
 
+import java.util.Arrays;
 import java.util.UUID;
 
 /**
@@ -16,7 +17,7 @@ import java.util.UUID;
 public class QueueProfile {
     private final int TICK_THRESHOLD = 6;
     private final int RANGE_INCREMENT = 10;
-    private final int MAX_RANGE = 50;
+    private final int MAX_RANGE = 220;
 
     private final Queue queue;
     private final UUID uuid;
@@ -38,27 +39,47 @@ public class QueueProfile {
     }
 
     /**
-     * Method to queue the range.
+     * Method to queue the player.
+     *
+     * @param player The player to queue.
      */
-    public void queueRange() {
+    public void queueRange(Player player) {
         this.ticks++;
 
         if (this.ticks % this.TICK_THRESHOLD != 0) {
             return;
         }
 
-        this.range += this.RANGE_INCREMENT;
-        if (this.range < this.MAX_RANGE) {
+        if (!this.queue.isRanked()) {
+            if (player != null) {
+                Arrays.asList(
+                        "",
+                        "&b&l" + this.queue.getKit().getName(),
+                        " &f● &bPing Range: &fN/A",
+                        "   &7Searching for match...",
+                        ""
+                ).forEach(line -> player.sendMessage(CC.translate(line)));
+            }
             return;
         }
 
-        this.ticks = 0;
-        this.range = 0;
+        if (this.range >= this.MAX_RANGE) {
+            return;
+        }
 
-        if (this.queue.isRanked()) {
-            Player player = Bukkit.getPlayer(this.uuid);
+        int previousRange = this.range;
+        this.range = Math.min(this.range + this.RANGE_INCREMENT, this.MAX_RANGE);
+
+        if (this.range != previousRange) {
             if (player != null) {
-                player.sendMessage(CC.translate("&aIncreased queue range to 50 due to inactivity. &7(" + getMinimumElo() + " - " + getMaximumElo() + ")"));
+                Arrays.asList(
+                        "",
+                        "&b&l" + this.queue.getKit().getName() + " &6&l" + Symbol.RANKED_STAR + "Ranked",
+                        " &f● &bELO Range: &f" + this.getMinimumElo() + " &7&l" + Symbol.ARROW_R + "&f " + this.getMaximumElo(),
+                        " &f● &bPing Range: &fN/A",
+                        "   " + (this.range == this.MAX_RANGE ? "&c&lRANGE LIMIT REACHED..." : "&7Searching for match..."),
+                        ""
+                ).forEach(line -> player.sendMessage(CC.translate(line)));
             }
         }
     }

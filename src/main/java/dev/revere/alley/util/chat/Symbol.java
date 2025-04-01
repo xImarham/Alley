@@ -9,6 +9,7 @@ import lombok.experimental.UtilityClass;
  */
 @UtilityClass
 public class Symbol {
+    public String RANKED_STAR = "✫";
     public String ARROW_R = "»";
     public String ARROW_L = "«";
     public String STAR_FILLED = "★";

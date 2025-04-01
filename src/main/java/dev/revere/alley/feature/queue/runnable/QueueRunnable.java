@@ -47,9 +47,9 @@ public class QueueRunnable implements Runnable {
      * @param queue The queue.
      */
     public void processQueue(Queue queue) {
-        queue.getProfiles().forEach(QueueProfile::queueRange);
+        queue.getProfiles().forEach(queuedProfile -> queuedProfile.queueRange(Bukkit.getPlayer(queuedProfile.getUuid())));
         queue.getProfiles().forEach(profile -> {
-            if (profile.getElapsedTime() >= 300000) { // 5 minutes
+            if (profile.getElapsedTime() >= queue.getMaxQueueTime()) {
                 if (queue.getProfile(profile.getUuid()).getState().equals(EnumProfileState.WAITING)) {
                     queue.getProfiles().remove(profile);
                     queue.removePlayer(profile);

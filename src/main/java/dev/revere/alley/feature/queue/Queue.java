@@ -22,19 +22,25 @@ import java.util.UUID;
 @Getter
 @Setter
 public class Queue {
-    private final LinkedList<QueueProfile> profiles = new LinkedList<>();
-    private final UUID uuid = UUID.randomUUID();
-    private final boolean ranked;
+    private final LinkedList<QueueProfile> profiles;
+
+    private final UUID uuid;
     private final Kit kit;
 
+    private final boolean ranked;
+    private final long maxQueueTime;
+
     /**
-     * Constructs a new Queue with the specified kit and adds it to the queue repository.
+     * Constructor for the Queue class.
      *
      * @param kit The kit associated with the queue.
      */
     public Queue(Kit kit, boolean ranked) {
+        this.profiles = new LinkedList<>();
+        this.uuid = UUID.randomUUID();
         this.kit = kit;
         this.ranked = ranked;
+        this.maxQueueTime = 300000L; // 5 minutes
         Alley.getInstance().getQueueService().getQueues().add(this);
     }
 
