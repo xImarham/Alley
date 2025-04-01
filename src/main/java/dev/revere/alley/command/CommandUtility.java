@@ -17,7 +17,7 @@ import dev.revere.alley.feature.leaderboard.command.LeaderboardCommand;
 import dev.revere.alley.feature.queue.command.admin.QueueCommand;
 import dev.revere.alley.feature.queue.command.player.LeaveQueueCommand;
 import dev.revere.alley.feature.queue.command.player.QueuesCommand;
-import dev.revere.alley.feature.service.command.ServiceCommand;
+import dev.revere.alley.feature.server.command.ServiceCommand;
 import dev.revere.alley.feature.spawn.command.SetSpawnCommand;
 import dev.revere.alley.feature.spawn.command.SpawnCommand;
 import dev.revere.alley.feature.spawn.command.SpawnItemsCommand;

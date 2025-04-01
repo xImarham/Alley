@@ -25,7 +25,7 @@ import dev.revere.alley.feature.leaderboard.LeaderboardService;
 import dev.revere.alley.feature.queue.QueueService;
 import dev.revere.alley.feature.scoreboard.ScoreboardTitleAnimator;
 import dev.revere.alley.feature.scoreboard.ScoreboardVisualizer;
-import dev.revere.alley.feature.service.ServerService;
+import dev.revere.alley.feature.server.ServerService;
 import dev.revere.alley.feature.spawn.SpawnService;
 import dev.revere.alley.feature.spawn.listener.SpawnListener;
 import dev.revere.alley.feature.tablist.task.TablistUpdateTask;
