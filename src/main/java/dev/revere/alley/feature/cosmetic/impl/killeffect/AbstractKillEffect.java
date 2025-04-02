@@ -47,6 +47,6 @@ public abstract class AbstractKillEffect implements ICosmetic {
      * @return the permission for this kill effect
      */
     public String getPermission() {
-        return "alley.kill.effects." + this.permission;
+        return "alley.cosmetic.killeffect." + this.permission;
     }
 }

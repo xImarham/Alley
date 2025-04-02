@@ -11,7 +11,7 @@ import org.bukkit.entity.Player;
  * @project Alley
  * @since 02/04/2025
  */
-@KillEffectData(name = "Heart", description = "Spawn hearts at the opponent", permission = "alley.cosmetic.killeffect.heart", icon = Material.REDSTONE, slot = 15)
+@KillEffectData(name = "Heart", description = "Spawn hearts at the opponent", permission = "heart", icon = Material.REDSTONE, slot = 15)
 public class HeartKillEffect extends AbstractKillEffect {
 
     @Override

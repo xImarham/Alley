@@ -11,7 +11,7 @@ import org.bukkit.entity.Player;
  * @project Alley
  * @date 01/06/2024
  */
-@KillEffectData(name = "Thunder", description = "Spawn a lighting bolt at the opponent", permission = "alley.cosmetic.killeffect.thunder", icon = Material.STICK, slot = 11)
+@KillEffectData(name = "Thunder", description = "Spawn a lighting bolt at the opponent", permission = "thunder", icon = Material.STICK, slot = 11)
 public class ThunderKillEffect extends AbstractKillEffect {
 
     @Override

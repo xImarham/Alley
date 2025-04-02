@@ -25,7 +25,7 @@ public class CosmeticsMenu extends Menu {
 
     @Override
     public String getTitle(Player player) {
-        return "&b&lCosmetics Menu - " + this.cosmeticType + "s";
+        return "&b&lCosmetics - " + this.cosmeticType + "s";
     }
 
     @Override

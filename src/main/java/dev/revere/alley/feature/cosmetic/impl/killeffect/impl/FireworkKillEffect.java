@@ -13,7 +13,7 @@ import java.util.stream.IntStream;
  * @project Alley
  * @since 02/04/2025
  */
-@KillEffectData(name = "Firework", description = "Spawn a firework at the opponent", permission = "alley.cosmetic.killeffect.firework", icon = Material.FIREWORK, slot = 14)
+@KillEffectData(name = "Firework", description = "Spawn a firework at the opponent", permission = "firework", icon = Material.FIREWORK, slot = 14)
 public class FireworkKillEffect extends AbstractKillEffect {
 
     @Override

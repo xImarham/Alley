@@ -11,7 +11,7 @@ import org.bukkit.entity.Player;
  * @project Alley
  * @since 02/04/2025
  */
-@KillEffectData(name = "Explosion", description = "Spawn explosion particles", permission = "alley.cosmetic.killeffect.explosion", icon = Material.TNT, slot = 13)
+@KillEffectData(name = "Explosion", description = "Spawn explosion particles", permission = "explosion", icon = Material.TNT, slot = 13)
 public class ExplosionKillEffect extends AbstractKillEffect {
 
     @Override

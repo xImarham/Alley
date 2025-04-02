@@ -47,6 +47,6 @@ public abstract class AbstractSoundEffect implements ICosmetic {
      * @return the permission for this kill effect
      */
     public String getPermission() {
-        return "alley.sound.effects." + this.permission;
+        return "alley.cosmetic.soundeffect." + this.permission;
     }
 }

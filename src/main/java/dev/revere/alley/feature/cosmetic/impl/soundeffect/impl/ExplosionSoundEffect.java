@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
  * @project Alley
  * @since 02/04/2025
  */
-@SoundEffectData(name = "Explosion", description = "Play an explosion sound", permission = "alley.cosmetic.soundeffect.explosion", icon = Material.TNT, slot = 12)
+@SoundEffectData(name = "Explosion", description = "Play an explosion sound", permission = "explosion", icon = Material.TNT, slot = 12)
 public class ExplosionSoundEffect extends AbstractSoundEffect {
 
     @Override

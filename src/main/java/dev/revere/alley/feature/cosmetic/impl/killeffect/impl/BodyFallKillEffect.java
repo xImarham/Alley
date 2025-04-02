@@ -11,7 +11,7 @@ import org.bukkit.entity.Player;
  * @project Alley
  * @since 02/04/2025
  */
-@KillEffectData(name = "Body Fall", description = "Let's the opponent's body fall.", permission = "alley.cosmetic.killeffect.bodyfall", icon = Material.DIAMOND_SWORD, slot = 16)
+@KillEffectData(name = "Body Fall", description = "Let's the opponent's body fall.", permission = "bodyfall", icon = Material.DIAMOND_SWORD, slot = 16)
 public class BodyFallKillEffect extends AbstractKillEffect {
 
     @Override

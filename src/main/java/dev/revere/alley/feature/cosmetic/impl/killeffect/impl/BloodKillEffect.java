@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
  * @project Alley
  * @date 01/06/2024
  */
-@KillEffectData(name = "Blood", description = "Spawn blood particles", permission = "alley.cosmetic.killeffect.blood", icon = Material.REDSTONE, slot = 12)
+@KillEffectData(name = "Blood", description = "Spawn blood particles", permission = "blood", icon = Material.REDSTONE, slot = 12)
 public class BloodKillEffect extends AbstractKillEffect {
 
     @Override
