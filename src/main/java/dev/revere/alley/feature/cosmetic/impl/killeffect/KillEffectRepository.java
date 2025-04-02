@@ -1,6 +1,6 @@
-package dev.revere.alley.feature.cosmetic.impl.killeffects;
+package dev.revere.alley.feature.cosmetic.impl.killeffect;
 
-import dev.revere.alley.feature.cosmetic.impl.killeffects.impl.*;
+import dev.revere.alley.feature.cosmetic.impl.killeffect.impl.*;
 import lombok.Getter;
 import dev.revere.alley.feature.cosmetic.interfaces.ICosmeticRepository;
 import dev.revere.alley.feature.cosmetic.repository.BaseCosmeticRepository;

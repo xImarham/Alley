@@ -1,7 +1,7 @@
-package dev.revere.alley.feature.cosmetic.impl.killeffects.impl;
+package dev.revere.alley.feature.cosmetic.impl.killeffect.impl;
 
-import dev.revere.alley.feature.cosmetic.impl.killeffects.AbstractKillEffect;
-import dev.revere.alley.feature.cosmetic.impl.killeffects.annotation.KillEffectData;
+import dev.revere.alley.feature.cosmetic.impl.killeffect.AbstractKillEffect;
+import dev.revere.alley.feature.cosmetic.impl.killeffect.annotation.KillEffectData;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 

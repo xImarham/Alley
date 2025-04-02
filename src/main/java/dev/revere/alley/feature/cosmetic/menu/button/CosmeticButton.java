@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import dev.revere.alley.Alley;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.feature.cosmetic.impl.soundeffect.AbstractSoundEffect;
-import dev.revere.alley.feature.cosmetic.impl.killeffects.AbstractKillEffect;
+import dev.revere.alley.feature.cosmetic.impl.killeffect.AbstractKillEffect;
 import dev.revere.alley.feature.cosmetic.interfaces.ICosmetic;
 import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.util.item.ItemBuilder;

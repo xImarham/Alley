@@ -2,7 +2,7 @@ package dev.revere.alley.feature.cosmetic.repository;
 
 import lombok.Getter;
 import dev.revere.alley.feature.cosmetic.impl.soundeffect.SoundEffectRepository;
-import dev.revere.alley.feature.cosmetic.impl.killeffects.KillEffectRepository;
+import dev.revere.alley.feature.cosmetic.impl.killeffect.KillEffectRepository;
 import dev.revere.alley.feature.cosmetic.interfaces.ICosmeticRepository;
 
 import java.util.HashMap;

@@ -1,4 +1,4 @@
-package dev.revere.alley.feature.cosmetic.impl.killeffects.annotation;
+package dev.revere.alley.feature.cosmetic.impl.killeffect.annotation;
 
 import org.bukkit.Material;
 

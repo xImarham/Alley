@@ -1,7 +1,7 @@
-package dev.revere.alley.feature.cosmetic.impl.killeffects;
+package dev.revere.alley.feature.cosmetic.impl.killeffect;
 
 import lombok.Data;
-import dev.revere.alley.feature.cosmetic.impl.killeffects.annotation.KillEffectData;
+import dev.revere.alley.feature.cosmetic.impl.killeffect.annotation.KillEffectData;
 import dev.revere.alley.feature.cosmetic.interfaces.ICosmetic;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
