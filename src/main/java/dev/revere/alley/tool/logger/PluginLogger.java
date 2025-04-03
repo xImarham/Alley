@@ -25,32 +25,33 @@ public class PluginLogger {
 
         PluginConstant pluginConstant = plugin.getPluginConstant();
         ChatColor color = pluginConstant.getMainColor();
+        ChatColor secondary = ChatColor.WHITE;
 
         Arrays.asList(
-                " ",
+                "",
                 "        " + color + "&l" + pluginConstant.getName() + color + " Practice",
-                " ",
-                "    &fAuthors: " + color + plugin.getDescription().getAuthors().toString().replace("[", "").replace("]", ""),
-                " ",
-                "    &fVersion: " + color + pluginConstant.getVersion(),
-                "    &fDiscord: " + color + plugin.getDescription().getWebsite(),
-                "    &fDescription: " + color + pluginConstant.getDescription(),
-                " ",
-                "    &fKits " + color + plugin.getKitService().getKits().size(),
-                "    &fArenas: " + color + plugin.getArenaService().getArenas().size(),
-                "    &fFFA Arenas: " + color + plugin.getFfaService().getMatches().size(),
-                "    &fDivisions: " + color + plugin.getDivisionService().getDivisions().size(),
-                " ",
-                "    &bMongoDB &f| &bStatus: &aConnected",
-                "     &fHost: " + color + plugin.getConfigService().getDatabaseConfig().getString("mongo.uri"),
-                "     &fDatabase: " + color + plugin.getConfigService().getDatabaseConfig().getString("mongo.database"),
-                "     &fLoaded Profiles: " + color + plugin.getProfileService().getProfiles().size(),
-                " ",
-                "    &fSpigot: " + color + plugin.getServer().getName(),
-                "    &fVersion: " + color + pluginConstant.getBukkitVersionExact(plugin),
-                " ",
-                "    &fLoaded in " + color + timeTaken + " &bms",
-                " "
+                "",
+                "    " + secondary + "Authors: " + color + plugin.getDescription().getAuthors().toString().replace("[", "").replace("]", ""),
+                "",
+                "    " + secondary + "Version: " + color + pluginConstant.getVersion(),
+                "    " + secondary + "Discord: " + color + plugin.getDescription().getWebsite(),
+                "    " + secondary + "Description: " + color + pluginConstant.getDescription(),
+                "",
+                "    " + secondary + "Kits " + color + plugin.getKitService().getKits().size(),
+                "    " + secondary + "Arenas: " + color + plugin.getArenaService().getArenas().size(),
+                "    " + secondary + "FFA Arenas: " + color + plugin.getFfaService().getMatches().size(),
+                "    " + secondary + "Divisions: " + color + plugin.getDivisionService().getDivisions().size(),
+                "",
+                "    " + color + "MongoDB " + secondary + "| " + color + "Status: &aConnected",
+                "     " + secondary + "Host: " + color + plugin.getConfigService().getDatabaseConfig().getString("mongo.uri"),
+                "     " + secondary + "Database: " + color + plugin.getConfigService().getDatabaseConfig().getString("mongo.database"),
+                "     " + secondary + "Loaded Profiles: " + color + plugin.getProfileService().getProfiles().size(),
+                "",
+                "    " + secondary + "Spigot: " + color + plugin.getServer().getName(),
+                "    " + secondary + "Version: " + color + pluginConstant.getBukkitVersionExact(plugin),
+                "",
+                "    " + secondary + "Loaded in " + color + timeTaken + " " + color + "ms",
+                ""
         ).forEach(line -> plugin.getServer().getConsoleSender().sendMessage(CC.translate(line)));
     }
 
