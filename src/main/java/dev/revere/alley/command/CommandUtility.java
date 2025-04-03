@@ -46,6 +46,7 @@ import dev.revere.alley.profile.shop.command.ShopCommand;
 import dev.revere.alley.profile.shop.command.admin.SetCoinsCommand;
 import dev.revere.alley.profile.stats.command.StatsCommand;
 import dev.revere.alley.tool.logger.Logger;
+import dev.revere.alley.tool.logger.command.ViewErrorCommand;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -95,6 +96,8 @@ public class CommandUtility {
             new PushCommand();
             new StrikeCommand();
             new TrollCommand();
+
+            new ViewErrorCommand();
         });
 
         Logger.logTimeWithAction("registered", "Donator Commands", () -> {

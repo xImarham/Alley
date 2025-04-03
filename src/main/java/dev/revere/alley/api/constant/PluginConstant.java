@@ -4,6 +4,7 @@ import lombok.Getter;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.reflections.Reflections;
 
 /**
  * This class holds constants related to a plugin.
@@ -28,6 +29,8 @@ public class PluginConstant {
     private final String adminPermissionPrefix;
     private final String permissionLackMessage;
 
+    private final Reflections reflections;
+
     /**
      * Constructor for the PluginConstant class.
      *
@@ -50,6 +53,8 @@ public class PluginConstant {
         this.packageDirectory = packageDirectory;
         this.adminPermissionPrefix = pluginDescription.getName() + ".admin";
         this.permissionLackMessage = ChatColor.translateAlternateColorCodes('&', "&cNo Permission.");
+
+        this.reflections = new Reflections(packageDirectory);
     }
 
     /**

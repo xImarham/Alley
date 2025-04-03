@@ -41,7 +41,7 @@ public class AnimationRepository {
         this.internalAnimations = new HashSet<>();
         this.configAnimations = new HashSet<>();
 
-        this.reflections = new Reflections(plugin.getPluginConstant().getPackageDirectory());
+        this.reflections = plugin.getPluginConstant().getReflections();
 
         this.registerAnimations(AbstractAnimation.class, this.internalAnimations);
         this.registerAnimations(TextAnimation.class, this.configAnimations);

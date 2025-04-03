@@ -5,6 +5,11 @@ import dev.revere.alley.util.chat.CC;
 import lombok.experimental.UtilityClass;
 import org.bukkit.command.ConsoleCommandSender;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+
 /**
  * @author Remi
  * @project Alley
@@ -13,9 +18,11 @@ import org.bukkit.command.ConsoleCommandSender;
 @UtilityClass
 public class Logger {
     private final static ConsoleCommandSender consoleSender;
+    private static final Map<UUID, Exception> storedExceptions;
 
     static {
         consoleSender = Alley.getInstance().getServer().getConsoleSender();
+        storedExceptions = new HashMap<>();
     }
 
     /**
@@ -42,8 +49,60 @@ public class Logger {
      * @param message   the info message or the class name
      * @param exception the exception to log
      */
-    public void logException(String message, Exception exception) {
-        consoleSender.sendMessage(CC.translate(CC.ERROR_PREFIX + "&c(EXCEPTION) &f" + message + ": &r" + exception.getMessage() + "!"));
+    public static void logException(String message, Exception exception) {
+        UUID errorId = UUID.randomUUID();
+        storedExceptions.put(errorId, exception);
+
+        Arrays.asList(
+                "",
+                CC.ERROR_PREFIX + "&c&lEXCEPTION",
+                " &f" + message + ": &r" + exception.getMessage(),
+                "",
+                " &c(Type &4viewerror " + errorId + " &cin console to see details)",
+                ""
+        ).forEach(line -> consoleSender.sendMessage(CC.translate(line)));
+    }
+
+    /**
+     * Retrieve and print the full stack trace of a stored exception.
+     *
+     * @param errorId The UUID of the error.
+     */
+    @SuppressWarnings("all")
+    public static void viewException(UUID errorId) {
+        Exception exception = storedExceptions.get(errorId);
+        if (exception == null) {
+            consoleSender.sendMessage(CC.translate(CC.ERROR_PREFIX + "&cNo exception found with ID: " + errorId));
+            return;
+        }
+
+        Arrays.asList(
+                "",
+                CC.MENU_BAR + CC.MENU_BAR + CC.MENU_BAR + CC.MENU_BAR,
+                "",
+                "&c&lVIEWING ERROR: " + errorId,
+                ""
+        ).forEach(line -> consoleSender.sendMessage(CC.translate(line)));
+
+        exception.printStackTrace();
+
+        StackTraceElement[] stackTrace = exception.getStackTrace();
+        String locationMessage = "&cError occurred at: Unknown location";
+
+        for (StackTraceElement element : stackTrace) {
+            if (element.getClassName().startsWith(Alley.getInstance().getPluginConstant().getPackageDirectory())) {
+                locationMessage = "&cError occurred at: " + element.getClassName() + " (Line " + element.getLineNumber() + ")";
+                break;
+            }
+        }
+
+        consoleSender.sendMessage("");
+        consoleSender.sendMessage(CC.translate(locationMessage));
+        consoleSender.sendMessage("");
+        consoleSender.sendMessage(CC.MENU_BAR + CC.MENU_BAR + CC.MENU_BAR + CC.MENU_BAR);
+        consoleSender.sendMessage("");
+
+        storedExceptions.remove(errorId);
     }
 
     /**

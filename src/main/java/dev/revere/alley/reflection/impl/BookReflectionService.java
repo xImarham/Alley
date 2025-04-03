@@ -1,11 +1,9 @@
-package dev.revere.alley.util;
+package dev.revere.alley.reflection.impl;
 
+import dev.revere.alley.reflection.IReflection;
 import io.netty.buffer.Unpooled;
-import lombok.experimental.UtilityClass;
-import dev.revere.alley.util.reflection.ReflectionUtils;
 import net.minecraft.server.v1_8_R3.*;
 import org.bukkit.Material;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -13,8 +11,12 @@ import org.bukkit.inventory.ItemStack;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 
-@UtilityClass
-public class BookUtil {
+/**
+ * @author Emmy
+ * @project Alley
+ * @since 03/04/2025
+ */
+public class BookReflectionService implements IReflection {
     /**
      * Opens a book for a player.
      *
@@ -36,7 +38,8 @@ public class BookUtil {
             dataOutputStream.writeInt(0);
 
             PacketPlayOutCustomPayload packet = new PacketPlayOutCustomPayload("MC|BOpen", new PacketDataSerializer(Unpooled.wrappedBuffer(byteArrayOutputStream.toByteArray())));
-            ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
+            this.sendPacket(player, packet);
+
             player.getInventory().setItem(slot, oldItem);
         } catch (Exception exception) {
             throw new RuntimeException(exception);
@@ -53,15 +56,18 @@ public class BookUtil {
      */
     public ItemStack createBook(String title, String author, String[] pages) {
         ItemStack bookItem = new ItemStack(Material.WRITTEN_BOOK, 1);
-        Class<?> craftItemStack = ReflectionUtils.getCraftBukkitClassFromName("inventory.CraftItemStack");
+
         net.minecraft.server.v1_8_R3.ItemStack itemStackCopy = CraftItemStack.asNMSCopy(bookItem);
+
         NBTTagCompound nbt = new NBTTagCompound();
         NBTTagList pagesList = new NBTTagList();
         nbt.setString("title", title);
         nbt.setString("author", author);
+
         for (String page : pages) {
             pagesList.add(new NBTTagString(page));
         }
+
         nbt.set("pages", pagesList);
         itemStackCopy.setTag(nbt);
         return CraftItemStack.asBukkitCopy(itemStackCopy);

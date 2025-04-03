@@ -3,6 +3,7 @@ package dev.revere.alley.feature.cosmetic.impl.killeffect.impl;
 import dev.revere.alley.Alley;
 import dev.revere.alley.feature.cosmetic.impl.killeffect.AbstractKillEffect;
 import dev.revere.alley.feature.cosmetic.impl.killeffect.annotation.KillEffectData;
+import dev.revere.alley.reflection.impl.DeathReflectionService;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
@@ -16,6 +17,6 @@ public class BodyFallKillEffect extends AbstractKillEffect {
 
     @Override
     public void spawnEffect(Player player) {
-        Alley.getInstance().getDeathReflectionService().animateDeath(player);
+        Alley.getInstance().getReflectionRepository().getReflection(DeathReflectionService.class).animateDeath(player);
     }
 }

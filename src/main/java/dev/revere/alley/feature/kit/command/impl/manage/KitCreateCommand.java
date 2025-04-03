@@ -7,6 +7,7 @@ import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.feature.kit.Kit;
 import dev.revere.alley.feature.kit.KitService;
 import dev.revere.alley.locale.KitLocale;
+import dev.revere.alley.reflection.impl.ActionBarReflectionService;
 import dev.revere.alley.util.InventoryUtil;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.Material;
@@ -71,7 +72,7 @@ public class KitCreateCommand extends BaseCommand {
 
         kitService.createKit(kitName, inventory, armor, icon, slot);
         Alley.getInstance().getProfileService().loadProfiles(); // to update the kits in the database
-        Alley.getInstance().getActionBarReflectionService().sendMessage(player, KitLocale.KIT_CREATED.getMessage().replace("{kit-name}", kitName), 5);
+        Alley.getInstance().getReflectionRepository().getReflection(ActionBarReflectionService.class).sendMessage(player, KitLocale.KIT_CREATED.getMessage().replace("{kit-name}", kitName), 5);
 
         player.sendMessage(CC.translate(KitLocale.KIT_CREATED.getMessage().replace("{kit-name}", kitName)));
         player.sendMessage(CC.translate("&7Do not forget to reload the queues by using &c&l/queue reload&7."));

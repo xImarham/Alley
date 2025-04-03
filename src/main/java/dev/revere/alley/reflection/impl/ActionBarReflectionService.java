@@ -18,7 +18,7 @@ public class ActionBarReflectionService implements IReflection {
     protected final Alley plugin;
 
     /**
-     * Constructor for the ActionBarService class.
+     * Constructor for the ActionBarReflectionService class.
      *
      * @param plugin The Alley plugin instance.
      */
@@ -52,5 +52,15 @@ public class ActionBarReflectionService implements IReflection {
         } catch (Exception exception) {
             Logger.logException("An error occurred while trying to send an action bar message to " + player.getName(), exception);
         }
+    }
+
+    /**
+     * Sends a death message to the killer.
+     *
+     * @param killer The player who killed the victim.
+     * @param victim The player who died.
+     */
+    public void sendDeathMessage(Player killer, Player victim) {
+        this.sendMessage(killer, "&c&lKILL! &f" + victim.getName(), 3);
     }
 }

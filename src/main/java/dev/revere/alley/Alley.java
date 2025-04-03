@@ -47,9 +47,7 @@ import dev.revere.alley.game.party.PartyService;
 import dev.revere.alley.game.party.listener.PartyListener;
 import dev.revere.alley.profile.ProfileService;
 import dev.revere.alley.profile.listener.ProfileListener;
-import dev.revere.alley.reflection.impl.ActionBarReflectionService;
-import dev.revere.alley.reflection.impl.DeathReflectionService;
-import dev.revere.alley.reflection.impl.TitleReflectionService;
+import dev.revere.alley.reflection.ReflectionRepository;
 import dev.revere.alley.task.ArrowRemovalTask;
 import dev.revere.alley.task.RepositoryCleanupTask;
 import dev.revere.alley.tool.animation.AnimationRepository;
@@ -94,10 +92,8 @@ public class Alley extends JavaPlugin {
     private LeaderboardService leaderboardService;
     private EloCalculator eloCalculator;
     private ServerService serverService;
-    private DeathReflectionService deathReflectionService;
-    private ActionBarReflectionService actionBarReflectionService;
-    private TitleReflectionService titleReflectionService;
     private AnimationRepository animationRepository;
+    private ReflectionRepository reflectionRepository;
 
     private boolean loaded;
 
@@ -179,9 +175,7 @@ public class Alley extends JavaPlugin {
         services.put(ServerService.class.getSimpleName(), () -> this.serverService = new ServerService());
         services.put(AnimationRepository.class.getSimpleName(), () -> this.animationRepository = new AnimationRepository(this));
         services.put(Assemble.class.getSimpleName() + " API", () -> this.assemble = new Assemble(this, new ScoreboardVisualizer(this)));
-        services.put(DeathReflectionService.class.getSimpleName(), () -> this.deathReflectionService = new DeathReflectionService());
-        services.put(ActionBarReflectionService.class.getSimpleName(), () -> this.actionBarReflectionService = new ActionBarReflectionService(this));
-        services.put(TitleReflectionService.class.getSimpleName(), () -> this.titleReflectionService = new TitleReflectionService());
+        services.put(ReflectionRepository.class.getSimpleName(), () -> this.reflectionRepository = new ReflectionRepository(this));
 
         services.forEach(Logger::logTime);
     }
