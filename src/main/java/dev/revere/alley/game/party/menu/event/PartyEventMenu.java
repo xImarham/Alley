@@ -8,7 +8,7 @@ import dev.revere.alley.game.party.menu.event.impl.ffa.PartyEventFFAMenu;
 import dev.revere.alley.game.party.menu.event.impl.split.PartyEventSplitMenu;
 import dev.revere.alley.locale.impl.PartyLocale;
 import dev.revere.alley.util.chat.CC;
-import dev.revere.alley.util.item.ItemBuilder;
+import dev.revere.alley.tool.item.ItemBuilder;
 import lombok.AllArgsConstructor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;

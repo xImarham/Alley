@@ -14,7 +14,7 @@ import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.ProfileService;
 import dev.revere.alley.util.PlayerUtil;
-import dev.revere.alley.util.item.ItemBuilder;
+import dev.revere.alley.tool.item.ItemBuilder;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.ChatColor;

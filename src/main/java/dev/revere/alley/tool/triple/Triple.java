@@ -1,4 +1,4 @@
-package dev.revere.alley.util.triple;
+package dev.revere.alley.tool.triple;
 
 
 /**

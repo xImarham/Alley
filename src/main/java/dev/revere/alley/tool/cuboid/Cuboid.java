@@ -1,4 +1,4 @@
-package dev.revere.alley.util.cuboid;
+package dev.revere.alley.tool.cuboid;
 
 import org.bukkit.Location;
 import org.bukkit.World;

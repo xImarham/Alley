@@ -3,7 +3,7 @@ package dev.revere.alley.profile.shop.menu;
 import lombok.AllArgsConstructor;
 import dev.revere.alley.profile.shop.menu.impl.ShopEffectMenu;
 import dev.revere.alley.api.menu.Button;
-import dev.revere.alley.util.item.ItemBuilder;
+import dev.revere.alley.tool.item.ItemBuilder;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;

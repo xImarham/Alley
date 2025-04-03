@@ -6,7 +6,7 @@ import dev.revere.alley.game.ffa.enums.EnumFFAState;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
 import dev.revere.alley.util.chat.CC;
-import dev.revere.alley.util.cuboid.Cuboid;
+import dev.revere.alley.tool.cuboid.Cuboid;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

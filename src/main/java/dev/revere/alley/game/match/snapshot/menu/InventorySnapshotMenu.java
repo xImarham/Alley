@@ -7,7 +7,7 @@ import dev.revere.alley.api.menu.Menu;
 import dev.revere.alley.game.match.snapshot.menu.button.InventorySnapshotArmorButton;
 import dev.revere.alley.game.match.snapshot.menu.button.ViewOpponentButton;
 import dev.revere.alley.util.chat.CC;
-import dev.revere.alley.util.item.ItemBuilder;
+import dev.revere.alley.tool.item.ItemBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;

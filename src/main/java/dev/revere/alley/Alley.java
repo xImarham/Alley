@@ -25,7 +25,7 @@ import dev.revere.alley.feature.kit.KitService;
 import dev.revere.alley.feature.kit.settings.KitSettingService;
 import dev.revere.alley.feature.leaderboard.LeaderboardService;
 import dev.revere.alley.feature.queue.QueueService;
-import dev.revere.alley.feature.scoreboard.ScoreboardTitleAnimator;
+import dev.revere.alley.tool.animation.config.impl.ScoreboardTitleAnimator;
 import dev.revere.alley.feature.scoreboard.ScoreboardVisualizer;
 import dev.revere.alley.feature.server.ServerService;
 import dev.revere.alley.feature.spawn.SpawnService;
@@ -169,7 +169,7 @@ public class Alley extends JavaPlugin {
         services.put(EloCalculator.class.getSimpleName(), () -> this.eloCalculator = new EloCalculator());
         services.put(ServerService.class.getSimpleName(), () -> this.serverService = new ServerService());
         services.put(ScoreboardTitleAnimator.class.getSimpleName(), () -> this.scoreboardTitleAnimator = new ScoreboardTitleAnimator(this.configService.getScoreboardConfig()));
-        services.put(Assemble.class.getSimpleName() + " API", () -> this.assemble = new Assemble(this, new ScoreboardVisualizer()));
+        services.put(Assemble.class.getSimpleName() + " API", () -> this.assemble = new Assemble(this, new ScoreboardVisualizer(this)));
         services.put(DeathReflectionService.class.getSimpleName(), () -> this.deathReflectionService = new DeathReflectionService());
         services.put(ActionBarService.class.getSimpleName(), () -> this.actionBarService = new ActionBarService(this));
 

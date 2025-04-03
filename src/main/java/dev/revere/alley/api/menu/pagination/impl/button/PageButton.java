@@ -3,7 +3,7 @@ package dev.revere.alley.api.menu.pagination.impl.button;
 import dev.revere.alley.api.menu.MenuUtil;
 import dev.revere.alley.api.menu.pagination.PaginatedMenu;
 import dev.revere.alley.api.menu.pagination.impl.menu.ViewAllPagesMenu;
-import dev.revere.alley.util.item.ItemBuilder;
+import dev.revere.alley.tool.item.ItemBuilder;
 import lombok.AllArgsConstructor;
 import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.util.chat.CC;

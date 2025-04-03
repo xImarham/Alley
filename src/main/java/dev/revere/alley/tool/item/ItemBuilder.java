@@ -1,4 +1,4 @@
-package dev.revere.alley.util.item;
+package dev.revere.alley.tool.item;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;

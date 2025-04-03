@@ -7,7 +7,7 @@ import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumWorldTime;
 import dev.revere.alley.profile.settings.menu.MatchSettingsMenu;
 import dev.revere.alley.util.chat.CC;
-import dev.revere.alley.util.item.ItemBuilder;
+import dev.revere.alley.tool.item.ItemBuilder;
 import lombok.AllArgsConstructor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;

@@ -1,6 +1,6 @@
-package dev.revere.alley.util.triple.impl;
+package dev.revere.alley.tool.triple.impl;
 
-import dev.revere.alley.util.triple.Triple;
+import dev.revere.alley.tool.triple.Triple;
 import lombok.Getter;
 import lombok.Setter;
 

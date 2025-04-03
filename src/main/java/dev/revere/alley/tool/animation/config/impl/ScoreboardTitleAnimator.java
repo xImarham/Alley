@@ -1,6 +1,6 @@
-package dev.revere.alley.feature.scoreboard;
+package dev.revere.alley.tool.animation.config.impl;
 
-import dev.revere.alley.util.animator.TextAnimator;
+import dev.revere.alley.tool.animation.config.TextAnimator;
 import org.bukkit.configuration.file.FileConfiguration;
 
 /**

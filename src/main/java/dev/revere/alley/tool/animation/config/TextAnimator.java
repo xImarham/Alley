@@ -1,4 +1,4 @@
-package dev.revere.alley.util.animator;
+package dev.revere.alley.tool.animation.config;
 
 import dev.revere.alley.util.TaskUtil;
 import lombok.Getter;

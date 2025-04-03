@@ -15,11 +15,11 @@ import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
-import dev.revere.alley.util.visual.AnimationUtil;
-import dev.revere.alley.util.visual.ScoreboardUtil;
 import dev.revere.alley.util.TimeUtil;
+import dev.revere.alley.tool.animation.internal.impl.DotAnimationImpl;
 import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.util.reflection.BukkitReflection;
+import dev.revere.alley.util.visual.ScoreboardUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -34,6 +34,19 @@ import java.util.List;
  * @date 27/03/2024 - 14:27
  */
 public class ScoreboardVisualizer implements IAssembleAdapter {
+    protected final Alley plugin;
+    protected final DotAnimationImpl dotAnimation;
+
+    /**
+     * Constructor for the ScoreboardVisualizer class.
+     *
+     * @param plugin The Alley plugin instance.
+     */
+    public ScoreboardVisualizer(Alley plugin) {
+        this.plugin = plugin;
+        this.dotAnimation = new DotAnimationImpl();
+    }
+    
     /**
      * Get the title of the scoreboard.
      *
@@ -42,7 +55,7 @@ public class ScoreboardVisualizer implements IAssembleAdapter {
      */
     @Override
     public String getTitle(Player player) {
-        return CC.translate(Alley.getInstance().getScoreboardTitleAnimator().getText()
+        return CC.translate(this.plugin.getScoreboardTitleAnimator().getText()
                 .replaceAll("%server-name%", Bukkit.getServerName())
         );
     }
@@ -55,8 +68,8 @@ public class ScoreboardVisualizer implements IAssembleAdapter {
      */
     @Override
     public List<String> getLines(Player player) {
-        if (Alley.getInstance().getProfileService().getProfile(player.getUniqueId()).getProfileData().getProfileSettingData().isScoreboardEnabled()) {
-            Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
+        if (this.plugin.getProfileService().getProfile(player.getUniqueId()).getProfileData().getProfileSettingData().isScoreboardEnabled()) {
+            Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
             List<String> lines = new ArrayList<>();
             if (profile == null) {
                 return Arrays.asList(
@@ -69,7 +82,7 @@ public class ScoreboardVisualizer implements IAssembleAdapter {
                 );
             }
 
-            if (Alley.getInstance().getConfigService().getConfig("providers/scoreboard.yml").getConfigurationSection("scoreboard.lines") == null) {
+            if (this.plugin.getConfigService().getConfig("providers/scoreboard.yml").getConfigurationSection("scoreboard.lines") == null) {
                 return Arrays.asList(
                         "&cNo lines found in the",
                         "&cscoreboard.yml file.",
@@ -81,16 +94,16 @@ public class ScoreboardVisualizer implements IAssembleAdapter {
             }
             switch (profile.getState()) {
                 case LOBBY:
-                    for (String line : Alley.getInstance().getConfigService().getConfig("providers/scoreboard.yml").getStringList("scoreboard.lines.lobby")) {
+                    for (String line : this.plugin.getConfigService().getConfig("providers/scoreboard.yml").getStringList("scoreboard.lines.lobby")) {
                         lines.add(CC.translate(line)
                                 .replaceAll("\\{sidebar}", this.getScoreboardLines(player))
                                 .replaceAll("\\{online}", String.valueOf(Bukkit.getOnlinePlayers().size()))
-                                .replaceAll("\\{playing}", String.valueOf(Alley.getInstance().getProfileService().getProfiles().values().stream().filter(profile1 -> profile1.getState() == EnumProfileState.PLAYING).count()))
-                                .replaceAll("\\{in-queue}", String.valueOf(Alley.getInstance().getProfileService().getProfiles().values().stream().filter(profile1 -> profile1.getState() == EnumProfileState.WAITING).count())));
+                                .replaceAll("\\{playing}", String.valueOf(this.plugin.getProfileService().getProfiles().values().stream().filter(profile1 -> profile1.getState() == EnumProfileState.PLAYING).count()))
+                                .replaceAll("\\{in-queue}", String.valueOf(this.plugin.getProfileService().getProfiles().values().stream().filter(profile1 -> profile1.getState() == EnumProfileState.WAITING).count())));
                     }
 
                     if (profile.getParty() != null) {
-                        for (String line : Alley.getInstance().getConfigService().getConfig("providers/scoreboard.yml").getStringList("scoreboard.lines.party-addition")) {
+                        for (String line : this.plugin.getConfigService().getConfig("providers/scoreboard.yml").getStringList("scoreboard.lines.party-addition")) {
                             lines.add(CC.translate(line)
                                     .replaceAll("\\{sidebar}", this.getScoreboardLines(player))
                                     .replaceAll("\\{party-size}", String.valueOf(profile.getParty().getMembers().size()))
@@ -100,16 +113,16 @@ public class ScoreboardVisualizer implements IAssembleAdapter {
 
                     break;
                 case WAITING:
-                    for (String line : Alley.getInstance().getConfigService().getConfig("providers/scoreboard.yml").getStringList("scoreboard.lines.waiting")) {
+                    for (String line : this.plugin.getConfigService().getConfig("providers/scoreboard.yml").getStringList("scoreboard.lines.waiting")) {
                         lines.add(CC.translate(line)
                                 .replaceAll("\\{sidebar}", this.getScoreboardLines(player))
                                 .replaceAll("\\{online}", String.valueOf(Bukkit.getOnlinePlayers().size()))
-                                .replaceAll("\\{playing}", String.valueOf(Alley.getInstance().getProfileService().getProfiles().values().stream().filter(profile1 -> profile1.getState() == EnumProfileState.PLAYING).count()))
-                                .replaceAll("\\{in-queue}", String.valueOf(Alley.getInstance().getProfileService().getProfiles().values().stream().filter(profile1 -> profile1.getState() == EnumProfileState.WAITING).count()))
-                                .replaceAll("\\{queued-type}", Alley.getInstance().getProfileService().getProfile(player.getUniqueId()).getQueueProfile().getQueue().getQueueType())
-                                .replaceAll("\\{queued-time}", String.valueOf(Alley.getInstance().getProfileService().getProfile(player.getUniqueId()).getQueueProfile().getFormattedElapsedTime()))
-                                .replaceAll("\\{dot-animation}", AnimationUtil.getDots())
-                                .replaceAll("\\{queued-kit}", String.valueOf(Alley.getInstance().getProfileService().getProfile(player.getUniqueId()).getQueueProfile().getQueue().getKit().getName())));
+                                .replaceAll("\\{playing}", String.valueOf(this.plugin.getProfileService().getProfiles().values().stream().filter(profile1 -> profile1.getState() == EnumProfileState.PLAYING).count()))
+                                .replaceAll("\\{in-queue}", String.valueOf(this.plugin.getProfileService().getProfiles().values().stream().filter(profile1 -> profile1.getState() == EnumProfileState.WAITING).count()))
+                                .replaceAll("\\{queued-type}", this.plugin.getProfileService().getProfile(player.getUniqueId()).getQueueProfile().getQueue().getQueueType())
+                                .replaceAll("\\{queued-time}", String.valueOf(this.plugin.getProfileService().getProfile(player.getUniqueId()).getQueueProfile().getFormattedElapsedTime()))
+                                .replaceAll("\\{dot-animation}", this.dotAnimation.getCurrentFrame())
+                                .replaceAll("\\{queued-kit}", String.valueOf(this.plugin.getProfileService().getProfile(player.getUniqueId()).getQueueProfile().getQueue().getKit().getName())));
                     }
                     break;
                 case PLAYING:
@@ -135,7 +148,7 @@ public class ScoreboardVisualizer implements IAssembleAdapter {
                         } else if (profile.getMatch().getKit().isSettingEnabled(KitSettingStickFightImpl.class) && ((MatchRoundsRegularImpl) profile.getMatch()).getCurrentRound() > 0) {
                             this.replaceStickFightLines(player, lines, opponent, (MatchStickFightImpl) profile.getMatch(), profile);
                         } else {
-                            for (String line : Alley.getInstance().getConfigService().getConfig("providers/scoreboard.yml").getStringList("scoreboard.lines.starting")) {
+                            for (String line : this.plugin.getConfigService().getConfig("providers/scoreboard.yml").getStringList("scoreboard.lines.starting")) {
                                 lines.add(CC.translate(line)
                                         .replaceAll("\\{sidebar}", this.getScoreboardLines(player))
                                         .replaceAll("\\{opponent}", opponent.getPlayer().getUsername())
@@ -143,12 +156,12 @@ public class ScoreboardVisualizer implements IAssembleAdapter {
                                         .replaceAll("\\{player-ping}", String.valueOf(BukkitReflection.getPing(player)))
                                         .replaceAll("\\{duration}", profile.getMatch().getDuration())
                                         .replaceAll("\\{arena}", profile.getMatch().getArena().getDisplayName() == null ? "&c&lNULL" : profile.getMatch().getArena().getDisplayName())
-                                        .replaceAll("\\{dot-animation}", AnimationUtil.getDots())
+                                        .replaceAll("\\{dot-animation}", this.dotAnimation.getCurrentFrame())
                                         .replaceAll("\\{kit}", profile.getMatch().getKit().getDisplayName()));
                             }
                         }
                     } else if (profile.getMatch().getState() == EnumMatchState.ENDING_MATCH) {
-                        for (String line : Alley.getInstance().getConfigService().getConfig("providers/scoreboard.yml").getStringList("scoreboard.lines.ending")) {
+                        for (String line : this.plugin.getConfigService().getConfig("providers/scoreboard.yml").getStringList("scoreboard.lines.ending")) {
                             lines.add(CC.translate(line)
                                     .replaceAll("\\{sidebar}", this.getScoreboardLines(player))
                                     .replaceAll("\\{opponent}", opponent.getPlayer().getUsername())
@@ -161,7 +174,7 @@ public class ScoreboardVisualizer implements IAssembleAdapter {
                                     .replaceAll("\\{end-result}", opponent.getPlayer().isDead() ? "&a&lVICTORY!" : "&c&lDEFEAT!"));
                         }
                     } else if (profile.getMatch().getKit().isSettingEnabled(KitSettingBoxingImpl.class)) {
-                        for (String line : Alley.getInstance().getConfigService().getConfig("providers/scoreboard.yml").getStringList("scoreboard.lines.playing.boxing-match")) {
+                        for (String line : this.plugin.getConfigService().getConfig("providers/scoreboard.yml").getStringList("scoreboard.lines.playing.boxing-match")) {
                             lines.add(CC.translate(line)
                                     .replaceAll("\\{sidebar}", this.getScoreboardLines(player))
                                     .replaceAll("\\{opponent}", opponent.getPlayer().getUsername())
@@ -181,7 +194,7 @@ public class ScoreboardVisualizer implements IAssembleAdapter {
                     } else if (profile.getMatch().getKit().isSettingEnabled(KitSettingStickFightImpl.class)) {
                         this.replaceStickFightLines(player, lines, opponent, (MatchStickFightImpl) profile.getMatch(), profile);
                     } else if (profile.getMatch().getKit().isSettingEnabled(KitSettingLivesImpl.class)) {
-                        for (String line : Alley.getInstance().getConfigService().getConfig("providers/scoreboard.yml").getStringList("scoreboard.lines.playing.lives-match")) {
+                        for (String line : this.plugin.getConfigService().getConfig("providers/scoreboard.yml").getStringList("scoreboard.lines.playing.lives-match")) {
                             lines.add(CC.translate(line)
                                     .replaceAll("\\{sidebar}", this.getScoreboardLines(player))
                                     .replaceAll("\\{opponent}", opponent.getPlayer().getUsername())
@@ -194,7 +207,7 @@ public class ScoreboardVisualizer implements IAssembleAdapter {
                                     .replaceAll("\\{kit}", profile.getMatch().getKit().getDisplayName()));
                         }
                     } else {
-                        for (String line : Alley.getInstance().getConfigService().getConfig("providers/scoreboard.yml").getStringList("scoreboard.lines.playing.regular-match")) {
+                        for (String line : this.plugin.getConfigService().getConfig("providers/scoreboard.yml").getStringList("scoreboard.lines.playing.regular-match")) {
                             lines.add(CC.translate(line)
                                     .replaceAll("\\{sidebar}", this.getScoreboardLines(player))
                                     .replaceAll("\\{opponent}", opponent.getPlayer().getUsername())
@@ -208,7 +221,7 @@ public class ScoreboardVisualizer implements IAssembleAdapter {
                     break;
                 case SPECTATING:
                     if (profile.getMatch() instanceof MatchRegularImpl) {
-                        for (String line : Alley.getInstance().getConfigService().getConfig("providers/scoreboard.yml").getStringList("scoreboard.lines.spectating")) {
+                        for (String line : this.plugin.getConfigService().getConfig("providers/scoreboard.yml").getStringList("scoreboard.lines.spectating")) {
                             lines.add(CC.translate(line)
                                     .replaceAll("\\{sidebar}", this.getScoreboardLines(player))
                                     .replaceAll("\\{playerA}", profile.getMatch().getParticipants().get(0).getPlayer().getUsername())
@@ -224,9 +237,9 @@ public class ScoreboardVisualizer implements IAssembleAdapter {
                     }
                     break;
                 case FFA:
-                    CombatService combatService = Alley.getInstance().getCombatService();
-                    List<String> ffaLines = Alley.getInstance().getConfigService().getConfig("providers/scoreboard.yml").getStringList("scoreboard.lines.ffa");
-                    List<String> combatTagLines = Alley.getInstance().getConfigService().getConfig("providers/scoreboard.yml").getStringList("ffa-combat-tag");
+                    CombatService combatService = this.plugin.getCombatService();
+                    List<String> ffaLines = this.plugin.getConfigService().getConfig("providers/scoreboard.yml").getStringList("scoreboard.lines.ffa");
+                    List<String> combatTagLines = this.plugin.getConfigService().getConfig("providers/scoreboard.yml").getStringList("ffa-combat-tag");
 
                     for (String line : ffaLines) {
                         if (line.contains("{player-combat}")) {
@@ -241,7 +254,7 @@ public class ScoreboardVisualizer implements IAssembleAdapter {
                                     .replaceAll("\\{sidebar}", this.getScoreboardLines(player))
                                     .replaceAll("\\{kit}", profile.getFfaMatch().getKit().getDisplayName())
                                     .replaceAll("\\{players}", String.valueOf(profile.getFfaMatch().getPlayers().size()))
-                                    .replaceAll("\\{zone}", Alley.getInstance().getFfaSpawnService().getCuboid().isIn(player) ? "Spawn" : "Warzone")
+                                    .replaceAll("\\{zone}", this.plugin.getFfaSpawnService().getCuboid().isIn(player) ? "Spawn" : "Warzone")
                                     .replaceAll("\\{kills}", String.valueOf(profile.getProfileData().getFfaData().get(profile.getFfaMatch().getKit().getName()).getKills()))
                                     .replaceAll("\\{deaths}", String.valueOf(profile.getProfileData().getFfaData().get(profile.getFfaMatch().getKit().getName()).getDeaths()))
                                     .replaceAll("\\{ping}", String.valueOf(BukkitReflection.getPing(player))));
@@ -250,7 +263,7 @@ public class ScoreboardVisualizer implements IAssembleAdapter {
                     break;
             }
 
-            List<String> footer = Alley.getInstance().getConfigService().getConfig("providers/scoreboard.yml").getStringList("scoreboard.footer-addition");
+            List<String> footer = this.plugin.getConfigService().getConfig("providers/scoreboard.yml").getStringList("scoreboard.footer-addition");
             for (String line : footer) {
                 lines.add(CC.translate(line).replaceAll("\\{sidebar}", this.getScoreboardLines(player)));
             }
@@ -273,7 +286,7 @@ public class ScoreboardVisualizer implements IAssembleAdapter {
         long remainingTime = Math.max(900_000 - elapsedTime, 0);
         String formattedTime = TimeUtil.millisToFourDigitSecondsTimer(remainingTime);
 
-        for (String line : Alley.getInstance().getConfigService().getConfig("providers/scoreboard.yml").getStringList("scoreboard.lines.playing.battlerush-match")) {
+        for (String line : this.plugin.getConfigService().getConfig("providers/scoreboard.yml").getStringList("scoreboard.lines.playing.battlerush-match")) {
             lines.add(CC.translate(line)
                     .replaceAll("\\{sidebar}", this.getScoreboardLines(player))
                     .replaceAll("\\{opponent}", opponent.getPlayer().getUsername())
@@ -302,7 +315,7 @@ public class ScoreboardVisualizer implements IAssembleAdapter {
      * @param profile       The profile to replace the lines for.
      */
     private void replaceStickFightLines(Player player, List<String> lines, GameParticipant<MatchGamePlayerImpl> opponent, MatchStickFightImpl stickFightMatch, Profile profile) {
-        for (String line : Alley.getInstance().getConfigService().getConfig("providers/scoreboard.yml").getStringList("scoreboard.lines.playing.stickfight-match")) {
+        for (String line : this.plugin.getConfigService().getConfig("providers/scoreboard.yml").getStringList("scoreboard.lines.playing.stickfight-match")) {
             lines.add(CC.translate(line)
                     .replaceAll("\\{sidebar}", this.getScoreboardLines(player))
                     .replaceAll("\\{opponent}", opponent.getPlayer().getUsername())
@@ -327,12 +340,12 @@ public class ScoreboardVisualizer implements IAssembleAdapter {
      * @return The difference in hits between the player and the opponent.
      */
     private String getBoxingHitDifference(Player player, GameParticipant<MatchGamePlayerImpl> opponent) {
-        Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
+        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
         if (profile.getMatch().getKit().isSettingEnabled(KitSettingBoxingImpl.class)) {
             int playerHits = profile.getMatch().getGamePlayer(player).getData().getHits();
             int opponentHits = profile.getMatch().getGamePlayer(opponent.getPlayer().getPlayer()).getData().getHits();
 
-            FileConfiguration config = Alley.getInstance().getConfigService().getScoreboardConfig();
+            FileConfiguration config = this.plugin.getConfigService().getScoreboardConfig();
             String positiveDifference = config.getString("boxing-hit-difference.positive-difference", "&a(+{difference})");
             String negativeDifference = config.getString("boxing-hit-difference.negative-difference", "&c(-{difference})");
             String zeroDifference = config.getString("boxing-hit-difference.no-difference", "&a(+0)");
@@ -356,12 +369,12 @@ public class ScoreboardVisualizer implements IAssembleAdapter {
      * @return The combo that either the player, or the opponent, or no one has.
      */
     private String getBoxingCombo(Player player, GameParticipant<MatchGamePlayerImpl> opponent) {
-        Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
+        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
         if (profile.getMatch().getKit().isSettingEnabled(KitSettingBoxingImpl.class)) {
             int playerCombo = profile.getMatch().getGamePlayer(player).getData().getCombo();
             int opponentCombo = profile.getMatch().getGamePlayer(opponent.getPlayer().getPlayer()).getData().getCombo();
 
-            FileConfiguration config = Alley.getInstance().getConfigService().getScoreboardConfig();
+            FileConfiguration config = this.plugin.getConfigService().getScoreboardConfig();
             String positiveCombo = config.getString("boxing-combo-display.positive-combo", "&a{combo} Combo");
             String negativeCombo = config.getString("boxing-combo-display.negative-combo", "&c{combo} Combo");
             String zeroCombo = config.getString("boxing-combo-display.no-combo", "&fNo Combo");
@@ -384,7 +397,7 @@ public class ScoreboardVisualizer implements IAssembleAdapter {
      * @return The scoreboard lines.
      */
     public String getScoreboardLines(Player player) {
-        Alley alley = Alley.getInstance();
+        Alley alley = this.plugin;
         if (alley.getProfileService().getProfile(player.getUniqueId()).getProfileData().getProfileSettingData().isShowScoreboardLines()) {
             return alley.getConfigService().getConfig("providers/scoreboard.yml").getString("scoreboard.sidebar-format");
         }

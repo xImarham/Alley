@@ -10,7 +10,7 @@ import dev.revere.alley.feature.queue.menu.button.UnrankedButton;
 import dev.revere.alley.game.ffa.AbstractFFAMatch;
 import dev.revere.alley.game.ffa.menu.FFAButton;
 import dev.revere.alley.profile.Profile;
-import dev.revere.alley.util.item.ItemBuilder;
+import dev.revere.alley.tool.item.ItemBuilder;
 import lombok.AllArgsConstructor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;

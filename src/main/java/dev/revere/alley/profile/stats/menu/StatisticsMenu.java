@@ -11,7 +11,7 @@ import dev.revere.alley.profile.data.impl.ProfileUnrankedKitData;
 import dev.revere.alley.profile.stats.menu.button.GlobalStatButton;
 import dev.revere.alley.profile.stats.menu.button.LeaderboardButton;
 import dev.revere.alley.profile.stats.menu.button.StatisticsButton;
-import dev.revere.alley.util.item.ItemBuilder;
+import dev.revere.alley.tool.item.ItemBuilder;
 import lombok.AllArgsConstructor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;

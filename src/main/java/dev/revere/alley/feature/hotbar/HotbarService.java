@@ -4,7 +4,7 @@ import dev.revere.alley.Alley;
 import lombok.Getter;
 import dev.revere.alley.feature.hotbar.enums.HotbarItems;
 import dev.revere.alley.feature.hotbar.enums.HotbarType;
-import dev.revere.alley.util.item.ItemBuilder;
+import dev.revere.alley.tool.item.ItemBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;

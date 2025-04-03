@@ -3,7 +3,7 @@ package dev.revere.alley.game.match.snapshot.menu.button;
 import lombok.AllArgsConstructor;
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.menu.Button;
-import dev.revere.alley.util.item.ItemBuilder;
+import dev.revere.alley.tool.item.ItemBuilder;
 import dev.revere.alley.game.match.snapshot.Snapshot;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
