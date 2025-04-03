@@ -19,7 +19,7 @@ import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.game.match.player.participant.TeamGameParticipant;
 import dev.revere.alley.game.party.Party;
-import dev.revere.alley.locale.impl.PartyLocale;
+import dev.revere.alley.locale.PartyLocale;
 import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.tool.item.ItemBuilder;
 import lombok.AllArgsConstructor;

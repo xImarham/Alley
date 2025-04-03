@@ -1,6 +1,6 @@
-package dev.revere.alley.tool.animation.internal.impl;
+package dev.revere.alley.tool.animation.type.internal.impl;
 
-import dev.revere.alley.tool.animation.internal.AbstractAnimation;
+import dev.revere.alley.tool.animation.type.internal.AbstractAnimation;
 
 import java.util.Arrays;
 

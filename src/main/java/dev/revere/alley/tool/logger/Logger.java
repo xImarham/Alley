@@ -1,13 +1,9 @@
-package dev.revere.alley.util.logger;
+package dev.revere.alley.tool.logger;
 
 import dev.revere.alley.Alley;
-import dev.revere.alley.util.ServerUtil;
 import dev.revere.alley.util.chat.CC;
 import lombok.experimental.UtilityClass;
-import org.bukkit.Bukkit;
 import org.bukkit.command.ConsoleCommandSender;
-
-import java.util.Arrays;
 
 /**
  * @author Remi
@@ -16,7 +12,11 @@ import java.util.Arrays;
  */
 @UtilityClass
 public class Logger {
-    private static final ConsoleCommandSender consoleSender = Bukkit.getConsoleSender();
+    private final static ConsoleCommandSender consoleSender;
+
+    static {
+        consoleSender = Alley.getInstance().getServer().getConsoleSender();
+    }
 
     /**
      * Log a message to the console.
@@ -94,51 +94,5 @@ public class Logger {
         runnable.run();
         long runtime = System.currentTimeMillis() - start;
         consoleSender.sendMessage(CC.translate(CC.PREFIX + "&fSuccessfully " + action + "&f the &b" + task + " &fin &b" + runtime + "ms&f."));
-    }
-
-    /**
-     * Send a message to the console when the plugin is enabled.
-     *
-     * @param timeTaken The time taken to enable the plugin.
-     */
-    public void pluginEnabled(long timeTaken) {
-        Alley plugin = Alley.getInstance();
-        Arrays.asList(
-                " ",
-                "        &b&l" + plugin.getDescription().getName() + " &bPractice",
-                " ",
-                "    &fAuthors: &b" + plugin.getDescription().getAuthors().toString().replace("[", "").replace("]", ""),
-                " ",
-                "    &fVersion: &b" + plugin.getDescription().getVersion(),
-                "    &fDiscord: &b" + plugin.getDescription().getWebsite(),
-                "    &fDescription: &b" + plugin.getDescription().getDescription(),
-                " ",
-                "    &fKits &b" + plugin.getKitService().getKits().size(),
-                "    &fArenas: &b" + plugin.getArenaService().getArenas().size(),
-                "    &fFFA Arenas: &b" + plugin.getFfaService().getMatches().size(),
-                "    &fDivisions: &b" + plugin.getDivisionService().getDivisions().size(),
-                " ",
-                "    &bMongoDB &f| &bStatus: &aConnected",
-                "     &fHost: &b" + plugin.getConfigService().getDatabaseConfig().getString("mongo.uri"),
-                "     &fDatabase: &b" + plugin.getConfigService().getDatabaseConfig().getString("mongo.database"),
-                "     &fLoaded Profiles: &b" + plugin.getProfileService().getProfiles().size(),
-                " ",
-                "    &fSpigot: &b" + Bukkit.getName(),
-                "    &fVersion: &b" + ServerUtil.getBukkitVersionExact(plugin),
-                " ",
-                "    &fLoaded in &b" + timeTaken + " &bms",
-                " "
-        ).forEach(line -> consoleSender.sendMessage(CC.translate(line)));
-    }
-
-    /**
-     * Send a message to the console when the plugin is disabled.
-     */
-    public void pluginDisabled() {
-        Arrays.asList(
-                "",
-                CC.PREFIX + "&cDisabled.",
-                ""
-        ).forEach(line -> consoleSender.sendMessage(CC.translate(line)));
     }
 }

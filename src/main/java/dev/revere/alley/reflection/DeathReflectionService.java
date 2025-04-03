@@ -1,7 +1,7 @@
 package dev.revere.alley.reflection;
 
 import dev.revere.alley.util.TaskUtil;
-import dev.revere.alley.util.logger.Logger;
+import dev.revere.alley.tool.logger.Logger;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;

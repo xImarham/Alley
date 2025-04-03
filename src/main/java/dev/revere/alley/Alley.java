@@ -2,14 +2,14 @@ package dev.revere.alley;
 
 import dev.revere.alley.api.assemble.Assemble;
 import dev.revere.alley.api.command.CommandFramework;
+import dev.revere.alley.api.constant.PluginConstant;
 import dev.revere.alley.api.menu.MenuListener;
+import dev.revere.alley.api.server.ServerEnvironment;
 import dev.revere.alley.command.CommandUtility;
 import dev.revere.alley.config.ConfigService;
 import dev.revere.alley.database.MongoService;
 import dev.revere.alley.essential.emoji.EmojiRepository;
 import dev.revere.alley.essential.emoji.listener.EmojiListener;
-import dev.revere.alley.reflection.ActionBarService;
-import dev.revere.alley.reflection.DeathReflectionService;
 import dev.revere.alley.feature.arena.AbstractArena;
 import dev.revere.alley.feature.arena.ArenaService;
 import dev.revere.alley.feature.arena.listener.ArenaListener;
@@ -25,7 +25,6 @@ import dev.revere.alley.feature.kit.KitService;
 import dev.revere.alley.feature.kit.settings.KitSettingService;
 import dev.revere.alley.feature.leaderboard.LeaderboardService;
 import dev.revere.alley.feature.queue.QueueService;
-import dev.revere.alley.tool.animation.config.impl.ScoreboardTitleAnimator;
 import dev.revere.alley.feature.scoreboard.ScoreboardVisualizer;
 import dev.revere.alley.feature.server.ServerService;
 import dev.revere.alley.feature.spawn.SpawnService;
@@ -48,11 +47,15 @@ import dev.revere.alley.game.party.PartyService;
 import dev.revere.alley.game.party.listener.PartyListener;
 import dev.revere.alley.profile.ProfileService;
 import dev.revere.alley.profile.listener.ProfileListener;
+import dev.revere.alley.reflection.ActionBarService;
+import dev.revere.alley.reflection.DeathReflectionService;
 import dev.revere.alley.task.ArrowRemovalTask;
 import dev.revere.alley.task.RepositoryCleanupTask;
-import dev.revere.alley.util.ServerUtil;
-import dev.revere.alley.util.logger.Logger;
+import dev.revere.alley.tool.animation.AnimationRepository;
+import dev.revere.alley.tool.logger.Logger;
+import dev.revere.alley.tool.logger.PluginLogger;
 import lombok.Getter;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.EntityType;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -63,6 +66,8 @@ public class Alley extends JavaPlugin {
 
     @Getter private static Alley instance;
 
+    private PluginConstant pluginConstant;
+    private ServerEnvironment serverEnvironment;
     private Assemble assemble;
     private CommandFramework commandFramework;
     private CosmeticRepository cosmeticRepository;
@@ -77,7 +82,6 @@ public class Alley extends JavaPlugin {
     private PartyService partyService;
     private CooldownRepository cooldownRepository;
     private KitService kitService;
-    private ScoreboardTitleAnimator scoreboardTitleAnimator;
     private KitSettingService kitSettingService;
     private SnapshotRepository snapshotRepository;
     private FFAService ffaService;
@@ -91,6 +95,7 @@ public class Alley extends JavaPlugin {
     private ServerService serverService;
     private DeathReflectionService deathReflectionService;
     private ActionBarService actionBarService;
+    private AnimationRepository animationRepository;
 
     private boolean loaded;
 
@@ -106,12 +111,12 @@ public class Alley extends JavaPlugin {
         this.runTasks();
 
         CommandUtility.registerCommands();
-        ServerUtil.setupWorld();
+        this.serverEnvironment.setupWorld();
 
         long end = System.currentTimeMillis();
         long timeTaken = end - start;
 
-        Logger.pluginEnabled(timeTaken);
+        PluginLogger.onEnable(timeTaken);
         this.loaded = true;
     }
 
@@ -122,15 +127,15 @@ public class Alley extends JavaPlugin {
 
         this.assemble.interruptAndClose(true);
 
-        ServerUtil.disconnectPlayers();
-        ServerUtil.clearEntities(EntityType.DROPPED_ITEM);
+        this.serverEnvironment.disconnectPlayers();
+        this.serverEnvironment.clearEntities(EntityType.DROPPED_ITEM);
 
         this.kitService.saveKits();
         this.ffaService.saveFFAMatches();
         this.arenaService.getArenas().forEach(AbstractArena::saveArena);
         this.divisionService.saveDivisions();
 
-        Logger.pluginDisabled();
+        PluginLogger.onDisable();
     }
 
     private void checkDescription() {
@@ -144,6 +149,8 @@ public class Alley extends JavaPlugin {
     private void initializeServices() {
         final Map<String, Runnable> services = new LinkedHashMap<>();
 
+        services.put(PluginConstant.class.getSimpleName(), () -> this.pluginConstant = new PluginConstant(this, "dev.revere.alley", ChatColor.AQUA));
+        services.put(ServerEnvironment.class.getSimpleName(), () -> this.serverEnvironment = new ServerEnvironment(this, false, false,false,false, true));
         services.put(ConfigService.class.getSimpleName(), () -> this.configService = new ConfigService());
         services.put(MongoService.class.getSimpleName(), () -> this.mongoService = new MongoService(this.configService.getDatabaseConfig().getString("mongo.uri"), this.configService.getDatabaseConfig().getString("mongo.database")));
         services.put(CommandFramework.class.getSimpleName(), () -> this.commandFramework = new CommandFramework(this));
@@ -168,7 +175,7 @@ public class Alley extends JavaPlugin {
         services.put(LeaderboardService.class.getSimpleName(), () -> this.leaderboardService = new LeaderboardService());
         services.put(EloCalculator.class.getSimpleName(), () -> this.eloCalculator = new EloCalculator());
         services.put(ServerService.class.getSimpleName(), () -> this.serverService = new ServerService());
-        services.put(ScoreboardTitleAnimator.class.getSimpleName(), () -> this.scoreboardTitleAnimator = new ScoreboardTitleAnimator(this.configService.getScoreboardConfig()));
+        services.put(AnimationRepository.class.getSimpleName(), () -> this.animationRepository = new AnimationRepository(this));
         services.put(Assemble.class.getSimpleName() + " API", () -> this.assemble = new Assemble(this, new ScoreboardVisualizer(this)));
         services.put(DeathReflectionService.class.getSimpleName(), () -> this.deathReflectionService = new DeathReflectionService());
         services.put(ActionBarService.class.getSimpleName(), () -> this.actionBarService = new ActionBarService(this));
@@ -192,7 +199,7 @@ public class Alley extends JavaPlugin {
                 new FFAListener(this),
                 new FFACuboidListener(this.ffaSpawnService.getCuboid(), this),
                 new WorldListener(),
-                new EmojiListener(),
+                new EmojiListener(this),
                 new CombatListener(this)
         ).forEach(listener -> getServer().getPluginManager().registerEvents(listener, this));
     }

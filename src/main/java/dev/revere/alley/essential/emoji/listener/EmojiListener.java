@@ -14,6 +14,16 @@ import java.util.Map;
  * @date 10/11/2024 - 09:34
  */
 public class EmojiListener implements Listener {
+    protected final Alley plugin;
+
+    /**
+     * Constructor for the EmojiListener class.
+     *
+     * @param plugin The Alley plugin instance.
+     */
+    public EmojiListener(Alley plugin) {
+        this.plugin = plugin;
+    }
 
     @EventHandler
     private void onAsyncChat(AsyncPlayerChatEvent event) {
@@ -24,7 +34,7 @@ public class EmojiListener implements Listener {
             return;
         }
 
-        for (Map.Entry<String, String> entry : Alley.getInstance().getEmojiRepository().getEmojis().entrySet()) {
+        for (Map.Entry<String, String> entry : this.plugin.getEmojiRepository().getEmojis().entrySet()) {
             if (message.contains(entry.getKey())) {
                 message = message.replace(entry.getKey(), entry.getValue());
             }

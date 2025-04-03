@@ -2,7 +2,7 @@ package dev.revere.alley.reflection;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.util.chat.CC;
-import dev.revere.alley.util.logger.Logger;
+import dev.revere.alley.tool.logger.Logger;
 import net.minecraft.server.v1_8_R3.IChatBaseComponent;
 import net.minecraft.server.v1_8_R3.PacketPlayOutChat;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;

@@ -5,7 +5,7 @@ import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.feature.kit.Kit;
-import dev.revere.alley.locale.impl.KitLocale;
+import dev.revere.alley.locale.KitLocale;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.command.CommandSender;
 

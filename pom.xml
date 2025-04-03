@@ -166,5 +166,12 @@
             <artifactId>1.8.8</artifactId>
             <version>1.8.8</version>
         </dependency>
+
+        <!-- Reflections -->
+        <dependency>
+            <groupId>org.reflections</groupId>
+            <artifactId>reflections</artifactId>
+            <version>0.10.2</version>
+        </dependency>
     </dependencies>
 </project>

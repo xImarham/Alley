@@ -8,7 +8,7 @@ import dev.revere.alley.feature.cooldown.Cooldown;
 import dev.revere.alley.feature.cooldown.CooldownRepository;
 import dev.revere.alley.feature.cooldown.enums.EnumCooldownType;
 import dev.revere.alley.game.party.enums.EnumPartyState;
-import dev.revere.alley.locale.impl.PartyLocale;
+import dev.revere.alley.locale.PartyLocale;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
 import dev.revere.alley.util.chat.CC;

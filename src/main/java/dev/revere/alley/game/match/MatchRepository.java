@@ -1,6 +1,6 @@
 package dev.revere.alley.game.match;
 
-import dev.revere.alley.util.logger.Logger;
+import dev.revere.alley.tool.logger.Logger;
 import lombok.Getter;
 
 import java.util.ArrayList;

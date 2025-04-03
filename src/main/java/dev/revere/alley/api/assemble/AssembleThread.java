@@ -1,6 +1,6 @@
 package dev.revere.alley.api.assemble;
 
-import dev.revere.alley.util.logger.Logger;
+import dev.revere.alley.tool.logger.Logger;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Objective;
@@ -23,6 +23,7 @@ public class AssembleThread extends Thread {
     }
 
     @Override
+    @SuppressWarnings("all")
     public void run() {
         while (!this.isInterrupted()) {
             try {

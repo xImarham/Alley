@@ -1,4 +1,4 @@
-package dev.revere.alley.tool.animation.config;
+package dev.revere.alley.tool.animation.type.config;
 
 import dev.revere.alley.util.TaskUtil;
 import lombok.Getter;
@@ -14,7 +14,7 @@ import java.util.List;
  */
 @Getter
 @Setter
-public class TextAnimator {
+public class TextAnimation {
     private String text;
     private List<String> animation;
     private boolean animated;
@@ -22,12 +22,12 @@ public class TextAnimator {
     private int index;
 
     /**
-     * Constructor for the TextAnimator class.
+     * Constructor for the TextAnimation class.
      *
      * @param config The configuration file.
      * @param path   The config path where the animation settings are stored.
      */
-    public TextAnimator(FileConfiguration config, String path) {
+    public TextAnimation(FileConfiguration config, String path) {
         this.text = config.getString(path + ".text", "null");
         this.animated = config.getBoolean(path + ".animated", false);
         this.ticks = config.getLong(path + ".ticks", 10L);

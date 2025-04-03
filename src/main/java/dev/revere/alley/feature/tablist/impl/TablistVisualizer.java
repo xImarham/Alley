@@ -2,7 +2,7 @@ package dev.revere.alley.feature.tablist.impl;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.util.chat.CC;
-import dev.revere.alley.util.logger.Logger;
+import dev.revere.alley.tool.logger.Logger;
 import dev.revere.alley.feature.tablist.ITablist;
 import net.minecraft.server.v1_8_R3.ChatComponentText;
 import net.minecraft.server.v1_8_R3.PacketPlayOutPlayerListHeaderFooter;

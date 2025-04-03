@@ -15,8 +15,10 @@ import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
+import dev.revere.alley.tool.animation.enums.EnumAnimationType;
+import dev.revere.alley.tool.animation.type.config.impl.ScoreboardTitleAnimationImpl;
+import dev.revere.alley.tool.animation.type.internal.impl.DotAnimationImpl;
 import dev.revere.alley.util.TimeUtil;
-import dev.revere.alley.tool.animation.internal.impl.DotAnimationImpl;
 import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.util.reflection.BukkitReflection;
 import dev.revere.alley.util.visual.ScoreboardUtil;
@@ -35,7 +37,9 @@ import java.util.List;
  */
 public class ScoreboardVisualizer implements IAssembleAdapter {
     protected final Alley plugin;
-    protected final DotAnimationImpl dotAnimation;
+
+    private final DotAnimationImpl dotAnimation;
+    private final ScoreboardTitleAnimationImpl scoreboardTitleAnimation;
 
     /**
      * Constructor for the ScoreboardVisualizer class.
@@ -44,7 +48,8 @@ public class ScoreboardVisualizer implements IAssembleAdapter {
      */
     public ScoreboardVisualizer(Alley plugin) {
         this.plugin = plugin;
-        this.dotAnimation = new DotAnimationImpl();
+        this.dotAnimation = plugin.getAnimationRepository().getAnimation(DotAnimationImpl.class, EnumAnimationType.INTERNAL);
+        this.scoreboardTitleAnimation = plugin.getAnimationRepository().getAnimation(ScoreboardTitleAnimationImpl.class, EnumAnimationType.CONFIG);
     }
     
     /**
@@ -55,9 +60,7 @@ public class ScoreboardVisualizer implements IAssembleAdapter {
      */
     @Override
     public String getTitle(Player player) {
-        return CC.translate(this.plugin.getScoreboardTitleAnimator().getText()
-                .replaceAll("%server-name%", Bukkit.getServerName())
-        );
+        return this.scoreboardTitleAnimation.getText();
     }
 
     /**

@@ -1,10 +1,9 @@
 package dev.revere.alley.command.impl.main;
 
-import dev.revere.alley.Alley;
-import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.api.command.BaseCommand;
-import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.CommandArgs;
+import dev.revere.alley.api.command.annotation.CommandData;
+import dev.revere.alley.util.chat.CC;
 import org.bukkit.command.CommandSender;
 
 import java.util.Arrays;
@@ -23,15 +22,15 @@ public class AlleyCommand extends BaseCommand {
         Arrays.asList(
                 "",
                 "     &b&lAlley",
-                "      &f┃ Authors: &b" + Alley.getInstance().getDescription().getAuthors().toString().replace("[", "").replace("]", ""),
-                "      &f┃ Version: &b" + Alley.getInstance().getDescription().getVersion(),
+                "      &f┃ Authors: &b" + this.alley.getDescription().getAuthors().toString().replace("[", "").replace("]", ""),
+                "      &f┃ Version: &b" + this.alley.getDescription().getVersion(),
                 "",
                 "     &b&lDescription:",
-                "      &f┃ " + Alley.getInstance().getDescription().getDescription(),
+                "      &f┃ " + this.alley.getDescription().getDescription(),
                 ""
         ).forEach(line -> sender.sendMessage(CC.translate(line)));
 
-        if (sender.hasPermission("alley.admin")) {
+        if (sender.hasPermission(this.alley.getPluginConstant().getAdminPermissionPrefix())) {
             Arrays.asList(
                     "     &b&lAdmin Help",
                     "      &f┃ /alley reload &7- &bReloads the plugin.",

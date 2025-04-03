@@ -82,7 +82,7 @@ public class ProfileListener implements Listener {
             for (String message : config.getStringList("welcome-message.message")) {
                 player.sendMessage(CC.translate(message)
                         .replace("{player}", player.getName())
-                        .replace("{version}", Alley.getInstance().getDescription().getVersion())
+                        .replace("{version}", Alley.getInstance().getPluginConstant().getVersion())
                         .replace("{author}", Alley.getInstance().getDescription().getAuthors().toString().replace("[", "").replace("]", ""))
                 );
             }

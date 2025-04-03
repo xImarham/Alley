@@ -2,7 +2,7 @@ package dev.revere.alley.feature.division;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.feature.division.tier.DivisionTier;
-import dev.revere.alley.util.logger.Logger;
+import dev.revere.alley.tool.logger.Logger;
 import lombok.Getter;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;

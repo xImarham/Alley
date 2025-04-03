@@ -1,4 +1,4 @@
-package dev.revere.alley.tool.animation.internal;
+package dev.revere.alley.tool.animation.type.internal;
 
 import java.util.List;
 

@@ -1,7 +1,7 @@
 package dev.revere.alley.feature.cosmetic.repository;
 
 import dev.revere.alley.feature.cosmetic.interfaces.ICosmetic;
-import dev.revere.alley.util.logger.Logger;
+import dev.revere.alley.tool.logger.Logger;
 import lombok.Getter;
 
 import java.util.ArrayList;

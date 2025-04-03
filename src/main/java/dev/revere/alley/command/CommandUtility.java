@@ -45,7 +45,7 @@ import dev.revere.alley.profile.settings.command.worldtime.*;
 import dev.revere.alley.profile.shop.command.ShopCommand;
 import dev.revere.alley.profile.shop.command.admin.SetCoinsCommand;
 import dev.revere.alley.profile.stats.command.StatsCommand;
-import dev.revere.alley.util.logger.Logger;
+import dev.revere.alley.tool.logger.Logger;
 import lombok.experimental.UtilityClass;
 
 /**

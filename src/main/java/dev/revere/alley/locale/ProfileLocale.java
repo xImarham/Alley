@@ -1,6 +1,6 @@
-package dev.revere.alley.locale.impl;
+package dev.revere.alley.locale;
 
-import dev.revere.alley.locale.interfaces.ILocale;
+import dev.revere.alley.api.locale.ILocale;
 import lombok.Getter;
 import dev.revere.alley.Alley;
 import dev.revere.alley.util.chat.CC;

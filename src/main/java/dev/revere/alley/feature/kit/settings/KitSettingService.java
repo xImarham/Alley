@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import dev.revere.alley.feature.kit.Kit;
 import dev.revere.alley.feature.kit.settings.impl.*;
-import dev.revere.alley.util.logger.Logger;
+import dev.revere.alley.tool.logger.Logger;
 
 import java.util.ArrayList;
 import java.util.HashMap;

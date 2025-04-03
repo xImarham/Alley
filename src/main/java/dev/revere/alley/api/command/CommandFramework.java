@@ -3,7 +3,7 @@ package dev.revere.alley.api.command;
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.annotation.CompleterData;
-import dev.revere.alley.locale.Locale;
+import dev.revere.alley.api.constant.PluginConstant;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -61,6 +61,7 @@ public class CommandFramework implements CommandExecutor {
         return handleCommand(sender, cmd, label, args);
     }
 
+    @SuppressWarnings("all")
     public boolean handleCommand(CommandSender sender, Command cmd, String label, String[] args) {
         for (int i = args.length; i >= 0; i--) {
             StringBuilder buffer = new StringBuilder();
@@ -74,12 +75,15 @@ public class CommandFramework implements CommandExecutor {
                 Object methodObject = this.commandMap.get(cmdLabel).getValue();
                 CommandData commandData = method.getAnnotation(CommandData.class);
 
-                if (commandData.isAdminOnly() && !sender.hasPermission("alley.admin")) {
-                    sender.sendMessage(ChatColor.RED + "Only ops may execute this command.");
+                PluginConstant pluginConstant = this.plugin.getPluginConstant();
+                String noPermission = pluginConstant.getPermissionLackMessage();
+
+                if (commandData.isAdminOnly() && !sender.hasPermission(pluginConstant.getAdminPermissionPrefix())) {
+                    sender.sendMessage(noPermission);
                     return true;
                 }
                 if (!commandData.permission().isEmpty() && (!sender.hasPermission(commandData.permission()))) {
-                    sender.sendMessage(CC.translate(CC.translate(Locale.NO_PERM.getMessage())));
+                    sender.sendMessage(CC.translate(noPermission));
                     return true;
                 }
                 if (commandData.inGameOnly() && !(sender instanceof Player)) {
@@ -97,7 +101,7 @@ public class CommandFramework implements CommandExecutor {
                 return true;
             }
         }
-        defaultCommand(new CommandArgs(sender, cmd, label, args, 0));
+        this.defaultCommand(new CommandArgs(sender, cmd, label, args, 0));
         return true;
     }
 
@@ -142,8 +146,8 @@ public class CommandFramework implements CommandExecutor {
                 help.add(topic);
             }
         }
-        IndexHelpTopic topic = new IndexHelpTopic(plugin.getDescription().getName(), "All commands for " + plugin.getDescription().getName(), null, help,
-                "Below is a list of all " + plugin.getDescription().getName() + " commands:");
+        IndexHelpTopic topic = new IndexHelpTopic(plugin.getPluginConstant().getName(), "All commands for " + plugin.getPluginConstant().getName(), null, help,
+                "Below is a list of all " + plugin.getPluginConstant().getName() + " commands:");
         Bukkit.getServer().getHelpMap().addTopic(topic);
     }
 
@@ -152,20 +156,20 @@ public class CommandFramework implements CommandExecutor {
             if (m.getAnnotation(CommandData.class) != null) {
                 CommandData commandData = m.getAnnotation(CommandData.class);
                 this.commandMap.remove(commandData.name().toLowerCase());
-                this.commandMap.remove(this.plugin.getDescription().getName() + ":" + commandData.name().toLowerCase());
-                map.getCommand(commandData.name().toLowerCase()).unregister(map);
+                this.commandMap.remove(this.plugin.getPluginConstant().getName() + ":" + commandData.name().toLowerCase());
+                this.map.getCommand(commandData.name().toLowerCase()).unregister(map);
             }
         }
     }
 
     public void registerCommand(CommandData commandData, String label, Method m, Object obj) {
         this.commandMap.put(label.toLowerCase(), new AbstractMap.SimpleEntry<>(m, obj));
-        this.commandMap.put(this.plugin.getDescription().getName() + ':' + label.toLowerCase(),
+        this.commandMap.put(this.plugin.getPluginConstant().getName() + ':' + label.toLowerCase(),
                 new AbstractMap.SimpleEntry<>(m, obj));
         String cmdLabel = label.replace(".", ",").split(",")[0].toLowerCase();
         if (map.getCommand(cmdLabel) == null) {
             Command cmd = new BukkitCommand(cmdLabel, this, plugin);
-            map.register(plugin.getDescription().getName(), cmd);
+            map.register(plugin.getPluginConstant().getName(), cmd);
         }
         if (!commandData.description().equalsIgnoreCase("") && cmdLabel.equals(label)) {
             map.getCommand(cmdLabel).setDescription(commandData.description());
@@ -179,7 +183,7 @@ public class CommandFramework implements CommandExecutor {
         String cmdLabel = label.replace(".", ",").split(",")[0].toLowerCase();
         if (map.getCommand(cmdLabel) == null) {
             Command command = new BukkitCommand(cmdLabel, this, plugin);
-            map.register(plugin.getDescription().getName(), command);
+            map.register(plugin.getPluginConstant().getName(), command);
         }
         if (map.getCommand(cmdLabel) instanceof BukkitCommand) {
             BukkitCommand command = (BukkitCommand) map.getCommand(cmdLabel);

@@ -6,7 +6,7 @@ import dev.revere.alley.feature.arena.enums.EnumArenaType;
 import dev.revere.alley.tool.cuboid.Cuboid;
 import dev.revere.alley.tool.cuboid.CuboidService;
 import dev.revere.alley.util.location.LocationUtil;
-import dev.revere.alley.util.logger.Logger;
+import dev.revere.alley.tool.logger.Logger;
 import lombok.Getter;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;

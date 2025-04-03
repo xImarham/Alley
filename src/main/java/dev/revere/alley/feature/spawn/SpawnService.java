@@ -2,7 +2,7 @@ package dev.revere.alley.feature.spawn;
 
 import dev.revere.alley.config.ConfigService;
 import dev.revere.alley.util.location.LocationUtil;
-import dev.revere.alley.util.logger.Logger;
+import dev.revere.alley.tool.logger.Logger;
 import lombok.Getter;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;

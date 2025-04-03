@@ -5,7 +5,7 @@ import dev.revere.alley.api.assemble.enums.EnumAssembleStyle;
 import dev.revere.alley.api.assemble.events.AssembleBoardCreateEvent;
 import dev.revere.alley.api.assemble.interfaces.IAssembleAdapter;
 import dev.revere.alley.api.assemble.listener.AssembleListener;
-import dev.revere.alley.util.chat.CC;
+import dev.revere.alley.tool.logger.Logger;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Bukkit;
@@ -116,7 +116,7 @@ public class Assemble {
         }
 
         if (onDisable) {
-            Bukkit.getConsoleSender().sendMessage(CC.translate(CC.ERROR_PREFIX + "&cAssemble has been interrupted and closed due to server stop."));
+            Logger.log("&cAssemble has been interrupted and closed due to server stop.");
         }
     }
 }
