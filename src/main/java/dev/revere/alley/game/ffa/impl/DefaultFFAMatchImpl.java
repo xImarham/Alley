@@ -134,7 +134,7 @@ public class DefaultFFAMatchImpl extends AbstractFFAMatch {
         Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
         profile.getProfileData().getFfaData().get(getKit().getName()).incrementDeaths();
 
-        Alley.getInstance().getActionBarService().sendMessage(killer, "&c&lKILL! &f" + player.getName(), 3);
+        Alley.getInstance().getActionBarReflectionService().sendMessage(killer, "&c&lKILL! &f" + player.getName(), 3);
         Alley.getInstance().getCombatService().resetCombatLog(player);
 
         this.getPlayers().forEach(online -> online.sendMessage(CC.translate("&b" + player.getName() + " &ahas been killed by &b" + killer.getName() + "&a.")));

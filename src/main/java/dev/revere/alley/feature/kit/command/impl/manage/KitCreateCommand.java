@@ -71,7 +71,7 @@ public class KitCreateCommand extends BaseCommand {
 
         kitService.createKit(kitName, inventory, armor, icon, slot);
         Alley.getInstance().getProfileService().loadProfiles(); // to update the kits in the database
-        Alley.getInstance().getActionBarService().sendMessage(player, KitLocale.KIT_CREATED.getMessage().replace("{kit-name}", kitName), 5);
+        Alley.getInstance().getActionBarReflectionService().sendMessage(player, KitLocale.KIT_CREATED.getMessage().replace("{kit-name}", kitName), 5);
 
         player.sendMessage(CC.translate(KitLocale.KIT_CREATED.getMessage().replace("{kit-name}", kitName)));
         player.sendMessage(CC.translate("&7Do not forget to reload the queues by using &c&l/queue reload&7."));

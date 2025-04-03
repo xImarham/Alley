@@ -47,8 +47,9 @@ import dev.revere.alley.game.party.PartyService;
 import dev.revere.alley.game.party.listener.PartyListener;
 import dev.revere.alley.profile.ProfileService;
 import dev.revere.alley.profile.listener.ProfileListener;
-import dev.revere.alley.reflection.ActionBarService;
-import dev.revere.alley.reflection.DeathReflectionService;
+import dev.revere.alley.reflection.impl.ActionBarReflectionService;
+import dev.revere.alley.reflection.impl.DeathReflectionService;
+import dev.revere.alley.reflection.impl.TitleReflectionService;
 import dev.revere.alley.task.ArrowRemovalTask;
 import dev.revere.alley.task.RepositoryCleanupTask;
 import dev.revere.alley.tool.animation.AnimationRepository;
@@ -94,7 +95,8 @@ public class Alley extends JavaPlugin {
     private EloCalculator eloCalculator;
     private ServerService serverService;
     private DeathReflectionService deathReflectionService;
-    private ActionBarService actionBarService;
+    private ActionBarReflectionService actionBarReflectionService;
+    private TitleReflectionService titleReflectionService;
     private AnimationRepository animationRepository;
 
     private boolean loaded;
@@ -150,7 +152,7 @@ public class Alley extends JavaPlugin {
         final Map<String, Runnable> services = new LinkedHashMap<>();
 
         services.put(PluginConstant.class.getSimpleName(), () -> this.pluginConstant = new PluginConstant(this, "dev.revere.alley", ChatColor.AQUA));
-        services.put(ServerEnvironment.class.getSimpleName(), () -> this.serverEnvironment = new ServerEnvironment(this, false, false,false,false, true));
+        services.put(ServerEnvironment.class.getSimpleName(), () -> this.serverEnvironment = new ServerEnvironment(this, false, false, false, false, true));
         services.put(ConfigService.class.getSimpleName(), () -> this.configService = new ConfigService());
         services.put(MongoService.class.getSimpleName(), () -> this.mongoService = new MongoService(this.configService.getDatabaseConfig().getString("mongo.uri"), this.configService.getDatabaseConfig().getString("mongo.database")));
         services.put(CommandFramework.class.getSimpleName(), () -> this.commandFramework = new CommandFramework(this));
@@ -178,7 +180,8 @@ public class Alley extends JavaPlugin {
         services.put(AnimationRepository.class.getSimpleName(), () -> this.animationRepository = new AnimationRepository(this));
         services.put(Assemble.class.getSimpleName() + " API", () -> this.assemble = new Assemble(this, new ScoreboardVisualizer(this)));
         services.put(DeathReflectionService.class.getSimpleName(), () -> this.deathReflectionService = new DeathReflectionService());
-        services.put(ActionBarService.class.getSimpleName(), () -> this.actionBarService = new ActionBarService(this));
+        services.put(ActionBarReflectionService.class.getSimpleName(), () -> this.actionBarReflectionService = new ActionBarReflectionService(this));
+        services.put(TitleReflectionService.class.getSimpleName(), () -> this.titleReflectionService = new TitleReflectionService());
 
         services.forEach(Logger::logTime);
     }

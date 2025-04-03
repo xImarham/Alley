@@ -137,7 +137,7 @@ public class MatchListener implements Listener {
             GameParticipant<MatchGamePlayerImpl> killerParticipant = profile.getMatch().getParticipant(killer);
             killerParticipant.getPlayer().getData().incrementKills();
 
-            Alley.getInstance().getActionBarService().sendMessage(killer, "&c&lKILL! &f" + player.getName(), 3);
+            Alley.getInstance().getActionBarReflectionService().sendMessage(killer, "&c&lKILL! &f" + player.getName(), 3);
             profile.getMatch().getParticipants()
                     .forEach(participant -> participant.getPlayer().getPlayer().sendMessage(CC.translate("&c" + player.getName() + " &fwas killed by &c" + killer.getName() + "&f.")));
             profile.getMatch().createSnapshot(player.getUniqueId(), killer.getUniqueId());

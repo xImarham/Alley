@@ -1,10 +1,10 @@
-package dev.revere.alley.reflection;
+package dev.revere.alley.reflection.impl;
 
+import dev.revere.alley.reflection.IReflection;
 import dev.revere.alley.util.TaskUtil;
 import dev.revere.alley.tool.logger.Logger;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import net.minecraft.server.v1_8_R3.*;
 
 import java.lang.reflect.Field;
@@ -16,7 +16,7 @@ import java.util.Set;
  * @project Alley
  * @since 02/04/2025
  */
-public class DeathReflectionService {
+public class DeathReflectionService implements IReflection {
     private final int FAKE_ENTITY_ID;
     private final byte DEATH_STATUS;
     private final int VIEW_RADIUS;
@@ -40,7 +40,8 @@ public class DeathReflectionService {
         this.hidePlayer(player, playersInRange, false);
 
         for (Player watcher : playersInRange) {
-            this.sendDeathPackets(watcher, spawnPacket, statusPacket);
+            this.sendPacket(watcher, spawnPacket);
+            this.sendPacket(watcher, statusPacket);
         }
 
         TaskUtil.runLater(() -> {
@@ -51,19 +52,19 @@ public class DeathReflectionService {
 
     /**
      * Creates a spawn packet for the fake death entity.
-     * 
+     *
      * @param player The player whose death animation is being shown.
      * @return The spawn packet.
      */
     private PacketPlayOutNamedEntitySpawn createSpawnPacket(Player player) {
-        PacketPlayOutNamedEntitySpawn spawnPacket = new PacketPlayOutNamedEntitySpawn(((CraftPlayer) player).getHandle());
+        PacketPlayOutNamedEntitySpawn spawnPacket = new PacketPlayOutNamedEntitySpawn((this.getCraftPlayer(player).getHandle()));
         this.setEntityId(spawnPacket);
         return spawnPacket;
     }
 
     /**
      * Creates a status packet for the fake death entity.
-     * 
+     *
      * @return The status packet indicating death.
      */
     private PacketPlayOutEntityStatus createStatusPacket() {
@@ -74,7 +75,7 @@ public class DeathReflectionService {
     }
 
     /**
-     * Sets the entity ID for a packet.
+     * Sets the entity ID for a packet using reflection from the IReflection interface.
      *
      * @param packet The packet to set the entity ID for.
      */
@@ -82,13 +83,11 @@ public class DeathReflectionService {
         try {
             Field field;
             if (packet instanceof PacketPlayOutNamedEntitySpawn) {
-                field = PacketPlayOutNamedEntitySpawn.class.getDeclaredField("a");
-                field.setAccessible(true);
-                field.set(packet, FAKE_ENTITY_ID);
+                field = this.getField(PacketPlayOutNamedEntitySpawn.class, "a");
+                this.setField(field, packet, this.FAKE_ENTITY_ID);
             } else if (packet instanceof PacketPlayOutEntityStatus) {
-                field = PacketPlayOutEntityStatus.class.getDeclaredField("a");
-                field.setAccessible(true);
-                field.set(packet, FAKE_ENTITY_ID);
+                field = this.getField(PacketPlayOutEntityStatus.class, "a");
+                this.setField(field, packet, this.FAKE_ENTITY_ID);
             }
         } catch (Exception exception) {
             Logger.logException("Failed to set entity ID for death animation packet.", exception);
@@ -96,15 +95,14 @@ public class DeathReflectionService {
     }
 
     /**
-     * Sets the status byte for the entity status packet.
+     * Sets the status byte for the entity status packet using reflection from the IReflection interface.
      *
      * @param statusPacket The entity status packet.
      */
     private void setStatus(PacketPlayOutEntityStatus statusPacket) {
         try {
-            Field field = PacketPlayOutEntityStatus.class.getDeclaredField("b");
-            field.setAccessible(true);
-            field.set(statusPacket, DEATH_STATUS);
+            Field field = this.getField(PacketPlayOutEntityStatus.class, "b");
+            this.setField(field, statusPacket, this.DEATH_STATUS);
         } catch (Exception exception) {
             Logger.logException("Failed to set status for death animation packet.", exception);
         }
@@ -118,7 +116,7 @@ public class DeathReflectionService {
      */
     private Set<Player> getPlayersInRange(Player player) {
         Set<Player> playersInRange = new HashSet<>();
-        for (Entity entity : player.getNearbyEntities(VIEW_RADIUS, VIEW_RADIUS, VIEW_RADIUS)) {
+        for (Entity entity : player.getNearbyEntities(this.VIEW_RADIUS, this.VIEW_RADIUS, this.VIEW_RADIUS)) {
             if (entity instanceof Player && !entity.getUniqueId().equals(player.getUniqueId())) {
                 playersInRange.add((Player) entity);
             }
@@ -127,28 +125,14 @@ public class DeathReflectionService {
     }
 
     /**
-     * Sends the death animation packets to a player.
-     *
-     * @param player The player to send the packets to.
-     * @param spawnPacket The spawn packet for the fake entity.
-     * @param statusPacket The status packet indicating death.
-     */
-    private void sendDeathPackets(Player player, PacketPlayOutNamedEntitySpawn spawnPacket, PacketPlayOutEntityStatus statusPacket) {
-        CraftPlayer craftPlayer = (CraftPlayer) player;
-        craftPlayer.getHandle().playerConnection.sendPacket(spawnPacket);
-        craftPlayer.getHandle().playerConnection.sendPacket(statusPacket);
-    }
-
-    /**
      * Removes the fake death entity from players' views.
      *
      * @param players The players to remove the fake entity for.
      */
     private void removeFakeEntities(Set<Player> players) {
-        PacketPlayOutEntityDestroy destroyPacket = new PacketPlayOutEntityDestroy(FAKE_ENTITY_ID);
+        PacketPlayOutEntityDestroy destroyPacket = new PacketPlayOutEntityDestroy(this.FAKE_ENTITY_ID);
         for (Player player : players) {
-            CraftPlayer craftPlayer = (CraftPlayer) player;
-            craftPlayer.getHandle().playerConnection.sendPacket(destroyPacket);
+            this.sendPacket(player, destroyPacket);
         }
     }
 

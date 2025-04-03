@@ -1,11 +1,11 @@
-package dev.revere.alley.reflection;
+package dev.revere.alley.reflection.impl;
 
 import dev.revere.alley.Alley;
+import dev.revere.alley.reflection.IReflection;
 import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.tool.logger.Logger;
 import net.minecraft.server.v1_8_R3.IChatBaseComponent;
 import net.minecraft.server.v1_8_R3.PacketPlayOutChat;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -14,7 +14,7 @@ import org.bukkit.scheduler.BukkitRunnable;
  * @project Alley
  * @since 03/04/2025
  */
-public class ActionBarService {
+public class ActionBarReflectionService implements IReflection {
     protected final Alley plugin;
 
     /**
@@ -22,7 +22,7 @@ public class ActionBarService {
      *
      * @param plugin The Alley plugin instance.
      */
-    public ActionBarService(Alley plugin) {
+    public ActionBarReflectionService(Alley plugin) {
         this.plugin = plugin;
     }
 
@@ -31,12 +31,13 @@ public class ActionBarService {
      *
      * @param player The player.
      * @param message The message.
+     * @param durationSeconds The duration to show the message (in seconds).
      */
     public void sendMessage(Player player, String message, int durationSeconds) {
         try {
             IChatBaseComponent chatBaseComponent = IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + CC.translate(message) + "\"}");
             PacketPlayOutChat packet = new PacketPlayOutChat(chatBaseComponent, (byte) 2);
-            ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
+            this.sendPacket(player, packet);
 
             if (durationSeconds > 0) {
                 new BukkitRunnable() {
@@ -44,7 +45,7 @@ public class ActionBarService {
                     public void run() {
                         IChatBaseComponent clearChatBaseComponent = IChatBaseComponent.ChatSerializer.a("{\"text\": \"\"}");
                         PacketPlayOutChat clearPacket = new PacketPlayOutChat(clearChatBaseComponent, (byte) 2);
-                        ((CraftPlayer) player).getHandle().playerConnection.sendPacket(clearPacket);
+                        sendPacket(player, clearPacket);
                     }
                 }.runTaskLater(this.plugin, durationSeconds * 20L);
             }
