@@ -2,12 +2,11 @@ package dev.revere.alley.game.ffa.impl;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.feature.arena.AbstractArena;
-import dev.revere.alley.game.ffa.AbstractFFAMatch;
 import dev.revere.alley.feature.hotbar.enums.HotbarType;
 import dev.revere.alley.feature.kit.Kit;
+import dev.revere.alley.game.ffa.AbstractFFAMatch;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
-import dev.revere.alley.util.visual.ActionBarUtil;
 import dev.revere.alley.util.PlayerUtil;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.Bukkit;
@@ -135,7 +134,7 @@ public class DefaultFFAMatchImpl extends AbstractFFAMatch {
         Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
         profile.getProfileData().getFfaData().get(getKit().getName()).incrementDeaths();
 
-        ActionBarUtil.sendMessage(killer, "&c&lKILL! &f" + player.getName(), 3);
+        Alley.getInstance().getActionBarService().sendMessage(killer, "&c&lKILL! &f" + player.getName(), 3);
         Alley.getInstance().getCombatService().resetCombatLog(player);
 
         this.getPlayers().forEach(online -> online.sendMessage(CC.translate("&b" + player.getName() + " &ahas been killed by &b" + killer.getName() + "&a.")));

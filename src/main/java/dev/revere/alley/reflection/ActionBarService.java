@@ -1,6 +1,5 @@
-package dev.revere.alley.util.visual;
+package dev.revere.alley.reflection;
 
-import lombok.experimental.UtilityClass;
 import dev.revere.alley.Alley;
 import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.util.logger.Logger;
@@ -13,12 +12,22 @@ import org.bukkit.scheduler.BukkitRunnable;
 /**
  * @author Emmy
  * @project Alley
- * @date 17/10/2024 - 07:26
+ * @since 03/04/2025
  */
-@UtilityClass
-public class ActionBarUtil {
+public class ActionBarService {
+    protected final Alley plugin;
+
     /**
-     * Method to send an action bar message to a player in an specific interval.
+     * Constructor for the ActionBarService class.
+     *
+     * @param plugin The Alley plugin instance.
+     */
+    public ActionBarService(Alley plugin) {
+        this.plugin = plugin;
+    }
+
+    /**
+     * Method to send an action bar message to a player in a specific interval.
      *
      * @param player The player.
      * @param message The message.
@@ -37,7 +46,7 @@ public class ActionBarUtil {
                         PacketPlayOutChat clearPacket = new PacketPlayOutChat(clearChatBaseComponent, (byte) 2);
                         ((CraftPlayer) player).getHandle().playerConnection.sendPacket(clearPacket);
                     }
-                }.runTaskLater(Alley.getInstance(), durationSeconds * 20L);
+                }.runTaskLater(this.plugin, durationSeconds * 20L);
             }
         } catch (Exception exception) {
             Logger.logException("An error occurred while trying to send an action bar message to " + player.getName(), exception);

@@ -8,6 +8,7 @@ import dev.revere.alley.config.ConfigService;
 import dev.revere.alley.database.MongoService;
 import dev.revere.alley.essential.emoji.EmojiRepository;
 import dev.revere.alley.essential.emoji.listener.EmojiListener;
+import dev.revere.alley.reflection.ActionBarService;
 import dev.revere.alley.reflection.DeathReflectionService;
 import dev.revere.alley.feature.arena.AbstractArena;
 import dev.revere.alley.feature.arena.ArenaService;
@@ -89,6 +90,7 @@ public class Alley extends JavaPlugin {
     private EloCalculator eloCalculator;
     private ServerService serverService;
     private DeathReflectionService deathReflectionService;
+    private ActionBarService actionBarService;
 
     private boolean loaded;
 
@@ -169,6 +171,7 @@ public class Alley extends JavaPlugin {
         services.put(ScoreboardTitleAnimator.class.getSimpleName(), () -> this.scoreboardTitleAnimator = new ScoreboardTitleAnimator(this.configService.getScoreboardConfig()));
         services.put(Assemble.class.getSimpleName() + " API", () -> this.assemble = new Assemble(this, new ScoreboardVisualizer()));
         services.put(DeathReflectionService.class.getSimpleName(), () -> this.deathReflectionService = new DeathReflectionService());
+        services.put(ActionBarService.class.getSimpleName(), () -> this.actionBarService = new ActionBarService(this));
 
         services.forEach(Logger::logTime);
     }

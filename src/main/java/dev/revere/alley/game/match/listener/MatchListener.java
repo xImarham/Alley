@@ -13,7 +13,6 @@ import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
-import dev.revere.alley.util.visual.ActionBarUtil;
 import dev.revere.alley.util.ListenerUtil;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.GameMode;
@@ -138,7 +137,7 @@ public class MatchListener implements Listener {
             GameParticipant<MatchGamePlayerImpl> killerParticipant = profile.getMatch().getParticipant(killer);
             killerParticipant.getPlayer().getData().incrementKills();
 
-            ActionBarUtil.sendMessage(killer, "&c&lKILL! &f" + player.getName(), 3);
+            Alley.getInstance().getActionBarService().sendMessage(killer, "&c&lKILL! &f" + player.getName(), 3);
             profile.getMatch().getParticipants()
                     .forEach(participant -> participant.getPlayer().getPlayer().sendMessage(CC.translate("&c" + player.getName() + " &fwas killed by &c" + killer.getName() + "&f.")));
             profile.getMatch().createSnapshot(player.getUniqueId(), killer.getUniqueId());
