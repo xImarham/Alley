@@ -18,9 +18,6 @@ import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.util.chat.ClickableUtil;
 import lombok.Getter;
 import lombok.Setter;
-import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.api.chat.ClickEvent;
-import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.entity.Player;
 
@@ -35,12 +32,16 @@ import java.util.List;
 @Getter
 @Setter
 public class DuelRequestService {
+    private final Alley plugin;
     private final List<DuelRequest> duelRequests;
 
     /**
      * Constructor for the DuelRequestService class.
+     *
+     * @param plugin The Alley plugin instance.
      */
-    public DuelRequestService() {
+    public DuelRequestService(Alley plugin) {
+        this.plugin = plugin;
         this.duelRequests = new ArrayList<>();
     }
 
@@ -86,22 +87,15 @@ public class DuelRequestService {
      * @param kit    the kit
      */
     public void sendDuelRequest(Player sender, Player target, Kit kit) {
-        AbstractArena arena = Alley.getInstance().getArenaService().getRandomArena(kit);
+        AbstractArena arena = this.plugin.getArenaService().getRandomArena(kit);
         DuelRequest duelRequest = new DuelRequest(sender, target, kit, arena);
         this.addDuelRequest(duelRequest);
 
-        TextComponent invitation = new TextComponent(CC.translate(" &a(Click To Accept)"));
-        invitation.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/accept " + sender.getName()));
-
-        String hover = CC.translate("&aClick to accept " + sender.getName() + "&a's duel challenge.");
-        TextComponent hoverComponent = new TextComponent(hover);
-        invitation.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new BaseComponent[]{hoverComponent}));
-
-        this.sendInvite(sender, target, kit, arena, invitation);
+        this.sendInvite(sender, target, kit, arena, this.getClickable(sender));
     }
 
     /**
-     * Send duel request to the target player.
+     * Send duel request to the target player with a specific arena.
      *
      * @param sender the sender
      * @param target the target
@@ -112,7 +106,7 @@ public class DuelRequestService {
         DuelRequest duelRequest = new DuelRequest(sender, target, kit, arena);
         this.addDuelRequest(duelRequest);
 
-        this.sendInvite(sender, target, kit, arena, ClickableUtil.createComponent(" &a(Click To Accept)", "/accept " + sender.getName(), "&aClick to accept &b" + sender.getName() + "&a's duel request."));
+        this.sendInvite(sender, target, kit, arena, this.getClickable(sender));
     }
 
     /**
@@ -148,7 +142,7 @@ public class DuelRequestService {
         GameParticipant<MatchGamePlayerImpl> participantA = new GameParticipant<>(playerA);
         GameParticipant<MatchGamePlayerImpl> participantB = new GameParticipant<>(playerB);
 
-        for (Queue queue : Alley.getInstance().getQueueService().getQueues()) {
+        for (Queue queue : this.plugin.getQueueService().getQueues()) {
             if (queue.getKit().equals(duelRequest.getKit()) && !queue.isRanked()) {
                 if (queue.getKit().isSettingEnabled(KitSettingLivesImpl.class)) {
                     AbstractMatch match = new MatchLivesRegularImpl(queue, duelRequest.getKit(), duelRequest.getArena(), false, participantA, participantB);
@@ -167,5 +161,19 @@ public class DuelRequestService {
         }
 
         this.removeDuelRequest(duelRequest);
+    }
+    
+    /**
+     * Get the clickable component for the duel request.
+     *
+     * @param sender the sender
+     * @return the clickable component
+     */
+    private TextComponent getClickable(Player sender) {
+        return ClickableUtil.createComponent(
+                " &a(Click To Accept)", 
+                "/accept " + sender.getName(), 
+                "&aClick to accept &b" + sender.getName() + "&a's duel request."
+        );
     }
 }

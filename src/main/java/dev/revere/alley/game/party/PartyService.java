@@ -243,7 +243,7 @@ public class PartyService {
         target.sendMessage(CC.translate("&f&l ● &fYou've been invited to join &b" + party.getLeader().getName() + "&f's party."));
         target.sendMessage(CC.translate("&f&l ● &fFrom: &b" + sender.getName()));
         target.sendMessage(CC.translate("&f&l ● &fPlayers: &b" + party.getMembers().size() + "&f/&b30")); //TODO: Implement party size limit with permissions ect...
-        target.spigot().sendMessage(ClickableUtil.createComponent(" &a(Click To Accept)", "/party accept " + sender.getName(), "&aClick to accept " + sender.getName() + "&a's party invitation."));
+        target.spigot().sendMessage(this.getClickable(sender));
         target.sendMessage("");
     }
 
@@ -293,13 +293,25 @@ public class PartyService {
      * @param party The party to announce.
      */
     public void announceParty(Party party) {
-        TextComponent textComponent = ClickableUtil.createComponent(" &a(Click to join)", "/party join " + party.getLeader().getName(), "&aClick to accept &b" + party.getLeader().getName() + "&a's party invitation.");
-
         Bukkit.getOnlinePlayers().forEach(player -> {
             player.sendMessage("");
             player.sendMessage(CC.translate("&b&l" + party.getLeader().getName() + " &a&lis inviting you to join &b&ltheir &a&lparty!"));
-            player.spigot().sendMessage(textComponent);
+            player.spigot().sendMessage(this.getClickable(party.getLeader()));
             player.sendMessage("");
         });
+    }
+
+    /**
+     * Gets the clickable text component for accepting a party invitation.
+     *
+     * @param sender The player who sent the invitation.
+     * @return The clickable text component.
+     */
+    private TextComponent getClickable(Player sender) {
+        return ClickableUtil.createComponent(
+                " &a(Click to accept)",
+                "/party accept " + sender.getName(),
+                "&aClick to accept &b" + sender.getName() + "&a's party invitation."
+        );
     }
 }
