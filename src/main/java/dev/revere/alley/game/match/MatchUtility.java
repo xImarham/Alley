@@ -4,21 +4,18 @@ import dev.revere.alley.Alley;
 import dev.revere.alley.feature.arena.AbstractArena;
 import dev.revere.alley.game.match.enums.EnumMatchState;
 import dev.revere.alley.game.match.player.GamePlayer;
-import dev.revere.alley.profile.Profile;
-import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
-
+import dev.revere.alley.game.match.player.participant.GameParticipant;
+import dev.revere.alley.profile.Profile;
 import dev.revere.alley.util.chat.CC;
-import org.bukkit.Location;
-import org.bukkit.entity.Player;
-import org.bukkit.configuration.file.FileConfiguration;
-
+import lombok.experimental.UtilityClass;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
-
-import lombok.experimental.UtilityClass;
+import org.bukkit.Location;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Player;
 
 import java.util.List;
 

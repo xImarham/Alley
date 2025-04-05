@@ -1,8 +1,8 @@
 package dev.revere.alley.feature.hotbar;
 
-import lombok.Data;
 import dev.revere.alley.feature.hotbar.enums.HotbarItems;
 import dev.revere.alley.feature.hotbar.enums.HotbarType;
+import lombok.Data;
 import org.bukkit.inventory.ItemStack;
 
 /**

@@ -1,13 +1,13 @@
 package dev.revere.alley.feature.arena;
 
-import dev.revere.alley.feature.arena.enums.EnumArenaType;
-import lombok.Getter;
 import dev.revere.alley.Alley;
+import dev.revere.alley.feature.arena.enums.EnumArenaType;
 import dev.revere.alley.feature.arena.impl.FreeForAllArena;
 import dev.revere.alley.feature.arena.impl.SharedArena;
 import dev.revere.alley.feature.arena.impl.StandAloneArena;
 import dev.revere.alley.feature.kit.Kit;
 import dev.revere.alley.util.location.LocationUtil;
+import lombok.Getter;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;

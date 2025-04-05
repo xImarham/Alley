@@ -1,8 +1,8 @@
 package dev.revere.alley.feature.kit.editor.command;
 
 import dev.revere.alley.api.command.BaseCommand;
-import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.CommandArgs;
+import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.entity.Player;
 

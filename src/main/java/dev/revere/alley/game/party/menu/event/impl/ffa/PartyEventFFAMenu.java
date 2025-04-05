@@ -1,10 +1,10 @@
 package dev.revere.alley.game.party.menu.event.impl.ffa;
 
-import lombok.AllArgsConstructor;
 import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.api.menu.Menu;
 import dev.revere.alley.api.menu.impl.BackButton;
 import dev.revere.alley.game.party.menu.event.PartyEventMenu;
+import lombok.AllArgsConstructor;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;

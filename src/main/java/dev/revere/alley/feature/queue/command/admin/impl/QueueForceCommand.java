@@ -1,16 +1,15 @@
 package dev.revere.alley.feature.queue.command.admin.impl;
 
-import dev.revere.alley.Alley;
+import dev.revere.alley.api.command.BaseCommand;
+import dev.revere.alley.api.command.CommandArgs;
+import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.feature.hotbar.enums.HotbarType;
 import dev.revere.alley.feature.kit.Kit;
-import dev.revere.alley.profile.Profile;
 import dev.revere.alley.feature.queue.Queue;
+import dev.revere.alley.profile.Profile;
 import dev.revere.alley.util.PlayerUtil;
 import dev.revere.alley.util.SoundUtil;
 import dev.revere.alley.util.chat.CC;
-import dev.revere.alley.api.command.BaseCommand;
-import dev.revere.alley.api.command.annotation.CommandData;
-import dev.revere.alley.api.command.CommandArgs;
 import org.bukkit.entity.Player;
 
 /**

@@ -1,6 +1,5 @@
 package dev.revere.alley.profile.settings.command.toggle;
 
-import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;

@@ -1,9 +1,9 @@
 package dev.revere.alley.locale;
 
-import dev.revere.alley.api.locale.ILocale;
-import lombok.Getter;
 import dev.revere.alley.Alley;
+import dev.revere.alley.api.locale.ILocale;
 import dev.revere.alley.util.chat.CC;
+import lombok.Getter;
 
 /**
  * @author Emmy

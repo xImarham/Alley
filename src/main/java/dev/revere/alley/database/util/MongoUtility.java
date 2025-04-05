@@ -1,11 +1,11 @@
 package dev.revere.alley.database.util;
 
 import dev.revere.alley.Alley;
+import dev.revere.alley.feature.division.Division;
+import dev.revere.alley.feature.division.tier.DivisionTier;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.data.ProfileData;
 import dev.revere.alley.profile.data.impl.*;
-import dev.revere.alley.feature.division.Division;
-import dev.revere.alley.feature.division.tier.DivisionTier;
 import dev.revere.alley.profile.enums.EnumChatChannel;
 import dev.revere.alley.profile.enums.EnumWorldTime;
 import lombok.experimental.UtilityClass;

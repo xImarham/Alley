@@ -1,10 +1,9 @@
 package dev.revere.alley.api.menu.pagination.impl.button;
 
+import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.api.menu.pagination.PaginatedMenu;
 import dev.revere.alley.util.chat.CC;
 import lombok.AllArgsConstructor;
-import dev.revere.alley.api.menu.Button;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;

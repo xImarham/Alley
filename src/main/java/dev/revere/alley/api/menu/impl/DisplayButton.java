@@ -1,9 +1,9 @@
 package dev.revere.alley.api.menu.impl;
 
+import dev.revere.alley.api.menu.Button;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import dev.revere.alley.api.menu.Button;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;

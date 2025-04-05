@@ -1,10 +1,10 @@
 package dev.revere.alley.essential.command;
 
+import dev.revere.alley.api.command.BaseCommand;
+import dev.revere.alley.api.command.CommandArgs;
+import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.util.EnchantUtil;
 import dev.revere.alley.util.chat.CC;
-import dev.revere.alley.api.command.BaseCommand;
-import dev.revere.alley.api.command.annotation.CommandData;
-import dev.revere.alley.api.command.CommandArgs;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;

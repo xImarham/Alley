@@ -1,7 +1,7 @@
 package dev.revere.alley.util.particle;
 
-import lombok.Getter;
 import dev.revere.alley.util.reflection.ReflectionUtils;
+import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;

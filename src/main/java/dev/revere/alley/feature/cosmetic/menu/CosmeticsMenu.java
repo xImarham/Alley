@@ -1,14 +1,14 @@
 package dev.revere.alley.feature.cosmetic.menu;
 
-import dev.revere.alley.api.menu.impl.BackButton;
-import dev.revere.alley.profile.settings.menu.PracticeSettingsMenu;
-import lombok.AllArgsConstructor;
 import dev.revere.alley.Alley;
-import dev.revere.alley.feature.cosmetic.menu.button.SoundEffectButton;
-import dev.revere.alley.feature.cosmetic.menu.button.CosmeticButton;
-import dev.revere.alley.feature.cosmetic.menu.button.KillEffectButton;
 import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.api.menu.Menu;
+import dev.revere.alley.api.menu.impl.BackButton;
+import dev.revere.alley.feature.cosmetic.menu.button.CosmeticButton;
+import dev.revere.alley.feature.cosmetic.menu.button.KillEffectButton;
+import dev.revere.alley.feature.cosmetic.menu.button.SoundEffectButton;
+import dev.revere.alley.profile.settings.menu.PracticeSettingsMenu;
+import lombok.AllArgsConstructor;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;

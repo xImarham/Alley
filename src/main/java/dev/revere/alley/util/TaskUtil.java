@@ -1,7 +1,7 @@
 package dev.revere.alley.util;
 
-import lombok.experimental.UtilityClass;
 import dev.revere.alley.Alley;
+import lombok.experimental.UtilityClass;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 

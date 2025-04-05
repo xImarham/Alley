@@ -1,10 +1,10 @@
 package dev.revere.alley.profile.settings.menu;
 
-import dev.revere.alley.api.menu.impl.BackButton;
-import lombok.AllArgsConstructor;
 import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.api.menu.Menu;
+import dev.revere.alley.api.menu.impl.BackButton;
 import dev.revere.alley.tool.item.ItemBuilder;
+import lombok.AllArgsConstructor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;

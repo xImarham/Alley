@@ -1,8 +1,8 @@
 package dev.revere.alley.profile.stats.command;
 
 import dev.revere.alley.api.command.BaseCommand;
-import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.CommandArgs;
+import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.profile.stats.menu.StatisticsMenu;
 import dev.revere.alley.util.PlayerUtil;
 import dev.revere.alley.util.chat.CC;

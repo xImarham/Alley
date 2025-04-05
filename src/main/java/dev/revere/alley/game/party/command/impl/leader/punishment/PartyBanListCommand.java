@@ -1,9 +1,8 @@
 package dev.revere.alley.game.party.command.impl.leader.punishment;
 
-import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
-import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.CommandArgs;
+import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;

@@ -2,8 +2,8 @@ package dev.revere.alley.feature.kit.command.impl.data.slot;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
-import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.CommandArgs;
+import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.feature.kit.Kit;
 import dev.revere.alley.feature.kit.KitService;
 import dev.revere.alley.locale.KitLocale;

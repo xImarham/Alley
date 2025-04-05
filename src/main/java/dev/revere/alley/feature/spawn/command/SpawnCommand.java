@@ -1,9 +1,8 @@
 package dev.revere.alley.feature.spawn.command;
 
-import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
-import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.CommandArgs;
+import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.feature.hotbar.enums.HotbarType;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;

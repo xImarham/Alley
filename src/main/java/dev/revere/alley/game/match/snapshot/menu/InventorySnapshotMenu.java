@@ -1,13 +1,13 @@
 package dev.revere.alley.game.match.snapshot.menu;
 
-import lombok.AllArgsConstructor;
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.api.menu.Menu;
 import dev.revere.alley.game.match.snapshot.menu.button.InventorySnapshotArmorButton;
 import dev.revere.alley.game.match.snapshot.menu.button.ViewOpponentButton;
-import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.tool.item.ItemBuilder;
+import dev.revere.alley.util.chat.CC;
+import lombok.AllArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;

@@ -1,8 +1,8 @@
 package dev.revere.alley.api.assemble.events;
 
+import dev.revere.alley.api.assemble.AssembleBoard;
 import lombok.Getter;
 import lombok.Setter;
-import dev.revere.alley.api.assemble.AssembleBoard;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 

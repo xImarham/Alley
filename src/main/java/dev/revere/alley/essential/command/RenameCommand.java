@@ -2,8 +2,8 @@ package dev.revere.alley.essential.command;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
-import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.CommandArgs;
+import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;

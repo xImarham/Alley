@@ -1,10 +1,10 @@
 package dev.revere.alley.feature.kit;
 
 import dev.revere.alley.Alley;
+import dev.revere.alley.feature.kit.settings.KitSetting;
 import dev.revere.alley.game.ffa.AbstractFFAMatch;
 import lombok.Getter;
 import lombok.Setter;
-import dev.revere.alley.feature.kit.settings.KitSetting;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;

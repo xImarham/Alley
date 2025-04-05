@@ -1,9 +1,8 @@
 package dev.revere.alley.game.party.command.impl.member;
 
-import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
-import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.CommandArgs;
+import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.game.party.Party;
 import dev.revere.alley.game.party.enums.EnumPartyState;
 import dev.revere.alley.util.chat.CC;

@@ -1,14 +1,14 @@
 package dev.revere.alley.game.duel.menu;
 
-import lombok.AllArgsConstructor;
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.api.menu.Menu;
-import dev.revere.alley.tool.item.ItemBuilder;
 import dev.revere.alley.feature.arena.AbstractArena;
 import dev.revere.alley.feature.arena.impl.StandAloneArena;
 import dev.revere.alley.feature.kit.Kit;
+import dev.revere.alley.tool.item.ItemBuilder;
 import dev.revere.alley.util.chat.CC;
+import lombok.AllArgsConstructor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;

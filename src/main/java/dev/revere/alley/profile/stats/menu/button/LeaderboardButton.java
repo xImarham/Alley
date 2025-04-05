@@ -1,8 +1,8 @@
 package dev.revere.alley.profile.stats.menu.button;
 
+import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.feature.leaderboard.menu.LeaderboardMenu;
 import dev.revere.alley.tool.item.ItemBuilder;
-import dev.revere.alley.api.menu.Button;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;

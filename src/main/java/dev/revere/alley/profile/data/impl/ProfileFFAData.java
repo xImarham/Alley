@@ -2,7 +2,6 @@ package dev.revere.alley.profile.data.impl;
 
 import lombok.Getter;
 import lombok.Setter;
-import dev.revere.alley.Alley;
 
 import java.text.DecimalFormat;
 

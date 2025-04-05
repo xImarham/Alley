@@ -1,9 +1,9 @@
 package dev.revere.alley.api.menu.pagination;
 
-import dev.revere.alley.api.menu.pagination.impl.button.PageButton;
-import lombok.Getter;
 import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.api.menu.Menu;
+import dev.revere.alley.api.menu.pagination.impl.button.PageButton;
+import lombok.Getter;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;

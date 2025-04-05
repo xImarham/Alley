@@ -1,8 +1,8 @@
 package dev.revere.alley.config;
 
-import lombok.Getter;
 import dev.revere.alley.Alley;
 import dev.revere.alley.tool.logger.Logger;
+import lombok.Getter;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 

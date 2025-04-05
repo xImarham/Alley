@@ -1,5 +1,8 @@
 package dev.revere.alley.feature.division.command;
 
+import dev.revere.alley.api.command.BaseCommand;
+import dev.revere.alley.api.command.CommandArgs;
+import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.feature.division.command.impl.data.DivisionSetDescriptionCommand;
 import dev.revere.alley.feature.division.command.impl.data.DivisionSetDisplayNameCommand;
 import dev.revere.alley.feature.division.command.impl.data.DivisionSetIconCommand;
@@ -11,9 +14,6 @@ import dev.revere.alley.feature.division.command.impl.manage.DivisionViewCommand
 import dev.revere.alley.feature.division.command.impl.player.DivisionsCommand;
 import dev.revere.alley.feature.division.menu.DivisionsMenu;
 import dev.revere.alley.util.chat.CC;
-import dev.revere.alley.api.command.BaseCommand;
-import dev.revere.alley.api.command.annotation.CommandData;
-import dev.revere.alley.api.command.CommandArgs;
 import org.bukkit.entity.Player;
 
 /**

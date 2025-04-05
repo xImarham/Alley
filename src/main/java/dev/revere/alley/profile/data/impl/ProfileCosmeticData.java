@@ -1,12 +1,12 @@
 package dev.revere.alley.profile.data.impl;
 
-import lombok.Getter;
-import lombok.Setter;
-import dev.revere.alley.feature.cosmetic.impl.soundeffect.AbstractSoundEffect;
-import dev.revere.alley.feature.cosmetic.impl.soundeffect.SoundEffectRepository;
 import dev.revere.alley.feature.cosmetic.impl.killeffect.AbstractKillEffect;
 import dev.revere.alley.feature.cosmetic.impl.killeffect.KillEffectRepository;
+import dev.revere.alley.feature.cosmetic.impl.soundeffect.AbstractSoundEffect;
+import dev.revere.alley.feature.cosmetic.impl.soundeffect.SoundEffectRepository;
 import dev.revere.alley.feature.cosmetic.interfaces.ICosmetic;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * @author Remi

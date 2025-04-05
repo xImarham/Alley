@@ -1,9 +1,9 @@
 package dev.revere.alley.game.match.player.impl;
 
-import lombok.Getter;
-import lombok.Setter;
 import dev.revere.alley.game.match.player.GamePlayer;
 import dev.revere.alley.game.match.player.data.MatchGamePlayerData;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.UUID;
 

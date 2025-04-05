@@ -1,8 +1,8 @@
 package dev.revere.alley.feature.cosmetic.impl.soundeffect;
 
-import lombok.Data;
 import dev.revere.alley.feature.cosmetic.impl.soundeffect.annotation.SoundEffectData;
 import dev.revere.alley.feature.cosmetic.interfaces.ICosmetic;
+import lombok.Data;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 

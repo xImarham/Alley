@@ -1,9 +1,8 @@
 package dev.revere.alley.feature.arena.command.impl.data;
 
-import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
-import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.CommandArgs;
+import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.command.CommandSender;
 

@@ -2,8 +2,8 @@ package dev.revere.alley.feature.division.menu;
 
 import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.feature.division.Division;
-import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.tool.item.ItemBuilder;
+import dev.revere.alley.util.chat.CC;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.bukkit.entity.Player;

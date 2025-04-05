@@ -1,8 +1,8 @@
 package dev.revere.alley.feature.cooldown;
 
-import lombok.Getter;
 import dev.revere.alley.feature.cooldown.enums.EnumCooldownType;
 import dev.revere.alley.util.TaskUtil;
+import lombok.Getter;
 import org.bukkit.scheduler.BukkitTask;
 
 /**

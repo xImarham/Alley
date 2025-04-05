@@ -1,13 +1,12 @@
 package dev.revere.alley.feature.arena;
 
 import dev.revere.alley.feature.arena.enums.EnumArenaType;
+import lombok.Getter;
+import lombok.Setter;
 import org.bukkit.Location;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import lombok.Setter;
-import lombok.Getter;
 
 /**
  * @author Emmy

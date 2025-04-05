@@ -1,14 +1,12 @@
 package dev.revere.alley.api.menu.pagination.impl.menu;
 
-import dev.revere.alley.api.menu.MenuUtil;
+import dev.revere.alley.api.menu.Button;
+import dev.revere.alley.api.menu.Menu;
 import dev.revere.alley.api.menu.pagination.PaginatedMenu;
 import dev.revere.alley.api.menu.pagination.impl.button.JumpToPageButton;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import dev.revere.alley.api.menu.Button;
-import dev.revere.alley.api.menu.Menu;
-import dev.revere.alley.api.menu.impl.BackButton;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;

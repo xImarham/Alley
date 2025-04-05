@@ -1,9 +1,9 @@
 package dev.revere.alley.profile.data.impl;
 
-import lombok.Getter;
-import lombok.Setter;
 import dev.revere.alley.profile.enums.EnumChatChannel;
 import dev.revere.alley.profile.enums.EnumWorldTime;
+import lombok.Getter;
+import lombok.Setter;
 import org.bukkit.entity.Player;
 
 /**

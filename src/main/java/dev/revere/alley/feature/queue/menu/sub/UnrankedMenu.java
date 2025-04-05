@@ -1,10 +1,10 @@
 package dev.revere.alley.feature.queue.menu.sub;
 
 import dev.revere.alley.Alley;
-import dev.revere.alley.feature.queue.Queue;
 import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.api.menu.Menu;
 import dev.revere.alley.api.menu.impl.BackButton;
+import dev.revere.alley.feature.queue.Queue;
 import dev.revere.alley.feature.queue.menu.QueuesMenuDefault;
 import dev.revere.alley.feature.queue.menu.button.UnrankedButton;
 import org.bukkit.entity.Player;

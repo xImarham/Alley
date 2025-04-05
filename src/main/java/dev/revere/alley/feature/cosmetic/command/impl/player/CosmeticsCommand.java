@@ -1,9 +1,9 @@
 package dev.revere.alley.feature.cosmetic.command.impl.player;
 
-import dev.revere.alley.feature.cosmetic.menu.CosmeticsMenu;
 import dev.revere.alley.api.command.BaseCommand;
-import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.CommandArgs;
+import dev.revere.alley.api.command.annotation.CommandData;
+import dev.revere.alley.feature.cosmetic.menu.CosmeticsMenu;
 import org.bukkit.entity.Player;
 
 /**

@@ -1,11 +1,11 @@
 package dev.revere.alley.feature.cosmetic.impl.soundeffect;
 
 import dev.revere.alley.feature.cosmetic.impl.soundeffect.impl.ExplosionSoundEffect;
-import lombok.Getter;
 import dev.revere.alley.feature.cosmetic.impl.soundeffect.impl.NoneSoundEffect;
 import dev.revere.alley.feature.cosmetic.impl.soundeffect.impl.StepSoundEffect;
 import dev.revere.alley.feature.cosmetic.interfaces.ICosmeticRepository;
 import dev.revere.alley.feature.cosmetic.repository.BaseCosmeticRepository;
+import lombok.Getter;
 
 /**
  * @author Remi

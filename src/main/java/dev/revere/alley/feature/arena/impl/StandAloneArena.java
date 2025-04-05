@@ -1,14 +1,14 @@
 package dev.revere.alley.feature.arena.impl;
 
-import dev.revere.alley.game.match.impl.MatchRoundsRegularImpl;
-import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
-import dev.revere.alley.game.match.player.participant.GameParticipant;
-import lombok.Getter;
-import lombok.Setter;
 import dev.revere.alley.Alley;
 import dev.revere.alley.feature.arena.AbstractArena;
 import dev.revere.alley.feature.arena.enums.EnumArenaType;
+import dev.revere.alley.game.match.impl.MatchRoundsRegularImpl;
+import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
+import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.util.location.LocationUtil;
+import lombok.Getter;
+import lombok.Setter;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
 

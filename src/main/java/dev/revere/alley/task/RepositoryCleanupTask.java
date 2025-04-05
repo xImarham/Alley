@@ -2,10 +2,10 @@ package dev.revere.alley.task;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.feature.combat.CombatService;
-import dev.revere.alley.game.duel.DuelRequestService;
 import dev.revere.alley.game.duel.DuelRequest;
-import dev.revere.alley.game.party.PartyService;
+import dev.revere.alley.game.duel.DuelRequestService;
 import dev.revere.alley.game.party.PartyRequest;
+import dev.revere.alley.game.party.PartyService;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;

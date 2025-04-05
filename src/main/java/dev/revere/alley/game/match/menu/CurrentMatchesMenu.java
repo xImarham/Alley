@@ -1,19 +1,21 @@
 package dev.revere.alley.game.match.menu;
 
+import dev.revere.alley.Alley;
+import dev.revere.alley.api.menu.Button;
+import dev.revere.alley.api.menu.pagination.PaginatedMenu;
+import dev.revere.alley.game.match.AbstractMatch;
+import dev.revere.alley.tool.item.ItemBuilder;
 import dev.revere.alley.util.chat.CC;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import dev.revere.alley.Alley;
-import dev.revere.alley.game.match.AbstractMatch;
-import dev.revere.alley.api.menu.Button;
-import dev.revere.alley.tool.item.ItemBuilder;
-import dev.revere.alley.api.menu.pagination.PaginatedMenu;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**

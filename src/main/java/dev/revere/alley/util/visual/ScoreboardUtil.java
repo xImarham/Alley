@@ -1,7 +1,7 @@
 package dev.revere.alley.util.visual;
 
-import lombok.experimental.UtilityClass;
 import dev.revere.alley.util.chat.CC;
+import lombok.experimental.UtilityClass;
 
 /**
  * @author Emmy

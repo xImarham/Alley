@@ -1,8 +1,8 @@
 package dev.revere.alley.feature.kit.settings;
 
+import dev.revere.alley.feature.kit.settings.annotation.KitSettingData;
 import lombok.Getter;
 import lombok.Setter;
-import dev.revere.alley.feature.kit.settings.annotation.KitSettingData;
 
 /**
  * @author Remi

@@ -1,9 +1,9 @@
 package dev.revere.alley.profile.settings.command;
 
-import dev.revere.alley.profile.settings.menu.MatchSettingsMenu;
 import dev.revere.alley.api.command.BaseCommand;
-import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.CommandArgs;
+import dev.revere.alley.api.command.annotation.CommandData;
+import dev.revere.alley.profile.settings.menu.MatchSettingsMenu;
 import org.bukkit.entity.Player;
 
 /**

@@ -1,8 +1,8 @@
 package dev.revere.alley.feature.queue.command.admin;
 
 import dev.revere.alley.api.command.BaseCommand;
-import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.CommandArgs;
+import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.feature.queue.command.admin.impl.QueueForceCommand;
 import dev.revere.alley.feature.queue.command.admin.impl.QueueReloadCommand;
 import dev.revere.alley.util.chat.CC;

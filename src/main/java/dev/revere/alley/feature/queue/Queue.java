@@ -1,13 +1,13 @@
 package dev.revere.alley.feature.queue;
 
-import lombok.Getter;
-import lombok.Setter;
 import dev.revere.alley.Alley;
 import dev.revere.alley.feature.hotbar.enums.HotbarType;
 import dev.revere.alley.feature.kit.Kit;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
 import dev.revere.alley.util.chat.CC;
+import lombok.Getter;
+import lombok.Setter;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
