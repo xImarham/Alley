@@ -40,7 +40,6 @@ public class ReflectionRepository {
                     instance = clazz.getDeclaredConstructor().newInstance();
                 }
 
-                Logger.log("Registering reflection service: " + clazz.getName());
                 this.reflectionServices.add(instance);
             } catch (Exception exception) {
                 Logger.logException("Failed to register reflection service: " + clazz.getName(), exception);
