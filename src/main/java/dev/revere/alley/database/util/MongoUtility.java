@@ -30,6 +30,7 @@ public class MongoUtility {
      */
     public Document toDocument(Profile profile) {
         Document document = new Document();
+        document.put("firstJoin", profile.getFirstJoin());
         document.put("uuid", profile.getUuid().toString());
         document.put("name", profile.getName());
 
@@ -50,6 +51,7 @@ public class MongoUtility {
         profileDataDocument.put("ffaData", convertFFAData(profileData.getFfaData()));
         profileDataDocument.put("profileSettingData", convertProfileSettingData(profileData.getProfileSettingData()));
         profileDataDocument.put("profileCosmeticData", convertProfileCosmeticData(profileData.getProfileCosmeticData()));
+        profileDataDocument.put("profilePlayTimeData", convertProfilePlayTimeData(profileData.getProfilePlayTimeData()));
 
         document.put("profileData", profileDataDocument);
         return document;
@@ -141,12 +143,27 @@ public class MongoUtility {
     }
 
     /**
+     * Converts a ProfilePlayTimeData object to a Document.
+     *
+     * @param playTimeData The play time data to convert.
+     * @return The converted Document.
+     */
+    private Document convertProfilePlayTimeData(ProfilePlayTimeData playTimeData) {
+        Document playTimeDocument = new Document();
+        playTimeDocument.put("total", playTimeData.getTotal());
+        playTimeDocument.put("lastLogin", playTimeData.getLastLogin());
+        return playTimeDocument;
+    }
+
+    /**
      * Updates a Profile object from a Document.
      *
      * @param profile   The profile to update.
      * @param document  The document to update from.
      */
     public void updateProfileFromDocument(Profile profile, Document document) {
+        profile.setFirstJoin(document.getLong("firstJoin"));
+
         if (document.containsKey("profileData")) {
             Document profileDataDocument = (Document) document.get("profileData");
             ProfileData profileData = new ProfileData();
@@ -177,6 +194,7 @@ public class MongoUtility {
 
             profileData.setProfileSettingData(parseProfileSettingData((Document) profileDataDocument.get("profileSettingData")));
             profileData.setProfileCosmeticData(parseProfileCosmeticData((Document) profileDataDocument.get("profileCosmeticData")));
+            profileData.setProfilePlayTimeData(parseProfilePlayTimeData((Document) profileDataDocument.get("profilePlayTimeData")));
 
             profile.setProfileData(profileData);
         }
@@ -280,5 +298,18 @@ public class MongoUtility {
         cosmeticData.setSelectedKillEffect(cosmeticDocument.getString("selectedKillEffect"));
         cosmeticData.setSelectedSoundEffect(cosmeticDocument.getString("selectedSoundEffect"));
         return cosmeticData;
+    }
+
+    /**
+     * Parses a ProfilePlayTimeData object from a Document.
+     *
+     * @param playTimeDocument The play time document to parse.
+     * @return The parsed ProfilePlayTimeData.
+     */
+    private ProfilePlayTimeData parseProfilePlayTimeData(Document playTimeDocument) {
+        ProfilePlayTimeData playTimeData = new ProfilePlayTimeData();
+        playTimeData.setTotal(playTimeDocument.getLong("total"));
+        playTimeData.setLastLogin(playTimeDocument.getLong("lastLogin"));
+        return playTimeData;
     }
 }

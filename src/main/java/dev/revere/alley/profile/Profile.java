@@ -12,6 +12,7 @@ import dev.revere.alley.game.match.AbstractMatch;
 import dev.revere.alley.game.party.Party;
 import dev.revere.alley.profile.data.ProfileData;
 import dev.revere.alley.profile.data.impl.ProfileFFAData;
+import dev.revere.alley.profile.data.impl.ProfilePlayTimeData;
 import dev.revere.alley.profile.data.impl.ProfileRankedKitData;
 import dev.revere.alley.profile.data.impl.ProfileUnrankedKitData;
 import dev.revere.alley.profile.enums.EnumProfileState;
@@ -35,6 +36,8 @@ public class Profile {
     private final UUID uuid;
     private String name;
 
+    private long firstJoin;
+
     private ProfileData profileData;
     private QueueProfile queueProfile;
     private EnumProfileState state;
@@ -55,6 +58,7 @@ public class Profile {
      */
     public Profile(UUID uuid) {
         this.uuid = uuid;
+        this.firstJoin = System.currentTimeMillis();
         this.state = EnumProfileState.LOBBY;
         this.profileData = new ProfileData();
         this.name = Bukkit.getOfflinePlayer(this.uuid).getName();
@@ -184,5 +188,13 @@ public class Profile {
         }
 
         return null;
+    }
+
+    /**
+     * Updates the last play time of the profile.
+     */
+    public void updatePlayTime() {
+        ProfilePlayTimeData playTimeData = this.profileData.getProfilePlayTimeData();
+        playTimeData.setTotal(playTimeData.getTotal() + (System.currentTimeMillis() - playTimeData.getLastLogin()));
     }
 }

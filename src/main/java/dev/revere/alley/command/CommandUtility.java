@@ -1,6 +1,5 @@
 package dev.revere.alley.command;
 
-import dev.revere.alley.command.impl.admin.PlaytimeCommand;
 import dev.revere.alley.command.impl.donator.HostCommand;
 import dev.revere.alley.command.impl.donator.emoji.EmojiCommand;
 import dev.revere.alley.command.impl.main.AlleyCommand;
@@ -36,6 +35,7 @@ import dev.revere.alley.game.party.command.PartyCommand;
 import dev.revere.alley.profile.command.ChallengesCommand;
 import dev.revere.alley.profile.command.ChatCommand;
 import dev.revere.alley.profile.command.MatchHistoryCommand;
+import dev.revere.alley.profile.command.admin.PlaytimeCommand;
 import dev.revere.alley.profile.command.admin.ResetStatsCommand;
 import dev.revere.alley.profile.command.admin.ranked.RankedCommand;
 import dev.revere.alley.profile.settings.command.MatchSettingsCommand;

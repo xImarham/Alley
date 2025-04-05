@@ -25,6 +25,7 @@ public class ProfileData {
     private Map<String, ProfileFFAData> ffaData;
     private ProfileSettingData profileSettingData;
     private ProfileCosmeticData profileCosmeticData;
+    private ProfilePlayTimeData profilePlayTimeData;
 
     private int elo = 1000;
     private int coins = 100;
@@ -45,6 +46,7 @@ public class ProfileData {
     private void initializeDataClasses() {
         this.profileSettingData = new ProfileSettingData();
         this.profileCosmeticData = new ProfileCosmeticData();
+        this.profilePlayTimeData = new ProfilePlayTimeData();
     }
 
     private void feedDataClasses() {

@@ -7,6 +7,8 @@ import dev.revere.alley.database.profile.IProfile;
 import dev.revere.alley.database.profile.impl.MongoProfileImpl;
 import dev.revere.alley.database.util.MongoUtility;
 import dev.revere.alley.profile.data.ProfileData;
+import dev.revere.alley.tool.date.DateFormatter;
+import dev.revere.alley.tool.date.enums.EnumDateFormat;
 import dev.revere.alley.util.chat.CC;
 import lombok.Getter;
 import org.bson.Document;
@@ -14,9 +16,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -116,11 +116,9 @@ public class ProfileService {
      */
     public void archiveProfile(Profile profile) {
         Document archiveDocument = new Document();
-        long archiveTimestamp = System.currentTimeMillis();
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-        String formattedDate = dateFormat.format(new Date(archiveTimestamp));
-        String archiveId = profile.getUuid().toString() + "-" + archiveTimestamp;
+        DateFormatter formattedDate = new DateFormatter(EnumDateFormat.DATE_PLUS_TIME, System.currentTimeMillis());
+        String archiveId = UUID.randomUUID().toString();
 
         archiveDocument.put("archive_id", archiveId);
         archiveDocument.put("archived_at", formattedDate);

@@ -120,9 +120,6 @@ match:
         - "  &b&l● &f{loser} &7{loser-color}{loser-indicator}{math-loser-elo} &7(&f{old-loser-elo} &7-> &f{new-loser-elo})"
         - ""
 
-playtime:
-  message: " \n&b{target}'s total playtime:\n &b{days} &fdays, &b{hours} &fhours, &b{minutes} &fminutes and &b{seconds} &fseconds.\n "
-
 player-settings:
   party-invites: "&aYou've {status} &aparty invites."
   party-messages: "&aYou've {status} &aparty messages."

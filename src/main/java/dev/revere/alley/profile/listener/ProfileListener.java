@@ -4,6 +4,7 @@ import dev.revere.alley.Alley;
 import dev.revere.alley.feature.hotbar.enums.HotbarType;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.ProfileService;
+import dev.revere.alley.profile.data.impl.ProfilePlayTimeData;
 import dev.revere.alley.profile.enums.EnumProfileState;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.GameMode;
@@ -66,6 +67,8 @@ public class ProfileListener implements Listener {
         profile.setOnline(true);
         profile.setMatch(null);
 
+        profile.getProfileData().getProfilePlayTimeData().setLastLogin(System.currentTimeMillis());
+
         Alley.getInstance().getSpawnService().teleportToSpawn(player);
         Alley.getInstance().getHotbarService().applyHotbarItems(player, HotbarType.LOBBY);
 
@@ -111,7 +114,10 @@ public class ProfileListener implements Listener {
     public void onPlayerQuitEvent(PlayerQuitEvent event) {
         Player player = event.getPlayer();
         Profile profile = this.profileService.getProfile(player.getUniqueId());
+
         event.setQuitMessage(null);
+
+        profile.updatePlayTime();
         profile.setOnline(false);
         profile.save();
     }
