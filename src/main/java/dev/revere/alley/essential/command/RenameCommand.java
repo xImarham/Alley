@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
  */
 public class RenameCommand extends BaseCommand {
     @Override
-    @CommandData(name = "rename", permission = "alley.admin")
+    @CommandData(name = "rename", permission = "alley.command.rename", usage = "rename <name>", description = "Rename the item in your hand")
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
 

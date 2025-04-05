@@ -24,7 +24,7 @@ import java.util.Objects;
  */
 public class ArenaCreateCommand extends BaseCommand {
 
-    @CommandData(name = "arena.create", permission = "alley.admin")
+    @CommandData(name = "arena.create", isAdminOnly = true)
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
@@ -46,7 +46,7 @@ public class ArenaCreateCommand extends BaseCommand {
             return;
         }
 
-        if (Alley.getInstance().getArenaService().getArenaByName(arenaName) != null) {
+        if (this.plugin.getArenaService().getArenaByName(arenaName) != null) {
             player.sendMessage(CC.translate("&cAn arena with that name already exists!"));
             return;
         }
@@ -85,7 +85,7 @@ public class ArenaCreateCommand extends BaseCommand {
      * @return The default display name.
      */
     private String getDefaultDisplayName(EnumArenaType arenaType) {
-        FileConfiguration config = Alley.getInstance().getConfigService().getSettingsConfig();
+        FileConfiguration config = this.plugin.getConfigService().getSettingsConfig();
 
         switch (arenaType) {
             case SHARED:

@@ -14,7 +14,7 @@ import org.bukkit.entity.Player;
  * @date 6/2/2024
  */
 public class SetCoinsCommand extends BaseCommand {
-    @CommandData(name = "coins.set", permission = "alley.admin")
+    @CommandData(name = "coins.set", isAdminOnly = true)
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
@@ -31,7 +31,7 @@ public class SetCoinsCommand extends BaseCommand {
             return;
         }
 
-        Profile profile = Alley.getInstance().getProfileService().getProfile(target.getUniqueId());
+        Profile profile = this.plugin.getProfileService().getProfile(target.getUniqueId());
 
         try {
             int amount = Integer.parseInt(args[1]);

@@ -23,7 +23,7 @@ public class AlleyDebugCommand extends BaseCommand {
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
         String[] args = command.getArgs();
-        Profile profile = this.alley.getProfileService().getProfile(player.getUniqueId());
+        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
 
         if (args.length < 1) {
             player.sendMessage(CC.translate("&6Usage: &e/alley debug &b<memory/instance/profile/profiledata>"));
@@ -81,20 +81,20 @@ public class AlleyDebugCommand extends BaseCommand {
         Arrays.asList(
                 "",
                 "     &b&lAlley &7┃ &fInstance Information",
-                "      &f┃ Profiles: &b" + this.formatNumber(this.alley.getProfileService().getProfiles().size()),
-                "      &f┃ Matches: &b" + this.formatNumber(this.alley.getMatchRepository().getMatches().size()),
-                "      &f┃ Queues: &b" + this.formatNumber(this.alley.getQueueService().getQueues().size()),
-                "      &f┃ Queue profiles: &b" + this.formatNumber(Arrays.stream(this.alley.getQueueService().getQueues().stream().mapToInt(queue -> queue.getProfiles().size()).toArray()).sum()),
-                "      &f┃ Cooldowns: &b" + this.formatNumber(this.alley.getCooldownRepository().getCooldowns().size()),
-                "      &f┃ Active Cooldowns: &b" + this.formatNumber((int) this.alley.getCooldownRepository().getCooldowns().stream().filter(cooldown -> cooldown.getC().isActive()).count()),
-                "      &f┃ Combats: &b" + this.formatNumber(this.alley.getCombatService().getCombatMap().size()),
-                "      &f┃ Kits: &b" + this.formatNumber(this.alley.getKitService().getKits().size()),
-                "      &f┃ Kit Settings: &b" + this.formatNumber(this.alley.getKitSettingService().getSettings().size()),
-                "      &f┃ Parties: &b" + this.formatNumber(this.alley.getPartyService().getParties().size()),
-                "      &f┃ Arenas: &b" + this.formatNumber(this.alley.getArenaService().getArenas().size()),
-                "      &f┃ Snapshots: &b" + this.formatNumber(this.alley.getSnapshotRepository().getSnapshots().size()),
-                "      &f┃ Duel Requests: &b" + this.formatNumber(this.alley.getDuelRequestService().getDuelRequests().size()),
-                "      &f┃ Emojis: &b" + this.formatNumber(this.alley.getEmojiRepository().getEmojis().size()),
+                "      &f┃ Profiles: &b" + this.formatNumber(this.plugin.getProfileService().getProfiles().size()),
+                "      &f┃ Matches: &b" + this.formatNumber(this.plugin.getMatchRepository().getMatches().size()),
+                "      &f┃ Queues: &b" + this.formatNumber(this.plugin.getQueueService().getQueues().size()),
+                "      &f┃ Queue profiles: &b" + this.formatNumber(Arrays.stream(this.plugin.getQueueService().getQueues().stream().mapToInt(queue -> queue.getProfiles().size()).toArray()).sum()),
+                "      &f┃ Cooldowns: &b" + this.formatNumber(this.plugin.getCooldownRepository().getCooldowns().size()),
+                "      &f┃ Active Cooldowns: &b" + this.formatNumber((int) this.plugin.getCooldownRepository().getCooldowns().stream().filter(cooldown -> cooldown.getC().isActive()).count()),
+                "      &f┃ Combats: &b" + this.formatNumber(this.plugin.getCombatService().getCombatMap().size()),
+                "      &f┃ Kits: &b" + this.formatNumber(this.plugin.getKitService().getKits().size()),
+                "      &f┃ Kit Settings: &b" + this.formatNumber(this.plugin.getKitSettingService().getSettings().size()),
+                "      &f┃ Parties: &b" + this.formatNumber(this.plugin.getPartyService().getParties().size()),
+                "      &f┃ Arenas: &b" + this.formatNumber(this.plugin.getArenaService().getArenas().size()),
+                "      &f┃ Snapshots: &b" + this.formatNumber(this.plugin.getSnapshotRepository().getSnapshots().size()),
+                "      &f┃ Duel Requests: &b" + this.formatNumber(this.plugin.getDuelRequestService().getDuelRequests().size()),
+                "      &f┃ Emojis: &b" + this.formatNumber(this.plugin.getEmojiRepository().getEmojis().size()),
                 ""
         ).forEach(line -> player.sendMessage(CC.translate(line)));
     }

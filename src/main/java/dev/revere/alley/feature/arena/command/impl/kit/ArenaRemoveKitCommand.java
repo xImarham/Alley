@@ -23,13 +23,13 @@ public class ArenaRemoveKitCommand extends BaseCommand {
         List<String> completion = new ArrayList<>();
 
         if (command.getArgs().length == 1 && command.getPlayer().hasPermission("alley.admin")) {
-            Alley.getInstance().getArenaService().getArenas().forEach(arena -> completion.add(arena.getName()));
+            this.plugin.getArenaService().getArenas().forEach(arena -> completion.add(arena.getName()));
         }
 
         return completion;
     }
 
-    @CommandData(name = "arena.removekit", permission = "alley.admin")
+    @CommandData(name = "arena.removekit", isAdminOnly = true)
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
@@ -43,23 +43,23 @@ public class ArenaRemoveKitCommand extends BaseCommand {
         String arenaName = args[0];
         String kitName = args[1];
 
-        if (Alley.getInstance().getArenaService().getArenaByName(arenaName) == null) {
+        if (this.plugin.getArenaService().getArenaByName(arenaName) == null) {
             player.sendMessage(CC.translate("&cAn arena with that name does not exist!"));
             return;
         }
 
-        if (Alley.getInstance().getKitService().getKit(kitName) == null) {
+        if (this.plugin.getKitService().getKit(kitName) == null) {
             player.sendMessage(CC.translate("&cA kit with that name does not exist!"));
             return;
         }
 
-        if (!Alley.getInstance().getArenaService().getArenaByName(arenaName).getKits().contains(kitName)) {
+        if (!this.plugin.getArenaService().getArenaByName(arenaName).getKits().contains(kitName)) {
             player.sendMessage(CC.translate("&cThis arena does not have this kit!"));
             return;
         }
 
         player.sendMessage(CC.translate("&aKit &b" + kitName + "&a has been removed from arena &b" + arenaName + "&a!"));
-        Alley.getInstance().getArenaService().getArenaByName(arenaName).getKits().remove(kitName);
-        Alley.getInstance().getArenaService().saveArena(Alley.getInstance().getArenaService().getArenaByName(arenaName));
+        this.plugin.getArenaService().getArenaByName(arenaName).getKits().remove(kitName);
+        this.plugin.getArenaService().saveArena(this.plugin.getArenaService().getArenaByName(arenaName));
     }
 }

@@ -8,11 +8,11 @@ import org.bukkit.entity.Player;
 
 /**
  * @author Emmy
- * @project Delta
+ * @project Alley
  * @date 25/06/2024 - 19:42
  */
 public class StrikeCommand extends BaseCommand {
-    @CommandData(name = "strike", permission = "delta.command.strike", usage = "strike <player> | all", description = "Strike a player with lightning")
+    @CommandData(name = "strike", permission = "alley.command.troll.strike", usage = "strike <player> | all", description = "Strike a player with lightning")
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();

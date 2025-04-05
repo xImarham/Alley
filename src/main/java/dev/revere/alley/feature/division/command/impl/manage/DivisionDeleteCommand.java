@@ -15,7 +15,7 @@ import org.bukkit.entity.Player;
  * @since 26/01/2025
  */
 public class DivisionDeleteCommand extends BaseCommand {
-    @CommandData(name = "division.delete", permission = "alley.admin", usage = "division delete <name>")
+    @CommandData(name = "division.delete", isAdminOnly = true, usage = "division delete <name>")
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
@@ -27,7 +27,7 @@ public class DivisionDeleteCommand extends BaseCommand {
         }
         
         String name = args[0];
-        DivisionService divisionService = Alley.getInstance().getDivisionService();
+        DivisionService divisionService = this.plugin.getDivisionService();
         Division division = divisionService.getDivision(name);
         if (division == null) {
             player.sendMessage(CC.translate("&cA division with that name does not exist."));

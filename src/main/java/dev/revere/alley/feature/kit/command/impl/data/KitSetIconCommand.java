@@ -2,6 +2,7 @@ package dev.revere.alley.feature.kit.command.impl.data;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.feature.kit.Kit;
+import dev.revere.alley.feature.kit.KitService;
 import dev.revere.alley.locale.KitLocale;
 import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.api.command.BaseCommand;
@@ -15,7 +16,7 @@ import org.bukkit.entity.Player;
  * @date 5/26/2024
  */
 public class KitSetIconCommand extends BaseCommand {
-    @CommandData(name = "kit.seticon", permission = "alley.admin")
+    @CommandData(name = "kit.seticon", isAdminOnly = true)
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
@@ -26,9 +27,8 @@ public class KitSetIconCommand extends BaseCommand {
             return;
         }
 
-        String kitName = args[0];
-
-        Kit kit = Alley.getInstance().getKitService().getKit(kitName);
+        KitService kitService = this.plugin.getKitService();
+        Kit kit = kitService.getKit(args[0]);
         if (kit == null) {
             player.sendMessage(CC.translate(KitLocale.KIT_NOT_FOUND.getMessage()));
             return;

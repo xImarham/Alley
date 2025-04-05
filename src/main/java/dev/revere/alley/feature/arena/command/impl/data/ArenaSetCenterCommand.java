@@ -1,6 +1,5 @@
 package dev.revere.alley.feature.arena.command.impl.data;
 
-import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
@@ -23,14 +22,14 @@ public class ArenaSetCenterCommand extends BaseCommand {
         List<String> completion = new ArrayList<>();
 
         if (command.getArgs().length == 1 && command.getPlayer().hasPermission("alley.admin")) {
-            Alley.getInstance().getArenaService().getArenas().forEach(arena -> completion.add(arena.getName()));
+            this.plugin.getArenaService().getArenas().forEach(arena -> completion.add(arena.getName()));
         }
 
         return completion;
     }
 
 
-    @CommandData(name = "arena.setcenter", permission = "alley.admin")
+    @CommandData(name = "arena.setcenter", isAdminOnly = true)
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
@@ -42,13 +41,13 @@ public class ArenaSetCenterCommand extends BaseCommand {
         }
 
         String arenaName = args[0];
-        if (Alley.getInstance().getArenaService().getArenaByName(arenaName) == null) {
+        if (this.plugin.getArenaService().getArenaByName(arenaName) == null) {
             player.sendMessage(CC.translate("&cAn arena with that name does not exist!"));
             return;
         }
 
-        Alley.getInstance().getArenaService().getArenaByName(arenaName).setCenter(player.getLocation());
-        Alley.getInstance().getArenaService().saveArena(Alley.getInstance().getArenaService().getArenaByName(arenaName));
+        this.plugin.getArenaService().getArenaByName(arenaName).setCenter(player.getLocation());
+        this.plugin.getArenaService().saveArena(this.plugin.getArenaService().getArenaByName(arenaName));
         player.sendMessage(CC.translate("&aCenter has been set for arena &b" + arenaName + "&a!"));
     }
 }

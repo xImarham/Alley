@@ -16,7 +16,7 @@ import org.bukkit.entity.Player;
  */
 public class HostCommand extends BaseCommand {
     @Override
-    @CommandData(name = "host", permission = "alley.host")
+    @CommandData(name = "host", permission = "alley.command.donator.host")
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
 

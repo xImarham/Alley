@@ -15,7 +15,7 @@ import org.bukkit.entity.Player;
  * @date 5/21/2024
  */
 public class KitSetSettingCommand extends BaseCommand {
-    @CommandData(name = "kit.setsetting", aliases = {"kit.setting"}, permission = "alley.admin")
+    @CommandData(name = "kit.setsetting", aliases = {"kit.setting"}, isAdminOnly = true)
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();

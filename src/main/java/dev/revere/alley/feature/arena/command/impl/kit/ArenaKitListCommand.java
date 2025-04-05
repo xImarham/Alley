@@ -23,13 +23,13 @@ public class ArenaKitListCommand extends BaseCommand {
         List<String> completion = new ArrayList<>();
 
         if (command.getArgs().length == 1 && command.getPlayer().hasPermission("alley.admin")) {
-            Alley.getInstance().getArenaService().getArenas().forEach(arena -> completion.add(arena.getName()));
+            this.plugin.getArenaService().getArenas().forEach(arena -> completion.add(arena.getName()));
         }
 
         return completion;
     }
 
-    @CommandData(name = "arena.kitlist", permission = "alley.admin")
+    @CommandData(name = "arena.kitlist", isAdminOnly = true)
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
@@ -41,17 +41,17 @@ public class ArenaKitListCommand extends BaseCommand {
         }
 
         String arenaName = args[0];
-        if (Alley.getInstance().getArenaService().getArenaByName(arenaName) == null) {
+        if (this.plugin.getArenaService().getArenaByName(arenaName) == null) {
             player.sendMessage(CC.translate("&cAn arena with that name does not exist!"));
             return;
         }
 
         player.sendMessage("");
-        player.sendMessage(CC.translate("     &b&l" + arenaName + " Kit List &f(" + Alley.getInstance().getArenaService().getArenaByName(arenaName).getKits().size() + "&f)"));
-        if (Alley.getInstance().getArenaService().getArenaByName(arenaName).getKits().isEmpty()) {
+        player.sendMessage(CC.translate("     &b&l" + arenaName + " Kit List &f(" + this.plugin.getArenaService().getArenaByName(arenaName).getKits().size() + "&f)"));
+        if (this.plugin.getArenaService().getArenaByName(arenaName).getKits().isEmpty()) {
             player.sendMessage(CC.translate("      &f● &cNo Arena Kits available."));
         }
-        Alley.getInstance().getArenaService().getArenaByName(arenaName).getKits().forEach(kit -> player.sendMessage(CC.translate("      &f● &b" + kit)));
+        this.plugin.getArenaService().getArenaByName(arenaName).getKits().forEach(kit -> player.sendMessage(CC.translate("      &f● &b" + kit)));
         player.sendMessage("");
     }
 }

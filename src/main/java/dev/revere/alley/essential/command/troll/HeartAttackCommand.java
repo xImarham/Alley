@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
  * @date 28/10/2024 - 09:09
  */
 public class HeartAttackCommand extends BaseCommand {
-    @CommandData(name = "heartattack", permission = "alley.command.heartattack")
+    @CommandData(name = "heartattack", permission = "alley.command.troll.heartattack")
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();

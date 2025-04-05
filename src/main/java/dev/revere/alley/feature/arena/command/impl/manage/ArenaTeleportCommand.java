@@ -24,14 +24,14 @@ public class ArenaTeleportCommand extends BaseCommand {
         List<String> completion = new ArrayList<>();
 
         if (command.getArgs().length == 1 && command.getPlayer().hasPermission("alley.admin")) {
-            Alley.getInstance().getArenaService().getArenas().forEach(arena -> completion.add(arena.getName()));
+            this.plugin.getArenaService().getArenas().forEach(arena -> completion.add(arena.getName()));
         }
 
         return completion;
     }
 
     @Override
-    @CommandData(name = "arena.teleport", aliases = "arena.tp", permission = "alley.admin")
+    @CommandData(name = "arena.teleport", aliases = "arena.tp", isAdminOnly = true)
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
         String[] args = command.getArgs();
@@ -42,7 +42,7 @@ public class ArenaTeleportCommand extends BaseCommand {
         }
 
         String arenaName = args[0];
-        AbstractArena arena = Alley.getInstance().getArenaService().getArenaByName(arenaName);
+        AbstractArena arena = this.plugin.getArenaService().getArenaByName(arenaName);
 
         if (arena == null) {
             player.sendMessage(CC.translate("&cAn arena with that name does not exist."));

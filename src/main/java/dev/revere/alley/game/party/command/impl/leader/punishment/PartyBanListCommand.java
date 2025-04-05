@@ -21,7 +21,7 @@ public class PartyBanListCommand extends BaseCommand {
 
         player.sendMessage("");
         player.sendMessage(CC.translate("&c&lBanned Members in your party:"));
-        Alley.getInstance().getPartyService().getPartyByLeader(player).getBannedPlayers().forEach(bannedMember -> player.sendMessage(CC.translate("&7- &c" + Bukkit.getPlayer(bannedMember).getName())));
+        this.plugin.getPartyService().getPartyByLeader(player).getBannedPlayers().forEach(bannedMember -> player.sendMessage(CC.translate("&7- &c" + Bukkit.getPlayer(bannedMember).getName())));
         player.sendMessage("");
     }
 }

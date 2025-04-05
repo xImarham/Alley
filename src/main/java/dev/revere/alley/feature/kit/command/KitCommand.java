@@ -83,7 +83,7 @@ public class KitCommand extends BaseCommand {
         return completion;
     }
 
-    @CommandData(name = "kit", permission = "alley.admin", inGameOnly = false)
+    @CommandData(name = "kit", isAdminOnly = true, inGameOnly = false)
     @Override
     public void onCommand(CommandArgs command) {
         CommandSender sender = command.getSender();

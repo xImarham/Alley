@@ -19,7 +19,7 @@ import java.util.Map;
  * @date 6/1/2024
  */
 public class CosmeticSetCommand extends BaseCommand {
-    @CommandData(name = "cosmetic.set", permission = "alley.admin")
+    @CommandData(name = "cosmetic.set", isAdminOnly = true)
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
@@ -36,12 +36,12 @@ public class CosmeticSetCommand extends BaseCommand {
             return;
         }
 
-        Profile profile = Alley.getInstance().getProfileService().getProfile(target.getUniqueId());
+        Profile profile = this.plugin.getProfileService().getProfile(target.getUniqueId());
 
         String type = args[1];
         String cosmeticName = args[2];
 
-        Map<String, ICosmeticRepository<?>> cosmeticRepositories = Alley.getInstance().getCosmeticRepository().getCosmeticRepositories();
+        Map<String, ICosmeticRepository<?>> cosmeticRepositories = this.plugin.getCosmeticRepository().getCosmeticRepositories();
         ICosmeticRepository<?> repository = cosmeticRepositories.get(type);
         if (repository == null) {
             player.sendMessage(CC.translate("&cInvalid cosmetic type"));

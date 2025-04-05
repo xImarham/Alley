@@ -16,7 +16,7 @@ import org.bukkit.inventory.ItemStack;
  * @date 28/05/2024 - 20:28
  */
 public class EnchantCommand extends BaseCommand {
-    @CommandData(name = "enchant", permission = "alley.admin")
+    @CommandData(name = "enchant", permission = "alley.command.enchant")
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();

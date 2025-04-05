@@ -35,6 +35,6 @@ public class PartyUnbanCommand extends BaseCommand {
             return;
         }
 
-        Alley.getInstance().getPartyService().unbanMember(player, target);
+        this.plugin.getPartyService().unbanMember(player, target);
     }
 }

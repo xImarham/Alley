@@ -36,7 +36,7 @@ public class PartyAcceptCommand extends BaseCommand {
             return;
         }
 
-        PartyService partyService = Alley.getInstance().getPartyService();
+        PartyService partyService = this.plugin.getPartyService();
 
         Party party = partyService.getPartyByLeader(target);
         if (party == null) {

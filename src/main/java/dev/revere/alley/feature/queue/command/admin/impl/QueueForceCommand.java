@@ -19,7 +19,7 @@ import org.bukkit.entity.Player;
  * @date 5/26/2024
  */
 public class QueueForceCommand extends BaseCommand {
-    @CommandData(name = "queue.force", aliases = {"forcequeue"}, permission = "alley.admin")
+    @CommandData(name = "queue.force", aliases = {"forcequeue"}, isAdminOnly = true)
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
@@ -40,19 +40,19 @@ public class QueueForceCommand extends BaseCommand {
             return;
         }
 
-        Kit kit = Alley.getInstance().getKitService().getKit(kitType);
+        Kit kit = this.plugin.getKitService().getKit(kitType);
         if (kit == null) {
             player.sendMessage(CC.translate("&cKit not found."));
             return;
         }
 
-        Profile profile = Alley.getInstance().getProfileService().getProfile(target.getUniqueId());
-        for (Queue queue : Alley.getInstance().getQueueService().getQueues()) {
+        Profile profile = this.plugin.getProfileService().getProfile(target.getUniqueId());
+        for (Queue queue : this.plugin.getQueueService().getQueues()) {
             if (queue.getKit().equals(kit) && queue.isRanked() == ranked) {
                 queue.addPlayer(target, queue.isRanked() ? profile.getProfileData().getRankedKitData().get(queue.getKit().getName()).getElo() : 0);
                 PlayerUtil.reset(target, false);
                 SoundUtil.playBanHammer(target);
-                Alley.getInstance().getHotbarService().applyHotbarItems(target, HotbarType.QUEUE);
+                this.plugin.getHotbarService().applyHotbarItems(target, HotbarType.QUEUE);
                 player.sendMessage(CC.translate("&aYou've added &b" + target.getName() + " &ato the &b" + queue.getQueueType() + " &aqueue."));
 
                 if (ranked && profile.getProfileData().isRankedBanned()) {

@@ -24,13 +24,13 @@ public class ArenaToggleCommand extends BaseCommand {
         List<String> completion = new ArrayList<>();
 
         if (command.getArgs().length == 1 && command.getPlayer().hasPermission("alley.admin")) {
-            Alley.getInstance().getArenaService().getArenas().forEach(arena -> completion.add(arena.getName()));
+            this.plugin.getArenaService().getArenas().forEach(arena -> completion.add(arena.getName()));
         }
 
         return completion;
     }
 
-    @CommandData(name = "arena.toggle", permission = "alley.admin")
+    @CommandData(name = "arena.toggle", isAdminOnly = true)
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
@@ -42,28 +42,28 @@ public class ArenaToggleCommand extends BaseCommand {
         }
 
         String arenaName = args[0];
-        if (Alley.getInstance().getArenaService().getArenaByName(arenaName) == null) {
+        if (this.plugin.getArenaService().getArenaByName(arenaName) == null) {
             player.sendMessage(CC.translate("&cAn arena with that name does not exist!"));
             return;
         }
 
-        if (Alley.getInstance().getArenaService().getArenaByName(arenaName).getType() == EnumArenaType.FFA) {
+        if (this.plugin.getArenaService().getArenaByName(arenaName).getType() == EnumArenaType.FFA) {
             player.sendMessage(CC.translate("&cYou cannot enable or disable Free-For-All arenas!"));
             return;
         }
 
-        if (Alley.getInstance().getArenaService().getArenaByName(arenaName).getMinimum() == null || Alley.getInstance().getArenaService().getArenaByName(arenaName).getMaximum() == null || Alley.getInstance().getArenaService().getArenaByName(arenaName).getPos1() == null || Alley.getInstance().getArenaService().getArenaByName(arenaName).getPos2() == null) {
+        if (this.plugin.getArenaService().getArenaByName(arenaName).getMinimum() == null || this.plugin.getArenaService().getArenaByName(arenaName).getMaximum() == null || this.plugin.getArenaService().getArenaByName(arenaName).getPos1() == null || this.plugin.getArenaService().getArenaByName(arenaName).getPos2() == null) {
             player.sendMessage(CC.translate("&cYou must finish configuring this arena before enabling or disabling!"));
             return;
         }
 
-        if (Alley.getInstance().getArenaService().getArenaByName(arenaName).getKits().isEmpty()) {
+        if (this.plugin.getArenaService().getArenaByName(arenaName).getKits().isEmpty()) {
             player.sendMessage(CC.translate("&cYou must add at least one kit to this arena before enabling or disabling!"));
             return;
         }
 
-        Alley.getInstance().getArenaService().getArenaByName(arenaName).setEnabled(!Alley.getInstance().getArenaService().getArenaByName(arenaName).isEnabled());
-        Alley.getInstance().getArenaService().saveArena(Alley.getInstance().getArenaService().getArenaByName(arenaName));
-        player.sendMessage(CC.translate("&aArena &b" + arenaName + "&a has been " + (Alley.getInstance().getArenaService().getArenaByName(arenaName).isEnabled() ? "enabled" : "disabled") + "&a!"));
+        this.plugin.getArenaService().getArenaByName(arenaName).setEnabled(!this.plugin.getArenaService().getArenaByName(arenaName).isEnabled());
+        this.plugin.getArenaService().saveArena(this.plugin.getArenaService().getArenaByName(arenaName));
+        player.sendMessage(CC.translate("&aArena &b" + arenaName + "&a has been " + (this.plugin.getArenaService().getArenaByName(arenaName).isEnabled() ? "enabled" : "disabled") + "&a!"));
     }
 }

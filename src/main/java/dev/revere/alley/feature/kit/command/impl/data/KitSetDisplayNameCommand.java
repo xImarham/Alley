@@ -2,6 +2,7 @@ package dev.revere.alley.feature.kit.command.impl.data;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.feature.kit.Kit;
+import dev.revere.alley.feature.kit.KitService;
 import dev.revere.alley.locale.KitLocale;
 import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.api.command.BaseCommand;
@@ -17,7 +18,7 @@ import java.util.Arrays;
  * @date 28/04/2024 - 22:46
  */
 public class KitSetDisplayNameCommand extends BaseCommand {
-    @CommandData(name = "kit.displayname", aliases = "kit.setdisplayname",permission = "alley.admin")
+    @CommandData(name = "kit.displayname", aliases = "kit.setdisplayname",isAdminOnly = true)
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
@@ -28,15 +29,14 @@ public class KitSetDisplayNameCommand extends BaseCommand {
             return;
         }
 
-        String kitName = args[0];
-        String displayName = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
-
-        Kit kit = Alley.getInstance().getKitService().getKit(kitName);
+        KitService kitService = this.plugin.getKitService();
+        Kit kit = kitService.getKit(args[0]);
         if (kit == null) {
             player.sendMessage(CC.translate(KitLocale.KIT_NOT_FOUND.getMessage()));
             return;
         }
 
+        String displayName = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
         kit.setDisplayName(displayName);
         Alley.getInstance().getKitService().saveKit(kit);
         player.sendMessage(CC.translate(KitLocale.KIT_DISPLAYNAME_SET.getMessage()).replace("{kit-name}", kit.getName()).replace("{display-name}", displayName));

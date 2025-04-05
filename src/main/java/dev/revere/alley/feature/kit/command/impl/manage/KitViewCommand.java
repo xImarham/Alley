@@ -27,7 +27,7 @@ public class KitViewCommand extends BaseCommand {
             return;
         }
 
-        Kit kit = Alley.getInstance().getKitService().getKit(args[0]);
+        Kit kit = this.plugin.getKitService().getKit(args[0]);
         if (kit == null) {
             player.sendMessage(CC.translate(KitLocale.KIT_NOT_FOUND.getMessage()));
             return;

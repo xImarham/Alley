@@ -13,12 +13,12 @@ import org.bukkit.entity.Player;
  * @date 5/26/2024
  */
 public class QueueReloadCommand extends BaseCommand {
-    @CommandData(name = "queue.reload", aliases = {"reloadqueue", "reloadqueues"}, permission = "alley.admin")
+    @CommandData(name = "queue.reload", aliases = {"reloadqueue", "reloadqueues"}, isAdminOnly = true)
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
 
-        Alley.getInstance().getQueueService().reloadQueues();
+        this.plugin.getQueueService().reloadQueues();
         player.sendMessage(CC.translate("&aYou've reloaded the queues."));
     }
 }

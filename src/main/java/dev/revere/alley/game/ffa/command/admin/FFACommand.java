@@ -30,7 +30,7 @@ public class FFACommand extends BaseCommand {
     }
 
     @Override
-    @CommandData(name = "ffa", permission = "alley.admin")
+    @CommandData(name = "ffa", isAdminOnly = true)
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
 

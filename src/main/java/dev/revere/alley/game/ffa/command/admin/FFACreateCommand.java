@@ -17,7 +17,7 @@ import org.bukkit.entity.Player;
  * @date 5/27/2024
  */
 public class FFACreateCommand extends BaseCommand {
-    @CommandData(name = "ffa.create", permission = "alley.admin")
+    @CommandData(name = "ffa.create", isAdminOnly = true)
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
@@ -29,7 +29,7 @@ public class FFACreateCommand extends BaseCommand {
         }
 
         String arenaName = args[0];
-        AbstractArena arena = Alley.getInstance().getArenaService().getArenaByName(arenaName);
+        AbstractArena arena = this.plugin.getArenaService().getArenaByName(arenaName);
         if (arena == null) {
             player.sendMessage(CC.translate("&cArena not found."));
             return;
@@ -41,7 +41,7 @@ public class FFACreateCommand extends BaseCommand {
         }
 
         String kitName = args[1];
-        Kit kit = Alley.getInstance().getKitService().getKit(kitName);
+        Kit kit = this.plugin.getKitService().getKit(kitName);
         if (kit == null) {
             player.sendMessage(CC.translate(KitLocale.KIT_NOT_FOUND.getMessage()));
             return;
@@ -49,14 +49,14 @@ public class FFACreateCommand extends BaseCommand {
 
         int maxPlayers = Integer.parseInt(args[2]);
 
-        if (Alley.getInstance().getFfaService().getFFAMatch(kitName) != null) {
+        if (this.plugin.getFfaService().getFFAMatch(kitName) != null) {
             player.sendMessage(CC.translate("&cThere is already a FFA match with the name " + kitName + "."));
             return;
         }
 
-        Alley.getInstance().getFfaService().createFFAMatch(arena, kit, maxPlayers);
+        this.plugin.getFfaService().createFFAMatch(arena, kit, maxPlayers);
         player.sendMessage(CC.translate("&aSuccessfully created the FFA match."));
-        Alley.getInstance().getProfileService().loadProfiles();
+        this.plugin.getProfileService().loadProfiles();
         player.sendMessage(CC.translate("&7Additionally, all profiles have been reloaded."));
     }
 }

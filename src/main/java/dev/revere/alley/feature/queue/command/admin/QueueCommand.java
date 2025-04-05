@@ -20,7 +20,7 @@ public class QueueCommand extends BaseCommand {
         new QueueReloadCommand();
     }
 
-    @CommandData(name = "queue", permission = "alley.admin", inGameOnly = false)
+    @CommandData(name = "queue", isAdminOnly = true, inGameOnly = false)
     @Override
     public void onCommand(CommandArgs command) {
         CommandSender sender = command.getSender();

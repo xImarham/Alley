@@ -15,11 +15,11 @@ import org.bukkit.entity.Player;
  */
 public class SpawnItemsCommand extends BaseCommand {
     @Override
-    @CommandData(name = "spawnitems", aliases = {"lobbyitems"}, permission = "alley.admin")
+    @CommandData(name = "spawnitems", aliases = {"lobbyitems"}, isAdminOnly = true)
     public void onCommand(CommandArgs args) {
         Player player = args.getPlayer();
 
-        Alley.getInstance().getHotbarService().applyHotbarItems(player, HotbarType.LOBBY);
+        this.plugin.getHotbarService().applyHotbarItems(player, HotbarType.LOBBY);
         player.sendMessage(CC.translate("&aYou were given the spawn items!"));
     }
 }

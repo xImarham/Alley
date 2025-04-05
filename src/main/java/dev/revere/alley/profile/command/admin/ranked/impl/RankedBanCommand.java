@@ -16,7 +16,7 @@ import org.bukkit.entity.Player;
  * @since 13/03/2025
  */
 public class RankedBanCommand extends BaseCommand {
-    @CommandData(name = "ranked.ban", permission = "alley.admin", description = "Ban a player from ranked matches.", usage = "/ranked ban <player>")
+    @CommandData(name = "ranked.ban", isAdminOnly = true, description = "Ban a player from ranked matches.", usage = "/ranked ban <player>")
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
@@ -34,7 +34,7 @@ public class RankedBanCommand extends BaseCommand {
             return;
         }
 
-        Profile profile = this.alley.getProfileService().getProfile(target.getUniqueId());
+        Profile profile = this.plugin.getProfileService().getProfile(target.getUniqueId());
         if (profile == null) {
             player.sendMessage(CC.translate("&cProfile not found."));
             return;

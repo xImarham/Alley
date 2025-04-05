@@ -1,6 +1,5 @@
 package dev.revere.alley.feature.kit.command.impl.manage;
 
-import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
@@ -20,7 +19,7 @@ import org.bukkit.inventory.ItemStack;
  * @date 20/05/2024 - 13:06
  */
 public class KitCreateCommand extends BaseCommand {
-    @CommandData(name = "kit.create", permission = "alley.admin")
+    @CommandData(name = "kit.create", isAdminOnly = true)
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
@@ -32,8 +31,7 @@ public class KitCreateCommand extends BaseCommand {
         }
 
         String kitName = args[0];
-
-        KitService kitService = Alley.getInstance().getKitService();
+        KitService kitService = this.plugin.getKitService();
         if (kitService.getKit(kitName) != null) {
             player.sendMessage(CC.translate(KitLocale.KIT_ALREADY_EXISTS.getMessage()));
             return;
@@ -71,8 +69,8 @@ public class KitCreateCommand extends BaseCommand {
         }
 
         kitService.createKit(kitName, inventory, armor, icon, slot);
-        Alley.getInstance().getProfileService().loadProfiles(); // to update the kits in the database
-        Alley.getInstance().getReflectionRepository().getReflection(ActionBarReflectionService.class).sendMessage(player, KitLocale.KIT_CREATED.getMessage().replace("{kit-name}", kitName), 5);
+        this.plugin.getProfileService().loadProfiles(); // to update the kits in the database
+        this.plugin.getReflectionRepository().getReflection(ActionBarReflectionService.class).sendMessage(player, KitLocale.KIT_CREATED.getMessage().replace("{kit-name}", kitName), 5);
 
         player.sendMessage(CC.translate(KitLocale.KIT_CREATED.getMessage().replace("{kit-name}", kitName)));
         player.sendMessage(CC.translate("&7Do not forget to reload the queues by using &c&l/queue reload&7."));

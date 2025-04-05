@@ -27,13 +27,13 @@ public class PartyLookupCommand extends BaseCommand {
             return;
         }
 
-        Player target = Alley.getInstance().getServer().getPlayer(args[0]);
+        Player target = this.plugin.getServer().getPlayer(args[0]);
         if (target == null) {
             player.sendMessage(CC.translate("&cInvalid player."));
             return;
         }
 
-        Party party = Alley.getInstance().getPartyService().getParty(target);
+        Party party = this.plugin.getPartyService().getParty(target);
         if (party == null) {
             player.sendMessage(CC.translate("&cThis player is not in a party."));
             return;

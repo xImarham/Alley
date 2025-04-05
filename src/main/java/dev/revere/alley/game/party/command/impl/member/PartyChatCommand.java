@@ -25,7 +25,7 @@ public class PartyChatCommand extends BaseCommand {
         Player player = command.getPlayer();
         String[] args = command.getArgs();
 
-        Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
+        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
         String message = Arrays.stream(args).map(argument -> argument + " ").collect(Collectors.joining());
 
         if (args.length == 0) {
@@ -49,7 +49,7 @@ public class PartyChatCommand extends BaseCommand {
             return;
         }
 
-        String partyMessage = Alley.getInstance().getPartyService().getChatFormat().replace("{player}", player.getName()).replace("{message}", message);
+        String partyMessage = this.plugin.getPartyService().getChatFormat().replace("{player}", player.getName()).replace("{message}", message);
         profile.getParty().notifyParty(partyMessage);
     }
 }

@@ -20,7 +20,7 @@ public class LeaveSpectatorCommand extends BaseCommand {
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
 
-        Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
+        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
         if (profile.getState() != EnumProfileState.SPECTATING) {
             player.sendMessage(CC.translate("&cYou are not spectating a match."));
             return;

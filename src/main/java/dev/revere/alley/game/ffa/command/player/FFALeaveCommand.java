@@ -19,14 +19,14 @@ public class FFALeaveCommand extends BaseCommand {
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
-        Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
+        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
 
         if (profile.getFfaMatch() == null) {
             player.sendMessage(CC.translate("&cYou are not in a FFA match."));
             return;
         }
 
-        CombatService combatService = Alley.getInstance().getCombatService();
+        CombatService combatService = this.plugin.getCombatService();
         if (combatService.isPlayerInCombat(player.getUniqueId())) {
             profile.getFfaMatch().handleCombatLog(player, combatService.getLastAttacker(player));
         }

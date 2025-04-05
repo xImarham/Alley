@@ -14,23 +14,23 @@ import java.util.Arrays;
  * @date 19/04/2024 - 17:39
  */
 public class AlleyCommand extends BaseCommand {
-    @CommandData(name = "alley", aliases = {"emmy", "remi", "revere"}, inGameOnly = false)
+    @CommandData(name = "alley", aliases = {"apractice", "aprac", "practice", "emmy", "remi", "revere"}, inGameOnly = false)
     @Override
     public void onCommand(CommandArgs command) {
         CommandSender sender = command.getSender();
 
         Arrays.asList(
                 "",
-                "     &b&lAlley",
-                "      &f┃ Authors: &b" + this.alley.getDescription().getAuthors().toString().replace("[", "").replace("]", ""),
-                "      &f┃ Version: &b" + this.alley.getDescription().getVersion(),
+                "     &b&lAlley Practice",
+                "      &f┃ Authors: &b" + this.plugin.getDescription().getAuthors().toString().replace("[", "").replace("]", ""),
+                "      &f┃ Version: &b" + this.plugin.getDescription().getVersion(),
                 "",
                 "     &b&lDescription:",
-                "      &f┃ " + this.alley.getDescription().getDescription(),
+                "      &f┃ " + this.plugin.getDescription().getDescription(),
                 ""
         ).forEach(line -> sender.sendMessage(CC.translate(line)));
 
-        if (sender.hasPermission(this.alley.getPluginConstant().getAdminPermissionPrefix())) {
+        if (sender.hasPermission(this.plugin.getPluginConstant().getAdminPermissionPrefix())) {
             Arrays.asList(
                     "     &b&lAdmin Help",
                     "      &f┃ /alley reload &7- &bReloads the plugin.",

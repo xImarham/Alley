@@ -22,7 +22,7 @@ public class RankedCommand extends BaseCommand {
         new RankedUnbanCommand();
     }
 
-    @CommandData(name = "ranked", permission = "alley.admin", description = "Manage ranked allowance.")
+    @CommandData(name = "ranked", isAdminOnly = true, description = "Manage ranked allowance.")
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();

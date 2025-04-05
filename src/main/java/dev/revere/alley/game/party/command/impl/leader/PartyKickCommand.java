@@ -34,7 +34,7 @@ public class PartyKickCommand extends BaseCommand {
             return;
         }
 
-        PartyService partyService = Alley.getInstance().getPartyService();
+        PartyService partyService = this.plugin.getPartyService();
         Party party = partyService.getPartyByLeader(player);
         if (party == null) {
             player.sendMessage(CC.translate(PartyLocale.NOT_IN_PARTY.getMessage()));

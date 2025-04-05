@@ -20,7 +20,7 @@ import java.util.UUID;
  * @date 02/01/2025 - 20:58
  */
 public class ResetStatsCommand extends BaseCommand {
-    @CommandData(name = "resetstats", aliases = {"wipestats",}, permission = "alley.command.resetstats")
+    @CommandData(name = "resetstats", aliases = {"wipestats",}, isAdminOnly = true)
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
@@ -40,7 +40,7 @@ public class ResetStatsCommand extends BaseCommand {
             return;
         }
 
-        Profile profile = Alley.getInstance().getProfileService().getProfile(uuid);
+        Profile profile = this.plugin.getProfileService().getProfile(uuid);
         if (profile == null) {
             player.sendMessage(CC.translate("&cThat player does not exist."));
             return;

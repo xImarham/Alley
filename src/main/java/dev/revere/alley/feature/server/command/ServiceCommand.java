@@ -22,7 +22,7 @@ public class ServiceCommand extends BaseCommand {
         new ServiceMenuCommand();
     }
 
-    @CommandData(name = "service", permission = "alley.admin", usage = "/service", description = "Service command.")
+    @CommandData(name = "service", isAdminOnly = true, usage = "/service", description = "Service command.")
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();

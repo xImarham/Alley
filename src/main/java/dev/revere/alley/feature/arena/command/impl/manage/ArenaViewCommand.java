@@ -16,7 +16,7 @@ import org.bukkit.command.CommandSender;
  * @date 24/09/2024 - 18:29
  */
 public class ArenaViewCommand extends BaseCommand {
-    @CommandData(name = "arena.view", permission = "alley.admin", inGameOnly = false)
+    @CommandData(name = "arena.view", isAdminOnly = true, inGameOnly = false)
     @Override
     public void onCommand(CommandArgs command) {
         CommandSender sender = command.getSender();
@@ -27,7 +27,7 @@ public class ArenaViewCommand extends BaseCommand {
             return;
         }
 
-        ArenaService arenaService = Alley.getInstance().getArenaService();
+        ArenaService arenaService = this.plugin.getArenaService();
 
         AbstractArena arena = arenaService.getArenaByName(args[0]);
         if (arena == null) {

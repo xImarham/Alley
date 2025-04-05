@@ -25,13 +25,13 @@ public class ArenaSetCuboidCommand extends BaseCommand {
         List<String> completion = new ArrayList<>();
 
         if (command.getArgs().length == 1 && command.getPlayer().hasPermission("alley.admin")) {
-            Alley.getInstance().getArenaService().getArenas().forEach(arena -> completion.add(arena.getName()));
+            this.plugin.getArenaService().getArenas().forEach(arena -> completion.add(arena.getName()));
         }
 
         return completion;
     }
 
-    @CommandData(name = "arena.setcuboid", permission = "alley.admin")
+    @CommandData(name = "arena.setcuboid", isAdminOnly = true)
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
@@ -49,20 +49,20 @@ public class ArenaSetCuboidCommand extends BaseCommand {
         }
 
         String arenaName = args[0];
-        if (Alley.getInstance().getArenaService().getArenaByName(arenaName) == null) {
+        if (this.plugin.getArenaService().getArenaByName(arenaName) == null) {
             player.sendMessage(CC.translate("&cAn arena with that name does not exist!"));
             return;
         }
 
-        if (Alley.getInstance().getArenaService().getArenaByName(arenaName).getType() == EnumArenaType.FFA) {
+        if (this.plugin.getArenaService().getArenaByName(arenaName).getType() == EnumArenaType.FFA) {
             player.sendMessage(CC.translate("&cYou cannot set cuboids for Free-For-All arenas! You must use: &4/arena setsafezone pos1/pos2&c."));
             return;
         }
 
-        Alley.getInstance().getArenaService().getArenaByName(arenaName).setMinimum(arenaSelection.getMinimum());
-        Alley.getInstance().getArenaService().getArenaByName(arenaName).setMaximum(arenaSelection.getMaximum());
+        this.plugin.getArenaService().getArenaByName(arenaName).setMinimum(arenaSelection.getMinimum());
+        this.plugin.getArenaService().getArenaByName(arenaName).setMaximum(arenaSelection.getMaximum());
         player.sendMessage(CC.translate("&aCuboid has been set for arena &b" + arenaName + "&a!"));
 
-        Alley.getInstance().getArenaService().saveArena(Alley.getInstance().getArenaService().getArenaByName(arenaName));
+        this.plugin.getArenaService().saveArena(this.plugin.getArenaService().getArenaByName(arenaName));
     }
 }

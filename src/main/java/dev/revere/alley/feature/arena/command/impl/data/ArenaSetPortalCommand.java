@@ -17,7 +17,7 @@ import org.bukkit.entity.Player;
  * @since 02/03/2025
  */
 public class ArenaSetPortalCommand extends BaseCommand {
-    @CommandData(name = "arena.setportal", permission = "alley.command.arena.setportal")
+    @CommandData(name = "arena.setportal", isAdminOnly = true)
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
@@ -28,7 +28,7 @@ public class ArenaSetPortalCommand extends BaseCommand {
             return;
         }
 
-        ArenaService arenaService = Alley.getInstance().getArenaService();
+        ArenaService arenaService = this.plugin.getArenaService();
         String name = args[0];
 
         AbstractArena arena = arenaService.getArenaByName(name);

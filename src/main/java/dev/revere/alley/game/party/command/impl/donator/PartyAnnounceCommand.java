@@ -26,7 +26,7 @@ public class PartyAnnounceCommand extends BaseCommand {
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
-        Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
+        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
         if (profile.getParty() == null) {
             player.sendMessage(CC.translate(PartyLocale.NOT_IN_PARTY.getMessage()));
             return;
@@ -42,7 +42,7 @@ public class PartyAnnounceCommand extends BaseCommand {
             return;
         }
 
-        CooldownRepository cooldownRepository = Alley.getInstance().getCooldownRepository();
+        CooldownRepository cooldownRepository = this.plugin.getCooldownRepository();
         Optional<Cooldown> optionalCooldown = Optional.ofNullable(cooldownRepository.getCooldown(player.getUniqueId(), EnumCooldownType.PARTY_ANNOUNCE_COOLDOWN));
         if (optionalCooldown.isPresent() && optionalCooldown.get().isActive()) {
             player.sendMessage(CC.translate("&cYou must wait " + optionalCooldown.get().remainingTimeInMinutes() + " &cbefore announcing your party again."));
@@ -57,6 +57,6 @@ public class PartyAnnounceCommand extends BaseCommand {
 
         cooldown.resetCooldown();
 
-        Alley.getInstance().getPartyService().announceParty(profile.getParty());
+        this.plugin.getPartyService().announceParty(profile.getParty());
     }
 }

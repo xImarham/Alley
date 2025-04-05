@@ -1,9 +1,9 @@
 package dev.revere.alley.feature.kit.command.impl.data;
 
-import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
-import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.CommandArgs;
+import dev.revere.alley.api.command.annotation.CommandData;
+import dev.revere.alley.feature.kit.Kit;
 import dev.revere.alley.feature.kit.KitService;
 import dev.revere.alley.locale.KitLocale;
 import dev.revere.alley.util.chat.CC;
@@ -28,17 +28,16 @@ public class KitSetDisclaimerCommand extends BaseCommand {
             return;
         }
 
-        KitService kitService = Alley.getInstance().getKitService();
-        String kitName = args[0];
-        String disclaimer = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
-
-        if (kitService.getKit(kitName) == null) {
+        KitService kitService = this.plugin.getKitService();
+        Kit kit = kitService.getKit(args[0]);
+        if (kit == null) {
             sender.sendMessage(CC.translate(KitLocale.KIT_NOT_FOUND.getMessage()));
             return;
         }
 
-        kitService.getKit(kitName).setDisclaimer(disclaimer);
-        kitService.saveKit(kitService.getKit(kitName));
-        sender.sendMessage(CC.translate(KitLocale.KIT_DISCLAIMER_SET.getMessage()).replace("{kit-name}", kitName).replace("{disclaimer}", disclaimer));
+        String disclaimer = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
+        kit.setDisclaimer(disclaimer);
+        kitService.saveKit(kit);
+        sender.sendMessage(CC.translate(KitLocale.KIT_DISCLAIMER_SET.getMessage()).replace("{kit-name}", kit.getName()).replace("{disclaimer}", disclaimer));
     }
 }

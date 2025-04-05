@@ -1,6 +1,5 @@
 package dev.revere.alley.feature.kit.command.impl.storage;
 
-import dev.revere.alley.Alley;
 import dev.revere.alley.locale.KitLocale;
 import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.api.command.BaseCommand;
@@ -14,12 +13,12 @@ import org.bukkit.entity.Player;
  * @date 23/05/2024 - 01:18
  */
 public class KitSaveAllCommand extends BaseCommand {
-    @CommandData(name = "kit.saveall", permission = "alley.admin")
+    @CommandData(name = "kit.saveall", isAdminOnly = true)
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
 
-        Alley.getInstance().getKitService().saveKits();
+        this.plugin.getKitService().saveKits();
         player.sendMessage(CC.translate(KitLocale.KIT_SAVED_ALL.getMessage()));
     }
 }

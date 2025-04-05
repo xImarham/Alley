@@ -27,7 +27,7 @@ public class PartyInfoCommand extends BaseCommand {
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
 
-        PartyService partyService = Alley.getInstance().getPartyService();
+        PartyService partyService = this.plugin.getPartyService();
         Party party = partyService.getPartyByMember(player.getUniqueId());
 
         if (party == null) {
@@ -39,18 +39,18 @@ public class PartyInfoCommand extends BaseCommand {
 
         String members = party.getMembers().stream()
                 .filter(uuid -> !uuid.equals(leaderUUID))
-                .map(uuid -> Alley.getInstance().getServer().getPlayer(uuid))
+                .map(uuid -> this.plugin.getServer().getPlayer(uuid))
                 .filter(Objects::nonNull)
                 .map(Player::getName)
                 .collect(Collectors.joining(", "));
 
-        FileConfiguration config = Alley.getInstance().getConfigService().getConfig("messages.yml");
+        FileConfiguration config = this.plugin.getConfigService().getConfig("messages.yml");
         List<String> info = config.getStringList("party.info-command.text");
         String noMembersFormat = CC.translate(config.getString("party.info-command.no-members-format"));
 
         for (String line : info) {
             player.sendMessage(CC.translate(line)
-                    .replace("{leader}", Alley.getInstance().getServer().getPlayer(leaderUUID).getName())
+                    .replace("{leader}", this.plugin.getServer().getPlayer(leaderUUID).getName())
                     .replace("{members}", members.isEmpty() ? noMembersFormat : members));
         }
     }

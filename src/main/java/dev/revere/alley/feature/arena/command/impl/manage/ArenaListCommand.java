@@ -14,21 +14,21 @@ import org.bukkit.entity.Player;
  * @date 5/20/2024
  */
 public class ArenaListCommand extends BaseCommand {
-    @CommandData(name = "arena.list", aliases = {"arenas"},  permission = "alley.admin")
+    @CommandData(name = "arena.list", aliases = {"arenas"},  isAdminOnly = true)
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
 
         player.sendMessage("");
-        player.sendMessage(CC.translate("     &b&lArena List &f(" + Alley.getInstance().getArenaService().getArenas().size() + "&f)"));
-        if (Alley.getInstance().getArenaService().getArenas().isEmpty()) {
+        player.sendMessage(CC.translate("     &b&lArena List &f(" + this.plugin.getArenaService().getArenas().size() + "&f)"));
+        if (this.plugin.getArenaService().getArenas().isEmpty()) {
             player.sendMessage(CC.translate("      &f● &cNo Arenas available."));
         }
 
-        Alley.getInstance().getArenaService().getArenas().stream().filter(arena -> arena.getType() != EnumArenaType.FFA).forEach(arena ->
+        this.plugin.getArenaService().getArenas().stream().filter(arena -> arena.getType() != EnumArenaType.FFA).forEach(arena ->
                 player.sendMessage(CC.translate("      &f● &b" + arena.getName() + " &7(" + arena.getType().name() + ")" + (arena.isEnabled() ? " &aEnabled" : " &cDisabled"))))
         ;
-        Alley.getInstance().getArenaService().getArenas().stream().filter(arena -> arena.getType() == EnumArenaType.FFA).forEach(arena ->
+        this.plugin.getArenaService().getArenas().stream().filter(arena -> arena.getType() == EnumArenaType.FFA).forEach(arena ->
                 player.sendMessage(CC.translate("      &f● &b" + arena.getName() + " &7(" + arena.getType().name() + ")")))
         ;
 

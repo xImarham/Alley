@@ -45,12 +45,12 @@ public class MatchStartCommand extends BaseCommand {
                     }
                     break;
                 case 3:
-                    Alley.getInstance().getKitService().getKits().forEach(kit -> completion.add(kit.getName()));
+                    this.plugin.getKitService().getKits().forEach(kit -> completion.add(kit.getName()));
                     break;
                 case 4:
-                    Kit kit = Alley.getInstance().getKitService().getKit(command.getArgs()[2]);
+                    Kit kit = this.plugin.getKitService().getKit(command.getArgs()[2]);
                     if (kit != null) {
-                        Alley.getInstance().getArenaService().getArenas()
+                        this.plugin.getArenaService().getArenas()
                                 .stream()
                                 .filter(arena -> arena.getKits().contains(kit.getName()))
                                 .forEach(arena -> completion.add(arena.getName()));
@@ -63,7 +63,7 @@ public class MatchStartCommand extends BaseCommand {
         return completion;
     }
 
-    @CommandData(name = "match.start", permission = "alley.admin")
+    @CommandData(name = "match.start", isAdminOnly = true)
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
@@ -84,13 +84,13 @@ public class MatchStartCommand extends BaseCommand {
             return;
         }
 
-        Kit kit = Alley.getInstance().getKitService().getKit(kitName);
+        Kit kit = this.plugin.getKitService().getKit(kitName);
         if (kit == null) {
             player.sendMessage(CC.translate("&cKit not found."));
             return;
         }
 
-        AbstractArena arena = Alley.getInstance().getArenaService().getArenaByName(arenaName);
+        AbstractArena arena = this.plugin.getArenaService().getArenaByName(arenaName);
         if (arena == null) {
             player.sendMessage(CC.translate("&cArena not found."));
             return;
@@ -102,7 +102,7 @@ public class MatchStartCommand extends BaseCommand {
         GameParticipant<MatchGamePlayerImpl> participantA = new GameParticipant<>(playerA);
         GameParticipant<MatchGamePlayerImpl> participantB = new GameParticipant<>(playerB);
 
-        for (Queue queue : Alley.getInstance().getQueueService().getQueues()) {
+        for (Queue queue : this.plugin.getQueueService().getQueues()) {
             if (queue.getKit().equals(kit) && !queue.isRanked()) {
                 if (queue.getKit().isSettingEnabled(KitSettingLivesImpl.class)) {
                     AbstractMatch match = new MatchLivesRegularImpl(queue, kit, arena, false, participantA, participantB);

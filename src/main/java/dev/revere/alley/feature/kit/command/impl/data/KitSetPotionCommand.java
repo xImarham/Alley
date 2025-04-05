@@ -4,6 +4,7 @@ import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.feature.kit.Kit;
+import dev.revere.alley.feature.kit.KitService;
 import dev.revere.alley.locale.KitLocale;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.Material;
@@ -21,7 +22,7 @@ import java.util.List;
  */
 public class KitSetPotionCommand extends BaseCommand {
 
-    @CommandData(name = "kit.setpotion", aliases = {"kit.setpotioneffects"}, permission = "alley.admin")
+    @CommandData(name = "kit.setpotion", aliases = {"kit.setpotioneffects"}, isAdminOnly = true)
     @Override
     public void onCommand(CommandArgs command) {
         Player sender = command.getPlayer();
@@ -32,8 +33,8 @@ public class KitSetPotionCommand extends BaseCommand {
             return;
         }
 
-        String kitName = args[0];
-        Kit kit = this.alley.getKitService().getKit(kitName);
+        KitService kitService = this.plugin.getKitService();
+        Kit kit = kitService.getKit(args[0]);
         if (kit == null) {
             sender.sendMessage(CC.translate(KitLocale.KIT_NOT_FOUND.getMessage()));
             return;
@@ -52,15 +53,13 @@ public class KitSetPotionCommand extends BaseCommand {
 
         PotionMeta potionMeta = (PotionMeta) itemInHand.getItemMeta();
         List<PotionEffect> effects = potionMeta.getCustomEffects();
-
         if (effects.isEmpty()) {
             sender.sendMessage(CC.translate("&cThe potion you are holding has no custom effects!"));
             return;
         }
 
         kit.setPotionEffects(effects);
-        this.alley.getKitService().saveKit(kit);
-        sender.sendMessage(CC.translate("&aSuccessfully set potion effects for kit &e" + kitName + "&a!"));
+        kitService.saveKit(kit);
+        sender.sendMessage(CC.translate("&aSuccessfully set potion effects for kit &e" + kit.getName() + "&a!"));
     }
 }
-

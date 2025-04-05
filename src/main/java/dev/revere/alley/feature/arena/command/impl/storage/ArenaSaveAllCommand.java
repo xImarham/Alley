@@ -14,13 +14,13 @@ import org.bukkit.entity.Player;
  * @date 5/20/2024
  */
 public class ArenaSaveAllCommand extends BaseCommand {
-    @CommandData(name = "arena.saveall", permission = "alley.admin")
+    @CommandData(name = "arena.saveall", isAdminOnly = true)
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
 
-        for (AbstractArena arena : Alley.getInstance().getArenaService().getArenas()) {
-            Alley.getInstance().getArenaService().saveArena(arena);
+        for (AbstractArena arena : this.plugin.getArenaService().getArenas()) {
+            this.plugin.getArenaService().saveArena(arena);
         }
 
         player.sendMessage(CC.translate("&aAll arenas have been saved!"));

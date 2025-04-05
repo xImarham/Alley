@@ -15,7 +15,7 @@ import java.util.Arrays;
  * @date 15/09/2024 - 11:45
  */
 public class ArenaSetDisplayNameCommand extends BaseCommand {
-    @CommandData(name = "arena.setdisplayname", permission = "alley.command.arena.setdisplayname", inGameOnly = false)
+    @CommandData(name = "arena.setdisplayname", isAdminOnly = true, inGameOnly = false)
     @Override
     public void onCommand(CommandArgs command) {
         CommandSender sender = command.getSender();
@@ -28,13 +28,13 @@ public class ArenaSetDisplayNameCommand extends BaseCommand {
 
         String arenaName = args[0];
         String displayName = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
-        if (Alley.getInstance().getArenaService().getArenaByName(arenaName) == null) {
+        if (this.plugin.getArenaService().getArenaByName(arenaName) == null) {
             sender.sendMessage(CC.translate("&cAn arena with that name does not exist!"));
             return;
         }
 
-        Alley.getInstance().getArenaService().getArenaByName(arenaName).setDisplayName(displayName);
-        Alley.getInstance().getArenaService().getArenaByName(arenaName).saveArena();
+        this.plugin.getArenaService().getArenaByName(arenaName).setDisplayName(displayName);
+        this.plugin.getArenaService().getArenaByName(arenaName).saveArena();
         sender.sendMessage(CC.translate("&aSuccessfully set the display name of the arena &e" + arenaName + " &ato &e" + displayName + "&a."));
     }
 }

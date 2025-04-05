@@ -21,9 +21,9 @@ public class PartyDisbandCommand extends BaseCommand {
     @CommandData(name = "party.disband", aliases = {"p.disband"})
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
-        Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
+        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
 
-        if (Alley.getInstance().getProfileService().getProfile(player.getUniqueId()).getState() != EnumProfileState.LOBBY) {
+        if (this.plugin.getProfileService().getProfile(player.getUniqueId()).getState() != EnumProfileState.LOBBY) {
             player.sendMessage(CC.translate("&cYou must be at spawn in order to execute this command :v"));
             return;
         }
@@ -33,7 +33,7 @@ public class PartyDisbandCommand extends BaseCommand {
             return;
         }
 
-        PartyService partyService = Alley.getInstance().getPartyService();
+        PartyService partyService = this.plugin.getPartyService();
         if (partyService.getPartyByLeader(player) != null) {
             partyService.disbandParty(player);
             player.sendMessage(CC.translate(PartyLocale.PARTY_DISBANDED.getMessage()));

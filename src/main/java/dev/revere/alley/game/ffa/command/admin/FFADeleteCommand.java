@@ -14,7 +14,7 @@ import org.bukkit.entity.Player;
  * @date 5/27/2024
  */
 public class FFADeleteCommand extends BaseCommand {
-    @CommandData(name = "ffa.delete", permission = "alley.admin")
+    @CommandData(name = "ffa.delete", isAdminOnly = true)
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
@@ -26,13 +26,13 @@ public class FFADeleteCommand extends BaseCommand {
         }
 
         String kitName = args[0];
-        AbstractFFAMatch match = Alley.getInstance().getFfaService().getFFAMatch(kitName);
+        AbstractFFAMatch match = this.plugin.getFfaService().getFFAMatch(kitName);
         if (match == null) {
             player.sendMessage(CC.translate("&cThere is no FFA match with the name " + kitName + "."));
             return;
         }
 
-        Alley.getInstance().getFfaService().deleteFFAMatch(match);
+        this.plugin.getFfaService().deleteFFAMatch(match);
         player.sendMessage(CC.translate("&aSuccessfully deleted the FFA match."));
     }
 }

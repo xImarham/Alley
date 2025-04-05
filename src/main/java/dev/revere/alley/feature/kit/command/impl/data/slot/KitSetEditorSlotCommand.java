@@ -1,12 +1,12 @@
 package dev.revere.alley.feature.kit.command.impl.data.slot;
 
-import dev.revere.alley.Alley;
+import dev.revere.alley.api.command.BaseCommand;
+import dev.revere.alley.api.command.CommandArgs;
+import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.feature.kit.Kit;
+import dev.revere.alley.feature.kit.KitService;
 import dev.revere.alley.locale.KitLocale;
 import dev.revere.alley.util.chat.CC;
-import dev.revere.alley.api.command.BaseCommand;
-import dev.revere.alley.api.command.annotation.CommandData;
-import dev.revere.alley.api.command.CommandArgs;
 import org.bukkit.entity.Player;
 
 /**
@@ -15,7 +15,7 @@ import org.bukkit.entity.Player;
  * @date 21/05/2024 - 00:15
  */
 public class KitSetEditorSlotCommand extends BaseCommand {
-    @CommandData(name = "kit.seteditorslot", permission = "alley.admin")
+    @CommandData(name = "kit.seteditorslot", isAdminOnly = true)
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
@@ -26,18 +26,23 @@ public class KitSetEditorSlotCommand extends BaseCommand {
             return;
         }
 
-        String kitName = args[0];
-        int slot = Integer.parseInt(args[1]);
-
-        Kit kit = Alley.getInstance().getKitService().getKit(kitName);
-
+        KitService kitService = this.plugin.getKitService();
+        Kit kit = kitService.getKit(args[0]);
         if (kit == null) {
             player.sendMessage(CC.translate(KitLocale.KIT_NOT_FOUND.getMessage()));
             return;
         }
 
+        int slot;
+        try {
+            slot = Integer.parseInt(args[1]);
+        } catch (NumberFormatException e) {
+            player.sendMessage(CC.translate("&cThe slot must be a number!"));
+            return;
+        }
+
         kit.setEditorslot(slot);
-        Alley.getInstance().getKitService().saveKit(kit);
-        player.sendMessage(CC.translate(KitLocale.KIT_EDITORSLOT_SET.getMessage()).replace("{kit-name}", kitName).replace("{slot}", args[1]));
+        kitService.saveKit(kit);
+        player.sendMessage(CC.translate(KitLocale.KIT_EDITORSLOT_SET.getMessage()).replace("{kit-name}", kit.getName()).replace("{slot}", String.valueOf(slot)));
     }
 }

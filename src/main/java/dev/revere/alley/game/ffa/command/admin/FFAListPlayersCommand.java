@@ -14,7 +14,7 @@ import org.bukkit.entity.Player;
  * @date 5/27/2024
  */
 public class FFAListPlayersCommand extends BaseCommand {
-    @CommandData(name = "ffa.listplayers", permission = "alley.admin")
+    @CommandData(name = "ffa.listplayers", isAdminOnly = true)
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
@@ -26,7 +26,7 @@ public class FFAListPlayersCommand extends BaseCommand {
         }
         
         String kitName = args[0];
-        AbstractFFAMatch match = Alley.getInstance().getFfaService().getFFAMatch(kitName);
+        AbstractFFAMatch match = this.plugin.getFfaService().getFFAMatch(kitName);
         if (match == null) {
             player.sendMessage(CC.translate("&cThere is no FFA match with the name " + kitName + "."));
             return;

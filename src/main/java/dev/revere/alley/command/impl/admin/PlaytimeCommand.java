@@ -17,7 +17,7 @@ import org.bukkit.entity.Player;
  */
 public class PlaytimeCommand extends BaseCommand {
     @Override
-    @CommandData(name = "playtime", permission = "alley.admin")
+    @CommandData(name = "playtime", isAdminOnly = true)
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
         String[] args = command.getArgs();

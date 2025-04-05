@@ -15,7 +15,7 @@ import org.bukkit.entity.Player;
  * @since 28/01/2025
  */
 public class DivisionSetIconCommand extends BaseCommand {
-    @CommandData(name = "division.seticon", permission = "alley.admin", usage = "division seticon <name>")
+    @CommandData(name = "division.seticon", isAdminOnly = true, usage = "division seticon <name>")
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
@@ -26,7 +26,7 @@ public class DivisionSetIconCommand extends BaseCommand {
             return;
         }
 
-        DivisionService divisionService = Alley.getInstance().getDivisionService();
+        DivisionService divisionService = this.plugin.getDivisionService();
         Division division = divisionService.getDivision(args[0]);
         if (division == null) {
             player.sendMessage(CC.translate("&cA division with that name does not exist."));

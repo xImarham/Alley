@@ -28,19 +28,19 @@ public class FFAJoinCommand extends BaseCommand {
         }
 
         String kitName = args[0];
-        Kit kit = Alley.getInstance().getKitService().getKit(kitName);
+        Kit kit = this.plugin.getKitService().getKit(kitName);
         if (kit == null) {
             player.sendMessage("Kit not found.");
             return;
         }
 
-        Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
+        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
         if (profile.getParty() != null) {
             player.sendMessage(CC.translate("&cYou must leave your party to join FFA."));
             return;
         }
 
-        FFAService ffaService = Alley.getInstance().getFfaService();
+        FFAService ffaService = this.plugin.getFfaService();
         ffaService.getMatches().stream()
                 .filter(match -> match.getKit().equals(kit))
                 .filter(match -> match.getPlayers().size() < match.getMaxPlayers())

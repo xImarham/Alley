@@ -23,7 +23,7 @@ public class PartyLeaveCommand extends BaseCommand {
         Player player = command.getPlayer();
         UUID playerUUID = player.getUniqueId();
 
-        PartyService partyService = Alley.getInstance().getPartyService();
+        PartyService partyService = this.plugin.getPartyService();
         if (partyService.getPartyByLeader(player) != null) {
             partyService.disbandParty(player);
             player.sendMessage(CC.translate(PartyLocale.PARTY_DISBANDED.getMessage()));

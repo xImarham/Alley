@@ -18,18 +18,18 @@ import org.bukkit.entity.Player;
  */
 public class SpawnCommand extends BaseCommand {
     @Override
-    @CommandData(name = "spawn", permission = "alley.admin")
+    @CommandData(name = "spawn", isAdminOnly = true)
     public void onCommand(CommandArgs args) {
         Player player = args.getPlayer();
-        Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
+        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
         if (profile.getState() == EnumProfileState.FFA || profile.getState() == EnumProfileState.PLAYING) {
             player.sendMessage(CC.translate("&cYou cannot teleport to spawn while in this state."));
             return;
         }
 
         PlayerUtil.reset(player, false);
-        Alley.getInstance().getSpawnService().teleportToSpawn(player);
-        Alley.getInstance().getHotbarService().applyHotbarItems(player, HotbarType.LOBBY);
-        player.sendMessage(CC.translate(Alley.getInstance().getConfigService().getMessagesConfig().getString("spawn.teleported")));
+        this.plugin.getSpawnService().teleportToSpawn(player);
+        this.plugin.getHotbarService().applyHotbarItems(player, HotbarType.LOBBY);
+        player.sendMessage(CC.translate(this.plugin.getConfigService().getMessagesConfig().getString("spawn.teleported")));
     }
 }

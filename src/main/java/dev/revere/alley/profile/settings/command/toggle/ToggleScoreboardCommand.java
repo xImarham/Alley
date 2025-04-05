@@ -21,7 +21,7 @@ public class ToggleScoreboardCommand extends BaseCommand {
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
 
-        Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
+        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
         profile.getProfileData().getProfileSettingData().setScoreboardEnabled(!profile.getProfileData().getProfileSettingData().isScoreboardEnabled());
 
         player.sendMessage(CC.translate(ProfileLocale.TOGGLED_SCOREBOARD.getMessage().replace("{status}", profile.getProfileData().getProfileSettingData().isScoreboardEnabled() ? "&aenabled" : "&cdisabled")));

@@ -21,7 +21,7 @@ public class MatchCommand extends BaseCommand {
     }
 
     @Override
-    @CommandData(name = "match", permission = "alley.admin")
+    @CommandData(name = "match", isAdminOnly = true)
     public void onCommand(CommandArgs args) {
         CommandSender sender = args.getSender();
 

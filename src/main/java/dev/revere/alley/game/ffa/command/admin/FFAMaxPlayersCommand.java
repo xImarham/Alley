@@ -14,7 +14,7 @@ import org.bukkit.entity.Player;
  * @date 5/27/2024
  */
 public class FFAMaxPlayersCommand extends BaseCommand {
-    @CommandData(name = "ffa.maxplayers", permission = "alley.admin")
+    @CommandData(name = "ffa.maxplayers", isAdminOnly = true)
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
@@ -28,14 +28,14 @@ public class FFAMaxPlayersCommand extends BaseCommand {
         String kitName = args[0];
         int maxPlayers = Integer.parseInt(args[1]);
 
-        AbstractFFAMatch match = Alley.getInstance().getFfaService().getFFAMatch(kitName);
+        AbstractFFAMatch match = this.plugin.getFfaService().getFFAMatch(kitName);
         if (match == null) {
             player.sendMessage(CC.translate("&cThere is no FFA match with the name " + kitName + "."));
             return;
         }
 
         match.setMaxPlayers(maxPlayers);
-        Alley.getInstance().getFfaService().saveFFAMatch(match);
+        this.plugin.getFfaService().saveFFAMatch(match);
         player.sendMessage(CC.translate("&aSuccessfully set the max players for the FFA match."));
     }
 }

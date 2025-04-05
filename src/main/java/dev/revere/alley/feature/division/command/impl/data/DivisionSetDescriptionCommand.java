@@ -17,7 +17,7 @@ import java.util.Arrays;
  * @since 28/01/2025
  */
 public class DivisionSetDescriptionCommand extends BaseCommand {
-    @CommandData(name = "division.setdescription", permission = "alley.admin", usage = "division setdescription <name> <description>")
+    @CommandData(name = "division.setdescription", isAdminOnly = true, usage = "division setdescription <name> <description>")
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
@@ -28,7 +28,7 @@ public class DivisionSetDescriptionCommand extends BaseCommand {
             return;
         }
 
-        DivisionService divisionService = Alley.getInstance().getDivisionService();
+        DivisionService divisionService = this.plugin.getDivisionService();
         Division division = divisionService.getDivision(args[0]);
         if (division == null) {
             player.sendMessage(CC.translate("&cA division with that name does not exist."));

@@ -18,7 +18,7 @@ public class ResetTimeCommand extends BaseCommand {
     @CommandData(name = "resettime", aliases = "currenttime")
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
-        Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
+        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
 
         profile.getProfileData().getProfileSettingData().setTimeDefault(player);
         player.sendMessage(CC.translate("&aYou have reset your world time."));

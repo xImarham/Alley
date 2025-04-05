@@ -24,9 +24,9 @@ public class PartyCreateCommand extends BaseCommand {
         Player player = command.getPlayer();
         UUID playerUUID = player.getUniqueId();
 
-        PartyService partyService = Alley.getInstance().getPartyService();
+        PartyService partyService = this.plugin.getPartyService();
 
-        if (Alley.getInstance().getProfileService().getProfile(player.getUniqueId()).getState() != EnumProfileState.LOBBY) {
+        if (this.plugin.getProfileService().getProfile(player.getUniqueId()).getState() != EnumProfileState.LOBBY) {
             player.sendMessage(CC.translate("&cYou must be at spawn in order to execute this command :v"));
             return;
         }
@@ -41,7 +41,7 @@ public class PartyCreateCommand extends BaseCommand {
             return;
         }
 
-        if (Alley.getInstance().getServerService().check(player)) {
+        if (this.plugin.getServerService().check(player)) {
             return;
         }
 

@@ -19,12 +19,12 @@ public class DuelRequestsCommand extends BaseCommand {
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
 
-        if (Alley.getInstance().getProfileService().getProfile(player.getUniqueId()).getMatch() != null) {
+        if (this.plugin.getProfileService().getProfile(player.getUniqueId()).getMatch() != null) {
             player.sendMessage(CC.translate("&cYou are already in a match."));
             return;
         }
 
-        if (Alley.getInstance().getServerService().check(player)) {
+        if (this.plugin.getServerService().check(player)) {
             return;
         }
 

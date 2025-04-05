@@ -8,11 +8,11 @@ import org.bukkit.entity.Player;
 
 /**
  * @author Emmy
- * @project Delta
+ * @project Alley
  * @date 25/06/2024 - 20:26
  */
 public class PushCommand extends BaseCommand {
-    @CommandData(name = "push", permission = "delta.command.push", usage = "push (player) (value)", description = "Push a player")
+    @CommandData(name = "push", permission = "alley.command.troll.push", usage = "push <player> <value>", description = "Push a player")
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();

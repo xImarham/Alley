@@ -16,7 +16,7 @@ import org.bukkit.entity.Player;
  * @since 06/03/2025
  */
 public class ArenaSetHeightLimit extends BaseCommand {
-    @CommandData(name = "arena.setheightlimit", permission = "alley.admin")
+    @CommandData(name = "arena.setheightlimit", isAdminOnly = true)
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
@@ -27,7 +27,7 @@ public class ArenaSetHeightLimit extends BaseCommand {
             return;
         }
 
-        ArenaService arenaService = this.alley.getArenaService();
+        ArenaService arenaService = this.plugin.getArenaService();
         AbstractArena arena = arenaService.getArenaByName(args[0]);
         if (arena == null) {
             player.sendMessage(CC.translate("&cAn arena with that name does not exist!"));

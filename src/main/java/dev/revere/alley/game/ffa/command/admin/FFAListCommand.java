@@ -13,16 +13,16 @@ import org.bukkit.entity.Player;
  * @date 5/27/2024
  */
 public class FFAListCommand extends BaseCommand {
-    @CommandData(name = "ffa.list", permission = "alley.admin")
+    @CommandData(name = "ffa.list", isAdminOnly = true)
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
         player.sendMessage("");
-        player.sendMessage(CC.translate("     &b&lFFA Match List &f(" + Alley.getInstance().getFfaService().getMatches().size() + "&f)"));
-        if (Alley.getInstance().getFfaService().getMatches().isEmpty()) {
+        player.sendMessage(CC.translate("     &b&lFFA Match List &f(" + this.plugin.getFfaService().getMatches().size() + "&f)"));
+        if (this.plugin.getFfaService().getMatches().isEmpty()) {
             player.sendMessage(CC.translate("      &f● &cNo Matches available."));
         }
-        Alley.getInstance().getFfaService().getMatches().forEach(match -> player.sendMessage(CC.translate("      &f● &b" + match.getKit().getDisplayName() + " &f(" + (match.getPlayers().size() + "/" + match.getMaxPlayers()) + "&f)")));
+        this.plugin.getFfaService().getMatches().forEach(match -> player.sendMessage(CC.translate("      &f● &b" + match.getKit().getDisplayName() + " &f(" + (match.getPlayers().size() + "/" + match.getMaxPlayers()) + "&f)")));
         player.sendMessage("");
     }
 }

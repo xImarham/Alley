@@ -23,13 +23,13 @@ public class ArenaDeleteCommand extends BaseCommand {
         List<String> completion = new ArrayList<>();
 
         if (command.getArgs().length == 1 && command.getPlayer().hasPermission("alley.admin")) {
-            Alley.getInstance().getArenaService().getArenas().forEach(arena -> completion.add(arena.getName()));
+            this.plugin.getArenaService().getArenas().forEach(arena -> completion.add(arena.getName()));
         }
 
         return completion;
     }
 
-    @CommandData(name = "arena.delete", permission = "alley.admin")
+    @CommandData(name = "arena.delete", isAdminOnly = true)
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
@@ -41,12 +41,12 @@ public class ArenaDeleteCommand extends BaseCommand {
         }
 
         String arenaName = args[0];
-        if (Alley.getInstance().getArenaService().getArenaByName(arenaName) == null) {
+        if (this.plugin.getArenaService().getArenaByName(arenaName) == null) {
             player.sendMessage(CC.translate("&cAn arena with that name does not exist!"));
             return;
         }
 
         player.sendMessage(CC.translate("&aArena &b" + arenaName + "&a has been deleted!"));
-        Alley.getInstance().getArenaService().deleteArena(Alley.getInstance().getArenaService().getArenaByName(arenaName));
+        this.plugin.getArenaService().deleteArena(this.plugin.getArenaService().getArenaByName(arenaName));
     }
 }

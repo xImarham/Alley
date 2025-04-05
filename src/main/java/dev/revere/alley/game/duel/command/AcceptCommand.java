@@ -31,17 +31,17 @@ public class AcceptCommand extends BaseCommand {
             return;
         }
 
-        DuelRequest duelRequest = Alley.getInstance().getDuelRequestService().getDuelRequest(player, target);
+        DuelRequest duelRequest = this.plugin.getDuelRequestService().getDuelRequest(player, target);
         if (duelRequest == null) {
             player.sendMessage(CC.translate("&cYou do not have a pending duel request from that player."));
             return;
         }
 
-        if (Alley.getInstance().getServerService().check(player)) {
+        if (this.plugin.getServerService().check(player)) {
             return;
         }
 
-        Alley.getInstance().getDuelRequestService().acceptPendingRequest(duelRequest);
+        this.plugin.getDuelRequestService().acceptPendingRequest(duelRequest);
         player.sendMessage(CC.translate("&aYou have accepted the duel request from " + target.getName() + "."));
     }
 }

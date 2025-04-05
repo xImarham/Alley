@@ -74,7 +74,7 @@ public class ArenaCommand extends BaseCommand {
         return completion;
     }
 
-    @CommandData(name = "arena", permission = "alley.admin", inGameOnly = false)
+    @CommandData(name = "arena", isAdminOnly = true, inGameOnly = false)
     @Override
     public void onCommand(CommandArgs command) {
         CommandSender sender = command.getSender();

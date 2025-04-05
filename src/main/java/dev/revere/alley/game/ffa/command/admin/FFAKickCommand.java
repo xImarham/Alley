@@ -14,7 +14,7 @@ import org.bukkit.entity.Player;
  * @date 5/27/2024
  */
 public class FFAKickCommand extends BaseCommand {
-    @CommandData(name = "ffa.kick", permission = "alley.admin")
+    @CommandData(name = "ffa.kick", isAdminOnly = true)
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
@@ -33,7 +33,7 @@ public class FFAKickCommand extends BaseCommand {
             return;
         }
 
-        AbstractFFAMatch match = Alley.getInstance().getFfaService().getFFAMatch(target);
+        AbstractFFAMatch match = this.plugin.getFfaService().getFFAMatch(target);
         if (match == null) {
             player.sendMessage(CC.translate("&cThis player is not in a FFA match."));
             return;

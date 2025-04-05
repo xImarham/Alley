@@ -17,7 +17,7 @@ import java.util.Arrays;
  * @since 26/01/2025
  */
 public class DivisionViewCommand extends BaseCommand {
-    @CommandData(name = "division.view", permission = "alley.admin", usage = "division view <name>")
+    @CommandData(name = "division.view", isAdminOnly = true, usage = "division view <name>")
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
@@ -28,7 +28,7 @@ public class DivisionViewCommand extends BaseCommand {
             return;
         }
         
-        DivisionService divisionService = Alley.getInstance().getDivisionService();
+        DivisionService divisionService = this.plugin.getDivisionService();
         Division division = divisionService.getDivision(args[0]);
         if (division == null) {
             player.sendMessage(CC.translate("&cA division with that name does not exist."));

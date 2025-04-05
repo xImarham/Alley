@@ -15,7 +15,7 @@ import org.bukkit.entity.Player;
  */
 public class ArenaSetSafeZoneCommand extends BaseCommand {
     @Override
-    @CommandData(name = "arena.setsafezone", permission = "alley.admin")
+    @CommandData(name = "arena.setsafezone", isAdminOnly = true)
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
         String[] args = command.getArgs();
@@ -28,12 +28,12 @@ public class ArenaSetSafeZoneCommand extends BaseCommand {
         String arenaName = args[0];
         String spawnType = args[1];
 
-        if (Alley.getInstance().getArenaService().getArenaByName(arenaName) == null) {
+        if (this.plugin.getArenaService().getArenaByName(arenaName) == null) {
             player.sendMessage(CC.translate("&cAn arena with that name does not exist!"));
             return;
         }
 
-        if (Alley.getInstance().getArenaService().getArenaByName(arenaName).getType() != EnumArenaType.FFA) {
+        if (this.plugin.getArenaService().getArenaByName(arenaName).getType() != EnumArenaType.FFA) {
             player.sendMessage(CC.translate("&cYou can only set the safezone for Free-For-All arenas!"));
             return;
         }
@@ -44,13 +44,13 @@ public class ArenaSetSafeZoneCommand extends BaseCommand {
         }
 
         if (spawnType.equalsIgnoreCase("pos1")) {
-            Alley.getInstance().getArenaService().getArenaByName(arenaName).setMaximum(player.getLocation());
+            this.plugin.getArenaService().getArenaByName(arenaName).setMaximum(player.getLocation());
             player.sendMessage(CC.translate("&aSafe Zone position 1 has been set for arena &b" + arenaName + "&a!"));
         } else {
-            Alley.getInstance().getArenaService().getArenaByName(arenaName).setMinimum(player.getLocation());
+            this.plugin.getArenaService().getArenaByName(arenaName).setMinimum(player.getLocation());
             player.sendMessage(CC.translate("&aSafe Zone position 2 has been set for arena &b" + arenaName + "&a!"));
         }
 
-        Alley.getInstance().getArenaService().saveArena(Alley.getInstance().getArenaService().getArenaByName(arenaName));
+        this.plugin.getArenaService().saveArena(this.plugin.getArenaService().getArenaByName(arenaName));
     }
 }

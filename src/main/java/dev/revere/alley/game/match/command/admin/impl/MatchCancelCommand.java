@@ -15,7 +15,7 @@ import org.bukkit.entity.Player;
  * @date 5/26/2024
  */
 public class MatchCancelCommand extends BaseCommand {
-    @CommandData(name = "match.cancel", permission = "alley.admin")
+    @CommandData(name = "match.cancel", isAdminOnly = true)
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
@@ -32,7 +32,7 @@ public class MatchCancelCommand extends BaseCommand {
             return;
         }
 
-        Profile profile = Alley.getInstance().getProfileService().getProfile(target.getUniqueId());
+        Profile profile = this.plugin.getProfileService().getProfile(target.getUniqueId());
 
         if (profile.getState() != EnumProfileState.PLAYING || profile.getMatch() == null) {
             player.sendMessage(CC.translate("&cThat player is not in a match."));

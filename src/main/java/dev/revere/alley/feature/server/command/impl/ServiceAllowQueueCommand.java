@@ -13,7 +13,7 @@ import org.bukkit.entity.Player;
  * @since 09/03/2025
  */
 public class ServiceAllowQueueCommand extends BaseCommand {
-    @CommandData(name = "service.allowqueue", permission = "alley.admin", usage = "/service allowqueue <true/false>", description = "Allow/disallow queueing.")
+    @CommandData(name = "service.allowqueue", isAdminOnly = true, usage = "/service allowqueue <true/false>", description = "Allow/disallow queueing.")
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
@@ -32,8 +32,8 @@ public class ServiceAllowQueueCommand extends BaseCommand {
             return;
         }
 
-        ServerService serverService = this.alley.getServerService();
-        serverService.removePlayersFromQueue(player, this.alley);
+        ServerService serverService = this.plugin.getServerService();
+        serverService.removePlayersFromQueue(player, this.plugin);
         serverService.setAllowQueueing(allowQueue);
         player.sendMessage(CC.translate("&aYou've " + (allowQueue ? "&aenabled" : "&cdisabled") + " queueing."));
     }

@@ -14,11 +14,11 @@ import org.bukkit.entity.Player;
  * @date 6/2/2024
  */
 public class DivisionListCommand extends BaseCommand {
-    @CommandData(name = "division.list", permission = "alley.admin")
+    @CommandData(name = "division.list", isAdminOnly = true)
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
-        DivisionService divisionService = Alley.getInstance().getDivisionService();
+        DivisionService divisionService = this.plugin.getDivisionService();
         
         player.sendMessage("");
         player.sendMessage(CC.translate("     &b&lDivision List &f(" + divisionService.getDivisions().size() + "&f)"));

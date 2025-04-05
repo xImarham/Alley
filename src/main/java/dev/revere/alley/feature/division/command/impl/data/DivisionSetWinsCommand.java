@@ -24,9 +24,9 @@ public class DivisionSetWinsCommand extends BaseCommand {
     public List<String> DivisionSetWinsCompleter(CommandArgs command) {
         List<String> completion = new ArrayList<>();
         if (command.getArgs().length == 1 && command.getPlayer().hasPermission("alley.admin")) {
-            Alley.getInstance().getDivisionService().getDivisions().forEach(division -> completion.add(division.getName()));
+            this.plugin.getDivisionService().getDivisions().forEach(division -> completion.add(division.getName()));
         } else if (command.getArgs().length == 2 && command.getPlayer().hasPermission("alley.admin")) {
-            Division division = Alley.getInstance().getDivisionService().getDivision(command.getArgs()[0]);
+            Division division = this.plugin.getDivisionService().getDivision(command.getArgs()[0]);
             if (division != null) {
                 division.getTiers().forEach(tier -> completion.add(tier.getName()));
             }
@@ -35,7 +35,7 @@ public class DivisionSetWinsCommand extends BaseCommand {
         return completion;
     }
 
-    @CommandData(name = "division.setwins", permission = "alley.admin", usage = "division setwins <name> <tier> <wins>")
+    @CommandData(name = "division.setwins", isAdminOnly = true, usage = "division setwins <name> <tier> <wins>")
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
@@ -46,7 +46,7 @@ public class DivisionSetWinsCommand extends BaseCommand {
             return;
         }
 
-        DivisionService divisionService = Alley.getInstance().getDivisionService();
+        DivisionService divisionService = this.plugin.getDivisionService();
         Division division = divisionService.getDivision(args[0]);
         if (division == null) {
             player.sendMessage(CC.translate("&cA division with that name does not exist."));

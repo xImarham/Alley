@@ -27,7 +27,7 @@ public class ChatCommand extends BaseCommand {
             return;
         }
 
-        Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
+        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
         if (EnumChatChannel.getExactChatChannel(args[0], true) == null) {
             player.sendMessage(CC.translate("&cThe chat channel &b" + args[0] + " &cdoes not exist."));
             return;

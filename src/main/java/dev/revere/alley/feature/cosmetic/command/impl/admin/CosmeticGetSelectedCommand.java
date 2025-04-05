@@ -16,7 +16,7 @@ import org.bukkit.entity.Player;
  * @date 6/1/2024
  */
 public class CosmeticGetSelectedCommand extends BaseCommand {
-    @CommandData(name = "cosmetic.getselected", aliases = {"cosmetic.get"}, permission = "alley.admin")
+    @CommandData(name = "cosmetic.getselected", aliases = {"cosmetic.get"}, isAdminOnly = true)
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
@@ -33,7 +33,7 @@ public class CosmeticGetSelectedCommand extends BaseCommand {
             return;
         }
 
-        Profile profile = Alley.getInstance().getProfileService().getProfile(target.getUniqueId());
+        Profile profile = this.plugin.getProfileService().getProfile(target.getUniqueId());
         player.sendMessage(CC.translate("     &b&lSelected Cosmetics for " + target.getName()));
 
         ProfileCosmeticData cosmeticData = profile.getProfileData().getProfileCosmeticData();

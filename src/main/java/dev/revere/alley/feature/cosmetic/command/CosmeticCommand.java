@@ -27,7 +27,7 @@ public class CosmeticCommand extends BaseCommand {
         new CosmeticGetSelectedCommand();
     }
 
-    @CommandData(name = "cosmetic", permission = "alley.admin")
+    @CommandData(name = "cosmetic", isAdminOnly = true)
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();

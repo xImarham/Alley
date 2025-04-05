@@ -15,7 +15,7 @@ import org.bukkit.entity.Player;
  * @since 26/01/2025
  */
 public class DivisionCreateCommand extends BaseCommand {
-    @CommandData(name = "division.create", permission = "alley.admin", usage = "division.create <name> <requiredWins>")
+    @CommandData(name = "division.create", isAdminOnly = true, usage = "division.create <name> <requiredWins>")
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
@@ -35,7 +35,7 @@ public class DivisionCreateCommand extends BaseCommand {
             return;
         }
 
-        DivisionService divisionService = Alley.getInstance().getDivisionService();
+        DivisionService divisionService = this.plugin.getDivisionService();
         Division division = divisionService.getDivision(name);
         if (division != null) {
             player.sendMessage(CC.translate("&cA division with that name already exists."));

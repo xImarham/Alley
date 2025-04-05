@@ -16,13 +16,13 @@ import org.bukkit.entity.Player;
 public class SetSpawnCommand extends BaseCommand {
 
     @Override
-    @CommandData(name = "setspawn", permission = "alley.admin")
+    @CommandData(name = "setspawn", isAdminOnly = true)
     public void onCommand(CommandArgs cmd) {
         Player player = (Player) cmd.getSender();
         Location location = player.getLocation();
-        Alley.getInstance().getSpawnService().updateSpawnLocation(location);
+        this.plugin.getSpawnService().updateSpawnLocation(location);
 
-        String message = Alley.getInstance().getConfigService().getMessagesConfig().getString("spawn.spawn-set");
+        String message = this.plugin.getConfigService().getMessagesConfig().getString("spawn.spawn-set");
         message = message.replace("{world}", location.getWorld().getName())
                 .replace("{x}", String.format("%.2f", location.getX()))
                 .replace("{y}", String.format("%.2f", location.getY()))
