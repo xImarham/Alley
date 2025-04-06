@@ -79,6 +79,8 @@ public class ProfileListener implements Listener {
 
         profile.getProfileData().getProfileSettingData().setTimeBasedOnProfileSetting(player);
 
+        profile.save();
+
         FileConfiguration config = Alley.getInstance().getConfigService().getMessagesConfig();
         if (config.getBoolean("welcome-message.enabled")) {
             for (String message : config.getStringList("welcome-message.message")) {
