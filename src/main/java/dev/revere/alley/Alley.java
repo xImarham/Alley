@@ -167,7 +167,7 @@ public class Alley extends JavaPlugin {
         services.put(PartyService.class.getSimpleName(), () -> this.partyService = new PartyService());
         services.put(SpawnService.class.getSimpleName(), () -> this.spawnService = new SpawnService(this.configService));
         services.put(FFASpawnService.class.getSimpleName(), () -> this.ffaSpawnService = new FFASpawnService());
-        services.put(DuelRequestService.class.getSimpleName(), () -> this.duelRequestService = new DuelRequestService());
+        services.put(DuelRequestService.class.getSimpleName(), () -> this.duelRequestService = new DuelRequestService(this));
         services.put(EmojiRepository.class.getSimpleName(), () -> this.emojiRepository = new EmojiRepository());
         services.put(CombatService.class.getSimpleName(), () -> this.combatService = new CombatService());
         services.put(LeaderboardService.class.getSimpleName(), () -> this.leaderboardService = new LeaderboardService());
