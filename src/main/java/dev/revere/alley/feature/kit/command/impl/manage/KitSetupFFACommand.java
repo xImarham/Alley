@@ -61,8 +61,9 @@ public class KitSetupFFACommand extends BaseCommand {
             return;
         }
         
-        /*TODO: check which settings the kit has enabled so that we cannot for example set boxing as ffa. 
-           Additionally, disallow specific settings to be enabled (such as Boxing, BattleRush, ect) because ffa is enabled*/
+        /* TODO: Verify which settings are enabled for the kit to prevent conflicting settings, 
+            such as setting Boxing as FFA. Afterwards too, if (/kit setsetting) */
+
 
         kit.setFfaEnabled(true);
         kit.setFfaSlot(menuSlot);
