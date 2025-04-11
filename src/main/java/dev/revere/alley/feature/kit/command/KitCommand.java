@@ -4,12 +4,10 @@ import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.annotation.CompleterData;
-import dev.revere.alley.command.CommandDataCollector;
 import dev.revere.alley.feature.kit.command.impl.data.*;
-import dev.revere.alley.feature.kit.command.impl.data.slot.*;
-import dev.revere.alley.feature.kit.command.impl.manage.KitSetupFFACommand;
 import dev.revere.alley.feature.kit.command.impl.data.inventory.KitGetInvCommand;
 import dev.revere.alley.feature.kit.command.impl.data.inventory.KitSetInvCommand;
+import dev.revere.alley.feature.kit.command.impl.data.slot.*;
 import dev.revere.alley.feature.kit.command.impl.manage.*;
 import dev.revere.alley.feature.kit.command.impl.settings.KitSetSettingCommand;
 import dev.revere.alley.feature.kit.command.impl.settings.KitSettingsCommand;
@@ -22,7 +20,6 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 /**
  * @author Emmy
@@ -62,8 +59,6 @@ public class KitCommand extends BaseCommand {
     public List<String> kitCompleter(CommandArgs command) {
         List<String> completion = new ArrayList<>();
         if (command.getArgs().length == 1 && command.getPlayer().hasPermission("alley.admin")) {
-            CommandDataCollector collector = new CommandDataCollector();
-            Set<String> completions = collector.collectCommandNames("feature.kit.command.impl");
             completion.add("list");
             completion.add("saveall");
             completion.add("settings");
