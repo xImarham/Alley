@@ -4,13 +4,12 @@ import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.annotation.CompleterData;
+import dev.revere.alley.command.CommandDataCollector;
 import dev.revere.alley.feature.kit.command.impl.data.*;
+import dev.revere.alley.feature.kit.command.impl.data.slot.*;
+import dev.revere.alley.feature.kit.command.impl.manage.KitSetupFFACommand;
 import dev.revere.alley.feature.kit.command.impl.data.inventory.KitGetInvCommand;
 import dev.revere.alley.feature.kit.command.impl.data.inventory.KitSetInvCommand;
-import dev.revere.alley.feature.kit.command.impl.data.slot.KitSetEditorSlotCommand;
-import dev.revere.alley.feature.kit.command.impl.data.slot.KitSetRankedSlotCommand;
-import dev.revere.alley.feature.kit.command.impl.data.slot.KitSetSlotAllCommand;
-import dev.revere.alley.feature.kit.command.impl.data.slot.KitSetUnrankedSlotCommand;
 import dev.revere.alley.feature.kit.command.impl.manage.*;
 import dev.revere.alley.feature.kit.command.impl.settings.KitSetSettingCommand;
 import dev.revere.alley.feature.kit.command.impl.settings.KitSettingsCommand;
@@ -23,6 +22,7 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author Emmy
@@ -52,12 +52,18 @@ public class KitCommand extends BaseCommand {
         new KitSetPotionCommand();
         new KitViewCommand();
         new KitViewSettingsCommand();
+        new KitSetupFFACommand();
+        new KitToggleFFACommand();
+        new KitSetFfaSlotCommand();
     }
 
+    @SuppressWarnings("unused")
     @CompleterData(name = "kit")
     public List<String> kitCompleter(CommandArgs command) {
         List<String> completion = new ArrayList<>();
         if (command.getArgs().length == 1 && command.getPlayer().hasPermission("alley.admin")) {
+            CommandDataCollector collector = new CommandDataCollector();
+            Set<String> completions = collector.collectCommandNames("feature.kit.command.impl");
             completion.add("list");
             completion.add("saveall");
             completion.add("settings");
@@ -75,9 +81,12 @@ public class KitCommand extends BaseCommand {
             completion.add("setrankedslot");
             completion.add("setslotall");
             completion.add("setunrankedslot");
+            completion.add("setffaslot");
             completion.add("setsetting");
             completion.add("setdisplayname");
             completion.add("setpotion");
+            completion.add("toggleffa");
+            completion.add("setupffa");
         }
 
         return completion;
@@ -126,6 +135,8 @@ public class KitCommand extends BaseCommand {
                     " &f● &b/kit viewsettings &8(&7kitName&8) &7| View kit settings",
                     " &f● &b/kit delete &8(&7kitName&8) &7| Delete a kit",
                     " &f● &b/kit create &8(&7kitName&8) &7| Create a kit",
+                    " &f● &b/kit toggleffa &8(&7kitName&8) &7| Toggle ffa kit",
+                    " &f● &b/kit setupffa &8(&7kitName&8) &7| Setup ffa kit",
             },
             {
                     " &f● &b/kit seticon &8(&7kitName&8) &7| Set icon of a kit",
@@ -141,7 +152,8 @@ public class KitCommand extends BaseCommand {
                     " &f● &b/kit setslotall &8(&7kitName&8) &8(&7slot&8) &7| Set all menu slots",
                     " &f● &b/kit seteditorslot &8(&7kitName&8) &8(&7slot&8) &7| Set editor menu slot",
                     " &f● &b/kit setrankedslot &8(&7kitName&8) &8(&7slot&8) &7| Set ranked menu slot",
-                    " &f● &b/kit setunrankedslot &8(&7kitName&8) &8(&7slot&8) &7| Set unranked menu slot"
+                    " &f● &b/kit setunrankedslot &8(&7kitName&8) &8(&7slot&8) &7| Set unranked menu slot",
+                    " &f● &b/kit setffaslot &8(&7kitName&8) &8(&7slot&8) &7| Set ffa menu slot",
             }
     };
 }

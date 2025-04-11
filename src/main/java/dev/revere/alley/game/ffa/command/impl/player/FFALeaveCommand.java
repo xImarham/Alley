@@ -1,4 +1,4 @@
-package dev.revere.alley.game.ffa.command.player;
+package dev.revere.alley.game.ffa.command.impl.player;
 
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;

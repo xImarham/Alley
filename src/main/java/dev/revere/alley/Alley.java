@@ -5,6 +5,7 @@ import dev.revere.alley.api.command.CommandFramework;
 import dev.revere.alley.api.constant.PluginConstant;
 import dev.revere.alley.api.menu.MenuListener;
 import dev.revere.alley.api.server.ServerEnvironment;
+import dev.revere.alley.command.CommandDataCollector;
 import dev.revere.alley.command.CommandUtility;
 import dev.revere.alley.config.ConfigService;
 import dev.revere.alley.database.MongoService;
@@ -69,6 +70,7 @@ public class Alley extends JavaPlugin {
     private ServerEnvironment serverEnvironment;
     private Assemble assemble;
     private CommandFramework commandFramework;
+    private CommandDataCollector commandDataCollector;
     private CosmeticRepository cosmeticRepository;
     private ProfileService profileService;
     private DivisionService divisionService;
@@ -129,7 +131,6 @@ public class Alley extends JavaPlugin {
         this.serverEnvironment.clearEntities(EntityType.DROPPED_ITEM);
 
         this.kitService.saveKits();
-        this.ffaService.saveFFAMatches();
         this.arenaService.getArenas().forEach(AbstractArena::saveArena);
         this.divisionService.saveDivisions();
 
@@ -152,11 +153,12 @@ public class Alley extends JavaPlugin {
         services.put(ConfigService.class.getSimpleName(), () -> this.configService = new ConfigService());
         services.put(MongoService.class.getSimpleName(), () -> this.mongoService = new MongoService(this.configService.getDatabaseConfig().getString("mongo.uri"), this.configService.getDatabaseConfig().getString("mongo.database")));
         services.put(CommandFramework.class.getSimpleName(), () -> this.commandFramework = new CommandFramework(this));
+        services.put(CommandDataCollector.class.getSimpleName(), () -> this.commandDataCollector = new CommandDataCollector());
         services.put(QueueService.class.getSimpleName(), () -> this.queueService = new QueueService(this));
         services.put(KitSettingService.class.getSimpleName(), () -> this.kitSettingService = new KitSettingService());
         services.put(KitService.class.getSimpleName(), () -> this.kitService = new KitService(this));
         services.put(ArenaService.class.getSimpleName(), () -> this.arenaService = new ArenaService());
-        services.put(FFAService.class.getSimpleName(), () -> this.ffaService = new FFAService());
+        services.put(FFAService.class.getSimpleName(), () -> this.ffaService = new FFAService(this));
         services.put(CosmeticRepository.class.getSimpleName(), () -> this.cosmeticRepository = new CosmeticRepository());
         services.put(DivisionService.class.getSimpleName(), () -> this.divisionService = new DivisionService(this));
         services.put(ProfileService.class.getSimpleName(), () -> { this.profileService = new ProfileService(); this.profileService.loadProfiles(); });

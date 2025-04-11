@@ -27,6 +27,7 @@ public enum KitLocale implements ILocale {
     KIT_EDITORSLOT_SET("messages.yml", "kit.editorslot-set"),
     KIT_UNRANKEDSLOT_SET("messages.yml", "kit.unrankedslot-set"),
     KIT_RANKEDSLOT_SET("messages.yml", "kit.rankedslot-set"),
+    KIT_FFASLOT_SET("messages.yml", "kit.ffaslot-set"),
     KIT_SETTING_SET("messages.yml", "kit.setting-set"),
     KIT_CANNOT_SET_IN_CREATIVE("messages.yml", "kit.cannot-set-in-creative"),
 

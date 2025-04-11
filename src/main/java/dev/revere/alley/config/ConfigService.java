@@ -23,7 +23,6 @@ public class ConfigService {
     private final FileConfiguration settingsConfig;
     private final FileConfiguration messagesConfig;
     private final FileConfiguration databaseConfig;
-    private final FileConfiguration ffaConfig;
     private final FileConfiguration kitsConfig;
     private final FileConfiguration arenasConfig;
     private final FileConfiguration scoreboardConfig;
@@ -34,7 +33,7 @@ public class ConfigService {
     private final String[] configFileNames = {
             "settings.yml", "messages.yml", "menus.yml",
             "database/database.yml",
-            "storage/ffa.yml", "storage/kits.yml", "storage/arenas.yml", "storage/divisions.yml",
+            "storage/kits.yml", "storage/arenas.yml", "storage/divisions.yml",
             "providers/scoreboard.yml", "providers/tablist.yml"
     };
 
@@ -49,7 +48,6 @@ public class ConfigService {
         this.settingsConfig = this.getConfig("settings.yml");
         this.messagesConfig = this.getConfig("messages.yml");
         this.databaseConfig = this.getConfig("database/database.yml");
-        this.ffaConfig = this.getConfig("storage/ffa.yml");
         this.kitsConfig = this.getConfig("storage/kits.yml");
         this.arenasConfig = this.getConfig("storage/arenas.yml");
         this.scoreboardConfig = this.getConfig("providers/scoreboard.yml");

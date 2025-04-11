@@ -1,8 +1,6 @@
 package dev.revere.alley.feature.kit;
 
-import dev.revere.alley.Alley;
 import dev.revere.alley.feature.kit.settings.KitSetting;
-import dev.revere.alley.game.ffa.AbstractFFAMatch;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Material;
@@ -21,17 +19,21 @@ import java.util.List;
 @Getter
 @Setter
 public class Kit {
-    private final List<KitSetting> kitSettings;
-
     private String name;
     private String displayName;
     private String description;
+    private String disclaimer;
+    private String ffaArenaName;
 
     private boolean enabled;
+    private boolean ffaEnabled;
 
     private int unrankedslot;
     private int rankedslot;
     private int editorslot;
+    private int ffaSlot;
+
+    private int maxFfaPlayers;
 
     private ItemStack[] inventory;
     private ItemStack[] armor;
@@ -39,9 +41,8 @@ public class Kit {
     private Material icon;
     private int iconData;
 
-    private String disclaimer;
-
     private List<PotionEffect> potionEffects;
+    private final List<KitSetting> kitSettings;
 
     /**
      * Constructor for the Kit class.
@@ -58,7 +59,7 @@ public class Kit {
      * @param icon         The icon of the kit.
      * @param iconData     The icon data of the kit.
      */
-    public Kit(String name, String displayName, String description, boolean enabled, int unrankedslot, int rankedslot, int editorslot, ItemStack[] inventory, ItemStack[] armor, Material icon, int iconData, String disclaimer) {
+    public Kit(String name, String displayName, String description, boolean enabled, int unrankedslot, int rankedslot, int editorslot, int ffaSlot, ItemStack[] inventory, ItemStack[] armor, Material icon, int iconData, String disclaimer) {
         this.name = name;
         this.displayName = displayName;
         this.description = description;
@@ -73,6 +74,10 @@ public class Kit {
         this.kitSettings = new ArrayList<>();
         this.disclaimer = disclaimer;
         this.potionEffects = new ArrayList<>();
+        this.ffaEnabled = false;
+        this.ffaSlot = ffaSlot;
+        this.ffaArenaName = "";
+        this.maxFfaPlayers = 20;
     }
 
     /**
@@ -81,7 +86,7 @@ public class Kit {
      * @param kitSetting The kit setting to add.
      */
     public void addKitSetting(KitSetting kitSetting) {
-        kitSettings.add(kitSetting);
+        this.kitSettings.add(kitSetting);
     }
 
     /**
@@ -91,7 +96,7 @@ public class Kit {
      * @return Whether the setting is enabled.
      */
     public boolean isSettingEnabled(String name) {
-        KitSetting kitSetting = kitSettings.stream()
+        KitSetting kitSetting = this.kitSettings.stream()
                 .filter(setting -> setting.getName().equals(name))
                 .findFirst()
                 .orElse(null);
@@ -106,27 +111,12 @@ public class Kit {
      * @return Whether the setting is enabled.
      */
     public boolean isSettingEnabled(Class<? extends KitSetting> clazz) {
-        KitSetting kitSetting = kitSettings.stream()
+        KitSetting kitSetting = this.kitSettings.stream()
                 .filter(setting -> setting.getClass().equals(clazz))
                 .findFirst()
                 .orElse(null);
 
         return kitSetting != null && kitSetting.isEnabled();
-    }
-
-    /**
-     * Method to check if multiple settings are enabled.
-     *
-     * @param names The names of the settings.
-     * @return Whether the settings are enabled.
-     */
-    public boolean areSettingsEnabled(String... names) {
-        for (String name : names) {
-            if (!this.isSettingEnabled(name)) {
-                return false;
-            }
-        }
-        return true;
     }
 
     /**
@@ -138,19 +128,5 @@ public class Kit {
         for (PotionEffect effect : this.potionEffects) {
             player.addPotionEffect(effect);
         }
-    }
-
-    /**
-     * Method to check if the kit is a FFA kit.
-     *
-     * @return Whether the kit is a FFA kit.
-     */
-    public boolean isFfaKit() {
-        for (AbstractFFAMatch match : Alley.getInstance().getFfaService().getMatches()) {
-            if (match.getKit().getName().equals(this.name)) {
-                return true;
-            }
-        }
-        return false;
     }
 }

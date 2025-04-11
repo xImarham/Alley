@@ -31,11 +31,8 @@ public class FFAMenu extends Menu {
 
         buttons.put(0, new BackButton(new QueuesMenuDefault()));
 
-        int slot = 10;
-
         for (AbstractFFAMatch match : Alley.getInstance().getFfaService().getMatches()) {
-            buttons.put(slot, new FFAButton(match));
-            slot++;
+            buttons.put(match.getKit().getFfaSlot(), new FFAButton(match));
         }
 
         addBorder(buttons, (byte) 15, 5);

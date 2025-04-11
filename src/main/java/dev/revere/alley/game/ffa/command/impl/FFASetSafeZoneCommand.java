@@ -1,4 +1,4 @@
-package dev.revere.alley.feature.arena.command.impl.data;
+package dev.revere.alley.game.ffa.command.impl;
 
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
@@ -12,15 +12,15 @@ import org.bukkit.entity.Player;
  * @project Alley
  * @date 12/06/2024 - 21:56
  */
-public class ArenaSetSafeZoneCommand extends BaseCommand {
+public class FFASetSafeZoneCommand extends BaseCommand {
     @Override
-    @CommandData(name = "arena.setsafezone", isAdminOnly = true)
+    @CommandData(name = "ffa.setsafezone", isAdminOnly = true)
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
         String[] args = command.getArgs();
 
         if (args.length < 2) {
-            player.sendMessage(CC.translate("&6Usage: &e/arena setsafezone &b<arenaName> <pos1/pos2>"));
+            player.sendMessage(CC.translate("&6Usage: &e/ffa setsafezone &b<arenaName> <pos1/pos2>"));
             return;
         }
 

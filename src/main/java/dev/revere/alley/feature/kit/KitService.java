@@ -43,7 +43,7 @@ public class KitService {
      * Method to load all kits from the kits.yml file.
      */
     public void loadKits() {
-        FileConfiguration config = Alley.getInstance().getConfigService().getConfig("storage/kits.yml");
+        FileConfiguration config = this.plugin.getConfigService().getConfig("storage/kits.yml");
         ConfigurationSection kitsSection = config.getConfigurationSection("kits");
         if (kitsSection == null) {
             return;
@@ -67,6 +67,7 @@ public class KitService {
                     config.getInt(key + ".unrankedslot"),
                     config.getInt(key + ".rankedslot"),
                     config.getInt(key + ".editorslot"),
+                    config.getInt(key + ".ffa.slot"),
                     inventory,
                     armor,
                     icon,
@@ -74,6 +75,7 @@ public class KitService {
                     disclaimer
             );
 
+            this.setupFFA(kit, config, key);
             this.loadKitSettings(config, key, kit);
             this.loadPotionEffects(config, key, kit);
             this.addMissingKitSettings(kit, config, key);
@@ -82,55 +84,11 @@ public class KitService {
         }
     }
 
-    /**
-     * Method to save all kits to the kits.yml file.
-     */
-    public void saveKits() {
-        for (Kit kit : this.kits) {
-            FileConfiguration config = Alley.getInstance().getConfigService().getKitsConfig();
-            String key = "kits." + kit.getName();
-            config.set(key + ".displayname", kit.getDisplayName());
-            config.set(key + ".description", kit.getDescription());
-            config.set(key + ".enabled", kit.isEnabled());
-            config.set(key + ".unrankedslot", kit.getUnrankedslot());
-            config.set(key + ".rankedslot", kit.getRankedslot());
-            config.set(key + ".editorslot", kit.getEditorslot());
-            config.set(key + ".items", kit.getInventory());
-            config.set(key + ".armor", kit.getArmor());
-            config.set(key + ".icon", kit.getIcon().name());
-            config.set(key + ".icondata", kit.getIconData());
-            config.set(key + ".disclaimer", kit.getDisclaimer());
-            this.saveKitSettings(config, key, kit);
-            this.savePotionEffects(config, key, kit);
-            Alley.getInstance().getConfigService().saveConfig(Alley.getInstance().getConfigService().getConfigFile("storage/kits.yml"), config);
-        }
-    }
-
-    /**
-     * Method to save the settings of a kit.
-     *
-     * @param config The configuration file.
-     * @param key    The path key.
-     * @param kit    The kit.
-     */
-    private void saveKitSettings(FileConfiguration config, String key, Kit kit) {
-        for (KitSetting kitSetting : kit.getKitSettings()) {
-            String settingKey = key + ".settings." + kitSetting.getName();
-            config.set(settingKey + ".description", kitSetting.getDescription());
-            config.set(settingKey + ".enabled", kitSetting.isEnabled());
-        }
-    }
-
-    /**
-     * Method to save the potion effects of a kit.
-     *
-     * @param config The configuration file.
-     * @param key    The path key.
-     * @param kit    The kit.
-     */
-    private void savePotionEffects(FileConfiguration config, String key, Kit kit) {
-        List<String> potionEffects = PotionUtil.serialize(kit.getPotionEffects());
-        config.set(key + ".potioneffects", potionEffects);
+    private void setupFFA(Kit kit, FileConfiguration config, String key) {
+        kit.setFfaEnabled(config.getBoolean(key + ".ffa.enabled"));
+        kit.setFfaArenaName(config.getString(key + ".ffa.arena"));
+        kit.setMaxFfaPlayers(config.getInt(key + ".ffa.maxplayers"));
+        kit.setFfaSlot(config.getInt(key + ".ffa.slot"));
     }
 
     /**
@@ -152,7 +110,7 @@ public class KitService {
             String description = config.getString(settingKey + ".description");
             boolean enabled = config.getBoolean(settingKey + ".enabled");
 
-            KitSetting kitSetting = Alley.getInstance().getKitSettingService().createSettingByName(settingName);
+            KitSetting kitSetting = this.plugin.getKitSettingService().createSettingByName(settingName);
             if (kitSetting != null) {
                 kitSetting.setDescription(description);
                 kitSetting.setEnabled(enabled);
@@ -185,7 +143,7 @@ public class KitService {
      * @param key    The path key.
      */
     private void addMissingKitSettings(Kit kit, FileConfiguration config, String key) {
-        Alley.getInstance().getKitSettingService().getSettings().forEach(setting -> {
+        this.plugin.getKitSettingService().getSettings().forEach(setting -> {
             if (kit.getKitSettings().stream().noneMatch(kitSetting -> kitSetting.getName().equals(setting.getName()))) {
                 kit.addKitSetting(setting);
                 Bukkit.getConsoleSender().sendMessage(CC.translate("&cAdded missing setting " + setting.getName() + " to kit " + kit.getName() + ". Now saving it into the kits config..."));
@@ -195,54 +153,44 @@ public class KitService {
     }
 
     /**
-     * Method to save a kit to the kits.yml file.
-     *
-     * @param kit The kit to save.
+     * Method to save all kits to the kits.yml file.
      */
-    public void saveKit(Kit kit) {
-        FileConfiguration config = Alley.getInstance().getConfigService().getKitsConfig();
-        String key = "kits." + kit.getName();
-        config.set(key + ".displayname", kit.getDisplayName());
-        config.set(key + ".description", kit.getDescription());
-        config.set(key + ".enabled", kit.isEnabled());
-        config.set(key + ".unrankedslot", kit.getUnrankedslot());
-        config.set(key + ".rankedslot", kit.getRankedslot());
-        config.set(key + ".editorslot", kit.getEditorslot());
-        config.set(key + ".items", kit.getInventory());
-        config.set(key + ".armor", kit.getArmor());
-        config.set(key + ".icon", kit.getIcon().name());
-        config.set(key + ".icondata", kit.getIconData());
-        config.set(key + ".disclaimer", kit.getDisclaimer());
-
-        if (kit.getKitSettings() == null) {
-            this.applyDefaultSettings(config, key, kit);
-        } else {
+    public void saveKits() {
+        for (Kit kit : this.kits) {
+            FileConfiguration config = this.plugin.getConfigService().getKitsConfig();
+            String key = "kits." + kit.getName();
+            this.kitToConfig(kit, config, key);
             this.saveKitSettings(config, key, kit);
-        }
-
-        if (kit.getPotionEffects() != null) {
             this.savePotionEffects(config, key, kit);
+            this.plugin.getConfigService().saveConfig(this.plugin.getConfigService().getConfigFile("storage/kits.yml"), config);
         }
-
-        Alley.getInstance().getConfigService().saveConfig(Alley.getInstance().getConfigService().getConfigFile("storage/kits.yml"), config);
     }
 
     /**
-     * Method to apply the default settings to a kit.
+     * Method to save the settings of a kit.
      *
      * @param config The configuration file.
      * @param key    The path key.
      * @param kit    The kit.
      */
-    public void applyDefaultSettings(FileConfiguration config, String key, Kit kit) {
-        Alley.getInstance().getKitSettingService().getSettings().forEach(setting -> {
-            kit.addKitSetting(setting);
-            String settingKey = key + ".settings." + setting.getName();
-            config.set(settingKey + ".description", setting.getDescription());
-            config.set(settingKey + ".enabled", setting.isEnabled());
-        });
+    private void saveKitSettings(FileConfiguration config, String key, Kit kit) {
+        for (KitSetting kitSetting : kit.getKitSettings()) {
+            String settingKey = key + ".settings." + kitSetting.getName();
+            config.set(settingKey + ".description", kitSetting.getDescription());
+            config.set(settingKey + ".enabled", kitSetting.isEnabled());
+        }
+    }
 
-        Alley.getInstance().getConfigService().saveConfig(Alley.getInstance().getConfigService().getConfigFile("storage/kits.yml"), config);
+    /**
+     * Method to save the potion effects of a kit.
+     *
+     * @param config The configuration file.
+     * @param key    The path key.
+     * @param kit    The kit.
+     */
+    private void savePotionEffects(FileConfiguration config, String key, Kit kit) {
+        List<String> potionEffects = PotionUtil.serialize(kit.getPotionEffects());
+        config.set(key + ".potioneffects", potionEffects);
     }
 
     /**
@@ -259,21 +207,45 @@ public class KitService {
         }
     }
 
-    //deletes a kit
+    /**
+     * Method to save a kit to the kits.yml file.
+     *
+     * @param kit The kit to save.
+     */
+    public void saveKit(Kit kit) {
+        FileConfiguration config = this.plugin.getConfigService().getKitsConfig();
+        String key = "kits." + kit.getName();
+        this.kitToConfig(kit, config, key);
+
+        if (kit.getKitSettings() == null) {
+            this.applyDefaultSettings(config, key, kit);
+        } else {
+            this.saveKitSettings(config, key, kit);
+        }
+
+        if (kit.getPotionEffects() != null) {
+            this.savePotionEffects(config, key, kit);
+        }
+
+        this.plugin.getConfigService().saveConfig(this.plugin.getConfigService().getConfigFile("storage/kits.yml"), config);
+    }
 
     /**
-     * Method to delete a kit.
+     * Method to apply the default settings to a kit.
      *
-     * @param kit The kit to delete.
+     * @param config The configuration file.
+     * @param key    The path key.
+     * @param kit    The kit.
      */
-    public void deleteKit(Kit kit) {
-        FileConfiguration config = Alley.getInstance().getConfigService().getKitsConfig();
-        File file = Alley.getInstance().getConfigService().getConfigFile("storage/kits.yml");
+    public void applyDefaultSettings(FileConfiguration config, String key, Kit kit) {
+        this.plugin.getKitSettingService().getSettings().forEach(setting -> {
+            kit.addKitSetting(setting);
+            String settingKey = key + ".settings." + setting.getName();
+            config.set(settingKey + ".description", setting.getDescription());
+            config.set(settingKey + ".enabled", setting.isEnabled());
+        });
 
-        this.kits.remove(kit);
-        config.set("kits." + kit.getName(), null);
-
-        Alley.getInstance().getConfigService().saveConfig(file, config);
+        this.plugin.getConfigService().saveConfig(this.plugin.getConfigService().getConfigFile("storage/kits.yml"), config);
     }
 
     /**
@@ -287,10 +259,11 @@ public class KitService {
     public void createKit(String kitName, ItemStack[] inventory, ItemStack[] armor, Material icon, int slot) {
         Kit kit = new Kit(
                 kitName,
-                Alley.getInstance().getConfigService().getSettingsConfig().getString("kit.default-name").replace("{kit-name}", kitName),
-                Alley.getInstance().getConfigService().getSettingsConfig().getString("kit.default-description").replace("{kit-name}", kitName),
+                this.plugin.getConfigService().getSettingsConfig().getString("kit.default-name").replace("{kit-name}", kitName),
+                this.plugin.getConfigService().getSettingsConfig().getString("kit.default-description").replace("{kit-name}", kitName),
                 true,
                 slot,
+                0,
                 0,
                 0,
                 inventory,
@@ -300,9 +273,24 @@ public class KitService {
                 kitName + " kit disclaimer."
         );
 
-        Alley.getInstance().getKitSettingService().applyAllSettingsToKit(kit);
+        this.plugin.getKitSettingService().applyAllSettingsToKit(kit);
         this.kits.add(kit);
         this.saveKit(kit);
+    }
+
+    /**
+     * Method to delete a kit.
+     *
+     * @param kit The kit to delete.
+     */
+    public void deleteKit(Kit kit) {
+        FileConfiguration config = this.plugin.getConfigService().getKitsConfig();
+        File file = this.plugin.getConfigService().getConfigFile("storage/kits.yml");
+
+        this.kits.remove(kit);
+        config.set("kits." + kit.getName(), null);
+
+        this.plugin.getConfigService().saveConfig(file, config);
     }
 
     /**
@@ -312,9 +300,41 @@ public class KitService {
      * @return The kit.
      */
     public Kit getKit(String name) {
-        return this.kits.stream()
-                .filter(kit -> kit.getName().equalsIgnoreCase(name))
-                .findFirst()
-                .orElse(null);
+        return this.kits.stream().filter(kit -> kit.getName().equalsIgnoreCase(name)).findFirst().orElse(null);
+    }
+
+    /**
+     * Method to get a kit by its object.
+     *
+     * @param kit The kit instance.
+     * @return The kit.
+     */
+    public Kit getKit(Kit kit) {
+        return this.kits.stream().filter(k -> k.getName().equalsIgnoreCase(kit.getName())).findFirst().orElse(null);
+    }
+
+    /**
+     * Method to save a kit to the configuration specified in the parameters with a given key path.
+     *
+     * @param kit    The kit to save.
+     * @param config The configuration file.
+     * @param key    The path key.
+     */
+    private void kitToConfig(Kit kit, FileConfiguration config, String key) {
+        config.set(key + ".displayname", kit.getDisplayName());
+        config.set(key + ".description", kit.getDescription());
+        config.set(key + ".enabled", kit.isEnabled());
+        config.set(key + ".unrankedslot", kit.getUnrankedslot());
+        config.set(key + ".rankedslot", kit.getRankedslot());
+        config.set(key + ".editorslot", kit.getEditorslot());
+        config.set(key + ".items", kit.getInventory());
+        config.set(key + ".armor", kit.getArmor());
+        config.set(key + ".icon", kit.getIcon().name());
+        config.set(key + ".icondata", kit.getIconData());
+        config.set(key + ".disclaimer", kit.getDisclaimer());
+        config.set(key + ".ffa.enabled", kit.isFfaEnabled());
+        config.set(key + ".ffa.arena", kit.getFfaArenaName());
+        config.set(key + ".ffa.slot", kit.getFfaSlot());
+        config.set(key + ".ffa.maxplayers", kit.getMaxFfaPlayers());
     }
 }

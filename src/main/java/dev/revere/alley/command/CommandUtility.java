@@ -23,7 +23,7 @@ import dev.revere.alley.feature.spawn.command.SpawnItemsCommand;
 import dev.revere.alley.game.duel.command.AcceptCommand;
 import dev.revere.alley.game.duel.command.DuelCommand;
 import dev.revere.alley.game.duel.command.DuelRequestsCommand;
-import dev.revere.alley.game.ffa.command.admin.FFACommand;
+import dev.revere.alley.game.ffa.command.FFACommand;
 import dev.revere.alley.game.match.command.admin.MatchCommand;
 import dev.revere.alley.game.match.command.admin.impl.MatchInfoCommand;
 import dev.revere.alley.game.match.command.player.CurrentMatchesCommand;

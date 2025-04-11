@@ -5,128 +5,76 @@ import dev.revere.alley.feature.arena.AbstractArena;
 import dev.revere.alley.feature.kit.Kit;
 import dev.revere.alley.game.ffa.impl.DefaultFFAMatchImpl;
 import dev.revere.alley.tool.logger.Logger;
+import dev.revere.alley.util.chat.CC;
 import lombok.Getter;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
- * @author Remi
+ * @author Emmy
  * @project Alley
- * @date 5/27/2024
+ * @since 11/04/2025
  */
 @Getter
 public class FFAService {
-    private final List<AbstractFFAMatch> matches;
+    protected final Alley plugin;
 
-    public FFAService() {
+    private final List<AbstractFFAMatch> matches;
+    private final List<Kit> ffaKits;
+
+    private final int defaultPlayerSize;
+
+    /**
+     * Constructor for the FFAService class.
+     *
+     * @param plugin The Alley plugin instance.
+     */
+    public FFAService(Alley plugin) {
+        this.plugin = plugin;
         this.matches = new ArrayList<>();
-        this.loadFFAMatches();
+        this.ffaKits = plugin.getKitService().getKits().stream().filter(Kit::isFfaEnabled).collect(Collectors.toList());
+        this.defaultPlayerSize = 20;
+        this.initializeMatches();
     }
 
     /**
      * Load all FFA matches
      */
-    public void loadFFAMatches() {
-        FileConfiguration config = Alley.getInstance().getConfigService().getFfaConfig();
-        ConfigurationSection ffaConfig = config.getConfigurationSection("ffa");
-        if (ffaConfig == null) {
-            return;
-        }
-
-        for (String kitName : ffaConfig.getKeys(false)) {
-            String name = "ffa." + kitName;
-
-            Kit kit = Alley.getInstance().getKitService().getKit(kitName);
-            if (kit == null) {
-                Logger.logError("FFA Match (" + name + ") kit not found: " + kitName);
-                continue;
-            }
-
-            String arenaName = config.getString(name + ".arena");
-            AbstractArena arena = Alley.getInstance().getArenaService().getArenaByName(arenaName);
+    public void initializeMatches() {
+        for (Kit kit : this.ffaKits) {
+            AbstractArena arena = this.plugin.getArenaService().getArenaByName(kit.getFfaArenaName());
             if (arena == null) {
-                Logger.logError("FFA Match (" + name + ") arena not found: " + arenaName);
+                Logger.logError("Kit " + kit.getName() + " has no FFA arena set. Please set the FFA arena in the kit settings.");
                 continue;
             }
 
-            int maxPlayers = config.getInt(name + ".maxPlayers");
-            this.matches.add(new DefaultFFAMatchImpl(kitName, arena, kit, maxPlayers));
+            if (kit.getMaxFfaPlayers() <= 0) {
+                kit.setMaxFfaPlayers(this.defaultPlayerSize);
+                Logger.logError("FFA match for kit " + kit.getName() + " has a max player size of 0. Setting to default of " + this.defaultPlayerSize + " players.");
+            }
+
+            this.createFFAMatch(arena, kit, kit.getMaxFfaPlayers());
         }
     }
 
     /**
-     * Save all FFA matches
-     */
-    public void saveFFAMatches() {
-        this.matches.forEach(this::saveFFAMatch);
-    }
-
-    /**
-     * Save an FFA match
+     * Creates a new FFA match with the given parameters.
      *
-     * @param match The match to save
-     */
-    public void saveFFAMatch(AbstractFFAMatch match) {
-        String name = "ffa." + match.getKit().getName();
-        FileConfiguration config = Alley.getInstance().getConfigService().getFfaConfig();
-        config.set(name, null);
-        config.set(name + ".arena", match.getArena().getName());
-        config.set(name + ".maxPlayers", match.getMaxPlayers());
-        Alley.getInstance().getConfigService().saveConfig(Alley.getInstance().getConfigService().getConfigFile("storage/ffa.yml"), config);
-    }
-
-    /**
-     * Create a new FFA match
-     *
-     * @param arena The arena the match is being played in
-     * @param kit The kit the players are using
+     * @param arena      The arena the match is being played in
+     * @param kit        The kit the players are using
      * @param maxPlayers The maximum amount of players allowed in the match
      */
     public void createFFAMatch(AbstractArena arena, Kit kit, int maxPlayers) {
         DefaultFFAMatchImpl match = new DefaultFFAMatchImpl(kit.getName(), arena, kit, maxPlayers);
-        matches.add(match);
-        this.saveFFAMatch(match);
+        this.matches.add(match);
     }
 
     /**
-     * Delete an FFA match
-     *
-     * @param match The match to delete
-     */
-    public void deleteFFAMatch(AbstractFFAMatch match) {
-        this.matches.remove(match);
-        FileConfiguration config = Alley.getInstance().getConfigService().getConfig("storage/ffa.yml");
-        config.set("ffa." + match.getKit().getName(), null);
-        Alley.getInstance().getFfaService().saveFFAMatches();
-    }
-
-    /**
-     * Get an FFA match by kit name
-     *
-     * @param kitName The name of the kit
-     * @return The FFA match
-     */
-    public AbstractFFAMatch getFFAMatch(String kitName) {
-        return this.matches.stream().filter(match -> match.getKit().getName().equalsIgnoreCase(kitName)).findFirst().orElse(null);
-    }
-
-    /**
-     * Get an FFA match by player
-     *
-     * @param player The player
-     * @return The FFA match
-     */
-    public AbstractFFAMatch getFFAMatch(Player player) {
-        return this.matches.stream().filter(match -> match.getPlayers().contains(player)).findFirst().orElse(null);
-    }
-
-    /**
-     * Get an FFA match by player UUID.
+     * Get an FFA match instance by the player.
      *
      * @param player The player
      * @return An Optional containing the FFA match if found, or empty if not
@@ -135,5 +83,51 @@ public class FFAService {
         return this.matches.stream()
                 .filter(match -> match.getPlayers().contains(player))
                 .findFirst();
+    }
+
+    /**
+     * Method to get an FFA match instance by its name.
+     *
+     * @param kitName The name of the kit the match is using
+     * @return The FFA match instance
+     */
+    public AbstractFFAMatch getFFAMatch(String kitName) {
+        return this.matches.stream().filter(match -> match.getKit().getName().equalsIgnoreCase(kitName)).findFirst().orElse(null);
+    }
+
+    /**
+     * Get an FFA match instance by the player.
+     *
+     * @param player The player whose in the match.
+     * @return The FFA match instance
+     */
+    public AbstractFFAMatch getFFAMatch(Player player) {
+        return this.matches.stream().filter(match -> match.getPlayers().contains(player)).findFirst().orElse(null);
+    }
+
+    public void reloadFFAKits() {
+        this.matches.forEach(match -> match.getPlayers().forEach(player -> {
+            player.sendMessage(CC.translate("&cThe FFA match has been reloaded. Please rejoin."));
+            match.leave(player);
+        }));
+
+        this.matches.clear();
+        this.ffaKits.clear();
+
+        this.ffaKits.addAll(this.plugin.getKitService().getKits().stream().filter(Kit::isFfaEnabled).collect(Collectors.toList()));
+        this.ffaKits.forEach(kit -> {
+            AbstractArena arena = this.plugin.getArenaService().getArenaByName(kit.getFfaArenaName());
+            if (arena == null) {
+                Logger.logError("Kit " + kit.getName() + " has no FFA arena set. Please set the FFA arena in the kit settings.");
+                return;
+            }
+
+            if (kit.getMaxFfaPlayers() <= 0) {
+                kit.setMaxFfaPlayers(this.defaultPlayerSize);
+                Logger.logError("FFA match for kit " + kit.getName() + " has a max player size of 0. Setting to default of " + this.defaultPlayerSize + " players.");
+            }
+
+            this.createFFAMatch(arena, kit, kit.getMaxFfaPlayers());
+        });
     }
 }

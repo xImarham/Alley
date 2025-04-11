@@ -101,7 +101,7 @@ public class StatisticsMenu extends Menu {
                 ));
             }
 
-            if (this.kit.isFfaKit() && this.profile.hasParticipatedInFFA()) {
+            if (this.kit.isFfaEnabled() && this.profile.hasParticipatedInFFA()) {
                 lore.addAll(Arrays.asList(
                         "",
                         "&b&lFFA",

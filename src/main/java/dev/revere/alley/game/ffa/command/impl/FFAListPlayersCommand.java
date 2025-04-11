@@ -1,4 +1,4 @@
-package dev.revere.alley.game.ffa.command.admin;
+package dev.revere.alley.game.ffa.command.impl;
 
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
@@ -12,18 +12,18 @@ import org.bukkit.entity.Player;
  * @project Alley
  * @date 5/27/2024
  */
-public class FFADeleteCommand extends BaseCommand {
-    @CommandData(name = "ffa.delete", isAdminOnly = true)
+public class FFAListPlayersCommand extends BaseCommand {
+    @CommandData(name = "ffa.listplayers", isAdminOnly = true)
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
         String[] args = command.getArgs();
 
         if (args.length != 1) {
-            player.sendMessage(CC.translate("&cUsage: /ffa delete <kit>"));
+            player.sendMessage(CC.translate("&cUsage: /ffa listplayers <kit>"));
             return;
         }
-
+        
         String kitName = args[0];
         AbstractFFAMatch match = this.plugin.getFfaService().getFFAMatch(kitName);
         if (match == null) {
@@ -31,7 +31,12 @@ public class FFADeleteCommand extends BaseCommand {
             return;
         }
 
-        this.plugin.getFfaService().deleteFFAMatch(match);
-        player.sendMessage(CC.translate("&aSuccessfully deleted the FFA match."));
+        player.sendMessage("");
+        player.sendMessage(CC.translate("     &b&l" + match.getKit().getDisplayName() + " Player List &f(" + match.getPlayers().size() + "&f)"));
+        if (match.getPlayers().isEmpty()) {
+            player.sendMessage(CC.translate("      &f● &cNo Players available."));
+        }
+        match.getPlayers().forEach(participant -> player.sendMessage(CC.translate("      &f● &b" + participant.getName())));
+        player.sendMessage("");
     }
 }

@@ -77,11 +77,8 @@ public class QueuesMenuModern extends Menu {
                 //TODO: Implement bot fights :v
                 break;
             case FFA:
-                int slot = 10;
-
                 for (AbstractFFAMatch match : this.plugin.getFfaService().getMatches()) {
-                    buttons.put(slot, new FFAButton(match));
-                    slot++;
+                    buttons.put(match.getKit().getFfaSlot(), new FFAButton(match));
                 }
 
                 break;
