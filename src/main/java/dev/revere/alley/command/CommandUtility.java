@@ -1,12 +1,12 @@
 package dev.revere.alley.command;
 
-import dev.revere.alley.command.impl.donator.HostCommand;
-import dev.revere.alley.command.impl.donator.emoji.EmojiCommand;
+import dev.revere.alley.command.impl.other.*;
+import dev.revere.alley.game.host.command.HostCommand;
+import dev.revere.alley.essential.emoji.command.EmojiCommand;
 import dev.revere.alley.command.impl.main.AlleyCommand;
 import dev.revere.alley.command.impl.main.AlleyDebugCommand;
 import dev.revere.alley.command.impl.main.AlleyReloadCommand;
-import dev.revere.alley.essential.command.*;
-import dev.revere.alley.essential.command.troll.*;
+import dev.revere.alley.command.impl.other.troll.*;
 import dev.revere.alley.feature.arena.command.ArenaCommand;
 import dev.revere.alley.feature.cosmetic.command.CosmeticCommand;
 import dev.revere.alley.feature.division.command.DivisionCommand;

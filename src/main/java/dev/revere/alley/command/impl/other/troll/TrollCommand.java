@@ -1,4 +1,4 @@
-package dev.revere.alley.essential.command.troll;
+package dev.revere.alley.command.impl.other.troll;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;

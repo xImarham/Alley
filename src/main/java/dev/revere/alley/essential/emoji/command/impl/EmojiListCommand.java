@@ -1,4 +1,4 @@
-package dev.revere.alley.command.impl.donator.emoji.impl;
+package dev.revere.alley.essential.emoji.command.impl;
 
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;

@@ -19,10 +19,27 @@ public class DateFormatter {
 
     /**
      * Constructor for the DateFormatter class.
+     * <p> </p>
+     * Constructs a new {@link DateFormatter} using the specified {@link EnumDateFormat}
+     * and a provided time in milliseconds.
+     * <p>
+     * This class is useful for formatting timestamps into readable or styled formats,
+     * including custom formats for Discord or in-game display.
+     * </p>
      *
-     * @param dateFormat The date format to use.
-     * @param time The time in milliseconds since the epoch.
+     * <h3>Example Usage:</h3>
+     * <pre>{@code
+     * // Create a formatter using the current time and a predefined format
+     * DateFormatter currentTime = new DateFormatter(EnumDateFormat.TIME, System.currentTimeMillis());
+     *
+     * // Format the date using the underlying SimpleDateFormat
+     * String formattedTime = currentTime.getDateFormat().format(currentTime.getDate());
+     * }</pre>
+     *
+     * @param dateFormat The date format pattern to use, defined by {@link EnumDateFormat}.
+     * @param time       The timestamp in milliseconds since epoch.
      */
+
     public DateFormatter(EnumDateFormat dateFormat, long time) {
         this.date = new Date(time);
         this.dateFormat = new SimpleDateFormat(dateFormat.getFormat());

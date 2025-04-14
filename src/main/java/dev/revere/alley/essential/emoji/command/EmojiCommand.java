@@ -1,9 +1,9 @@
-package dev.revere.alley.command.impl.donator.emoji;
+package dev.revere.alley.essential.emoji.command;
 
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
-import dev.revere.alley.command.impl.donator.emoji.impl.EmojiListCommand;
+import dev.revere.alley.essential.emoji.command.impl.EmojiListCommand;
 import dev.revere.alley.essential.emoji.enums.EnumEmojiType;
 import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.util.chat.ClickableUtil;

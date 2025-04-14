@@ -18,6 +18,12 @@ game:
   # The radius of the portal in blocks.
   portal-radius: 5
 
+essentials:
+  emojis: true # Whether to enable emojis in the chat or not (E. g. :smile:)
+  chat-logging: # Setting to log the in-game chat to a specific discord channel via webhook (OPTIONAL)
+    enabled: false
+    webhook-url: "" # create a webhook on one of your channels and paste the url here, make sure the channel is accessible to the '@everyone' role, it won't work otherwise
+
 arena:
   # When creating an arena, the following displayname for each
   # arena type will be set. {arena} represents the arena name.

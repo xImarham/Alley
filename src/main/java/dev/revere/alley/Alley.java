@@ -3,12 +3,14 @@ package dev.revere.alley;
 import dev.revere.alley.api.assemble.Assemble;
 import dev.revere.alley.api.command.CommandFramework;
 import dev.revere.alley.api.constant.PluginConstant;
+import dev.revere.alley.api.discord.DiscordBridge;
 import dev.revere.alley.api.menu.MenuListener;
 import dev.revere.alley.api.server.ServerEnvironment;
 import dev.revere.alley.command.CommandDataCollector;
 import dev.revere.alley.command.CommandUtility;
 import dev.revere.alley.config.ConfigService;
 import dev.revere.alley.database.MongoService;
+import dev.revere.alley.essential.chat.ChatListener;
 import dev.revere.alley.essential.emoji.EmojiRepository;
 import dev.revere.alley.essential.emoji.listener.EmojiListener;
 import dev.revere.alley.feature.arena.AbstractArena;
@@ -56,6 +58,7 @@ import dev.revere.alley.tool.logger.Logger;
 import dev.revere.alley.tool.logger.PluginLogger;
 import lombok.Getter;
 import org.bukkit.ChatColor;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.EntityType;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -96,6 +99,7 @@ public class Alley extends JavaPlugin {
     private ServerService serverService;
     private AnimationRepository animationRepository;
     private ReflectionRepository reflectionRepository;
+    private DiscordBridge discordBridge;
 
     private boolean loaded;
 
@@ -109,6 +113,7 @@ public class Alley extends JavaPlugin {
         this.initializeServices();
         this.registerListeners();
         this.runTasks();
+        this.initializeEssentials();
 
         CommandUtility.registerCommands();
         this.serverEnvironment.setupWorld();
@@ -170,7 +175,6 @@ public class Alley extends JavaPlugin {
         services.put(SpawnService.class.getSimpleName(), () -> this.spawnService = new SpawnService(this.configService));
         services.put(FFASpawnService.class.getSimpleName(), () -> this.ffaSpawnService = new FFASpawnService());
         services.put(DuelRequestService.class.getSimpleName(), () -> this.duelRequestService = new DuelRequestService(this));
-        services.put(EmojiRepository.class.getSimpleName(), () -> this.emojiRepository = new EmojiRepository());
         services.put(CombatService.class.getSimpleName(), () -> this.combatService = new CombatService());
         services.put(LeaderboardService.class.getSimpleName(), () -> this.leaderboardService = new LeaderboardService());
         services.put(EloCalculator.class.getSimpleName(), () -> this.eloCalculator = new EloCalculator());
@@ -214,5 +218,25 @@ public class Alley extends JavaPlugin {
         }
 
         runnables.forEach(Logger::logTimeTask);
+    }
+
+    private void initializeEssentials() {
+        FileConfiguration config = this.configService.getSettingsConfig();
+
+        Logger.logTime("Essential Services", () -> {
+            if (config.getBoolean("essentials.emojis")) {
+                this.emojiRepository = new EmojiRepository();
+                this.getServer().getPluginManager().registerEvents(new EmojiListener(this), this);
+                Logger.log("Emojis have been enabled.");
+            }
+
+
+            String webhookUrl = config.getString("essentials.chat-logging.webhook-url");
+            if (config.getBoolean("essentials.chat-logging.enabled")) {
+                this.discordBridge = new DiscordBridge(this, webhookUrl);
+                this.getServer().getPluginManager().registerEvents(new ChatListener(this), this);
+                Logger.log("Chat logging is enabled. Discord Webhook URL: " + webhookUrl);
+            }
+        });
     }
 }

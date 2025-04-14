@@ -1,4 +1,4 @@
-package dev.revere.alley.command.impl.donator;
+package dev.revere.alley.game.host.command;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
