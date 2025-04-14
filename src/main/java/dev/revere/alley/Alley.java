@@ -64,6 +64,23 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.*;
 
+/**
+ * Alley – A modern, modular Practice PvP core built from the ground up for Minecraft 1.8.
+ * <p>
+ * Developed by Revere Inc., Alley focuses on clean, professional, and readable code,
+ * making it easy for developers to jump into practice PvP development with minimal friction.
+ * </p>
+ * <p>
+ * Alley is open source under the terms described in the README:
+ * <a href="https://github.com/RevereInc/alley-practice">GitHub Repository</a>
+ * </p>
+ *
+ * @author  Emmy, Remi
+ * @version 2.0 — Complete recode (entirely rewritten from scratch)
+ * @since   19/04/2024
+ * @see     <a href="https://revere.dev">revere.dev</a>
+ * @see     <a href="https://discord.gg/revere">Discord Support</a>
+ */
 @Getter
 public class Alley extends JavaPlugin {
 
