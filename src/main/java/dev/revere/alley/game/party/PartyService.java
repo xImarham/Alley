@@ -310,7 +310,7 @@ public class PartyService {
     private TextComponent getClickable(Player sender) {
         return ClickableUtil.createComponent(
                 " &a(Click to accept)",
-                "/party accept " + sender.getName(),
+                "/party join " + sender.getName(),
                 "&aClick to accept &b" + sender.getName() + "&a's party invitation."
         );
     }
