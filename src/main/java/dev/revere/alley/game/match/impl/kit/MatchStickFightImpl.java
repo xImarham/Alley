@@ -47,7 +47,6 @@ public class MatchStickFightImpl extends MatchRoundsRegularImpl {
         this.participantA = participantA;
         this.participantB = participantB;
         this.rounds = rounds;
-        this.scorer = "";
     }
 
     @Override
@@ -111,7 +110,7 @@ public class MatchStickFightImpl extends MatchRoundsRegularImpl {
         this.loser = this.participantA.isAllDead() ? this.participantA : this.participantB;
         this.currentRound++;
 
-        this.broadcastPlayerScoreMessage(this.winner, this.loser, this.scorer);
+        this.broadcastTeamScoreMessage(this.winner, this.loser);
         this.removePlacedBlocks();
 
         if (this.canEndMatch()) {

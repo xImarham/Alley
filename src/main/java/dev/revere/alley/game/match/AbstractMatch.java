@@ -106,6 +106,8 @@ public abstract class AbstractMatch {
             ((StandAloneArena) this.arena).setActive(true);
         }
 
+        this.sendMessage(CC.translate("&7[&bMatch&7] &b" + this.getParticipants().get(0).getPlayer().getUsername() + " &avs &b" + this.getParticipants().get(1).getPlayer().getUsername()));
+
         this.state = EnumMatchState.STARTING;
         this.runnable = new MatchRunnable(this);
         this.runnable.runTaskTimer(Alley.getInstance(), 0L, 20L);

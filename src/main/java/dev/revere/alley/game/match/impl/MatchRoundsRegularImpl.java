@@ -76,7 +76,7 @@ public class MatchRoundsRegularImpl extends MatchRegularImpl {
         this.loser = this.participantA.isAllDead() ? this.participantA : this.participantB;
         this.currentRound++;
 
-        this.broadcastTeamScoreMessage(this.winner, this.loser);
+        this.broadcastPlayerScoreMessage(this.winner, this.loser, this.scorer);
 
         if (this.canEndMatch()) {
             super.handleRoundEnd();
