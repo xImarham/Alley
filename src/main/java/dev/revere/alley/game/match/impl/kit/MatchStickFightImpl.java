@@ -87,7 +87,6 @@ public class MatchStickFightImpl extends MatchRoundsRegularImpl {
                 this.handleRoundEnd(gamePlayer.getPlayer());
                 Bukkit.broadcastMessage("(!) Player who died: " + gamePlayer.getPlayer().getName());
             }
-
         } else {
             MatchGamePlayerImpl gamePlayer = participant.getPlayer();
             gamePlayer.getData().incrementDeaths();
@@ -97,7 +96,6 @@ public class MatchStickFightImpl extends MatchRoundsRegularImpl {
         }
     }
 
-
     @Override
     public void handleRespawn(Player player) {
         GameParticipant<MatchGamePlayerImpl> participant = this.participantA.containsPlayer(player.getUniqueId()) ? this.participantA : this.participantB;
@@ -105,9 +103,11 @@ public class MatchStickFightImpl extends MatchRoundsRegularImpl {
     }
 
     public void handleRoundEnd(Player player) {
-        this.winner = this.participantA.isAllDead() ? this.participantB : this.participantA;
+        boolean isADead = this.participantA.containsPlayer(player.getUniqueId());
+        this.loser = isADead ? this.participantA : this.participantB;
+        this.winner = isADead ? this.participantB : this.participantA;
+
         this.winner.getPlayer().getData().incrementGoals();
-        this.loser = this.participantA.isAllDead() ? this.participantA : this.participantB;
         this.currentRound++;
 
         this.broadcastTeamScoreMessage(this.winner, this.loser);

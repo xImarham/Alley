@@ -117,11 +117,11 @@ public class ProfileService {
     public void archiveProfile(Profile profile) {
         Document archiveDocument = new Document();
 
-        DateFormatter formattedDate = new DateFormatter(EnumDateFormat.DATE_PLUS_TIME, System.currentTimeMillis());
+        DateFormatter dateFormatter = new DateFormatter(EnumDateFormat.DATE_PLUS_TIME, System.currentTimeMillis());
         String archiveId = UUID.randomUUID().toString();
 
         archiveDocument.put("archive_id", archiveId);
-        archiveDocument.put("archived_at", formattedDate);
+        archiveDocument.put("archived_at", dateFormatter.getDateFormat().format(dateFormatter.getDate()));
         archiveDocument.put("data", MongoUtility.toDocument(profile));
 
         Alley.getInstance().getMongoService().getMongoDatabase().getCollection("profile_archives").updateOne(
