@@ -98,7 +98,7 @@ public class MatchListener implements Listener {
             if (match.getState() == EnumMatchState.STARTING || match.getState() == EnumMatchState.ENDING_ROUND) {
                 if (matchKit.isSettingEnabled(KitSettingDenyMovementImpl.class)) {
                     List<GameParticipant<MatchGamePlayerImpl>> participants = match.getParticipants();
-                    MatchUtility.denyPlayerMovement(participants, match);
+                    match.denyPlayerMovement(participants);
                 }
             }
         }
@@ -237,6 +237,8 @@ public class MatchListener implements Listener {
                     opponent.setEliminated(true);
 
                     if (match.canEndRound()) {
+
+                        match.setScorer(player.getName());
                         match.handleRoundEnd();
 
                         if (match.canEndMatch()) {

@@ -22,6 +22,7 @@ import dev.revere.alley.game.match.enums.EnumMatchState;
 import dev.revere.alley.game.match.impl.MatchRegularImpl;
 import dev.revere.alley.game.match.impl.MatchRoundsRegularImpl;
 import dev.revere.alley.game.match.impl.kit.MatchStickFightImpl;
+import dev.revere.alley.game.match.player.GamePlayer;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.game.match.runnable.MatchRunnable;
@@ -64,7 +65,6 @@ public abstract class AbstractMatch {
     private MatchRunnable runnable;
     private EnumMatchState state;
 
-    //private Map<BlockState, Location> changedBlocks;
     private Map<BlockState, Location> brokenBlocks;
     private Map<BlockState, Location> placedBlocks;
 
@@ -86,7 +86,6 @@ public abstract class AbstractMatch {
         this.arena = arena;
         this.ranked = ranked;
         this.snapshots = new ArrayList<>();
-        //this.changedBlocks = new HashMap<>();
         this.placedBlocks = new HashMap<>();
         this.brokenBlocks = new HashMap<>();
         this.spectators = new CopyOnWriteArrayList<>();
@@ -713,6 +712,49 @@ public abstract class AbstractMatch {
                 " &b&l● &fWin Streak: &b" + "N/A" + " &f(Best: " + "N/A" + ")",
                 ""
         ).forEach(line -> winner.sendMessage(CC.translate(line)));
+    }
+
+    /**
+     * Intentionally made to deny player movement during a match countdown.
+     *
+     * @param participants the participants
+     */
+    public void denyPlayerMovement(List<GameParticipant<MatchGamePlayerImpl>> participants) {
+        if (participants.size() == 2) {
+            GameParticipant<?> participantA = participants.get(0);
+            GameParticipant<?> participantB = participants.get(1);
+
+            Location locationA = this.arena.getPos1();
+            Location locationB = this.arena.getPos2();
+
+            for (GamePlayer gamePlayer : participantA.getPlayers()) {
+                Player participantPlayer = gamePlayer.getPlayer();
+                if (participantPlayer != null) {
+                    this.teleportBackIfMoved(participantPlayer, locationA);
+                }
+            }
+
+            for (GamePlayer gamePlayer : participantB.getPlayers()) {
+                Player participantPlayer = gamePlayer.getPlayer();
+                if (participantPlayer != null) {
+                    this.teleportBackIfMoved(participantPlayer, locationB);
+                }
+            }
+        }
+    }
+
+    /**
+     * Teleports the player back to their designated position if they moved.
+     *
+     * @param player   The player to check.
+     * @param location The designated location.
+     */
+    private void teleportBackIfMoved(Player player, Location location) {
+        Location playerLocation = player.getLocation();
+
+        if (playerLocation.getBlockX() != location.getBlockX() || playerLocation.getBlockZ() != location.getBlockZ()) {
+            player.teleport(new Location(location.getWorld(), location.getX(), playerLocation.getY(), location.getZ(), playerLocation.getYaw(), playerLocation.getPitch()));
+        }
     }
 
     /**

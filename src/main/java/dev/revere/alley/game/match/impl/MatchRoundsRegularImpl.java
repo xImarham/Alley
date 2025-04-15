@@ -9,6 +9,7 @@ import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.util.PlayerUtil;
 import lombok.Getter;
+import lombok.Setter;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -31,6 +32,9 @@ public class MatchRoundsRegularImpl extends MatchRegularImpl {
     private final int rounds;
     private int currentRound;
 
+    @Setter
+    private String scorer;
+
     /**
      * Constructor for the RegularMatchImpl class.
      *
@@ -47,6 +51,7 @@ public class MatchRoundsRegularImpl extends MatchRegularImpl {
         this.participantA = participantA;
         this.participantB = participantB;
         this.rounds = rounds;
+        this.scorer = "Unknown";
     }
 
     @Override
@@ -71,7 +76,7 @@ public class MatchRoundsRegularImpl extends MatchRegularImpl {
         this.loser = this.participantA.isAllDead() ? this.participantA : this.participantB;
         this.currentRound++;
 
-        this.broadcastScoredMessage(this.winner, this.loser);
+        this.broadcastTeamScoreMessage(this.winner, this.loser);
 
         if (this.canEndMatch()) {
             super.handleRoundEnd();
@@ -116,22 +121,49 @@ public class MatchRoundsRegularImpl extends MatchRegularImpl {
     }
 
     /**
-     * Broadcasts a message to all players in the match when a player scores.
+     * Broadcasts a message to all players in the match when a player of a team scores.
      *
      * @param winner The player who scored.
      * @param loser  The player who was scored on.
      */
-    public void broadcastScoredMessage(GameParticipant<MatchGamePlayerImpl> winner, GameParticipant<MatchGamePlayerImpl> loser) {
+    public void broadcastTeamScoreMessage(GameParticipant<MatchGamePlayerImpl> winner, GameParticipant<MatchGamePlayerImpl> loser) {
         ChatColor teamWinnerColor = this.getTeamColor(winner);
         ChatColor teamLoserColor = this.getTeamColor(loser);
 
         FileConfiguration config = Alley.getInstance().getConfigService().getMessagesConfig();
 
         if (config.getBoolean("match.scored.enabled")) {
-            for (String message : config.getStringList("match.scored.format")) {
+            for (String message : config.getStringList("match.scored.format.team")) {
                 this.notifyAll(message
                         .replace("{winner-color}", teamWinnerColor.toString())
                         .replace("{winner}", winner.getPlayer().getUsername())
+                        .replace("{winner-goals}", String.valueOf(winner.getPlayer().getData().getGoals()))
+                        .replace("{loser-color}", teamLoserColor.toString())
+                        .replace("{loser}", loser.getPlayer().getUsername())
+                        .replace("{loser-goals}", String.valueOf(loser.getPlayer().getData().getGoals()))
+                );
+            }
+        }
+    }
+
+    /**
+     * Broadcasts a message to all players in the match when a player scores.
+     *
+     * @param winner The player who scored.
+     * @param loser  The player who was scored on.
+     * @param scorer The name of the player who scored.
+     */
+    public void broadcastPlayerScoreMessage(GameParticipant<MatchGamePlayerImpl> winner, GameParticipant<MatchGamePlayerImpl> loser, String scorer) {
+        ChatColor teamWinnerColor = this.getTeamColor(winner);
+        ChatColor teamLoserColor = this.getTeamColor(loser);
+
+        FileConfiguration config = Alley.getInstance().getConfigService().getMessagesConfig();
+
+        if (config.getBoolean("match.scored.enabled")) {
+            for (String message : config.getStringList("match.scored.format.solo")) {
+                this.notifyAll(message
+                        .replace("{winner-color}", teamWinnerColor.toString())
+                        .replace("{scorer}", scorer)
                         .replace("{winner-goals}", String.valueOf(winner.getPlayer().getData().getGoals()))
                         .replace("{loser-color}", teamLoserColor.toString())
                         .replace("{loser}", loser.getPlayer().getUsername())

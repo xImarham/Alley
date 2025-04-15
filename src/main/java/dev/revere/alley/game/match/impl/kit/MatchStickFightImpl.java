@@ -8,8 +8,10 @@ import dev.revere.alley.game.match.enums.EnumMatchState;
 import dev.revere.alley.game.match.impl.MatchRoundsRegularImpl;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
+import dev.revere.alley.game.match.player.participant.TeamGameParticipant;
 import dev.revere.alley.game.match.snapshot.Snapshot;
 import lombok.Getter;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
@@ -45,6 +47,7 @@ public class MatchStickFightImpl extends MatchRoundsRegularImpl {
         this.participantA = participantA;
         this.participantB = participantB;
         this.rounds = rounds;
+        this.scorer = "";
     }
 
     @Override
@@ -64,12 +67,37 @@ public class MatchStickFightImpl extends MatchRoundsRegularImpl {
 
     @Override
     public void handleDeath(Player player) {
-        GameParticipant<MatchGamePlayerImpl> participant = this.participantA.containsPlayer(player.getUniqueId()) ? this.participantA : this.participantB;
-        participant.getPlayer().getData().incrementDeaths();
-        participant.getPlayer().setDead(true);
+        GameParticipant<MatchGamePlayerImpl> participant;
 
-        this.handleRoundEnd(player);
+        if (participantA.containsPlayer(player.getUniqueId())) {
+            participant = participantA;
+        } else {
+            participant = participantB;
+        }
+
+        if (participant instanceof TeamGameParticipant<?>) {
+            TeamGameParticipant<MatchGamePlayerImpl> team = (TeamGameParticipant<MatchGamePlayerImpl>) participant;
+            MatchGamePlayerImpl gamePlayer = team.getPlayers().stream()
+                    .filter(gamePlayer1 -> gamePlayer1.getUuid().equals(player.getUniqueId()))
+                    .findFirst()
+                    .orElse(null);
+
+            if (gamePlayer != null) {
+                gamePlayer.getData().incrementDeaths();
+                gamePlayer.setDead(true);
+                this.handleRoundEnd(gamePlayer.getPlayer());
+                Bukkit.broadcastMessage("(!) Player who died: " + gamePlayer.getPlayer().getName());
+            }
+
+        } else {
+            MatchGamePlayerImpl gamePlayer = participant.getPlayer();
+            gamePlayer.getData().incrementDeaths();
+            gamePlayer.setDead(true);
+            this.handleRoundEnd(gamePlayer.getPlayer());
+            Bukkit.broadcastMessage("(?) Player who died: " + gamePlayer.getPlayer().getName());
+        }
     }
+
 
     @Override
     public void handleRespawn(Player player) {
@@ -83,7 +111,7 @@ public class MatchStickFightImpl extends MatchRoundsRegularImpl {
         this.loser = this.participantA.isAllDead() ? this.participantA : this.participantB;
         this.currentRound++;
 
-        this.broadcastScoredMessage(this.winner, this.loser);
+        this.broadcastPlayerScoreMessage(this.winner, this.loser, this.scorer);
         this.removePlacedBlocks();
 
         if (this.canEndMatch()) {
@@ -93,6 +121,11 @@ public class MatchStickFightImpl extends MatchRoundsRegularImpl {
 
             if (this.participantA.getPlayers().size() == 1 && this.participantB.getPlayers().size() == 1) {
                 MatchUtility.sendMatchResult(this, winner.getPlayer().getPlayer().getName(), loser.getPlayer().getPlayer().getName());
+            } else {
+                this.sendMessage("");
+                this.sendMessage("Winners: " + this.winner.getConjoinedNames());
+                this.sendMessage("Losers: " + this.loser.getConjoinedNames());
+                this.sendMessage("");
             }
 
             if (!this.isRanked()) {

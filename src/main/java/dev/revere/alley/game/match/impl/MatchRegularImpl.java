@@ -118,6 +118,11 @@ public class MatchRegularImpl extends AbstractMatch {
 
         if (this.participantA.getPlayers().size() == 1 && this.participantB.getPlayers().size() == 1) {
             MatchUtility.sendMatchResult(this, this.winner.getPlayer().getPlayer().getName(), this.loser.getPlayer().getPlayer().getName());
+        } else {
+            this.sendMessage("");
+            this.sendMessage("Winners: " + this.winner.getConjoinedNames());
+            this.sendMessage("Losers: " + this.loser.getConjoinedNames());
+            this.sendMessage("");
         }
 
         if (!this.isRanked()) {

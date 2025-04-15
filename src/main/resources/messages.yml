@@ -95,10 +95,16 @@ match:
   scored:
     enabled: true
     format:
-      - ""
-      - "{winner-color}&l{winner} &b&lscored!"
-      - "{winner-color}&l{winner-goals} &7- {loser-color}&l{loser-goals}"
-      - ""
+      solo:
+        - ""
+        - "{winner-color}&l{scorer} &b&lscored!"
+        - "{winner-color}&l{winner-goals} &7- {loser-color}&l{loser-goals}"
+        - ""
+      team:
+        - ""
+        - "{winner-color}&l{winner}'s Team &b&lscored!"
+        - "{winner-color}&l{winner-goals} &7- {loser-color}&l{loser-goals}"
+        - ""
   ended:
     match-result:
       format:

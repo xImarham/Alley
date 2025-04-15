@@ -26,49 +26,6 @@ import java.util.List;
  */
 @UtilityClass
 public class MatchUtility {
-    /**
-     * Intentionally made to deny player movement during a match countdown.
-     *
-     * @param participants the participants
-     * @param match        the match
-     */
-    public void denyPlayerMovement(List<GameParticipant<MatchGamePlayerImpl>> participants, AbstractMatch match) {
-        if (participants.size() == 2) {
-            GameParticipant<?> participantA = participants.get(0);
-            GameParticipant<?> participantB = participants.get(1);
-
-            Location locationA = match.getArena().getPos1();
-            Location locationB = match.getArena().getPos2();
-
-            for (GamePlayer gamePlayer : participantA.getPlayers()) {
-                Player participantPlayer = gamePlayer.getPlayer();
-                if (participantPlayer != null) {
-                    teleportBackIfMoved(participantPlayer, locationA);
-                }
-            }
-
-            for (GamePlayer gamePlayer : participantB.getPlayers()) {
-                Player participantPlayer = gamePlayer.getPlayer();
-                if (participantPlayer != null) {
-                    teleportBackIfMoved(participantPlayer, locationB);
-                }
-            }
-        }
-    }
-
-    /**
-     * Teleports the player back to their designated position if they moved.
-     *
-     * @param player   The player to check.
-     * @param location The designated location.
-     */
-    private void teleportBackIfMoved(Player player, Location location) {
-        Location playerLocation = player.getLocation();
-
-        if (playerLocation.getBlockX() != location.getBlockX() || playerLocation.getBlockZ() != location.getBlockZ()) {
-            player.teleport(new Location(location.getWorld(), location.getX(), playerLocation.getY(), location.getZ(), playerLocation.getYaw(), playerLocation.getPitch()));
-        }
-    }
 
     /**
      * Check if a location is beyond the bounds of an arena.
@@ -98,6 +55,7 @@ public class MatchUtility {
 
         return !withinBounds;
     }
+
     /**
      * Sends the match result message.
      *
