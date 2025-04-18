@@ -55,7 +55,7 @@ public class BotFightListener implements Listener {
 
         NPC npc = botFight.getBot().getNpc();
         if (npc != null && npc.isSpawned()) {
-            npc.getNavigator().setTarget(realPlayer.getLocation());
+
         }
     }
 
