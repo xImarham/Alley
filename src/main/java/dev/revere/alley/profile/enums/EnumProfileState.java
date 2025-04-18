@@ -9,10 +9,10 @@ import lombok.Getter;
  */
 @Getter
 public enum EnumProfileState {
-
     LOBBY("Lobby", "The player is in the lobby"),
     WAITING("Waiting", "The player is waiting for a match"),
     PLAYING("Playing", "The player is playing a match"),
+    FIGHTING_BOT("Fighting Bot", "The player is fighting a bot"),
     SPECTATING("Spectating", "The player is spectating a match"),
     EDITING("Editing", "The player is editing a kit"),
     PLAYING_TOURNAMENT("Tournament", "The player is in a tournament"),
@@ -24,6 +24,12 @@ public enum EnumProfileState {
     private final String name;
     private final String description;
 
+    /**
+     * Constructor for the EnumProfileState enum.
+     *
+     * @param name        The name of the profile state.
+     * @param description The description of the profile state.
+     */
     EnumProfileState(String name, String description) {
         this.name = name;
         this.description = description;

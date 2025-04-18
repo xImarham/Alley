@@ -3,14 +3,17 @@ package dev.revere.alley.feature.queue.menu;
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.api.menu.Menu;
+import dev.revere.alley.feature.kit.Kit;
 import dev.revere.alley.feature.queue.Queue;
 import dev.revere.alley.feature.queue.QueueService;
 import dev.revere.alley.feature.queue.enums.EnumQueueType;
+import dev.revere.alley.feature.queue.menu.button.BotButton;
 import dev.revere.alley.feature.queue.menu.button.UnrankedButton;
 import dev.revere.alley.game.ffa.AbstractFFAMatch;
 import dev.revere.alley.game.ffa.menu.FFAButton;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.tool.item.ItemBuilder;
+import dev.revere.alley.util.chat.CC;
 import lombok.AllArgsConstructor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -74,7 +77,9 @@ public class QueuesMenuModern extends Menu {
 
                 break;
             case BOTS:
-                //TODO: Implement bot fights :v
+                for (Kit kit : this.plugin.getKitService().getKits()) {
+                    buttons.put(kit.getUnrankedslot(), new BotButton(kit));
+                }
                 break;
             case FFA:
                 for (AbstractFFAMatch match : this.plugin.getFfaService().getMatches()) {
@@ -92,9 +97,9 @@ public class QueuesMenuModern extends Menu {
     /**
      * Get the properties of the unranked button.
      *
-     * @param buttons         the buttons map
+     * @param buttons      the buttons map
      * @param queueService the queue repository
-     * @param profile         the player's profile
+     * @param profile      the player's profile
      */
     private void getUnrankedButton(Map<Integer, Button> buttons, QueueService queueService, Profile profile) {
         String selected = profile.getQueueType() == EnumQueueType.UNRANKED ? "&a&lSELECTED" : "&aClick to play!";
@@ -111,9 +116,9 @@ public class QueuesMenuModern extends Menu {
     /**
      * Get the properties of the bots button.
      *
-     * @param buttons         the buttons map
+     * @param buttons      the buttons map
      * @param queueService the queue repository
-     * @param profile         the player's profile
+     * @param profile      the player's profile
      */
     private void getBotsButton(Map<Integer, Button> buttons, QueueService queueService, Profile profile) {
         String selected = profile.getQueueType() == EnumQueueType.BOTS ? "&a&lSELECTED" : "&c&lIN DEVELOPMENT";
@@ -130,9 +135,9 @@ public class QueuesMenuModern extends Menu {
     /**
      * Get the properties of the FFA button.
      *
-     * @param buttons         the buttons map
+     * @param buttons      the buttons map
      * @param queueService the queue repository
-     * @param profile         the player's profile
+     * @param profile      the player's profile
      */
     private void getFFAButton(Map<Integer, Button> buttons, QueueService queueService, Profile profile) {
         String selected = profile.getQueueType() == EnumQueueType.FFA ? "&a&lSELECTED" : "&aClick to play!";
@@ -176,6 +181,10 @@ public class QueuesMenuModern extends Menu {
             switch (this.material) {
                 case DIAMOND_SWORD:
                     profile.setQueueType(EnumQueueType.UNRANKED);
+                    break;
+                case GOLD_SWORD:
+                    //profile.setQueueType(EnumQueueType.BOTS);
+                    player.sendMessage(CC.translate("&c&lThis feature is currently being worked on."));
                     break;
                 case GOLD_AXE:
                     profile.setQueueType(EnumQueueType.FFA);

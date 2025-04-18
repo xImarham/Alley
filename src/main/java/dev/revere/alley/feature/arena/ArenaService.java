@@ -169,4 +169,22 @@ public class ArenaService {
         }
         return selectedArena;
     }
+
+    /**
+     * Get a random arena of type StandAlone
+     *
+     * @return the arena
+     */
+    public AbstractArena getRandomStandAloneArena() {
+        List<AbstractArena> availableArenas = this.arenas.stream()
+                .filter(arena -> arena.getType() == EnumArenaType.STANDALONE)
+                .filter(AbstractArena::isEnabled)
+                .collect(Collectors.toList());
+
+        if (availableArenas.isEmpty()) {
+            return null;
+        }
+
+        return availableArenas.get(ThreadLocalRandom.current().nextInt(availableArenas.size()));
+    }
 }

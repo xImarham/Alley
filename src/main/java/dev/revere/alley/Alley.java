@@ -34,6 +34,10 @@ import dev.revere.alley.feature.spawn.SpawnService;
 import dev.revere.alley.feature.spawn.listener.SpawnListener;
 import dev.revere.alley.feature.tablist.task.TablistUpdateTask;
 import dev.revere.alley.feature.world.WorldListener;
+import dev.revere.alley.game.bot.BotFightRepository;
+import dev.revere.alley.game.bot.mechanics.BotMechanics;
+import dev.revere.alley.game.bot.listener.BotFightDeathListener;
+import dev.revere.alley.game.bot.listener.BotFightListener;
 import dev.revere.alley.game.duel.DuelRequestService;
 import dev.revere.alley.game.ffa.FFAService;
 import dev.revere.alley.game.ffa.cuboid.FFASpawnService;
@@ -117,6 +121,8 @@ public class Alley extends JavaPlugin {
     private AnimationRepository animationRepository;
     private ReflectionRepository reflectionRepository;
     private DiscordBridge discordBridge;
+    private BotMechanics botMechanics;
+    private BotFightRepository botFightRepository;
 
     private boolean loaded;
 
@@ -199,6 +205,8 @@ public class Alley extends JavaPlugin {
         services.put(AnimationRepository.class.getSimpleName(), () -> this.animationRepository = new AnimationRepository(this));
         services.put(Assemble.class.getSimpleName() + " API", () -> this.assemble = new Assemble(this, new ScoreboardVisualizer(this)));
         services.put(ReflectionRepository.class.getSimpleName(), () -> this.reflectionRepository = new ReflectionRepository(this));
+        services.put(BotMechanics.class.getSimpleName(), () -> this.botMechanics = new BotMechanics());
+        services.put(BotFightRepository.class.getSimpleName(), () -> this.botFightRepository = new BotFightRepository());
 
         services.forEach(Logger::logTime);
     }
@@ -220,7 +228,9 @@ public class Alley extends JavaPlugin {
                 new FFACuboidListener(this.ffaSpawnService.getCuboid(), this),
                 new WorldListener(),
                 new EmojiListener(this),
-                new CombatListener(this)
+                new CombatListener(this),
+                new BotFightListener(),
+                new BotFightDeathListener()
         ).forEach(listener -> getServer().getPluginManager().registerEvents(listener, this));
     }
 

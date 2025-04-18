@@ -7,6 +7,7 @@ import dev.revere.alley.feature.kit.Kit;
 import dev.revere.alley.feature.leaderboard.enums.EnumLeaderboardType;
 import dev.revere.alley.feature.queue.QueueProfile;
 import dev.revere.alley.feature.queue.enums.EnumQueueType;
+import dev.revere.alley.game.bot.BotFight;
 import dev.revere.alley.game.ffa.AbstractFFAMatch;
 import dev.revere.alley.game.match.AbstractMatch;
 import dev.revere.alley.game.party.Party;
@@ -47,6 +48,7 @@ public class Profile {
 
     private AbstractFFAMatch ffaMatch;
     private AbstractMatch match;
+    private BotFight botFight;
     private Party party;
 
     private boolean online;
