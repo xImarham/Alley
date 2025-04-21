@@ -81,14 +81,16 @@ public enum EnumPracticeSettingType {
                     " " + LoreHelper.shownOrHidden(settings.isShowScoreboardLines()),
                     "",
                     "&aClick to change!"
-            )),
+            )
+    ),
 
     COSMETICS(25, "&b&lCosmetics", Material.NETHER_STAR,
             settings -> Arrays.asList(
                     "&fCustomize your cosmetics.",
                     "",
                     "&aClick to view!"
-            ));
+            )
+    );
 
     public final int slot;
     public final String displayName;
