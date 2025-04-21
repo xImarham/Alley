@@ -12,6 +12,11 @@ import org.bukkit.entity.Player;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * @author Emmy
+ * @project Alley
+ * @since 21/04/2025
+ */
 public class PracticeSettingsMenu extends Menu {
 
     @Override

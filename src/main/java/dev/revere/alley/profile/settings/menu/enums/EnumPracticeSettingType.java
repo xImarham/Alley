@@ -8,6 +8,11 @@ import java.util.Arrays;
 import java.util.function.Function;
 import java.util.List;
 
+/**
+ * @author Emmy
+ * @project Alley
+ * @since 21/04/2025
+ */
 public enum EnumPracticeSettingType {
 
     PARTY_MESSAGES(10, "&b&lToggle Party Messages", Material.FEATHER,
