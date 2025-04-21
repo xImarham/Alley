@@ -19,6 +19,9 @@ import java.util.*;
  */
 @Getter
 public class LeaderboardService {
+
+    //TODO: this is just a test, it is gonna be fixed/recoded.
+
     private final Map<Kit, List<LeaderboardRecord>> leaderboardEntries;
 
     public LeaderboardService() {
