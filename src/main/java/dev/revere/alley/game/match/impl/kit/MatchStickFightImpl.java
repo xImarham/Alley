@@ -121,10 +121,7 @@ public class MatchStickFightImpl extends MatchRoundsRegularImpl {
             if (this.participantA.getPlayers().size() == 1 && this.participantB.getPlayers().size() == 1) {
                 MatchUtility.sendMatchResult(this, winner.getPlayer().getPlayer().getName(), loser.getPlayer().getPlayer().getName());
             } else {
-                this.sendMessage("");
-                this.sendMessage("Winners: " + this.winner.getConjoinedNames());
-                this.sendMessage("Losers: " + this.loser.getConjoinedNames());
-                this.sendMessage("");
+                MatchUtility.sendConjoinedMatchResult(this, this.winner, this.loser);
             }
 
             if (!this.isRanked()) {

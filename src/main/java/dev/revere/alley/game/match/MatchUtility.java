@@ -3,7 +3,6 @@ package dev.revere.alley.game.match;
 import dev.revere.alley.Alley;
 import dev.revere.alley.feature.arena.AbstractArena;
 import dev.revere.alley.game.match.enums.EnumMatchState;
-import dev.revere.alley.game.match.player.GamePlayer;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.profile.Profile;
@@ -16,8 +15,6 @@ import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
-
-import java.util.List;
 
 /**
  * @author Emmy
@@ -64,14 +61,19 @@ public class MatchUtility {
      * @param loserName  The name of the loser.
      */
     public void sendMatchResult(AbstractMatch match, String winnerName, String loserName) {
+
+        // this is untested, it might not work as expected :D
+
         FileConfiguration config = Alley.getInstance().getConfigService().getMessagesConfig();
 
-        String winnerCommand = config.getString("match.ended.match-result.winner.command").replace("{winner}", winnerName);
-        String winnerHover = config.getString("match.ended.match-result.winner.hover").replace("{winner}", winnerName);
-        String loserCommand = config.getString("match.ended.match-result.loser.command").replace("{loser}", loserName);
-        String loserHover = config.getString("match.ended.match-result.loser.hover").replace("{loser}", loserName);
+        String path = "match.ended.match-result.regular.";
 
-        for (String line : Alley.getInstance().getConfigService().getMessagesConfig().getStringList("match.ended.match-result.format")) {
+        String winnerCommand = config.getString(path + "winner.command").replace("{winner}", winnerName);
+        String winnerHover = config.getString(path + "winner.hover").replace("{winner}", winnerName);
+        String loserCommand = config.getString(path + "loser.command").replace("{loser}", loserName);
+        String loserHover = config.getString(path + "loser.hover").replace("{loser}", loserName);
+
+        for (String line : Alley.getInstance().getConfigService().getMessagesConfig().getStringList(path + "format")) {
             if (line.contains("{winner}") && line.contains("{loser}")) {
                 String[] parts = line.split("\\{winner}", 2);
 
@@ -122,5 +124,59 @@ public class MatchUtility {
                 match.sendMessage(CC.translate(line));
             }
         }
+    }
+
+    /**
+     * Sends the conjoined match result message.
+     *
+     * @param match               The match.
+     * @param winnerParticipant   The winner participant.
+     * @param loserParticipant    The loser participant.
+     */
+    public void sendConjoinedMatchResult(AbstractMatch match, GameParticipant<MatchGamePlayerImpl> winnerParticipant, GameParticipant<MatchGamePlayerImpl> loserParticipant) {
+        FileConfiguration config = Alley.getInstance().getConfigService().getMessagesConfig();
+        String path = "match.ended.match-result.conjoined.";
+
+        String winnerTeamName = winnerParticipant.getPlayer().getUsername();
+        String loserTeamName = loserParticipant.getPlayer().getUsername();
+
+        for (String line : config.getStringList(path + "format")) {
+            String translated = CC.translate(line)
+                    .replace("{winner}", winnerTeamName)
+                    .replace("{loser}", loserTeamName);
+            match.sendMessage(translated);
+        }
+
+        match.sendMessage(CC.translate("&7&m------------------------------"));
+        match.sendMessage(CC.translate("&aWinner Team: &f" + winnerTeamName));
+
+        for (MatchGamePlayerImpl player : winnerParticipant.getPlayers()) {
+            Player bukkitPlayer = player.getPlayer();
+            String playerName = bukkitPlayer.getName();
+
+            TextComponent playerComponent = new TextComponent(CC.translate("&7- &f" + playerName));
+            playerComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/inventory " + playerName));
+            playerComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+                    new ComponentBuilder(CC.translate("&eClick to view " + playerName + "'s inventory")).create()));
+
+            match.sendCombinedSpigotMessage(playerComponent);
+        }
+
+        match.sendMessage("");
+        match.sendMessage(CC.translate("&cLoser Team: &f" + loserTeamName));
+
+        for (MatchGamePlayerImpl player : loserParticipant.getPlayers()) {
+            Player bukkitPlayer = player.getPlayer();
+            String playerName = bukkitPlayer.getName();
+
+            TextComponent playerComponent = new TextComponent(CC.translate("&7- &f" + playerName));
+            playerComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/inventory " + playerName));
+            playerComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+                    new ComponentBuilder(CC.translate("&eClick to view " + playerName + "'s inventory")).create()));
+
+            match.sendCombinedSpigotMessage(playerComponent);
+        }
+
+        match.sendMessage(CC.translate(""));
     }
 }
