@@ -32,7 +32,7 @@ public class CurrentMatchesMenu extends PaginatedMenu {
      */
     @Override
     public String getPrePaginatedTitle(Player player) {
-        return "&8Current Matches (" + Alley.getInstance().getMatchRepository().getMatches().size() + ")";
+        return "&b&lCurrent Matches (" + Alley.getInstance().getMatchRepository().getMatches().size() + ")";
     }
 
     /**

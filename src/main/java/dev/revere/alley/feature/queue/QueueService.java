@@ -73,7 +73,7 @@ public class QueueService {
      * @return the player count of the game type
      */
     public int getPlayerCountOfGameType(String queue) {
-        EnumProfileState stateForQueue = getStateForQueue(queue);
+        EnumProfileState stateForQueue = this.getStateForQueue(queue);
 
         if (stateForQueue == null) {
             return 0;
@@ -81,7 +81,7 @@ public class QueueService {
 
         return (int) this.plugin.getProfileService().getProfiles().values().stream()
                 .filter(profile -> profile.getState().equals(stateForQueue))
-                .filter(profile -> isMatchForQueue(profile, queue))
+                .filter(profile -> this.isMatchForQueue(profile, queue))
                 .count();
     }
 
@@ -98,6 +98,8 @@ public class QueueService {
                 return EnumProfileState.PLAYING;
             case "FFA":
                 return EnumProfileState.FFA;
+            case "Bots":
+                return EnumProfileState.FIGHTING_BOT;
             default:
                 return null;
         }

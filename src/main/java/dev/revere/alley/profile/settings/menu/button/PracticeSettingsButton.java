@@ -5,7 +5,6 @@ import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.feature.cosmetic.menu.CosmeticsMenu;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumWorldTime;
-import dev.revere.alley.profile.settings.menu.MatchSettingsMenu;
 import dev.revere.alley.tool.item.ItemBuilder;
 import dev.revere.alley.util.chat.CC;
 import lombok.AllArgsConstructor;
@@ -86,7 +85,9 @@ public class PracticeSettingsButton extends Button {
                 }
                 break;
             case BOOK:
-                new MatchSettingsMenu().openMenu(player);
+                //new MatchSettingsMenu().openMenu(player);
+                player.closeInventory();
+                player.sendMessage(CC.translate("&cThis feature is currently in development."));
                 break;
             case NETHER_STAR:
                 new CosmeticsMenu("KillEffect").openMenu(player);

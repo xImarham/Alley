@@ -13,6 +13,7 @@ import dev.revere.alley.game.ffa.AbstractFFAMatch;
 import dev.revere.alley.game.ffa.menu.FFAButton;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.tool.item.ItemBuilder;
+import dev.revere.alley.tool.visual.LoreHelper;
 import dev.revere.alley.util.chat.CC;
 import lombok.AllArgsConstructor;
 import org.bukkit.Material;
@@ -63,9 +64,32 @@ public class QueuesMenuModern extends Menu {
         QueueService queueService = this.plugin.getQueueService();
         Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
 
-        this.getUnrankedButton(buttons, queueService, profile);
-        this.getBotsButton(buttons, queueService, profile);
-        this.getFFAButton(buttons, queueService, profile);
+        buttons.put(2, new QueuesButtonModern("&b&lUnranked", Material.DIAMOND_SWORD, 0, Arrays.asList(
+                "&7Casual 1v1s with",
+                "&7no loss penalty.",
+                "",
+                "&bPlayers: &f" + queueService.getPlayerCountOfGameType("Unranked"),
+                "",
+                this.getLore(profile, EnumQueueType.UNRANKED)
+        )));
+
+        buttons.put(4, new QueuesButtonModern("&b&lBots", Material.GOLD_SWORD, 0, Arrays.asList(
+                "&7Practice against bots",
+                "&7to improve your skills.",
+                "",
+                "&bPlayers: &f" + queueService.getPlayerCountOfGameType("Bots"),
+                "",
+                "&c&lIN DEVELOPMENT"
+        )));
+
+        buttons.put(6, new QueuesButtonModern("&b&lFFA", Material.GOLD_AXE, 0, Arrays.asList(
+                "&7Free for all with",
+                "&7infinity respawns.",
+                "",
+                "&bPlayers: &f" + queueService.getPlayerCountOfGameType("FFA"),
+                "",
+                this.getLore(profile, EnumQueueType.FFA)
+        )));
 
         switch (profile.getQueueType()) {
             case UNRANKED:
@@ -92,63 +116,6 @@ public class QueuesMenuModern extends Menu {
         this.addGlass(buttons, (byte) 15);
 
         return buttons;
-    }
-
-    /**
-     * Get the properties of the unranked button.
-     *
-     * @param buttons      the buttons map
-     * @param queueService the queue repository
-     * @param profile      the player's profile
-     */
-    private void getUnrankedButton(Map<Integer, Button> buttons, QueueService queueService, Profile profile) {
-        String selected = profile.getQueueType() == EnumQueueType.UNRANKED ? "&a&lSELECTED" : "&aClick to play!";
-        buttons.put(2, new QueuesButtonModern("&b&lSolos", Material.DIAMOND_SWORD, 0, Arrays.asList(
-                "&7Casual 1v1s with",
-                "&7no loss penalty.",
-                "",
-                "&bPlayers: &f" + queueService.getPlayerCountOfGameType("Unranked"),
-                "",
-                selected
-        )));
-    }
-
-    /**
-     * Get the properties of the bots button.
-     *
-     * @param buttons      the buttons map
-     * @param queueService the queue repository
-     * @param profile      the player's profile
-     */
-    private void getBotsButton(Map<Integer, Button> buttons, QueueService queueService, Profile profile) {
-        String selected = profile.getQueueType() == EnumQueueType.BOTS ? "&a&lSELECTED" : "&c&lIN DEVELOPMENT";
-        buttons.put(4, new QueuesButtonModern("&b&lBots", Material.GOLD_SWORD, 0, Arrays.asList(
-                "&7Practice against bots",
-                "&7to improve your skills.",
-                "",
-                "&bPlayers: &f" + queueService.getPlayerCountOfGameType("Bots"),
-                "",
-                selected
-        )));
-    }
-
-    /**
-     * Get the properties of the FFA button.
-     *
-     * @param buttons      the buttons map
-     * @param queueService the queue repository
-     * @param profile      the player's profile
-     */
-    private void getFFAButton(Map<Integer, Button> buttons, QueueService queueService, Profile profile) {
-        String selected = profile.getQueueType() == EnumQueueType.FFA ? "&a&lSELECTED" : "&aClick to play!";
-        buttons.put(6, new QueuesButtonModern("&b&lFFA", Material.GOLD_AXE, 0, Arrays.asList(
-                "&7Free for all with",
-                "&7infinity respawns.",
-                "",
-                "&bPlayers: &f" + queueService.getPlayerCountOfGameType("FFA"),
-                "",
-                selected
-        )));
     }
 
     @Override
@@ -195,5 +162,15 @@ public class QueuesMenuModern extends Menu {
 
             playNeutral(player);
         }
+    }
+
+    /**
+     * Get the lore for the selected queue type.
+     *
+     * @param profile the player's profile
+     * @param type    the queue type to check
+     */
+    private String getLore(Profile profile, EnumQueueType type) {
+        return LoreHelper.selectionLore(profile.getQueueType() == type, "play");
     }
 }
