@@ -20,16 +20,16 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @since 21/04/2025
  */
 @Getter
-public class TitleRepository {
+public class TitleService {
     protected final Alley plugin;
     private final Map<Kit, Title> titles;
 
     /**
-     * Constructor for the TitleRepository class.
+     * Constructor for the TitleService class.
      *
      * @param plugin The Alley plugin instance.
      */
-    public TitleRepository(Alley plugin) {
+    public TitleService(Alley plugin) {
         this.plugin = plugin;
         this.titles = new HashMap<>();
         this.loadTitles();

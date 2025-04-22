@@ -41,7 +41,7 @@ public class TitleMenu extends PaginatedMenu {
 
         int slot = 0;
 
-        Map<Kit, Title> titleMap = Alley.getInstance().getTitleRepository().getTitles();
+        Map<Kit, Title> titleMap = Alley.getInstance().getTitleService().getTitles();
         for (Title title : titleMap.values()) {
             slot = this.validateSlot(slot);
             buttons.put(slot++, new TitleButton(this.profile, title));

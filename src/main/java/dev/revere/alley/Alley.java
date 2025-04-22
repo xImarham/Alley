@@ -33,7 +33,7 @@ import dev.revere.alley.feature.server.ServerService;
 import dev.revere.alley.feature.spawn.SpawnService;
 import dev.revere.alley.feature.spawn.listener.SpawnListener;
 import dev.revere.alley.feature.tablist.task.TablistUpdateTask;
-import dev.revere.alley.feature.title.TitleRepository;
+import dev.revere.alley.feature.title.TitleService;
 import dev.revere.alley.feature.world.WorldListener;
 import dev.revere.alley.game.bot.BotFightRepository;
 import dev.revere.alley.game.bot.mechanics.BotMechanics;
@@ -124,7 +124,7 @@ public class Alley extends JavaPlugin {
     private DiscordBridge discordBridge;
     private BotMechanics botMechanics;
     private BotFightRepository botFightRepository;
-    private TitleRepository titleRepository;
+    private TitleService titleService;
 
     private boolean loaded;
 
@@ -209,7 +209,7 @@ public class Alley extends JavaPlugin {
         services.put(ReflectionRepository.class.getSimpleName(), () -> this.reflectionRepository = new ReflectionRepository(this));
         services.put(BotMechanics.class.getSimpleName(), () -> this.botMechanics = new BotMechanics());
         services.put(BotFightRepository.class.getSimpleName(), () -> this.botFightRepository = new BotFightRepository());
-        services.put(TitleRepository.class.getSimpleName(), () -> this.titleRepository = new TitleRepository(this));
+        services.put(TitleService.class.getSimpleName(), () -> this.titleService = new TitleService(this));
 
         services.forEach(Logger::logTime);
     }
