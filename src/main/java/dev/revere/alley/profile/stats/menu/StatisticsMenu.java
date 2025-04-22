@@ -40,6 +40,7 @@ public class StatisticsMenu extends Menu {
         buttons.put(2, new StatisticsButton());
         buttons.put(4, new GlobalStatButton());
         buttons.put(6, new LeaderboardButton());
+        //buttons.put(8, new DivisionViewButton(Alley.getInstance().getProfileService().getProfile(player.getUniqueId())));
 
         Profile profile = Alley.getInstance().getProfileService().getProfile(this.target == player ? player.getUniqueId() : this.target.getUniqueId());
         List<Kit> sortedKits = profile.getSortedKits();

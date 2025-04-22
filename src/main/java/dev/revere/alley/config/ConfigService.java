@@ -29,11 +29,12 @@ public class ConfigService {
     private final FileConfiguration tablistConfig;
     private final FileConfiguration divisionsConfig;
     private final FileConfiguration menusConfig;
+    private final FileConfiguration titlesConfig;
 
     private final String[] configFileNames = {
             "settings.yml", "messages.yml", "menus.yml",
             "database/database.yml",
-            "storage/kits.yml", "storage/arenas.yml", "storage/divisions.yml",
+            "storage/kits.yml", "storage/arenas.yml", "storage/divisions.yml", "storage/titles.yml",
             "providers/scoreboard.yml", "providers/tablist.yml"
     };
 
@@ -54,6 +55,7 @@ public class ConfigService {
         this.tablistConfig = this.getConfig("providers/tablist.yml");
         this.divisionsConfig = this.getConfig("storage/divisions.yml");
         this.menusConfig = this.getConfig("menus.yml");
+        this.titlesConfig = this.getConfig("storage/titles.yml");
     }
 
     /**

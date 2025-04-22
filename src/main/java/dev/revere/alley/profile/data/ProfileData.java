@@ -9,6 +9,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.var;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -27,6 +29,9 @@ public class ProfileData {
     private ProfileCosmeticData profileCosmeticData;
     private ProfilePlayTimeData profilePlayTimeData;
 
+    private String selectedTitle;
+    private List<String> unlockedTitles;
+
     private int elo = 1000;
     private int coins = 100;
     private int unrankedWins = 0;
@@ -40,6 +45,8 @@ public class ProfileData {
         this.initializeMaps();
         this.feedDataClasses();
         this.initializeDataClasses();
+        this.selectedTitle = "";
+        this.unlockedTitles = new ArrayList<>();
         this.rankedBanned = false;
     }
 

@@ -1,9 +1,10 @@
 package dev.revere.alley.feature.division.menu;
 
+import dev.revere.alley.Alley;
 import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.feature.division.Division;
+import dev.revere.alley.feature.title.menu.TitleMenu;
 import dev.revere.alley.tool.item.ItemBuilder;
-import dev.revere.alley.util.chat.CC;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.bukkit.entity.Player;
@@ -43,9 +44,6 @@ public class DivisionButton extends Button {
     public void clicked(Player player, ClickType clickType) {
         if (clickType != ClickType.LEFT) return;
 
-        player.sendMessage(CC.translate("&cThis feature is not implemented yet."));
-        player.closeInventory();
-
-        //open titles menu like on minemen - still need to implement that =)
+        new TitleMenu(Alley.getInstance().getProfileService().getProfile(player.getUniqueId())).openMenu(player);
     }
 }

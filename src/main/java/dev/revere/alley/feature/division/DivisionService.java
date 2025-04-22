@@ -156,4 +156,15 @@ public class DivisionService {
 
         this.plugin.getConfigService().saveConfig(this.plugin.getConfigService().getConfigFile("storage/divisions.yml"), config);
     }
+
+    /**
+     * Get the highest division based on the required wins of the first tier.
+     *
+     * @return The highest division.
+     */
+    public Division getHighestDivision() {
+        return this.divisions.stream()
+                .max(Comparator.comparingInt(d -> d.getTiers().get(0).getRequiredWins()))
+                .orElse(null);
+    }
 }
