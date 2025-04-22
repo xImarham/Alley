@@ -46,7 +46,7 @@ public class MongoUtility {
 
         profileDataDocument.put("rankedBanned", profileData.isRankedBanned());
 
-        profileDataDocument.put("selectedTitle", profileData.getSelectedTitle());
+        profileDataDocument.put("selectedTitle", profileData.getSelectedTitle() == null || profileData.getSelectedTitle().isEmpty() ? "" : profileData.getSelectedTitle());
         profileDataDocument.put("unlockedTitles", profileData.getUnlockedTitles());
 
         profileDataDocument.put("unrankedKitData", convertUnrankedKitData(profileData.getUnrankedKitData()));
