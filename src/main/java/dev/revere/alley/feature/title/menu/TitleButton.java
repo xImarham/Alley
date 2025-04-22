@@ -108,7 +108,9 @@ public class TitleButton extends Button {
             "&c&lLOCKED",
             "",
             "&fUnlock &b" + nextRank + " &fwith " + requiredWinsToUnlock + " more " + winOrWins + ".",
-            "&f" + progressBar + " &7" + progressPercent
+            "&f" + progressBar + " &7" + progressPercent,
+            "",
+            "&fRequires &c&l" + this.title.getRequiredDivision().getName().toUpperCase() + " &fdivision."
         );
     }
 }
