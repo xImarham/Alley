@@ -30,11 +30,12 @@ public class ConfigService {
     private final FileConfiguration divisionsConfig;
     private final FileConfiguration menusConfig;
     private final FileConfiguration titlesConfig;
+    private final FileConfiguration levelsConfig;
 
     private final String[] configFileNames = {
             "settings.yml", "messages.yml", "menus.yml",
             "database/database.yml",
-            "storage/kits.yml", "storage/arenas.yml", "storage/divisions.yml", "storage/titles.yml",
+            "storage/kits.yml", "storage/arenas.yml", "storage/divisions.yml", "storage/titles.yml", "storage/levels.yml",
             "providers/scoreboard.yml", "providers/tablist.yml"
     };
 
@@ -56,6 +57,7 @@ public class ConfigService {
         this.divisionsConfig = this.getConfig("storage/divisions.yml");
         this.menusConfig = this.getConfig("menus.yml");
         this.titlesConfig = this.getConfig("storage/titles.yml");
+        this.levelsConfig = this.getConfig("storage/levels.yml");
     }
 
     /**

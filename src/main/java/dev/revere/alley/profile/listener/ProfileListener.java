@@ -68,6 +68,8 @@ public class ProfileListener implements Listener {
 
         profile.getProfileData().getProfilePlayTimeData().setLastLogin(System.currentTimeMillis());
 
+        profile.getProfileData().determineLevel();
+
         Alley.getInstance().getSpawnService().teleportToSpawn(player);
         Alley.getInstance().getHotbarService().applyHotbarItems(player, HotbarType.LOBBY);
 

@@ -51,7 +51,7 @@ public class ScoreboardVisualizer implements IAssembleAdapter {
         this.dotAnimation = plugin.getAnimationRepository().getAnimation(DotAnimationImpl.class, EnumAnimationType.INTERNAL);
         this.scoreboardTitleAnimation = plugin.getAnimationRepository().getAnimation(ScoreboardTitleAnimationImpl.class, EnumAnimationType.CONFIG);
     }
-    
+
     /**
      * Get the title of the scoreboard.
      *
@@ -76,41 +76,44 @@ public class ScoreboardVisualizer implements IAssembleAdapter {
             List<String> lines = new ArrayList<>();
             if (profile == null) {
                 return Arrays.asList(
-                        "&cProfile could not load.",
-                        "&cTry relogging.",
-                        "",
-                        "&cIf this issue persists",
-                        "&cplease contact the",
-                        "&cplugin developer."
+                    "&cProfile could not load.",
+                    "&cTry relogging.",
+                    "",
+                    "&cIf this issue persists",
+                    "&cplease contact the",
+                    "&cplugin developer."
                 );
             }
 
             if (this.plugin.getConfigService().getConfig("providers/scoreboard.yml").getConfigurationSection("scoreboard.lines") == null) {
                 return Arrays.asList(
-                        "&cNo lines found in the",
-                        "&cscoreboard.yml file.",
-                        "",
-                        "&cIf this issue persists",
-                        "please contact the",
-                        "&cplugin developer."
+                    "&cNo lines found in the",
+                    "&cscoreboard.yml file.",
+                    "",
+                    "&cIf this issue persists",
+                    "please contact the",
+                    "&cplugin developer."
                 );
             }
             switch (profile.getState()) {
                 case LOBBY:
                     for (String line : this.plugin.getConfigService().getConfig("providers/scoreboard.yml").getStringList("scoreboard.lines.lobby")) {
                         lines.add(CC.translate(line)
-                                .replaceAll("\\{sidebar}", this.getScoreboardLines(player))
-                                .replaceAll("\\{online}", String.valueOf(Bukkit.getOnlinePlayers().size()))
-                                .replaceAll("\\{playing}", String.valueOf(this.plugin.getProfileService().getProfiles().values().stream().filter(profile1 -> profile1.getState() == EnumProfileState.PLAYING).count()))
-                                .replaceAll("\\{in-queue}", String.valueOf(this.plugin.getProfileService().getProfiles().values().stream().filter(profile1 -> profile1.getState() == EnumProfileState.WAITING).count())));
+                            .replaceAll("\\{sidebar}", this.getScoreboardLines(player))
+                            .replaceAll("\\{online}", String.valueOf(Bukkit.getOnlinePlayers().size()))
+                            .replaceAll("\\{playing}", String.valueOf(this.plugin.getProfileService().getProfiles().values().stream().filter(profile1 -> profile1.getState() == EnumProfileState.PLAYING).count()))
+                            .replaceAll("\\{level}", String.valueOf(this.plugin.getLevelService().getLevel(profile.getProfileData().getGlobalLevel()).getDisplayName()))
+                            .replaceAll("\\{in-queue}", String.valueOf(this.plugin.getProfileService().getProfiles().values().stream().filter(profile1 -> profile1.getState() == EnumProfileState.WAITING).count()))
+                        );
                     }
 
                     if (profile.getParty() != null) {
                         for (String line : this.plugin.getConfigService().getConfig("providers/scoreboard.yml").getStringList("scoreboard.lines.party-addition")) {
                             lines.add(CC.translate(line)
-                                    .replaceAll("\\{sidebar}", this.getScoreboardLines(player))
-                                    .replaceAll("\\{party-size}", String.valueOf(profile.getParty().getMembers().size()))
-                                    .replaceAll("\\{party-leader}", profile.getParty().getLeader().getName()));
+                                .replaceAll("\\{sidebar}", this.getScoreboardLines(player))
+                                .replaceAll("\\{party-size}", String.valueOf(profile.getParty().getMembers().size()))
+                                .replaceAll("\\{party-leader}", profile.getParty().getLeader().getName())
+                            );
                         }
                     }
 
@@ -118,14 +121,16 @@ public class ScoreboardVisualizer implements IAssembleAdapter {
                 case WAITING:
                     for (String line : this.plugin.getConfigService().getConfig("providers/scoreboard.yml").getStringList("scoreboard.lines.waiting")) {
                         lines.add(CC.translate(line)
-                                .replaceAll("\\{sidebar}", this.getScoreboardLines(player))
-                                .replaceAll("\\{online}", String.valueOf(Bukkit.getOnlinePlayers().size()))
-                                .replaceAll("\\{playing}", String.valueOf(this.plugin.getProfileService().getProfiles().values().stream().filter(profile1 -> profile1.getState() == EnumProfileState.PLAYING).count()))
-                                .replaceAll("\\{in-queue}", String.valueOf(this.plugin.getProfileService().getProfiles().values().stream().filter(profile1 -> profile1.getState() == EnumProfileState.WAITING).count()))
-                                .replaceAll("\\{queued-type}", this.plugin.getProfileService().getProfile(player.getUniqueId()).getQueueProfile().getQueue().getQueueType())
-                                .replaceAll("\\{queued-time}", String.valueOf(this.plugin.getProfileService().getProfile(player.getUniqueId()).getQueueProfile().getFormattedElapsedTime()))
-                                .replaceAll("\\{dot-animation}", this.dotAnimation.getCurrentFrame())
-                                .replaceAll("\\{queued-kit}", String.valueOf(this.plugin.getProfileService().getProfile(player.getUniqueId()).getQueueProfile().getQueue().getKit().getName())));
+                            .replaceAll("\\{sidebar}", this.getScoreboardLines(player))
+                            .replaceAll("\\{online}", String.valueOf(Bukkit.getOnlinePlayers().size()))
+                            .replaceAll("\\{playing}", String.valueOf(this.plugin.getProfileService().getProfiles().values().stream().filter(profile1 -> profile1.getState() == EnumProfileState.PLAYING).count()))
+                            .replaceAll("\\{in-queue}", String.valueOf(this.plugin.getProfileService().getProfiles().values().stream().filter(profile1 -> profile1.getState() == EnumProfileState.WAITING).count()))
+                            .replaceAll("\\{queued-type}", this.plugin.getProfileService().getProfile(player.getUniqueId()).getQueueProfile().getQueue().getQueueType())
+                            .replaceAll("\\{level}", String.valueOf(this.plugin.getLevelService().getLevel(profile.getProfileData().getGlobalLevel()).getDisplayName()))
+                            .replaceAll("\\{queued-time}", String.valueOf(this.plugin.getProfileService().getProfile(player.getUniqueId()).getQueueProfile().getFormattedElapsedTime()))
+                            .replaceAll("\\{dot-animation}", this.dotAnimation.getCurrentFrame())
+                            .replaceAll("\\{queued-kit}", String.valueOf(this.plugin.getProfileService().getProfile(player.getUniqueId()).getQueueProfile().getQueue().getKit().getName()))
+                        );
                     }
                     break;
                 case PLAYING:
@@ -153,43 +158,43 @@ public class ScoreboardVisualizer implements IAssembleAdapter {
                         } else {
                             for (String line : this.plugin.getConfigService().getConfig("providers/scoreboard.yml").getStringList("scoreboard.lines.starting")) {
                                 lines.add(CC.translate(line)
-                                        .replaceAll("\\{sidebar}", this.getScoreboardLines(player))
-                                        .replaceAll("\\{opponent}", opponent.getPlayer().getUsername())
-                                        .replaceAll("\\{opponent-ping}", String.valueOf(BukkitReflection.getPing(opponent.getPlayer().getPlayer())))
-                                        .replaceAll("\\{player-ping}", String.valueOf(BukkitReflection.getPing(player)))
-                                        .replaceAll("\\{duration}", profile.getMatch().getDuration())
-                                        .replaceAll("\\{arena}", profile.getMatch().getArena().getDisplayName() == null ? "&c&lNULL" : profile.getMatch().getArena().getDisplayName())
-                                        .replaceAll("\\{dot-animation}", this.dotAnimation.getCurrentFrame())
-                                        .replaceAll("\\{kit}", profile.getMatch().getKit().getDisplayName()));
+                                    .replaceAll("\\{sidebar}", this.getScoreboardLines(player))
+                                    .replaceAll("\\{opponent}", opponent.getPlayer().getUsername())
+                                    .replaceAll("\\{opponent-ping}", String.valueOf(BukkitReflection.getPing(opponent.getPlayer().getPlayer())))
+                                    .replaceAll("\\{player-ping}", String.valueOf(BukkitReflection.getPing(player)))
+                                    .replaceAll("\\{duration}", profile.getMatch().getDuration())
+                                    .replaceAll("\\{arena}", profile.getMatch().getArena().getDisplayName() == null ? "&c&lNULL" : profile.getMatch().getArena().getDisplayName())
+                                    .replaceAll("\\{dot-animation}", this.dotAnimation.getCurrentFrame())
+                                    .replaceAll("\\{kit}", profile.getMatch().getKit().getDisplayName()));
                             }
                         }
                     } else if (profile.getMatch().getState() == EnumMatchState.ENDING_MATCH) {
                         for (String line : this.plugin.getConfigService().getConfig("providers/scoreboard.yml").getStringList("scoreboard.lines.ending")) {
                             lines.add(CC.translate(line)
-                                    .replaceAll("\\{sidebar}", this.getScoreboardLines(player))
-                                    .replaceAll("\\{opponent}", opponent.getPlayer().getUsername())
-                                    .replaceAll("\\{opponent-ping}", String.valueOf(BukkitReflection.getPing(opponent.getPlayer().getPlayer())))
-                                    .replaceAll("\\{player-ping}", String.valueOf(BukkitReflection.getPing(player)))
-                                    .replaceAll("\\{duration}", profile.getMatch().getDuration())
-                                    .replaceAll("\\{arena}", profile.getMatch().getArena().getDisplayName() == null ? "&c&lNULL" : profile.getMatch().getArena().getDisplayName())
-                                    .replaceAll("\\{kit}", profile.getMatch().getKit().getDisplayName() == null ? "&c&lNULL" : profile.getMatch().getKit().getDisplayName())
-                                    .replaceAll("\\{winner}", opponent.getPlayer().isDead() ? you.getPlayer().getUsername() : opponent.getPlayer().getUsername())
-                                    .replaceAll("\\{end-result}", opponent.getPlayer().isDead() ? "&a&lVICTORY!" : "&c&lDEFEAT!"));
+                                .replaceAll("\\{sidebar}", this.getScoreboardLines(player))
+                                .replaceAll("\\{opponent}", opponent.getPlayer().getUsername())
+                                .replaceAll("\\{opponent-ping}", String.valueOf(BukkitReflection.getPing(opponent.getPlayer().getPlayer())))
+                                .replaceAll("\\{player-ping}", String.valueOf(BukkitReflection.getPing(player)))
+                                .replaceAll("\\{duration}", profile.getMatch().getDuration())
+                                .replaceAll("\\{arena}", profile.getMatch().getArena().getDisplayName() == null ? "&c&lNULL" : profile.getMatch().getArena().getDisplayName())
+                                .replaceAll("\\{kit}", profile.getMatch().getKit().getDisplayName() == null ? "&c&lNULL" : profile.getMatch().getKit().getDisplayName())
+                                .replaceAll("\\{winner}", opponent.getPlayer().isDead() ? you.getPlayer().getUsername() : opponent.getPlayer().getUsername())
+                                .replaceAll("\\{end-result}", opponent.getPlayer().isDead() ? "&a&lVICTORY!" : "&c&lDEFEAT!"));
                         }
                     } else if (profile.getMatch().getKit().isSettingEnabled(KitSettingBoxingImpl.class)) {
                         for (String line : this.plugin.getConfigService().getConfig("providers/scoreboard.yml").getStringList("scoreboard.lines.playing.boxing-match")) {
                             lines.add(CC.translate(line)
-                                    .replaceAll("\\{sidebar}", this.getScoreboardLines(player))
-                                    .replaceAll("\\{opponent}", opponent.getPlayer().getUsername())
-                                    .replaceAll("\\{opponent-ping}", String.valueOf(BukkitReflection.getPing(opponent.getPlayer().getPlayer())))
-                                    .replaceAll("\\{difference}", getBoxingHitDifference(player, opponent))
-                                    .replaceAll("\\{player-hits}", String.valueOf(profile.getMatch().getGamePlayer(player).getData().getHits()))
-                                    .replaceAll("\\{opponent-hits}", String.valueOf(profile.getMatch().getGamePlayer(opponent.getPlayer().getPlayer()).getData().getHits()))
-                                    .replaceAll("\\{combo}", getBoxingCombo(player, opponent))
-                                    .replaceAll("\\{player-ping}", String.valueOf(BukkitReflection.getPing(player)))
-                                    .replaceAll("\\{duration}", profile.getMatch().getDuration())
-                                    .replaceAll("\\{arena}", profile.getMatch().getArena().getDisplayName() == null ? "&c&lNULL" : profile.getMatch().getArena().getDisplayName())
-                                    .replaceAll("\\{kit}", profile.getMatch().getKit().getDisplayName()));
+                                .replaceAll("\\{sidebar}", this.getScoreboardLines(player))
+                                .replaceAll("\\{opponent}", opponent.getPlayer().getUsername())
+                                .replaceAll("\\{opponent-ping}", String.valueOf(BukkitReflection.getPing(opponent.getPlayer().getPlayer())))
+                                .replaceAll("\\{difference}", getBoxingHitDifference(player, opponent))
+                                .replaceAll("\\{player-hits}", String.valueOf(profile.getMatch().getGamePlayer(player).getData().getHits()))
+                                .replaceAll("\\{opponent-hits}", String.valueOf(profile.getMatch().getGamePlayer(opponent.getPlayer().getPlayer()).getData().getHits()))
+                                .replaceAll("\\{combo}", getBoxingCombo(player, opponent))
+                                .replaceAll("\\{player-ping}", String.valueOf(BukkitReflection.getPing(player)))
+                                .replaceAll("\\{duration}", profile.getMatch().getDuration())
+                                .replaceAll("\\{arena}", profile.getMatch().getArena().getDisplayName() == null ? "&c&lNULL" : profile.getMatch().getArena().getDisplayName())
+                                .replaceAll("\\{kit}", profile.getMatch().getKit().getDisplayName()));
                         }
                     } else if (profile.getMatch().getKit().isSettingEnabled(KitSettingBattleRushImpl.class)) {
                         MatchRoundsRegularImpl roundsMatch = (MatchRoundsRegularImpl) profile.getMatch();
@@ -199,26 +204,26 @@ public class ScoreboardVisualizer implements IAssembleAdapter {
                     } else if (profile.getMatch().getKit().isSettingEnabled(KitSettingLivesImpl.class)) {
                         for (String line : this.plugin.getConfigService().getConfig("providers/scoreboard.yml").getStringList("scoreboard.lines.playing.lives-match")) {
                             lines.add(CC.translate(line)
-                                    .replaceAll("\\{sidebar}", this.getScoreboardLines(player))
-                                    .replaceAll("\\{opponent}", opponent.getPlayer().getUsername())
-                                    .replaceAll("\\{opponent-ping}", String.valueOf(BukkitReflection.getPing(opponent.getPlayer().getPlayer())))
-                                    .replaceAll("\\{player-ping}", String.valueOf(BukkitReflection.getPing(player)))
-                                    .replaceAll("\\{player-lives}", String.valueOf(profile.getMatch().getGamePlayer(player).getData().getLives()))
-                                    .replaceAll("\\{opponent-lives}", String.valueOf(profile.getMatch().getGamePlayer(opponent.getPlayer().getPlayer()).getData().getLives()))
-                                    .replaceAll("\\{duration}", profile.getMatch().getDuration())
-                                    .replaceAll("\\{arena}", profile.getMatch().getArena().getDisplayName() == null ? "&c&lNULL" : profile.getMatch().getArena().getDisplayName())
-                                    .replaceAll("\\{kit}", profile.getMatch().getKit().getDisplayName()));
+                                .replaceAll("\\{sidebar}", this.getScoreboardLines(player))
+                                .replaceAll("\\{opponent}", opponent.getPlayer().getUsername())
+                                .replaceAll("\\{opponent-ping}", String.valueOf(BukkitReflection.getPing(opponent.getPlayer().getPlayer())))
+                                .replaceAll("\\{player-ping}", String.valueOf(BukkitReflection.getPing(player)))
+                                .replaceAll("\\{player-lives}", String.valueOf(profile.getMatch().getGamePlayer(player).getData().getLives()))
+                                .replaceAll("\\{opponent-lives}", String.valueOf(profile.getMatch().getGamePlayer(opponent.getPlayer().getPlayer()).getData().getLives()))
+                                .replaceAll("\\{duration}", profile.getMatch().getDuration())
+                                .replaceAll("\\{arena}", profile.getMatch().getArena().getDisplayName() == null ? "&c&lNULL" : profile.getMatch().getArena().getDisplayName())
+                                .replaceAll("\\{kit}", profile.getMatch().getKit().getDisplayName()));
                         }
                     } else {
                         for (String line : this.plugin.getConfigService().getConfig("providers/scoreboard.yml").getStringList("scoreboard.lines.playing.regular-match")) {
                             lines.add(CC.translate(line)
-                                    .replaceAll("\\{sidebar}", this.getScoreboardLines(player))
-                                    .replaceAll("\\{opponent}", opponent.getPlayer().getUsername())
-                                    .replaceAll("\\{opponent-ping}", String.valueOf(BukkitReflection.getPing(opponent.getPlayer().getPlayer())))
-                                    .replaceAll("\\{player-ping}", String.valueOf(BukkitReflection.getPing(player)))
-                                    .replaceAll("\\{duration}", profile.getMatch().getDuration())
-                                    .replaceAll("\\{arena}", profile.getMatch().getArena().getDisplayName() == null ? "&c&lNULL" : profile.getMatch().getArena().getDisplayName())
-                                    .replaceAll("\\{kit}", profile.getMatch().getKit().getDisplayName()));
+                                .replaceAll("\\{sidebar}", this.getScoreboardLines(player))
+                                .replaceAll("\\{opponent}", opponent.getPlayer().getUsername())
+                                .replaceAll("\\{opponent-ping}", String.valueOf(BukkitReflection.getPing(opponent.getPlayer().getPlayer())))
+                                .replaceAll("\\{player-ping}", String.valueOf(BukkitReflection.getPing(player)))
+                                .replaceAll("\\{duration}", profile.getMatch().getDuration())
+                                .replaceAll("\\{arena}", profile.getMatch().getArena().getDisplayName() == null ? "&c&lNULL" : profile.getMatch().getArena().getDisplayName())
+                                .replaceAll("\\{kit}", profile.getMatch().getKit().getDisplayName()));
                         }
                     }
                     break;
@@ -226,16 +231,16 @@ public class ScoreboardVisualizer implements IAssembleAdapter {
                     if (profile.getMatch() instanceof MatchRegularImpl) {
                         for (String line : this.plugin.getConfigService().getConfig("providers/scoreboard.yml").getStringList("scoreboard.lines.spectating")) {
                             lines.add(CC.translate(line)
-                                    .replaceAll("\\{sidebar}", this.getScoreboardLines(player))
-                                    .replaceAll("\\{playerA}", profile.getMatch().getParticipants().get(0).getPlayer().getUsername())
-                                    .replaceAll("\\{playerB}", profile.getMatch().getParticipants().get(1).getPlayer().getUsername())
-                                    .replaceAll("\\{pingA}", String.valueOf(BukkitReflection.getPing(profile.getMatch().getParticipants().get(0).getPlayer().getPlayer())))
-                                    .replaceAll("\\{pingB}", String.valueOf(BukkitReflection.getPing(profile.getMatch().getParticipants().get(1).getPlayer().getPlayer())))
-                                    .replaceAll("\\{colorA}", String.valueOf(((MatchRegularImpl) profile.getMatch()).getTeamAColor()))
-                                    .replaceAll("\\{colorB}", String.valueOf(((MatchRegularImpl) profile.getMatch()).getTeamBColor()))
-                                    .replaceAll("\\{duration}", profile.getMatch().getDuration())
-                                    .replaceAll("\\{arena}", profile.getMatch().getArena().getDisplayName() == null ? "&c&lNULL" : profile.getMatch().getArena().getDisplayName())
-                                    .replaceAll("\\{kit}", profile.getMatch().getKit().getDisplayName()));
+                                .replaceAll("\\{sidebar}", this.getScoreboardLines(player))
+                                .replaceAll("\\{playerA}", profile.getMatch().getParticipants().get(0).getPlayer().getUsername())
+                                .replaceAll("\\{playerB}", profile.getMatch().getParticipants().get(1).getPlayer().getUsername())
+                                .replaceAll("\\{pingA}", String.valueOf(BukkitReflection.getPing(profile.getMatch().getParticipants().get(0).getPlayer().getPlayer())))
+                                .replaceAll("\\{pingB}", String.valueOf(BukkitReflection.getPing(profile.getMatch().getParticipants().get(1).getPlayer().getPlayer())))
+                                .replaceAll("\\{colorA}", String.valueOf(((MatchRegularImpl) profile.getMatch()).getTeamAColor()))
+                                .replaceAll("\\{colorB}", String.valueOf(((MatchRegularImpl) profile.getMatch()).getTeamBColor()))
+                                .replaceAll("\\{duration}", profile.getMatch().getDuration())
+                                .replaceAll("\\{arena}", profile.getMatch().getArena().getDisplayName() == null ? "&c&lNULL" : profile.getMatch().getArena().getDisplayName())
+                                .replaceAll("\\{kit}", profile.getMatch().getKit().getDisplayName()));
                         }
                     }
                     break;
@@ -249,18 +254,18 @@ public class ScoreboardVisualizer implements IAssembleAdapter {
                             if (combatService.isPlayerInCombat(player.getUniqueId())) {
                                 for (String combatLine : combatTagLines) {
                                     lines.add(CC.translate(combatLine
-                                            .replaceAll("\\{combat-tag}", combatService.getRemainingTimeFormatted(player))));
+                                        .replaceAll("\\{combat-tag}", combatService.getRemainingTimeFormatted(player))));
                                 }
                             }
                         } else {
                             lines.add(CC.translate(line)
-                                    .replaceAll("\\{sidebar}", this.getScoreboardLines(player))
-                                    .replaceAll("\\{kit}", profile.getFfaMatch().getKit().getDisplayName())
-                                    .replaceAll("\\{players}", String.valueOf(profile.getFfaMatch().getPlayers().size()))
-                                    .replaceAll("\\{zone}", this.plugin.getFfaSpawnService().getCuboid().isIn(player) ? "Spawn" : "Warzone")
-                                    .replaceAll("\\{kills}", String.valueOf(profile.getProfileData().getFfaData().get(profile.getFfaMatch().getKit().getName()).getKills()))
-                                    .replaceAll("\\{deaths}", String.valueOf(profile.getProfileData().getFfaData().get(profile.getFfaMatch().getKit().getName()).getDeaths()))
-                                    .replaceAll("\\{ping}", String.valueOf(BukkitReflection.getPing(player))));
+                                .replaceAll("\\{sidebar}", this.getScoreboardLines(player))
+                                .replaceAll("\\{kit}", profile.getFfaMatch().getKit().getDisplayName())
+                                .replaceAll("\\{players}", String.valueOf(profile.getFfaMatch().getPlayers().size()))
+                                .replaceAll("\\{zone}", this.plugin.getFfaSpawnService().getCuboid().isIn(player) ? "Spawn" : "Warzone")
+                                .replaceAll("\\{kills}", String.valueOf(profile.getProfileData().getFfaData().get(profile.getFfaMatch().getKit().getName()).getKills()))
+                                .replaceAll("\\{deaths}", String.valueOf(profile.getProfileData().getFfaData().get(profile.getFfaMatch().getKit().getName()).getDeaths()))
+                                .replaceAll("\\{ping}", String.valueOf(BukkitReflection.getPing(player))));
                         }
                     }
                     break;
@@ -291,47 +296,47 @@ public class ScoreboardVisualizer implements IAssembleAdapter {
 
         for (String line : this.plugin.getConfigService().getConfig("providers/scoreboard.yml").getStringList("scoreboard.lines.playing.battlerush-match")) {
             lines.add(CC.translate(line)
-                    .replaceAll("\\{sidebar}", this.getScoreboardLines(player))
-                    .replaceAll("\\{opponent}", opponent.getPlayer().getUsername())
-                    .replaceAll("\\{opponent-ping}", String.valueOf(BukkitReflection.getPing(opponent.getPlayer().getPlayer())))
-                    .replaceAll("\\{player-ping}", String.valueOf(BukkitReflection.getPing(player)))
-                    .replaceAll("\\{time-left}", formattedTime) // Inject formatted time
-                    .replaceAll("\\{goals}", ScoreboardUtil.visualizeGoalsAsCircles(roundsMatch.getParticipantA().getPlayer().getData().getGoals(), 3))
-                    .replaceAll("\\{opponent-goals}", ScoreboardUtil.visualizeGoalsAsCircles(roundsMatch.getParticipantB().getPlayer().getData().getGoals(), 3))
-                    .replaceAll("\\{kills}", String.valueOf(profile.getMatch().getGamePlayer(player).getData().getKills()))
-                    .replaceAll("\\{current-round}", String.valueOf(roundsMatch.getCurrentRound()))
-                    .replaceAll("\\{duration}", profile.getMatch().getDuration())
-                    .replaceAll("\\{color}", String.valueOf(roundsMatch.getTeamAColor()))
-                    .replaceAll("\\{opponent-color}", String.valueOf(roundsMatch.getTeamBColor()))
-                    .replaceAll("\\{arena}", profile.getMatch().getArena().getDisplayName() == null ? "&c&lNULL" : profile.getMatch().getArena().getDisplayName())
-                    .replaceAll("\\{kit}", profile.getMatch().getKit().getDisplayName()));
+                .replaceAll("\\{sidebar}", this.getScoreboardLines(player))
+                .replaceAll("\\{opponent}", opponent.getPlayer().getUsername())
+                .replaceAll("\\{opponent-ping}", String.valueOf(BukkitReflection.getPing(opponent.getPlayer().getPlayer())))
+                .replaceAll("\\{player-ping}", String.valueOf(BukkitReflection.getPing(player)))
+                .replaceAll("\\{time-left}", formattedTime) // Inject formatted time
+                .replaceAll("\\{goals}", ScoreboardUtil.visualizeGoalsAsCircles(roundsMatch.getParticipantA().getPlayer().getData().getGoals(), 3))
+                .replaceAll("\\{opponent-goals}", ScoreboardUtil.visualizeGoalsAsCircles(roundsMatch.getParticipantB().getPlayer().getData().getGoals(), 3))
+                .replaceAll("\\{kills}", String.valueOf(profile.getMatch().getGamePlayer(player).getData().getKills()))
+                .replaceAll("\\{current-round}", String.valueOf(roundsMatch.getCurrentRound()))
+                .replaceAll("\\{duration}", profile.getMatch().getDuration())
+                .replaceAll("\\{color}", String.valueOf(roundsMatch.getTeamAColor()))
+                .replaceAll("\\{opponent-color}", String.valueOf(roundsMatch.getTeamBColor()))
+                .replaceAll("\\{arena}", profile.getMatch().getArena().getDisplayName() == null ? "&c&lNULL" : profile.getMatch().getArena().getDisplayName())
+                .replaceAll("\\{kit}", profile.getMatch().getKit().getDisplayName()));
         }
     }
 
     /**
      * Replace the lines for the Stick Fight match.
      *
-     * @param player        The player to replace the lines for.
-     * @param lines         The lines to replace.
-     * @param opponent      The opponent to replace the lines for.
+     * @param player          The player to replace the lines for.
+     * @param lines           The lines to replace.
+     * @param opponent        The opponent to replace the lines for.
      * @param stickFightMatch The stick fight match to replace the lines for.
-     * @param profile       The profile to replace the lines for.
+     * @param profile         The profile to replace the lines for.
      */
     private void replaceStickFightLines(Player player, List<String> lines, GameParticipant<MatchGamePlayerImpl> opponent, MatchStickFightImpl stickFightMatch, Profile profile) {
         for (String line : this.plugin.getConfigService().getConfig("providers/scoreboard.yml").getStringList("scoreboard.lines.playing.stickfight-match")) {
             lines.add(CC.translate(line)
-                    .replaceAll("\\{sidebar}", this.getScoreboardLines(player))
-                    .replaceAll("\\{opponent}", opponent.getPlayer().getUsername())
-                    .replaceAll("\\{opponent-ping}", String.valueOf(BukkitReflection.getPing(opponent.getPlayer().getPlayer())))
-                    .replaceAll("\\{player-ping}", String.valueOf(BukkitReflection.getPing(player)))
-                    .replaceAll("\\{goals}", ScoreboardUtil.visualizeGoalsAsCircles(stickFightMatch.getParticipantA().getPlayer().getData().getGoals(), 5))
-                    .replaceAll("\\{opponent-goals}", ScoreboardUtil.visualizeGoalsAsCircles(stickFightMatch.getParticipantB().getPlayer().getData().getGoals(), 5))
-                    .replaceAll("\\{current-round}", String.valueOf(stickFightMatch.getCurrentRound()))
-                    .replaceAll("\\{duration}", profile.getMatch().getDuration())
-                    .replaceAll("\\{color}", String.valueOf(stickFightMatch.getTeamAColor()))
-                    .replaceAll("\\{opponent-color}", String.valueOf(stickFightMatch.getTeamBColor()))
-                    .replaceAll("\\{arena}", profile.getMatch().getArena().getDisplayName() == null ? "&c&lNULL" : profile.getMatch().getArena().getDisplayName())
-                    .replaceAll("\\{kit}", profile.getMatch().getKit().getDisplayName()));
+                .replaceAll("\\{sidebar}", this.getScoreboardLines(player))
+                .replaceAll("\\{opponent}", opponent.getPlayer().getUsername())
+                .replaceAll("\\{opponent-ping}", String.valueOf(BukkitReflection.getPing(opponent.getPlayer().getPlayer())))
+                .replaceAll("\\{player-ping}", String.valueOf(BukkitReflection.getPing(player)))
+                .replaceAll("\\{goals}", ScoreboardUtil.visualizeGoalsAsCircles(stickFightMatch.getParticipantA().getPlayer().getData().getGoals(), 5))
+                .replaceAll("\\{opponent-goals}", ScoreboardUtil.visualizeGoalsAsCircles(stickFightMatch.getParticipantB().getPlayer().getData().getGoals(), 5))
+                .replaceAll("\\{current-round}", String.valueOf(stickFightMatch.getCurrentRound()))
+                .replaceAll("\\{duration}", profile.getMatch().getDuration())
+                .replaceAll("\\{color}", String.valueOf(stickFightMatch.getTeamAColor()))
+                .replaceAll("\\{opponent-color}", String.valueOf(stickFightMatch.getTeamBColor()))
+                .replaceAll("\\{arena}", profile.getMatch().getArena().getDisplayName() == null ? "&c&lNULL" : profile.getMatch().getArena().getDisplayName())
+                .replaceAll("\\{kit}", profile.getMatch().getKit().getDisplayName()));
         }
     }
 

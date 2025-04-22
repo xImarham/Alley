@@ -1,6 +1,7 @@
 package dev.revere.alley.command;
 
 import dev.revere.alley.command.impl.other.*;
+import dev.revere.alley.feature.level.command.LevelCommand;
 import dev.revere.alley.feature.title.command.TitleCommand;
 import dev.revere.alley.game.host.command.HostCommand;
 import dev.revere.alley.essential.emoji.command.EmojiCommand;
@@ -74,6 +75,7 @@ public class CommandUtility {
             new CosmeticCommand();
             new DivisionCommand();
             new TitleCommand();
+            new LevelCommand();
 
             new AlleyDebugCommand();
             new MatchInfoCommand();

@@ -2,14 +2,17 @@ package dev.revere.alley.profile.data;
 
 import com.google.common.collect.Maps;
 import dev.revere.alley.Alley;
+import dev.revere.alley.feature.kit.Kit;
 import dev.revere.alley.feature.kit.settings.impl.KitSettingRankedImpl;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.data.impl.*;
+import dev.revere.alley.util.chat.CC;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.var;
+import org.bukkit.Bukkit;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -29,6 +32,8 @@ public class ProfileData {
     private ProfileCosmeticData profileCosmeticData;
     private ProfilePlayTimeData profilePlayTimeData;
 
+    private String globalLevel;
+
     private String selectedTitle;
     private List<String> unlockedTitles;
 
@@ -45,6 +50,7 @@ public class ProfileData {
         this.initializeMaps();
         this.feedDataClasses();
         this.initializeDataClasses();
+        this.globalLevel = "";
         this.selectedTitle = "";
         this.unlockedTitles = new ArrayList<>();
         this.rankedBanned = false;
@@ -76,7 +82,7 @@ public class ProfileData {
      * @return the global elo of the player
      */
     private int calculateGlobalElo(Profile profile) {
-        var rankedKits = Alley.getInstance().getKitService().getKits().stream()
+        List<Kit> rankedKits = Alley.getInstance().getKitService().getKits().stream()
                 .filter(kit -> kit.isSettingEnabled(KitSettingRankedImpl.class))
                 .collect(Collectors.toList());
 
@@ -94,13 +100,30 @@ public class ProfileData {
         return totalElo / rankedKits.size();
     }
 
+    public void determineLevel() {
+        this.globalLevel = Alley.getInstance().getLevelService().getLevel(this.elo).getName();
+    }
+
     /**
      * Updates the elo and division of the player
      *
      * @param profile the profile of the player
      */
     public void updateElo(Profile profile) {
+        int previousElo = this.elo;
+        String previousLevel = Alley.getInstance().getLevelService().getLevel(previousElo).getName();
+
         this.elo = this.calculateGlobalElo(profile);
+        String newLevel = Alley.getInstance().getLevelService().getLevel(this.elo).getName();
+
+        if (!newLevel.equals(previousLevel)) {
+            Arrays.asList(
+                "",
+                "&b&lNEW LEVEL &f| &a&lCONGRATULATIONS!",
+                " &fYou have reached &b" + newLevel + " &fin the global ranking system.",
+                ""
+            ).forEach(line -> Bukkit.getPlayer(profile.getUuid()).sendMessage(CC.translate(line)));
+        }
     }
 
     /**

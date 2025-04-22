@@ -46,6 +46,8 @@ public class MongoUtility {
 
         profileDataDocument.put("rankedBanned", profileData.isRankedBanned());
 
+        profileDataDocument.put("globalLevel", profileData.getGlobalLevel() == null || profileData.getGlobalLevel().isEmpty() ? "" : profileData.getGlobalLevel());
+
         profileDataDocument.put("selectedTitle", profileData.getSelectedTitle() == null || profileData.getSelectedTitle().isEmpty() ? "" : profileData.getSelectedTitle());
         profileDataDocument.put("unlockedTitles", profileData.getUnlockedTitles());
 
@@ -179,6 +181,8 @@ public class MongoUtility {
             profileData.setRankedLosses(profileDataDocument.getInteger("rankedLosses"));
 
             profileData.setRankedBanned(profileDataDocument.getBoolean("rankedBanned"));
+
+            profileData.setGlobalLevel(profileDataDocument.getString("globalLevel"));
 
             profileData.setSelectedTitle(profileDataDocument.getString("selectedTitle"));
             profileData.setUnlockedTitles(profileDataDocument.getList("unlockedTitles", String.class));

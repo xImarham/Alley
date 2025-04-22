@@ -27,6 +27,7 @@ import dev.revere.alley.feature.hotbar.listener.HotbarListener;
 import dev.revere.alley.feature.kit.KitService;
 import dev.revere.alley.feature.kit.settings.KitSettingService;
 import dev.revere.alley.feature.leaderboard.LeaderboardService;
+import dev.revere.alley.feature.level.LevelService;
 import dev.revere.alley.feature.queue.QueueService;
 import dev.revere.alley.feature.scoreboard.ScoreboardVisualizer;
 import dev.revere.alley.feature.server.ServerService;
@@ -126,6 +127,7 @@ public class Alley extends JavaPlugin {
     private BotMechanics botMechanics;
     private BotFightRepository botFightRepository;
     private TitleService titleService;
+    private LevelService levelService;
 
     private boolean loaded;
 
@@ -200,6 +202,7 @@ public class Alley extends JavaPlugin {
         services.put(FFAService.class.getSimpleName(), () -> this.ffaService = new FFAService(this));
         services.put(CosmeticRepository.class.getSimpleName(), () -> this.cosmeticRepository = new CosmeticRepository());
         services.put(DivisionService.class.getSimpleName(), () -> this.divisionService = new DivisionService(this));
+        services.put(LevelService.class.getSimpleName(), () -> this.levelService = new LevelService(this));
         services.put(ProfileService.class.getSimpleName(), () -> { this.profileService = new ProfileService(); this.profileService.loadProfiles(); });
         services.put(HotbarService.class.getSimpleName(), () -> this.hotbarService = new HotbarService());
         services.put(CooldownRepository.class.getSimpleName(), () -> this.cooldownRepository = new CooldownRepository());
