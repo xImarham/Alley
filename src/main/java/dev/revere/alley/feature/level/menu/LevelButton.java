@@ -33,14 +33,16 @@ public class LevelButton extends Button {
                 .build();
         }
 
+        int requiredElo = this.level.getMinElo() - this.profile.getProfileData().getElo();
+
         return new ItemBuilder(Material.STAINED_GLASS_PANE)
             .name(this.level.getDisplayName())
             .lore(
                 "",
                 "&c&lLOCKED",
                 "",
-                "&fUnlock &b" + this.level.getDisplayName() + " &fwith " + this.level.getMinElo() + " Elo.",
-                "&fCurrent global elo: " + this.profile.getProfileData().getElo()
+                "&fUnlock with &b" + requiredElo + " &fmore Elo!",
+                "&fCurrent Elo: &b" + this.profile.getProfileData().getElo()
             )
             .durability(14)
             .hideMeta()

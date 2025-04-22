@@ -43,7 +43,7 @@ public class LevelService {
 
             String displayName = config.getString(path + ".display-name");
 
-            Material material = Material.matchMaterial(config.getString(path));
+            Material material = Material.matchMaterial(config.getString(path + ".material"));
             int durability = config.getInt(path + ".durability");
 
             int minElo = config.getInt(path + ".min-elo");

@@ -2,14 +2,12 @@ package dev.revere.alley.feature.level.menu;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.menu.Button;
-import dev.revere.alley.api.menu.Menu;
 import dev.revere.alley.api.menu.pagination.PaginatedMenu;
 import dev.revere.alley.feature.level.Level;
 import dev.revere.alley.profile.Profile;
 import lombok.AllArgsConstructor;
 import org.bukkit.entity.Player;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
