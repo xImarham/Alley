@@ -22,4 +22,11 @@ public interface IProfile {
      * @param profile The profile to load.
      */
     void loadProfile(Profile profile);
+
+    /**
+     * Archives a profile in the database.
+     *
+     * @param profile The profile to archive.
+     */
+    void archiveProfile(Profile profile);
 }

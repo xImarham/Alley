@@ -85,7 +85,7 @@ public class ProfileService {
         Profile profile = this.getProfile(target);
         OfflinePlayer targetPlayer = Bukkit.getOfflinePlayer(target);
 
-        this.archiveProfile(profile);
+        this.iProfile.archiveProfile(profile);
 
         profile.setProfileData(new ProfileData());
         profile.save();
@@ -107,27 +107,5 @@ public class ProfileService {
                     ""
             ).forEach(line -> targetPlayer.getPlayer().sendMessage(CC.translate(line)));
         }
-    }
-
-    /**
-     * Archives a player's profile before resetting stats.
-     *
-     * @param profile The profile to archive.
-     */
-    public void archiveProfile(Profile profile) {
-        Document archiveDocument = new Document();
-
-        DateFormatter dateFormatter = new DateFormatter(EnumDateFormat.DATE_PLUS_TIME, System.currentTimeMillis());
-        String archiveId = UUID.randomUUID().toString();
-
-        archiveDocument.put("archive_id", archiveId);
-        archiveDocument.put("archived_at", dateFormatter.getDateFormat().format(dateFormatter.getDate()));
-        archiveDocument.put("data", MongoUtility.toDocument(profile));
-
-        Alley.getInstance().getMongoService().getMongoDatabase().getCollection("profile_archives").updateOne(
-                new Document("uuid", profile.getUuid().toString()),
-                new Document("$push", new Document("archives", archiveDocument)),
-                new UpdateOptions().upsert(true)
-        );
     }
 }
