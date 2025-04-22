@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 
 /**
  * @author Emmy
- * @project alley-practice
+ * @project Alley
  * @since 22/04/2025
  */
 public class TitleCommand extends BaseCommand {

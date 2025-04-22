@@ -12,7 +12,7 @@ import org.bukkit.inventory.ItemStack;
 
 /**
  * @author Emmy
- * @project alley-practice
+ * @project Alley
  * @since 21/04/2025
  */
 @AllArgsConstructor

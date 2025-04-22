@@ -1,14 +1,10 @@
 package dev.revere.alley.profile;
 
 import com.mongodb.client.MongoCollection;
-import com.mongodb.client.model.UpdateOptions;
 import dev.revere.alley.Alley;
 import dev.revere.alley.database.profile.IProfile;
 import dev.revere.alley.database.profile.impl.MongoProfileImpl;
-import dev.revere.alley.database.util.MongoUtility;
 import dev.revere.alley.profile.data.ProfileData;
-import dev.revere.alley.tool.date.DateFormatter;
-import dev.revere.alley.tool.date.enums.EnumDateFormat;
 import dev.revere.alley.util.chat.CC;
 import lombok.Getter;
 import org.bson.Document;
