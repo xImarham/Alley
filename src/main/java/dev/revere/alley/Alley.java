@@ -89,7 +89,8 @@ import java.util.*;
 @Getter
 public class Alley extends JavaPlugin {
 
-    @Getter private static Alley instance;
+    @Getter
+    private static Alley instance;
 
     private PluginConstant pluginConstant;
     private ServerEnvironment serverEnvironment;
@@ -128,6 +129,10 @@ public class Alley extends JavaPlugin {
 
     private boolean loaded;
 
+    public Alley() {
+        new AlleyAPI();
+    }
+
     public void onEnable() {
         this.loaded = false;
         instance = this;
@@ -148,6 +153,8 @@ public class Alley extends JavaPlugin {
 
         PluginLogger.onEnable(timeTaken);
         this.loaded = true;
+
+        AlleyAPI.getInstance().runOnEnableCallbacks();
     }
 
     @Override
@@ -165,6 +172,8 @@ public class Alley extends JavaPlugin {
         this.divisionService.saveDivisions();
 
         PluginLogger.onDisable();
+
+        AlleyAPI.getInstance().runOnDisableCallbacks();
     }
 
     private void checkDescription() {
