@@ -61,9 +61,6 @@ public class MatchUtility {
      * @param loserName  The name of the loser.
      */
     public void sendMatchResult(AbstractMatch match, String winnerName, String loserName) {
-
-        // this is untested, it might not work as expected :D
-
         FileConfiguration config = Alley.getInstance().getConfigService().getMessagesConfig();
 
         String path = "match.ended.match-result.regular.";
@@ -134,6 +131,9 @@ public class MatchUtility {
      * @param loserParticipant    The loser participant.
      */
     public void sendConjoinedMatchResult(AbstractMatch match, GameParticipant<MatchGamePlayerImpl> winnerParticipant, GameParticipant<MatchGamePlayerImpl> loserParticipant) {
+     
+        // this is untested, it might not work as expected :D
+        
         FileConfiguration config = Alley.getInstance().getConfigService().getMessagesConfig();
         String path = "match.ended.match-result.conjoined.";
 
