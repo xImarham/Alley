@@ -6,15 +6,6 @@ import dev.revere.alley.api.menu.Menu;
 import dev.revere.alley.feature.arena.AbstractArena;
 import dev.revere.alley.feature.arena.impl.StandAloneArena;
 import dev.revere.alley.feature.kit.Kit;
-import dev.revere.alley.feature.kit.settings.impl.KitSettingBattleRushImpl;
-import dev.revere.alley.feature.kit.settings.impl.KitSettingLivesImpl;
-import dev.revere.alley.feature.kit.settings.impl.KitSettingStickFightImpl;
-import dev.revere.alley.feature.queue.Queue;
-import dev.revere.alley.game.match.AbstractMatch;
-import dev.revere.alley.game.match.impl.MatchLivesRegularImpl;
-import dev.revere.alley.game.match.impl.MatchRegularImpl;
-import dev.revere.alley.game.match.impl.MatchRoundsRegularImpl;
-import dev.revere.alley.game.match.impl.kit.MatchStickFightImpl;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.game.match.player.participant.TeamGameParticipant;
@@ -55,7 +46,7 @@ public class PartyEventSplitArenaSelectorMenu extends Menu {
 
         for (AbstractArena arena : Alley.getInstance().getArenaService().getArenas()) {
             if (arena.getKits().contains(kit.getName()) && arena.isEnabled() &&
-                    (!(arena instanceof StandAloneArena) || !((StandAloneArena) arena).isActive())) {
+                (!(arena instanceof StandAloneArena) || !((StandAloneArena) arena).isActive())) {
                 buttons.put(buttons.size(), new PartyEventSplitArenaSelectorButton(kit, arena));
             }
         }
@@ -71,10 +62,10 @@ public class PartyEventSplitArenaSelectorMenu extends Menu {
         @Override
         public ItemStack getButtonItem(Player player) {
             return new ItemBuilder(Material.PAPER).name("&b" + arena.getName()).durability(0).hideMeta()
-                    .lore(Collections.singletonList(
-                            "&7Click to select this arena."
-                    ))
-                    .build();
+                .lore(Collections.singletonList(
+                    "&7Click to select this arena."
+                ))
+                .build();
         }
 
         @Override
@@ -111,23 +102,9 @@ public class PartyEventSplitArenaSelectorMenu extends Menu {
                 }
             }
 
-            for (Queue queue : Alley.getInstance().getQueueService().getQueues()) {
-                if (queue.getKit().equals(this.kit) && !queue.isRanked()) {
-                    if (queue.getKit().isSettingEnabled(KitSettingLivesImpl.class)) {
-                        AbstractMatch match = new MatchLivesRegularImpl(queue, this.kit, this.arena, false, participantA, participantB);
-                        match.startMatch();
-                    } else if (queue.getKit().isSettingEnabled(KitSettingBattleRushImpl.class)) {
-                        AbstractMatch match = new MatchRoundsRegularImpl(queue, this.kit, arena, false, participantA, participantB, 3);
-                        match.startMatch();
-                    } else if (queue.getKit().isSettingEnabled(KitSettingStickFightImpl.class)) {
-                        AbstractMatch match = new MatchStickFightImpl(queue, this.kit, arena, false, participantA, participantB, 5);
-                        match.startMatch();
-                    } else {
-                        AbstractMatch match = new MatchRegularImpl(queue, this.kit, this.arena, false, participantA, participantB);
-                        match.startMatch();
-                    }
-                }
-            }
+            Alley.getInstance().getMatchRepository().createAndStartMatch(
+                this.kit, this.arena, participantA, participantB
+            );
         }
     }
 }

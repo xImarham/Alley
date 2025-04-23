@@ -3,15 +3,6 @@ package dev.revere.alley.game.duel;
 import dev.revere.alley.Alley;
 import dev.revere.alley.feature.arena.AbstractArena;
 import dev.revere.alley.feature.kit.Kit;
-import dev.revere.alley.feature.kit.settings.impl.KitSettingBattleRushImpl;
-import dev.revere.alley.feature.kit.settings.impl.KitSettingLivesImpl;
-import dev.revere.alley.feature.kit.settings.impl.KitSettingStickFightImpl;
-import dev.revere.alley.feature.queue.Queue;
-import dev.revere.alley.game.match.AbstractMatch;
-import dev.revere.alley.game.match.impl.MatchLivesRegularImpl;
-import dev.revere.alley.game.match.impl.MatchRegularImpl;
-import dev.revere.alley.game.match.impl.MatchRoundsRegularImpl;
-import dev.revere.alley.game.match.impl.kit.MatchStickFightImpl;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.util.chat.CC;
@@ -142,23 +133,9 @@ public class DuelRequestService {
         GameParticipant<MatchGamePlayerImpl> participantA = new GameParticipant<>(playerA);
         GameParticipant<MatchGamePlayerImpl> participantB = new GameParticipant<>(playerB);
 
-        for (Queue queue : this.plugin.getQueueService().getQueues()) {
-            if (queue.getKit().equals(duelRequest.getKit()) && !queue.isRanked()) {
-                if (queue.getKit().isSettingEnabled(KitSettingLivesImpl.class)) {
-                    AbstractMatch match = new MatchLivesRegularImpl(queue, duelRequest.getKit(), duelRequest.getArena(), false, participantA, participantB);
-                    match.startMatch();
-                } else if (queue.getKit().isSettingEnabled(KitSettingBattleRushImpl.class)) {
-                    AbstractMatch match = new MatchRoundsRegularImpl(queue, duelRequest.getKit(), duelRequest.getArena(), false, participantA, participantB, 3);
-                    match.startMatch();
-                } else if (queue.getKit().isSettingEnabled(KitSettingStickFightImpl.class)) {
-                    AbstractMatch match = new MatchStickFightImpl(queue, duelRequest.getKit(), duelRequest.getArena(), false, participantA, participantB, 5);
-                    match.startMatch();
-                } else {
-                    AbstractMatch match = new MatchRegularImpl(queue, duelRequest.getKit(), duelRequest.getArena(), false, participantA, participantB);
-                    match.startMatch();
-                }
-            }
-        }
+        Alley.getInstance().getMatchRepository().createAndStartMatch(
+            duelRequest.getKit(), duelRequest.getArena(), participantA, participantB
+        );
 
         this.removeDuelRequest(duelRequest);
     }

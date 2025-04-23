@@ -4,16 +4,8 @@ import dev.revere.alley.Alley;
 import dev.revere.alley.feature.arena.AbstractArena;
 import dev.revere.alley.feature.arena.enums.EnumArenaType;
 import dev.revere.alley.feature.hotbar.enums.HotbarType;
-import dev.revere.alley.feature.kit.settings.impl.KitSettingBattleRushImpl;
-import dev.revere.alley.feature.kit.settings.impl.KitSettingLivesImpl;
-import dev.revere.alley.feature.kit.settings.impl.KitSettingStickFightImpl;
 import dev.revere.alley.feature.queue.Queue;
 import dev.revere.alley.feature.queue.QueueProfile;
-import dev.revere.alley.game.match.AbstractMatch;
-import dev.revere.alley.game.match.impl.MatchLivesRegularImpl;
-import dev.revere.alley.game.match.impl.MatchRegularImpl;
-import dev.revere.alley.game.match.impl.MatchRoundsRegularImpl;
-import dev.revere.alley.game.match.impl.kit.MatchStickFightImpl;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.profile.ProfileService;
@@ -37,8 +29,7 @@ import java.util.Optional;
 public class QueueRunnable implements Runnable {
     @Override
     public void run() {
-        Alley.getInstance().getQueueService().getQueues()
-                .forEach(this::processQueue);
+        Alley.getInstance().getQueueService().getQueues().forEach(this::processQueue);
     }
 
     /**
@@ -118,28 +109,9 @@ public class QueueRunnable implements Runnable {
             return;
         }
 
-        AbstractMatch match = getMatchType(queue, gameParticipantList, arena);
-        match.startMatch();
-    }
-
-    /**
-     * Method to get the match type.
-     *
-     * @param queue               The queue.
-     * @param gameParticipantList The game participant list.
-     * @param arena               The arena.
-     * @return The match type.
-     */
-    private @NotNull AbstractMatch getMatchType(Queue queue, GameParticipantList gameParticipantList, AbstractArena arena) {
-        if (queue.getKit().isSettingEnabled(KitSettingLivesImpl.class)) {
-            return new MatchLivesRegularImpl(queue, queue.getKit(), arena, queue.isRanked(), gameParticipantList.getParticipantA(), gameParticipantList.getParticipantB());
-        } else if (queue.getKit().isSettingEnabled(KitSettingBattleRushImpl.class)) {
-            return new MatchRoundsRegularImpl(queue, queue.getKit(), arena, queue.isRanked(), gameParticipantList.getParticipantA(), gameParticipantList.getParticipantB(), 3);
-        } else if (queue.getKit().isSettingEnabled(KitSettingStickFightImpl.class)) {
-            return new MatchStickFightImpl(queue, queue.getKit(), arena, queue.isRanked(), gameParticipantList.getParticipantA(), gameParticipantList.getParticipantB(), 5);
-        } else {
-            return new MatchRegularImpl(queue, queue.getKit(), arena, queue.isRanked(), gameParticipantList.getParticipantA(), gameParticipantList.getParticipantB());
-        }
+        Alley.getInstance().getMatchRepository().createAndStartMatch(
+            queue.getKit(), arena, gameParticipantList.participantA, gameParticipantList.participantB
+        );
     }
 
     /**
@@ -176,8 +148,8 @@ public class QueueRunnable implements Runnable {
      */
     private @NotNull GameParticipantList getGameParticipantList(GamePlayerList gamePlayerList) {
         return new GameParticipantList(
-                new GameParticipant<>(gamePlayerList.getFirstMatchGamePlayer()),
-                new GameParticipant<>(gamePlayerList.getSecondMatchGamePlayer())
+            new GameParticipant<>(gamePlayerList.getFirstMatchGamePlayer()),
+            new GameParticipant<>(gamePlayerList.getSecondMatchGamePlayer())
         );
     }
 
@@ -190,8 +162,8 @@ public class QueueRunnable implements Runnable {
      */
     private @NotNull GamePlayerList getGamePlayerList(Player firstPlayer, Player secondPlayer, QueueProfile firstProfile, QueueProfile secondProfile) {
         return new GamePlayerList(
-                new MatchGamePlayerImpl(firstPlayer.getUniqueId(), firstPlayer.getName(), firstProfile.getElo()),
-                new MatchGamePlayerImpl(secondPlayer.getUniqueId(), secondPlayer.getName(), secondProfile.getElo())
+            new MatchGamePlayerImpl(firstPlayer.getUniqueId(), firstPlayer.getName(), firstProfile.getElo()),
+            new MatchGamePlayerImpl(secondPlayer.getUniqueId(), secondPlayer.getName(), secondProfile.getElo())
         );
     }
 
@@ -212,7 +184,7 @@ public class QueueRunnable implements Runnable {
         }
 
         public List<GameParticipant<MatchGamePlayerImpl>> getParticipants() {
-            return Arrays.asList(getParticipantA(), getParticipantB());
+            return Arrays.asList(this.participantA, this.participantB);
         }
     }
 
