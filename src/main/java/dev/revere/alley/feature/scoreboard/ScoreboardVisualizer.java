@@ -97,22 +97,27 @@ public class ScoreboardVisualizer implements IAssembleAdapter {
             }
             switch (profile.getState()) {
                 case LOBBY:
-                    for (String line : this.plugin.getConfigService().getConfig("providers/scoreboard.yml").getStringList("scoreboard.lines.lobby")) {
-                        lines.add(CC.translate(line)
-                            .replaceAll("\\{sidebar}", this.getScoreboardLines(player))
-                            .replaceAll("\\{online}", String.valueOf(Bukkit.getOnlinePlayers().size()))
-                            .replaceAll("\\{playing}", String.valueOf(this.plugin.getProfileService().getProfiles().values().stream().filter(profile1 -> profile1.getState() == EnumProfileState.PLAYING).count()))
-                            .replaceAll("\\{level}", String.valueOf(this.plugin.getLevelService().getLevel(profile.getProfileData().getGlobalLevel()).getDisplayName()))
-                            .replaceAll("\\{in-queue}", String.valueOf(this.plugin.getProfileService().getProfiles().values().stream().filter(profile1 -> profile1.getState() == EnumProfileState.WAITING).count()))
-                        );
-                    }
-
                     if (profile.getParty() != null) {
-                        for (String line : this.plugin.getConfigService().getConfig("providers/scoreboard.yml").getStringList("scoreboard.lines.party-addition")) {
+                        for (String line : this.plugin.getConfigService().getConfig("providers/scoreboard.yml").getStringList("scoreboard.lines.party")) {
                             lines.add(CC.translate(line)
                                 .replaceAll("\\{sidebar}", this.getScoreboardLines(player))
+                                .replaceAll("\\{online}", String.valueOf(Bukkit.getOnlinePlayers().size()))
+                                .replaceAll("\\{level}", String.valueOf(this.plugin.getLevelService().getLevel(profile.getProfileData().getGlobalLevel()).getDisplayName()))
+                                .replaceAll("\\{sidebar}", this.getScoreboardLines(player))
+                                .replaceAll("\\{wins}", String.valueOf(profile.getProfileData().getTotalWins()))
                                 .replaceAll("\\{party-size}", String.valueOf(profile.getParty().getMembers().size()))
                                 .replaceAll("\\{party-leader}", profile.getParty().getLeader().getName())
+                            );
+                        }
+                    } else {
+                        for (String line : this.plugin.getConfigService().getConfig("providers/scoreboard.yml").getStringList("scoreboard.lines.lobby")) {
+                            lines.add(CC.translate(line)
+                                .replaceAll("\\{sidebar}", this.getScoreboardLines(player))
+                                .replaceAll("\\{online}", String.valueOf(Bukkit.getOnlinePlayers().size()))
+                                .replaceAll("\\{wins}", String.valueOf(profile.getProfileData().getTotalWins()))
+                                .replaceAll("\\{playing}", String.valueOf(this.plugin.getProfileService().getProfiles().values().stream().filter(profile1 -> profile1.getState() == EnumProfileState.PLAYING).count()))
+                                .replaceAll("\\{level}", String.valueOf(this.plugin.getLevelService().getLevel(profile.getProfileData().getGlobalLevel()).getDisplayName()))
+                                .replaceAll("\\{in-queue}", String.valueOf(this.plugin.getProfileService().getProfiles().values().stream().filter(profile1 -> profile1.getState() == EnumProfileState.WAITING).count()))
                             );
                         }
                     }
@@ -125,6 +130,7 @@ public class ScoreboardVisualizer implements IAssembleAdapter {
                             .replaceAll("\\{online}", String.valueOf(Bukkit.getOnlinePlayers().size()))
                             .replaceAll("\\{playing}", String.valueOf(this.plugin.getProfileService().getProfiles().values().stream().filter(profile1 -> profile1.getState() == EnumProfileState.PLAYING).count()))
                             .replaceAll("\\{in-queue}", String.valueOf(this.plugin.getProfileService().getProfiles().values().stream().filter(profile1 -> profile1.getState() == EnumProfileState.WAITING).count()))
+                            .replaceAll("\\{wins}", String.valueOf(profile.getProfileData().getTotalWins()))
                             .replaceAll("\\{queued-type}", this.plugin.getProfileService().getProfile(player.getUniqueId()).getQueueProfile().getQueue().getQueueType())
                             .replaceAll("\\{level}", String.valueOf(this.plugin.getLevelService().getLevel(profile.getProfileData().getGlobalLevel()).getDisplayName()))
                             .replaceAll("\\{queued-time}", String.valueOf(this.plugin.getProfileService().getProfile(player.getUniqueId()).getQueueProfile().getFormattedElapsedTime()))
