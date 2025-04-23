@@ -29,7 +29,7 @@ public class ReflectionRepository {
         this.registerReflectionServices();
     }
 
-    public void registerReflectionServices() {
+    private void registerReflectionServices() {
         Reflections reflections = this.plugin.getPluginConstant().getReflections();
         for (Class<? extends IReflection> clazz : reflections.getSubTypesOf(IReflection.class)) {
             try {
@@ -53,7 +53,7 @@ public class ReflectionRepository {
      * @param clazz The class type of the service to retrieve.
      * @return The service instance, or null if not found.
      */
-    public <T extends IReflection> T getReflection(Class<T> clazz) {
+    public <T extends IReflection> T getReflectionService(Class<T> clazz) {
         for (IReflection service : this.reflectionServices) {
             if (service.getClass().equals(clazz)) {
                 return clazz.cast(service);

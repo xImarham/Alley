@@ -25,17 +25,18 @@ public class TitleReflectionService implements IReflection {
      */
     public void sendTitle(Player player, String title, String subtitle, int fadeIn, int stay, int fadeOut) {
         CraftPlayer craftPlayer = this.getCraftPlayer(player);
-        if (craftPlayer == null) {
-            return;
-        }
+        if (craftPlayer == null) return;
 
-        player.sendMessage(CC.translate(title));
+        String translatedTitle = CC.translate(title);
+        String translatedSubtitle = CC.translate(subtitle);
+        IChatBaseComponent titleComponent = IChatBaseComponent.ChatSerializer.a("{\"text\":\"" + translatedTitle + "\"}");
+        IChatBaseComponent subtitleComponent = IChatBaseComponent.ChatSerializer.a("{\"text\":\"" + translatedSubtitle + "\"}");
 
-        IChatBaseComponent titleComponent = IChatBaseComponent.ChatSerializer.a("{\"text\":\"" + CC.translate(title) + "\"}");
-        IChatBaseComponent subtitleComponent = IChatBaseComponent.ChatSerializer.a("{\"text\":\"" + CC.translate(subtitle) + "\"}");
+        PacketPlayOutTitle timesPacket = new PacketPlayOutTitle(fadeIn, stay, fadeOut);
+        this.sendPacket(player, timesPacket);
 
-        PacketPlayOutTitle titlePacket = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.TITLE, titleComponent, fadeIn, stay, fadeOut);
-        PacketPlayOutTitle subtitlePacket = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.SUBTITLE, subtitleComponent, fadeIn, stay, fadeOut);
+        PacketPlayOutTitle titlePacket = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.TITLE, titleComponent);
+        PacketPlayOutTitle subtitlePacket = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.SUBTITLE, subtitleComponent);
 
         this.sendPacket(player, titlePacket);
         this.sendPacket(player, subtitlePacket);

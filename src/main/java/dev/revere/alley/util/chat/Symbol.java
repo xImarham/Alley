@@ -26,4 +26,5 @@ public class Symbol {
     public String FLAG = "⚑";
     public String SKULL = "☠";
     public String GEAR = "⚙";
+    public String CROSSED_SWORDS = "⚔";
 }

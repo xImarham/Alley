@@ -17,6 +17,6 @@ public class BodyFallKillEffect extends AbstractKillEffect {
 
     @Override
     public void spawnEffect(Player player) {
-        Alley.getInstance().getReflectionRepository().getReflection(DeathReflectionService.class).animateDeath(player);
+        Alley.getInstance().getReflectionRepository().getReflectionService(DeathReflectionService.class).animateDeath(player);
     }
 }

@@ -7,15 +7,20 @@ import dev.revere.alley.feature.hotbar.HotbarService;
 import dev.revere.alley.feature.hotbar.enums.HotbarType;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
+import dev.revere.alley.reflection.impl.TitleReflectionService;
+import dev.revere.alley.util.SoundUtil;
 import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.util.chat.ClickableUtil;
+import dev.revere.alley.util.chat.Symbol;
 import lombok.Getter;
 import lombok.Setter;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -52,6 +57,85 @@ public class PartyService {
         Party party = new Party(player);
         profile.setParty(party);
         Alley.getInstance().getHotbarService().applyHotbarItems(player, HotbarType.PARTY);
+
+        Alley.getInstance().getReflectionRepository().getReflectionService(TitleReflectionService.class).sendTitle(
+            player,
+            "&a&l" + Symbol.CROSSED_SWORDS + " Party Created",
+            "&7Type /p for help.",
+            2, 10, 2
+        );
+
+        SoundUtil.playCustomSound(player, Sound.FIREWORK_TWINKLE, 1.0F, 1.0F);
+
+        Arrays.asList(
+            "",
+            "&b&lParty Created &a" + Symbol.TICK,
+            " &7Type /p for help.",
+            ""
+        ).forEach(line -> player.sendMessage(CC.translate(line)));
+    }
+
+    /**
+     * Disbands the party.
+     *
+     * @param leader The leader of the party.
+     */
+    public void disbandParty(Player leader) {
+        Party party = this.getPartyByLeader(leader);
+        party.getMembers().forEach(member -> this.setupProfile(Bukkit.getPlayer(member), false));
+        party.notifyParty("&b&lParty &7&l" + Symbol.ARROW_R + " &b" + leader.getName() + " &cdisbanded the party.");
+        this.parties.remove(party);
+
+        Cooldown cooldown = Alley.getInstance().getCooldownRepository().getCooldown(leader.getUniqueId(), EnumCooldownType.PARTY_ANNOUNCE_COOLDOWN);
+        if (cooldown != null && cooldown.isActive()) {
+            cooldown.resetCooldown();
+        }
+
+        if (leader.isOnline()) {
+            this.setupProfile(leader, false);
+        }
+
+        Alley.getInstance().getReflectionRepository().getReflectionService(TitleReflectionService.class).sendTitle(
+            leader,
+            "&c&l✖ Party Disbanded",
+            "&7You've removed your party.",
+            2, 10, 2
+        );
+
+        SoundUtil.playBanHammer(leader);
+    }
+
+    /**
+     * Removes a member from the party.
+     *
+     * @param player The member to remove.
+     */
+    public void leaveParty(Player player) {
+        Party party = this.getPartyByMember(player.getUniqueId());
+        if (party == null) {
+            if (player.isOnline()) {
+                player.sendMessage(CC.translate("&cYou are not in a party."));
+            }
+            return;
+        }
+
+        party.getMembers().remove(player.getUniqueId());
+        party.notifyParty("&a" + player.getName() + " has left the party.");
+        this.setupProfile(player, false);
+    }
+
+    /**
+     * Kicks a member from the party.
+     *
+     * @param leader The leader of the party.
+     * @param member The member to kick.
+     */
+    public void kickMember(Player leader, Player member) {
+        Party party = this.getPartyByLeader(leader);
+        if (party == null) return;
+        party.getMembers().remove(member.getUniqueId());
+        party.notifyParty("&c" + member.getName() + " has been kicked from the party.");
+        this.setupProfile(member, false);
     }
 
     /**
@@ -132,27 +216,6 @@ public class PartyService {
     }
 
     /**
-     * Disbands the party.
-     *
-     * @param leader The leader of the party.
-     */
-    public void disbandParty(Player leader) {
-        Party party = this.getPartyByLeader(leader);
-        party.getMembers().forEach(member -> this.setupProfile(Bukkit.getPlayer(member), false));
-        party.notifyPartyExcludeLeader("&cThe party has been disbanded.");
-        this.parties.remove(party);
-
-        Cooldown cooldown = Alley.getInstance().getCooldownRepository().getCooldown(leader.getUniqueId(), EnumCooldownType.PARTY_ANNOUNCE_COOLDOWN);
-        if (cooldown != null && cooldown.isActive()) {
-            cooldown.resetCooldown();
-        }
-
-        if (leader.isOnline()) {
-            this.setupProfile(leader, false);
-        }
-    }
-
-    /**
      * Sets up the profile of a player.
      *
      * @param player The player to set up the profile for.
@@ -171,39 +234,6 @@ public class PartyService {
     }
 
     /**
-     * Removes a member from the party.
-     *
-     * @param player The member to remove.
-     */
-    public void leaveParty(Player player) {
-        Party party = this.getPartyByMember(player.getUniqueId());
-        if (party == null) {
-            if (player.isOnline()) {
-                player.sendMessage(CC.translate("&cYou are not in a party."));
-            }
-            return;
-        }
-
-        party.getMembers().remove(player.getUniqueId());
-        party.notifyParty("&a" + player.getName() + " has left the party.");
-        this.setupProfile(player, false);
-    }
-
-    /**
-     * Kicks a member from the party.
-     *
-     * @param leader The leader of the party.
-     * @param member The member to kick.
-     */
-    public void kickMember(Player leader, Player member) {
-        Party party = this.getPartyByLeader(leader);
-        if (party == null) return;
-        party.getMembers().remove(member.getUniqueId());
-        party.notifyParty("&c" + member.getName() + " has been kicked from the party.");
-        this.setupProfile(member, false);
-    }
-
-    /**
      * Gets a party request for a specific player.
      *
      * @param player The player to get the request for.
@@ -211,9 +241,9 @@ public class PartyService {
      */
     public PartyRequest getRequest(Player player) {
         return this.partyRequests.stream()
-                .filter(request -> request.getTarget().equals(player))
-                .findFirst()
-                .orElse(null);
+            .filter(request -> request.getTarget().equals(player))
+            .findFirst()
+            .orElse(null);
     }
 
     /**
@@ -255,9 +285,9 @@ public class PartyService {
      */
     public Party getPartyByLeader(Player player) {
         return this.parties.stream()
-                .filter(party -> party.getLeader().equals(player))
-                .findFirst()
-                .orElse(null);
+            .filter(party -> party.getLeader().equals(player))
+            .findFirst()
+            .orElse(null);
     }
 
     /**
@@ -268,9 +298,9 @@ public class PartyService {
      */
     public Party getPartyByMember(UUID uuid) {
         return this.parties.stream()
-                .filter(party -> party.getMembers().contains(uuid))
-                .findFirst()
-                .orElse(null);
+            .filter(party -> party.getMembers().contains(uuid))
+            .findFirst()
+            .orElse(null);
     }
 
     /**
@@ -309,9 +339,9 @@ public class PartyService {
      */
     private TextComponent getClickable(Player sender) {
         return ClickableUtil.createComponent(
-                " &a(Click to accept)",
-                "/party join " + sender.getName(),
-                "&aClick to accept &b" + sender.getName() + "&a's party invitation."
+            " &a(Click to accept)",
+            "/party join " + sender.getName(),
+            "&aClick to accept &b" + sender.getName() + "&a's party invitation."
         );
     }
 }

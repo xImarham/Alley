@@ -45,6 +45,6 @@ public class PartyCreateCommand extends BaseCommand {
         }
 
         partyService.createParty(player);
-        player.sendMessage(CC.translate(PartyLocale.PARTY_CREATED.getMessage()));
+        //player.sendMessage(CC.translate(PartyLocale.PARTY_CREATED.getMessage()));
     }
 }

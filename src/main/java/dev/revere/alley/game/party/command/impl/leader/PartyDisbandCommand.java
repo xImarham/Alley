@@ -35,7 +35,7 @@ public class PartyDisbandCommand extends BaseCommand {
         PartyService partyService = this.plugin.getPartyService();
         if (partyService.getPartyByLeader(player) != null) {
             partyService.disbandParty(player);
-            player.sendMessage(CC.translate(PartyLocale.PARTY_DISBANDED.getMessage()));
+            //player.sendMessage(CC.translate(PartyLocale.PARTY_DISBANDED.getMessage()));
             return;
         }
 

@@ -37,7 +37,7 @@ public class KitDeleteCommand extends BaseCommand {
 
         kitService.deleteKit(kit);
         player.sendMessage(CC.translate(KitLocale.KIT_DELETED.getMessage().replace("{kit-name}", kitName)));
-        this.plugin.getReflectionRepository().getReflection(ActionBarReflectionService.class).sendMessage(player, KitLocale.KIT_DELETED.getMessage().replace("{kit-name}", kitName), 5);
+        this.plugin.getReflectionRepository().getReflectionService(ActionBarReflectionService.class).sendMessage(player, KitLocale.KIT_DELETED.getMessage().replace("{kit-name}", kitName), 5);
 
         this.plugin.getArenaService().getArenas().forEach(arena -> {
             if (arena.getKits().contains(kitName)) {
