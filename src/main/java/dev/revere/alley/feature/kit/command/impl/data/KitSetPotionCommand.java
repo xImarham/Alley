@@ -25,41 +25,41 @@ public class KitSetPotionCommand extends BaseCommand {
     @CommandData(name = "kit.setpotion", aliases = {"kit.setpotioneffects"}, isAdminOnly = true)
     @Override
     public void onCommand(CommandArgs command) {
-        Player sender = command.getPlayer();
+        Player player = command.getPlayer();
         String[] args = command.getArgs();
 
         if (args.length < 1) {
-            sender.sendMessage(CC.translate("&6Usage: &e/kit setpotion &b<kitName>"));
+            player.sendMessage(CC.translate("&6Usage: &e/kit setpotion &b<kitName>"));
             return;
         }
 
         KitService kitService = this.plugin.getKitService();
         Kit kit = kitService.getKit(args[0]);
         if (kit == null) {
-            sender.sendMessage(CC.translate(KitLocale.KIT_NOT_FOUND.getMessage()));
+            player.sendMessage(CC.translate(KitLocale.KIT_NOT_FOUND.getMessage()));
             return;
         }
 
-        ItemStack itemInHand = sender.getInventory().getItemInHand();
+        ItemStack itemInHand = player.getInventory().getItemInHand();
         if (itemInHand == null || itemInHand.getType() != Material.POTION) {
-            sender.sendMessage(CC.translate("&cYou must hold a potion bottle to set effects for this kit!"));
+            player.sendMessage(CC.translate("&cYou must hold a potion bottle to set effects for this kit!"));
             return;
         }
 
         if (!(itemInHand.getItemMeta() instanceof PotionMeta)) {
-            sender.sendMessage(CC.translate("&cInvalid potion!"));
+            player.sendMessage(CC.translate("&cInvalid potion!"));
             return;
         }
 
         PotionMeta potionMeta = (PotionMeta) itemInHand.getItemMeta();
         List<PotionEffect> effects = potionMeta.getCustomEffects();
         if (effects.isEmpty()) {
-            sender.sendMessage(CC.translate("&cThe potion you are holding has no custom effects!"));
+            player.sendMessage(CC.translate("&cThe potion you are holding has no custom effects!"));
             return;
         }
 
         kit.setPotionEffects(effects);
         kitService.saveKit(kit);
-        sender.sendMessage(CC.translate("&aSuccessfully set potion effects for kit &e" + kit.getName() + "&a!"));
+        player.sendMessage(CC.translate(KitLocale.KIT_POTION_EFFECTS_SET.getMessage()).replace("{kit-name}", kit.getName()));
     }
 }

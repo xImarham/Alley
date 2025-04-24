@@ -19,6 +19,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -59,29 +60,12 @@ public class KitCommand extends BaseCommand {
     public List<String> kitCompleter(CommandArgs command) {
         List<String> completion = new ArrayList<>();
         if (command.getArgs().length == 1 && command.getPlayer().hasPermission("alley.admin")) {
-            completion.add("list");
-            completion.add("saveall");
-            completion.add("settings");
-            completion.add("save");
-            completion.add("view");
-            completion.add("viewsettings");
-            completion.add("delete");
-            completion.add("create");
-            completion.add("seticon");
-            completion.add("setinv");
-            completion.add("getinv");
-            completion.add("setdesc");
-            completion.add("setdisclaimer");
-            completion.add("seteditorslot");
-            completion.add("setrankedslot");
-            completion.add("setslotall");
-            completion.add("setunrankedslot");
-            completion.add("setffaslot");
-            completion.add("setsetting");
-            completion.add("setdisplayname");
-            completion.add("setpotion");
-            completion.add("toggleffa");
-            completion.add("setupffa");
+            completion.addAll(Arrays.asList(
+                "list", "saveall", "settings", "save", "view", "viewsettings", "delete", "create",
+                "seticon", "setinv", "getinv", "setdesc", "setdisclaimer", "seteditorslot",
+                "setrankedslot", "setslotall", "setunrankedslot", "setffaslot", "setsetting",
+                "setdisplayname", "setpotion", "toggleffa", "setupffa"
+            ));
         }
 
         return completion;
@@ -102,21 +86,21 @@ public class KitCommand extends BaseCommand {
             }
         }
 
-        if (page > pages.length || page < 1) {
+        if (page > this.pages.length || page < 1) {
             sender.sendMessage(CC.translate("&cNo more pages available."));
             return;
         }
 
         sender.sendMessage("");
-        sender.sendMessage(CC.translate("&b&lKit Commands &8(&7Page &f" + page + "&7/&f" + pages.length + "&8)"));
-        for (String string : pages[page - 1]) {
+        sender.sendMessage(CC.translate("&b&lKit Commands &8(&7Page &f" + page + "&7/&f" + this.pages.length + "&8)"));
+        for (String string : this.pages[page - 1]) {
             sender.sendMessage(CC.translate(string));
         }
         sender.sendMessage("");
 
         if (sender instanceof Player) {
             Player player = (Player) sender;
-            ClickableUtil.sendPageNavigation(player, page, pages.length, "/kit", false, true);
+            ClickableUtil.sendPageNavigation(player, page, this.pages.length, "/kit", false, true);
         }
     }
 

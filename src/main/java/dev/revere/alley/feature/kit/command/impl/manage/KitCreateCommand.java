@@ -59,7 +59,7 @@ public class KitCreateCommand extends BaseCommand {
             if (slotTaken) return;
             slot = Integer.parseInt(args[1]);
         } catch (NumberFormatException e) {
-            player.sendMessage(CC.translate("&cInvalid slot number!"));
+            player.sendMessage(CC.translate(KitLocale.SLOT_MUST_BE_NUMBER.getMessage()));
             return;
         }
 

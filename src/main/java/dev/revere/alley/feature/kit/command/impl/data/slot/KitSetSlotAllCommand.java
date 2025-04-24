@@ -38,7 +38,7 @@ public class KitSetSlotAllCommand extends BaseCommand {
         try {
             slot = Integer.parseInt(args[1]);
         } catch (NumberFormatException e) {
-            sender.sendMessage(CC.translate("&cUsage: /kit setslotall (kit-name) (slot)"));
+            sender.sendMessage(CC.translate(KitLocale.SLOT_MUST_BE_NUMBER.getMessage()));
             return;
         }
 
@@ -46,6 +46,6 @@ public class KitSetSlotAllCommand extends BaseCommand {
         kit.setRankedslot(slot);
         kit.setUnrankedslot(slot);
         Alley.getInstance().getKitService().saveKit(kit);
-        sender.sendMessage(CC.translate(Alley.getInstance().getConfigService().getMessagesConfig().getString("kit.slots-set")).replace("{kit-name}", kit.getName()).replace("{slot}", String.valueOf(slot)));
+        sender.sendMessage(CC.translate(KitLocale.KIT_SLOTS_SET.getMessage()).replace("{kit-name}", kit.getName()).replace("{slot}", String.valueOf(slot)));
     }
 }

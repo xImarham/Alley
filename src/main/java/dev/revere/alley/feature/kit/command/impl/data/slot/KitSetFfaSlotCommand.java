@@ -37,14 +37,12 @@ public class KitSetFfaSlotCommand extends BaseCommand {
         try {
             slot = Integer.parseInt(args[1]);
         } catch (NumberFormatException e) {
-            player.sendMessage(CC.translate("&cThe slot must be a number."));
+            player.sendMessage(CC.translate(KitLocale.SLOT_MUST_BE_NUMBER.getMessage()));
             return;
         }
 
         kit.setFfaSlot(slot);
         kitService.saveKit(kit);
-        player.sendMessage(CC.translate(KitLocale.KIT_FFASLOT_SET.getMessage())
-                .replace("{kit-name}", kit.getName())
-                .replace("{slot}", String.valueOf(slot)));
+        player.sendMessage(CC.translate(KitLocale.KIT_FFASLOT_SET.getMessage()).replace("{kit-name}", kit.getName()).replace("{slot}", String.valueOf(slot)));
     }
 }
