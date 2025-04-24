@@ -1,7 +1,8 @@
-package dev.revere.alley.game.match;
+package dev.revere.alley.game.match.utility;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.feature.arena.AbstractArena;
+import dev.revere.alley.game.match.AbstractMatch;
 import dev.revere.alley.game.match.enums.EnumMatchState;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;

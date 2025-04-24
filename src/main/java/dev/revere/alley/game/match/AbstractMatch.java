@@ -152,17 +152,13 @@ public abstract class AbstractMatch {
         }
     }
 
-    public void endMatchOnServerStop() {
+    public void resetBlockChanges() {
         this.removePlacedBlocks();
         this.placeBrokenBlocks();
-
-        Alley.getInstance().getMatchRepository().getMatches().remove(this);
-        this.runnable.cancel();
     }
 
     public void endMatch() {
-        this.removePlacedBlocks();
-        this.placeBrokenBlocks();
+        this.resetBlockChanges();
 
         this.getParticipants().forEach(this::finalizeParticipant);
         this.spectators.forEach(uuid -> {

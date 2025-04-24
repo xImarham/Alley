@@ -8,7 +8,7 @@ import dev.revere.alley.feature.elo.result.OldEloResult;
 import dev.revere.alley.feature.kit.Kit;
 import dev.revere.alley.feature.queue.Queue;
 import dev.revere.alley.game.match.AbstractMatch;
-import dev.revere.alley.game.match.MatchUtility;
+import dev.revere.alley.game.match.utility.MatchUtility;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.profile.Profile;

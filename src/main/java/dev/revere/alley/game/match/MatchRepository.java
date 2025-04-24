@@ -61,14 +61,13 @@ public class MatchRepository {
         match.startMatch();
     }
 
-
     public void endPresentMatches() {
         if (this.matches.isEmpty()) {
             return;
         }
 
         List<AbstractMatch> matchList = new ArrayList<>(this.matches);
-        matchList.forEach(AbstractMatch::endMatchOnServerStop);
+        matchList.forEach(AbstractMatch::resetBlockChanges);
 
         Logger.log(this.matches.size() + " matches have been ended.");
     }

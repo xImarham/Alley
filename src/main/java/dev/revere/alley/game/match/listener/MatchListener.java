@@ -5,7 +5,7 @@ import dev.revere.alley.feature.arena.impl.StandAloneArena;
 import dev.revere.alley.feature.kit.Kit;
 import dev.revere.alley.feature.kit.settings.impl.*;
 import dev.revere.alley.game.match.AbstractMatch;
-import dev.revere.alley.game.match.MatchUtility;
+import dev.revere.alley.game.match.utility.MatchUtility;
 import dev.revere.alley.game.match.enums.EnumMatchState;
 import dev.revere.alley.game.match.impl.MatchRoundsRegularImpl;
 import dev.revere.alley.game.match.impl.kit.MatchStickFightImpl;
