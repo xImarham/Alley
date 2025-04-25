@@ -153,6 +153,7 @@ public class MatchRegularImpl extends AbstractMatch {
             Profile winnerProfile = profileService.getProfile(winner.getPlayer().getUuid());
             winnerProfile.getProfileData().getUnrankedKitData().get(getKit().getName()).incrementWins();
             winnerProfile.getProfileData().incrementUnrankedWins();
+            winnerProfile.getProfileData().determineTitles();
 
             Profile loserProfile = profileService.getProfile(loser.getPlayer().getUuid());
             loserProfile.getProfileData().getUnrankedKitData().get(getKit().getName()).incrementLosses();

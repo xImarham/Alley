@@ -4,6 +4,7 @@ import com.google.common.collect.Maps;
 import dev.revere.alley.Alley;
 import dev.revere.alley.feature.kit.Kit;
 import dev.revere.alley.feature.kit.settings.impl.KitSettingRankedImpl;
+import dev.revere.alley.feature.title.Title;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.data.impl.*;
 import dev.revere.alley.util.chat.CC;
@@ -83,21 +84,31 @@ public class ProfileData {
      */
     private int calculateGlobalElo(Profile profile) {
         List<Kit> rankedKits = Alley.getInstance().getKitService().getKits().stream()
-                .filter(kit -> kit.isSettingEnabled(KitSettingRankedImpl.class))
-                .collect(Collectors.toList());
+            .filter(kit -> kit.isSettingEnabled(KitSettingRankedImpl.class))
+            .collect(Collectors.toList());
 
         if (rankedKits.isEmpty()) {
             return 0;
         }
 
         int totalElo = rankedKits.stream()
-                .mapToInt(kit -> {
-                    ProfileRankedKitData kitData = profile.getProfileData().getRankedKitData().get(kit.getName());
-                    return kitData != null ? kitData.getElo() : 0;
-                })
-                .sum();
+            .mapToInt(kit -> {
+                ProfileRankedKitData kitData = profile.getProfileData().getRankedKitData().get(kit.getName());
+                return kitData != null ? kitData.getElo() : 0;
+            })
+            .sum();
 
         return totalElo / rankedKits.size();
+    }
+
+    public void determineTitles() {
+        for (Title title : Alley.getInstance().getTitleService().getTitles().values()) {
+            if (this.unrankedKitData.get(title.getKit().getName()).getDivision() == title.getRequiredDivision()) {
+                if (!this.unlockedTitles.contains(title.getKit().getName())) {
+                    this.unlockedTitles.add(title.getKit().getName());
+                }
+            }
+        }
     }
 
     public void determineLevel() {
