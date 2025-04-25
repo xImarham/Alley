@@ -46,6 +46,8 @@ public class MatchFFAImpl extends AbstractMatch {
     public void handleRespawn(Player player) {
         player.spigot().respawn();
 
+        //this.addSpectator(player);
+
         player.teleport(this.getArena().getCenter());
     }
 
