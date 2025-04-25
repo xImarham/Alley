@@ -22,7 +22,7 @@ import org.bukkit.util.Vector;
  * @since 08/02/2025
  */
 @Getter
-public class MatchRoundsRegularImpl extends MatchRegularImpl {
+public class MatchRoundsImpl extends MatchRegularImpl {
     private final GameParticipant<MatchGamePlayerImpl> participantA;
     private final GameParticipant<MatchGamePlayerImpl> participantB;
 
@@ -36,7 +36,7 @@ public class MatchRoundsRegularImpl extends MatchRegularImpl {
     private String scorer;
 
     /**
-     * Constructor for the RegularMatchImpl class.
+     * Constructor for the MatchRoundsImpl class.
      *
      * @param queue        The queue of the match.
      * @param kit          The kit of the match.
@@ -46,7 +46,7 @@ public class MatchRoundsRegularImpl extends MatchRegularImpl {
      * @param participantB The second participant.
      * @param rounds The amount of rounds the match will have.
      */
-    public MatchRoundsRegularImpl(Queue queue, Kit kit, AbstractArena arena, boolean ranked, GameParticipant<MatchGamePlayerImpl> participantA, GameParticipant<MatchGamePlayerImpl> participantB, int rounds) {
+    public MatchRoundsImpl(Queue queue, Kit kit, AbstractArena arena, boolean ranked, GameParticipant<MatchGamePlayerImpl> participantA, GameParticipant<MatchGamePlayerImpl> participantB, int rounds) {
         super(queue, kit, arena, ranked, participantA, participantB);
         this.participantA = participantA;
         this.participantB = participantB;

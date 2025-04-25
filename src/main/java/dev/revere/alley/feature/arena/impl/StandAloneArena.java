@@ -3,7 +3,7 @@ package dev.revere.alley.feature.arena.impl;
 import dev.revere.alley.Alley;
 import dev.revere.alley.feature.arena.AbstractArena;
 import dev.revere.alley.feature.arena.enums.EnumArenaType;
-import dev.revere.alley.game.match.impl.MatchRoundsRegularImpl;
+import dev.revere.alley.game.match.impl.MatchRoundsImpl;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.util.location.LocationUtil;
@@ -96,7 +96,7 @@ public class StandAloneArena extends AbstractArena {
      * @param playerTeam The team of the player.
      * @return Whether the player is in the enemy portal or not.
      */
-    public boolean isEnemyPortal(MatchRoundsRegularImpl match, Location playerLocation, GameParticipant<MatchGamePlayerImpl> playerTeam) {
+    public boolean isEnemyPortal(MatchRoundsImpl match, Location playerLocation, GameParticipant<MatchGamePlayerImpl> playerTeam) {
         Location enemyPortal = playerTeam == match.getParticipantA() ? this.team2Portal : this.team1Portal;
         return playerLocation.distance(enemyPortal) < this.portalRadius;
     }

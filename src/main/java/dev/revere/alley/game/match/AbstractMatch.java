@@ -20,7 +20,7 @@ import dev.revere.alley.feature.kit.settings.impl.KitSettingStickFightImpl;
 import dev.revere.alley.feature.queue.Queue;
 import dev.revere.alley.game.match.enums.EnumMatchState;
 import dev.revere.alley.game.match.impl.MatchRegularImpl;
-import dev.revere.alley.game.match.impl.MatchRoundsRegularImpl;
+import dev.revere.alley.game.match.impl.MatchRoundsImpl;
 import dev.revere.alley.game.match.impl.kit.MatchStickFightImpl;
 import dev.revere.alley.game.match.player.GamePlayer;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
@@ -435,7 +435,7 @@ public abstract class AbstractMatch {
      */
     public void handleRoundStart() {
         this.snapshots.clear();
-        if (this.kit.isSettingEnabled(KitSettingBattleRushImpl.class) && ((MatchRoundsRegularImpl) this).getCurrentRound() > 0) {
+        if (this.kit.isSettingEnabled(KitSettingBattleRushImpl.class) && ((MatchRoundsImpl) this).getCurrentRound() > 0) {
             return;
         } else if (this.kit.isSettingEnabled(KitSettingStickFightImpl.class) && ((MatchStickFightImpl) this).getCurrentRound() > 0) {
             return;

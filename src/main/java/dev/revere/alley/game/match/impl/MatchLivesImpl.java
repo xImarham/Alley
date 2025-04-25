@@ -18,7 +18,7 @@ import org.bukkit.entity.Player;
  * @date 5/21/2024
  */
 @Getter
-public class MatchLivesRegularImpl extends MatchRegularImpl {
+public class MatchLivesImpl extends MatchRegularImpl {
     private final GameParticipant<MatchGamePlayerImpl> participantA;
     private final GameParticipant<MatchGamePlayerImpl> participantB;
 
@@ -26,7 +26,7 @@ public class MatchLivesRegularImpl extends MatchRegularImpl {
     private GameParticipant<MatchGamePlayerImpl> loser;
 
     /**
-     * Constructor for the MatchLivesRegularImpl class.
+     * Constructor for the MatchLivesImpl class.
      *
      * @param queue        The queue of the match.
      * @param kit          The kit of the match.
@@ -35,7 +35,7 @@ public class MatchLivesRegularImpl extends MatchRegularImpl {
      * @param participantA The first participant.
      * @param participantB The second participant.
      */
-    public MatchLivesRegularImpl(Queue queue, Kit kit, AbstractArena arena, boolean ranked, GameParticipant<MatchGamePlayerImpl> participantA, GameParticipant<MatchGamePlayerImpl> participantB) {
+    public MatchLivesImpl(Queue queue, Kit kit, AbstractArena arena, boolean ranked, GameParticipant<MatchGamePlayerImpl> participantA, GameParticipant<MatchGamePlayerImpl> participantB) {
         super(queue, kit, arena, ranked, participantA, participantB);
         this.participantA = participantA;
         this.participantB = participantB;

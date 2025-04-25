@@ -5,7 +5,7 @@ import dev.revere.alley.feature.kit.settings.impl.KitSettingBattleRushImpl;
 import dev.revere.alley.feature.kit.settings.impl.KitSettingStickFightImpl;
 import dev.revere.alley.game.match.AbstractMatch;
 import dev.revere.alley.game.match.enums.EnumMatchState;
-import dev.revere.alley.game.match.impl.MatchRoundsRegularImpl;
+import dev.revere.alley.game.match.impl.MatchRoundsImpl;
 import dev.revere.alley.util.SoundUtil;
 import dev.revere.alley.util.chat.CC;
 import lombok.Getter;
@@ -46,7 +46,7 @@ public class MatchRunnable extends BukkitRunnable {
                     Alley.getInstance().getServer().getScheduler().runTask(Alley.getInstance(), this.match::handleRoundStart);
                     this.match.setState(EnumMatchState.RUNNING);
 
-                    if (this.match.getKit().isSettingEnabled(KitSettingBattleRushImpl.class) || this.match.getKit().isSettingEnabled(KitSettingStickFightImpl.class) && ((MatchRoundsRegularImpl) this.match).getCurrentRound() > 0) {
+                    if (this.match.getKit().isSettingEnabled(KitSettingBattleRushImpl.class) || this.match.getKit().isSettingEnabled(KitSettingStickFightImpl.class) && ((MatchRoundsImpl) this.match).getCurrentRound() > 0) {
                         this.match.sendMessage(CC.translate("&aRound Started!"));
                         this.playSoundStarted();
                     } else {

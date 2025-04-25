@@ -5,7 +5,7 @@ import dev.revere.alley.feature.kit.Kit;
 import dev.revere.alley.feature.queue.Queue;
 import dev.revere.alley.game.match.utility.MatchUtility;
 import dev.revere.alley.game.match.enums.EnumMatchState;
-import dev.revere.alley.game.match.impl.MatchRoundsRegularImpl;
+import dev.revere.alley.game.match.impl.MatchRoundsImpl;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.game.match.player.participant.TeamGameParticipant;
@@ -21,7 +21,7 @@ import org.bukkit.util.Vector;
  * @since 07/03/2025
  */
 @Getter
-public class MatchStickFightImpl extends MatchRoundsRegularImpl {
+public class MatchStickFightImpl extends MatchRoundsImpl {
     private final GameParticipant<MatchGamePlayerImpl> participantA;
     private final GameParticipant<MatchGamePlayerImpl> participantB;
 

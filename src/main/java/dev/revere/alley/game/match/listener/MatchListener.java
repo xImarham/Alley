@@ -7,7 +7,7 @@ import dev.revere.alley.feature.kit.settings.impl.*;
 import dev.revere.alley.game.match.AbstractMatch;
 import dev.revere.alley.game.match.utility.MatchUtility;
 import dev.revere.alley.game.match.enums.EnumMatchState;
-import dev.revere.alley.game.match.impl.MatchRoundsRegularImpl;
+import dev.revere.alley.game.match.impl.MatchRoundsImpl;
 import dev.revere.alley.game.match.impl.kit.MatchStickFightImpl;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
@@ -210,7 +210,7 @@ public class MatchListener implements Listener {
         Player player = event.getPlayer();
         Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
         if (profile.getState() == EnumProfileState.PLAYING) {
-            MatchRoundsRegularImpl match = (MatchRoundsRegularImpl) profile.getMatch();
+            MatchRoundsImpl match = (MatchRoundsImpl) profile.getMatch();
             if (match.getKit().isSettingEnabled(KitSettingBattleRushImpl.class) /*|| profile.getMatch().getKit().isSettingEnabled(KitSettingBridgesImpl.class)*/) {
                 if (player.getGameMode() == GameMode.CREATIVE) return;
                 if (player.getGameMode() == GameMode.SPECTATOR) return;

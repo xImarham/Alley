@@ -45,7 +45,7 @@ public class MatchRegularImpl extends AbstractMatch {
     private GameParticipant<MatchGamePlayerImpl> loser;
 
     /**
-     * Constructor for the RegularMatchImpl class.
+     * Constructor for the MatchRegularImpl class.
      *
      * @param queue       The queue of the match.
      * @param kit          The kit of the match.

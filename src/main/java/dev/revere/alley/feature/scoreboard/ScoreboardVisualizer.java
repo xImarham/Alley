@@ -9,7 +9,7 @@ import dev.revere.alley.feature.kit.settings.impl.KitSettingLivesImpl;
 import dev.revere.alley.feature.kit.settings.impl.KitSettingStickFightImpl;
 import dev.revere.alley.game.match.enums.EnumMatchState;
 import dev.revere.alley.game.match.impl.MatchRegularImpl;
-import dev.revere.alley.game.match.impl.MatchRoundsRegularImpl;
+import dev.revere.alley.game.match.impl.MatchRoundsImpl;
 import dev.revere.alley.game.match.impl.kit.MatchStickFightImpl;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
@@ -156,10 +156,10 @@ public class ScoreboardVisualizer implements IAssembleAdapter {
                     }
 
                     if (profile.getMatch().getState() == EnumMatchState.STARTING) {
-                        if (profile.getMatch().getKit().isSettingEnabled(KitSettingBattleRushImpl.class) && ((MatchRoundsRegularImpl) profile.getMatch()).getCurrentRound() > 0) {
-                            MatchRoundsRegularImpl roundsMatch = (MatchRoundsRegularImpl) profile.getMatch();
+                        if (profile.getMatch().getKit().isSettingEnabled(KitSettingBattleRushImpl.class) && ((MatchRoundsImpl) profile.getMatch()).getCurrentRound() > 0) {
+                            MatchRoundsImpl roundsMatch = (MatchRoundsImpl) profile.getMatch();
                             this.replaceBattleRushLines(player, lines, opponent, roundsMatch, profile);
-                        } else if (profile.getMatch().getKit().isSettingEnabled(KitSettingStickFightImpl.class) && ((MatchRoundsRegularImpl) profile.getMatch()).getCurrentRound() > 0) {
+                        } else if (profile.getMatch().getKit().isSettingEnabled(KitSettingStickFightImpl.class) && ((MatchRoundsImpl) profile.getMatch()).getCurrentRound() > 0) {
                             this.replaceStickFightLines(player, lines, opponent, (MatchStickFightImpl) profile.getMatch(), profile);
                         } else {
                             for (String line : this.plugin.getConfigService().getConfig("providers/scoreboard.yml").getStringList("scoreboard.lines.starting")) {
@@ -203,7 +203,7 @@ public class ScoreboardVisualizer implements IAssembleAdapter {
                                 .replaceAll("\\{kit}", profile.getMatch().getKit().getDisplayName()));
                         }
                     } else if (profile.getMatch().getKit().isSettingEnabled(KitSettingBattleRushImpl.class)) {
-                        MatchRoundsRegularImpl roundsMatch = (MatchRoundsRegularImpl) profile.getMatch();
+                        MatchRoundsImpl roundsMatch = (MatchRoundsImpl) profile.getMatch();
                         this.replaceBattleRushLines(player, lines, opponent, roundsMatch, profile);
                     } else if (profile.getMatch().getKit().isSettingEnabled(KitSettingStickFightImpl.class)) {
                         this.replaceStickFightLines(player, lines, opponent, (MatchStickFightImpl) profile.getMatch(), profile);
@@ -295,7 +295,7 @@ public class ScoreboardVisualizer implements IAssembleAdapter {
      * @param roundsMatch The rounds match to replace the lines for.
      * @param profile     The profile to replace the lines for.
      */
-    private void replaceBattleRushLines(Player player, List<String> lines, GameParticipant<MatchGamePlayerImpl> opponent, MatchRoundsRegularImpl roundsMatch, Profile profile) {
+    private void replaceBattleRushLines(Player player, List<String> lines, GameParticipant<MatchGamePlayerImpl> opponent, MatchRoundsImpl roundsMatch, Profile profile) {
         long elapsedTime = System.currentTimeMillis() - profile.getMatch().getStartTime();
         long remainingTime = Math.max(900_000 - elapsedTime, 0);
         String formattedTime = TimeUtil.millisToFourDigitSecondsTimer(remainingTime);
