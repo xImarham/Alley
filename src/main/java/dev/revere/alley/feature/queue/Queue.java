@@ -24,7 +24,6 @@ import java.util.UUID;
 public class Queue {
     private final LinkedList<QueueProfile> profiles;
 
-    private final UUID uuid;
     private final Kit kit;
 
     private final boolean ranked;
@@ -37,7 +36,6 @@ public class Queue {
      */
     public Queue(Kit kit, boolean ranked) {
         this.profiles = new LinkedList<>();
-        this.uuid = UUID.randomUUID();
         this.kit = kit;
         this.ranked = ranked;
         this.maxQueueTime = 300000L; // 5 minutes
