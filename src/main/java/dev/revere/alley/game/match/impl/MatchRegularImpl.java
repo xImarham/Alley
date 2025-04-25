@@ -102,9 +102,9 @@ public class MatchRegularImpl extends AbstractMatch {
         participant.getPlayers().forEach(gamePlayer -> {
             Player teamPlayer = gamePlayer.getPlayer();
 
-            teamPlayer.getInventory().all(Material.WOOL).forEach((key, value) -> {
-                teamPlayer.getInventory().setItem(key, new ItemBuilder(Material.WOOL).durability(woolColor).amount(64).build());
-            });
+            teamPlayer.getInventory().all(Material.WOOL).forEach((key, value) ->
+                teamPlayer.getInventory().setItem(key, new ItemBuilder(Material.WOOL).durability(woolColor).amount(64).build())
+            );
 
             teamPlayer.updateInventory();
         });
