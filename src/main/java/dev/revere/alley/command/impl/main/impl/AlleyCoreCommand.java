@@ -7,7 +7,6 @@ import dev.revere.alley.core.ICore;
 import dev.revere.alley.core.enums.EnumCoreType;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 import java.util.Arrays;
 
