@@ -10,12 +10,12 @@ import dev.revere.alley.game.match.AbstractMatch;
 import dev.revere.alley.game.match.enums.EnumMatchState;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
+import dev.revere.alley.util.ListenerUtil;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -45,7 +45,8 @@ public class MatchInteractListener implements Listener {
 
         if (profile.getState() != EnumProfileState.PLAYING) return;
         if (!profile.getMatch().getKit().isSettingEnabled(KitSettingParkourImpl.class)) return;
-        if (event.getAction() != Action.PHYSICAL || event.getClickedBlock() == null || event.getClickedBlock().getType() != Material.STONE_PLATE) return;
+
+        if (ListenerUtil.notSteppingOnPlate(event)) return;
 
         AbstractMatch match = profile.getMatch();
         match.getParticipants().forEach(participant -> {

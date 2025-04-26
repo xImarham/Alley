@@ -4,6 +4,7 @@ import dev.revere.alley.Alley;
 import dev.revere.alley.essential.parkour.data.ParkourData;
 import dev.revere.alley.profile.enums.EnumProfileState;
 import dev.revere.alley.reflection.impl.TitleReflectionService;
+import dev.revere.alley.util.ListenerUtil;
 import dev.revere.alley.util.SoundUtil;
 import dev.revere.alley.util.chat.Symbol;
 import org.bukkit.Location;
@@ -12,7 +13,6 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 
@@ -116,18 +116,7 @@ public class ParkourListener implements Listener {
             return;
         }
 
-        if (Action.PHYSICAL != event.getAction()) {
-            return;
-        }
-
-        if (event.getClickedBlock() == null) {
-            return;
-        }
-
-        Material type = event.getClickedBlock().getType();
-        if (!this.pressurePlates.contains(type)) {
-            return;
-        }
+        if (ListenerUtil.notSteppingOnPlate(event)) return;
 
         ParkourData parkourData = this.plugin.getParkourService().getParkourData(player);
         if (parkourData == null) {
@@ -160,14 +149,4 @@ public class ParkourListener implements Listener {
             2, 10, 2
         );
     }
-
-    /**
-     * List of pressure plate materials.
-     */
-    private final List<Material> pressurePlates = Arrays.asList(
-        Material.WOOD_PLATE,
-        Material.STONE_PLATE,
-        Material.IRON_PLATE,
-        Material.GOLD_PLATE
-    );
 }

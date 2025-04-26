@@ -5,11 +5,14 @@ import lombok.experimental.UtilityClass;
 import org.bukkit.Material;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -45,4 +48,33 @@ public class ListenerUtil {
             }
         }.runTaskLater(Alley.getInstance(), 100L);
     }
+
+    /**
+     * Checks if the player is not stepping on a pressure plate.
+     *
+     * @param event The event.
+     * @return true if the player is stepping on a pressure plate, false otherwise.
+     */
+    public boolean notSteppingOnPlate(PlayerInteractEvent event) {
+        if (event.getAction() != Action.PHYSICAL) {
+            return false;
+        }
+
+        if (event.getClickedBlock() == null) {
+            return false;
+        }
+
+        Material type = event.getClickedBlock().getType();
+        return !pressurePlates.contains(type);
+    }
+
+    /**
+     * List of pressure plate materials.
+     */
+    private final List<Material> pressurePlates = Arrays.asList(
+        Material.WOOD_PLATE,
+        Material.STONE_PLATE,
+        Material.IRON_PLATE,
+        Material.GOLD_PLATE
+    );
 }
