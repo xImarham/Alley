@@ -5,7 +5,6 @@ import lombok.experimental.UtilityClass;
 import org.bukkit.Material;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
-import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
@@ -56,10 +55,6 @@ public class ListenerUtil {
      * @return true if the player is stepping on a pressure plate, false otherwise.
      */
     public boolean notSteppingOnPlate(PlayerInteractEvent event) {
-        if (event.getAction() != Action.PHYSICAL) {
-            return false;
-        }
-
         if (event.getClickedBlock() == null) {
             return false;
         }
