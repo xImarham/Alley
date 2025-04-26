@@ -24,6 +24,9 @@ essentials:
     enabled: false
     webhook-url: "" # create a webhook on one of your channels and paste the url here, make sure the channel is accessible to the '@everyone' role, it won't work otherwise
 
+parkour:
+  starter-location: world:-5.1145064347201865:69.0:40.13243289901497:-1.9397448:20.588186
+
 arena:
   # When creating an arena, the following displayname for each
   # arena type will be set. {arena} represents the arena name.

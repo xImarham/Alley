@@ -1,7 +1,7 @@
 package dev.revere.alley.feature.queue;
 
 import dev.revere.alley.Alley;
-import dev.revere.alley.feature.hotbar.enums.HotbarType;
+import dev.revere.alley.feature.hotbar.enums.EnumHotbarType;
 import dev.revere.alley.feature.kit.Kit;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
@@ -102,7 +102,7 @@ public class Queue {
             return;
         }
 
-        Alley.getInstance().getHotbarService().applyHotbarItems(player, HotbarType.LOBBY);
+        Alley.getInstance().getHotbarService().applyHotbarItems(player, EnumHotbarType.LOBBY);
         player.sendMessage(CC.translate("&cYou've left the queue."));
     }
 

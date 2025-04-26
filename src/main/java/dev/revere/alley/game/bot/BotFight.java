@@ -2,7 +2,7 @@ package dev.revere.alley.game.bot;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.feature.arena.AbstractArena;
-import dev.revere.alley.feature.hotbar.enums.HotbarType;
+import dev.revere.alley.feature.hotbar.enums.EnumHotbarType;
 import dev.revere.alley.feature.kit.Kit;
 import dev.revere.alley.game.bot.enums.EnumBotFightState;
 import dev.revere.alley.game.bot.enums.EnumBotPreset;
@@ -87,7 +87,7 @@ public class BotFight {
         profile.setMatch(null);
 
         plugin.getSpawnService().teleportToSpawn(this.player);
-        plugin.getHotbarService().applyHotbarItems(this.player, HotbarType.LOBBY);
+        plugin.getHotbarService().applyHotbarItems(this.player, EnumHotbarType.LOBBY);
         Alley.getInstance().getBotFightRepository().removeBotFight(this);
     }
 

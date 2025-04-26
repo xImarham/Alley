@@ -3,7 +3,7 @@ package dev.revere.alley.feature.queue.command.admin.impl;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
-import dev.revere.alley.feature.hotbar.enums.HotbarType;
+import dev.revere.alley.feature.hotbar.enums.EnumHotbarType;
 import dev.revere.alley.feature.kit.Kit;
 import dev.revere.alley.feature.queue.Queue;
 import dev.revere.alley.profile.Profile;
@@ -51,7 +51,7 @@ public class QueueForceCommand extends BaseCommand {
                 queue.addPlayer(target, queue.isRanked() ? profile.getProfileData().getRankedKitData().get(queue.getKit().getName()).getElo() : 0);
                 PlayerUtil.reset(target, false);
                 SoundUtil.playBanHammer(target);
-                this.plugin.getHotbarService().applyHotbarItems(target, HotbarType.QUEUE);
+                this.plugin.getHotbarService().applyHotbarItems(target, EnumHotbarType.QUEUE);
                 player.sendMessage(CC.translate("&aYou've added &b" + target.getName() + " &ato the &b" + queue.getQueueType() + " &aqueue."));
 
                 if (ranked && profile.getProfileData().isRankedBanned()) {

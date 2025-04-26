@@ -4,7 +4,7 @@ import dev.revere.alley.Alley;
 import dev.revere.alley.feature.cooldown.Cooldown;
 import dev.revere.alley.feature.cooldown.enums.EnumCooldownType;
 import dev.revere.alley.feature.hotbar.HotbarService;
-import dev.revere.alley.feature.hotbar.enums.HotbarType;
+import dev.revere.alley.feature.hotbar.enums.EnumHotbarType;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
 import dev.revere.alley.reflection.impl.TitleReflectionService;
@@ -56,7 +56,7 @@ public class PartyService {
 
         Party party = new Party(player);
         profile.setParty(party);
-        Alley.getInstance().getHotbarService().applyHotbarItems(player, HotbarType.PARTY);
+        Alley.getInstance().getHotbarService().applyHotbarItems(player, EnumHotbarType.PARTY);
 
         Alley.getInstance().getReflectionRepository().getReflectionService(TitleReflectionService.class).sendTitle(
             player,
@@ -227,9 +227,9 @@ public class PartyService {
 
         profile.setParty(join ? this.getPartyByMember(player.getUniqueId()) : null);
         if (join && (profile.getState() == EnumProfileState.LOBBY || profile.getState() == EnumProfileState.WAITING)) {
-            hotbarService.applyHotbarItems(player, HotbarType.PARTY);
+            hotbarService.applyHotbarItems(player, EnumHotbarType.PARTY);
         } else {
-            hotbarService.applyHotbarItems(player, HotbarType.LOBBY);
+            hotbarService.applyHotbarItems(player, EnumHotbarType.LOBBY);
         }
     }
 

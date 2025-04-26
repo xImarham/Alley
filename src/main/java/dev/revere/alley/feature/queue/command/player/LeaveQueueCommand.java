@@ -1,8 +1,10 @@
 package dev.revere.alley.feature.queue.command.player;
 
+import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
+import dev.revere.alley.essential.parkour.ParkourService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
 import dev.revere.alley.util.chat.CC;
@@ -22,6 +24,11 @@ public class LeaveQueueCommand extends BaseCommand {
         if (!profile.getState().equals(EnumProfileState.WAITING)) {
             player.sendMessage(CC.translate("&cYou are not in a queue."));
             return;
+        }
+
+        ParkourService parkourService = Alley.getInstance().getParkourService();
+        if (parkourService.isPlaying(player)) {
+            parkourService.removePlayer(player, false);
         }
 
         profile.getQueueProfile().getQueue().removePlayer(profile.getQueueProfile());

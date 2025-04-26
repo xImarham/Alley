@@ -2,7 +2,7 @@ package dev.revere.alley.feature.queue.menu.button;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.menu.Button;
-import dev.revere.alley.feature.hotbar.enums.HotbarType;
+import dev.revere.alley.feature.hotbar.enums.EnumHotbarType;
 import dev.revere.alley.feature.kit.Kit;
 import dev.revere.alley.feature.queue.Queue;
 import dev.revere.alley.profile.Profile;
@@ -51,6 +51,6 @@ public class UnrankedButton extends Button {
         PlayerUtil.reset(player, false);
         player.closeInventory();
         playNeutral(player);
-        Alley.getInstance().getHotbarService().applyHotbarItems(player, HotbarType.QUEUE);
+        Alley.getInstance().getHotbarService().applyHotbarItems(player, EnumHotbarType.QUEUE);
     }
 }

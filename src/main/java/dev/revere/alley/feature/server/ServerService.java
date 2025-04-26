@@ -1,7 +1,7 @@
 package dev.revere.alley.feature.server;
 
 import dev.revere.alley.Alley;
-import dev.revere.alley.feature.hotbar.enums.HotbarType;
+import dev.revere.alley.feature.hotbar.enums.EnumHotbarType;
 import dev.revere.alley.game.match.AbstractMatch;
 import dev.revere.alley.game.match.MatchRepository;
 import dev.revere.alley.game.party.Party;
@@ -107,7 +107,7 @@ public class ServerService {
                 profile.setState(EnumProfileState.LOBBY);
                 plugin.getQueueService().getQueues().remove(profile.getQueueProfile().getQueue());
                 profile.setQueueProfile(null);
-                plugin.getHotbarService().applyHotbarItems(queuePlayer, HotbarType.LOBBY);
+                plugin.getHotbarService().applyHotbarItems(queuePlayer, EnumHotbarType.LOBBY);
                 plugin.getSpawnService().teleportToSpawn(queuePlayer);
                 queuePlayer.sendMessage(CC.translate("&cYou've been removed from the queue due to a server reboot."));
             }

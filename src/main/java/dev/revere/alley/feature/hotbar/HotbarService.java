@@ -1,8 +1,7 @@
 package dev.revere.alley.feature.hotbar;
 
 import dev.revere.alley.Alley;
-import dev.revere.alley.feature.hotbar.enums.HotbarItems;
-import dev.revere.alley.feature.hotbar.enums.HotbarType;
+import dev.revere.alley.feature.hotbar.enums.EnumHotbarType;
 import dev.revere.alley.tool.item.ItemBuilder;
 import lombok.Getter;
 import org.bukkit.Bukkit;
@@ -19,11 +18,11 @@ import java.util.*;
  */
 @Getter
 public class HotbarService {
-    private final Map<HotbarType, List<HotbarItem>> hotbarItemsByType;
+    private final Map<EnumHotbarType, List<HotbarItem>> hotbarItemsByType;
 
     public HotbarService() {
-        this.hotbarItemsByType = new EnumMap<>(HotbarType.class);
-        Arrays.stream(HotbarType.values()).forEach(type -> this.hotbarItemsByType.put(type, new ArrayList<>()));
+        this.hotbarItemsByType = new EnumMap<>(EnumHotbarType.class);
+        Arrays.stream(EnumHotbarType.values()).forEach(type -> this.hotbarItemsByType.put(type, new ArrayList<>()));
         this.initializeHotbarItems();
     }
 
@@ -32,7 +31,7 @@ public class HotbarService {
      */
     private void initializeHotbarItems() {
         Arrays.stream(HotbarItems.values()).forEach(item -> {
-            Set<HotbarType> types = item.getTypes();
+            Set<EnumHotbarType> types = item.getTypes();
             if (types != null) {
                 types.forEach(type -> this.addHotbarItem(type, item));
             }
@@ -45,7 +44,7 @@ public class HotbarService {
      * @param type       the hotbar type
      * @param hotbarItem the hotbar item
      */
-    public void addHotbarItem(HotbarType type, HotbarItems hotbarItem) {
+    public void addHotbarItem(EnumHotbarType type, HotbarItems hotbarItem) {
         List<HotbarItem> items = this.hotbarItemsByType.computeIfAbsent(type, k -> new ArrayList<>());
         items.add(this.createHotbarItem(type, hotbarItem));
     }
@@ -56,7 +55,7 @@ public class HotbarService {
      * @param player the player
      * @param type   the hotbar type
      */
-    public void applyHotbarItems(Player player, HotbarType type) {
+    public void applyHotbarItems(Player player, EnumHotbarType type) {
         player.getInventory().clear();
         for (HotbarItem item : this.hotbarItemsByType.get(type)) {
             ItemStack itemStack = item.getItemStack();
@@ -79,7 +78,7 @@ public class HotbarService {
      * @param hotbarItem the hotbar item
      * @return the hotbar item
      */
-    private HotbarItem createHotbarItem(HotbarType type, HotbarItems hotbarItem) {
+    private HotbarItem createHotbarItem(EnumHotbarType type, HotbarItems hotbarItem) {
         return new HotbarItem(type, hotbarItem,
                 new ItemBuilder(hotbarItem.getMaterial())
                         .name(hotbarItem.getName())
@@ -111,7 +110,7 @@ public class HotbarService {
      * @param hotbarItem the hotbar item
      * @return the hotbar item
      */
-    public HotbarItem getItemByStack(HotbarType type, HotbarItems hotbarItem) {
+    public HotbarItem getItemByStack(EnumHotbarType type, HotbarItems hotbarItem) {
         List<HotbarItem> itemsOfType = this.hotbarItemsByType.get(type);
         if (itemsOfType != null) {
             return itemsOfType.stream()

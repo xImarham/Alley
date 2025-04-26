@@ -13,6 +13,8 @@ import dev.revere.alley.database.MongoService;
 import dev.revere.alley.essential.chat.ChatListener;
 import dev.revere.alley.essential.emoji.EmojiRepository;
 import dev.revere.alley.essential.emoji.listener.EmojiListener;
+import dev.revere.alley.essential.parkour.ParkourService;
+import dev.revere.alley.essential.parkour.listener.ParkourListener;
 import dev.revere.alley.feature.arena.AbstractArena;
 import dev.revere.alley.feature.arena.ArenaService;
 import dev.revere.alley.feature.arena.listener.ArenaListener;
@@ -81,11 +83,11 @@ import java.util.*;
  * <a href="https://github.com/RevereInc/alley-practice">GitHub Repository</a>
  * </p>
  *
- * @author  Emmy, Remi
+ * @author Emmy, Remi
  * @version 2.0 — Complete recode (entirely rewritten from scratch)
- * @since   19/04/2024
- * @see     <a href="https://revere.dev">revere.dev</a>
- * @see     <a href="https://discord.gg/revere">Discord Support</a>
+ * @see <a href="https://revere.dev">revere.dev</a>
+ * @see <a href="https://discord.gg/revere">Discord Support</a>
+ * @since 19/04/2024
  */
 @Getter
 public class Alley extends JavaPlugin {
@@ -128,6 +130,7 @@ public class Alley extends JavaPlugin {
     private BotFightRepository botFightRepository;
     private TitleService titleService;
     private LevelService levelService;
+    private ParkourService parkourService;
 
     private boolean loaded;
 
@@ -203,7 +206,8 @@ public class Alley extends JavaPlugin {
         services.put(CosmeticRepository.class.getSimpleName(), () -> this.cosmeticRepository = new CosmeticRepository());
         services.put(DivisionService.class.getSimpleName(), () -> this.divisionService = new DivisionService(this));
         services.put(LevelService.class.getSimpleName(), () -> this.levelService = new LevelService(this));
-        services.put(ProfileService.class.getSimpleName(), () -> { this.profileService = new ProfileService(); this.profileService.loadProfiles(); });
+        services.put(TitleService.class.getSimpleName(), () -> this.titleService = new TitleService(this));
+        services.put(ProfileService.class.getSimpleName(), () -> {this.profileService = new ProfileService();this.profileService.loadProfiles();});
         services.put(HotbarService.class.getSimpleName(), () -> this.hotbarService = new HotbarService());
         services.put(CooldownRepository.class.getSimpleName(), () -> this.cooldownRepository = new CooldownRepository());
         services.put(SnapshotRepository.class.getSimpleName(), () -> this.snapshotRepository = new SnapshotRepository());
@@ -221,31 +225,32 @@ public class Alley extends JavaPlugin {
         services.put(ReflectionRepository.class.getSimpleName(), () -> this.reflectionRepository = new ReflectionRepository(this));
         services.put(BotMechanics.class.getSimpleName(), () -> this.botMechanics = new BotMechanics());
         services.put(BotFightRepository.class.getSimpleName(), () -> this.botFightRepository = new BotFightRepository());
-        services.put(TitleService.class.getSimpleName(), () -> this.titleService = new TitleService(this));
+        services.put(ParkourService.class.getSimpleName(), () -> this.parkourService = new ParkourService(this, this.configService.getSettingsConfig().getString("parkour.starter-location")));
 
         services.forEach(Logger::logTime);
     }
 
     private void registerListeners() {
         Arrays.asList(
-                new ProfileListener(this.profileService),
-                new HotbarListener(),
-                new PartyListener(),
-                new MatchListener(this),
-                new MatchInteractListener(this),
-                new MatchDisconnectListener(this),
-                new MatchDamageListener(this),
-                new MatchBlockListener(this),
-                new ArenaListener(),
-                new MenuListener(),
-                new SpawnListener(),
-                new FFAListener(this),
-                new FFACuboidListener(this.ffaSpawnService.getCuboid(), this),
-                new WorldListener(),
-                new EmojiListener(this),
-                new CombatListener(this),
-                new BotFightListener(),
-                new BotFightDeathListener()
+            new ProfileListener(this.profileService),
+            new HotbarListener(),
+            new PartyListener(),
+            new MatchListener(this),
+            new MatchInteractListener(this),
+            new MatchDisconnectListener(this),
+            new MatchDamageListener(this),
+            new MatchBlockListener(this),
+            new ArenaListener(),
+            new MenuListener(),
+            new SpawnListener(),
+            new FFAListener(this),
+            new FFACuboidListener(this.ffaSpawnService.getCuboid(), this),
+            new WorldListener(),
+            new EmojiListener(this),
+            new CombatListener(this),
+            new BotFightListener(),
+            new BotFightDeathListener(),
+            new ParkourListener(this)
         ).forEach(listener -> getServer().getPluginManager().registerEvents(listener, this));
     }
 

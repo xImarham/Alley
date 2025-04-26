@@ -1,7 +1,7 @@
 package dev.revere.alley.profile.listener;
 
 import dev.revere.alley.Alley;
-import dev.revere.alley.feature.hotbar.enums.HotbarType;
+import dev.revere.alley.feature.hotbar.enums.EnumHotbarType;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.ProfileService;
 import dev.revere.alley.profile.enums.EnumProfileState;
@@ -71,7 +71,7 @@ public class ProfileListener implements Listener {
         profile.getProfileData().determineLevel();
 
         Alley.getInstance().getSpawnService().teleportToSpawn(player);
-        Alley.getInstance().getHotbarService().applyHotbarItems(player, HotbarType.LOBBY);
+        Alley.getInstance().getHotbarService().applyHotbarItems(player, EnumHotbarType.LOBBY);
 
         player.setFlySpeed(1 * 0.1F);
         player.setWalkSpeed(2 * 0.1F);

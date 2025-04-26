@@ -2,7 +2,7 @@ package dev.revere.alley.game.ffa.impl;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.feature.arena.AbstractArena;
-import dev.revere.alley.feature.hotbar.enums.HotbarType;
+import dev.revere.alley.feature.hotbar.enums.EnumHotbarType;
 import dev.revere.alley.feature.kit.Kit;
 import dev.revere.alley.game.ffa.AbstractFFAMatch;
 import dev.revere.alley.profile.Profile;
@@ -66,7 +66,7 @@ public class DefaultFFAMatchImpl extends AbstractFFAMatch {
 
         PlayerUtil.reset(player, false);
         Alley.getInstance().getSpawnService().teleportToSpawn(player);
-        Alley.getInstance().getHotbarService().applyHotbarItems(player, HotbarType.LOBBY);
+        Alley.getInstance().getHotbarService().applyHotbarItems(player, EnumHotbarType.LOBBY);
     }
 
     /**

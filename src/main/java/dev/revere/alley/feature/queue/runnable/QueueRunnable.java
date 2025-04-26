@@ -1,9 +1,10 @@
 package dev.revere.alley.feature.queue.runnable;
 
 import dev.revere.alley.Alley;
+import dev.revere.alley.essential.parkour.ParkourService;
 import dev.revere.alley.feature.arena.AbstractArena;
 import dev.revere.alley.feature.arena.enums.EnumArenaType;
-import dev.revere.alley.feature.hotbar.enums.HotbarType;
+import dev.revere.alley.feature.hotbar.enums.EnumHotbarType;
 import dev.revere.alley.feature.queue.Queue;
 import dev.revere.alley.feature.queue.QueueProfile;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
@@ -45,9 +46,15 @@ public class QueueRunnable implements Runnable {
                     queue.getProfiles().remove(profile);
                     queue.removePlayer(profile);
                     Player player = Alley.getInstance().getServer().getPlayer(profile.getUuid());
+
+                    ParkourService parkourService = Alley.getInstance().getParkourService();
+                    if (parkourService.isPlaying(player)) {
+                        parkourService.removePlayer(player, false);
+                    }
+                    
                     player.sendMessage(CC.translate("&cYou have been removed from the queue due to inactivity."));
                     Alley.getInstance().getProfileService().getProfile(profile.getUuid()).setQueueProfile(null);
-                    Alley.getInstance().getHotbarService().applyHotbarItems(player, HotbarType.LOBBY);
+                    Alley.getInstance().getHotbarService().applyHotbarItems(player, EnumHotbarType.LOBBY);
                 } else {
                     Logger.logError("&cPlayer &4" + Bukkit.getPlayer(profile.getUuid()) + "&c couldn't be removed from the queue because their state was changed.");
                     Alley.getInstance().getProfileService().getProfile(profile.getUuid()).setQueueProfile(null);
@@ -76,6 +83,7 @@ public class QueueRunnable implements Runnable {
                     this.clearQueueProfiles(queue, firstProfile, secondProfile);
                     GamePlayerList gamePlayerList = getGamePlayerList(firstPlayerOpt.get(), secondPlayerOpt.get(), firstProfile, secondProfile);
                     GameParticipantList gameParticipantList = getGameParticipantList(gamePlayerList);
+                    
                     this.processGame(queue, gameParticipantList);
                 }
             }
@@ -99,19 +107,40 @@ public class QueueRunnable implements Runnable {
      * @param gameParticipantList The game participant list.
      */
     private void processGame(Queue queue, GameParticipantList gameParticipantList) {
-        AbstractArena arena = getArena(queue);
-
+        AbstractArena arena = this.getArena(queue);
         if (arena == null || arena.getType().equals(EnumArenaType.FFA)) {
             gameParticipantList.getParticipants().forEach(participant -> {
                 Player player = Alley.getInstance().getServer().getPlayer(participant.getPlayer().getUuid());
                 player.sendMessage(CC.translate("&cThere are no available arenas for the kit you're playing."));
+
+                this.removeFromParkourIfPlaying(gameParticipantList, true);
+
             });
             return;
         }
 
+        this.removeFromParkourIfPlaying(gameParticipantList, false);
+
         Alley.getInstance().getMatchRepository().createAndStartMatch(
             queue.getKit(), arena, gameParticipantList.participantA, gameParticipantList.participantB
         );
+    }
+
+    /**
+     * Method to remove players from parkour if they are playing.
+     *
+     * @param gameParticipantList The game participant list.
+     * @param tpToSpawn           Whether to teleport to spawn.
+     */
+    private void removeFromParkourIfPlaying(GameParticipantList gameParticipantList, boolean tpToSpawn) {
+        for (GameParticipant<MatchGamePlayerImpl> participant : gameParticipantList.getParticipants()) {
+            Player player = Alley.getInstance().getServer().getPlayer(participant.getPlayer().getUuid());
+            if (player == null) {
+                return;
+            }
+
+            Alley.getInstance().getParkourService().removeIfPlayingParkour(player, tpToSpawn);
+        }
     }
 
     /**

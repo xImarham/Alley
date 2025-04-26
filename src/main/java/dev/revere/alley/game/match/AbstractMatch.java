@@ -12,7 +12,7 @@ import dev.revere.alley.feature.cosmetic.repository.CosmeticRepository;
 import dev.revere.alley.feature.division.Division;
 import dev.revere.alley.feature.division.tier.DivisionTier;
 import dev.revere.alley.feature.hotbar.HotbarService;
-import dev.revere.alley.feature.hotbar.enums.HotbarType;
+import dev.revere.alley.feature.hotbar.enums.EnumHotbarType;
 import dev.revere.alley.feature.kit.Kit;
 import dev.revere.alley.feature.kit.settings.impl.KitSettingBattleRushImpl;
 import dev.revere.alley.feature.kit.settings.impl.KitSettingLivesImpl;
@@ -218,11 +218,11 @@ public abstract class AbstractMatch {
 
         HotbarService hotbarService = Alley.getInstance().getHotbarService();
         if (profile.getParty() == null) {
-            hotbarService.applyHotbarItems(player, HotbarType.LOBBY);
+            hotbarService.applyHotbarItems(player, EnumHotbarType.LOBBY);
             return;
         }
 
-        hotbarService.applyHotbarItems(player, HotbarType.PARTY);
+        hotbarService.applyHotbarItems(player, EnumHotbarType.PARTY);
     }
 
     /**
@@ -492,7 +492,7 @@ public abstract class AbstractMatch {
         Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
         profile.setState(EnumProfileState.SPECTATING);
         profile.setMatch(this);
-        Alley.getInstance().getHotbarService().applyHotbarItems(player, HotbarType.SPECTATOR);
+        Alley.getInstance().getHotbarService().applyHotbarItems(player, EnumHotbarType.SPECTATOR);
 
         if (arena.getCenter() == null) {
             player.sendMessage(CC.translate("&cThe arena is not set up for spectating"));

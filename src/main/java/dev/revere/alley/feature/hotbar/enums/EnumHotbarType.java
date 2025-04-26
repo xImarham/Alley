@@ -5,7 +5,7 @@ package dev.revere.alley.feature.hotbar.enums;
  * @project Alley
  * @date 5/27/2024
  */
-public enum HotbarType {
+public enum EnumHotbarType {
     LOBBY,
     PARTY,
     QUEUE,

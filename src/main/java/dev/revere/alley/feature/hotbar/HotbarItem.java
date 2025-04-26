@@ -1,7 +1,6 @@
 package dev.revere.alley.feature.hotbar;
 
-import dev.revere.alley.feature.hotbar.enums.HotbarItems;
-import dev.revere.alley.feature.hotbar.enums.HotbarType;
+import dev.revere.alley.feature.hotbar.enums.EnumHotbarType;
 import lombok.Data;
 import org.bukkit.inventory.ItemStack;
 
@@ -12,7 +11,7 @@ import org.bukkit.inventory.ItemStack;
  */
 @Data
 public class HotbarItem {
-    private final HotbarType hotbarType;
+    private final EnumHotbarType hotbarType;
     private final HotbarItems hotbarItems;
     private final ItemStack itemStack;
     private final int slot;
