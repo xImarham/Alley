@@ -7,3 +7,4 @@ website: https://discord.gg/revere
 softdepend:
   - AquaCore
   - Phoenix
+  - Helium
