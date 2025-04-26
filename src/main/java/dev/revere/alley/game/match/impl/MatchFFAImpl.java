@@ -88,11 +88,11 @@ public class MatchFFAImpl extends AbstractMatch {
                 this.sendMessage("Winner: " + this.winner.getPlayer().getUsername());
 
                 String losers = this.participants.stream()
-                    .filter(participant -> participant != this.winner)
-                    .map(GameParticipant::getPlayer)
-                    .map(MatchGamePlayerImpl::getUsername)
-                    .reduce((a, b) -> a + ", " + b)
-                    .orElse("None");
+                                    .filter(participant -> participant != this.winner)
+                                    .map(GameParticipant::getPlayer)
+                                    .map(MatchGamePlayerImpl::getUsername)
+                                    .reduce((a, b) -> a + ", " + b)
+                                    .orElse("None");
 
                 this.sendMessage("Losers: " + losers);
             })

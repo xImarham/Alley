@@ -31,7 +31,7 @@ public class StandAloneArena extends AbstractArena {
     /**
      * Constructor for the StandAloneArena class.
      *
-     * @param name The name of the arena.
+     * @param name    The name of the arena.
      * @param minimum The minimum location of the arena.
      * @param maximum The maximum location of the arena.
      */
@@ -91,9 +91,9 @@ public class StandAloneArena extends AbstractArena {
     /**
      * Check if the player is in the enemy portal.
      *
-     * @param match The match.
+     * @param match          The match.
      * @param playerLocation The location of the player.
-     * @param playerTeam The team of the player.
+     * @param playerTeam     The team of the player.
      * @return Whether the player is in the enemy portal or not.
      */
     public boolean isEnemyPortal(MatchRoundsImpl match, Location playerLocation, GameParticipant<MatchGamePlayerImpl> playerTeam) {

@@ -103,11 +103,11 @@ public class DuelRequestService {
     /**
      * Send invite to the target player.
      *
-     * @param sender      the sender
-     * @param target      the target
-     * @param kit         the kit
-     * @param arena       the arena
-     * @param invitation  the invitation
+     * @param sender     the sender
+     * @param target     the target
+     * @param kit        the kit
+     * @param arena      the arena
+     * @param invitation the invitation
      */
     private void sendInvite(Player sender, Player target, Kit kit, AbstractArena arena, TextComponent invitation) {
         target.sendMessage("");
@@ -139,7 +139,7 @@ public class DuelRequestService {
 
         this.removeDuelRequest(duelRequest);
     }
-    
+
     /**
      * Get the clickable component for the duel request.
      *
@@ -148,9 +148,9 @@ public class DuelRequestService {
      */
     private TextComponent getClickable(Player sender) {
         return ClickableUtil.createComponent(
-                " &a(Click To Accept)", 
-                "/accept " + sender.getName(), 
-                "&aClick to accept &b" + sender.getName() + "&a's duel request."
+            " &a(Click To Accept)",
+            "/accept " + sender.getName(),
+            "&aClick to accept &b" + sender.getName() + "&a's duel request."
         );
     }
 }

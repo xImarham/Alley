@@ -63,7 +63,7 @@ public final class TimeUtil {
         calendar.setTime(date);
 
         return new SimpleDateFormat("MMM dd yyyy " + (secondaryColor == null ? "" : secondaryColor) +
-                "(hh:mm aa zz)").format(date);
+                                        "(hh:mm aa zz)").format(date);
     }
 
     /**

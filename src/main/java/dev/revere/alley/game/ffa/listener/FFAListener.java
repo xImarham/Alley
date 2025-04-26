@@ -35,7 +35,7 @@ import java.util.Optional;
  */
 public class FFAListener implements Listener {
     private final Alley plugin;
-    
+
     /**
      * Constructor for the FFAListener class.
      *
@@ -135,14 +135,14 @@ public class FFAListener implements Listener {
 
         Player victim = (Player) event.getEntity();
         Player attacker = (Player) event.getDamager();
-        
+
         FFASpawnService ffaSpawnService = this.plugin.getFfaSpawnService();
         if (ffaSpawnService.getCuboid().isIn((victim)) && ffaSpawnService.getCuboid().isIn((attacker))
                 || !ffaSpawnService.getCuboid().isIn(victim) && ffaSpawnService.getCuboid().isIn(attacker)
                 || ffaSpawnService.getCuboid().isIn(victim) && !ffaSpawnService.getCuboid().isIn(attacker)) {
 
             CombatService combatService = Alley.getInstance().getCombatService();
-            if (combatService.isPlayerInCombat(victim.getUniqueId() ) && combatService.isPlayerInCombat(attacker.getUniqueId())) {
+            if (combatService.isPlayerInCombat(victim.getUniqueId()) && combatService.isPlayerInCombat(attacker.getUniqueId())) {
                 return;
             }
 
@@ -160,7 +160,7 @@ public class FFAListener implements Listener {
         Player player = event.getPlayer();
         Profile profile = this.accessProfile(player);
         if (profile.getState() != EnumProfileState.FFA) return;
-        
+
         event.setCancelled(true);
     }
 

@@ -163,8 +163,8 @@ public class MongoUtility {
     /**
      * Updates a Profile object from a Document.
      *
-     * @param profile   The profile to update.
-     * @param document  The document to update from.
+     * @param profile  The profile to update.
+     * @param document The document to update from.
      */
     public void updateProfileFromDocument(Profile profile, Document document) {
         profile.setFirstJoin(document.getLong("firstJoin"));
@@ -228,9 +228,9 @@ public class MongoUtility {
 
             String storedTier = kitEntry.getString("tier");
             DivisionTier tier = division.getTiers().stream()
-                    .filter(t -> t.getName().equals(storedTier))
-                    .findFirst()
-                    .orElse(null);
+                                    .filter(t -> t.getName().equals(storedTier))
+                                    .findFirst()
+                                    .orElse(null);
             kit.setTier(Objects.requireNonNull(tier).getName());
 
             kit.setWins(kitEntry.getInteger("wins"));

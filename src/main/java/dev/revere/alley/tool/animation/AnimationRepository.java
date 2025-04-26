@@ -56,9 +56,9 @@ public class AnimationRepository {
      */
     private <T> void registerAnimations(Class<T> superClass, Set<T> targetSet) {
         Set<Class<? extends T>> classes = this.reflections.getSubTypesOf(superClass)
-                .stream()
-                .filter(clazz -> !Modifier.isAbstract(clazz.getModifiers()))
-                .collect(Collectors.toSet());
+                                              .stream()
+                                              .filter(clazz -> !Modifier.isAbstract(clazz.getModifiers()))
+                                              .collect(Collectors.toSet());
 
         for (Class<? extends T> clazz : classes) {
             try {
@@ -94,9 +94,9 @@ public class AnimationRepository {
         }
 
         return targetSet.stream()
-                .filter(clazz::isInstance)
-                .map(clazz::cast)
-                .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("No animator found for class: " + clazz.getName()));
+                   .filter(clazz::isInstance)
+                   .map(clazz::cast)
+                   .findFirst()
+                   .orElseThrow(() -> new IllegalArgumentException("No animator found for class: " + clazz.getName()));
     }
 }

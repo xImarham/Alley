@@ -24,7 +24,7 @@ public class DivisionDeleteCommand extends BaseCommand {
             player.sendMessage(CC.translate("&6Usage: &e/division delete &b<name>"));
             return;
         }
-        
+
         String name = args[0];
         DivisionService divisionService = this.plugin.getDivisionService();
         Division division = divisionService.getDivision(name);
@@ -32,7 +32,7 @@ public class DivisionDeleteCommand extends BaseCommand {
             player.sendMessage(CC.translate("&cA division with that name does not exist."));
             return;
         }
-        
+
         divisionService.deleteDivision(division.getName());
         player.sendMessage(CC.translate("&aSuccessfully deleted the division named &b" + name + "&a."));
     }

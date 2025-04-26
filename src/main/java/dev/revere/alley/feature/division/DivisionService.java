@@ -71,12 +71,12 @@ public class DivisionService {
             }
 
             Division division = new Division(
-                    key,
-                    displayName,
-                    description,
-                    durability,
-                    icon,
-                    tiers
+                key,
+                displayName,
+                description,
+                durability,
+                icon,
+                tiers
             );
 
             loadedDivisions.add(division);
@@ -130,11 +130,11 @@ public class DivisionService {
      */
     public void createDivision(String name, int requiredWins) {
         Division division = new Division(name, "&b&l" + name, "The " + name + " Division", 0, Material.DIRT, Arrays.asList(
-                new DivisionTier("I", requiredWins),
-                new DivisionTier("II", (int) (requiredWins * 1.25)),
-                new DivisionTier("III", (int) (requiredWins * 1.5)),
-                new DivisionTier("IV", (int) (requiredWins * 1.75)),
-                new DivisionTier("V", (requiredWins * 2))
+            new DivisionTier("I", requiredWins),
+            new DivisionTier("II", (int) (requiredWins * 1.25)),
+            new DivisionTier("III", (int) (requiredWins * 1.5)),
+            new DivisionTier("IV", (int) (requiredWins * 1.75)),
+            new DivisionTier("V", (requiredWins * 2))
         ));
 
         this.divisions.add(division);
@@ -164,7 +164,7 @@ public class DivisionService {
      */
     public Division getHighestDivision() {
         return this.divisions.stream()
-                .max(Comparator.comparingInt(d -> d.getTiers().get(0).getRequiredWins()))
-                .orElse(null);
+                   .max(Comparator.comparingInt(d -> d.getTiers().get(0).getRequiredWins()))
+                   .orElse(null);
     }
 }

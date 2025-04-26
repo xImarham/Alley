@@ -19,18 +19,18 @@ public class BotMechanics {
     public void handleBotAim(Bot bot, Player player) {
         double aimRandomness = bot.getPreset().getAimRandomness();
         bot.getNpc().faceLocation(player.getLocation().add(new Vector(
-                (Math.random() - 0.5) * aimRandomness,
-                (Math.random() - 0.5) * aimRandomness,
-                (Math.random() - 0.5) * aimRandomness
+            (Math.random() - 0.5) * aimRandomness,
+            (Math.random() - 0.5) * aimRandomness,
+            (Math.random() - 0.5) * aimRandomness
         )));
     }
 
     /**
      * Handles the attack range logic for the bot.
      *
-     * @param distance   The distance between the bot and the player.
-     * @param player      The player instance.
-     * @param bot        The bot instance.
+     * @param distance The distance between the bot and the player.
+     * @param player   The player instance.
+     * @param bot      The bot instance.
      */
     public void handleAttackRange(double distance, Player player, Bot bot) {
         double attackRange = bot.getPreset().getReach();

@@ -26,10 +26,10 @@ public class ShopButton extends Button {
     @Override
     public ItemStack getButtonItem(Player player) {
         return new ItemBuilder(itemStack)
-                .name(displayName)
-                .lore(lore)
-                .hideMeta()
-                .build();
+                   .name(displayName)
+                   .lore(lore)
+                   .hideMeta()
+                   .build();
     }
 
     @Override

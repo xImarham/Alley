@@ -26,7 +26,7 @@ public class MongoService {
     /**
      * Constructor for the MongoService class.
      *
-     * @param uri The MongoDB URI.
+     * @param uri          The MongoDB URI.
      * @param databaseName The name of the database.
      */
     public MongoService(String uri, String databaseName) {
@@ -42,9 +42,9 @@ public class MongoService {
         try {
             ConnectionString connectionString = new ConnectionString(this.uri);
             MongoClientSettings settings = MongoClientSettings.builder()
-                    .applyConnectionString(connectionString)
-                    .retryWrites(true)
-                    .build();
+                                               .applyConnectionString(connectionString)
+                                               .retryWrites(true)
+                                               .build();
 
             this.mongoClient = MongoClients.create(settings);
             this.mongoDatabase = this.mongoClient.getDatabase(this.databaseName);

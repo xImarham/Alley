@@ -32,10 +32,10 @@ public class PracticeSettingsMenu extends Menu {
 
         for (EnumPracticeSettingType type : EnumPracticeSettingType.values()) {
             buttons.put(type.slot, new PracticeSettingsButton(
-                    type.displayName,
-                    type.material,
-                    type.durability,
-                    type.loreProvider.apply(settings)
+                type.displayName,
+                type.material,
+                type.durability,
+                type.loreProvider.apply(settings)
             ));
         }
 

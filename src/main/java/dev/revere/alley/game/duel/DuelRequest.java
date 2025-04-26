@@ -16,9 +16,9 @@ import org.bukkit.entity.Player;
 public class DuelRequest {
     private final Player sender;
     private final Player target;
-    
+
     private Kit kit;
-    
+
     private AbstractArena arena;
 
     private final long expireTime;

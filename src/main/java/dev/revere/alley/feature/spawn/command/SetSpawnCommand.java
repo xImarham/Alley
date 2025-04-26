@@ -23,11 +23,11 @@ public class SetSpawnCommand extends BaseCommand {
 
         String message = this.plugin.getConfigService().getMessagesConfig().getString("spawn.spawn-set");
         message = message.replace("{world}", location.getWorld().getName())
-                .replace("{x}", String.format("%.2f", location.getX()))
-                .replace("{y}", String.format("%.2f", location.getY()))
-                .replace("{z}", String.format("%.2f", location.getZ()))
-                .replace("{yaw}", String.format("%.2f", location.getYaw()))
-                .replace("{pitch}", String.format("%.2f", location.getPitch()));
+                      .replace("{x}", String.format("%.2f", location.getX()))
+                      .replace("{y}", String.format("%.2f", location.getY()))
+                      .replace("{z}", String.format("%.2f", location.getZ()))
+                      .replace("{yaw}", String.format("%.2f", location.getYaw()))
+                      .replace("{pitch}", String.format("%.2f", location.getPitch()));
 
         player.sendMessage(CC.translate(message));
     }

@@ -16,7 +16,7 @@ public class ServiceMenuCommand extends BaseCommand {
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
-        
+
         new ServiceMenu().openMenu(player);
     }
 }

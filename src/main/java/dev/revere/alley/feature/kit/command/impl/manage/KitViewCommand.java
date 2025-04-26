@@ -33,7 +33,7 @@ public class KitViewCommand extends BaseCommand {
         }
 
         player.sendMessage("");
-        player.sendMessage(CC.translate("&b&lKit " + kit.getName() +  " &f(" + (kit.isEnabled() ? "&aEnabled" : "&cDisabled") + "&f)"));
+        player.sendMessage(CC.translate("&b&lKit " + kit.getName() + " &f(" + (kit.isEnabled() ? "&aEnabled" : "&cDisabled") + "&f)"));
         player.sendMessage(CC.translate(" &f● &bDisplay Name: &f" + kit.getDisplayName()));
         player.sendMessage(CC.translate(" &f● &bName: &f" + kit.getName()));
         player.sendMessage(CC.translate(" &f● &bIcon: &f" + kit.getIcon().name().toLowerCase() + " &7(" + kit.getIconData() + ")"));
@@ -41,9 +41,9 @@ public class KitViewCommand extends BaseCommand {
         player.sendMessage(CC.translate(" &f● &bDescription: &f" + kit.getDescription()));
         player.sendMessage(CC.translate(" &f● &bFFA: &f" + (kit.isFfaEnabled() ? "&aEnabled" : "&cDisabled")));
         player.spigot().sendMessage(ClickableUtil.createComponent(
-                        "  &a(Click here to view the kit settings)",
-                        "/kit viewsettings " + kit.getName(),
-                        "&7Click to view the settings of the kit &b" + kit.getName())
+            "  &a(Click here to view the kit settings)",
+            "/kit viewsettings " + kit.getName(),
+            "&7Click to view the settings of the kit &b" + kit.getName())
         );
         player.sendMessage("");
     }

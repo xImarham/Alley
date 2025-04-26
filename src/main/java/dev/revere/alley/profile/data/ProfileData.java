@@ -84,19 +84,19 @@ public class ProfileData {
      */
     private int calculateGlobalElo(Profile profile) {
         List<Kit> rankedKits = Alley.getInstance().getKitService().getKits().stream()
-            .filter(kit -> kit.isSettingEnabled(KitSettingRankedImpl.class))
-            .collect(Collectors.toList());
+                                   .filter(kit -> kit.isSettingEnabled(KitSettingRankedImpl.class))
+                                   .collect(Collectors.toList());
 
         if (rankedKits.isEmpty()) {
             return 0;
         }
 
         int totalElo = rankedKits.stream()
-            .mapToInt(kit -> {
-                ProfileRankedKitData kitData = profile.getProfileData().getRankedKitData().get(kit.getName());
-                return kitData != null ? kitData.getElo() : 0;
-            })
-            .sum();
+                           .mapToInt(kit -> {
+                               ProfileRankedKitData kitData = profile.getProfileData().getRankedKitData().get(kit.getName());
+                               return kitData != null ? kitData.getElo() : 0;
+                           })
+                           .sum();
 
         return totalElo / rankedKits.size();
     }

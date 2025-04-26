@@ -35,9 +35,9 @@ public class DuelKitSelectorMenu extends Menu {
         Map<Integer, Button> buttons = new HashMap<>();
 
         Alley.getInstance().getKitService().getKits().stream()
-                .filter(Kit::isEnabled)
-                .filter(kit -> kit.isSettingEnabled(KitSettingRankedImpl.class))
-                .forEach(kit -> buttons.put(buttons.size(), new DuelButton(targetPlayer, kit)));
+            .filter(Kit::isEnabled)
+            .filter(kit -> kit.isSettingEnabled(KitSettingRankedImpl.class))
+            .forEach(kit -> buttons.put(buttons.size(), new DuelButton(targetPlayer, kit)));
 
         return buttons;
     }
@@ -50,12 +50,12 @@ public class DuelKitSelectorMenu extends Menu {
         @Override
         public ItemStack getButtonItem(Player player) {
             return new ItemBuilder(kit.getIcon()).name(kit.getDisplayName() == null ? "&b&l" + kit.getName() : kit.getDisplayName()).durability(kit.getIconData()).hideMeta()
-                    .lore(Arrays.asList(
-                            "&7" + kit.getDescription(),
-                            "",
-                            "&aClick to send a duel request to " + targetPlayer.getName() + "!"
-                    ))
-                    .hideMeta().build();
+                       .lore(Arrays.asList(
+                           "&7" + kit.getDescription(),
+                           "",
+                           "&aClick to send a duel request to " + targetPlayer.getName() + "!"
+                       ))
+                       .hideMeta().build();
         }
 
         @Override

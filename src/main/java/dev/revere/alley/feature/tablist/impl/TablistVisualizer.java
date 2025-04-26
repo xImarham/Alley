@@ -34,12 +34,12 @@ public class TablistVisualizer implements ITablist {
     public void update(Player player) {
         if (Alley.getInstance().getProfileService().getProfile(player.getUniqueId()).getProfileData().getProfileSettingData().isTablistEnabled()) {
             List<String> headerLines = getHeader(player).stream()
-                    .map(CC::translate)
-                    .collect(Collectors.toList());
+                                           .map(CC::translate)
+                                           .collect(Collectors.toList());
 
             List<String> footerLines = getFooter(player).stream()
-                    .map(CC::translate)
-                    .collect(Collectors.toList());
+                                           .map(CC::translate)
+                                           .collect(Collectors.toList());
 
             String headerText = String.join("\n", headerLines);
             String footerText = String.join("\n", footerLines);

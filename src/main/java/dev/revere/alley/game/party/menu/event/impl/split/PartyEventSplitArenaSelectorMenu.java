@@ -46,7 +46,7 @@ public class PartyEventSplitArenaSelectorMenu extends Menu {
 
         for (AbstractArena arena : Alley.getInstance().getArenaService().getArenas()) {
             if (arena.getKits().contains(kit.getName()) && arena.isEnabled() &&
-                (!(arena instanceof StandAloneArena) || !((StandAloneArena) arena).isActive())) {
+                    (!(arena instanceof StandAloneArena) || !((StandAloneArena) arena).isActive())) {
                 buttons.put(buttons.size(), new PartyEventSplitArenaSelectorButton(kit, arena));
             }
         }
@@ -62,10 +62,10 @@ public class PartyEventSplitArenaSelectorMenu extends Menu {
         @Override
         public ItemStack getButtonItem(Player player) {
             return new ItemBuilder(Material.PAPER).name("&b" + arena.getName()).durability(0).hideMeta()
-                .lore(Collections.singletonList(
-                    "&7Click to select this arena."
-                ))
-                .build();
+                       .lore(Collections.singletonList(
+                           "&7Click to select this arena."
+                       ))
+                       .build();
         }
 
         @Override

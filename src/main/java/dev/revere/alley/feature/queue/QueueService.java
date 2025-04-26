@@ -80,9 +80,9 @@ public class QueueService {
         }
 
         return (int) this.plugin.getProfileService().getProfiles().values().stream()
-                .filter(profile -> profile.getState().equals(stateForQueue))
-                .filter(profile -> this.isMatchForQueue(profile, queue))
-                .count();
+                         .filter(profile -> profile.getState().equals(stateForQueue))
+                         .filter(profile -> this.isMatchForQueue(profile, queue))
+                         .count();
     }
 
     /**
@@ -109,7 +109,7 @@ public class QueueService {
      * Check if a profile's match type matches the queue
      *
      * @param profile the profile to check
-     * @param queue the queue to check the profile's match for
+     * @param queue   the queue to check the profile's match for
      * @return true if the profile's match type matches the queue
      */
     private boolean isMatchForQueue(Profile profile, String queue) {

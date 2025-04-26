@@ -141,7 +141,7 @@ public class DeathReflectionService implements IReflection {
     /**
      * Hide or show the player to/from all other players in the specified set.
      *
-     * @param player The player to show or hide.
+     * @param player  The player to show or hide.
      * @param players The players to hide or show the target player from.
      * @param visible True to show the player, false to hide.
      */

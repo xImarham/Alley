@@ -75,48 +75,48 @@ public class StatisticsMenu extends Menu {
             ProfileFFAData profileFFAData = this.profile.getProfileData().getFfaData().get(this.kit.getName());
 
             List<String> lore = new ArrayList<>(Arrays.asList(
-                    "&b&lUnranked &6⭐" + profileUnrankedKitData.getDivision().getName() + " " + profileUnrankedKitData.getTier().getName(),
-                    "&f● &bWins: &f" + profileUnrankedKitData.getWins(),
-                    //"&f● &bLosses: &f" + profileUnrankedKitData.getLosses(),
-                    "",
-                    "&f● &bWin Streak: " + "&fN/A",
-                    "    &bBest: " + "&fN/A" + " &7(N/A Daily)"
+                "&b&lUnranked &6⭐" + profileUnrankedKitData.getDivision().getName() + " " + profileUnrankedKitData.getTier().getName(),
+                "&f● &bWins: &f" + profileUnrankedKitData.getWins(),
+                //"&f● &bLosses: &f" + profileUnrankedKitData.getLosses(),
+                "",
+                "&f● &bWin Streak: " + "&fN/A",
+                "    &bBest: " + "&fN/A" + " &7(N/A Daily)"
             ));
 
             if (this.profile.hasParticipatedInRanked()) {
                 lore.addAll(Arrays.asList(
-                        "",
-                        "&b&lRanked",
-                        "&f● &bWins: &f" + profileRankedKitData.getWins(),
-                        //"&f● &bLosses: &f" + profileRankedKitData.getLosses(),
-                        "&f● &bElo: &f" + profileRankedKitData.getElo()
+                    "",
+                    "&b&lRanked",
+                    "&f● &bWins: &f" + profileRankedKitData.getWins(),
+                    //"&f● &bLosses: &f" + profileRankedKitData.getLosses(),
+                    "&f● &bElo: &f" + profileRankedKitData.getElo()
                 ));
             }
 
             if (this.profile.hasParticipatedInTournament()) {
                 lore.addAll(Arrays.asList(
-                        "",
-                        "&b&lTournament",
-                        "&f● &bWins: &f" + "N/A",
-                        "&f● &bLosses: &f" + "N/A"
+                    "",
+                    "&b&lTournament",
+                    "&f● &bWins: &f" + "N/A",
+                    "&f● &bLosses: &f" + "N/A"
                 ));
             }
 
             if (this.kit.isFfaEnabled() && this.profile.hasParticipatedInFFA()) {
                 lore.addAll(Arrays.asList(
-                        "",
-                        "&b&lFFA",
-                        "&f● &bKills: &f" + profileFFAData.getKills() + " &7(" + profileFFAData.getKillDeathRatio() + ")",
-                        "&f● &bDeaths: &f" + profileFFAData.getDeaths()
+                    "",
+                    "&b&lFFA",
+                    "&f● &bKills: &f" + profileFFAData.getKills() + " &7(" + profileFFAData.getKillDeathRatio() + ")",
+                    "&f● &bDeaths: &f" + profileFFAData.getDeaths()
                 ));
             }
 
             return new ItemBuilder(this.kit.getIcon())
-                    .name("&b&l" + this.kit.getDisplayName())
-                    .durability(this.kit.getIconData())
-                    .lore(lore)
-                    .hideMeta()
-                    .build();
+                       .name("&b&l" + this.kit.getDisplayName())
+                       .durability(this.kit.getIconData())
+                       .lore(lore)
+                       .hideMeta()
+                       .build();
         }
     }
 }

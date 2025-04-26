@@ -42,9 +42,9 @@ public class MatchStartCommand extends BaseCommand {
                     Kit kit = this.plugin.getKitService().getKit(command.getArgs()[2]);
                     if (kit != null) {
                         this.plugin.getArenaService().getArenas()
-                                .stream()
-                                .filter(arena -> arena.getKits().contains(kit.getName()))
-                                .forEach(arena -> completion.add(arena.getName()));
+                            .stream()
+                            .filter(arena -> arena.getKits().contains(kit.getName()))
+                            .forEach(arena -> completion.add(arena.getName()));
                     }
                     break;
                 default:

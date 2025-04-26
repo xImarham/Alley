@@ -56,12 +56,12 @@ public enum HotbarItems {
     /**
      * Constructor for the HotbarItems enum
      *
-     * @param name     The name of the item
-     * @param material The material of the item
-     * @param durability     The data of the item
-     * @param slot     The slot of the item
-     * @param command  The command of the item
-     * @param types    The types of the item
+     * @param name       The name of the item
+     * @param material   The material of the item
+     * @param durability The data of the item
+     * @param slot       The slot of the item
+     * @param command    The command of the item
+     * @param types      The types of the item
      */
     HotbarItems(String name, Material material, int durability, int slot, String command, EnumHotbarType... types) {
         this.name = name;

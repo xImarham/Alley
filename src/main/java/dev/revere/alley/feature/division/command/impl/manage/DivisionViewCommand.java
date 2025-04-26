@@ -21,12 +21,12 @@ public class DivisionViewCommand extends BaseCommand {
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
         String[] args = command.getArgs();
-        
+
         if (args.length < 1) {
             player.sendMessage(CC.translate("&6Usage: &e/division view &b<name>"));
             return;
         }
-        
+
         DivisionService divisionService = this.plugin.getDivisionService();
         Division division = divisionService.getDivision(args[0]);
         if (division == null) {
@@ -35,13 +35,13 @@ public class DivisionViewCommand extends BaseCommand {
         }
 
         Arrays.asList(
-                "",
-                "&b&lDivision &f(" + division.getDisplayName() + ")",
-                " &f● &bName: &f" + division.getDisplayName(),
-                " &f● &bTiers: &f" + division.getTiers().size(),
-                " &f● &bDescription: &f" + division.getDescription(),
-                " &f● &bRequired Wins: &f" + division.getTiers().get(0).getRequiredWins(),
-                ""
+            "",
+            "&b&lDivision &f(" + division.getDisplayName() + ")",
+            " &f● &bName: &f" + division.getDisplayName(),
+            " &f● &bTiers: &f" + division.getTiers().size(),
+            " &f● &bDescription: &f" + division.getDescription(),
+            " &f● &bRequired Wins: &f" + division.getTiers().get(0).getRequiredWins(),
+            ""
         ).forEach(line -> player.sendMessage(CC.translate(line)));
     }
 }

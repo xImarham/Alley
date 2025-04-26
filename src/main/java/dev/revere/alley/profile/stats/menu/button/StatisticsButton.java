@@ -24,20 +24,20 @@ public class StatisticsButton extends Button {
     @Override
     public ItemStack getButtonItem(Player player) {
         return new ItemBuilder(Material.PAPER)
-                .name("&b&lYour Statistics")
-                .lore(
-                        "&fYour statistics are displayed here.",
-                        "&fYou can view your wins, losses, and more.",
-                        "",
-                        "&aClick to view your statistics."
-                )
-                .build();
+                   .name("&b&lYour Statistics")
+                   .lore(
+                       "&fYour statistics are displayed here.",
+                       "&fYou can view your wins, losses, and more.",
+                       "",
+                       "&aClick to view your statistics."
+                   )
+                   .build();
     }
 
     /**
      * Handles the click event for the button.
      *
-     * @param player the player who clicked the button
+     * @param player    the player who clicked the button
      * @param clickType the type of click
      */
     @Override

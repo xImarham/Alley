@@ -82,22 +82,22 @@ public class CurrentMatchesMenu extends PaginatedMenu {
         @Override
         public ItemStack getButtonItem(Player player) {
             return new ItemBuilder(match.getKit().getIcon()).name("&b&l" + match.getParticipants().get(0).getPlayer().getUsername() + " &7vs &b&l" + match.getParticipants().get(1).getPlayer().getUsername()).durability(match.getKit().getIconData()).hideMeta()
-                    .lore(Arrays.asList(
-                            " &f● &bArena: &f" + match.getArena().getName(),
-                            " &f● &bKit: &f" + match.getKit().getName(),
-                            " &f● &bQueue: &f" + (match.getQueue() == null ? "None" : match.getQueue().getQueueType()),
-                            " ",
-                            "&aClick to spectate!"
-                    ))
-                    .hideMeta().build();
+                       .lore(Arrays.asList(
+                           " &f● &bArena: &f" + match.getArena().getName(),
+                           " &f● &bKit: &f" + match.getKit().getName(),
+                           " &f● &bQueue: &f" + (match.getQueue() == null ? "None" : match.getQueue().getQueueType()),
+                           " ",
+                           "&aClick to spectate!"
+                       ))
+                       .hideMeta().build();
         }
 
         /**
          * Handles the click event for the button.
          *
-         * @param player      the player who clicked the button
-         * @param slot        the slot the button was clicked in
-         * @param clickType   the type of click
+         * @param player       the player who clicked the button
+         * @param slot         the slot the button was clicked in
+         * @param clickType    the type of click
          * @param hotbarButton the hotbar button clicked
          */
         @Override
@@ -125,18 +125,18 @@ public class CurrentMatchesMenu extends PaginatedMenu {
         @Override
         public ItemStack getButtonItem(Player player) {
             return new ItemBuilder(Material.CARPET)
-                    .name("&b&lRefresh")
-                    .lore(" &f● &bPress to refresh the matches")
-                    .durability(2)
-                    .build();
+                       .name("&b&lRefresh")
+                       .lore(" &f● &bPress to refresh the matches")
+                       .durability(2)
+                       .build();
         }
 
         /**
          * Handles the click event for the button.
          *
-         * @param player      the player who clicked the button
-         * @param slot        the slot the button was clicked in
-         * @param clickType   the type of click
+         * @param player       the player who clicked the button
+         * @param slot         the slot the button was clicked in
+         * @param clickType    the type of click
          * @param hotbarButton the hotbar button clicked
          */
         @Override

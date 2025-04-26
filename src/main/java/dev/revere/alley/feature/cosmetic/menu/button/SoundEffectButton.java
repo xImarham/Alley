@@ -17,14 +17,14 @@ public class SoundEffectButton extends Button {
     @Override
     public ItemStack getButtonItem(Player player) {
         return new ItemBuilder(Material.PAPER)
-                .name("&b&lSound Effects")
-                .lore(
-                        "&fAll of your sound effects",
-                        "&fare displayed here.",
-                        "",
-                        "&aClick to view your sound effects."
-                )
-                .build();
+                   .name("&b&lSound Effects")
+                   .lore(
+                       "&fAll of your sound effects",
+                       "&fare displayed here.",
+                       "",
+                       "&aClick to view your sound effects."
+                   )
+                   .build();
     }
 
     /**

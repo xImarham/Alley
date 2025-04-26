@@ -51,7 +51,7 @@ public class QueueRunnable implements Runnable {
                     if (parkourService.isPlaying(player)) {
                         parkourService.removePlayer(player, false);
                     }
-                    
+
                     player.sendMessage(CC.translate("&cYou have been removed from the queue due to inactivity."));
                     Alley.getInstance().getProfileService().getProfile(profile.getUuid()).setQueueProfile(null);
                     Alley.getInstance().getHotbarService().applyHotbarItems(player, EnumHotbarType.LOBBY);
@@ -83,7 +83,7 @@ public class QueueRunnable implements Runnable {
                     this.clearQueueProfiles(queue, firstProfile, secondProfile);
                     GamePlayerList gamePlayerList = getGamePlayerList(firstPlayerOpt.get(), secondPlayerOpt.get(), firstProfile, secondProfile);
                     GameParticipantList gameParticipantList = getGameParticipantList(gamePlayerList);
-                    
+
                     this.processGame(queue, gameParticipantList);
                 }
             }

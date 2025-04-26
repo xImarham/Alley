@@ -47,10 +47,10 @@ public class MatchRegularImpl extends AbstractMatch {
     /**
      * Constructor for the MatchRegularImpl class.
      *
-     * @param queue       The queue of the match.
+     * @param queue        The queue of the match.
      * @param kit          The kit of the match.
      * @param arena        The arena of the match.
-     * @param ranked      Whether the match is ranked or not.
+     * @param ranked       Whether the match is ranked or not.
      * @param participantA The first participant.
      * @param participantB The second participant.
      */
@@ -103,7 +103,7 @@ public class MatchRegularImpl extends AbstractMatch {
             Player teamPlayer = gamePlayer.getPlayer();
 
             teamPlayer.getInventory().all(Material.WOOL).forEach((key, value) ->
-                teamPlayer.getInventory().setItem(key, new ItemBuilder(Material.WOOL).durability(woolColor).amount(64).build())
+                                                                     teamPlayer.getInventory().setItem(key, new ItemBuilder(Material.WOOL).durability(woolColor).amount(64).build())
             );
 
             teamPlayer.updateInventory();
@@ -133,8 +133,8 @@ public class MatchRegularImpl extends AbstractMatch {
     /**
      * Method to handle the data of the match such as elo changes and unranked stats.
      *
-     * @param winner      The winner of the match.
-     * @param loser       The loser of the match.
+     * @param winner       The winner of the match.
+     * @param loser        The loser of the match.
      * @param participantA The first participant.
      * @param participantB The second participant.
      */
@@ -164,12 +164,12 @@ public class MatchRegularImpl extends AbstractMatch {
     /**
      * Sends the elo result message.
      *
-     * @param winnerName The name of the winner.
-     * @param loserName  The name of the loser.
+     * @param winnerName   The name of the winner.
+     * @param loserName    The name of the loser.
      * @param oldEloWinner The old elo of the winner.
-     * @param oldEloLoser The old elo of the loser.
+     * @param oldEloLoser  The old elo of the loser.
      * @param newEloWinner The new elo of the winner.
-     * @param newEloLoser The new elo of the loser.
+     * @param newEloLoser  The new elo of the loser.
      */
     public void sendEloResult(String winnerName, String loserName, int oldEloWinner, int oldEloLoser, int newEloWinner, int newEloLoser) {
         FileConfiguration config = Alley.getInstance().getConfigService().getMessagesConfig();
@@ -179,18 +179,18 @@ public class MatchRegularImpl extends AbstractMatch {
         String loserIndicatorColor = config.getString("match.ended.elo-changes.loser-indicator-color", "&c");
 
         list.replaceAll(string -> string
-                .replace("{winner}", winnerName)
-                .replace("{loser}", loserName)
-                .replace("{old-winner-elo}", String.valueOf(oldEloWinner))
-                .replace("{old-loser-elo}", String.valueOf(oldEloLoser))
-                .replace("{new-winner-elo}", String.valueOf(newEloWinner))
-                .replace("{new-loser-elo}", String.valueOf(newEloLoser))
-                .replace("{winner-indicator}", newEloWinner > oldEloWinner ? "+" : "-")
-                .replace("{loser-indicator}", newEloLoser > oldEloLoser ? "+" : "-")
-                .replace("{winner-color}", newEloWinner > oldEloWinner ? winnerIndicatorColor : loserIndicatorColor)
-                .replace("{loser-color}", newEloLoser > oldEloLoser ? winnerIndicatorColor : loserIndicatorColor)
-                .replace("{math-winner-elo}", String.valueOf(Math.abs(oldEloWinner - newEloWinner)))
-                .replace("{math-loser-elo}", String.valueOf(Math.abs(oldEloLoser - newEloLoser)))
+                                      .replace("{winner}", winnerName)
+                                      .replace("{loser}", loserName)
+                                      .replace("{old-winner-elo}", String.valueOf(oldEloWinner))
+                                      .replace("{old-loser-elo}", String.valueOf(oldEloLoser))
+                                      .replace("{new-winner-elo}", String.valueOf(newEloWinner))
+                                      .replace("{new-loser-elo}", String.valueOf(newEloLoser))
+                                      .replace("{winner-indicator}", newEloWinner > oldEloWinner ? "+" : "-")
+                                      .replace("{loser-indicator}", newEloLoser > oldEloLoser ? "+" : "-")
+                                      .replace("{winner-color}", newEloWinner > oldEloWinner ? winnerIndicatorColor : loserIndicatorColor)
+                                      .replace("{loser-color}", newEloLoser > oldEloLoser ? winnerIndicatorColor : loserIndicatorColor)
+                                      .replace("{math-winner-elo}", String.valueOf(Math.abs(oldEloWinner - newEloWinner)))
+                                      .replace("{math-loser-elo}", String.valueOf(Math.abs(oldEloLoser - newEloLoser)))
         );
 
         list.forEach(this::notifyParticipants);
@@ -224,7 +224,7 @@ public class MatchRegularImpl extends AbstractMatch {
     /**
      * Method to handle the winner.
      *
-     * @param elo The new elo of the winner.
+     * @param elo    The new elo of the winner.
      * @param winner The winner of the match.
      */
     public void handleWinner(int elo, GameParticipant<MatchGamePlayerImpl> winner) {
@@ -238,7 +238,7 @@ public class MatchRegularImpl extends AbstractMatch {
     /**
      * Method to handle the loser.
      *
-     * @param elo The new elo of the loser.
+     * @param elo   The new elo of the loser.
      * @param loser The loser of the match.
      */
     public void handleLoser(int elo, GameParticipant<MatchGamePlayerImpl> loser) {

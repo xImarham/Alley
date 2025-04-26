@@ -18,7 +18,7 @@ import java.util.Arrays;
  * @date 28/04/2024 - 22:46
  */
 public class KitSetDescriptionCommand extends BaseCommand {
-    @CommandData(name = "kit.description", aliases = "kit.setdesc",isAdminOnly = true)
+    @CommandData(name = "kit.description", aliases = "kit.setdesc", isAdminOnly = true)
     @Override
     public void onCommand(CommandArgs command) {
         Player sender = command.getPlayer();

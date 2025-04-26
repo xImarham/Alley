@@ -33,26 +33,26 @@ public class TitleButton extends Button {
 
         if (!this.profile.getProfileData().getUnlockedTitles().contains(this.title.getKit().getName())) {
             return new ItemBuilder(Material.STAINED_GLASS_PANE)
-                .name("&b&l" + this.title.getKit().getName())
-                .lore(
-                    this.progress()
-                )
-                .durability(14)
-                .hideMeta()
-                .build();
+                       .name("&b&l" + this.title.getKit().getName())
+                       .lore(
+                           this.progress()
+                       )
+                       .durability(14)
+                       .hideMeta()
+                       .build();
         }
 
         return new ItemBuilder(this.title.getKit().getIcon())
-            .name("&b&l" + this.title.getKit().getName())
-            .lore(
-                "",
-                "&a&lUNLOCKED",
-                "",
-                "&aClick to select!"
-            )
-            .durability(this.title.getKit().getIconData())
-            .hideMeta()
-            .build();
+                   .name("&b&l" + this.title.getKit().getName())
+                   .lore(
+                       "",
+                       "&a&lUNLOCKED",
+                       "",
+                       "&aClick to select!"
+                   )
+                   .durability(this.title.getKit().getIconData())
+                   .hideMeta()
+                   .build();
     }
 
     @Override

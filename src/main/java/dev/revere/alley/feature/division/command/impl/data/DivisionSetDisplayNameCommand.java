@@ -31,7 +31,7 @@ public class DivisionSetDisplayNameCommand extends BaseCommand {
             player.sendMessage(CC.translate("&cA division with that name does not exist."));
             return;
         }
-        
+
         String displayName = args[1];
         division.setDisplayName(displayName);
         divisionService.saveDivision(division);

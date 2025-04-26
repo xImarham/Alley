@@ -54,12 +54,12 @@ public class Logger {
         storedExceptions.put(errorId, exception);
 
         Arrays.asList(
-                "",
-                CC.ERROR_PREFIX + "&c&lEXCEPTION",
-                " &f" + message + ": &r" + exception.getMessage(),
-                "",
-                " &c(Type &4viewerror " + errorId + " &cin console to see details)",
-                ""
+            "",
+            CC.ERROR_PREFIX + "&c&lEXCEPTION",
+            " &f" + message + ": &r" + exception.getMessage(),
+            "",
+            " &c(Type &4viewerror " + errorId + " &cin console to see details)",
+            ""
         ).forEach(line -> consoleSender.sendMessage(CC.translate(line)));
     }
 
@@ -77,11 +77,11 @@ public class Logger {
         }
 
         Arrays.asList(
-                "",
-                CC.MENU_BAR + CC.MENU_BAR + CC.MENU_BAR + CC.MENU_BAR,
-                "",
-                "&c&lVIEWING ERROR: " + errorId,
-                ""
+            "",
+            CC.MENU_BAR + CC.MENU_BAR + CC.MENU_BAR + CC.MENU_BAR,
+            "",
+            "&c&lVIEWING ERROR: " + errorId,
+            ""
         ).forEach(line -> consoleSender.sendMessage(CC.translate(line)));
 
         exception.printStackTrace();

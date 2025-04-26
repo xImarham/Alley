@@ -35,22 +35,22 @@ public class ShopEffectButton extends Button {
         }
 
         return new ItemBuilder(cosmetic.getIcon())
-                .name("&b&l" + cosmetic.getName())
-                .lore(
-                        "",
-                        "&f● &bDescription: &f" + cosmetic.getDescription(),
-                        "&f● &bPrice: &f" + cosmetic.getPrice() + " coins",
-                        "",
-                        lore
+                   .name("&b&l" + cosmetic.getName())
+                   .lore(
+                       "",
+                       "&f● &bDescription: &f" + cosmetic.getDescription(),
+                       "&f● &bPrice: &f" + cosmetic.getPrice() + " coins",
+                       "",
+                       lore
 
-                )
-                .build();
+                   )
+                   .build();
     }
 
     /**
      * Handles the click event for the button.
      *
-     * @param player the player who clicked the button
+     * @param player    the player who clicked the button
      * @param clickType the type of click
      */
     @Override

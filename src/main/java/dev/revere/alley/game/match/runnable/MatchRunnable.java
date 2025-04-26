@@ -60,10 +60,10 @@ public class MatchRunnable extends BukkitRunnable {
                 }
                 break;
             case ENDING_ROUND:
-                    if (this.match.canStartRound()) {
-                        this.match.setState(EnumMatchState.STARTING);
-                        this.match.getRunnable().setStage(4);
-                    }
+                if (this.match.canStartRound()) {
+                    this.match.setState(EnumMatchState.STARTING);
+                    this.match.getRunnable().setStage(4);
+                }
                 break;
             case ENDING_MATCH:
                 if (this.stage == 0) {
@@ -91,7 +91,7 @@ public class MatchRunnable extends BukkitRunnable {
      * Check if the time is up in the match.
      *
      * @param elapsedTime The elapsed time.
-     * @param timeLimit The time limit.
+     * @param timeLimit   The time limit.
      * @return If the match ended.
      */
     private boolean checkTime(long elapsedTime, long timeLimit) {
@@ -117,8 +117,8 @@ public class MatchRunnable extends BukkitRunnable {
             }
 
             config.getStringList("match.started.kit-disclaimer.format").forEach(message -> this.match.sendMessage(CC.translate(message)
-                    .replace("{kit-disclaimer}", CC.translate(this.match.getKit().getDisclaimer()))
-                    .replace("{kit-name}", this.match.getKit().getName())
+                                                                                                                      .replace("{kit-disclaimer}", CC.translate(this.match.getKit().getDisclaimer()))
+                                                                                                                      .replace("{kit-name}", this.match.getKit().getName())
             ));
         }
     }

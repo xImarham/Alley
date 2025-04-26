@@ -35,7 +35,7 @@ public enum EnumEmojiType {
      * Constructor for EnumEmojiType class.
      *
      * @param identifier the identifier of the emoji
-     * @param format the format of the emoji
+     * @param format     the format of the emoji
      */
     EnumEmojiType(String identifier, String format) {
         this.identifier = identifier;

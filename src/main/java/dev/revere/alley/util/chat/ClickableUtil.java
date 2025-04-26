@@ -21,8 +21,8 @@ public class ClickableUtil {
     /**
      * Create a clickable text component.
      *
-     * @param message the message
-     * @param command the command
+     * @param message   the message
+     * @param command   the command
      * @param hoverText the hover text
      * @return the text component
      */
@@ -40,12 +40,12 @@ public class ClickableUtil {
      * This calculates the current page, the total number of pages, and the base command for navigation.
      * This allows the player to navigate through pages with ease.
      *
-     * @param player the player
-     * @param page the current page
-     * @param totalPages the total number of pages
-     * @param command the command to be executed upon clicking
+     * @param player         the player
+     * @param page           the current page
+     * @param totalPages     the total number of pages
+     * @param command        the command to be executed upon clicking
      * @param keepInPosition whether to keep the next page button in the same position in every page (displayBoth must be false)
-     * @param displayBoth whether to always show both buttons or not (keepInPosition won't affect this, it will be ignored)
+     * @param displayBoth    whether to always show both buttons or not (keepInPosition won't affect this, it will be ignored)
      */
     public void sendPageNavigation(Player player, int page, int totalPages, String command, boolean keepInPosition, boolean displayBoth) {
         TextComponent nextPage = createComponent(page == totalPages ? "&a&m[Next Page]" : "&a[Next Page]", command + " " + (page + 1), page == totalPages ? "&cYou are already on the last page." : "&7Click to view page &b" + (page + 1) + "&7.");

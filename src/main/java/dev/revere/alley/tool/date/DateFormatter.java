@@ -49,7 +49,7 @@ public class DateFormatter {
     /**
      * Get the formatted date in a fancy and readable format (e.g., "1st of December, 2024").
      *
-     * @param primaryColor The primary color for the date.
+     * @param primaryColor   The primary color for the date.
      * @param secondaryColor The secondary color for the date.
      * @return The formatted readable date.
      */
@@ -78,10 +78,14 @@ public class DateFormatter {
             return day + "th";
         }
         switch (day % 10) {
-            case 1:  return day + "st";
-            case 2:  return day + "nd";
-            case 3:  return day + "rd";
-            default: return day + "th";
+            case 1:
+                return day + "st";
+            case 2:
+                return day + "nd";
+            case 3:
+                return day + "rd";
+            default:
+                return day + "th";
         }
     }
 }

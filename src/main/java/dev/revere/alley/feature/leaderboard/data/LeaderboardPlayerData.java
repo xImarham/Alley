@@ -22,8 +22,8 @@ public class LeaderboardPlayerData {
      *
      * @param name The name of the player
      * @param uuid The UUID of the player
-     * @param elo The ELO of the player
-     * @param kit The kit of the player
+     * @param elo  The ELO of the player
+     * @param kit  The kit of the player
      */
     public LeaderboardPlayerData(String name, UUID uuid, int elo, Kit kit) {
         this.name = name;

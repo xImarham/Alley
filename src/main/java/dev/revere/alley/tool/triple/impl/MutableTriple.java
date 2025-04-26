@@ -11,14 +11,13 @@ import lombok.Setter;
  * @param <A> the type of the first object
  * @param <B> the type of the second object
  * @param <C> the type of the third object
- *
  * @author Remi
  * @project Alley
  * @date 5/27/2024
  */
 @Getter
 @Setter
-public class MutableTriple<A, B,C> implements Triple<A, B, C> {
+public class MutableTriple<A, B, C> implements Triple<A, B, C> {
     private A a;
     private B b;
     private C c;

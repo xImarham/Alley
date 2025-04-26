@@ -105,7 +105,8 @@ public class CommandUtility {
             new StrikeCommand();
             new TrollCommand();
 
-            new ViewErrorCommand();});
+            new ViewErrorCommand();
+        });
 
         Logger.logTimeWithAction("registered", "Donator Commands", () -> {
             new HostCommand();

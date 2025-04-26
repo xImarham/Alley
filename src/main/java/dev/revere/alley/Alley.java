@@ -211,7 +211,10 @@ public class Alley extends JavaPlugin {
         services.put(DivisionService.class.getSimpleName(), () -> this.divisionService = new DivisionService(this));
         services.put(LevelService.class.getSimpleName(), () -> this.levelService = new LevelService(this));
         services.put(TitleService.class.getSimpleName(), () -> this.titleService = new TitleService(this));
-        services.put(ProfileService.class.getSimpleName(), () -> {this.profileService = new ProfileService();this.profileService.loadProfiles();});
+        services.put(ProfileService.class.getSimpleName(), () -> {
+            this.profileService = new ProfileService();
+            this.profileService.loadProfiles();
+        });
         services.put(HotbarService.class.getSimpleName(), () -> this.hotbarService = new HotbarService());
         services.put(CooldownRepository.class.getSimpleName(), () -> this.cooldownRepository = new CooldownRepository());
         services.put(SnapshotRepository.class.getSimpleName(), () -> this.snapshotRepository = new SnapshotRepository());

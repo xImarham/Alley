@@ -140,12 +140,12 @@ public class MatchListener implements Listener {
 
             Alley.getInstance().getReflectionRepository().getReflectionService(ActionBarReflectionService.class).sendDeathMessage(killer, player);
             profile.getMatch().getParticipants()
-                    .forEach(participant -> participant.getPlayer().getPlayer().sendMessage(CC.translate("&c" + player.getName() + " &fwas killed by &c" + killer.getName() + "&f.")));
+                .forEach(participant -> participant.getPlayer().getPlayer().sendMessage(CC.translate("&c" + player.getName() + " &fwas killed by &c" + killer.getName() + "&f.")));
             profile.getMatch().createSnapshot(player.getUniqueId(), killer.getUniqueId());
             //PlayerUtil.resetLastAttacker(player);
         } else {
             profile.getMatch().getParticipants()
-                    .forEach(participant -> participant.getPlayer().getPlayer().sendMessage(CC.translate("&c" + player.getName() + " &fdied.")));
+                .forEach(participant -> participant.getPlayer().getPlayer().sendMessage(CC.translate("&c" + player.getName() + " &fdied.")));
         }
 
         ListenerUtil.clearDroppedItemsOnDeath(event, player);
@@ -217,8 +217,8 @@ public class MatchListener implements Listener {
                 if (player.getLocation().getBlock().getType() == Material.ENDER_PORTAL || player.getLocation().getBlock().getType() == Material.ENDER_PORTAL_FRAME) {
                     StandAloneArena arena = (StandAloneArena) match.getArena();
                     GameParticipant<MatchGamePlayerImpl> playerTeam = match.getParticipantA().containsPlayer(player.getUniqueId())
-                            ? match.getParticipantA()
-                            : match.getParticipantB();
+                                                                          ? match.getParticipantA()
+                                                                          : match.getParticipantB();
 
                     if (!arena.isEnemyPortal(match, player.getLocation(), playerTeam)) {
                         player.sendMessage(CC.translate("&cYou cannot enter your own portal!"));

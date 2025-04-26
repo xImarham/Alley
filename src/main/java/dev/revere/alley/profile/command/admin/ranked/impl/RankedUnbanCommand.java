@@ -21,12 +21,12 @@ public class RankedUnbanCommand extends BaseCommand {
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
         String[] args = command.getArgs();
-        
+
         if (args.length < 1) {
             player.sendMessage(CC.translate("&6Usage: &e/ranked unban &b<player>"));
             return;
         }
-        
+
         String targetName = args[0];
         OfflinePlayer target = PlayerUtil.getOfflinePlayerByName(targetName);
         if (target == null) {
@@ -39,15 +39,15 @@ public class RankedUnbanCommand extends BaseCommand {
             player.sendMessage(CC.translate("&cProfile not found."));
             return;
         }
-        
+
         if (!profile.getProfileData().isRankedBanned()) {
             player.sendMessage(CC.translate("&cThis player is not banned from ranked matches."));
             return;
         }
-        
+
         profile.getProfileData().setRankedBanned(false);
         Bukkit.broadcastMessage(CC.translate("&a&l" + target.getName() + " &7has been unbanned from ranked matches."));
-        
+
         if (target.isOnline()) {
             Player targetPlayer = (Player) target;
             targetPlayer.sendMessage(CC.translate("&a&lYou have been unbanned from ranked matches."));

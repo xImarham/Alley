@@ -52,14 +52,14 @@ public class RenameCommand extends BaseCommand {
         player.updateInventory();
 
         String renameMessage = Alley.getInstance().getConfigService().getMessagesConfig().getString("rename-item.renamed")
-                .replace("{item}", originalName)
-                .replace("{renamed}", itemRename);
+                                   .replace("{item}", originalName)
+                                   .replace("{renamed}", itemRename);
         player.sendMessage(CC.translate(renameMessage));
     }
 
     private String translate(String name) {
         return Arrays.stream(name.split("_"))
-                .map(word -> word.substring(0, 1).toUpperCase() + word.substring(1).toLowerCase())
-                .collect(Collectors.joining(" "));
+                   .map(word -> word.substring(0, 1).toUpperCase() + word.substring(1).toLowerCase())
+                   .collect(Collectors.joining(" "));
     }
 }

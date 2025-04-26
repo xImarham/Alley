@@ -8,7 +8,6 @@ package dev.revere.alley.tool.triple;
  * @param <A> the type of the first object
  * @param <B> the type of the second object
  * @param <C> the type of the third object
- *
  * @author Remi
  * @project Alley
  * @date 5/27/2024

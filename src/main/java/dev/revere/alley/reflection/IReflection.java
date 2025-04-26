@@ -26,7 +26,7 @@ public interface IReflection {
     /**
      * Get a field from a class using reflection.
      *
-     * @param clazz  the class to search in
+     * @param clazz     the class to search in
      * @param fieldName the field's name
      * @return the field object
      * @throws NoSuchFieldException if the field doesn't exist
@@ -40,9 +40,9 @@ public interface IReflection {
     /**
      * Set the value of a field via reflection.
      *
-     * @param field the field to set
+     * @param field    the field to set
      * @param instance the object instance
-     * @param value the value to set
+     * @param value    the value to set
      * @throws IllegalAccessException if the field is not accessible
      */
     default void setField(Field field, Object instance, Object value) throws IllegalAccessException {

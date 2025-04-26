@@ -29,8 +29,8 @@ public class ActionBarReflectionService implements IReflection {
     /**
      * Method to send an action bar message to a player in a specific interval.
      *
-     * @param player The player.
-     * @param message The message.
+     * @param player          The player.
+     * @param message         The message.
      * @param durationSeconds The duration to show the message (in seconds).
      */
     public void sendMessage(Player player, String message, int durationSeconds) {

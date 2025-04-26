@@ -17,7 +17,7 @@ public class DivisionTier {
     /**
      * Constructor for the DivisionTier class.
      *
-     * @param name        The level of the division tier.
+     * @param name         The level of the division tier.
      * @param requiredWins The required wins of the division tier.
      */
     public DivisionTier(String name, int requiredWins) {

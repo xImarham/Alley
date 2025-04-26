@@ -28,11 +28,11 @@ public class EmojiCommand extends BaseCommand {
         Player player = command.getPlayer();
 
         Arrays.asList(
-                "",
-                "&b&lEmoji Help",
-                " &7To use an emoji, simply type the identifier in chat.",
-                " &7For example, if you want to use the &f" + EnumEmojiType.HEART.getFormat() + " &7emoji, type &f" + EnumEmojiType.HEART.getIdentifier() + "&7 in chat.",
-                ""
+            "",
+            "&b&lEmoji Help",
+            " &7To use an emoji, simply type the identifier in chat.",
+            " &7For example, if you want to use the &f" + EnumEmojiType.HEART.getFormat() + " &7emoji, type &f" + EnumEmojiType.HEART.getIdentifier() + "&7 in chat.",
+            ""
         ).forEach(line -> player.sendMessage(CC.translate(line)));
 
         player.spigot().sendMessage(ClickableUtil.createComponent(" &a[Click here to view all emojis]", "/emoji list", "&7Click here to view a list of all available emojis."));

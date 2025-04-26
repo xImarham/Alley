@@ -23,8 +23,8 @@ public class CommandButton extends Button {
     @Override
     public ItemStack getButtonItem(Player player) {
         return new ItemBuilder(this.itemStack)
-                .lore(this.lore)
-                .build();
+                   .lore(this.lore)
+                   .build();
     }
 
     @Override

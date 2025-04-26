@@ -23,7 +23,7 @@ public class FFAListPlayersCommand extends BaseCommand {
             player.sendMessage(CC.translate("&cUsage: /ffa listplayers <kit>"));
             return;
         }
-        
+
         String kitName = args[0];
         AbstractFFAMatch match = this.plugin.getFfaService().getFFAMatch(kitName);
         if (match == null) {

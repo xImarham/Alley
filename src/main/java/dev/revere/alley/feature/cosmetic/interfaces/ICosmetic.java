@@ -9,9 +9,14 @@ import org.bukkit.Material;
  */
 public interface ICosmetic {
     String getName();
+
     String getDescription();
+
     String getPermission();
+
     Material getIcon();
+
     int getPrice();
+
     int getSlot();
 }

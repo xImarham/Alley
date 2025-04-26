@@ -41,9 +41,9 @@ public class PartyEventSplitMenu extends Menu {
         final Map<Integer, Button> buttons = new HashMap<>();
 
         Alley.getInstance().getKitService().getKits()
-                .stream()
-                .filter(Kit::isEnabled)
-                .forEach(kit -> buttons.put(buttons.size(), new PartyEventSplitButton(kit)))
+            .stream()
+            .filter(Kit::isEnabled)
+            .forEach(kit -> buttons.put(buttons.size(), new PartyEventSplitButton(kit)))
         ;
 
         this.addGlass(buttons, 15);
@@ -63,12 +63,12 @@ public class PartyEventSplitMenu extends Menu {
         @Override
         public ItemStack getButtonItem(Player player) {
             return new ItemBuilder(kit.getIcon()).name("&b&l" + kit.getName()).durability(kit.getIconData()).hideMeta()
-                    .lore(
-                            "&7" + kit.getDescription(),
-                            "",
-                            "&aClick to select this kit."
-                    )
-                    .hideMeta().build();
+                       .lore(
+                           "&7" + kit.getDescription(),
+                           "",
+                           "&aClick to select this kit."
+                       )
+                       .hideMeta().build();
         }
 
         @Override
@@ -111,7 +111,7 @@ public class PartyEventSplitMenu extends Menu {
             }
 
             Alley.getInstance().getMatchRepository().createAndStartMatch(
-                    this.kit, Alley.getInstance().getArenaService().getRandomArena(this.kit), participantA, participantB
+                this.kit, Alley.getInstance().getArenaService().getRandomArena(this.kit), participantA, participantB
             );
         }
     }

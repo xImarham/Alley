@@ -29,46 +29,46 @@ public class PageButton extends Button {
         if (this.offset > 0) {
             if (MenuUtil.hasNext(player, offset, this.menu)) {
                 return new ItemBuilder(Material.MELON)
-                        .name("&b&lNext Page &7" + (this.menu.getPage() + "/" + this.menu.getPages(player)))
-                        .lore(Arrays.asList(
-                                "&7Right-Click:",
-                                " &7▶ View all",
-                                "",
-                                "&bClick to view!"
-                        ))
-                        .hideMeta()
-                        .build();
+                           .name("&b&lNext Page &7" + (this.menu.getPage() + "/" + this.menu.getPages(player)))
+                           .lore(Arrays.asList(
+                               "&7Right-Click:",
+                               " &7▶ View all",
+                               "",
+                               "&bClick to view!"
+                           ))
+                           .hideMeta()
+                           .build();
             } else {
                 return new ItemBuilder(Material.MELON)
-                        .name(CC.translate("&c&lNext Page"))
-                        .lore(Arrays.asList(
-                                "&cThere is no available",
-                                "&cnext page."
-                        ))
-                        .hideMeta()
-                        .build();
+                           .name(CC.translate("&c&lNext Page"))
+                           .lore(Arrays.asList(
+                               "&cThere is no available",
+                               "&cnext page."
+                           ))
+                           .hideMeta()
+                           .build();
             }
         } else {
             if (MenuUtil.hasPrevious(offset, this.menu)) {
                 return new ItemBuilder(Material.SPECKLED_MELON)
-                        .name("&6&lLast Page &7" + (this.menu.getPage() + "/" + this.menu.getPages(player)))
-                        .lore(Arrays.asList(
-                                "&7Right-Click:",
-                                " &7▶ View all",
-                                "",
-                                "&6Click to view!"
-                        ))
-                        .hideMeta()
-                        .build();
+                           .name("&6&lLast Page &7" + (this.menu.getPage() + "/" + this.menu.getPages(player)))
+                           .lore(Arrays.asList(
+                               "&7Right-Click:",
+                               " &7▶ View all",
+                               "",
+                               "&6Click to view!"
+                           ))
+                           .hideMeta()
+                           .build();
             } else {
                 return new ItemBuilder(Material.SPECKLED_MELON)
-                        .name(CC.translate("&c&lLast Page"))
-                        .lore(Arrays.asList(
-                                "&cThere is no available",
-                                "&clast page."
-                        ))
-                        .hideMeta()
-                        .build();
+                           .name(CC.translate("&c&lLast Page"))
+                           .lore(Arrays.asList(
+                               "&cThere is no available",
+                               "&clast page."
+                           ))
+                           .hideMeta()
+                           .build();
             }
         }
     }

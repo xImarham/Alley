@@ -44,8 +44,8 @@ public class ParkourData {
     public boolean hasCheckpoint(Location location) {
         for (Location checkpoint : this.checkpoints) {
             if (checkpoint.getBlockX() == location.getBlockX()
-                && checkpoint.getBlockY() == location.getBlockY()
-                && checkpoint.getBlockZ() == location.getBlockZ()) {
+                    && checkpoint.getBlockY() == location.getBlockY()
+                    && checkpoint.getBlockZ() == location.getBlockZ()) {
                 return true;
             }
         }

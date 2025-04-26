@@ -18,7 +18,7 @@ public abstract class AbstractAnimation {
     /**
      * Constructor for the AbstractAnimation class.
      *
-     * @param frames The frames of the animation.
+     * @param frames         The frames of the animation.
      * @param updateInterval The interval in milliseconds between animation frames.
      */
     protected AbstractAnimation(List<String> frames, long updateInterval) {

@@ -23,7 +23,7 @@ public class PartyListener implements Listener {
     private void onAsyncPlayerChatEvent(AsyncPlayerChatEvent event) {
         Profile profile = Alley.getInstance().getProfileService().getProfile(event.getPlayer().getUniqueId());
         PartyService partyService = Alley.getInstance().getPartyService();
-        
+
         if (profile.getProfileData().getProfileSettingData().getChatChannel().equalsIgnoreCase(EnumChatChannel.PARTY.toString())) {
             event.setCancelled(true);
             if (profile.getParty() == null) {

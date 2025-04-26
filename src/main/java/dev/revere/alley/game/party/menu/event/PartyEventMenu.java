@@ -37,37 +37,37 @@ public class PartyEventMenu extends Menu {
         final Map<Integer, Button> buttons = new HashMap<>();
 
         buttons.put(11, new PartyEventButton(
-                Material.DIAMOND_SWORD, 0,
-                "&b&lTeam split",
-                Arrays.asList(
-                        "&fSplit the party into",
-                        "&f2 teams and fight",
-                        "&fagainst each other.",
-                        "",
-                        "&aClick to select a kit."
-                )
+            Material.DIAMOND_SWORD, 0,
+            "&b&lTeam split",
+            Arrays.asList(
+                "&fSplit the party into",
+                "&f2 teams and fight",
+                "&fagainst each other.",
+                "",
+                "&aClick to select a kit."
+            )
         ));
 
         buttons.put(13, new PartyEventButton(
-                Material.GOLD_AXE, 0,
-                "&b&lFree for all",
-                Arrays.asList(
-                        "&fEvery player fights",
-                        "&fagainst each other.",
-                        "",
-                        "&aClick to select a kit."
-                )
+            Material.GOLD_AXE, 0,
+            "&b&lFree for all",
+            Arrays.asList(
+                "&fEvery player fights",
+                "&fagainst each other.",
+                "",
+                "&aClick to select a kit."
+            )
         ));
 
         buttons.put(15, new PartyEventButton(
-                Material.REDSTONE, 0,
-                "&cBest of 3 Sumo",
-                Arrays.asList(
-                        "&fThis event is not",
-                        "&fimplemented yet.",
-                        "",
-                        "&c&mClick to start the event."
-                )
+            Material.REDSTONE, 0,
+            "&cBest of 3 Sumo",
+            Arrays.asList(
+                "&fThis event is not",
+                "&fimplemented yet.",
+                "",
+                "&c&mClick to start the event."
+            )
         ));
 
         this.addGlass(buttons, 15);
@@ -90,11 +90,11 @@ public class PartyEventMenu extends Menu {
         @Override
         public ItemStack getButtonItem(Player player) {
             return new ItemBuilder(material)
-                    .name(name)
-                    .lore(lore)
-                    .durability(durability)
-                    .hideMeta()
-                    .build();
+                       .name(name)
+                       .lore(lore)
+                       .durability(durability)
+                       .hideMeta()
+                       .build();
         }
 
         @Override

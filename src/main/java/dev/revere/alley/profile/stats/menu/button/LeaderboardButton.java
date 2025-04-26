@@ -24,21 +24,21 @@ public class LeaderboardButton extends Button {
     @Override
     public ItemStack getButtonItem(Player player) {
         return new ItemBuilder(Material.EYE_OF_ENDER)
-                .name("&b&lLeaderboards")
-                .lore(
-                        "",
-                        " &fAll of the leaderboards are displayed here.",
-                        " &fYou can view top wins, losses, and more.",
-                        "",
-                        "&aClick to view the leaderboards."
-                )
-                .build();
+                   .name("&b&lLeaderboards")
+                   .lore(
+                       "",
+                       " &fAll of the leaderboards are displayed here.",
+                       " &fYou can view top wins, losses, and more.",
+                       "",
+                       "&aClick to view the leaderboards."
+                   )
+                   .build();
     }
 
     /**
      * Handles the click event for the button.
      *
-     * @param player the player who clicked the button
+     * @param player    the player who clicked the button
      * @param clickType the type of click
      */
     @Override

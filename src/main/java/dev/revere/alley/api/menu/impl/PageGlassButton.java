@@ -14,7 +14,7 @@ public class PageGlassButton extends Button {
     @Override
     public ItemStack getButtonItem(Player player) {
         return new ItemBuilder(Material.STAINED_GLASS_PANE)
-                .durability(this.durability)
-                .build();
+                   .durability(this.durability)
+                   .build();
     }
 }

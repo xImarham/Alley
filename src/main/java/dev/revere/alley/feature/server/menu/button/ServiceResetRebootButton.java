@@ -22,15 +22,15 @@ public class ServiceResetRebootButton extends Button {
     @Override
     public ItemStack getButtonItem(Player player) {
         return new ItemBuilder(Material.EMERALD)
-                .name("&a&lUnprepare Reboot")
-                .lore(
-                        "&fThis will undo the preparation",
-                        "&ffor a reboot by allowing",
-                        "&fqueueing again.",
-                        "",
-                        "&aClick to allow queueing again!"
-                )
-                .build();
+                   .name("&a&lUnprepare Reboot")
+                   .lore(
+                       "&fThis will undo the preparation",
+                       "&ffor a reboot by allowing",
+                       "&fqueueing again.",
+                       "",
+                       "&aClick to allow queueing again!"
+                   )
+                   .build();
     }
 
     @Override
@@ -44,9 +44,9 @@ public class ServiceResetRebootButton extends Button {
 
         Alley.getInstance().getServerService().setAllowQueueing(true);
         Arrays.asList(
-                "",
-                "&a&lQUEUEING IS NO LONGER DISABLED!",
-                ""
+            "",
+            "&a&lQUEUEING IS NO LONGER DISABLED!",
+            ""
         ).forEach(line -> Bukkit.broadcastMessage(CC.translate(line)));
     }
 }

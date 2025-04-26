@@ -90,29 +90,29 @@ public class Profile {
      */
     public List<Kit> getSortedKits() {
         return Alley.getInstance().getKitService().getKits()
-                .stream()
-                .filter(kit -> {
-                    ProfileRankedKitData rankedData = this.profileData.getRankedKitData().get(kit.getName());
-                    ProfileUnrankedKitData unrankedData = this.profileData.getUnrankedKitData().get(kit.getName());
-                    ProfileFFAData ffaData = this.profileData.getFfaData().get(kit.getName());
+                   .stream()
+                   .filter(kit -> {
+                       ProfileRankedKitData rankedData = this.profileData.getRankedKitData().get(kit.getName());
+                       ProfileUnrankedKitData unrankedData = this.profileData.getUnrankedKitData().get(kit.getName());
+                       ProfileFFAData ffaData = this.profileData.getFfaData().get(kit.getName());
 
-                    return (rankedData != null && (rankedData.getWins() != 0 || rankedData.getLosses() != 0)) ||
-                            (unrankedData != null && (unrankedData.getWins() != 0 || unrankedData.getLosses() != 0)) ||
-                            (ffaData != null && (ffaData.getKills() != 0 || ffaData.getDeaths() != 0));
-                })
-                .sorted(Comparator.comparingInt((Kit kit) -> {
-                            ProfileRankedKitData ranked = this.profileData.getRankedKitData().get(kit.getName());
-                            return ranked != null ? ranked.getElo() : 0;
-                        }).reversed()
-                        .thenComparingInt(kit -> {
-                            ProfileRankedKitData ranked = this.profileData.getRankedKitData().get(kit.getName());
-                            return ranked != null ? ranked.getWins() : 0;
-                        }).reversed()
-                        .thenComparingInt(kit -> {
-                            ProfileFFAData ffa = this.profileData.getFfaData().get(kit.getName());
-                            return ffa != null ? ffa.getKills() : 0;
-                        }).reversed())
-                .collect(Collectors.toList());
+                       return (rankedData != null && (rankedData.getWins() != 0 || rankedData.getLosses() != 0)) ||
+                                  (unrankedData != null && (unrankedData.getWins() != 0 || unrankedData.getLosses() != 0)) ||
+                                  (ffaData != null && (ffaData.getKills() != 0 || ffaData.getDeaths() != 0));
+                   })
+                   .sorted(Comparator.comparingInt((Kit kit) -> {
+                           ProfileRankedKitData ranked = this.profileData.getRankedKitData().get(kit.getName());
+                           return ranked != null ? ranked.getElo() : 0;
+                       }).reversed()
+                               .thenComparingInt(kit -> {
+                                   ProfileRankedKitData ranked = this.profileData.getRankedKitData().get(kit.getName());
+                                   return ranked != null ? ranked.getWins() : 0;
+                               }).reversed()
+                               .thenComparingInt(kit -> {
+                                   ProfileFFAData ffa = this.profileData.getFfaData().get(kit.getName());
+                                   return ffa != null ? ffa.getKills() : 0;
+                               }).reversed())
+                   .collect(Collectors.toList());
     }
 
     /**
@@ -145,7 +145,7 @@ public class Profile {
     /**
      * Get the next division or tier string for a given profile and kit.
      *
-     * @param kitName     The name of the kit.
+     * @param kitName The name of the kit.
      * @return The next division or tier string.
      */
     public String getNextDivisionAndTier(String kitName) {
@@ -175,7 +175,7 @@ public class Profile {
     /**
      * Get the next division for a given profile and kit.
      *
-     * @param kitName     The name of the kit.
+     * @param kitName The name of the kit.
      * @return The next division.
      */
     public Division getNextDivision(String kitName) {

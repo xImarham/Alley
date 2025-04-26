@@ -21,14 +21,14 @@ public class ServiceClearChatButton extends Button {
     @Override
     public ItemStack getButtonItem(Player player) {
         return new ItemBuilder(Material.BOOK)
-                .name("&c&lClear Chat")
-                .lore(
-                        "&fThis will clear the chat",
-                        "&ffor all players on the server.",
-                        "",
-                        "&cClick to clear!"
-                )
-                .build();
+                   .name("&c&lClear Chat")
+                   .lore(
+                       "&fThis will clear the chat",
+                       "&ffor all players on the server.",
+                       "",
+                       "&cClick to clear!"
+                   )
+                   .build();
     }
 
     @Override

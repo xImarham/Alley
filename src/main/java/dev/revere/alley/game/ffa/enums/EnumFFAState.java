@@ -10,9 +10,7 @@ import lombok.Getter;
 @Getter
 public enum EnumFFAState {
     SPAWN("Spawn", "The player is in the safezone."),
-    FIGHTING("Fighting", "The player is fighting outside safezone.")
-
-    ;
+    FIGHTING("Fighting", "The player is fighting outside safezone.");
 
     private final String name;
     private final String description;
@@ -20,7 +18,7 @@ public enum EnumFFAState {
     /**
      * Constructor for the EnumFFAState enum.
      *
-     * @param name The name of the state.
+     * @param name        The name of the state.
      * @param description The description of the state.
      */
     EnumFFAState(String name, String description) {

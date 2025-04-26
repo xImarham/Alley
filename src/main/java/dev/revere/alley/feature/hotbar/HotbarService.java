@@ -80,11 +80,11 @@ public class HotbarService {
      */
     private HotbarItem createHotbarItem(EnumHotbarType type, HotbarItems hotbarItem) {
         return new HotbarItem(type, hotbarItem,
-                new ItemBuilder(hotbarItem.getMaterial())
-                        .name(hotbarItem.getName())
-                        .hideMeta()
-                        .build(),
-                hotbarItem.getSlot());
+            new ItemBuilder(hotbarItem.getMaterial())
+                .name(hotbarItem.getName())
+                .hideMeta()
+                .build(),
+            hotbarItem.getSlot());
     }
 
     /**
@@ -95,12 +95,12 @@ public class HotbarService {
      */
     public HotbarItem getItemByStack(ItemStack item) {
         return this.hotbarItemsByType.values().stream()
-                .flatMap(List::stream)
-                .filter(i -> i.getItemStack().isSimilar(item))
-                //.filter(i -> i.getItemStack().equals(item))
-                //.filter(i -> i.getItemStack().getDurability() == item.getDurability())
-                .findFirst()
-                .orElse(null);
+                   .flatMap(List::stream)
+                   .filter(i -> i.getItemStack().isSimilar(item))
+                   //.filter(i -> i.getItemStack().equals(item))
+                   //.filter(i -> i.getItemStack().getDurability() == item.getDurability())
+                   .findFirst()
+                   .orElse(null);
     }
 
     /**
@@ -114,9 +114,9 @@ public class HotbarService {
         List<HotbarItem> itemsOfType = this.hotbarItemsByType.get(type);
         if (itemsOfType != null) {
             return itemsOfType.stream()
-                    .filter(i -> i.getHotbarItems() == hotbarItem)
-                    .findFirst()
-                    .orElse(null);
+                       .filter(i -> i.getHotbarItems() == hotbarItem)
+                       .findFirst()
+                       .orElse(null);
         }
         return null;
     }

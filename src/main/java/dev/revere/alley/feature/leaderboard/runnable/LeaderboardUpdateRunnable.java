@@ -10,6 +10,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 public class LeaderboardUpdateRunnable extends BukkitRunnable {
     @Override
     public void run() {
-        
+
     }
 }

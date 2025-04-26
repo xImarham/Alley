@@ -13,7 +13,7 @@ import org.bukkit.entity.Player;
  * @date 5/20/2024
  */
 public class ArenaListCommand extends BaseCommand {
-    @CommandData(name = "arena.list", aliases = {"arenas"},  isAdminOnly = true)
+    @CommandData(name = "arena.list", aliases = {"arenas"}, isAdminOnly = true)
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
@@ -25,10 +25,10 @@ public class ArenaListCommand extends BaseCommand {
         }
 
         this.plugin.getArenaService().getArenas().stream().filter(arena -> arena.getType() != EnumArenaType.FFA).forEach(arena ->
-                player.sendMessage(CC.translate("      &f● &b" + arena.getName() + " &7(" + arena.getType().name() + ")" + (arena.isEnabled() ? " &aEnabled" : " &cDisabled"))))
+                                                                                                                             player.sendMessage(CC.translate("      &f● &b" + arena.getName() + " &7(" + arena.getType().name() + ")" + (arena.isEnabled() ? " &aEnabled" : " &cDisabled"))))
         ;
         this.plugin.getArenaService().getArenas().stream().filter(arena -> arena.getType() == EnumArenaType.FFA).forEach(arena ->
-                player.sendMessage(CC.translate("      &f● &b" + arena.getName() + " &7(" + arena.getType().name() + ")")))
+                                                                                                                             player.sendMessage(CC.translate("      &f● &b" + arena.getName() + " &7(" + arena.getType().name() + ")")))
         ;
 
         player.sendMessage("");

@@ -28,7 +28,7 @@ public class MongoProfileImpl implements IProfile {
     public void saveProfile(Profile profile) {
         Document document = MongoUtility.toDocument(profile);
         Alley.getInstance().getProfileService().getCollection()
-                .replaceOne(Filters.eq("uuid", profile.getUuid().toString()), document, new ReplaceOptions().upsert(true));
+            .replaceOne(Filters.eq("uuid", profile.getUuid().toString()), document, new ReplaceOptions().upsert(true));
     }
 
     /**

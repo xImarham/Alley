@@ -35,7 +35,7 @@ public class ArenaViewCommand extends BaseCommand {
         }
 
         sender.sendMessage("");
-        sender.sendMessage(CC.translate("&b&lArena " + arena.getName() +  " &f(" + (arena.isEnabled() ? "&aEnabled" : "&cDisabled") + "&f)"));
+        sender.sendMessage(CC.translate("&b&lArena " + arena.getName() + " &f(" + (arena.isEnabled() ? "&aEnabled" : "&cDisabled") + "&f)"));
         sender.sendMessage(CC.translate(" &f● &bDisplay Name: &f" + arena.getDisplayName()));
         sender.sendMessage(CC.translate(" &f● &bName: &f" + arena.getName()));
         sender.sendMessage(CC.translate(" &f● &bType: &f" + arena.getType()));

@@ -52,11 +52,11 @@ public class CombatService {
      * Updates the combat map with the last attacker information if it exists.
      * Otherwise, it creates a new entry.
      *
-     * @param victim          The player who was attacked.
-     * @param attacker        The player who attacked.
-     * @param combat          The combat instance.
-     * @param currentTime     The current time in milliseconds.
-     * @param expirationTime  The expiration time in milliseconds.
+     * @param victim         The player who was attacked.
+     * @param attacker       The player who attacked.
+     * @param combat         The combat instance.
+     * @param currentTime    The current time in milliseconds.
+     * @param expirationTime The expiration time in milliseconds.
      */
     private void updateCombatIfPresent(Player victim, Player attacker, Combat combat, long currentTime, long expirationTime) {
         if (combat == null) {
@@ -69,10 +69,10 @@ public class CombatService {
     /**
      * Updates the combat properties of a player.
      *
-     * @param victim          The player who was attacked.
-     * @param combat           The combat instance.
-     * @param currentTime     The current time in milliseconds.
-     * @param expirationTime  The expiration time in milliseconds.
+     * @param victim         The player who was attacked.
+     * @param combat         The combat instance.
+     * @param currentTime    The current time in milliseconds.
+     * @param expirationTime The expiration time in milliseconds.
      */
     private void updateCombatProperties(Player victim, Combat combat, long currentTime, long expirationTime) {
         combat.setAttackerUUID(victim.getUniqueId());

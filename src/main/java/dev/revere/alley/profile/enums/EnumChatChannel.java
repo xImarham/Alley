@@ -11,9 +11,7 @@ import lombok.Getter;
 public enum EnumChatChannel {
 
     GLOBAL("Global", "The players chat channel is set to default."),
-    PARTY("Party", "The players chat channel is set to party.")
-
-    ;
+    PARTY("Party", "The players chat channel is set to party.");
 
     private final String name;
     private final String description;

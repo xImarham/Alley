@@ -15,9 +15,9 @@ public class SoundUtil {
      * Play a custom sound to the player
      *
      * @param player the player to play the sound to
-     * @param sound the sound to play
+     * @param sound  the sound to play
      * @param volume the volume of the sound
-     * @param pitch the pitch of the sound
+     * @param pitch  the pitch of the sound
      */
     public void playCustomSound(Player player, Sound sound, float volume, float pitch) {
         player.playSound(player.getLocation(), sound, volume, pitch);
@@ -35,7 +35,7 @@ public class SoundUtil {
     /**
      * Play a sound to the player based on the success boolean
      *
-     * @param player the player to play the sound to
+     * @param player  the player to play the sound to
      * @param success the boolean to determine the sound
      */
     public void playSound(Player player, boolean success) {

@@ -14,9 +14,7 @@ public enum EnumLeaderboardType {
     WIN_STREAK("Win Streak"),
     FFA("FFA"),
     RANKED("Ranked"),
-    TOURNAMENT("Tournament")
-
-    ;
+    TOURNAMENT("Tournament");
 
     private final String name;
 

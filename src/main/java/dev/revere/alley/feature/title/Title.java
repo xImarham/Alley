@@ -18,8 +18,8 @@ public class Title {
     /**
      * Constructor for the Title class.
      *
-     * @param kit The kit associated with the title.
-     * @param prefix The prefix of the title.
+     * @param kit              The kit associated with the title.
+     * @param prefix           The prefix of the title.
      * @param requiredDivision The required division for the title.
      */
     public Title(Kit kit, String prefix, Division requiredDivision) {

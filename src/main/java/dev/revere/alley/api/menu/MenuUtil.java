@@ -17,7 +17,7 @@ public class MenuUtil {
      * Checks if the player has a next page.
      *
      * @param player the player viewing the menu
-     * @param offset    the delta to modify the page number by
+     * @param offset the delta to modify the page number by
      * @param menu   the menu
      * @return true if the player has a next page
      */
@@ -29,7 +29,7 @@ public class MenuUtil {
     /**
      * Checks if the player has a previous page.
      *
-     * @param offset    the delta to modify the page number by
+     * @param offset the delta to modify the page number by
      * @param menu   the menu
      * @return true if the player has a previous page
      */

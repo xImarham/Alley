@@ -20,8 +20,8 @@ public class Cooldown {
     /**
      * Constructor for the Cooldown class.
      *
-     * @param type         the type of cooldown
-     * @param actionToRun  the action to run
+     * @param type        the type of cooldown
+     * @param actionToRun the action to run
      */
     public Cooldown(EnumCooldownType type, Runnable actionToRun) {
         this.type = type;

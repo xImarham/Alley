@@ -22,7 +22,7 @@ public final class DiscordBridge {
     /**
      * Constructor for the DiscordBridge class.
      *
-     * @param plugin The plugin instance.
+     * @param plugin     The plugin instance.
      * @param webhookUrl The webhook URL for Discord.
      */
     public DiscordBridge(JavaPlugin plugin, String webhookUrl) {

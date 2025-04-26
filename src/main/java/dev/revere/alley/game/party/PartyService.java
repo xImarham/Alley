@@ -241,9 +241,9 @@ public class PartyService {
      */
     public PartyRequest getRequest(Player player) {
         return this.partyRequests.stream()
-            .filter(request -> request.getTarget().equals(player))
-            .findFirst()
-            .orElse(null);
+                   .filter(request -> request.getTarget().equals(player))
+                   .findFirst()
+                   .orElse(null);
     }
 
     /**
@@ -285,9 +285,9 @@ public class PartyService {
      */
     public Party getPartyByLeader(Player player) {
         return this.parties.stream()
-            .filter(party -> party.getLeader().equals(player))
-            .findFirst()
-            .orElse(null);
+                   .filter(party -> party.getLeader().equals(player))
+                   .findFirst()
+                   .orElse(null);
     }
 
     /**
@@ -298,9 +298,9 @@ public class PartyService {
      */
     public Party getPartyByMember(UUID uuid) {
         return this.parties.stream()
-            .filter(party -> party.getMembers().contains(uuid))
-            .findFirst()
-            .orElse(null);
+                   .filter(party -> party.getMembers().contains(uuid))
+                   .findFirst()
+                   .orElse(null);
     }
 
     /**

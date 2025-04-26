@@ -13,8 +13,8 @@ public class ProgressBarUtil {
     /**
      * Generates a progress bar based on the given values.
      *
-     * @param current    the current value
-     * @param maximum        the max value
+     * @param current the current value
+     * @param maximum the max value
      * @param length  the total number of bars (usually 20 or 40)
      * @param symbol  the symbol to use for the progress bar (Default: ▎)
      * @return the progress bar string with the given values.

@@ -36,7 +36,7 @@ public abstract class AbstractArena {
     /**
      * Constructor for the Arena class.
      *
-     * @param name The name of the arena.
+     * @param name    The name of the arena.
      * @param minimum The minimum location of the arena.
      * @param maximum The maximum location of the arena.
      */
@@ -47,6 +47,8 @@ public abstract class AbstractArena {
     }
 
     public abstract void saveArena();
+
     public abstract void createArena();
+
     public abstract void deleteArena();
 }

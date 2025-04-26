@@ -34,9 +34,9 @@ public class PluginConstant {
     /**
      * Constructor for the PluginConstant class.
      *
-     * @param plugin The plugin instance.
+     * @param plugin           The plugin instance.
      * @param packageDirectory The package directory of the plugin.
-     * @param mainColor The main color for the plugin.
+     * @param mainColor        The main color for the plugin.
      */
     public PluginConstant(JavaPlugin plugin, String packageDirectory, ChatColor mainColor) {
         this.plugin = plugin;

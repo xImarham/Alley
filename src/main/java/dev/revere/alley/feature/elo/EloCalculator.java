@@ -11,10 +11,10 @@ import lombok.Getter;
 @Getter
 public class EloCalculator {
     private final EloRangeFactor[] ELO_RANGES = {
-            new EloRangeFactor(0, 1100, 25),
-            new EloRangeFactor(1001, 1400, 20),
-            new EloRangeFactor(1401, 1800, 15),
-            new EloRangeFactor(1801, 2200, 10)
+        new EloRangeFactor(0, 1100, 25),
+        new EloRangeFactor(1001, 1400, 20),
+        new EloRangeFactor(1401, 1800, 15),
+        new EloRangeFactor(1801, 2200, 10)
     };
 
     private final int DEFAULT_RANGE_FACTOR = 25;

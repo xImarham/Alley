@@ -34,9 +34,9 @@ public abstract class AbstractFFAMatch {
     /**
      * Constructor for the AbstractFFAMatch class.
      *
-     * @param name The name of the match
-     * @param arena The arena the match is being played in
-     * @param kit The kit the players are using
+     * @param name       The name of the match
+     * @param arena      The arena the match is being played in
+     * @param kit        The kit the players are using
      * @param maxPlayers The maximum amount of players allowed in the match
      */
     public AbstractFFAMatch(String name, AbstractArena arena, Kit kit, int maxPlayers) {
@@ -48,9 +48,13 @@ public abstract class AbstractFFAMatch {
     }
 
     public abstract void join(Player player);
+
     public abstract void setupPlayer(Player player);
+
     public abstract void handleDeath(Player player, Player killer);
+
     public abstract void handleRespawn(Player player);
+
     public abstract void leave(Player player);
 
     /**

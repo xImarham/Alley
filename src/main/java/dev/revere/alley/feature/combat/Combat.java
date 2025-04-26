@@ -20,7 +20,7 @@ public class Combat {
     /**
      * Constructor for the Combat class.
      *
-     * @param attackerUUID   The UUID of the attacker.
+     * @param attackerUUID    The UUID of the attacker.
      * @param attackTimestamp The timestamp of the attack.
      * @param expirationTime  The expiration time of the combat.
      */

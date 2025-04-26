@@ -29,11 +29,11 @@ public class ServerEnvironment {
     /**
      * Constructor for the ServerEnvironment class.
      *
-     * @param plugin the plugin instance.
-     * @param doDaylightCycle whether to enable daylight cycle.
-     * @param doWeatherCycle whether to enable weather cycle.
-     * @param doMobSpawning whether to enable mob spawning.
-     * @param doMobLoot whether to enable mob loot.
+     * @param plugin                     the plugin instance.
+     * @param doDaylightCycle            whether to enable daylight cycle.
+     * @param doWeatherCycle             whether to enable weather cycle.
+     * @param doMobSpawning              whether to enable mob spawning.
+     * @param doMobLoot                  whether to enable mob loot.
      * @param removeDroppedItemsOnEnable whether to remove dropped items on enable.
      */
     public ServerEnvironment(JavaPlugin plugin, boolean doDaylightCycle, boolean doWeatherCycle, boolean doMobSpawning, boolean doMobLoot, boolean removeDroppedItemsOnEnable) {

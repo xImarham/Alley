@@ -28,11 +28,11 @@ public class ServiceCommand extends BaseCommand {
         Player player = command.getPlayer();
 
         Arrays.asList(
-                "",
-                "&b&lService Commands",
-                " &f● &b/service menu &7| &fOpens the service menu.",
-                " &f● &b/service allowqueue &8<&7true/false&8> &7| &fAllow/disallow queueing.",
-                ""
+            "",
+            "&b&lService Commands",
+            " &f● &b/service menu &7| &fOpens the service menu.",
+            " &f● &b/service allowqueue &8<&7true/false&8> &7| &fAllow/disallow queueing.",
+            ""
         ).forEach(line -> player.sendMessage(CC.translate(line)));
     }
 }

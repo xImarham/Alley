@@ -37,21 +37,21 @@ public class CosmeticButton extends Button {
         }
 
         return new ItemBuilder(cosmetic.getIcon())
-                .name("&b&l" + cosmetic.getName())
-                .lore(
-                        "",
-                        "&f● &bDescription: &7" + cosmetic.getDescription(),
-                        "",
-                        lore
+                   .name("&b&l" + cosmetic.getName())
+                   .lore(
+                       "",
+                       "&f● &bDescription: &7" + cosmetic.getDescription(),
+                       "",
+                       lore
 
-                )
-                .build();
+                   )
+                   .build();
     }
 
     /**
      * Handles the click event for the button.
      *
-     * @param player the player who clicked the button
+     * @param player    the player who clicked the button
      * @param clickType the type of click
      */
     @Override

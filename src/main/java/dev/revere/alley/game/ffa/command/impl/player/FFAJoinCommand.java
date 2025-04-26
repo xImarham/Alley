@@ -41,10 +41,10 @@ public class FFAJoinCommand extends BaseCommand {
 
         FFAService ffaService = this.plugin.getFfaService();
         ffaService.getMatches().stream()
-                .filter(match -> match.getKit().equals(kit))
-                .filter(match -> match.getPlayers().size() < match.getMaxPlayers())
-                .findFirst()
-                .ifPresent(match -> match.join(player));
+            .filter(match -> match.getKit().equals(kit))
+            .filter(match -> match.getPlayers().size() < match.getMaxPlayers())
+            .findFirst()
+            .ifPresent(match -> match.join(player));
 
     }
 }

@@ -16,80 +16,80 @@ import java.util.List;
 public enum EnumPracticeSettingType {
 
     PARTY_MESSAGES(10, "&b&lToggle Party Messages", Material.FEATHER,
-            settings -> Arrays.asList(
-                    "&fSee party chat messages.",
-                    "",
-                    " " + LoreHelper.enabledOrDisabled(settings.isPartyMessagesEnabled()),
-                    "",
-                    "&aClick to change!"
-            )
+        settings -> Arrays.asList(
+            "&fSee party chat messages.",
+            "",
+            " " + LoreHelper.enabledOrDisabled(settings.isPartyMessagesEnabled()),
+            "",
+            "&aClick to change!"
+        )
     ),
 
     PARTY_INVITES(11, "&b&lToggle Party Invites", Material.NAME_TAG,
-            settings -> Arrays.asList(
-                    "&fReceive party invites.",
-                    "",
-                    " " + LoreHelper.enabledOrDisabled(settings.isPartyInvitesEnabled()),
-                    "",
-                    "&aClick to change!"
-            )
+        settings -> Arrays.asList(
+            "&fReceive party invites.",
+            "",
+            " " + LoreHelper.enabledOrDisabled(settings.isPartyInvitesEnabled()),
+            "",
+            "&aClick to change!"
+        )
     ),
 
     SIDEBAR_VISIBILITY(12, "&b&lSidebar Visibility", Material.CARPET, 5,
-            settings -> Arrays.asList(
-                    "&fSee the scoreboard.",
-                    "",
-                    " " + LoreHelper.shownOrHidden(settings.isScoreboardEnabled()),
-                    "",
-                    "&aClick to change!"
-            )
+        settings -> Arrays.asList(
+            "&fSee the scoreboard.",
+            "",
+            " " + LoreHelper.shownOrHidden(settings.isScoreboardEnabled()),
+            "",
+            "&aClick to change!"
+        )
     ),
 
     TAB_VISIBILITY(13, "&b&lTablist Visibility", Material.ITEM_FRAME,
-            settings -> Arrays.asList(
-                    "&fSee the tablist.",
-                    "",
-                    " " + LoreHelper.shownOrHidden(settings.isTablistEnabled()),
-                    "",
-                    "&aClick to change!"
-            )
+        settings -> Arrays.asList(
+            "&fSee the tablist.",
+            "",
+            " " + LoreHelper.shownOrHidden(settings.isTablistEnabled()),
+            "",
+            "&aClick to change!"
+        )
     ),
 
     WORLD_TIME(14, "&b&lWorld time", Material.WATCH, settings -> Arrays.asList(
-            "&fChange your world time.",
-            "",
-            formatTime("Default", settings.isDefaultTime(), "&a&l"),
-            formatTime("Day", settings.isDayTime(), "&e&l"),
-            formatTime("Sunset", settings.isSunsetTime(), "&6&l"),
-            formatTime("Night", settings.isNightTime(), "&4&l"),
-            "",
-            "&aClick to change!"
+        "&fChange your world time.",
+        "",
+        formatTime("Default", settings.isDefaultTime(), "&a&l"),
+        formatTime("Day", settings.isDayTime(), "&e&l"),
+        formatTime("Sunset", settings.isSunsetTime(), "&6&l"),
+        formatTime("Night", settings.isNightTime(), "&4&l"),
+        "",
+        "&aClick to change!"
     )),
 
     MATCH_SETTINGS(16, "&b&lMatch Settings", Material.BOOK,
-            settings -> Arrays.asList(
-                    "&fAdjust your match settings.",
-                    "",
-                    "&aClick to view!"
-            )
+        settings -> Arrays.asList(
+            "&fAdjust your match settings.",
+            "",
+            "&aClick to view!"
+        )
     ),
 
     SCOREBOARD_LINES(19, "&b&lShow Scoreboard Lines", Material.STRING,
-            settings -> Arrays.asList(
-                    "&fShow scoreboard lines.",
-                    "",
-                    " " + LoreHelper.shownOrHidden(settings.isShowScoreboardLines()),
-                    "",
-                    "&aClick to change!"
-            )
+        settings -> Arrays.asList(
+            "&fShow scoreboard lines.",
+            "",
+            " " + LoreHelper.shownOrHidden(settings.isShowScoreboardLines()),
+            "",
+            "&aClick to change!"
+        )
     ),
 
     COSMETICS(25, "&b&lCosmetics", Material.NETHER_STAR,
-            settings -> Arrays.asList(
-                    "&fCustomize your cosmetics.",
-                    "",
-                    "&aClick to view!"
-            )
+        settings -> Arrays.asList(
+            "&fCustomize your cosmetics.",
+            "",
+            "&aClick to view!"
+        )
     );
 
     public final int slot;

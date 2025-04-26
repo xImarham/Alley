@@ -77,9 +77,9 @@ public class MatchStickFightImpl extends MatchRoundsImpl {
         if (participant instanceof TeamGameParticipant<?>) {
             TeamGameParticipant<MatchGamePlayerImpl> team = (TeamGameParticipant<MatchGamePlayerImpl>) participant;
             MatchGamePlayerImpl gamePlayer = team.getPlayers().stream()
-                    .filter(gamePlayer1 -> gamePlayer1.getUuid().equals(player.getUniqueId()))
-                    .findFirst()
-                    .orElse(null);
+                                                 .filter(gamePlayer1 -> gamePlayer1.getUuid().equals(player.getUniqueId()))
+                                                 .findFirst()
+                                                 .orElse(null);
 
             if (gamePlayer != null) {
                 gamePlayer.getData().incrementDeaths();

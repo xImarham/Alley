@@ -108,28 +108,28 @@ public class ArenaCommand extends BaseCommand {
     }
 
     private final String[][] pages = {
-            {
-                    " &f● &b/arena list &7| List all arenas",
-                    " &f● &b/arena kitlist &8(&7arenaName&8) &7| List all kits for an arena",
-                    " &f● &b/arena saveall &7| Save all arenas",
-                    " &f● &b/arena view &8(&7arenaName&8) &7| View arena information",
-                    " &f● &b/arena delete &8(&7arenaName&8) &7| Delete an arena",
-                    " &f● &b/arena create &8(&7arenaName&8) &7| Create an arena",
-                    " &f● &b/arena tool &7| Get the Arena Selection tool"
-            },
-            {
-                    " &f● &b/arena setdisplayname &8(&7arenaName&8) &8(&7displayname&8) &7| Set display-name of an arena",
-                    " &f● &b/arena setcenter &8(&7arenaName&8) &7| Set center position",
-                    " &f● &b/arena setcuboid &8(&7arenaName&8) &7| Set min and max position",
-                    " &f● &b/arena setspawn &8(&7arenaName&8) &8<&7pos1/pos2&8> &7| Set spawn positions",
-                    " &f● &b/arena removekit &8(&7arenaName&8) &8(&7kitName&8) &7| Remove arena kit",
-                    " &f● &b/arena teleport &8(&7arenaName&8) &7| Teleport to an arena",
-                    " &f● &b/arena toggle &8(&7arenaName&8) &7| Enable or Disable an Arena",
-                    " &f● &b/arena addkit &8(&7arenaName&8) &8(&7kitName&8) &7| Add a kit to an arena"
-            },
-            {
-                    " &f● &b/arena setportal &8(&7arenaName&8) &8<&71/2&8> &7| Set portal positions for battlerush",
-                    " &f● &b/arena setheightlimit &8(&7arenaName&8) &7| Set height limit for standalone arenas",
-            }
+        {
+            " &f● &b/arena list &7| List all arenas",
+            " &f● &b/arena kitlist &8(&7arenaName&8) &7| List all kits for an arena",
+            " &f● &b/arena saveall &7| Save all arenas",
+            " &f● &b/arena view &8(&7arenaName&8) &7| View arena information",
+            " &f● &b/arena delete &8(&7arenaName&8) &7| Delete an arena",
+            " &f● &b/arena create &8(&7arenaName&8) &7| Create an arena",
+            " &f● &b/arena tool &7| Get the Arena Selection tool"
+        },
+        {
+            " &f● &b/arena setdisplayname &8(&7arenaName&8) &8(&7displayname&8) &7| Set display-name of an arena",
+            " &f● &b/arena setcenter &8(&7arenaName&8) &7| Set center position",
+            " &f● &b/arena setcuboid &8(&7arenaName&8) &7| Set min and max position",
+            " &f● &b/arena setspawn &8(&7arenaName&8) &8<&7pos1/pos2&8> &7| Set spawn positions",
+            " &f● &b/arena removekit &8(&7arenaName&8) &8(&7kitName&8) &7| Remove arena kit",
+            " &f● &b/arena teleport &8(&7arenaName&8) &7| Teleport to an arena",
+            " &f● &b/arena toggle &8(&7arenaName&8) &7| Enable or Disable an Arena",
+            " &f● &b/arena addkit &8(&7arenaName&8) &8(&7kitName&8) &7| Add a kit to an arena"
+        },
+        {
+            " &f● &b/arena setportal &8(&7arenaName&8) &8<&71/2&8> &7| Set portal positions for battlerush",
+            " &f● &b/arena setheightlimit &8(&7arenaName&8) &7| Set height limit for standalone arenas",
+        }
     };
 }

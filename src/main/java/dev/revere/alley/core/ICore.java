@@ -70,9 +70,9 @@ public interface ICore {
     /**
      * Retrieves the chat format for a given player and message.
      *
-     * @param player        The player whose chat format is to be retrieved.
-     * @param eventMessage  The message to be formatted.
-     * @param separator     The separator to be used in the chat format.
+     * @param player       The player whose chat format is to be retrieved.
+     * @param eventMessage The message to be formatted.
+     * @param separator    The separator to be used in the chat format.
      * @return The formatted chat message as a String.
      */
     default String getChatFormat(Player player, String eventMessage, String separator) {

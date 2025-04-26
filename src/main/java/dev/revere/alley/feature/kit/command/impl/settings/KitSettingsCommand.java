@@ -18,7 +18,7 @@ public class KitSettingsCommand extends BaseCommand {
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
         KitSettingService kitSettingService = this.plugin.getKitSettingService();
-        
+
         player.sendMessage("");
         player.sendMessage(CC.translate("     &b&lKit Settings List &f(" + kitSettingService.getSettings().size() + "&f)"));
         if (kitSettingService.getSettings().isEmpty()) {

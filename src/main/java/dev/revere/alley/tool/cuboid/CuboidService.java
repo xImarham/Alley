@@ -15,5 +15,6 @@ public abstract class CuboidService {
     }
 
     public abstract void loadCuboid();
+
     public abstract void updateCuboid();
 }

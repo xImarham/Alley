@@ -18,7 +18,7 @@ import java.util.Arrays;
  * @date 28/04/2024 - 22:46
  */
 public class KitSetDisplayNameCommand extends BaseCommand {
-    @CommandData(name = "kit.displayname", aliases = "kit.setdisplayname",isAdminOnly = true)
+    @CommandData(name = "kit.displayname", aliases = "kit.setdisplayname", isAdminOnly = true)
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();

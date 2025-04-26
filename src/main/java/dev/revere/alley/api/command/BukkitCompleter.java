@@ -43,7 +43,7 @@ public class BukkitCompleter implements TabCompleter {
                 Entry<Method, Object> entry = completers.get(cmdLabel);
                 try {
                     return (List<String>) entry.getKey().invoke(entry.getValue(),
-                            new CommandArgs(sender, command, label, args, cmdLabel.split("\\.").length - 1));
+                        new CommandArgs(sender, command, label, args, cmdLabel.split("\\.").length - 1));
                 } catch (IllegalArgumentException e) {
                     e.printStackTrace();
                 } catch (IllegalAccessException e) {

@@ -21,7 +21,7 @@ public class AlleyCoreCommand extends BaseCommand {
     public void onCommand(CommandArgs command) {
         CommandSender sender = command.getSender();
         ICore core = this.plugin.getCoreAdapter().getCore();
-        
+
         Arrays.asList(
             "",
             "&b&lCore Hook Information",

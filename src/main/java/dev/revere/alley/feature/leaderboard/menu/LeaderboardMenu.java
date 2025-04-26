@@ -58,26 +58,26 @@ public class LeaderboardMenu extends Menu {
         buttons.put(6, new DisplayTypeButton());
 
         Alley.getInstance().getKitService().getKits().stream()
-                .filter(Kit::isEnabled)
-                .filter(kit -> kit.getIcon() != null)
-                .forEach(kit -> {
-                    List<LeaderboardPlayerData> leaderboard = leaderboardService.getLeaderboardEntries(kit, currentType);
+            .filter(Kit::isEnabled)
+            .filter(kit -> kit.getIcon() != null)
+            .forEach(kit -> {
+                List<LeaderboardPlayerData> leaderboard = leaderboardService.getLeaderboardEntries(kit, currentType);
 
-                    switch (currentType) {
-                        case RANKED:
-                            if (kit.isSettingEnabled(KitSettingRankedImpl.class)) {
-                                buttons.put(kit.getRankedslot(), new LeaderboardKitButton(kit, leaderboard, currentType));
-                            }
-                            break;
-                        case UNRANKED:
-                        case UNRANKED_MONTHLY:
-                        case TOURNAMENT:
-                        case WIN_STREAK:
-                        case FFA:
-                            buttons.put(kit.getUnrankedslot(), new LeaderboardKitButton(kit, leaderboard, currentType));
-                            break;
-                    }
-                });
+                switch (currentType) {
+                    case RANKED:
+                        if (kit.isSettingEnabled(KitSettingRankedImpl.class)) {
+                            buttons.put(kit.getRankedslot(), new LeaderboardKitButton(kit, leaderboard, currentType));
+                        }
+                        break;
+                    case UNRANKED:
+                    case UNRANKED_MONTHLY:
+                    case TOURNAMENT:
+                    case WIN_STREAK:
+                    case FFA:
+                        buttons.put(kit.getUnrankedslot(), new LeaderboardKitButton(kit, leaderboard, currentType));
+                        break;
+                }
+            });
 
         this.addBorder(buttons, (byte) 15, 5);
 

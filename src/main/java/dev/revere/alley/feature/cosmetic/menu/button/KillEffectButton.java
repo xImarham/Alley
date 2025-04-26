@@ -17,20 +17,20 @@ public class KillEffectButton extends Button {
     @Override
     public ItemStack getButtonItem(Player player) {
         return new ItemBuilder(Material.PAPER)
-                .name("&b&lKill Effects")
-                .lore(
-                        "&fAll of your kill effects",
-                        "&fare displayed here.",
-                        "",
-                        "&aClick to view your kill effects."
-                )
-                .build();
+                   .name("&b&lKill Effects")
+                   .lore(
+                       "&fAll of your kill effects",
+                       "&fare displayed here.",
+                       "",
+                       "&aClick to view your kill effects."
+                   )
+                   .build();
     }
 
     /**
      * Handles the click event for the button.
      *
-     * @param player the player who clicked the button
+     * @param player    the player who clicked the button
      * @param clickType the type of click
      */
     @Override

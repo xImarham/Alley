@@ -20,23 +20,23 @@ public class AlleyCommand extends BaseCommand {
         CommandSender sender = command.getSender();
 
         Arrays.asList(
-                "",
-                "     &b&lAlley Practice",
-                "      &f┃ Authors: &b" + this.plugin.getDescription().getAuthors().toString().replace("[", "").replace("]", ""),
-                "      &f┃ Version: &b" + this.plugin.getDescription().getVersion(),
-                "",
-                "     &b&lDescription:",
-                "      &f┃ " + this.plugin.getDescription().getDescription(),
-                ""
+            "",
+            "     &b&lAlley Practice",
+            "      &f┃ Authors: &b" + this.plugin.getDescription().getAuthors().toString().replace("[", "").replace("]", ""),
+            "      &f┃ Version: &b" + this.plugin.getDescription().getVersion(),
+            "",
+            "     &b&lDescription:",
+            "      &f┃ " + this.plugin.getDescription().getDescription(),
+            ""
         ).forEach(line -> sender.sendMessage(CC.translate(line)));
 
         if (sender.hasPermission(this.plugin.getPluginConstant().getAdminPermissionPrefix())) {
             Arrays.asList(
-                    "     &b&lAdmin Help",
-                    "      &f┃ /alley reload &7- &bReloads the plugin.",
-                    "      &f┃ /alley debug &7- &bDatabase Debugging.",
-                    "      &f┃ /alley core &7- &bCore Hook Info.",
-                    ""
+                "     &b&lAdmin Help",
+                "      &f┃ /alley reload &7- &bReloads the plugin.",
+                "      &f┃ /alley debug &7- &bDatabase Debugging.",
+                "      &f┃ /alley core &7- &bCore Hook Info.",
+                ""
             ).forEach(line -> sender.sendMessage(CC.translate(line)));
         }
     }

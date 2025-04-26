@@ -16,7 +16,7 @@ public class SharedArena extends AbstractArena {
     /**
      * Constructor for the SharedArena class.
      *
-     * @param name The name of the arena.
+     * @param name    The name of the arena.
      * @param minimum The minimum location of the arena.
      * @param maximum The maximum location of the arena.
      */

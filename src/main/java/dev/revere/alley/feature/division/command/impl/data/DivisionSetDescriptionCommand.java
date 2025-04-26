@@ -21,7 +21,7 @@ public class DivisionSetDescriptionCommand extends BaseCommand {
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
         String[] args = command.getArgs();
-        
+
         if (args.length < 2) {
             player.sendMessage(CC.translate("&6Usage: &e/division setdescription &b<name> <description>"));
             return;
@@ -33,7 +33,7 @@ public class DivisionSetDescriptionCommand extends BaseCommand {
             player.sendMessage(CC.translate("&cA division with that name does not exist."));
             return;
         }
-        
+
         String description = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
         division.setDescription(description);
         divisionService.saveDivision(division);

@@ -87,20 +87,20 @@ public class ProfileService {
         profile.save();
 
         Arrays.asList(
-                "",
-                "&c&lSTAT RESET ISSUED",
-                "&cSuccessfully reset stats of " + targetPlayer.getName() + ".",
-                "&7Be aware that if this is being abused, you will be punished.",
-                ""
+            "",
+            "&c&lSTAT RESET ISSUED",
+            "&cSuccessfully reset stats of " + targetPlayer.getName() + ".",
+            "&7Be aware that if this is being abused, you will be punished.",
+            ""
         ).forEach(line -> player.sendMessage(CC.translate(line)));
 
         if (targetPlayer.isOnline()) {
             Arrays.asList(
-                    "",
-                    "&c&lSTAT RESET ACTION",
-                    "&cYour stats have been wiped due to suspicious activity.",
-                    "&7If you believe this was unjust, create a support ticket.",
-                    ""
+                "",
+                "&c&lSTAT RESET ACTION",
+                "&cYour stats have been wiped due to suspicious activity.",
+                "&7If you believe this was unjust, create a support ticket.",
+                ""
             ).forEach(line -> targetPlayer.getPlayer().sendMessage(CC.translate(line)));
         }
     }
