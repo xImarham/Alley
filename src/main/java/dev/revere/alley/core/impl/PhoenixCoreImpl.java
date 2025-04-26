@@ -1,9 +1,7 @@
 package dev.revere.alley.core.impl;
 
-import dev.revere.alley.Alley;
 import dev.revere.alley.core.ICore;
 import dev.revere.alley.core.enums.EnumCoreType;
-import dev.revere.alley.util.chat.CC;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import xyz.refinedev.phoenix.SharedAPI;
@@ -61,21 +59,6 @@ public class PhoenixCoreImpl implements ICore {
     @Override
     public ChatColor getTagColor(Player player) {
         return ChatColor.valueOf(Objects.requireNonNull(this.getProfile(player).getTag()).getColor());
-    }
-
-    @Override
-    public String getChatFormat(Player player, String eventMessage, String separator) {
-        String prefix = CC.translate(this.getRankPrefix(player));
-        String suffix = CC.translate(this.getRankSuffix(player));
-        String tagPrefix = CC.translate(this.getTagPrefix(player));
-
-        ChatColor color = this.getPlayerColor(player);
-        ChatColor rankColor = this.getRankColor(player);
-        ChatColor tagColor = this.getTagColor(player);
-
-        String selectedTitle = CC.translate(Alley.getInstance().getProfileService().getProfile(player.getUniqueId()).getProfileData().getSelectedTitle());
-
-        return prefix + rankColor + color + player.getName() + suffix + tagColor + tagPrefix + separator + eventMessage + selectedTitle;
     }
 
     /**

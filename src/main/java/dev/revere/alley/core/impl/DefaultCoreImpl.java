@@ -78,15 +78,4 @@ public class DefaultCoreImpl implements ICore {
     public ChatColor getTagColor(Player player) {
         return ChatColor.WHITE;
     }
-
-    @Override
-    public String getChatFormat(Player player, String eventMessage, String separator) {
-        String prefix = CC.translate(this.getRankPrefix(player));
-        String suffix = CC.translate(this.getRankSuffix(player));
-        ChatColor color = this.getPlayerColor(player);
-
-        String selectedTitle = CC.translate(Alley.getInstance().getProfileService().getProfile(player.getUniqueId()).getProfileData().getSelectedTitle());
-
-        return prefix + color + player.getName() + suffix + separator + eventMessage + selectedTitle;
-    }
 }

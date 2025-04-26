@@ -1,6 +1,8 @@
 package dev.revere.alley.core;
 
+import dev.revere.alley.Alley;
 import dev.revere.alley.core.enums.EnumCoreType;
+import dev.revere.alley.util.chat.CC;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
@@ -66,12 +68,28 @@ public interface ICore {
     ChatColor getTagColor(Player player);
 
     /**
-     * Retrieves the chat format for a given player.
+     * Retrieves the chat format for a given player and message.
      *
-     * @param player       The player whose chat format is to be retrieved.
-     * @param eventMessage The message to be formatted.
-     * @param separator    The separator to be used in the format.
-     * @return The chat format as a String.
+     * @param player        The player whose chat format is to be retrieved.
+     * @param eventMessage  The message to be formatted.
+     * @param separator     The separator to be used in the chat format.
+     * @return The formatted chat message as a String.
      */
-    String getChatFormat(Player player, String eventMessage, String separator);
+    default String getChatFormat(Player player, String eventMessage, String separator) {
+        String prefix = CC.translate(this.getRankPrefix(player));
+        String suffix = CC.translate(this.getRankSuffix(player));
+        String tagPrefix = CC.translate(this.getTagPrefix(player));
+
+        ChatColor color = this.getPlayerColor(player);
+        ChatColor rankColor = this.getRankColor(player);
+        ChatColor tagColor = this.getTagColor(player);
+
+        String selectedTitle = CC.translate(Alley.getInstance().getProfileService().getProfile(player.getUniqueId()).getProfileData().getSelectedTitle());
+
+        if (player.hasPermission("alley.chat.color")) {
+            eventMessage = CC.translate(eventMessage);
+        }
+
+        return prefix + rankColor + color + player.getName() + suffix + tagColor + tagPrefix + separator + eventMessage + selectedTitle;
+    }
 }

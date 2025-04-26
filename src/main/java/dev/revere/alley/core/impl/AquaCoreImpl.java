@@ -68,6 +68,10 @@ public class AquaCoreImpl implements ICore {
 
         String selectedTitle = CC.translate(Alley.getInstance().getProfileService().getProfile(player.getUniqueId()).getProfileData().getSelectedTitle());
 
+        if (player.hasPermission("alley.chat.color")) {
+            eventMessage = CC.translate(eventMessage);
+        }
+
         return prefix + color + player.getName() + suffix + this.aquaCoreAPI.getTagFormat(player) + separator + eventMessage + selectedTitle;
     }
 }
