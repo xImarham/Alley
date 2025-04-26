@@ -9,6 +9,8 @@ import dev.revere.alley.api.server.ServerEnvironment;
 import dev.revere.alley.command.CommandDataCollector;
 import dev.revere.alley.command.CommandUtility;
 import dev.revere.alley.config.ConfigService;
+import dev.revere.alley.core.CoreAdapter;
+import dev.revere.alley.core.listener.CoreChatListener;
 import dev.revere.alley.database.MongoService;
 import dev.revere.alley.essential.chat.ChatListener;
 import dev.revere.alley.essential.emoji.EmojiRepository;
@@ -100,6 +102,7 @@ public class Alley extends JavaPlugin {
     private Assemble assemble;
     private CommandFramework commandFramework;
     private CommandDataCollector commandDataCollector;
+    private CoreAdapter coreAdapter;
     private CosmeticRepository cosmeticRepository;
     private ProfileService profileService;
     private DivisionService divisionService;
@@ -198,6 +201,7 @@ public class Alley extends JavaPlugin {
         services.put(MongoService.class.getSimpleName(), () -> this.mongoService = new MongoService(this.configService.getDatabaseConfig().getString("mongo.uri"), this.configService.getDatabaseConfig().getString("mongo.database")));
         services.put(CommandFramework.class.getSimpleName(), () -> this.commandFramework = new CommandFramework(this));
         services.put(CommandDataCollector.class.getSimpleName(), () -> this.commandDataCollector = new CommandDataCollector());
+        services.put(CoreAdapter.class.getSimpleName(), () -> this.coreAdapter = new CoreAdapter(this));
         services.put(QueueService.class.getSimpleName(), () -> this.queueService = new QueueService(this));
         services.put(KitSettingService.class.getSimpleName(), () -> this.kitSettingService = new KitSettingService());
         services.put(KitService.class.getSimpleName(), () -> this.kitService = new KitService(this));
@@ -250,7 +254,8 @@ public class Alley extends JavaPlugin {
             new CombatListener(this),
             new BotFightListener(),
             new BotFightDeathListener(),
-            new ParkourListener(this)
+            new ParkourListener(this),
+            new CoreChatListener(this)
         ).forEach(listener -> getServer().getPluginManager().registerEvents(listener, this));
     }
 

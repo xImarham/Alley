@@ -1,6 +1,7 @@
 package dev.revere.alley.command;
 
 import dev.revere.alley.command.impl.other.*;
+import dev.revere.alley.command.impl.main.impl.AlleyCoreCommand;
 import dev.revere.alley.essential.parkour.command.SetParkourSpawnCommand;
 import dev.revere.alley.essential.tip.command.TipCommand;
 import dev.revere.alley.feature.level.command.LevelCommand;
@@ -8,8 +9,8 @@ import dev.revere.alley.feature.title.command.TitleCommand;
 import dev.revere.alley.game.host.command.HostCommand;
 import dev.revere.alley.essential.emoji.command.EmojiCommand;
 import dev.revere.alley.command.impl.main.AlleyCommand;
-import dev.revere.alley.command.impl.main.AlleyDebugCommand;
-import dev.revere.alley.command.impl.main.AlleyReloadCommand;
+import dev.revere.alley.command.impl.main.impl.AlleyDebugCommand;
+import dev.revere.alley.command.impl.main.impl.AlleyReloadCommand;
 import dev.revere.alley.command.impl.other.troll.*;
 import dev.revere.alley.feature.arena.command.ArenaCommand;
 import dev.revere.alley.feature.cosmetic.command.CosmeticCommand;
@@ -66,6 +67,9 @@ public class CommandUtility {
     public void registerCommands() {
         Logger.logTimeWithAction("registered", "Admin Commands", () -> {
             new AlleyCommand();
+
+            new AlleyCoreCommand();
+            new AlleyDebugCommand();
             new AlleyReloadCommand();
 
             new KitCommand();
@@ -78,10 +82,7 @@ public class CommandUtility {
             new DivisionCommand();
             new TitleCommand();
             new LevelCommand();
-
-            new AlleyDebugCommand();
             new MatchInfoCommand();
-
             new ServiceCommand();
             new EnchantCommand();
             new InvSeeCommand();
@@ -104,8 +105,7 @@ public class CommandUtility {
             new StrikeCommand();
             new TrollCommand();
 
-            new ViewErrorCommand();
-        });
+            new ViewErrorCommand();});
 
         Logger.logTimeWithAction("registered", "Donator Commands", () -> {
             new HostCommand();

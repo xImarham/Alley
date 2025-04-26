@@ -34,7 +34,8 @@ public class AlleyCommand extends BaseCommand {
             Arrays.asList(
                     "     &b&lAdmin Help",
                     "      &f┃ /alley reload &7- &bReloads the plugin.",
-                    "      &f┃ /alley debug &7- &bDisplays info for development purposes.",
+                    "      &f┃ /alley debug &7- &bDatabase Debugging.",
+                    "      &f┃ /alley core &7- &bCore Hook Info.",
                     ""
             ).forEach(line -> sender.sendMessage(CC.translate(line)));
         }

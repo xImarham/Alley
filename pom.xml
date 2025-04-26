@@ -68,6 +68,15 @@
 
     <repositories>
         <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+        <repository>
+            <id>refine-public-repo</id>
+            <name>Refine Development Repo</name>
+            <url>https://maven.refinedev.xyz/public-repo</url>
+        </repository>
+        <repository>
             <id>cs-arcanearts</id>
             <url>https://dl.cloudsmith.io/public/arcane/archive/maven/</url>
         </repository>
@@ -94,15 +103,6 @@
     </repositories>
 
     <dependencies>
-        <!-- Citizens API -->
-        <dependency>
-            <groupId>net.citizensnpcs</groupId>
-            <artifactId>citizensapi</artifactId>
-            <version>2.0.27-SNAPSHOT</version>
-            <type>jar</type>
-            <scope>compile</scope>
-        </dependency>
-
         <!-- Lombok -->
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -185,6 +185,38 @@
             <groupId>org.reflections</groupId>
             <artifactId>reflections</artifactId>
             <version>0.10.2</version>
+        </dependency>
+
+        <!-- Citizens API -->
+        <dependency>
+            <groupId>net.citizensnpcs</groupId>
+            <artifactId>citizensapi</artifactId>
+            <version>2.0.27-SNAPSHOT</version>
+            <type>jar</type>
+            <scope>compile</scope>
+        </dependency>
+
+        <!-- Helium API -->
+        <dependency>
+            <groupId>com.github.PlasmaServices</groupId>
+            <artifactId>HeliumAPI</artifactId>
+            <version>latest-build</version>
+        </dependency>
+
+        <!-- Phoenix API -->
+        <dependency>
+            <groupId>xyz.refinedev.phoenix</groupId>
+            <artifactId>pxAPI</artifactId>
+            <version>1.8.6</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- AquaCore API -->
+        <dependency>
+            <groupId>me.activated.core</groupId>
+            <artifactId>core-api</artifactId>
+            <version>1.0</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>
