@@ -2,7 +2,7 @@ command:
   anti-syntax-message: "&cYou cannot execute {argument}."
   # Allows you to execute for example alley:alley (syntax)
   syntax-bypass-perm: "alley.owner"
-  # The dispatched/executed command by console when the players buys a cosmetic
+  # The dispatched/executed command by console when the players buy a cosmetic
   grant-cosmetic-permission-command: "permission set {player} {permission}"
 
 spawn:
@@ -19,7 +19,7 @@ game:
   portal-radius: 5
 
 essentials:
-  emojis: true # Whether to enable emojis in the chat or not (E. g. :smile:)
+  emojis: true # Whether to enable emojis in the chat or not (e.g. :smile:)
   chat-logging: # Setting to log the in-game chat to a specific discord channel via webhook (OPTIONAL)
     enabled: false
     webhook-url: "" # create a webhook on one of your channels and paste the url here, make sure the channel is accessible to the '@everyone' role, it won't work otherwise
@@ -28,7 +28,7 @@ parkour:
   starter-location: world:-5.1145064347201865:69.0:40.13243289901497:-1.9397448:20.588186
 
 arena:
-  # When creating an arena, the following displayname for each
+  # When creating an arena, the following display-name for each
   # arena type will be set. {arena} represents the arena name.
   default-display-name:
     shared: "&b{arena-name}"
@@ -39,3 +39,11 @@ kit:
   # The default name and description that's going to be set when creating a kit.
   default-name: "&b&l{kit-name}"
   default-description: "&7{kit-name} kit description."
+
+profanity-filter:
+  add-default-words: false # Alley has a built-in list of rude and toxic words, set this to true if you want them to apply (The list below will be used in addition to the built-in list).
+  staff-notification-format: "&3[S] &f(&bAlley: &fProfanity Detected) &c{player}&f: &7{message}"
+  filtered-words:
+    - "shit"
+    - "fuck"
+    - "bitch"

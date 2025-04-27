@@ -2,6 +2,7 @@ package dev.revere.alley.core.listener;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.core.ICore;
+import dev.revere.alley.profile.Profile;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -33,9 +34,23 @@ public class CoreChatListener implements Listener {
 
         ICore core = this.plugin.getCoreAdapter().getCore();
 
-        Bukkit.getOnlinePlayers().forEach(
-                onlinePlayer -> onlinePlayer.sendMessage(core.getChatFormat(player, event.getMessage(), CC.translate("&7: &f")))
-        );
+        if (this.plugin.getProfanityFilter().isProfanity(event.getMessage())) {
+            this.plugin.getProfanityFilter().notifyStaff(event.getMessage(), player);
+        }
+
+        String format = core.getChatFormat(player, event.getMessage(), CC.translate("&7: &f"));
+        String censoredFormat = core.getChatFormat(player, this.plugin.getProfanityFilter().censorWords(event.getMessage()), CC.translate("&7: &f"));
+
+        Bukkit.getConsoleSender().sendMessage(format);
+
+        for (Player recipient : event.getRecipients()) {
+            Profile profile = this.plugin.getProfileService().getProfile(recipient.getUniqueId());
+            if (profile.getProfileData().getProfileSettingData().isProfanityFilterEnabled()) {
+                recipient.sendMessage(censoredFormat);
+            } else {
+                recipient.sendMessage(format);
+            }
+        }
 
         event.setCancelled(true);
     }

@@ -15,6 +15,7 @@ import dev.revere.alley.database.MongoService;
 import dev.revere.alley.essential.chat.ChatListener;
 import dev.revere.alley.essential.emoji.EmojiRepository;
 import dev.revere.alley.essential.emoji.listener.EmojiListener;
+import dev.revere.alley.essential.filter.ProfanityFilter;
 import dev.revere.alley.essential.parkour.ParkourService;
 import dev.revere.alley.essential.parkour.listener.ParkourListener;
 import dev.revere.alley.feature.arena.AbstractArena;
@@ -41,9 +42,9 @@ import dev.revere.alley.feature.tablist.task.TablistUpdateTask;
 import dev.revere.alley.feature.title.TitleService;
 import dev.revere.alley.feature.world.WorldListener;
 import dev.revere.alley.game.bot.BotFightRepository;
-import dev.revere.alley.game.bot.mechanics.BotMechanics;
 import dev.revere.alley.game.bot.listener.BotFightDeathListener;
 import dev.revere.alley.game.bot.listener.BotFightListener;
+import dev.revere.alley.game.bot.mechanics.BotMechanics;
 import dev.revere.alley.game.duel.DuelRequestService;
 import dev.revere.alley.game.ffa.FFAService;
 import dev.revere.alley.game.ffa.cuboid.FFASpawnService;
@@ -134,6 +135,7 @@ public class Alley extends JavaPlugin {
     private TitleService titleService;
     private LevelService levelService;
     private ParkourService parkourService;
+    private ProfanityFilter profanityFilter;
 
     private boolean loaded;
 
@@ -233,6 +235,7 @@ public class Alley extends JavaPlugin {
         services.put(BotMechanics.class.getSimpleName(), () -> this.botMechanics = new BotMechanics());
         services.put(BotFightRepository.class.getSimpleName(), () -> this.botFightRepository = new BotFightRepository());
         services.put(ParkourService.class.getSimpleName(), () -> this.parkourService = new ParkourService(this, this.configService.getSettingsConfig().getString("parkour.starter-location")));
+        services.put(ProfanityFilter.class.getSimpleName(), () -> this.profanityFilter = new ProfanityFilter(this));
 
         services.forEach(Logger::logTime);
     }

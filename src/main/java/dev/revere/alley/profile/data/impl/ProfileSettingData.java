@@ -19,6 +19,7 @@ public class ProfileSettingData {
     private boolean scoreboardEnabled;
     private boolean tablistEnabled;
     private boolean showScoreboardLines;
+    private boolean isProfanityFilterEnabled;
     private String chatChannel;
     private String time;
 
@@ -31,6 +32,7 @@ public class ProfileSettingData {
         this.scoreboardEnabled = true;
         this.tablistEnabled = true;
         this.showScoreboardLines = true;
+        this.isProfanityFilterEnabled = false;
         this.chatChannel = EnumChatChannel.GLOBAL.toString();
         this.time = EnumWorldTime.DEFAULT.getName();
     }

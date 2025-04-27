@@ -129,6 +129,7 @@ public class MongoUtility {
         settingDocument.put("scoreboardEnabled", settingData.isScoreboardEnabled());
         settingDocument.put("tablistEnabled", settingData.isTablistEnabled());
         settingDocument.put("showScoreboardLines", settingData.isShowScoreboardLines());
+        settingDocument.put("profanityFilterEnabled", settingData.isProfanityFilterEnabled());
         settingDocument.put("chatChannel", settingData.getChatChannel());
         settingDocument.put("time", settingData.getTime());
         return settingDocument;
@@ -292,6 +293,7 @@ public class MongoUtility {
         settingData.setScoreboardEnabled(settingDocument.getBoolean("scoreboardEnabled", true));
         settingData.setTablistEnabled(settingDocument.getBoolean("tablistEnabled", true));
         settingData.setShowScoreboardLines(settingDocument.getBoolean("showScoreboardLines", true));
+        settingData.setProfanityFilterEnabled(settingDocument.getBoolean("profanityFilterEnabled", true));
         settingData.setChatChannel(settingDocument.get("chatChannel", EnumChatChannel.GLOBAL.toString()));
         settingData.setTime(settingDocument.get("time", EnumWorldTime.DEFAULT.getName()));
         return settingData;

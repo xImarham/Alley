@@ -98,6 +98,9 @@ public class PracticeSettingsButton extends Button {
             case ITEM_FRAME:
                 player.performCommand("toggletablist");
                 break;
+            case ROTTEN_FLESH:
+                player.performCommand("toggleprofanityfilter");
+                break;
         }
 
         playNeutral(player);

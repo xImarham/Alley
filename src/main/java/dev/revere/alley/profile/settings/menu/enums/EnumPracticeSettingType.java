@@ -66,14 +66,6 @@ public enum EnumPracticeSettingType {
             "&aClick to change!"
     )),
 
-    MATCH_SETTINGS(16, "&b&lMatch Settings", Material.BOOK,
-            settings -> Arrays.asList(
-                    "&fAdjust your match settings.",
-                    "",
-                    "&aClick to view!"
-            )
-    ),
-
     SCOREBOARD_LINES(19, "&b&lShow Scoreboard Lines", Material.STRING,
             settings -> Arrays.asList(
                     "&fShow scoreboard lines.",
@@ -81,6 +73,24 @@ public enum EnumPracticeSettingType {
                     " " + LoreHelper.shownOrHidden(settings.isShowScoreboardLines()),
                     "",
                     "&aClick to change!"
+            )
+    ),
+
+    PROFANITY_FILTER(20, "&b&lProfanity Filter", Material.ROTTEN_FLESH,
+            settings -> Arrays.asList(
+                    "&fHide rude and offensive words.",
+                    "",
+                    " " + LoreHelper.enabledOrDisabled(settings.isProfanityFilterEnabled()),
+                    "",
+                    "&aClick to change!"
+            )
+    ),
+
+    MATCH_SETTINGS(16, "&b&lMatch Settings", Material.BOOK,
+            settings -> Arrays.asList(
+                    "&fAdjust your match settings.",
+                    "",
+                    "&aClick to view!"
             )
     ),
 
