@@ -21,6 +21,7 @@ import java.util.Set;
 @Getter
 public class ProfanityFilter {
     protected final Alley plugin;
+
     private final Set<String> filteredWords;
 
     private final String notificationMessage;
@@ -71,6 +72,12 @@ public class ProfanityFilter {
         return censoredMessage;
     }
 
+    /**
+     * Checks if a message contains any profane words.
+     *
+     * @param message The message to check.
+     * @return True if the message contains profane words, false otherwise.
+     */
     public boolean isProfanity(String message) {
         String[] words = message.split(" ");
 
@@ -132,6 +139,8 @@ public class ProfanityFilter {
                 "spic", "kike", "twat", "cock", "motherfucker", "douche", "dumbass", "dipshit",
                 "jackass", "prick", "cocksucker", "fucker", "shithead", "anus", "arse", "bollocks",
                 "bugger", "wanker", "tosser"
+
+                // ^ all copilot completion by the way, not me.
         );
     }
 }
