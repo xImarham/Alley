@@ -41,40 +41,40 @@ public class ShopEffectMenu extends Menu {
         SoundEffectRepository soundEffectRepository = new SoundEffectRepository();
         List<AbstractSoundEffect> soundEffects = soundEffectRepository.getCosmetics();
         int ownedSoundEffects = (int) soundEffects.stream()
-                                          .map(AbstractSoundEffect::getPermission)
-                                          .filter(player::hasPermission)
-                                          .count();
+                .map(AbstractSoundEffect::getPermission)
+                .filter(player::hasPermission)
+                .count();
 
         KillEffectRepository killEffectRepository = new KillEffectRepository();
         List<AbstractKillEffect> killEffects = killEffectRepository.getCosmetics();
         int ownedKillEffects = (int) killEffects.stream()
-                                         .map(AbstractKillEffect::getPermission)
-                                         .filter(player::hasPermission)
-                                         .count();
+                .map(AbstractKillEffect::getPermission)
+                .filter(player::hasPermission)
+                .count();
 
         buttons.put(0, new BackButton(new ShopMenu()));
         buttons.put(3, new ShopButton("&b&lKill Effects", new ItemStack(Material.REDSTONE), Arrays.asList(
-            "",
-            "&fPurchase kill effects",
-            "&fto use in games.",
-            "",
-            "&fYou own &b" + ownedKillEffects + " &fkill effects.",
-            "",
-            "&aClick to view!"
+                "",
+                "&fPurchase kill effects",
+                "&fto use in games.",
+                "",
+                "&fYou own &b" + ownedKillEffects + " &fkill effects.",
+                "",
+                "&aClick to view!"
         )));
         buttons.put(5, new ShopButton("&b&lSound Effects", new ItemStack(Material.FEATHER), Arrays.asList(
-            "",
-            "&fPurchase sound effects",
-            "&fto use in games.",
-            "",
-            "&fYou own &b" + ownedSoundEffects + " &fsound effects.",
-            "",
-            "&aClick to view!"
+                "",
+                "&fPurchase sound effects",
+                "&fto use in games.",
+                "",
+                "&fYou own &b" + ownedSoundEffects + " &fsound effects.",
+                "",
+                "&aClick to view!"
         )));
 
         Alley.getInstance().getCosmeticRepository().getCosmeticRepositories().get(cosmeticType).getCosmetics().stream()
-            .filter(cosmetic -> cosmetic.getIcon() != null)
-            .forEach(cosmetic -> buttons.put(cosmetic.getSlot(), new ShopEffectButton(cosmetic)));
+                .filter(cosmetic -> cosmetic.getIcon() != null)
+                .forEach(cosmetic -> buttons.put(cosmetic.getSlot(), new ShopEffectButton(cosmetic)));
 
         addBorder(buttons, (byte) 15, 5);
         return buttons;

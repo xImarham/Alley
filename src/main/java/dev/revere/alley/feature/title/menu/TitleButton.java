@@ -33,26 +33,26 @@ public class TitleButton extends Button {
 
         if (!this.profile.getProfileData().getUnlockedTitles().contains(this.title.getKit().getName())) {
             return new ItemBuilder(Material.STAINED_GLASS_PANE)
-                       .name("&b&l" + this.title.getKit().getName())
-                       .lore(
-                           this.progress()
-                       )
-                       .durability(14)
-                       .hideMeta()
-                       .build();
+                    .name("&b&l" + this.title.getKit().getName())
+                    .lore(
+                            this.progress()
+                    )
+                    .durability(14)
+                    .hideMeta()
+                    .build();
         }
 
         return new ItemBuilder(this.title.getKit().getIcon())
-                   .name("&b&l" + this.title.getKit().getName())
-                   .lore(
-                       "",
-                       "&a&lUNLOCKED",
-                       "",
-                       "&aClick to select!"
-                   )
-                   .durability(this.title.getKit().getIconData())
-                   .hideMeta()
-                   .build();
+                .name("&b&l" + this.title.getKit().getName())
+                .lore(
+                        "",
+                        "&a&lUNLOCKED",
+                        "",
+                        "&aClick to select!"
+                )
+                .durability(this.title.getKit().getIconData())
+                .hideMeta()
+                .build();
     }
 
     @Override
@@ -104,13 +104,13 @@ public class TitleButton extends Button {
         String winOrWins = requiredWinsToUnlock == 1 ? "win" : "wins";
 
         return Arrays.asList(
-            "",
-            "&c&lLOCKED",
-            "",
-            "&fUnlock &b" + nextRank + " &fwith " + requiredWinsToUnlock + " more " + winOrWins + ".",
-            "&f" + progressBar + " &7" + progressPercent,
-            "",
-            "&fRequires &c&l" + this.title.getRequiredDivision().getName().toUpperCase() + " &fdivision."
+                "",
+                "&c&lLOCKED",
+                "",
+                "&fUnlock &b" + nextRank + " &fwith " + requiredWinsToUnlock + " more " + winOrWins + ".",
+                "&f" + progressBar + " &7" + progressPercent,
+                "",
+                "&fRequires &c&l" + this.title.getRequiredDivision().getName().toUpperCase() + " &fdivision."
         );
     }
 }

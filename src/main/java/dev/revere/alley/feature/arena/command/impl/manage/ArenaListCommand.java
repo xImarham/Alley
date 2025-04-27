@@ -25,10 +25,10 @@ public class ArenaListCommand extends BaseCommand {
         }
 
         this.plugin.getArenaService().getArenas().stream().filter(arena -> arena.getType() != EnumArenaType.FFA).forEach(arena ->
-                                                                                                                             player.sendMessage(CC.translate("      &f● &b" + arena.getName() + " &7(" + arena.getType().name() + ")" + (arena.isEnabled() ? " &aEnabled" : " &cDisabled"))))
+                player.sendMessage(CC.translate("      &f● &b" + arena.getName() + " &7(" + arena.getType().name() + ")" + (arena.isEnabled() ? " &aEnabled" : " &cDisabled"))))
         ;
         this.plugin.getArenaService().getArenas().stream().filter(arena -> arena.getType() == EnumArenaType.FFA).forEach(arena ->
-                                                                                                                             player.sendMessage(CC.translate("      &f● &b" + arena.getName() + " &7(" + arena.getType().name() + ")")))
+                player.sendMessage(CC.translate("      &f● &b" + arena.getName() + " &7(" + arena.getType().name() + ")")))
         ;
 
         player.sendMessage("");

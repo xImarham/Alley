@@ -45,9 +45,9 @@ public class DuelRequestsMenu extends PaginatedMenu {
         Map<Integer, Button> buttons = new HashMap<>();
 
         Alley.getInstance().getDuelRequestService().getDuelRequests()
-            .stream()
-            .filter(duelRequest -> !duelRequest.getSender().equals(player))
-            .forEach(duelRequest -> buttons.put(buttons.size(), new DuelRequestsButton(duelRequest)));
+                .stream()
+                .filter(duelRequest -> !duelRequest.getSender().equals(player))
+                .forEach(duelRequest -> buttons.put(buttons.size(), new DuelRequestsButton(duelRequest)));
 
 
         return buttons;
@@ -60,15 +60,15 @@ public class DuelRequestsMenu extends PaginatedMenu {
         @Override
         public ItemStack getButtonItem(Player player) {
             return new ItemBuilder(Material.PAPER).name("&b&l" + this.duelRequest.getSender().getName()).durability(0).hideMeta()
-                       .lore(Arrays.asList(
-                           "&fKit: &f" + this.duelRequest.getKit().getDisplayName(),
-                           "&fArena: &f" + this.duelRequest.getArena().getDisplayName(),
-                           "",
-                           "&fExpires in: &b" + this.duelRequest.getRemainingTimeFormatted(),
-                           "",
-                           "&aClick to accept!"
-                       ))
-                       .hideMeta().build();
+                    .lore(Arrays.asList(
+                            "&fKit: &f" + this.duelRequest.getKit().getDisplayName(),
+                            "&fArena: &f" + this.duelRequest.getArena().getDisplayName(),
+                            "",
+                            "&fExpires in: &b" + this.duelRequest.getRemainingTimeFormatted(),
+                            "",
+                            "&aClick to accept!"
+                    ))
+                    .hideMeta().build();
         }
 
         @Override
@@ -107,10 +107,10 @@ public class DuelRequestsMenu extends PaginatedMenu {
         @Override
         public ItemStack getButtonItem(Player player) {
             return new ItemBuilder(Material.EMERALD)
-                       .name("&a&lRefresh")
-                       .lore("&aClick to refresh the duel requests.")
-                       .hideMeta()
-                       .build();
+                    .name("&a&lRefresh")
+                    .lore("&aClick to refresh the duel requests.")
+                    .hideMeta()
+                    .build();
         }
 
         @Override

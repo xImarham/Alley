@@ -27,13 +27,13 @@ public class JumpToPageButton extends Button {
 
         if (this.current) {
             itemMeta.setLore(Arrays.asList(
-                "",
-                CC.translate("&bSelected!")
+                    "",
+                    CC.translate("&bSelected!")
             ));
         } else {
             itemMeta.setLore(Arrays.asList(
-                "",
-                CC.translate("&bClick to open!")
+                    "",
+                    CC.translate("&bClick to open!")
             ));
         }
 

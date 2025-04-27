@@ -34,7 +34,7 @@ public class LocationUtil {
         }
 
         return location.getWorld().getName() + ":" + location.getX() + ":" + location.getY() + ":" + location.getZ() +
-                   ":" + location.getYaw() + ":" + location.getPitch();
+                ":" + location.getYaw() + ":" + location.getPitch();
     }
 
     /**
@@ -56,6 +56,6 @@ public class LocationUtil {
         }
 
         return new Location(world, Double.parseDouble(split[1]), Double.parseDouble(split[2]),
-            Double.parseDouble(split[3]), Float.parseFloat(split[4]), Float.parseFloat(split[5]));
+                Double.parseDouble(split[3]), Float.parseFloat(split[4]), Float.parseFloat(split[5]));
     }
 }

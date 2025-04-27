@@ -36,7 +36,7 @@ public class ChatListener implements Listener {
         String discordMessage = /*"[" + formattedTime + "] */"**" + playerName + "**: " + cleanedMessage;
 
         this.plugin.getServer().getScheduler().runTaskAsynchronously(this.plugin, () ->
-                                                                                      this.plugin.getDiscordBridge().getWebhookService().sendMessage(discordMessage)
+                this.plugin.getDiscordBridge().getWebhookService().sendMessage(discordMessage)
         );
     }
 }

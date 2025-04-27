@@ -41,9 +41,9 @@ public class DisplayTypeButton extends Button {
         lore.add("&aClick to change the display type.");
 
         return new ItemBuilder(Material.EYE_OF_ENDER)
-                   .name("&b&lDisplay Type")
-                   .lore(lore)
-                   .build();
+                .name("&b&lDisplay Type")
+                .lore(lore)
+                .build();
     }
 
     /**

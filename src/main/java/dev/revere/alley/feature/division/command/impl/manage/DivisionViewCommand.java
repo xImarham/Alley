@@ -35,13 +35,13 @@ public class DivisionViewCommand extends BaseCommand {
         }
 
         Arrays.asList(
-            "",
-            "&b&lDivision &f(" + division.getDisplayName() + ")",
-            " &f● &bName: &f" + division.getDisplayName(),
-            " &f● &bTiers: &f" + division.getTiers().size(),
-            " &f● &bDescription: &f" + division.getDescription(),
-            " &f● &bRequired Wins: &f" + division.getTiers().get(0).getRequiredWins(),
-            ""
+                "",
+                "&b&lDivision &f(" + division.getDisplayName() + ")",
+                " &f● &bName: &f" + division.getDisplayName(),
+                " &f● &bTiers: &f" + division.getTiers().size(),
+                " &f● &bDescription: &f" + division.getDescription(),
+                " &f● &bRequired Wins: &f" + division.getTiers().get(0).getRequiredWins(),
+                ""
         ).forEach(line -> player.sendMessage(CC.translate(line)));
     }
 }

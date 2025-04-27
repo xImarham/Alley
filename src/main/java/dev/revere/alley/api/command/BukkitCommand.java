@@ -41,7 +41,7 @@ public class BukkitCommand extends Command {
             success = executor.onCommand(sender, this, commandLabel, args);
         } catch (Throwable ex) {
             throw new CommandException("Unhandled exception executing command '" + commandLabel + "' in plugin "
-                                           + plugin.getDescription().getFullName(), ex);
+                    + plugin.getDescription().getFullName(), ex);
         }
 
         if (!success && usageMessage.length() > 0) {
@@ -55,7 +55,7 @@ public class BukkitCommand extends Command {
 
     @Override
     public List<String> tabComplete(CommandSender sender, String alias, String[] args)
-        throws CommandException, IllegalArgumentException {
+            throws CommandException, IllegalArgumentException {
         Validate.notNull(sender, "Sender cannot be null");
         Validate.notNull(args, "Arguments cannot be null");
         Validate.notNull(alias, "Alias cannot be null");
@@ -75,7 +75,7 @@ public class BukkitCommand extends Command {
                 message.append(arg).append(' ');
             }
             message.deleteCharAt(message.length() - 1).append("' in plugin ")
-                .append(plugin.getDescription().getFullName());
+                    .append(plugin.getDescription().getFullName());
             throw new CommandException(message.toString(), ex);
         }
 

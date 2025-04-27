@@ -59,19 +59,19 @@ public class PartyService {
         Alley.getInstance().getHotbarService().applyHotbarItems(player, EnumHotbarType.PARTY);
 
         Alley.getInstance().getReflectionRepository().getReflectionService(TitleReflectionService.class).sendTitle(
-            player,
-            "&a&l" + Symbol.CROSSED_SWORDS + " Party Created",
-            "&7Type /p for help.",
-            2, 10, 2
+                player,
+                "&a&l" + Symbol.CROSSED_SWORDS + " Party Created",
+                "&7Type /p for help.",
+                2, 10, 2
         );
 
         SoundUtil.playCustomSound(player, Sound.FIREWORK_TWINKLE, 1.0F, 1.0F);
 
         Arrays.asList(
-            "",
-            "&b&lParty Created &a" + Symbol.TICK,
-            " &7Type /p for help.",
-            ""
+                "",
+                "&b&lParty Created &a" + Symbol.TICK,
+                " &7Type /p for help.",
+                ""
         ).forEach(line -> player.sendMessage(CC.translate(line)));
     }
 
@@ -96,10 +96,10 @@ public class PartyService {
         }
 
         Alley.getInstance().getReflectionRepository().getReflectionService(TitleReflectionService.class).sendTitle(
-            leader,
-            "&c&l✖ Party Disbanded",
-            "&7You've removed your party.",
-            2, 10, 2
+                leader,
+                "&c&l✖ Party Disbanded",
+                "&7You've removed your party.",
+                2, 10, 2
         );
 
         SoundUtil.playBanHammer(leader);
@@ -241,9 +241,9 @@ public class PartyService {
      */
     public PartyRequest getRequest(Player player) {
         return this.partyRequests.stream()
-                   .filter(request -> request.getTarget().equals(player))
-                   .findFirst()
-                   .orElse(null);
+                .filter(request -> request.getTarget().equals(player))
+                .findFirst()
+                .orElse(null);
     }
 
     /**
@@ -285,9 +285,9 @@ public class PartyService {
      */
     public Party getPartyByLeader(Player player) {
         return this.parties.stream()
-                   .filter(party -> party.getLeader().equals(player))
-                   .findFirst()
-                   .orElse(null);
+                .filter(party -> party.getLeader().equals(player))
+                .findFirst()
+                .orElse(null);
     }
 
     /**
@@ -298,9 +298,9 @@ public class PartyService {
      */
     public Party getPartyByMember(UUID uuid) {
         return this.parties.stream()
-                   .filter(party -> party.getMembers().contains(uuid))
-                   .findFirst()
-                   .orElse(null);
+                .filter(party -> party.getMembers().contains(uuid))
+                .findFirst()
+                .orElse(null);
     }
 
     /**
@@ -339,9 +339,9 @@ public class PartyService {
      */
     private TextComponent getClickable(Player sender) {
         return ClickableUtil.createComponent(
-            " &a(Click to accept)",
-            "/party join " + sender.getName(),
-            "&aClick to accept &b" + sender.getName() + "&a's party invitation."
+                " &a(Click to accept)",
+                "/party join " + sender.getName(),
+                "&aClick to accept &b" + sender.getName() + "&a's party invitation."
         );
     }
 }

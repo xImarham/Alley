@@ -57,19 +57,19 @@ public class ArenaService {
             switch (arenaType) {
                 case SHARED:
                     arena = new SharedArena(
-                        arenaName,
-                        minimum,
-                        maximum
+                            arenaName,
+                            minimum,
+                            maximum
                     );
                     break;
                 case STANDALONE:
                     arena = new StandAloneArena(
-                        arenaName,
-                        minimum,
-                        maximum,
-                        team1Portal,
-                        team2Portal,
-                        heightLimit
+                            arenaName,
+                            minimum,
+                            maximum,
+                            team1Portal,
+                            team2Portal,
+                            heightLimit
                     );
                     break;
                 case FFA:
@@ -77,9 +77,9 @@ public class ArenaService {
                     Location safeZonePos2 = LocationUtil.deserialize(config.getString(name + ".safezone.pos2"));
 
                     arena = new FreeForAllArena(
-                        arenaName,
-                        safeZonePos1,
-                        safeZonePos2
+                            arenaName,
+                            safeZonePos1,
+                            safeZonePos2
                     );
                     break;
                 default:
@@ -154,10 +154,10 @@ public class ArenaService {
      */
     public AbstractArena getRandomArena(Kit kit) {
         List<AbstractArena> availableArenas = this.arenas.stream()
-                                                  .filter(arena -> arena.getKits().contains(kit.getName()))
-                                                  .filter(AbstractArena::isEnabled)
-                                                  .filter(arena -> !(arena instanceof StandAloneArena) || !((StandAloneArena) arena).isActive())
-                                                  .collect(Collectors.toList());
+                .filter(arena -> arena.getKits().contains(kit.getName()))
+                .filter(AbstractArena::isEnabled)
+                .filter(arena -> !(arena instanceof StandAloneArena) || !((StandAloneArena) arena).isActive())
+                .collect(Collectors.toList());
 
         if (availableArenas.isEmpty()) {
             return null;
@@ -177,9 +177,9 @@ public class ArenaService {
      */
     public AbstractArena getRandomStandAloneArena() {
         List<AbstractArena> availableArenas = this.arenas.stream()
-                                                  .filter(arena -> arena.getType() == EnumArenaType.STANDALONE)
-                                                  .filter(AbstractArena::isEnabled)
-                                                  .collect(Collectors.toList());
+                .filter(arena -> arena.getType() == EnumArenaType.STANDALONE)
+                .filter(AbstractArena::isEnabled)
+                .collect(Collectors.toList());
 
         if (availableArenas.isEmpty()) {
             return null;

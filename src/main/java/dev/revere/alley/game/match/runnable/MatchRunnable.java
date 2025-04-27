@@ -117,8 +117,8 @@ public class MatchRunnable extends BukkitRunnable {
             }
 
             config.getStringList("match.started.kit-disclaimer.format").forEach(message -> this.match.sendMessage(CC.translate(message)
-                                                                                                                      .replace("{kit-disclaimer}", CC.translate(this.match.getKit().getDisclaimer()))
-                                                                                                                      .replace("{kit-name}", this.match.getKit().getName())
+                    .replace("{kit-disclaimer}", CC.translate(this.match.getKit().getDisclaimer()))
+                    .replace("{kit-name}", this.match.getKit().getName())
             ));
         }
     }

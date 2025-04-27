@@ -42,9 +42,9 @@ public class MongoService {
         try {
             ConnectionString connectionString = new ConnectionString(this.uri);
             MongoClientSettings settings = MongoClientSettings.builder()
-                                               .applyConnectionString(connectionString)
-                                               .retryWrites(true)
-                                               .build();
+                    .applyConnectionString(connectionString)
+                    .retryWrites(true)
+                    .build();
 
             this.mongoClient = MongoClients.create(settings);
             this.mongoDatabase = this.mongoClient.getDatabase(this.databaseName);

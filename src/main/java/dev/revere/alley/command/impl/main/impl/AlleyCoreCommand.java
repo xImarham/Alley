@@ -23,10 +23,10 @@ public class AlleyCoreCommand extends BaseCommand {
         ICore core = this.plugin.getCoreAdapter().getCore();
 
         Arrays.asList(
-            "",
-            "&b&lCore Hook Information",
-            " &f&l● &bPlugin: &f" + core.getType().getPluginName() + " &7made by &f" + core.getType().getPluginAuthor(),
-            ""
+                "",
+                "&b&lCore Hook Information",
+                " &f&l● &bPlugin: &f" + core.getType().getPluginName() + " &7made by &f" + core.getType().getPluginAuthor(),
+                ""
         ).forEach(line -> sender.sendMessage(CC.translate(line)));
 
         if (core.getType() == EnumCoreType.DEFAULT) {

@@ -62,10 +62,10 @@ public class PartyEventSplitArenaSelectorMenu extends Menu {
         @Override
         public ItemStack getButtonItem(Player player) {
             return new ItemBuilder(Material.PAPER).name("&b" + arena.getName()).durability(0).hideMeta()
-                       .lore(Collections.singletonList(
-                           "&7Click to select this arena."
-                       ))
-                       .build();
+                    .lore(Collections.singletonList(
+                            "&7Click to select this arena."
+                    ))
+                    .build();
         }
 
         @Override
@@ -103,7 +103,7 @@ public class PartyEventSplitArenaSelectorMenu extends Menu {
             }
 
             Alley.getInstance().getMatchRepository().createAndStartMatch(
-                this.kit, this.arena, participantA, participantB
+                    this.kit, this.arena, participantA, participantB
             );
         }
     }

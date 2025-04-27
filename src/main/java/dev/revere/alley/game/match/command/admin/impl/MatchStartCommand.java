@@ -42,9 +42,9 @@ public class MatchStartCommand extends BaseCommand {
                     Kit kit = this.plugin.getKitService().getKit(command.getArgs()[2]);
                     if (kit != null) {
                         this.plugin.getArenaService().getArenas()
-                            .stream()
-                            .filter(arena -> arena.getKits().contains(kit.getName()))
-                            .forEach(arena -> completion.add(arena.getName()));
+                                .stream()
+                                .filter(arena -> arena.getKits().contains(kit.getName()))
+                                .forEach(arena -> completion.add(arena.getName()));
                     }
                     break;
                 default:
@@ -94,7 +94,7 @@ public class MatchStartCommand extends BaseCommand {
         GameParticipant<MatchGamePlayerImpl> participantB = new GameParticipant<>(playerB);
 
         Alley.getInstance().getMatchRepository().createAndStartMatch(
-            kit, arena, participantA, participantB
+                kit, arena, participantA, participantB
         );
     }
 }

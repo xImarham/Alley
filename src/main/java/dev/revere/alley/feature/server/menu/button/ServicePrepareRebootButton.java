@@ -23,19 +23,19 @@ public class ServicePrepareRebootButton extends Button {
     @Override
     public ItemStack getButtonItem(Player player) {
         return new ItemBuilder(Material.REDSTONE)
-                   .name("&c&lPrepare Reboot")
-                   .lore(
-                       "&fThis will prepare the server",
-                       "&ffor a reboot by cancelling",
-                       "&fall tasks and on-going matches.",
-                       "",
-                       "&cWARNING:",
-                       " &fThere won't be a",
-                       " &fconfirmation menu.",
-                       "",
-                       "&cClick to prepare!"
-                   )
-                   .build();
+                .name("&c&lPrepare Reboot")
+                .lore(
+                        "&fThis will prepare the server",
+                        "&ffor a reboot by cancelling",
+                        "&fall tasks and on-going matches.",
+                        "",
+                        "&cWARNING:",
+                        " &fThere won't be a",
+                        " &fconfirmation menu.",
+                        "",
+                        "&cClick to prepare!"
+                )
+                .build();
     }
 
     @Override
@@ -61,9 +61,9 @@ public class ServicePrepareRebootButton extends Button {
 
         serverService.setAllowQueueing(false);
         Arrays.asList(
-            "",
-            "&c&lServer is preparing for a reboot...",
-            ""
+                "",
+                "&c&lServer is preparing for a reboot...",
+                ""
         ).forEach(line -> Bukkit.broadcastMessage(CC.translate(line)));
     }
 }

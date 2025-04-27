@@ -134,7 +134,7 @@ public class DuelRequestService {
         GameParticipant<MatchGamePlayerImpl> participantB = new GameParticipant<>(playerB);
 
         Alley.getInstance().getMatchRepository().createAndStartMatch(
-            duelRequest.getKit(), duelRequest.getArena(), participantA, participantB
+                duelRequest.getKit(), duelRequest.getArena(), participantA, participantB
         );
 
         this.removeDuelRequest(duelRequest);
@@ -148,9 +148,9 @@ public class DuelRequestService {
      */
     private TextComponent getClickable(Player sender) {
         return ClickableUtil.createComponent(
-            " &a(Click To Accept)",
-            "/accept " + sender.getName(),
-            "&aClick to accept &b" + sender.getName() + "&a's duel request."
+                " &a(Click To Accept)",
+                "/accept " + sender.getName(),
+                "&aClick to accept &b" + sender.getName() + "&a's duel request."
         );
     }
 }

@@ -65,30 +65,30 @@ public class QueuesMenuModern extends Menu {
         Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
 
         buttons.put(2, new QueuesButtonModern("&b&lUnranked", Material.DIAMOND_SWORD, 0, Arrays.asList(
-            "&7Casual 1v1s with",
-            "&7no loss penalty.",
-            "",
-            "&bPlayers: &f" + queueService.getPlayerCountOfGameType("Unranked"),
-            "",
-            this.getLore(profile, EnumQueueType.UNRANKED)
+                "&7Casual 1v1s with",
+                "&7no loss penalty.",
+                "",
+                "&bPlayers: &f" + queueService.getPlayerCountOfGameType("Unranked"),
+                "",
+                this.getLore(profile, EnumQueueType.UNRANKED)
         )));
 
         buttons.put(4, new QueuesButtonModern("&b&lBots", Material.GOLD_SWORD, 0, Arrays.asList(
-            "&7Practice against bots",
-            "&7to improve your skills.",
-            "",
-            "&bPlayers: &f" + queueService.getPlayerCountOfGameType("Bots"),
-            "",
-            "&c&lIN DEVELOPMENT"
+                "&7Practice against bots",
+                "&7to improve your skills.",
+                "",
+                "&bPlayers: &f" + queueService.getPlayerCountOfGameType("Bots"),
+                "",
+                "&c&lIN DEVELOPMENT"
         )));
 
         buttons.put(6, new QueuesButtonModern("&b&lFFA", Material.GOLD_AXE, 0, Arrays.asList(
-            "&7Free for all with",
-            "&7infinity respawns.",
-            "",
-            "&bPlayers: &f" + queueService.getPlayerCountOfGameType("FFA"),
-            "",
-            this.getLore(profile, EnumQueueType.FFA)
+                "&7Free for all with",
+                "&7infinity respawns.",
+                "",
+                "&bPlayers: &f" + queueService.getPlayerCountOfGameType("FFA"),
+                "",
+                this.getLore(profile, EnumQueueType.FFA)
         )));
 
         switch (profile.getQueueType()) {
@@ -133,11 +133,11 @@ public class QueuesMenuModern extends Menu {
         @Override
         public ItemStack getButtonItem(Player player) {
             return new ItemBuilder(this.material)
-                       .name(this.displayName)
-                       .durability(this.durability)
-                       .lore(this.lore)
-                       .hideMeta()
-                       .build();
+                    .name(this.displayName)
+                    .durability(this.durability)
+                    .lore(this.lore)
+                    .hideMeta()
+                    .build();
         }
 
         @Override

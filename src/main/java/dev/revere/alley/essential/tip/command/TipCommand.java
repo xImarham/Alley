@@ -37,7 +37,7 @@ public class TipCommand extends BaseCommand {
                 long seconds = remainingSeconds % 60;
 
                 player.sendMessage(CC.translate(
-                    "&cYou need to wait " + seconds + "s before you can get another tip."
+                        "&cYou need to wait " + seconds + "s before you can get another tip."
                 ));
             }
         }

@@ -35,16 +35,16 @@ public class ShopEffectButton extends Button {
         }
 
         return new ItemBuilder(cosmetic.getIcon())
-                   .name("&b&l" + cosmetic.getName())
-                   .lore(
-                       "",
-                       "&f● &bDescription: &f" + cosmetic.getDescription(),
-                       "&f● &bPrice: &f" + cosmetic.getPrice() + " coins",
-                       "",
-                       lore
+                .name("&b&l" + cosmetic.getName())
+                .lore(
+                        "",
+                        "&f● &bDescription: &f" + cosmetic.getDescription(),
+                        "&f● &bPrice: &f" + cosmetic.getPrice() + " coins",
+                        "",
+                        lore
 
-                   )
-                   .build();
+                )
+                .build();
     }
 
     /**

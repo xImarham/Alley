@@ -122,7 +122,7 @@ public class QueueRunnable implements Runnable {
         this.removeFromParkourIfPlaying(gameParticipantList, false);
 
         Alley.getInstance().getMatchRepository().createAndStartMatch(
-            queue.getKit(), arena, gameParticipantList.participantA, gameParticipantList.participantB
+                queue.getKit(), arena, gameParticipantList.participantA, gameParticipantList.participantB
         );
     }
 
@@ -177,8 +177,8 @@ public class QueueRunnable implements Runnable {
      */
     private @NotNull GameParticipantList getGameParticipantList(GamePlayerList gamePlayerList) {
         return new GameParticipantList(
-            new GameParticipant<>(gamePlayerList.getFirstMatchGamePlayer()),
-            new GameParticipant<>(gamePlayerList.getSecondMatchGamePlayer())
+                new GameParticipant<>(gamePlayerList.getFirstMatchGamePlayer()),
+                new GameParticipant<>(gamePlayerList.getSecondMatchGamePlayer())
         );
     }
 
@@ -191,8 +191,8 @@ public class QueueRunnable implements Runnable {
      */
     private @NotNull GamePlayerList getGamePlayerList(Player firstPlayer, Player secondPlayer, QueueProfile firstProfile, QueueProfile secondProfile) {
         return new GamePlayerList(
-            new MatchGamePlayerImpl(firstPlayer.getUniqueId(), firstPlayer.getName(), firstProfile.getElo()),
-            new MatchGamePlayerImpl(secondPlayer.getUniqueId(), secondPlayer.getName(), secondProfile.getElo())
+                new MatchGamePlayerImpl(firstPlayer.getUniqueId(), firstPlayer.getName(), firstProfile.getElo()),
+                new MatchGamePlayerImpl(secondPlayer.getUniqueId(), secondPlayer.getName(), secondProfile.getElo())
         );
     }
 

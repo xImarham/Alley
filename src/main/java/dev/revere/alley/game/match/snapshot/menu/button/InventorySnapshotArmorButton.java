@@ -24,6 +24,6 @@ public class InventorySnapshotArmorButton extends Button {
     public ItemStack getButtonItem(Player player) {
         Snapshot snapshot = Alley.getInstance().getSnapshotRepository().getSnapshot(target);
         return new ItemBuilder(snapshot.getArmor()[armorPart])
-                   .build();
+                .build();
     }
 }

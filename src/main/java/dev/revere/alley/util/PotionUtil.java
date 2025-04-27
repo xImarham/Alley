@@ -74,8 +74,8 @@ public class PotionUtil {
      */
     public List<String> serialize(List<PotionEffect> potionEffects) {
         return potionEffects.stream()
-                   .map(effect -> effect.getType().getName() + ":" + effect.getDuration() + ":" + effect.getAmplifier())
-                   .collect(Collectors.toList());
+                .map(effect -> effect.getType().getName() + ":" + effect.getDuration() + ":" + effect.getAmplifier())
+                .collect(Collectors.toList());
     }
 
     /**
@@ -86,15 +86,15 @@ public class PotionUtil {
      */
     public List<PotionEffect> deserialize(List<String> serializedEffects) {
         return serializedEffects.stream()
-                   .map(s -> {
-                       String[] parts = s.split(":");
-                       if (parts.length < 3) return null;
-                       PotionEffectType type = PotionEffectType.getByName(parts[0]);
-                       int duration = Integer.parseInt(parts[1]);
-                       int amplifier = Integer.parseInt(parts[2]);
-                       return type != null ? new PotionEffect(type, duration, amplifier) : null;
-                   })
-                   .filter(Objects::nonNull)
-                   .collect(Collectors.toList());
+                .map(s -> {
+                    String[] parts = s.split(":");
+                    if (parts.length < 3) return null;
+                    PotionEffectType type = PotionEffectType.getByName(parts[0]);
+                    int duration = Integer.parseInt(parts[1]);
+                    int amplifier = Integer.parseInt(parts[2]);
+                    return type != null ? new PotionEffect(type, duration, amplifier) : null;
+                })
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
     }
 }

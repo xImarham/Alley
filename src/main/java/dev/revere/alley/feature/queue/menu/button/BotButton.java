@@ -23,17 +23,17 @@ public class BotButton extends Button {
     @Override
     public ItemStack getButtonItem(Player player) {
         return new ItemBuilder(kit.getIcon())
-                   .name(kit.getName())
-                   //TODO: This is just temporary, we're going to make this dynamic for all type of bots, not only a statically defined one. FOR TESTING PURPOSES ONLY.
-                   .lore(
-                       "&7Click to fight a bot!",
-                       "",
-                       "&7Difficulty: &b" + EnumBotPreset.EASY.getName(),
-                       "&7Kit: &b" + kit.getName(),
-                       "",
-                       "&7Click to start the fight!"
-                   )
-                   .build();
+                .name(kit.getName())
+                //TODO: This is just temporary, we're going to make this dynamic for all type of bots, not only a statically defined one. FOR TESTING PURPOSES ONLY.
+                .lore(
+                        "&7Click to fight a bot!",
+                        "",
+                        "&7Difficulty: &b" + EnumBotPreset.EASY.getName(),
+                        "&7Kit: &b" + kit.getName(),
+                        "",
+                        "&7Click to start the fight!"
+                )
+                .build();
     }
 
     @Override

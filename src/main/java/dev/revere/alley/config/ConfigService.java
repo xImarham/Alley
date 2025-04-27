@@ -33,10 +33,10 @@ public class ConfigService {
     private final FileConfiguration levelsConfig;
 
     private final String[] configFileNames = {
-        "settings.yml", "messages.yml", "menus.yml",
-        "database/database.yml",
-        "storage/kits.yml", "storage/arenas.yml", "storage/divisions.yml", "storage/titles.yml", "storage/levels.yml",
-        "providers/scoreboard.yml", "providers/tablist.yml"
+            "settings.yml", "messages.yml", "menus.yml",
+            "database/database.yml",
+            "storage/kits.yml", "storage/arenas.yml", "storage/divisions.yml", "storage/titles.yml", "storage/levels.yml",
+            "providers/scoreboard.yml", "providers/tablist.yml"
     };
 
     public ConfigService() {

@@ -37,15 +37,15 @@ public class CosmeticButton extends Button {
         }
 
         return new ItemBuilder(cosmetic.getIcon())
-                   .name("&b&l" + cosmetic.getName())
-                   .lore(
-                       "",
-                       "&f● &bDescription: &7" + cosmetic.getDescription(),
-                       "",
-                       lore
+                .name("&b&l" + cosmetic.getName())
+                .lore(
+                        "",
+                        "&f● &bDescription: &7" + cosmetic.getDescription(),
+                        "",
+                        lore
 
-                   )
-                   .build();
+                )
+                .build();
     }
 
     /**

@@ -41,9 +41,9 @@ public class KitViewCommand extends BaseCommand {
         player.sendMessage(CC.translate(" &f● &bDescription: &f" + kit.getDescription()));
         player.sendMessage(CC.translate(" &f● &bFFA: &f" + (kit.isFfaEnabled() ? "&aEnabled" : "&cDisabled")));
         player.spigot().sendMessage(ClickableUtil.createComponent(
-            "  &a(Click here to view the kit settings)",
-            "/kit viewsettings " + kit.getName(),
-            "&7Click to view the settings of the kit &b" + kit.getName())
+                "  &a(Click here to view the kit settings)",
+                "/kit viewsettings " + kit.getName(),
+                "&7Click to view the settings of the kit &b" + kit.getName())
         );
         player.sendMessage("");
     }

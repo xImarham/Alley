@@ -25,7 +25,7 @@ public class DivisionListCommand extends BaseCommand {
             player.sendMessage(CC.translate("      &f● &cNo Divisions available."));
         }
         divisionService.getDivisions()
-            .forEach(division -> player.sendMessage(CC.translate("      &f● &b" + division.getDisplayName() + " &f(" + division.getTiers().get(0).getRequiredWins() + " wins)")));
+                .forEach(division -> player.sendMessage(CC.translate("      &f● &b" + division.getDisplayName() + " &f(" + division.getTiers().get(0).getRequiredWins() + " wins)")));
         player.sendMessage("");
 
     }

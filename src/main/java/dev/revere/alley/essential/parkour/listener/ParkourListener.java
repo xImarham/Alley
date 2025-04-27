@@ -59,10 +59,10 @@ public class ParkourListener implements Listener {
             SoundUtil.playCustomSound(player, Sound.VILLAGER_DEATH, 1.0f, 1.0f);
 
             Alley.getInstance().getReflectionRepository().getReflectionService(TitleReflectionService.class).sendTitle(
-                player,
-                "&7&l" + Symbol.SKULL,
-                "&c" + this.getRandomSaltyMessage(),
-                2, 10, 2
+                    player,
+                    "&7&l" + Symbol.SKULL,
+                    "&c" + this.getRandomSaltyMessage(),
+                    2, 10, 2
             );
         }
     }
@@ -84,24 +84,24 @@ public class ParkourListener implements Listener {
      */
     private List<String> saltyMessages() {
         return Arrays.asList(
-            "WHOOPSIES!",
-            "LOL!",
-            "COMMON SENSE!",
-            "HELL NAW!",
-            "aw come on...",
-            "LMAO!",
-            "YIKES!",
-            "Emmy is better.",
-            "WTF!",
-            "NO WAY!",
-            "Bad.",
-            "ARE YOU SERIOUS?",
-            "OH NO!",
-            "DAMN!",
-            "BRO? HOW?",
-            "WHAT THE HELL?",
-            "LOSER!",
-            "HAHA!"
+                "WHOOPSIES!",
+                "LOL!",
+                "COMMON SENSE!",
+                "HELL NAW!",
+                "aw come on...",
+                "LMAO!",
+                "YIKES!",
+                "Emmy is better.",
+                "WTF!",
+                "NO WAY!",
+                "Bad.",
+                "ARE YOU SERIOUS?",
+                "OH NO!",
+                "DAMN!",
+                "BRO? HOW?",
+                "WHAT THE HELL?",
+                "LOSER!",
+                "HAHA!"
         );
     }
 
@@ -131,12 +131,12 @@ public class ParkourListener implements Listener {
         Location blockLocation = event.getClickedBlock().getLocation();
 
         Location centeredLocation = new Location(
-            blockLocation.getWorld(),
-            blockLocation.getBlockX() + 0.5,
-            blockLocation.getY(),
-            blockLocation.getBlockZ() + 0.5,
-            player.getLocation().getYaw(),
-            player.getLocation().getPitch()
+                blockLocation.getWorld(),
+                blockLocation.getBlockX() + 0.5,
+                blockLocation.getY(),
+                blockLocation.getBlockZ() + 0.5,
+                player.getLocation().getYaw(),
+                player.getLocation().getPitch()
         );
 
         if (parkourData.hasCheckpoint(centeredLocation)) {
@@ -148,10 +148,10 @@ public class ParkourListener implements Listener {
         SoundUtil.playCustomSound(player, Sound.ANVIL_USE, 1.0f, 1.0f);
 
         this.plugin.getReflectionRepository().getReflectionService(TitleReflectionService.class).sendTitle(
-            player,
-            "&aCHECKPOINT!",
-            "&7(" + player.getLocation().getBlockX() + ", " + player.getLocation().getBlockY() + ", " + player.getLocation().getBlockZ() + ")",
-            2, 10, 2
+                player,
+                "&aCHECKPOINT!",
+                "&7(" + player.getLocation().getBlockX() + ", " + player.getLocation().getBlockY() + ", " + player.getLocation().getBlockZ() + ")",
+                2, 10, 2
         );
     }
 }

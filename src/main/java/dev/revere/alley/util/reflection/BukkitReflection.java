@@ -66,7 +66,7 @@ public class BukkitReflection {
 
             CRAFT_ITEM_STACK_CLASS = Class.forName(CRAFT_BUKKIT_PACKAGE + "inventory.CraftItemStack");
             CRAFT_ITEM_STACK_AS_NMS_COPY_METHOD =
-                CRAFT_ITEM_STACK_CLASS.getDeclaredMethod("asNMSCopy", ItemStack.class);
+                    CRAFT_ITEM_STACK_CLASS.getDeclaredMethod("asNMSCopy", ItemStack.class);
             CRAFT_ITEM_STACK_AS_NMS_COPY_METHOD.setAccessible(true);
 
             ENTITY_ITEM_STACK_CLASS = Class.forName(NET_MINECRAFT_SERVER_PACKAGE + "ItemStack");

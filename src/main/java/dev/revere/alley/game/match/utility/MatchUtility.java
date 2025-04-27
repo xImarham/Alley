@@ -87,11 +87,11 @@ public class MatchUtility {
                     loserComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(CC.translate(loserHover)).create()));
 
                     match.sendCombinedSpigotMessage(
-                        new TextComponent(CC.translate(parts[0])),
-                        winnerComponent,
-                        new TextComponent(CC.translate(loserParts[0])),
-                        loserComponent,
-                        new TextComponent(loserParts.length > 1 ? CC.translate(loserParts[1]) : "")
+                            new TextComponent(CC.translate(parts[0])),
+                            winnerComponent,
+                            new TextComponent(CC.translate(loserParts[0])),
+                            loserComponent,
+                            new TextComponent(loserParts.length > 1 ? CC.translate(loserParts[1]) : "")
                     );
                 }
             } else if (line.contains("{winner}")) {
@@ -102,9 +102,9 @@ public class MatchUtility {
                 winnerComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(CC.translate(winnerHover)).create()));
 
                 match.sendCombinedSpigotMessage(
-                    new TextComponent(CC.translate(parts[0])),
-                    winnerComponent,
-                    new TextComponent(parts.length > 1 ? CC.translate(parts[1]) : "")
+                        new TextComponent(CC.translate(parts[0])),
+                        winnerComponent,
+                        new TextComponent(parts.length > 1 ? CC.translate(parts[1]) : "")
                 );
             } else if (line.contains("{loser}")) {
                 String[] parts = line.split("\\{loser}", 2);
@@ -114,9 +114,9 @@ public class MatchUtility {
                 loserComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(CC.translate(loserHover)).create()));
 
                 match.sendCombinedSpigotMessage(
-                    new TextComponent(CC.translate(parts[0])),
-                    loserComponent,
-                    new TextComponent(parts.length > 1 ? CC.translate(parts[1]) : "")
+                        new TextComponent(CC.translate(parts[0])),
+                        loserComponent,
+                        new TextComponent(parts.length > 1 ? CC.translate(parts[1]) : "")
                 );
             } else {
                 match.sendMessage(CC.translate(line));
@@ -143,8 +143,8 @@ public class MatchUtility {
 
         for (String line : config.getStringList(path + "format")) {
             String translated = CC.translate(line)
-                                    .replace("{winner}", winnerTeamName)
-                                    .replace("{loser}", loserTeamName);
+                    .replace("{winner}", winnerTeamName)
+                    .replace("{loser}", loserTeamName);
             match.sendMessage(translated);
         }
 
@@ -158,7 +158,7 @@ public class MatchUtility {
             TextComponent playerComponent = new TextComponent(CC.translate("&7- &f" + playerName));
             playerComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/inventory " + playerName));
             playerComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-                new ComponentBuilder(CC.translate("&eClick to view " + playerName + "'s inventory")).create()));
+                    new ComponentBuilder(CC.translate("&eClick to view " + playerName + "'s inventory")).create()));
 
             match.sendCombinedSpigotMessage(playerComponent);
         }
@@ -173,7 +173,7 @@ public class MatchUtility {
             TextComponent playerComponent = new TextComponent(CC.translate("&7- &f" + playerName));
             playerComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/inventory " + playerName));
             playerComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-                new ComponentBuilder(CC.translate("&eClick to view " + playerName + "'s inventory")).create()));
+                    new ComponentBuilder(CC.translate("&eClick to view " + playerName + "'s inventory")).create()));
 
             match.sendCombinedSpigotMessage(playerComponent);
         }

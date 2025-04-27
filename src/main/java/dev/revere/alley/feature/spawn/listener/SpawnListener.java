@@ -44,8 +44,8 @@ public class SpawnListener implements Listener {
 
         if (player.getGameMode() == GameMode.SURVIVAL
                 && (profile.getState().equals(EnumProfileState.LOBBY)
-                        || profile.getState().equals(EnumProfileState.EDITING)
-                        || profile.getState().equals(EnumProfileState.WAITING))) {
+                || profile.getState().equals(EnumProfileState.EDITING)
+                || profile.getState().equals(EnumProfileState.WAITING))) {
             event.setCancelled(true);
         }
     }
@@ -57,8 +57,8 @@ public class SpawnListener implements Listener {
 
         if (player.getGameMode() == GameMode.SURVIVAL
                 && (profile.getState().equals(EnumProfileState.LOBBY)
-                        || profile.getState().equals(EnumProfileState.EDITING)
-                        || profile.getState().equals(EnumProfileState.WAITING))) {
+                || profile.getState().equals(EnumProfileState.EDITING)
+                || profile.getState().equals(EnumProfileState.WAITING))) {
             event.setCancelled(true);
         }
     }
@@ -97,8 +97,8 @@ public class SpawnListener implements Listener {
 
             if (player.getGameMode() == GameMode.SURVIVAL
                     && (profile.getState().equals(EnumProfileState.LOBBY)
-                            || profile.getState().equals(EnumProfileState.EDITING)
-                            || profile.getState().equals(EnumProfileState.WAITING))) {
+                    || profile.getState().equals(EnumProfileState.EDITING)
+                    || profile.getState().equals(EnumProfileState.WAITING))) {
                 if (event.getClickedInventory() != null && event.getClickedInventory().equals(player.getInventory())) {
                     event.setCancelled(true);
                 }

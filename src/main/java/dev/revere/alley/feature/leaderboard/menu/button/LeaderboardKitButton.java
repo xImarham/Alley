@@ -34,34 +34,34 @@ public class LeaderboardKitButton extends Button {
         switch (this.type) {
             case RANKED:
                 return new ItemBuilder(this.kit.getIcon())
-                           .name(this.kit.getDisplayName())
-                           .durability(this.kit.getIconData())
-                           .hideMeta()
-                           .lore(this.leaderboard.stream()
-                                     .limit(10)
-                                     .map(data -> {
-                                         int currentRank = this.leaderboard.indexOf(data) + 1;
+                        .name(this.kit.getDisplayName())
+                        .durability(this.kit.getIconData())
+                        .hideMeta()
+                        .lore(this.leaderboard.stream()
+                                .limit(10)
+                                .map(data -> {
+                                    int currentRank = this.leaderboard.indexOf(data) + 1;
 
-                                         String rankNumber;
-                                         switch (currentRank) {
-                                             case 1:
-                                                 rankNumber = "&6&l✫1";
-                                                 break;
-                                             case 2:
-                                                 rankNumber = "&7&l✫2";
-                                                 break;
-                                             case 3:
-                                                 rankNumber = "&8&l✫3";
-                                                 break;
-                                             default:
-                                                 rankNumber = "&b" + currentRank + ".";
-                                                 break;
-                                         }
+                                    String rankNumber;
+                                    switch (currentRank) {
+                                        case 1:
+                                            rankNumber = "&6&l✫1";
+                                            break;
+                                        case 2:
+                                            rankNumber = "&7&l✫2";
+                                            break;
+                                        case 3:
+                                            rankNumber = "&8&l✫3";
+                                            break;
+                                        default:
+                                            rankNumber = "&b" + currentRank + ".";
+                                            break;
+                                    }
 
-                                         return rankNumber + " &f" + data.getName() + " &b- " + data.getElo();
-                                     })
-                                     .collect(Collectors.toList()))
-                           .build();
+                                    return rankNumber + " &f" + data.getName() + " &b- " + data.getElo();
+                                })
+                                .collect(Collectors.toList()))
+                        .build();
             default:
                 return this.inDevelopment();
         }
@@ -74,13 +74,13 @@ public class LeaderboardKitButton extends Button {
      */
     private ItemStack inDevelopment() {
         return new ItemBuilder(Material.BARRIER)
-                   .name("&c&lComing Soon")
-                   .lore(
-                       "&7This leaderboard is currently",
-                       "&7being worked on. Please check",
-                       "&7back later."
-                   )
-                   .build();
+                .name("&c&lComing Soon")
+                .lore(
+                        "&7This leaderboard is currently",
+                        "&7being worked on. Please check",
+                        "&7back later."
+                )
+                .build();
     }
 
 }

@@ -67,9 +67,9 @@ public class ListenerUtil {
      * List of pressure plate materials.
      */
     private final List<Material> pressurePlates = Arrays.asList(
-        Material.WOOD_PLATE,
-        Material.STONE_PLATE,
-        Material.IRON_PLATE,
-        Material.GOLD_PLATE
+            Material.WOOD_PLATE,
+            Material.STONE_PLATE,
+            Material.IRON_PLATE,
+            Material.GOLD_PLATE
     );
 }

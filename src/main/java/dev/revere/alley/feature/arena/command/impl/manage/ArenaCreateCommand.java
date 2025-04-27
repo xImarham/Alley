@@ -36,9 +36,9 @@ public class ArenaCreateCommand extends BaseCommand {
 
         String arenaName = args[0];
         EnumArenaType arenaType = Arrays.stream(EnumArenaType.values())
-                                      .filter(type -> type.name().equalsIgnoreCase(args[1]))
-                                      .findFirst()
-                                      .orElse(null);
+                .filter(type -> type.name().equalsIgnoreCase(args[1]))
+                .findFirst()
+                .orElse(null);
 
         if (arenaType == null) {
             player.sendMessage(CC.translate("&cInvalid arena type! Valid types: SHARED, STANDALONE, FFA"));

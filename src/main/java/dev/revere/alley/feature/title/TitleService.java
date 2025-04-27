@@ -50,15 +50,15 @@ public class TitleService {
 
         if (missingKits.get() > 0) {
             TextFormatter.centerText(
-                Arrays.asList(
-                    "",
-                    "&c&lINFO",
-                    "&fMissing &c" + missingKits + " &fkits in titles.yml.",
-                    "&fDefault values have been applied.",
-                    "&fPlease check the &cfile &fand adjust as needed.",
-                    ""
-                ),
-                60
+                    Arrays.asList(
+                            "",
+                            "&c&lINFO",
+                            "&fMissing &c" + missingKits + " &fkits in titles.yml.",
+                            "&fDefault values have been applied.",
+                            "&fPlease check the &cfile &fand adjust as needed.",
+                            ""
+                    ),
+                    60
             ).forEach(line -> Bukkit.getConsoleSender().sendMessage(CC.translate(line)));
         }
 

@@ -386,9 +386,9 @@ public abstract class AbstractMatch {
     protected void notifySpectators(String message) {
         if (this.spectators == null) return;
         this.spectators.stream()
-            .map(uuid -> Alley.getInstance().getServer().getPlayer(uuid))
-            .filter(Objects::nonNull)
-            .forEach(player -> player.sendMessage(CC.translate(message)));
+                .map(uuid -> Alley.getInstance().getServer().getPlayer(uuid))
+                .filter(Objects::nonNull)
+                .forEach(player -> player.sendMessage(CC.translate(message)));
     }
 
     protected void notifyAll(String message) {
@@ -578,11 +578,11 @@ public abstract class AbstractMatch {
      */
     public MatchGamePlayerImpl getGamePlayer(Player player) {
         return getParticipants().stream()
-                   .map(GameParticipant::getPlayers)
-                   .flatMap(List::stream)
-                   .filter(gamePlayer -> gamePlayer.getUuid().equals(player.getUniqueId()))
-                   .findFirst()
-                   .orElse(null);
+                .map(GameParticipant::getPlayers)
+                .flatMap(List::stream)
+                .filter(gamePlayer -> gamePlayer.getUuid().equals(player.getUniqueId()))
+                .findFirst()
+                .orElse(null);
     }
 
     /**
@@ -656,9 +656,9 @@ public abstract class AbstractMatch {
      */
     public GameParticipant<MatchGamePlayerImpl> getParticipant(Player player) {
         return getParticipants().stream()
-                   .filter(gameParticipant -> gameParticipant.containsPlayer(player.getUniqueId()))
-                   .findFirst()
-                   .orElse(null);
+                .filter(gameParticipant -> gameParticipant.containsPlayer(player.getUniqueId()))
+                .findFirst()
+                .orElse(null);
     }
 
     /**
@@ -707,12 +707,12 @@ public abstract class AbstractMatch {
         String winOrWins = requiredWinsToUnlock == 1 ? "win" : "wins";
 
         Arrays.asList(
-            "&b&lProgress",
-            " &b&l● &fUnlock &b" + nextRank + " &fwith " + requiredWinsToUnlock + " more " + winOrWins + "!",
-            "  &7(" + progressBar + "&7) " + progressPercent,
-            " &b&l● &fDaily Streak: &b" + "N/A" + " &f(Best: " + "N/A" + ")",
-            " &b&l● &fWin Streak: &b" + "N/A" + " &f(Best: " + "N/A" + ")",
-            ""
+                "&b&lProgress",
+                " &b&l● &fUnlock &b" + nextRank + " &fwith " + requiredWinsToUnlock + " more " + winOrWins + "!",
+                "  &7(" + progressBar + "&7) " + progressPercent,
+                " &b&l● &fDaily Streak: &b" + "N/A" + " &f(Best: " + "N/A" + ")",
+                " &b&l● &fWin Streak: &b" + "N/A" + " &f(Best: " + "N/A" + ")",
+                ""
         ).forEach(line -> winner.sendMessage(CC.translate(line)));
     }
 

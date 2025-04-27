@@ -28,15 +28,15 @@ public class UnrankedButton extends Button {
     public ItemStack getButtonItem(Player player) {
         Kit kit = queue.getKit();
         return new ItemBuilder(kit.getIcon()).name(kit.getDisplayName()).durability(kit.getIconData()).hideMeta().lore(Arrays.asList(
-            "&7" + kit.getDescription(),
-            "",
-            "&fIn Queue: &b" + queue.getProfiles().size(),
-            "&fIn Fights: &b" + queue.getQueueFightCount(),
-            "",
-            "&fTotal Wins: &b" + Alley.getInstance().getProfileService().getProfile(player.getUniqueId()).getProfileData().getUnrankedKitData().get(kit.getName()).getWins(),
-            "&fTotal Losses: &b" + Alley.getInstance().getProfileService().getProfile(player.getUniqueId()).getProfileData().getUnrankedKitData().get(kit.getName()).getLosses(),
-            "",
-            "&fClick to join the &b" + kit.getName() + " &fqueue!")
+                "&7" + kit.getDescription(),
+                "",
+                "&fIn Queue: &b" + queue.getProfiles().size(),
+                "&fIn Fights: &b" + queue.getQueueFightCount(),
+                "",
+                "&fTotal Wins: &b" + Alley.getInstance().getProfileService().getProfile(player.getUniqueId()).getProfileData().getUnrankedKitData().get(kit.getName()).getWins(),
+                "&fTotal Losses: &b" + Alley.getInstance().getProfileService().getProfile(player.getUniqueId()).getProfileData().getUnrankedKitData().get(kit.getName()).getLosses(),
+                "",
+                "&fClick to join the &b" + kit.getName() + " &fqueue!")
         ).hideMeta().build();
     }
 

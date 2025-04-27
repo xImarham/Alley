@@ -18,13 +18,13 @@ public class BackButton extends Button {
     @Override
     public ItemStack getButtonItem(Player player) {
         return new ItemBuilder(Material.ARROW)
-                   .name("&c&lBack")
-                   .durability(0)
-                   .lore(Arrays.asList(
-                       "&cClick here to return to",
-                       "&cthe previous menu.")
-                   )
-                   .build();
+                .name("&c&lBack")
+                .durability(0)
+                .lore(Arrays.asList(
+                        "&cClick here to return to",
+                        "&cthe previous menu.")
+                )
+                .build();
     }
 
     @Override

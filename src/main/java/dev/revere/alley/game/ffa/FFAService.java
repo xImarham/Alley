@@ -81,8 +81,8 @@ public class FFAService {
      */
     public Optional<AbstractFFAMatch> getMatchByPlayer(Player player) {
         return this.matches.stream()
-                   .filter(match -> match.getPlayers().contains(player))
-                   .findFirst();
+                .filter(match -> match.getPlayers().contains(player))
+                .findFirst();
     }
 
     /**

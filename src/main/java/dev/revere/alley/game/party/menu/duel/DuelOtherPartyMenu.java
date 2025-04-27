@@ -42,10 +42,10 @@ public class DuelOtherPartyMenu extends PaginatedMenu {
         Map<Integer, Button> buttons = new HashMap<>();
 
         Alley.getInstance().getPartyService().getParties().stream()
-            .sorted(Comparator.comparing(party -> party.getLeader().getName()))
-            //.filter(party -> !party.getLeader().equals(player))
-            .sorted(Comparator.comparingInt(party -> party.getMembers().size()))
-            .forEach(party -> buttons.put(buttons.size(), new DuelOtherPartyButton(party)))
+                .sorted(Comparator.comparing(party -> party.getLeader().getName()))
+                //.filter(party -> !party.getLeader().equals(player))
+                .sorted(Comparator.comparingInt(party -> party.getMembers().size()))
+                .forEach(party -> buttons.put(buttons.size(), new DuelOtherPartyButton(party)))
         ;
 
         return buttons;
@@ -66,9 +66,9 @@ public class DuelOtherPartyMenu extends PaginatedMenu {
             List<String> lore = getLore();
 
             ItemStack itemStack = new ItemBuilder(new ItemStack(Material.SKULL_ITEM, 1, (short) 3))
-                                      .name("&b&l" + party.getLeader().getName() + "'s Party")
-                                      .lore(lore)
-                                      .build();
+                    .name("&b&l" + party.getLeader().getName() + "'s Party")
+                    .lore(lore)
+                    .build();
             SkullMeta meta = (SkullMeta) itemStack.getItemMeta();
             meta.setOwner(Bukkit.getPlayer(party.getLeader().getName()).getName());
             itemStack.setItemMeta(meta);

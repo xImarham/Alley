@@ -239,26 +239,26 @@ public class Alley extends JavaPlugin {
 
     private void registerListeners() {
         Arrays.asList(
-            new ProfileListener(this.profileService),
-            new HotbarListener(),
-            new PartyListener(),
-            new MatchListener(this),
-            new MatchInteractListener(this),
-            new MatchDisconnectListener(this),
-            new MatchDamageListener(this),
-            new MatchBlockListener(this),
-            new ArenaListener(),
-            new MenuListener(),
-            new SpawnListener(),
-            new FFAListener(this),
-            new FFACuboidListener(this.ffaSpawnService.getCuboid(), this),
-            new WorldListener(),
-            new EmojiListener(this),
-            new CombatListener(this),
-            new BotFightListener(),
-            new BotFightDeathListener(),
-            new ParkourListener(this),
-            new CoreChatListener(this)
+                new ProfileListener(this.profileService),
+                new HotbarListener(),
+                new PartyListener(),
+                new MatchListener(this),
+                new MatchInteractListener(this),
+                new MatchDisconnectListener(this),
+                new MatchDamageListener(this),
+                new MatchBlockListener(this),
+                new ArenaListener(),
+                new MenuListener(),
+                new SpawnListener(),
+                new FFAListener(this),
+                new FFACuboidListener(this.ffaSpawnService.getCuboid(), this),
+                new WorldListener(),
+                new EmojiListener(this),
+                new CombatListener(this),
+                new BotFightListener(),
+                new BotFightDeathListener(),
+                new ParkourListener(this),
+                new CoreChatListener(this)
         ).forEach(listener -> getServer().getPluginManager().registerEvents(listener, this));
     }
 

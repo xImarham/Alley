@@ -48,8 +48,8 @@ public class CosmeticSetCommand extends BaseCommand {
         }
 
         ICosmetic cosmetic = repository.getCosmetics().stream()
-                                 .filter(c -> c.getName().equalsIgnoreCase(cosmeticName))
-                                 .findFirst().orElse(null);
+                .filter(c -> c.getName().equalsIgnoreCase(cosmeticName))
+                .findFirst().orElse(null);
 
         if (cosmetic == null) {
             player.sendMessage(CC.translate("&cInvalid cosmetic name"));

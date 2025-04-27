@@ -28,7 +28,7 @@ public class MongoProfileImpl implements IProfile {
     public void saveProfile(Profile profile) {
         Document document = MongoUtility.toDocument(profile);
         Alley.getInstance().getProfileService().getCollection()
-            .replaceOne(Filters.eq("uuid", profile.getUuid().toString()), document, new ReplaceOptions().upsert(true));
+                .replaceOne(Filters.eq("uuid", profile.getUuid().toString()), document, new ReplaceOptions().upsert(true));
     }
 
     /**
@@ -67,9 +67,9 @@ public class MongoProfileImpl implements IProfile {
         archiveDocument.put("data", MongoUtility.toDocument(profile));
 
         Alley.getInstance().getMongoService().getMongoDatabase().getCollection("profile_archives").updateOne(
-            new Document("uuid", profile.getUuid().toString()),
-            new Document("$push", new Document("archives", archiveDocument)),
-            new UpdateOptions().upsert(true)
+                new Document("uuid", profile.getUuid().toString()),
+                new Document("$push", new Document("archives", archiveDocument)),
+                new UpdateOptions().upsert(true)
         );
     }
 }

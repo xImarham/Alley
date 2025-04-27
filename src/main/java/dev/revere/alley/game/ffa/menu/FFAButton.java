@@ -23,18 +23,18 @@ public class FFAButton extends Button {
     @Override
     public ItemStack getButtonItem(Player player) {
         return new ItemBuilder(match.getKit().getIcon())
-                   .name("&b&l" + match.getName())
-                   .durability(match.getKit().getIconData())
-                   .lore(Arrays.asList(
-                       "",
-                       "&fPlaying: &b" + match.getPlayers().size() + "/" + match.getMaxPlayers(),
-                       "&fArena: &b" + match.getArena().getName(),
-                       "&fKit: &b" + match.getKit().getName(),
-                       "",
-                       "&fClick to join the &b" + match.getName() + " &fqueue.")
-                   )
-                   .hideMeta()
-                   .build();
+                .name("&b&l" + match.getName())
+                .durability(match.getKit().getIconData())
+                .lore(Arrays.asList(
+                        "",
+                        "&fPlaying: &b" + match.getPlayers().size() + "/" + match.getMaxPlayers(),
+                        "&fArena: &b" + match.getArena().getName(),
+                        "&fKit: &b" + match.getKit().getName(),
+                        "",
+                        "&fClick to join the &b" + match.getName() + " &fqueue.")
+                )
+                .hideMeta()
+                .build();
     }
 
     @Override

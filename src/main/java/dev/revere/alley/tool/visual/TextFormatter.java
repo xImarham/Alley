@@ -63,6 +63,6 @@ public class TextFormatter {
      */
     private String stripColorCodes(String text) {
         return text.replaceAll("(?i)§[0-9A-FK-OR]", "")
-                   .replaceAll("(?i)&[0-9A-FK-OR]", "");
+                .replaceAll("(?i)&[0-9A-FK-OR]", "");
     }
 }

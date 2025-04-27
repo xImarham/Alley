@@ -67,8 +67,8 @@ public class ProfileUnrankedKitData {
     public DivisionTier getTier() {
         Division division = this.getDivision();
         return division.getTiers().stream()
-                   .filter(tier -> tier.getName().equals(this.tier))
-                   .findFirst()
-                   .orElse(null);
+                .filter(tier -> tier.getName().equals(this.tier))
+                .findFirst()
+                .orElse(null);
     }
 }

@@ -97,9 +97,9 @@ public class Kit {
      */
     public boolean isSettingEnabled(String name) {
         KitSetting kitSetting = this.kitSettings.stream()
-                                    .filter(setting -> setting.getName().equals(name))
-                                    .findFirst()
-                                    .orElse(null);
+                .filter(setting -> setting.getName().equals(name))
+                .findFirst()
+                .orElse(null);
 
         return kitSetting != null && kitSetting.isEnabled();
     }
@@ -112,9 +112,9 @@ public class Kit {
      */
     public boolean isSettingEnabled(Class<? extends KitSetting> clazz) {
         KitSetting kitSetting = this.kitSettings.stream()
-                                    .filter(setting -> setting.getClass().equals(clazz))
-                                    .findFirst()
-                                    .orElse(null);
+                .filter(setting -> setting.getClass().equals(clazz))
+                .findFirst()
+                .orElse(null);
 
         return kitSetting != null && kitSetting.isEnabled();
     }

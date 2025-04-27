@@ -37,11 +37,11 @@ public class PartyInfoCommand extends BaseCommand {
         UUID leaderUUID = party.getLeader().getUniqueId();
 
         String members = party.getMembers().stream()
-                             .filter(uuid -> !uuid.equals(leaderUUID))
-                             .map(uuid -> this.plugin.getServer().getPlayer(uuid))
-                             .filter(Objects::nonNull)
-                             .map(Player::getName)
-                             .collect(Collectors.joining(", "));
+                .filter(uuid -> !uuid.equals(leaderUUID))
+                .map(uuid -> this.plugin.getServer().getPlayer(uuid))
+                .filter(Objects::nonNull)
+                .map(Player::getName)
+                .collect(Collectors.joining(", "));
 
         FileConfiguration config = this.plugin.getConfigService().getConfig("messages.yml");
         List<String> info = config.getStringList("party.info-command.text");
@@ -49,8 +49,8 @@ public class PartyInfoCommand extends BaseCommand {
 
         for (String line : info) {
             player.sendMessage(CC.translate(line)
-                                   .replace("{leader}", this.plugin.getServer().getPlayer(leaderUUID).getName())
-                                   .replace("{members}", members.isEmpty() ? noMembersFormat : members));
+                    .replace("{leader}", this.plugin.getServer().getPlayer(leaderUUID).getName())
+                    .replace("{members}", members.isEmpty() ? noMembersFormat : members));
         }
     }
 }

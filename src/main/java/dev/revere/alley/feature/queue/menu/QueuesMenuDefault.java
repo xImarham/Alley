@@ -56,30 +56,30 @@ public class QueuesMenuDefault extends Menu {
         QueueService queueService = this.plugin.getQueueService();
 
         buttons.put(11, new QueuesButtonDefault("&b&lSolos", Material.DIAMOND_SWORD, 0, Arrays.asList(
-            "&7Casual 1v1s with",
-            "&7no loss penalty.",
-            "",
-            "&bPlayers: &f" + queueService.getPlayerCountOfGameType("Unranked"),
-            "",
-            "&aClick to play!"
+                "&7Casual 1v1s with",
+                "&7no loss penalty.",
+                "",
+                "&bPlayers: &f" + queueService.getPlayerCountOfGameType("Unranked"),
+                "",
+                "&aClick to play!"
         )));
 
         buttons.put(13, new QueuesButtonDefault("&b&lBots", Material.GOLD_SWORD, 0, Arrays.asList(
-            "&7Practice against bots",
-            "&7to improve your skills.",
-            "",
-            "&bPlayers: &f" + queueService.getPlayerCountOfGameType("Bots"),
-            "",
-            "&aClick to play!"
+                "&7Practice against bots",
+                "&7to improve your skills.",
+                "",
+                "&bPlayers: &f" + queueService.getPlayerCountOfGameType("Bots"),
+                "",
+                "&aClick to play!"
         )));
 
         buttons.put(15, new QueuesButtonDefault("&b&lFFA", Material.GOLD_AXE, 0, Arrays.asList(
-            "&7Free for all with",
-            "&7infinity respawns.",
-            "",
-            "&bPlayers: &f" + queueService.getPlayerCountOfGameType("FFA"),
-            "",
-            "&aClick to play!"
+                "&7Free for all with",
+                "&7infinity respawns.",
+                "",
+                "&bPlayers: &f" + queueService.getPlayerCountOfGameType("FFA"),
+                "",
+                "&aClick to play!"
         )));
 
         this.addGlass(buttons, (byte) 15);
@@ -102,11 +102,11 @@ public class QueuesMenuDefault extends Menu {
         @Override
         public ItemStack getButtonItem(Player player) {
             return new ItemBuilder(this.material)
-                       .name(this.displayName)
-                       .durability(this.durability)
-                       .lore(this.lore)
-                       .hideMeta()
-                       .build();
+                    .name(this.displayName)
+                    .durability(this.durability)
+                    .lore(this.lore)
+                    .hideMeta()
+                    .build();
         }
 
         @Override

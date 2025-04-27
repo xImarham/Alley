@@ -38,15 +38,15 @@ public class FFACommand extends BaseCommand {
         Player player = command.getPlayer();
 
         Arrays.asList(
-            "",
-            "&b&lFFA Commands",
-            " &f● &b/ffa kick &7| Kick a player out of FFA",
-            " &f● &b/ffa list &7| List current FFA matches",
-            " &f● &b/ffa listplayers &7| List all players playing on FFA",
-            " &f● &b/ffa maxplayers &7| Set the max player count",
-            " &f● &b/ffa setspawn &7| Set the spawn location for FFA",
-            " &f● &b/ffa setsafezone &7| Set the safezone for FFA",
-            ""
+                "",
+                "&b&lFFA Commands",
+                " &f● &b/ffa kick &7| Kick a player out of FFA",
+                " &f● &b/ffa list &7| List current FFA matches",
+                " &f● &b/ffa listplayers &7| List all players playing on FFA",
+                " &f● &b/ffa maxplayers &7| Set the max player count",
+                " &f● &b/ffa setspawn &7| Set the spawn location for FFA",
+                " &f● &b/ffa setsafezone &7| Set the safezone for FFA",
+                ""
         ).forEach(line -> player.sendMessage(CC.translate(line)));
     }
 }

@@ -84,19 +84,19 @@ public class ProfileData {
      */
     private int calculateGlobalElo(Profile profile) {
         List<Kit> rankedKits = Alley.getInstance().getKitService().getKits().stream()
-                                   .filter(kit -> kit.isSettingEnabled(KitSettingRankedImpl.class))
-                                   .collect(Collectors.toList());
+                .filter(kit -> kit.isSettingEnabled(KitSettingRankedImpl.class))
+                .collect(Collectors.toList());
 
         if (rankedKits.isEmpty()) {
             return 0;
         }
 
         int totalElo = rankedKits.stream()
-                           .mapToInt(kit -> {
-                               ProfileRankedKitData kitData = profile.getProfileData().getRankedKitData().get(kit.getName());
-                               return kitData != null ? kitData.getElo() : 0;
-                           })
-                           .sum();
+                .mapToInt(kit -> {
+                    ProfileRankedKitData kitData = profile.getProfileData().getRankedKitData().get(kit.getName());
+                    return kitData != null ? kitData.getElo() : 0;
+                })
+                .sum();
 
         return totalElo / rankedKits.size();
     }
@@ -129,10 +129,10 @@ public class ProfileData {
 
         if (!newLevel.equals(previousLevel)) {
             Arrays.asList(
-                "",
-                "&b&lNEW LEVEL &f| &a&lCONGRATULATIONS!",
-                " &fYou have reached &b" + newLevel + " &fin the global ranking system.",
-                ""
+                    "",
+                    "&b&lNEW LEVEL &f| &a&lCONGRATULATIONS!",
+                    " &fYou have reached &b" + newLevel + " &fin the global ranking system.",
+                    ""
             ).forEach(line -> Bukkit.getPlayer(profile.getUuid()).sendMessage(CC.translate(line)));
         }
     }

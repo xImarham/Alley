@@ -60,19 +60,19 @@ public class KitService {
             String disclaimer = config.getString(key + ".disclaimer");
 
             Kit kit = new Kit(
-                name,
-                config.getString(key + ".displayname"),
-                config.getString(key + ".description"),
-                config.getBoolean(key + ".enabled"),
-                config.getInt(key + ".unrankedslot"),
-                config.getInt(key + ".rankedslot"),
-                config.getInt(key + ".editorslot"),
-                config.getInt(key + ".ffa.slot"),
-                inventory,
-                armor,
-                icon,
-                iconData,
-                disclaimer
+                    name,
+                    config.getString(key + ".displayname"),
+                    config.getString(key + ".description"),
+                    config.getBoolean(key + ".enabled"),
+                    config.getInt(key + ".unrankedslot"),
+                    config.getInt(key + ".rankedslot"),
+                    config.getInt(key + ".editorslot"),
+                    config.getInt(key + ".ffa.slot"),
+                    inventory,
+                    armor,
+                    icon,
+                    iconData,
+                    disclaimer
             );
 
             this.setupFFA(kit, config, key);
@@ -258,19 +258,19 @@ public class KitService {
      */
     public void createKit(String kitName, ItemStack[] inventory, ItemStack[] armor, Material icon, int slot) {
         Kit kit = new Kit(
-            kitName,
-            this.plugin.getConfigService().getSettingsConfig().getString("kit.default-name").replace("{kit-name}", kitName),
-            this.plugin.getConfigService().getSettingsConfig().getString("kit.default-description").replace("{kit-name}", kitName),
-            true,
-            slot,
-            0,
-            0,
-            0,
-            inventory,
-            armor,
-            icon,
-            (byte) 0,
-            kitName + " kit disclaimer."
+                kitName,
+                this.plugin.getConfigService().getSettingsConfig().getString("kit.default-name").replace("{kit-name}", kitName),
+                this.plugin.getConfigService().getSettingsConfig().getString("kit.default-description").replace("{kit-name}", kitName),
+                true,
+                slot,
+                0,
+                0,
+                0,
+                inventory,
+                armor,
+                icon,
+                (byte) 0,
+                kitName + " kit disclaimer."
         );
 
         this.plugin.getKitSettingService().applyAllSettingsToKit(kit);

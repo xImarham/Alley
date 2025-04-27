@@ -77,25 +77,25 @@ public class MatchFFAImpl extends AbstractMatch {
         super.handleRoundEnd();
 
         this.participants.stream()
-            .filter(participant -> !participant.isAllDead())
-            .findFirst()
-            .ifPresent(remaining -> {
-                this.winner = remaining;
-                this.winner.setEliminated(false);
+                .filter(participant -> !participant.isAllDead())
+                .findFirst()
+                .ifPresent(remaining -> {
+                    this.winner = remaining;
+                    this.winner.setEliminated(false);
 
-                // temporarily, couldnt be asked to mess with clickables again
+                    // temporarily, couldnt be asked to mess with clickables again
 
-                this.sendMessage("Winner: " + this.winner.getPlayer().getUsername());
+                    this.sendMessage("Winner: " + this.winner.getPlayer().getUsername());
 
-                String losers = this.participants.stream()
-                                    .filter(participant -> participant != this.winner)
-                                    .map(GameParticipant::getPlayer)
-                                    .map(MatchGamePlayerImpl::getUsername)
-                                    .reduce((a, b) -> a + ", " + b)
-                                    .orElse("None");
+                    String losers = this.participants.stream()
+                            .filter(participant -> participant != this.winner)
+                            .map(GameParticipant::getPlayer)
+                            .map(MatchGamePlayerImpl::getUsername)
+                            .reduce((a, b) -> a + ", " + b)
+                            .orElse("None");
 
-                this.sendMessage("Losers: " + losers);
-            })
+                    this.sendMessage("Losers: " + losers);
+                })
         ;
     }
 }

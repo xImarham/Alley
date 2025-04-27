@@ -103,7 +103,7 @@ public class MatchRegularImpl extends AbstractMatch {
             Player teamPlayer = gamePlayer.getPlayer();
 
             teamPlayer.getInventory().all(Material.WOOL).forEach((key, value) ->
-                                                                     teamPlayer.getInventory().setItem(key, new ItemBuilder(Material.WOOL).durability(woolColor).amount(64).build())
+                    teamPlayer.getInventory().setItem(key, new ItemBuilder(Material.WOOL).durability(woolColor).amount(64).build())
             );
 
             teamPlayer.updateInventory();
@@ -179,18 +179,18 @@ public class MatchRegularImpl extends AbstractMatch {
         String loserIndicatorColor = config.getString("match.ended.elo-changes.loser-indicator-color", "&c");
 
         list.replaceAll(string -> string
-                                      .replace("{winner}", winnerName)
-                                      .replace("{loser}", loserName)
-                                      .replace("{old-winner-elo}", String.valueOf(oldEloWinner))
-                                      .replace("{old-loser-elo}", String.valueOf(oldEloLoser))
-                                      .replace("{new-winner-elo}", String.valueOf(newEloWinner))
-                                      .replace("{new-loser-elo}", String.valueOf(newEloLoser))
-                                      .replace("{winner-indicator}", newEloWinner > oldEloWinner ? "+" : "-")
-                                      .replace("{loser-indicator}", newEloLoser > oldEloLoser ? "+" : "-")
-                                      .replace("{winner-color}", newEloWinner > oldEloWinner ? winnerIndicatorColor : loserIndicatorColor)
-                                      .replace("{loser-color}", newEloLoser > oldEloLoser ? winnerIndicatorColor : loserIndicatorColor)
-                                      .replace("{math-winner-elo}", String.valueOf(Math.abs(oldEloWinner - newEloWinner)))
-                                      .replace("{math-loser-elo}", String.valueOf(Math.abs(oldEloLoser - newEloLoser)))
+                .replace("{winner}", winnerName)
+                .replace("{loser}", loserName)
+                .replace("{old-winner-elo}", String.valueOf(oldEloWinner))
+                .replace("{old-loser-elo}", String.valueOf(oldEloLoser))
+                .replace("{new-winner-elo}", String.valueOf(newEloWinner))
+                .replace("{new-loser-elo}", String.valueOf(newEloLoser))
+                .replace("{winner-indicator}", newEloWinner > oldEloWinner ? "+" : "-")
+                .replace("{loser-indicator}", newEloLoser > oldEloLoser ? "+" : "-")
+                .replace("{winner-color}", newEloWinner > oldEloWinner ? winnerIndicatorColor : loserIndicatorColor)
+                .replace("{loser-color}", newEloLoser > oldEloLoser ? winnerIndicatorColor : loserIndicatorColor)
+                .replace("{math-winner-elo}", String.valueOf(Math.abs(oldEloWinner - newEloWinner)))
+                .replace("{math-loser-elo}", String.valueOf(Math.abs(oldEloLoser - newEloLoser)))
         );
 
         list.forEach(this::notifyParticipants);

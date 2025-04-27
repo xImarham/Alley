@@ -86,7 +86,7 @@ public class AssembleThread extends Thread {
                         entry.setText(line);
                         entry.setup();
                         entry.send(
-                            this.assemble.getAssembleStyle().isDescending() ? cache-- : cache++
+                                this.assemble.getAssembleStyle().isDescending() ? cache-- : cache++
                         );
                     }
                 }

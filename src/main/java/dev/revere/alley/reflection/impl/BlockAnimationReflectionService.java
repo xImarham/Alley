@@ -51,7 +51,7 @@ public class BlockAnimationReflectionService implements IReflection {
                 }
 
                 players.forEach(
-                    player -> sendBreakAnimation(player, block, animationId, this.stage)
+                        player -> sendBreakAnimation(player, block, animationId, this.stage)
                 );
 
                 this.stage++;
@@ -68,9 +68,9 @@ public class BlockAnimationReflectionService implements IReflection {
      */
     public void sendBreakAnimation(Player player, Block block, int animationId, int stage) {
         PacketPlayOutBlockBreakAnimation packet = new PacketPlayOutBlockBreakAnimation(
-            animationId,
-            new BlockPosition(block.getX(), block.getY(), block.getZ()),
-            stage
+                animationId,
+                new BlockPosition(block.getX(), block.getY(), block.getZ()),
+                stage
         );
 
         this.sendPacket(player, packet);

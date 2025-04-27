@@ -43,10 +43,10 @@ public class LeaderboardService {
                     ProfileRankedKitData rankedData = profile.getProfileData().getRankedKitData().get(kit.getName());
                     if (rankedData != null) {
                         playerDataList.add(new LeaderboardPlayerData(
-                            profile.getName(),
-                            profile.getUuid(),
-                            rankedData.getElo(),
-                            kit
+                                profile.getName(),
+                                profile.getUuid(),
+                                rankedData.getElo(),
+                                kit
                         ));
                     }
                 }
@@ -66,10 +66,10 @@ public class LeaderboardService {
      */
     public List<LeaderboardPlayerData> getLeaderboardEntries(Kit kit, EnumLeaderboardType type) {
         return this.leaderboardEntries.getOrDefault(kit, new ArrayList<>())
-                   .stream()
-                   .filter(record -> record.getType() == type)
-                   .findFirst()
-                   .map(LeaderboardRecord::getParticipants)
-                   .orElse(new ArrayList<>());
+                .stream()
+                .filter(record -> record.getType() == type)
+                .findFirst()
+                .map(LeaderboardRecord::getParticipants)
+                .orElse(new ArrayList<>());
     }
 }

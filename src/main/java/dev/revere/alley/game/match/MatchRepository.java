@@ -42,9 +42,9 @@ public class MatchRepository {
      */
     public void createAndStartMatch(Kit kit, AbstractArena arena, GameParticipant<MatchGamePlayerImpl> participantA, GameParticipant<MatchGamePlayerImpl> participantB) {
         Queue matchingQueue = Alley.getInstance().getQueueService().getQueues().stream()
-                                  .filter(queue -> queue.getKit().equals(kit) && !queue.isRanked())
-                                  .findFirst()
-                                  .orElse(null);
+                .filter(queue -> queue.getKit().equals(kit) && !queue.isRanked())
+                .findFirst()
+                .orElse(null);
 
         AbstractMatch match;
 

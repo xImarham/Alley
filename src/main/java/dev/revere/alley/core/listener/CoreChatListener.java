@@ -34,7 +34,7 @@ public class CoreChatListener implements Listener {
         ICore core = this.plugin.getCoreAdapter().getCore();
 
         Bukkit.getOnlinePlayers().forEach(
-            onlinePlayer -> onlinePlayer.sendMessage(core.getChatFormat(player, event.getMessage(), CC.translate("&7: &f")))
+                onlinePlayer -> onlinePlayer.sendMessage(core.getChatFormat(player, event.getMessage(), CC.translate("&7: &f")))
         );
 
         event.setCancelled(true);

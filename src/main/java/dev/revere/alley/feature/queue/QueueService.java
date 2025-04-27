@@ -80,9 +80,9 @@ public class QueueService {
         }
 
         return (int) this.plugin.getProfileService().getProfiles().values().stream()
-                         .filter(profile -> profile.getState().equals(stateForQueue))
-                         .filter(profile -> this.isMatchForQueue(profile, queue))
-                         .count();
+                .filter(profile -> profile.getState().equals(stateForQueue))
+                .filter(profile -> this.isMatchForQueue(profile, queue))
+                .count();
     }
 
     /**

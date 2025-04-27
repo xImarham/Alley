@@ -37,8 +37,8 @@ public class CosmeticsMenu extends Menu {
         buttons.put(5, new SoundEffectButton());
 
         Alley.getInstance().getCosmeticRepository().getCosmeticRepositories().get(this.cosmeticType).getCosmetics().stream()
-            .filter(cosmetic -> cosmetic.getIcon() != null)
-            .forEach(cosmetic -> buttons.put(cosmetic.getSlot(), new CosmeticButton(cosmetic)));
+                .filter(cosmetic -> cosmetic.getIcon() != null)
+                .forEach(cosmetic -> buttons.put(cosmetic.getSlot(), new CosmeticButton(cosmetic)));
 
         this.addBorder(buttons, (byte) 15, 5);
 

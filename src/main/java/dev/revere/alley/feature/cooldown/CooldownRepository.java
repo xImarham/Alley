@@ -42,9 +42,9 @@ public class CooldownRepository {
      */
     public Cooldown getCooldown(UUID uuid, EnumCooldownType type) {
         return this.cooldowns.stream()
-                   .filter(triple -> triple.getA().equals(uuid) && triple.getB().equals(type))
-                   .map(MutableTriple::getC)
-                   .findFirst()
-                   .orElse(null);
+                .filter(triple -> triple.getA().equals(uuid) && triple.getB().equals(type))
+                .map(MutableTriple::getC)
+                .findFirst()
+                .orElse(null);
     }
 }

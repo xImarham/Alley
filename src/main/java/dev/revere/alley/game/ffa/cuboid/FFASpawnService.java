@@ -33,9 +33,9 @@ public class FFASpawnService extends CuboidService {
     public void loadCuboid() {
         FileConfiguration config = Alley.getInstance().getConfigService().getArenasConfig();
         AbstractArena arena = Alley.getInstance().getArenaService().getArenas().stream()
-                                  .filter(a -> a.getType() == EnumArenaType.FFA)
-                                  .findFirst()
-                                  .orElse(null);
+                .filter(a -> a.getType() == EnumArenaType.FFA)
+                .findFirst()
+                .orElse(null);
 
         if (arena == null) {
             Logger.logError("FFA arena not found!");

@@ -30,11 +30,11 @@ public class PracticeSettingsButton extends Button {
     @Override
     public ItemStack getButtonItem(Player player) {
         return new ItemBuilder(this.material)
-                   .name(this.displayName)
-                   .durability(this.durability)
-                   .lore(this.lore)
-                   .hideMeta()
-                   .build();
+                .name(this.displayName)
+                .durability(this.durability)
+                .lore(this.lore)
+                .hideMeta()
+                .build();
     }
 
     @Override

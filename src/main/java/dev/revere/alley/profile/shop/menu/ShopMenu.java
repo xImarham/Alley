@@ -32,35 +32,35 @@ public class ShopMenu extends Menu {
         SoundEffectRepository soundEffectRepository = new SoundEffectRepository();
         List<AbstractSoundEffect> soundEffects = soundEffectRepository.getCosmetics();
         int ownedSoundEffects = (int) soundEffects.stream()
-                                          .map(AbstractSoundEffect::getPermission)
-                                          .filter(player::hasPermission)
-                                          .count();
+                .map(AbstractSoundEffect::getPermission)
+                .filter(player::hasPermission)
+                .count();
 
         KillEffectRepository killEffectRepository = new KillEffectRepository();
         List<AbstractKillEffect> killEffects = killEffectRepository.getCosmetics();
         int ownedKillEffects = (int) killEffects.stream()
-                                         .map(AbstractKillEffect::getPermission)
-                                         .filter(player::hasPermission)
-                                         .count();
+                .map(AbstractKillEffect::getPermission)
+                .filter(player::hasPermission)
+                .count();
 
         buttons.put(21, new ShopButton("&b&lKill Effects", new ItemStack(Material.REDSTONE), Arrays.asList(
-            "",
-            "&fPurchase kill effects",
-            "&fto use in games.",
-            "",
-            "&fYou own &b" + ownedKillEffects + " &fkill effects.",
-            "",
-            "&aClick to view!"
+                "",
+                "&fPurchase kill effects",
+                "&fto use in games.",
+                "",
+                "&fYou own &b" + ownedKillEffects + " &fkill effects.",
+                "",
+                "&aClick to view!"
         )));
 
         buttons.put(23, new ShopButton("&b&lSound Effects", new ItemStack(Material.FEATHER), Arrays.asList(
-            "",
-            "&fPurchase sound effects",
-            "&fto use in games.",
-            "",
-            "&fYou own &b" + ownedSoundEffects + " &fsound effects.",
-            "",
-            "&aClick to view!"
+                "",
+                "&fPurchase sound effects",
+                "&fto use in games.",
+                "",
+                "&fYou own &b" + ownedSoundEffects + " &fsound effects.",
+                "",
+                "&aClick to view!"
         )));
 
         addBorder(buttons, (byte) 15, 5);

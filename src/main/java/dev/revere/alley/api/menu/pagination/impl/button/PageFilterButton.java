@@ -55,9 +55,9 @@ public class PageFilterButton<T> extends Button {
         lore.add(CC.MENU_BAR);
 
         return new ItemBuilder(Material.HOPPER)
-                   .name("&7Filters")
-                   .lore(lore)
-                   .build();
+                .name("&7Filters")
+                .lore(lore)
+                .build();
     }
 
     @Override

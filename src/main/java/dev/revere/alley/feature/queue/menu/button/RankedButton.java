@@ -30,16 +30,16 @@ public class RankedButton extends Button {
     public ItemStack getButtonItem(Player player) {
         Kit kit = queue.getKit();
         return new ItemBuilder(kit.getIcon()).name(kit.getDisplayName()).durability(kit.getIconData()).hideMeta().lore(Arrays.asList(
-            "&7" + kit.getDescription(),
-            "",
-            "&fIn Queue: &b" + queue.getProfiles().size(),
-            "&fIn Fights: &b" + queue.getQueueFightCount(),
-            "",
-            "&fTotal Wins: &b" + Alley.getInstance().getProfileService().getProfile(player.getUniqueId()).getProfileData().getRankedKitData().get(kit.getName()).getWins(),
-            "&fTotal Losses: &b" + Alley.getInstance().getProfileService().getProfile(player.getUniqueId()).getProfileData().getRankedKitData().get(kit.getName()).getLosses(),
-            "&fElo: &b" + Alley.getInstance().getProfileService().getProfile(player.getUniqueId()).getProfileData().getRankedKitData().get(kit.getName()).getElo(),
-            "",
-            "&fClick to join the &b" + kit.getName() + " &fqueue!")
+                "&7" + kit.getDescription(),
+                "",
+                "&fIn Queue: &b" + queue.getProfiles().size(),
+                "&fIn Fights: &b" + queue.getQueueFightCount(),
+                "",
+                "&fTotal Wins: &b" + Alley.getInstance().getProfileService().getProfile(player.getUniqueId()).getProfileData().getRankedKitData().get(kit.getName()).getWins(),
+                "&fTotal Losses: &b" + Alley.getInstance().getProfileService().getProfile(player.getUniqueId()).getProfileData().getRankedKitData().get(kit.getName()).getLosses(),
+                "&fElo: &b" + Alley.getInstance().getProfileService().getProfile(player.getUniqueId()).getProfileData().getRankedKitData().get(kit.getName()).getElo(),
+                "",
+                "&fClick to join the &b" + kit.getName() + " &fqueue!")
         ).hideMeta().build();
     }
 
@@ -53,11 +53,11 @@ public class RankedButton extends Button {
         if (profile.getProfileData().isRankedBanned()) {
             player.closeInventory();
             Arrays.asList(
-                "",
-                "&c&lRANKED BAN",
-                "&cYou are currently banned from ranked queues.",
-                "&7You may appeal at &b&ndiscord.gg/alley-practice&7.",
-                ""
+                    "",
+                    "&c&lRANKED BAN",
+                    "&cYou are currently banned from ranked queues.",
+                    "&7You may appeal at &b&ndiscord.gg/alley-practice&7.",
+                    ""
             ).forEach(line -> player.sendMessage(CC.translate(line)));
             return;
         }

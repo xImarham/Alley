@@ -135,12 +135,12 @@ public class MatchRoundsImpl extends MatchRegularImpl {
         if (config.getBoolean("match.scored.enabled")) {
             for (String message : config.getStringList("match.scored.format.team")) {
                 this.notifyAll(message
-                                   .replace("{winner-color}", teamWinnerColor.toString())
-                                   .replace("{winner}", winner.getPlayer().getUsername())
-                                   .replace("{winner-goals}", String.valueOf(winner.getPlayer().getData().getGoals()))
-                                   .replace("{loser-color}", teamLoserColor.toString())
-                                   .replace("{loser}", loser.getPlayer().getUsername())
-                                   .replace("{loser-goals}", String.valueOf(loser.getPlayer().getData().getGoals()))
+                        .replace("{winner-color}", teamWinnerColor.toString())
+                        .replace("{winner}", winner.getPlayer().getUsername())
+                        .replace("{winner-goals}", String.valueOf(winner.getPlayer().getData().getGoals()))
+                        .replace("{loser-color}", teamLoserColor.toString())
+                        .replace("{loser}", loser.getPlayer().getUsername())
+                        .replace("{loser-goals}", String.valueOf(loser.getPlayer().getData().getGoals()))
                 );
             }
         }
@@ -162,12 +162,12 @@ public class MatchRoundsImpl extends MatchRegularImpl {
         if (config.getBoolean("match.scored.enabled")) {
             for (String message : config.getStringList("match.scored.format.solo")) {
                 this.notifyAll(message
-                                   .replace("{winner-color}", teamWinnerColor.toString())
-                                   .replace("{scorer}", scorer)
-                                   .replace("{winner-goals}", String.valueOf(winner.getPlayer().getData().getGoals()))
-                                   .replace("{loser-color}", teamLoserColor.toString())
-                                   .replace("{loser}", loser.getPlayer().getUsername())
-                                   .replace("{loser-goals}", String.valueOf(loser.getPlayer().getData().getGoals()))
+                        .replace("{winner-color}", teamWinnerColor.toString())
+                        .replace("{scorer}", scorer)
+                        .replace("{winner-goals}", String.valueOf(winner.getPlayer().getData().getGoals()))
+                        .replace("{loser-color}", teamLoserColor.toString())
+                        .replace("{loser}", loser.getPlayer().getUsername())
+                        .replace("{loser-goals}", String.valueOf(loser.getPlayer().getData().getGoals()))
                 );
             }
         }

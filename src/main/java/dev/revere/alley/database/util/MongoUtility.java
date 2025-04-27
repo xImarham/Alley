@@ -228,9 +228,9 @@ public class MongoUtility {
 
             String storedTier = kitEntry.getString("tier");
             DivisionTier tier = division.getTiers().stream()
-                                    .filter(t -> t.getName().equals(storedTier))
-                                    .findFirst()
-                                    .orElse(null);
+                    .filter(t -> t.getName().equals(storedTier))
+                    .findFirst()
+                    .orElse(null);
             kit.setTier(Objects.requireNonNull(tier).getName());
 
             kit.setWins(kitEntry.getInteger("wins"));
