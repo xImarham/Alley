@@ -113,7 +113,7 @@ public class CommandFramework implements CommandExecutor {
                     System.out.println("Unable to register command " + m.getName() + ". Unexpected method arguments");
                     continue;
                 }
-                registerCommand(commandData, commandData.name(), m, obj);
+                registerCommand(commandData, Objects.requireNonNull(commandData).name(), m, obj);
                 for (String alias : commandData.aliases()) {
                     registerCommand(commandData, alias, m, obj);
                 }
@@ -129,7 +129,7 @@ public class CommandFramework implements CommandExecutor {
                     System.out.println("Unable to register tab completer " + m.getName() + ". Unexpected return type");
                     continue;
                 }
-                registerCompleter(comp.name(), m, obj);
+                registerCompleter(Objects.requireNonNull(comp).name(), m, obj);
                 for (String alias : comp.aliases()) {
                     registerCompleter(alias, m, obj);
                 }
@@ -155,7 +155,7 @@ public class CommandFramework implements CommandExecutor {
         for (Method m : obj.getClass().getMethods()) {
             if (m.getAnnotation(CommandData.class) != null) {
                 CommandData commandData = m.getAnnotation(CommandData.class);
-                this.commandMap.remove(commandData.name().toLowerCase());
+                this.commandMap.remove(Objects.requireNonNull(commandData).name().toLowerCase());
                 this.commandMap.remove(this.plugin.getPluginConstant().getName() + ":" + commandData.name().toLowerCase());
                 this.map.getCommand(commandData.name().toLowerCase()).unregister(map);
             }

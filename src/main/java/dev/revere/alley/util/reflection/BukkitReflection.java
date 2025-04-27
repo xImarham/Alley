@@ -1,5 +1,6 @@
 package dev.revere.alley.util.reflection;
 
+import dev.revere.alley.tool.logger.Logger;
 import lombok.NonNull;
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
@@ -21,24 +22,24 @@ public class BukkitReflection {
     private static final String CRAFT_BUKKIT_PACKAGE;
     private static final String NET_MINECRAFT_SERVER_PACKAGE;
 
-    private static final Class CRAFT_SERVER_CLASS;
+    private static final Class<?> CRAFT_SERVER_CLASS;
     private static final Method CRAFT_SERVER_GET_HANDLE_METHOD;
 
-    private static final Class PLAYER_LIST_CLASS;
+    private static final Class<?> PLAYER_LIST_CLASS;
     private static final Field PLAYER_LIST_MAX_PLAYERS_FIELD;
 
-    private static final Class CRAFT_PLAYER_CLASS;
+    private static final Class<?> CRAFT_PLAYER_CLASS;
     private static final Method CRAFT_PLAYER_GET_HANDLE_METHOD;
 
-    private static final Class ENTITY_PLAYER_CLASS;
+    private static final Class<?> ENTITY_PLAYER_CLASS;
     private static final Field ENTITY_PLAYER_PING_FIELD;
 
-    private static final Class CRAFT_ITEM_STACK_CLASS;
+    private static final Class<?> CRAFT_ITEM_STACK_CLASS;
     private static final Method CRAFT_ITEM_STACK_AS_NMS_COPY_METHOD;
-    private static final Class ENTITY_ITEM_STACK_CLASS;
+    private static final Class<?> ENTITY_ITEM_STACK_CLASS;
     private static final Method ENTITY_ITEM_STACK_GET_NAME;
 
-    private static final Class SPIGOT_CONFIG_CLASS;
+    private static final Class<?> SPIGOT_CONFIG_CLASS;
     private static final Field SPIGOT_CONFIG_BUNGEE_FIELD;
 
     static {
@@ -65,8 +66,7 @@ public class BukkitReflection {
             ENTITY_PLAYER_PING_FIELD.setAccessible(true);
 
             CRAFT_ITEM_STACK_CLASS = Class.forName(CRAFT_BUKKIT_PACKAGE + "inventory.CraftItemStack");
-            CRAFT_ITEM_STACK_AS_NMS_COPY_METHOD =
-                    CRAFT_ITEM_STACK_CLASS.getDeclaredMethod("asNMSCopy", ItemStack.class);
+            CRAFT_ITEM_STACK_AS_NMS_COPY_METHOD = CRAFT_ITEM_STACK_CLASS.getDeclaredMethod("asNMSCopy", ItemStack.class);
             CRAFT_ITEM_STACK_AS_NMS_COPY_METHOD.setAccessible(true);
 
             ENTITY_ITEM_STACK_CLASS = Class.forName(NET_MINECRAFT_SERVER_PACKAGE + "ItemStack");
@@ -75,9 +75,8 @@ public class BukkitReflection {
             SPIGOT_CONFIG_CLASS = Class.forName("org.spigotmc.SpigotConfig");
             SPIGOT_CONFIG_BUNGEE_FIELD = SPIGOT_CONFIG_CLASS.getDeclaredField("bungee");
             SPIGOT_CONFIG_BUNGEE_FIELD.setAccessible(true);
-        } catch (Exception e) {
-            e.printStackTrace();
-
+        } catch (Exception exception) {
+            Logger.logException("Failed to initialize Bukkit/NMS Reflection", exception);
             throw new RuntimeException("Failed to initialize Bukkit/NMS Reflection");
         }
     }
@@ -95,8 +94,8 @@ public class BukkitReflection {
             field = holderClass.getDeclaredField(fieldName);
             field.setAccessible(true);
             return field;
-        } catch (final NoSuchFieldException e) {
-            throw new IllegalStateException(String.format("Unable to find field '%s' in class '%s'", fieldName, holderClass.getCanonicalName()), e);
+        } catch (final NoSuchFieldException exception) {
+            throw new IllegalStateException(String.format("Unable to find field '%s' in class '%s'", fieldName, holderClass.getCanonicalName()), exception);
         }
     }
 
@@ -129,7 +128,7 @@ public class BukkitReflection {
             int ping = ENTITY_PLAYER_PING_FIELD.getInt(CRAFT_PLAYER_GET_HANDLE_METHOD.invoke(player));
 
             return Math.max(ping, 0);
-        } catch (Exception e) {
+        } catch (Exception exception) {
             return 1;
         }
     }
@@ -143,8 +142,8 @@ public class BukkitReflection {
     public static void setMaxPlayers(Server server, int slots) {
         try {
             PLAYER_LIST_MAX_PLAYERS_FIELD.set(CRAFT_SERVER_GET_HANDLE_METHOD.invoke(server), slots);
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception exception) {
+            Logger.logException("Failed to set max players", exception);
         }
     }
 
@@ -156,8 +155,8 @@ public class BukkitReflection {
     public static boolean isBungeeServer() {
         try {
             return (boolean) SPIGOT_CONFIG_BUNGEE_FIELD.get(null);
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception exception) {
+            Logger.logException("Failed to check if server is a BungeeCord server", exception);
             return false;
         }
     }

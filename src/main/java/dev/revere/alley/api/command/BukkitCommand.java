@@ -27,7 +27,7 @@ public class BukkitCommand extends Command {
 
     @Override
     public boolean execute(CommandSender sender, String commandLabel, String[] args) {
-        boolean success = false;
+        boolean success;
 
         if (!plugin.isEnabled()) {
             return false;
@@ -44,7 +44,7 @@ public class BukkitCommand extends Command {
                     + plugin.getDescription().getFullName(), ex);
         }
 
-        if (!success && usageMessage.length() > 0) {
+        if (!success && !usageMessage.isEmpty()) {
             for (String line : usageMessage.replace("<command>", commandLabel).split("\n")) {
                 sender.sendMessage(line);
             }

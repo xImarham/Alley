@@ -23,6 +23,7 @@ import java.util.List;
 public class MatchStartCommand extends BaseCommand {
 
     @CompleterData(name = "match.start")
+    @SuppressWarnings("unused")
     public List<String> matchStartCompleter(CommandArgs command) {
         List<String> completion = new ArrayList<>();
         Player player = command.getPlayer();
