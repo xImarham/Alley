@@ -13,6 +13,7 @@ import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.ProfileService;
+import dev.revere.alley.reflection.impl.TitleReflectionService;
 import dev.revere.alley.tool.item.ItemBuilder;
 import dev.revere.alley.util.PlayerUtil;
 import lombok.Getter;
@@ -116,6 +117,9 @@ public class MatchRegularImpl extends AbstractMatch {
         this.loser = this.participantA.isAllDead() ? this.participantA : this.participantB;
         this.loser.setEliminated(true);
 
+        this.sendVictory(this.winner.getPlayer().getPlayer());
+        this.sendDefeat(this.loser.getPlayer().getPlayer());
+
         if (this.participantA.getPlayers().size() == 1 && this.participantB.getPlayers().size() == 1) {
             MatchUtility.sendMatchResult(this, this.winner.getPlayer().getPlayer().getName(), this.loser.getPlayer().getPlayer().getName());
         } else {
@@ -128,6 +132,34 @@ public class MatchRegularImpl extends AbstractMatch {
 
         this.handleData(this.winner, this.loser, this.participantA, this.participantB);
         super.handleRoundEnd();
+    }
+
+    /**
+     * Send the winner title to the player.
+     *
+     * @param player The player to send the title to.
+     */
+    private void sendVictory(Player player) {
+        Alley.getInstance().getReflectionRepository().getReflectionService(TitleReflectionService.class).sendTitle(
+                player,
+                "&bVictory!",
+                "&fYou have won the match!",
+                2, 20, 2
+        );
+    }
+
+    /**
+     * Send the loser title to the player.
+     *
+     * @param player The player to send the title to.
+     */
+    private void sendDefeat(Player player) {
+        Alley.getInstance().getReflectionRepository().getReflectionService(TitleReflectionService.class).sendTitle(
+                player,
+                "&cDefeat!",
+                "&fYou have lost the match!",
+                2, 20, 2
+        );
     }
 
     /**

@@ -6,6 +6,7 @@ import dev.revere.alley.feature.kit.settings.impl.KitSettingStickFightImpl;
 import dev.revere.alley.game.match.AbstractMatch;
 import dev.revere.alley.game.match.enums.EnumMatchState;
 import dev.revere.alley.game.match.impl.MatchRoundsImpl;
+import dev.revere.alley.reflection.impl.TitleReflectionService;
 import dev.revere.alley.util.SoundUtil;
 import dev.revere.alley.util.chat.CC;
 import lombok.Getter;
@@ -51,11 +52,13 @@ public class MatchRunnable extends BukkitRunnable {
                         this.playSoundStarted();
                     } else {
                         this.match.sendMessage(CC.translate("&aMatch has started. Good luck!"));
+                        this.sendTitleStarted();
                         this.playSoundStarted();
                         this.sendDisclaimer();
                     }
                 } else {
                     this.match.sendMessage(CC.translate("&a" + this.stage + "..."));
+                    this.sendTitleStarting();
                     this.playSoundStarting();
                 }
                 break;
@@ -104,6 +107,23 @@ public class MatchRunnable extends BukkitRunnable {
         return false;
     }
 
+    private void sendTitleStarted() {
+        this.match.getParticipants().forEach(participant -> Alley.getInstance().getReflectionRepository().getReflectionService(TitleReflectionService.class).sendTitle(
+                participant.getPlayer().getPlayer(),
+                "&b&lMatch started",
+                "&fGood Luck!",
+                15, 20, 2
+        ));
+    }
+
+    private void sendTitleStarting() {
+        this.match.getParticipants().forEach(participant -> Alley.getInstance().getReflectionRepository().getReflectionService(TitleReflectionService.class).sendTitle(
+                participant.getPlayer().getPlayer(),
+                "&a&l" + this.stage,
+                "",
+                2, 10, 2
+        ));
+    }
 
     /**
      * Send the disclaimer to the participants.
@@ -129,5 +149,41 @@ public class MatchRunnable extends BukkitRunnable {
 
     private void playSoundStarted() {
         this.match.getParticipants().forEach(participant -> SoundUtil.playBlast(participant.getPlayer().getPlayer()));
+    }
+
+    /**
+     * Represent the stage of the match via numbers and colors.
+     *
+     * @return The string representation of the stage.
+     */
+    public String representStage() {
+        String format;
+
+        switch (this.stage) {
+            case 6:
+                format = "&a6";
+                break;
+            case 5:
+                format = "&a5";
+                break;
+            case 4:
+                format = "&e4";
+                break;
+            case 3:
+                format = "&63";
+                break;
+            case 2:
+                format = "&c2";
+                break;
+            case 1:
+                format = "&41";
+                break;
+            case 0:
+            default:
+                format = "&40";
+                break;
+        }
+
+        return CC.translate(format);
     }
 }

@@ -76,8 +76,11 @@ scoreboard:
       - " &fLooking for a &bmatch&f{dot-animation}"
     starting:
       - "{sidebar}"
-      - "&b&lStarting Match{dot-animation}"
-      - " &bYou &fvs. &b{opponent}&f!"
+      - "&b&lStarting in &a&l{countdown}&b&l..."
+      - " &f&l● &rKit: &b{kit}"
+      - " &f&l● &rArena: &b{arena}"
+      - ""
+      - "  &fvs. {opponent}"
     playing:
       regular-match:
         - "{sidebar}"
@@ -151,7 +154,7 @@ scoreboard:
       - " &fKit: &b{kit}"
       - ""
       - " {colorA}{playerA} &f(&b{pingA}ms&f)"
-      - "  &bvs"
+      - "  &fvs"
       - " {colorB}{playerB} &f(&b{pingB}ms&f)"
     ffa:
       - "{sidebar}"
