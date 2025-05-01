@@ -2,6 +2,7 @@ package dev.revere.alley.api.menu;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.menu.impl.PageGlassButton;
+import dev.revere.alley.profile.enums.EnumProfileState;
 import dev.revere.alley.util.chat.CC;
 import lombok.Getter;
 import lombok.Setter;
@@ -22,7 +23,7 @@ public abstract class Menu {
     public static Map<String, Menu> currentlyOpenedMenus = new HashMap<>();
 
     @Getter
-    protected Alley ricardo = Alley.getInstance();
+    protected Alley plugin = Alley.getInstance();
     private Map<Integer, Button> buttons = new HashMap<>();
     private boolean autoUpdate = false;
     private boolean updateAfterClick = true;
@@ -160,6 +161,16 @@ public abstract class Menu {
     }
 
     public void onClose(Player player) {
-    }
+        EnumProfileState profileState = this.plugin.getProfileService().getProfile(player.getUniqueId()).getState();
+        if (profileState == EnumProfileState.PLAYING
+                || profileState == EnumProfileState.PLAYING_EVENT
+                || profileState == EnumProfileState.PLAYING_TOURNAMENT
+                || profileState == EnumProfileState.FIGHTING_BOT
+                || profileState == EnumProfileState.EDITING
+                || profileState == EnumProfileState.FFA) {
+            return;
+        }
 
+        this.plugin.getHotbarService().applyHotbarItems(player);
+    }
 }

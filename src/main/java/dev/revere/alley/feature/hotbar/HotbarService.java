@@ -2,6 +2,7 @@ package dev.revere.alley.feature.hotbar;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.feature.hotbar.enums.EnumHotbarType;
+import dev.revere.alley.profile.Profile;
 import dev.revere.alley.tool.item.ItemBuilder;
 import lombok.Getter;
 import org.bukkit.Bukkit;
@@ -69,6 +70,49 @@ public class HotbarService {
         }
 
         Bukkit.getScheduler().runTaskLater(Alley.getInstance(), player::updateInventory, 1L);
+    }
+
+    /**
+     * Apply the hotbar items to the player
+     *
+     * @param player the player
+     */
+    public void applyHotbarItems(Player player) {
+        this.applyHotbarItems(player, this.getCorrespondingType(Alley.getInstance().getProfileService().getProfile(player.getUniqueId())));
+    }
+
+    /**
+     * Get the corresponding hotbar type for the given profile.
+     *
+     * @param profile the profile
+     * @return the corresponding hotbar type
+     */
+    private EnumHotbarType getCorrespondingType(Profile profile) {
+        EnumHotbarType type;
+
+        switch (profile.getState()) {
+            case WAITING:
+                type = EnumHotbarType.QUEUE;
+                break;
+            case SPECTATING:
+                type = EnumHotbarType.SPECTATOR;
+                break;
+            case LOBBY:
+                if (profile.getParty() != null) {
+                    type = EnumHotbarType.PARTY;
+                } else {
+                    type = EnumHotbarType.LOBBY;
+                }
+                break;
+            case PLAYING_TOURNAMENT:
+                type = EnumHotbarType.TOURNAMENT;
+                break;
+            default:
+                type = EnumHotbarType.LOBBY;
+                break;
+        }
+
+        return type;
     }
 
     /**
