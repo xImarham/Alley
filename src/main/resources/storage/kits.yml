@@ -1,11 +1,11 @@
 kits:
   NoDebuff:
     displayname: '&b&lNoDebuff'
-    description: '&7The best experience!'
+    description: ''
     enabled: true
-    unrankedslot: 10
-    rankedslot: 10
-    editorslot: 10
+    unrankedslot: 11
+    rankedslot: 11
+    editorslot: 11
     items:
       - ==: org.bukkit.inventory.ItemStack
         type: DIAMOND_SWORD
@@ -202,13 +202,17 @@ kits:
     disclaimer: '&7Eliminate your opponents! (Diamond Gear, Health Potions)'
     potioneffects: []
     category: NORMAL
+    ffa:
+      enabled: false
+      slot: 0
+      maxplayers: 0
   Classic:
     displayname: '&b&lClassic'
-    description: '&7Old styled PvP.'
+    description: ''
     enabled: true
-    unrankedslot: 11
-    rankedslot: 11
-    editorslot: 11
+    unrankedslot: 12
+    rankedslot: 12
+    editorslot: 12
     items:
       - ==: org.bukkit.inventory.ItemStack
         type: DIAMOND_SWORD
@@ -304,13 +308,18 @@ kits:
     disclaimer: '&7Eliminate your opponents! (Diamond Gear, Fishing Rod, Bow)'
     potioneffects: []
     category: NORMAL
+    ffa:
+      enabled: true
+      slot: 21
+      maxplayers: 20
+      arena: freeforall
   Boxing:
     displayname: '&b&lBoxing'
     description: '&71st to 100 Hits, wins!'
     enabled: true
-    unrankedslot: 12
-    rankedslot: 12
-    editorslot: 12
+    unrankedslot: 10
+    rankedslot: 10
+    editorslot: 10
     items:
       - ==: org.bukkit.inventory.ItemStack
         type: DIAMOND_SWORD
@@ -416,9 +425,13 @@ kits:
     potioneffects:
       - SPEED:2147483647:1
     category: NORMAL
+    ffa:
+      enabled: false
+      slot: 0
+      maxplayers: 0
   Sumo:
     displayname: '&b&lSumo'
-    description: '&7Knock off your rival!'
+    description: ''
     enabled: true
     unrankedslot: 13
     rankedslot: 13
@@ -519,11 +532,15 @@ kits:
     disclaimer: '&7Throw your opponents off the surface!'
     potioneffects: []
     category: NORMAL
+    ffa:
+      enabled: false
+      slot: 0
+      maxplayers: 0
   Spleef:
     displayname: '&b&lSpleef'
-    description: '&7Snowy!'
+    description: ''
     enabled: true
-    unrankedslot: 14
+    unrankedslot: 10
     rankedslot: 14
     editorslot: 14
     items:
@@ -629,10 +646,14 @@ kits:
         enabled: false
     disclaimer: '&7Break the snow blocks and make your opponents fall!'
     potioneffects: []
-    category: NORMAL
+    category: EXTRA
+    ffa:
+      enabled: false
+      slot: 0
+      maxplayers: 0
   Parkour:
     displayname: '&b&lParkour'
-    description: Classic parkour lol.
+    description: ''
     enabled: true
     unrankedslot: 15
     rankedslot: 15
@@ -733,9 +754,13 @@ kits:
     disclaimer: '&7Complete the parkour faster than your opponent to win!'
     potioneffects: []
     category: NORMAL
+    ffa:
+      enabled: false
+      slot: 0
+      maxplayers: 0
   BattleRush:
     displayname: '&b&lBattleRush'
-    description: '&7BattleRush kit description'
+    description: ''
     enabled: true
     unrankedslot: 16
     rankedslot: 16
@@ -840,9 +865,13 @@ kits:
     disclaimer: '&7Enter your opponents goal to get the most points!'
     potioneffects: []
     category: NORMAL
+    ffa:
+      enabled: false
+      slot: 0
+      maxplayers: 0
   PearlFight:
     displayname: '&b&lPearlFight'
-    description: '&7PearlFight kit description'
+    description: ''
     enabled: true
     unrankedslot: 19
     rankedslot: 19
@@ -957,11 +986,15 @@ kits:
     disclaimer: '&7Hit your opponents off the map! (Kockback Stick, Blocks)'
     potioneffects: []
     category: NORMAL
+    ffa:
+      enabled: false
+      slot: 0
+      maxplayers: 0
   StickFight:
     displayname: '&b&lStickFight'
-    description: '&7StickFight kit description'
+    description: ''
     enabled: true
-    unrankedslot: 20
+    unrankedslot: 14
     rankedslot: 20
     editorslot: 20
     items:
@@ -1072,3 +1105,7 @@ kits:
     disclaimer: '&7Knock your opponent off! (Knockback Stick, Blocks)'
     potioneffects: []
     category: NORMAL
+    ffa:
+      enabled: false
+      slot: 0
+      maxplayers: 0
