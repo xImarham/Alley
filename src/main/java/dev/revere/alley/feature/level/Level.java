@@ -13,8 +13,8 @@ public class Level {
     private final String name;
     private final String displayName;
 
-    private Material material;
-    private int durability;
+    private final Material material;
+    private final int durability;
 
     private final int minElo;
     private final int maxElo;

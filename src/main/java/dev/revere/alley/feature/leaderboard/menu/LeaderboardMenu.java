@@ -66,7 +66,7 @@ public class LeaderboardMenu extends Menu {
                     switch (currentType) {
                         case RANKED:
                             if (kit.isSettingEnabled(KitSettingRankedImpl.class)) {
-                                buttons.put(kit.getRankedslot(), new LeaderboardKitButton(kit, leaderboard, currentType));
+                                buttons.put(kit.getRankedSlot(), new LeaderboardKitButton(kit, leaderboard, currentType));
                             }
                             break;
                         case UNRANKED:
@@ -74,7 +74,7 @@ public class LeaderboardMenu extends Menu {
                         case TOURNAMENT:
                         case WIN_STREAK:
                         case FFA:
-                            buttons.put(kit.getUnrankedslot(), new LeaderboardKitButton(kit, leaderboard, currentType));
+                            buttons.put(kit.getUnrankedSlot(), new LeaderboardKitButton(kit, leaderboard, currentType));
                             break;
                     }
                 });

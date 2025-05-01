@@ -1,5 +1,6 @@
 package dev.revere.alley.feature.kit;
 
+import dev.revere.alley.feature.kit.enums.EnumKitCategory;
 import dev.revere.alley.feature.kit.settings.KitSetting;
 import lombok.Getter;
 import lombok.Setter;
@@ -28,9 +29,9 @@ public class Kit {
     private boolean enabled;
     private boolean ffaEnabled;
 
-    private int unrankedslot;
-    private int rankedslot;
-    private int editorslot;
+    private int unrankedSlot;
+    private int rankedSlot;
+    private int editorSlot;
     private int ffaSlot;
 
     private int maxFfaPlayers;
@@ -39,7 +40,9 @@ public class Kit {
     private ItemStack[] armor;
 
     private Material icon;
-    private int iconData;
+    private int durability;
+
+    private EnumKitCategory category;
 
     private List<PotionEffect> potionEffects;
     private final List<KitSetting> kitSettings;
@@ -51,26 +54,27 @@ public class Kit {
      * @param displayName  The display name of the kit.
      * @param description  The description of the kit.
      * @param enabled      Whether the kit is enabled.
-     * @param unrankedslot The unranked slot of the kit.
-     * @param rankedslot   The ranked slot of the kit.
-     * @param editorslot   The editor slot of the kit.
+     * @param unrankedSlot The unranked slot of the kit.
+     * @param rankedSlot   The ranked slot of the kit.
+     * @param editorSlot   The editor slot of the kit.
      * @param inventory    The inventory of the kit.
      * @param armor        The armor of the kit.
      * @param icon         The icon of the kit.
-     * @param iconData     The icon data of the kit.
+     * @param durability     The icon data of the kit.
+     * @param disclaimer   The disclaimer of the kit.
      */
-    public Kit(String name, String displayName, String description, boolean enabled, int unrankedslot, int rankedslot, int editorslot, int ffaSlot, ItemStack[] inventory, ItemStack[] armor, Material icon, int iconData, String disclaimer) {
+    public Kit(String name, String displayName, String description, boolean enabled, int unrankedSlot, int rankedSlot, int editorSlot, int ffaSlot, ItemStack[] inventory, ItemStack[] armor, Material icon, int durability, String disclaimer, EnumKitCategory category) {
         this.name = name;
         this.displayName = displayName;
         this.description = description;
         this.enabled = enabled;
-        this.unrankedslot = unrankedslot;
-        this.rankedslot = rankedslot;
-        this.editorslot = editorslot;
+        this.unrankedSlot = unrankedSlot;
+        this.rankedSlot = rankedSlot;
+        this.editorSlot = editorSlot;
         this.inventory = inventory;
         this.armor = armor;
         this.icon = icon;
-        this.iconData = iconData;
+        this.durability = durability;
         this.kitSettings = new ArrayList<>();
         this.disclaimer = disclaimer;
         this.potionEffects = new ArrayList<>();
@@ -78,6 +82,7 @@ public class Kit {
         this.ffaSlot = ffaSlot;
         this.ffaArenaName = "";
         this.maxFfaPlayers = 20;
+        this.category = category;
     }
 
     /**

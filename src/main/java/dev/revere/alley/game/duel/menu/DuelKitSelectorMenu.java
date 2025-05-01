@@ -49,7 +49,7 @@ public class DuelKitSelectorMenu extends Menu {
 
         @Override
         public ItemStack getButtonItem(Player player) {
-            return new ItemBuilder(kit.getIcon()).name(kit.getDisplayName() == null ? "&b&l" + kit.getName() : kit.getDisplayName()).durability(kit.getIconData()).hideMeta()
+            return new ItemBuilder(kit.getIcon()).name(kit.getDisplayName() == null ? "&b&l" + kit.getName() : kit.getDisplayName()).durability(kit.getDurability()).hideMeta()
                     .lore(Arrays.asList(
                             "&7" + kit.getDescription(),
                             "",

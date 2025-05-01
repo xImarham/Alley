@@ -42,7 +42,7 @@ public class KitSetUnrankedSlotCommand extends BaseCommand {
             return;
         }
 
-        kit.setUnrankedslot(slot);
+        kit.setUnrankedSlot(slot);
         Alley.getInstance().getKitService().saveKit(kit);
         player.sendMessage(CC.translate(KitLocale.KIT_UNRANKEDSLOT_SET.getMessage()).replace("{kit-name}", kit.getName()).replace("{slot}", String.valueOf(slot)));
     }

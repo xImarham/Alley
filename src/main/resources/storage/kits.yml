@@ -161,7 +161,7 @@ kits:
             DURABILITY: 3
           repair-cost: 3
     icon: POTION
-    icondata: 16421
+    durability: 16421
     settings:
       Build:
         description: Allows you to build in matches
@@ -201,6 +201,7 @@ kits:
         enabled: false
     disclaimer: '&7Eliminate your opponents! (Diamond Gear, Health Potions)'
     potioneffects: []
+    category: NORMAL
   Classic:
     displayname: '&b&lClassic'
     description: '&7Old styled PvP.'
@@ -262,7 +263,7 @@ kits:
       - ==: org.bukkit.inventory.ItemStack
         type: DIAMOND_HELMET
     icon: DIAMOND_SWORD
-    icondata: 0
+    durability: 0
     settings:
       Build:
         description: Allows you to build in matches
@@ -302,6 +303,7 @@ kits:
         enabled: false
     disclaimer: '&7Eliminate your opponents! (Diamond Gear, Fishing Rod, Bow)'
     potioneffects: []
+    category: NORMAL
   Boxing:
     displayname: '&b&lBoxing'
     description: '&71st to 100 Hits, wins!'
@@ -372,7 +374,7 @@ kits:
         damage: -1
         amount: 0
     icon: DIAMOND_CHESTPLATE
-    icondata: 0
+    durability: 0
     settings:
       Build:
         description: Allows you to build in matches
@@ -413,6 +415,7 @@ kits:
     disclaimer: '&7First to 100 hits wins!'
     potioneffects:
       - SPEED:2147483647:1
+    category: NORMAL
   Sumo:
     displayname: '&b&lSumo'
     description: '&7Knock off your rival!'
@@ -475,7 +478,7 @@ kits:
         damage: -1
         amount: 0
     icon: LEASH
-    icondata: 0
+    durability: 0
     settings:
       Build:
         description: Allows you to build in matches
@@ -515,6 +518,7 @@ kits:
         enabled: false
     disclaimer: '&7Throw your opponents off the surface!'
     potioneffects: []
+    category: NORMAL
   Spleef:
     displayname: '&b&lSpleef'
     description: '&7Snowy!'
@@ -585,7 +589,7 @@ kits:
         damage: -1
         amount: 0
     icon: DIAMOND_SPADE
-    icondata: 0
+    durability: 0
     settings:
       Boxing:
         description: This is the boxing kit type
@@ -625,6 +629,7 @@ kits:
         enabled: false
     disclaimer: '&7Break the snow blocks and make your opponents fall!'
     potioneffects: []
+    category: NORMAL
   Parkour:
     displayname: '&b&lParkour'
     description: Classic parkour lol.
@@ -687,7 +692,7 @@ kits:
         damage: -1
         amount: 0
     icon: SAPLING
-    icondata: 0
+    durability: 0
     settings:
       Boxing:
         description: This is the boxing kit type
@@ -727,6 +732,7 @@ kits:
         enabled: false
     disclaimer: '&7Complete the parkour faster than your opponent to win!'
     potioneffects: []
+    category: NORMAL
   BattleRush:
     displayname: '&b&lBattleRush'
     description: '&7BattleRush kit description'
@@ -793,7 +799,7 @@ kits:
         damage: -1
         amount: 0
     icon: WATER_LILY
-    icondata: 0
+    durability: 0
     settings:
       Boxing:
         description: This is the boxing kit type
@@ -833,6 +839,7 @@ kits:
         enabled: false
     disclaimer: '&7Enter your opponents goal to get the most points!'
     potioneffects: []
+    category: NORMAL
   PearlFight:
     displayname: '&b&lPearlFight'
     description: '&7PearlFight kit description'
@@ -909,7 +916,7 @@ kits:
         damage: -1
         amount: 0
     icon: ENDER_PEARL
-    icondata: 0
+    durability: 0
     settings:
       Build:
         description: Allows you to build in matches
@@ -949,6 +956,7 @@ kits:
         enabled: false
     disclaimer: '&7Hit your opponents off the map! (Kockback Stick, Blocks)'
     potioneffects: []
+    category: NORMAL
   StickFight:
     displayname: '&b&lStickFight'
     description: '&7StickFight kit description'
@@ -1023,7 +1031,7 @@ kits:
         damage: -1
         amount: 0
     icon: STICK
-    icondata: 0
+    durability: 0
     settings:
       Build:
         description: Allows you to build in matches
@@ -1063,3 +1071,4 @@ kits:
         enabled: true
     disclaimer: '&7Knock your opponent off! (Knockback Stick, Blocks)'
     potioneffects: []
+    category: NORMAL

@@ -35,7 +35,7 @@ public class LeaderboardKitButton extends Button {
             case RANKED:
                 return new ItemBuilder(this.kit.getIcon())
                         .name(this.kit.getDisplayName())
-                        .durability(this.kit.getIconData())
+                        .durability(this.kit.getDurability())
                         .hideMeta()
                         .lore(this.leaderboard.stream()
                                 .limit(10)

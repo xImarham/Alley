@@ -4,10 +4,12 @@ import dev.revere.alley.Alley;
 import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.api.menu.Menu;
 import dev.revere.alley.feature.kit.Kit;
+import dev.revere.alley.feature.kit.enums.EnumKitCategory;
 import dev.revere.alley.feature.queue.Queue;
 import dev.revere.alley.feature.queue.QueueService;
 import dev.revere.alley.feature.queue.enums.EnumQueueType;
 import dev.revere.alley.feature.queue.menu.button.BotButton;
+import dev.revere.alley.feature.queue.menu.extra.button.ModeSwitcherButton;
 import dev.revere.alley.feature.queue.menu.button.UnrankedButton;
 import dev.revere.alley.game.ffa.AbstractFFAMatch;
 import dev.revere.alley.game.ffa.menu.FFAButton;
@@ -33,12 +35,6 @@ import java.util.Map;
  */
 @AllArgsConstructor
 public class QueuesMenuModern extends Menu {
-    private final Alley plugin;
-
-    public QueuesMenuModern() {
-        this.plugin = Alley.getInstance();
-    }
-
     /**
      * Get the title of the menu.
      *
@@ -94,15 +90,17 @@ public class QueuesMenuModern extends Menu {
         switch (profile.getQueueType()) {
             case UNRANKED:
                 for (Queue queue : this.plugin.getQueueService().getQueues()) {
-                    if (!queue.isRanked()) {
-                        buttons.put(queue.getKit().getUnrankedslot(), new UnrankedButton(queue));
+                    if (!queue.isRanked() && queue.getKit().getCategory() == EnumKitCategory.NORMAL) {
+                        buttons.put(queue.getKit().getUnrankedSlot(), new UnrankedButton(queue));
                     }
                 }
+
+                buttons.put(40, new ModeSwitcherButton(EnumQueueType.UNRANKED, EnumKitCategory.EXTRA));
 
                 break;
             case BOTS:
                 for (Kit kit : this.plugin.getKitService().getKits()) {
-                    buttons.put(kit.getUnrankedslot(), new BotButton(kit));
+                    buttons.put(kit.getUnrankedSlot(), new BotButton(kit));
                 }
                 break;
             case FFA:

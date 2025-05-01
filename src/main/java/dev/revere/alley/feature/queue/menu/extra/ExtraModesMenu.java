@@ -1,15 +1,14 @@
-package dev.revere.alley.feature.queue.menu.sub;
+package dev.revere.alley.feature.queue.menu.extra;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.api.menu.Menu;
-import dev.revere.alley.api.menu.impl.BackButton;
 import dev.revere.alley.feature.kit.enums.EnumKitCategory;
 import dev.revere.alley.feature.queue.Queue;
 import dev.revere.alley.feature.queue.enums.EnumQueueType;
-import dev.revere.alley.feature.queue.menu.QueuesMenuDefault;
-import dev.revere.alley.feature.queue.menu.extra.button.ModeSwitcherButton;
 import dev.revere.alley.feature.queue.menu.button.UnrankedButton;
+import dev.revere.alley.feature.queue.menu.extra.button.ModeSwitcherButton;
+import lombok.AllArgsConstructor;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
@@ -18,36 +17,36 @@ import java.util.Map;
 /**
  * @author Emmy
  * @project Alley
- * @date 23/05/2024 - 10:28
+ * @since 01/05/2025
  */
-public class UnrankedMenu extends Menu {
+@AllArgsConstructor
+public class ExtraModesMenu extends Menu {
+    private final EnumQueueType queueType;
 
     @Override
     public String getTitle(Player player) {
-        return "&b&lUnranked Queue";
+        return "&b&l" + this.queueType.getMenuTitle();
     }
 
     @Override
     public Map<Integer, Button> getButtons(Player player) {
         Map<Integer, Button> buttons = new HashMap<>();
 
-        buttons.put(0, new BackButton(new QueuesMenuDefault()));
+        buttons.put(4, new ModeSwitcherButton(this.queueType, EnumKitCategory.NORMAL));
 
         for (Queue queue : Alley.getInstance().getQueueService().getQueues()) {
-            if (!queue.isRanked() && queue.getKit().getCategory() == EnumKitCategory.NORMAL) {
+            if (!queue.isRanked() && queue.getKit().getCategory() == EnumKitCategory.EXTRA) {
                 buttons.put(queue.getKit().getUnrankedSlot(), new UnrankedButton(queue));
             }
         }
 
-        buttons.put(40, new ModeSwitcherButton(EnumQueueType.UNRANKED, EnumKitCategory.EXTRA));
-
-        this.addBorder(buttons, (byte) 15, 5);
+        this.addGlass(buttons, (byte) 15);
 
         return buttons;
     }
 
     @Override
     public int getSize() {
-        return 9 * 5;
+        return 9 * 4;
     }
 }

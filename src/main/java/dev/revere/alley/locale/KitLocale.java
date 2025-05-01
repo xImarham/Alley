@@ -25,10 +25,12 @@ public enum KitLocale implements ILocale {
     KIT_FFASLOT_SET("messages.yml", "kit.data.ffaslot-set"),
     KIT_SLOTS_SET("messages.yml", "kit.data.slots-set"),
     KIT_DESCRIPTION_SET("messages.yml", "kit.data.description-set"),
+    KIT_DESCRIPTION_CLEARED("messages.yml", "kit.data.description-cleared"),
     KIT_DISCLAIMER_SET("messages.yml", "kit.data.disclaimer-set"),
     KIT_DISPLAYNAME_SET("messages.yml", "kit.data.displayname-set"),
     KIT_ICON_SET("messages.yml", "kit.data.icon-set"),
     KIT_POTION_EFFECTS_SET("messages.yml", "kit.data.potion-effects-set"),
+    KIT_SET_CATEGORY("messages.yml", "kit.data.set-category"),
 
     KIT_CREATED("messages.yml", "kit.manage.created"),
     KIT_DELETED("messages.yml", "kit.manage.deleted"),

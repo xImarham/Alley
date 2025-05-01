@@ -10,6 +10,5 @@ public enum EnumHotbarType {
     PARTY,
     QUEUE,
     SPECTATOR,
-    TOURNAMENT,
-    SETTINGS
+    TOURNAMENT
 }

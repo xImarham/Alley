@@ -42,9 +42,9 @@ public class KitSetSlotAllCommand extends BaseCommand {
             return;
         }
 
-        kit.setEditorslot(slot);
-        kit.setRankedslot(slot);
-        kit.setUnrankedslot(slot);
+        kit.setEditorSlot(slot);
+        kit.setRankedSlot(slot);
+        kit.setUnrankedSlot(slot);
         Alley.getInstance().getKitService().saveKit(kit);
         sender.sendMessage(CC.translate(KitLocale.KIT_SLOTS_SET.getMessage()).replace("{kit-name}", kit.getName()).replace("{slot}", String.valueOf(slot)));
     }

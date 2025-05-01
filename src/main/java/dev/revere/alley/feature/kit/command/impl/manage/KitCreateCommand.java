@@ -49,7 +49,7 @@ public class KitCreateCommand extends BaseCommand {
         try {
             boolean slotTaken = false;
             for (Kit kit : kitService.getKits()) {
-                if (kit.getUnrankedslot() == Integer.parseInt(args[1])) {
+                if (kit.getUnrankedSlot() == Integer.parseInt(args[1])) {
                     player.sendMessage(CC.translate("&cThat slot is already taken by the &7" + kit.getName() + " &ckit!"));
                     slotTaken = true;
                     break;

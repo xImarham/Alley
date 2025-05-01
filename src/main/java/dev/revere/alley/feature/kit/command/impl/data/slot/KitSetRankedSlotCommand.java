@@ -41,7 +41,7 @@ public class KitSetRankedSlotCommand extends BaseCommand {
             return;
         }
 
-        kit.setRankedslot(slot);
+        kit.setRankedSlot(slot);
         kitService.saveKit(kit);
         player.sendMessage(CC.translate(KitLocale.KIT_RANKEDSLOT_SET.getMessage()).replace("{kit-name}", kit.getName()).replace("{slot}", String.valueOf(slot)));
     }

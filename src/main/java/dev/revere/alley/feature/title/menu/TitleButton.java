@@ -50,7 +50,7 @@ public class TitleButton extends Button {
                         "",
                         "&aClick to select!"
                 )
-                .durability(this.title.getKit().getIconData())
+                .durability(this.title.getKit().getDurability())
                 .hideMeta()
                 .build();
     }

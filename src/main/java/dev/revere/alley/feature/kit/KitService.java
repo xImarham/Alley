@@ -1,6 +1,7 @@
 package dev.revere.alley.feature.kit;
 
 import dev.revere.alley.Alley;
+import dev.revere.alley.feature.kit.enums.EnumKitCategory;
 import dev.revere.alley.feature.kit.settings.KitSetting;
 import dev.revere.alley.feature.kit.settings.impl.KitSettingRankedImpl;
 import dev.revere.alley.feature.queue.Queue;
@@ -56,7 +57,7 @@ public class KitService {
             ItemStack[] armor = config.getList(key + ".armor").toArray(new ItemStack[0]);
 
             Material icon = Material.matchMaterial(config.getString(key + ".icon"));
-            int iconData = config.getInt(key + ".icondata");
+            int iconData = config.getInt(key + ".durability");
             String disclaimer = config.getString(key + ".disclaimer");
 
             Kit kit = new Kit(
@@ -72,7 +73,8 @@ public class KitService {
                     armor,
                     icon,
                     iconData,
-                    disclaimer
+                    disclaimer,
+                    EnumKitCategory.valueOf(config.getString(key + ".category"))
             );
 
             this.setupFFA(kit, config, key);
@@ -270,7 +272,8 @@ public class KitService {
                 armor,
                 icon,
                 (byte) 0,
-                kitName + " kit disclaimer."
+                kitName + " kit disclaimer.",
+                EnumKitCategory.NORMAL
         );
 
         this.plugin.getKitSettingService().applyAllSettingsToKit(kit);
@@ -324,17 +327,18 @@ public class KitService {
         config.set(key + ".displayname", kit.getDisplayName());
         config.set(key + ".description", kit.getDescription());
         config.set(key + ".enabled", kit.isEnabled());
-        config.set(key + ".unrankedslot", kit.getUnrankedslot());
-        config.set(key + ".rankedslot", kit.getRankedslot());
-        config.set(key + ".editorslot", kit.getEditorslot());
+        config.set(key + ".unrankedslot", kit.getUnrankedSlot());
+        config.set(key + ".rankedslot", kit.getRankedSlot());
+        config.set(key + ".editorslot", kit.getEditorSlot());
         config.set(key + ".items", kit.getInventory());
         config.set(key + ".armor", kit.getArmor());
         config.set(key + ".icon", kit.getIcon().name());
-        config.set(key + ".icondata", kit.getIconData());
+        config.set(key + ".durability", kit.getDurability());
         config.set(key + ".disclaimer", kit.getDisclaimer());
         config.set(key + ".ffa.enabled", kit.isFfaEnabled());
         config.set(key + ".ffa.arena", kit.getFfaArenaName());
         config.set(key + ".ffa.slot", kit.getFfaSlot());
         config.set(key + ".ffa.maxplayers", kit.getMaxFfaPlayers());
+        config.set(key + ".category", kit.getCategory().name());
     }
 }

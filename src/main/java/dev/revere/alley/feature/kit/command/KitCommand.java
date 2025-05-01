@@ -53,6 +53,7 @@ public class KitCommand extends BaseCommand {
         new KitSetupFFACommand();
         new KitToggleFFACommand();
         new KitSetFfaSlotCommand();
+        new KitSetCategoryCommand();
     }
 
     @SuppressWarnings("unused")
@@ -64,7 +65,7 @@ public class KitCommand extends BaseCommand {
                     "list", "saveall", "settings", "save", "view", "viewsettings", "delete", "create",
                     "seticon", "setinv", "getinv", "setdesc", "setdisclaimer", "seteditorslot",
                     "setrankedslot", "setslotall", "setunrankedslot", "setffaslot", "setsetting",
-                    "setdisplayname", "setpotion", "toggleffa", "setupffa"
+                    "setdisplayname", "setpotion", "toggleffa", "setupffa", "setcategory"
             ));
         }
 
@@ -125,7 +126,8 @@ public class KitCommand extends BaseCommand {
                     " &f● &b/kit setsetting &8(&7kitName&8) &8(&7setting&8) &8(&7enabled&8) &7| Set kit setting",
                     " &f● &b/kit setdisclaimer &8(&7kitName&8) &8(&7disclaimer&8) &7| Set disclaimer",
                     " &f● &b/kit setdisplayname &8(&7kitName&8) &8(&7displayname&8) &7| Set display-name of a kit",
-                    " &f● &b/kit setpotion &8(&7kitName&8) &7| Set potion effects of a kit"
+                    " &f● &b/kit setpotion &8(&7kitName&8) &7| Set potion effects of a kit",
+                    " &f● &b/kit setcategory &8(&7kitName&8) &8(&7category&8) &7| Set category of a kit",
             },
             {
                     " &f● &b/kit setslotall &8(&7kitName&8) &8(&7slot&8) &7| Set all menu slots",

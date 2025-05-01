@@ -25,7 +25,7 @@ public class KitSetDescriptionCommand extends BaseCommand {
         String[] args = command.getArgs();
 
         if (command.length() < 2) {
-            sender.sendMessage(CC.translate("&6Usage: &e/kit description &b<kitName> <description>"));
+            sender.sendMessage(CC.translate("&6Usage: &e/kit description &b<kitName> <description/clear>"));
             return;
         }
 
@@ -33,6 +33,13 @@ public class KitSetDescriptionCommand extends BaseCommand {
         Kit kit = kitService.getKit(args[0]);
         if (kit == null) {
             sender.sendMessage(CC.translate(KitLocale.KIT_NOT_FOUND.getMessage()));
+            return;
+        }
+
+        if (args[1].equalsIgnoreCase("clear")) {
+            kit.setDescription("");
+            Alley.getInstance().getKitService().saveKit(kit);
+            sender.sendMessage(CC.translate(KitLocale.KIT_DESCRIPTION_CLEARED.getMessage().replace("{kit-name}", kit.getName())));
             return;
         }
 

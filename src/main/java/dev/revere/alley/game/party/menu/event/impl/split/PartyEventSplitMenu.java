@@ -62,7 +62,7 @@ public class PartyEventSplitMenu extends Menu {
 
         @Override
         public ItemStack getButtonItem(Player player) {
-            return new ItemBuilder(kit.getIcon()).name("&b&l" + kit.getName()).durability(kit.getIconData()).hideMeta()
+            return new ItemBuilder(kit.getIcon()).name("&b&l" + kit.getName()).durability(kit.getDurability()).hideMeta()
                     .lore(
                             "&7" + kit.getDescription(),
                             "",

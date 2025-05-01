@@ -113,7 +113,7 @@ public class StatisticsMenu extends Menu {
 
             return new ItemBuilder(this.kit.getIcon())
                     .name("&b&l" + this.kit.getDisplayName())
-                    .durability(this.kit.getIconData())
+                    .durability(this.kit.getDurability())
                     .lore(lore)
                     .hideMeta()
                     .build();

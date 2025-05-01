@@ -13,8 +13,12 @@ import lombok.AllArgsConstructor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * @author Emmy
@@ -29,18 +33,42 @@ public class RankedButton extends Button {
     @Override
     public ItemStack getButtonItem(Player player) {
         Kit kit = queue.getKit();
-        return new ItemBuilder(kit.getIcon()).name(kit.getDisplayName()).durability(kit.getIconData()).hideMeta().lore(Arrays.asList(
-                "&7" + kit.getDescription(),
+        return new ItemBuilder(kit.getIcon())
+                .name(kit.getDisplayName())
+                .durability(kit.getDurability())
+                .hideMeta()
+                .lore(this.getLore(kit, player))
+                .hideMeta().build();
+    }
+
+    /**
+     * Get the lore for the kit.
+     *
+     * @param kit the kit to get the lore for
+     * @return the lore for the kit
+     */
+    private @NotNull List<String> getLore(Kit kit, Player player) {
+        List<String> lore = new ArrayList<>();
+        if (!kit.getDescription().isEmpty()) {
+            Collections.addAll(lore,
+                    "&7" + kit.getDescription(),
+                    ""
+            );
+        }
+
+        Collections.addAll(lore,
+                "&fPlaying: &b" + this.queue.getQueueFightCount(),
+                "&fQueueing: &b" + this.queue.getProfiles().size(),
                 "",
-                "&fIn Queue: &b" + queue.getProfiles().size(),
-                "&fIn Fights: &b" + queue.getQueueFightCount(),
+                "&f&lYour ELO: &b" + Alley.getInstance().getProfileService().getProfile(player.getUniqueId()).getProfileData().getRankedKitData().get(kit.getName()).getElo(),
+                " &f1. &bNULL &f- &bN/A",
+                " &f2. &bNULL &f- &bN/A",
+                " &f3. &bNULL &f- &bN/A",
                 "",
-                "&fTotal Wins: &b" + Alley.getInstance().getProfileService().getProfile(player.getUniqueId()).getProfileData().getRankedKitData().get(kit.getName()).getWins(),
-                "&fTotal Losses: &b" + Alley.getInstance().getProfileService().getProfile(player.getUniqueId()).getProfileData().getRankedKitData().get(kit.getName()).getLosses(),
-                "&fElo: &b" + Alley.getInstance().getProfileService().getProfile(player.getUniqueId()).getProfileData().getRankedKitData().get(kit.getName()).getElo(),
-                "",
-                "&fClick to join the &b" + kit.getName() + " &fqueue!")
-        ).hideMeta().build();
+                "&aClick to play!"
+        );
+
+        return lore;
     }
 
     @Override

@@ -41,7 +41,7 @@ public class KitSetEditorSlotCommand extends BaseCommand {
             return;
         }
 
-        kit.setEditorslot(slot);
+        kit.setEditorSlot(slot);
         kitService.saveKit(kit);
         player.sendMessage(CC.translate(KitLocale.KIT_EDITORSLOT_SET.getMessage()).replace("{kit-name}", kit.getName()).replace("{slot}", String.valueOf(slot)));
     }
