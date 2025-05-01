@@ -34,6 +34,11 @@ public class KitSetupFFACommand extends BaseCommand {
             return;
         }
 
+        if (kit.isFfaEnabled()) {
+            player.sendMessage(CC.translate("&cThis kit is already set up for FFA!"));
+            return;
+        }
+
         AbstractArena arena = this.plugin.getArenaService().getArenaByName(args[1]);
         if (arena == null) {
             player.sendMessage(CC.translate("&cAn arena with that name does not exist!"));
