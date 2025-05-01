@@ -3,14 +3,13 @@ package dev.revere.alley.reflection.impl;
 import dev.revere.alley.reflection.IReflection;
 import dev.revere.alley.tool.logger.Logger;
 import dev.revere.alley.util.TaskUtil;
-import net.minecraft.server.v1_8_R3.PacketPlayOutEntityDestroy;
-import net.minecraft.server.v1_8_R3.PacketPlayOutEntityStatus;
-import net.minecraft.server.v1_8_R3.PacketPlayOutNamedEntitySpawn;
+import net.minecraft.server.v1_8_R3.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 import java.lang.reflect.Field;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -37,19 +36,17 @@ public class DeathReflectionService implements IReflection {
     public void animateDeath(Player player) {
         PacketPlayOutNamedEntitySpawn spawnPacket = this.createSpawnPacket(player);
         PacketPlayOutEntityStatus statusPacket = this.createStatusPacket();
+        PacketPlayOutEntityMetadata metadataPacket = this.createMetadataPacket();
 
         Set<Player> playersInRange = this.getPlayersInRange(player);
-        this.hidePlayer(player, playersInRange, false);
 
         for (Player watcher : playersInRange) {
             this.sendPacket(watcher, spawnPacket);
             this.sendPacket(watcher, statusPacket);
+            this.sendPacket(watcher, metadataPacket);
         }
 
-        TaskUtil.runLater(() -> {
-            this.removeFakeEntities(playersInRange);
-            this.hidePlayer(player, playersInRange, true);
-        }, 40L);
+        TaskUtil.runLater(() -> this.removeFakeEntities(playersInRange), 40L);
     }
 
     /**
@@ -138,20 +135,24 @@ public class DeathReflectionService implements IReflection {
         }
     }
 
-    /**
-     * Hide or show the player to/from all other players in the specified set.
-     *
-     * @param player  The player to show or hide.
-     * @param players The players to hide or show the target player from.
-     * @param visible True to show the player, false to hide.
-     */
-    private void hidePlayer(Player player, Set<Player> players, boolean visible) {
-        for (Player watcher : players) {
-            if (visible) {
-                watcher.showPlayer(player);
-            } else {
-                watcher.hidePlayer(player);
-            }
+    private PacketPlayOutEntityMetadata createMetadataPacket() {
+        try {
+            PacketPlayOutEntityMetadata metadataPacket = new PacketPlayOutEntityMetadata();
+            Field entityIdField = this.getField(PacketPlayOutEntityMetadata.class, "a");
+            Field dataWatcherField = this.getField(PacketPlayOutEntityMetadata.class, "b");
+
+            this.setField(entityIdField, metadataPacket, this.FAKE_ENTITY_ID);
+
+            DataWatcher dataWatcher = new DataWatcher(null);
+            dataWatcher.a(6, 0.0F);
+
+            List<DataWatcher.WatchableObject> items = dataWatcher.c();
+            this.setField(dataWatcherField, metadataPacket, items);
+
+            return metadataPacket;
+        } catch (Exception exception) {
+            Logger.logException("Failed to create metadata packet for death animation.", exception);
+            return null;
         }
     }
 }
