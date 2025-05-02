@@ -3,14 +3,12 @@ package dev.revere.alley.locale;
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.locale.ILocale;
 import dev.revere.alley.util.chat.CC;
-import lombok.Getter;
 
 /**
  * @author Emmy
  * @project Alley
  * @since 03/03/2025
  */
-@Getter
 public enum ProfileLocale implements ILocale {
     TOGGLED_PARTY_INVITES("messages.yml", "player-settings.party-invites"),
     TOGGLED_PARTY_MESSAGES("messages.yml", "player-settings.party-messages"),
@@ -22,7 +20,7 @@ public enum ProfileLocale implements ILocale {
     private final String configName, configString;
 
     /**
-     * Constructor for the ProfileLocale class.
+     * Constructor for the ProfileLocale enum.
      *
      * @param configName   The name of the config.
      * @param configString The string of the config.

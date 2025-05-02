@@ -1,7 +1,7 @@
 package dev.revere.alley.feature.kit;
 
 import dev.revere.alley.feature.kit.enums.EnumKitCategory;
-import dev.revere.alley.feature.kit.settings.KitSetting;
+import dev.revere.alley.feature.kit.setting.KitSetting;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Material;

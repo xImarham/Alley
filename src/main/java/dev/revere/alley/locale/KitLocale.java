@@ -46,7 +46,7 @@ public enum KitLocale implements ILocale {
     private final String configString;
 
     /**
-     * Constructor for the KitLocale class.
+     * Constructor for the KitLocale enum.
      *
      * @param configName   The name of the config.
      * @param configString The string of the config.

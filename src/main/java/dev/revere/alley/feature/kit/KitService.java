@@ -2,8 +2,8 @@ package dev.revere.alley.feature.kit;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.feature.kit.enums.EnumKitCategory;
-import dev.revere.alley.feature.kit.settings.KitSetting;
-import dev.revere.alley.feature.kit.settings.impl.KitSettingRankedImpl;
+import dev.revere.alley.feature.kit.setting.KitSetting;
+import dev.revere.alley.feature.kit.setting.impl.KitSettingRankedImpl;
 import dev.revere.alley.feature.queue.Queue;
 import dev.revere.alley.util.PotionUtil;
 import dev.revere.alley.util.chat.CC;

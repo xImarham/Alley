@@ -30,7 +30,7 @@ import dev.revere.alley.feature.elo.EloCalculator;
 import dev.revere.alley.feature.hotbar.HotbarService;
 import dev.revere.alley.feature.hotbar.listener.HotbarListener;
 import dev.revere.alley.feature.kit.KitService;
-import dev.revere.alley.feature.kit.settings.KitSettingService;
+import dev.revere.alley.feature.kit.setting.KitSettingService;
 import dev.revere.alley.feature.leaderboard.LeaderboardService;
 import dev.revere.alley.feature.level.LevelService;
 import dev.revere.alley.feature.queue.QueueService;

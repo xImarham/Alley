@@ -1,10 +1,8 @@
 package dev.revere.alley.feature.spawn.command;
 
-import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
-import dev.revere.alley.feature.hotbar.enums.EnumHotbarType;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
 import dev.revere.alley.util.PlayerUtil;
@@ -27,15 +25,9 @@ public class SpawnCommand extends BaseCommand {
             return;
         }
 
-        if (profile.getState() == EnumProfileState.WAITING) {
-            this.plugin.getHotbarService().applyHotbarItems(player, EnumHotbarType.QUEUE);
-            Alley.getInstance().getParkourService().removeIfPlayingParkour(player, true);
-            return;
-        }
-
         PlayerUtil.reset(player, false);
         this.plugin.getSpawnService().teleportToSpawn(player);
-        this.plugin.getHotbarService().applyHotbarItems(player, EnumHotbarType.LOBBY);
+        this.plugin.getHotbarService().applyHotbarItems(player);
         player.sendMessage(CC.translate(this.plugin.getConfigService().getMessagesConfig().getString("spawn.teleported")));
     }
 }

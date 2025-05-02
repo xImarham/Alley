@@ -5,14 +5,14 @@ import dev.revere.alley.Alley;
 import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.api.menu.Menu;
 import dev.revere.alley.feature.kit.Kit;
-import dev.revere.alley.feature.kit.settings.impl.KitSettingRankedImpl;
+import dev.revere.alley.feature.kit.setting.impl.KitSettingRankedImpl;
 import dev.revere.alley.feature.leaderboard.LeaderboardService;
 import dev.revere.alley.feature.leaderboard.data.LeaderboardPlayerData;
 import dev.revere.alley.feature.leaderboard.enums.EnumLeaderboardType;
 import dev.revere.alley.feature.leaderboard.menu.button.DisplayTypeButton;
 import dev.revere.alley.feature.leaderboard.menu.button.LeaderboardKitButton;
 import dev.revere.alley.profile.Profile;
-import dev.revere.alley.profile.stats.menu.button.StatisticsButton;
+import dev.revere.alley.profile.menu.statistic.button.StatisticsButton;
 import org.bukkit.entity.Player;
 
 import java.util.List;

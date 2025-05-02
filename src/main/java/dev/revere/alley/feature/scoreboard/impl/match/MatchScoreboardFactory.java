@@ -1,10 +1,10 @@
 package dev.revere.alley.feature.scoreboard.impl.match;
 
 import dev.revere.alley.Alley;
-import dev.revere.alley.feature.kit.settings.impl.KitSettingBattleRushImpl;
-import dev.revere.alley.feature.kit.settings.impl.KitSettingBoxingImpl;
-import dev.revere.alley.feature.kit.settings.impl.KitSettingLivesImpl;
-import dev.revere.alley.feature.kit.settings.impl.KitSettingStickFightImpl;
+import dev.revere.alley.feature.kit.setting.impl.KitSettingBattleRushImpl;
+import dev.revere.alley.feature.kit.setting.impl.KitSettingBoxingImpl;
+import dev.revere.alley.feature.kit.setting.impl.KitSettingLivesImpl;
+import dev.revere.alley.feature.kit.setting.impl.KitSettingStickFightImpl;
 import dev.revere.alley.feature.scoreboard.impl.match.impl.type.MatchScoreboardBoxingImpl;
 import dev.revere.alley.feature.scoreboard.impl.match.impl.state.MatchScoreboardEndingImpl;
 import dev.revere.alley.feature.scoreboard.impl.match.impl.MatchScoreboardRegularImpl;

@@ -1,8 +1,8 @@
 package dev.revere.alley.game.match.runnable;
 
 import dev.revere.alley.Alley;
-import dev.revere.alley.feature.kit.settings.impl.KitSettingBattleRushImpl;
-import dev.revere.alley.feature.kit.settings.impl.KitSettingStickFightImpl;
+import dev.revere.alley.feature.kit.setting.impl.KitSettingBattleRushImpl;
+import dev.revere.alley.feature.kit.setting.impl.KitSettingStickFightImpl;
 import dev.revere.alley.game.match.AbstractMatch;
 import dev.revere.alley.game.match.enums.EnumMatchState;
 import dev.revere.alley.game.match.impl.MatchRoundsImpl;

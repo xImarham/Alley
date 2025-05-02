@@ -3,14 +3,12 @@ package dev.revere.alley.locale;
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.locale.ILocale;
 import dev.revere.alley.util.chat.CC;
-import lombok.Getter;
 
 /**
  * @author Emmy
  * @project Alley
  * @since 03/03/2025
  */
-@Getter
 public enum PartyLocale implements ILocale {
     PARTY_CREATED("messages.yml", "party.created"),
     PARTY_DISBANDED("messages.yml", "party.disbanded"),
@@ -28,7 +26,7 @@ public enum PartyLocale implements ILocale {
     private final String configName, configString;
 
     /**
-     * Constructor for the PartyLocale class.
+     * Constructor for the PartyLocale enum.
      *
      * @param configName   The name of the config.
      * @param configString The string of the config.
