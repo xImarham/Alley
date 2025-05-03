@@ -24,14 +24,14 @@ public class PartyListener implements Listener {
         Profile profile = Alley.getInstance().getProfileService().getProfile(event.getPlayer().getUniqueId());
         PartyService partyService = Alley.getInstance().getPartyService();
 
-        if (profile.getProfileData().getProfileSettingData().getChatChannel().equalsIgnoreCase(EnumChatChannel.PARTY.toString())) {
+        if (profile.getProfileData().getSettingData().getChatChannel().equalsIgnoreCase(EnumChatChannel.PARTY.toString())) {
             event.setCancelled(true);
             if (profile.getParty() == null) {
                 event.getPlayer().sendMessage(CC.translate("&cYou're not in a party."));
                 return;
             }
 
-            if (!profile.getProfileData().getProfileSettingData().isPartyMessagesEnabled()) {
+            if (!profile.getProfileData().getSettingData().isPartyMessagesEnabled()) {
                 event.getPlayer().sendMessage(CC.translate("&cYou have party messages disabled."));
                 return;
             }
@@ -48,7 +48,7 @@ public class PartyListener implements Listener {
             }
 
             event.setCancelled(true);
-            if (!profile.getProfileData().getProfileSettingData().isPartyMessagesEnabled()) {
+            if (!profile.getProfileData().getSettingData().isPartyMessagesEnabled()) {
                 event.getPlayer().sendMessage(CC.translate("&cYou have party messages disabled."));
                 return;
             }

@@ -19,7 +19,7 @@ public class NightCommand extends BaseCommand {
         Player player = command.getPlayer();
         Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
 
-        profile.getProfileData().getProfileSettingData().setTimeNight(player);
+        profile.getProfileData().getSettingData().setTimeNight(player);
         player.sendMessage(CC.translate("&aYou have set the time to night."));
     }
 }

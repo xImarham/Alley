@@ -43,23 +43,23 @@ public class PracticeSettingsButton extends Button {
 
         if (this.material == Material.WATCH) {
             EnumWorldTime newTime = this.getNextWorldTime(clickType, profile);
-            profile.getProfileData().getProfileSettingData().setTime(newTime.getName());
+            profile.getProfileData().getSettingData().setTime(newTime.getName());
 
             switch (newTime) {
                 case DEFAULT:
-                    profile.getProfileData().getProfileSettingData().setTimeDefault(player);
+                    profile.getProfileData().getSettingData().setTimeDefault(player);
                     player.sendMessage(CC.translate("&aYou have reset your world time."));
                     break;
                 case DAY:
-                    profile.getProfileData().getProfileSettingData().setTimeDay(player);
+                    profile.getProfileData().getSettingData().setTimeDay(player);
                     player.sendMessage(CC.translate("&aYou have set the time to day."));
                     break;
                 case SUNSET:
-                    profile.getProfileData().getProfileSettingData().setTimeSunset(player);
+                    profile.getProfileData().getSettingData().setTimeSunset(player);
                     player.sendMessage(CC.translate("&aYou have set the time to sunset."));
                     break;
                 case NIGHT:
-                    profile.getProfileData().getProfileSettingData().setTimeNight(player);
+                    profile.getProfileData().getSettingData().setTimeNight(player);
                     player.sendMessage(CC.translate("&aYou have set the time to night."));
                     break;
             }
@@ -115,7 +115,7 @@ public class PracticeSettingsButton extends Button {
      */
     private EnumWorldTime getNextWorldTime(ClickType clickType, Profile profile) {
         EnumWorldTime[] timeStates = EnumWorldTime.values();
-        int currentIndex = profile.getProfileData().getProfileSettingData().getWorldTime().ordinal();
+        int currentIndex = profile.getProfileData().getSettingData().getWorldTime().ordinal();
 
         if (clickType == ClickType.LEFT) {
             currentIndex = (currentIndex + 1) % timeStates.length;

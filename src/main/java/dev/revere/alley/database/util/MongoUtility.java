@@ -54,9 +54,9 @@ public class MongoUtility {
         profileDataDocument.put("unrankedKitData", convertUnrankedKitData(profileData.getUnrankedKitData()));
         profileDataDocument.put("rankedKitData", convertRankedKitData(profileData.getRankedKitData()));
         profileDataDocument.put("ffaData", convertFFAData(profileData.getFfaData()));
-        profileDataDocument.put("profileSettingData", convertProfileSettingData(profileData.getProfileSettingData()));
-        profileDataDocument.put("profileCosmeticData", convertProfileCosmeticData(profileData.getProfileCosmeticData()));
-        profileDataDocument.put("profilePlayTimeData", convertProfilePlayTimeData(profileData.getProfilePlayTimeData()));
+        profileDataDocument.put("profileSettingData", convertProfileSettingData(profileData.getSettingData()));
+        profileDataDocument.put("profileCosmeticData", convertProfileCosmeticData(profileData.getCosmeticData()));
+        profileDataDocument.put("profilePlayTimeData", convertProfilePlayTimeData(profileData.getPlayTimeData()));
 
         document.put("profileData", profileDataDocument);
         return document;
@@ -203,9 +203,9 @@ public class MongoUtility {
             existingFFAData.putAll(newFFAData);
             profileData.setFfaData(existingFFAData);
 
-            profileData.setProfileSettingData(parseProfileSettingData((Document) profileDataDocument.get("profileSettingData")));
-            profileData.setProfileCosmeticData(parseProfileCosmeticData((Document) profileDataDocument.get("profileCosmeticData")));
-            profileData.setProfilePlayTimeData(parseProfilePlayTimeData((Document) profileDataDocument.get("profilePlayTimeData")));
+            profileData.setSettingData(parseProfileSettingData((Document) profileDataDocument.get("profileSettingData")));
+            profileData.setCosmeticData(parseProfileCosmeticData((Document) profileDataDocument.get("profileCosmeticData")));
+            profileData.setPlayTimeData(parseProfilePlayTimeData((Document) profileDataDocument.get("profilePlayTimeData")));
 
             profile.setProfileData(profileData);
         }

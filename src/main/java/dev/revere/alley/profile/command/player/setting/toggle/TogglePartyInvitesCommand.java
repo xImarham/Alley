@@ -21,8 +21,8 @@ public class TogglePartyInvitesCommand extends BaseCommand {
         Player player = command.getPlayer();
 
         Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
-        profile.getProfileData().getProfileSettingData().setPartyInvitesEnabled(!profile.getProfileData().getProfileSettingData().isPartyInvitesEnabled());
+        profile.getProfileData().getSettingData().setPartyInvitesEnabled(!profile.getProfileData().getSettingData().isPartyInvitesEnabled());
 
-        player.sendMessage(CC.translate(ProfileLocale.TOGGLED_PARTY_INVITES.getMessage().replace("{status}", profile.getProfileData().getProfileSettingData().isPartyInvitesEnabled() ? "&aenabled" : "&cdisabled")));
+        player.sendMessage(CC.translate(ProfileLocale.TOGGLED_PARTY_INVITES.getMessage().replace("{status}", profile.getProfileData().getSettingData().isPartyInvitesEnabled() ? "&aenabled" : "&cdisabled")));
     }
 }

@@ -19,7 +19,7 @@ public class DayCommand extends BaseCommand {
         Player player = command.getPlayer();
         Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
 
-        profile.getProfileData().getProfileSettingData().setTimeDay(player);
+        profile.getProfileData().getSettingData().setTimeDay(player);
         player.sendMessage(CC.translate("&aYou have set the time to day."));
     }
 }

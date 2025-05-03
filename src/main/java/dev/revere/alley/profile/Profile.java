@@ -196,7 +196,7 @@ public class Profile {
      * Updates the last play time of the profile.
      */
     public void updatePlayTime() {
-        ProfilePlayTimeData playTimeData = this.profileData.getProfilePlayTimeData();
+        ProfilePlayTimeData playTimeData = this.profileData.getPlayTimeData();
         playTimeData.setTotal(playTimeData.getTotal() + (System.currentTimeMillis() - playTimeData.getLastLogin()));
     }
 }

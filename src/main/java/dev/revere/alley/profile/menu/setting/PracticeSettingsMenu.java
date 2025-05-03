@@ -28,7 +28,7 @@ public class PracticeSettingsMenu extends Menu {
     public Map<Integer, Button> getButtons(Player player) {
         Map<Integer, Button> buttons = new HashMap<>();
         Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
-        ProfileSettingData settings = profile.getProfileData().getProfileSettingData();
+        ProfileSettingData settings = profile.getProfileData().getSettingData();
 
         for (EnumPracticeSettingType type : EnumPracticeSettingType.values()) {
             buttons.put(type.slot, new PracticeSettingsButton(

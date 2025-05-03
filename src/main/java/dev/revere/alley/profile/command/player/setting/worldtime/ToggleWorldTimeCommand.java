@@ -19,21 +19,21 @@ public class ToggleWorldTimeCommand extends BaseCommand {
         Player player = command.getPlayer();
         Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
 
-        switch (profile.getProfileData().getProfileSettingData().getWorldTime()) {
+        switch (profile.getProfileData().getSettingData().getWorldTime()) {
             case DEFAULT:
-                profile.getProfileData().getProfileSettingData().setTimeDay(player);
+                profile.getProfileData().getSettingData().setTimeDay(player);
                 player.sendMessage(CC.translate("&aYou have set the time to day."));
                 break;
             case DAY:
-                profile.getProfileData().getProfileSettingData().setTimeSunset(player);
+                profile.getProfileData().getSettingData().setTimeSunset(player);
                 player.sendMessage(CC.translate("&aYou have set the time to sunset."));
                 break;
             case SUNSET:
-                profile.getProfileData().getProfileSettingData().setTimeNight(player);
+                profile.getProfileData().getSettingData().setTimeNight(player);
                 player.sendMessage(CC.translate("&aYou have set the time to night."));
                 break;
             case NIGHT:
-                profile.getProfileData().getProfileSettingData().setTimeDefault(player);
+                profile.getProfileData().getSettingData().setTimeDefault(player);
                 player.sendMessage(CC.translate("&aYou have reset your world time."));
                 break;
         }

@@ -28,11 +28,11 @@ public class PartyChatCommand extends BaseCommand {
         String message = Arrays.stream(args).map(argument -> argument + " ").collect(Collectors.joining());
 
         if (args.length == 0) {
-            if (profile.getProfileData().getProfileSettingData().getChatChannel().equals(EnumChatChannel.PARTY.toString())) {
-                profile.getProfileData().getProfileSettingData().setChatChannel(EnumChatChannel.GLOBAL.toString());
+            if (profile.getProfileData().getSettingData().getChatChannel().equals(EnumChatChannel.PARTY.toString())) {
+                profile.getProfileData().getSettingData().setChatChannel(EnumChatChannel.GLOBAL.toString());
                 player.sendMessage(CC.translate("&aSet your chat channel to &bglobal&a."));
             } else {
-                profile.getProfileData().getProfileSettingData().setChatChannel(EnumChatChannel.PARTY.toString());
+                profile.getProfileData().getSettingData().setChatChannel(EnumChatChannel.PARTY.toString());
                 player.sendMessage(CC.translate("&aSet your chat channel to &bparty&a."));
             }
             return;
@@ -43,7 +43,7 @@ public class PartyChatCommand extends BaseCommand {
             return;
         }
 
-        if (!profile.getProfileData().getProfileSettingData().isPartyMessagesEnabled()) {
+        if (!profile.getProfileData().getSettingData().isPartyMessagesEnabled()) {
             player.sendMessage(CC.translate(PartyLocale.DISABLED_PARTY_CHAT.getMessage()));
             return;
         }

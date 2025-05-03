@@ -347,8 +347,8 @@ public abstract class AbstractMatch {
      */
     private void handleEffects(Player player, Player killer) {
         Profile profile = Alley.getInstance().getProfileService().getProfile(killer.getUniqueId());
-        String selectedKillEffectName = profile.getProfileData().getProfileCosmeticData().getSelectedKillEffect();
-        String selectedSoundEffectName = profile.getProfileData().getProfileCosmeticData().getSelectedSoundEffect();
+        String selectedKillEffectName = profile.getProfileData().getCosmeticData().getSelectedKillEffect();
+        String selectedSoundEffectName = profile.getProfileData().getCosmeticData().getSelectedSoundEffect();
 
         CosmeticRepository cosmeticRepository = Alley.getInstance().getCosmeticRepository();
         for (ICosmeticRepository<?> repository : cosmeticRepository.getCosmeticRepositories().values()) {

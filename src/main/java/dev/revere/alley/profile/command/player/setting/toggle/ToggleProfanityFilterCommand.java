@@ -20,8 +20,8 @@ public class ToggleProfanityFilterCommand extends BaseCommand {
         Player player = command.getPlayer();
 
         Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
-        profile.getProfileData().getProfileSettingData().setProfanityFilterEnabled(!profile.getProfileData().getProfileSettingData().isProfanityFilterEnabled());
+        profile.getProfileData().getSettingData().setProfanityFilterEnabled(!profile.getProfileData().getSettingData().isProfanityFilterEnabled());
 
-        player.sendMessage(CC.translate(ProfileLocale.TOGGLED_PROFANITY_FILTER.getMessage().replace("{status}", profile.getProfileData().getProfileSettingData().isProfanityFilterEnabled() ? "&aenabled" : "&cdisabled")));
+        player.sendMessage(CC.translate(ProfileLocale.TOGGLED_PROFANITY_FILTER.getMessage().replace("{status}", profile.getProfileData().getSettingData().isProfanityFilterEnabled() ? "&aenabled" : "&cdisabled")));
     }
 }

@@ -35,7 +35,7 @@ public class CosmeticGetSelectedCommand extends BaseCommand {
         Profile profile = this.plugin.getProfileService().getProfile(target.getUniqueId());
         player.sendMessage(CC.translate("     &b&lSelected Cosmetics for " + target.getName()));
 
-        ProfileCosmeticData cosmeticData = profile.getProfileData().getProfileCosmeticData();
+        ProfileCosmeticData cosmeticData = profile.getProfileData().getCosmeticData();
         String killEffect = cosmeticData.getSelectedKillEffect();
         String soundEffect = cosmeticData.getSelectedSoundEffect();
 

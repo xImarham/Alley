@@ -21,8 +21,8 @@ public class TogglePartyMessagesCommand extends BaseCommand {
         Player player = command.getPlayer();
 
         Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
-        profile.getProfileData().getProfileSettingData().setPartyMessagesEnabled(!profile.getProfileData().getProfileSettingData().isPartyMessagesEnabled());
+        profile.getProfileData().getSettingData().setPartyMessagesEnabled(!profile.getProfileData().getSettingData().isPartyMessagesEnabled());
 
-        player.sendMessage(CC.translate(ProfileLocale.TOGGLED_PARTY_MESSAGES.getMessage().replace("{status}", profile.getProfileData().getProfileSettingData().isPartyMessagesEnabled() ? "&aenabled" : "&cdisabled")));
+        player.sendMessage(CC.translate(ProfileLocale.TOGGLED_PARTY_MESSAGES.getMessage().replace("{status}", profile.getProfileData().getSettingData().isPartyMessagesEnabled() ? "&aenabled" : "&cdisabled")));
     }
 }

@@ -29,9 +29,10 @@ public class ProfileData {
     private Map<String, ProfileUnrankedKitData> unrankedKitData;
     private Map<String, ProfileRankedKitData> rankedKitData;
     private Map<String, ProfileFFAData> ffaData;
-    private ProfileSettingData profileSettingData;
-    private ProfileCosmeticData profileCosmeticData;
-    private ProfilePlayTimeData profilePlayTimeData;
+
+    private ProfileSettingData settingData;
+    private ProfileCosmeticData cosmeticData;
+    private ProfilePlayTimeData playTimeData;
 
     private String globalLevel;
 
@@ -58,9 +59,9 @@ public class ProfileData {
     }
 
     private void initializeDataClasses() {
-        this.profileSettingData = new ProfileSettingData();
-        this.profileCosmeticData = new ProfileCosmeticData();
-        this.profilePlayTimeData = new ProfilePlayTimeData();
+        this.settingData = new ProfileSettingData();
+        this.cosmeticData = new ProfileCosmeticData();
+        this.playTimeData = new ProfilePlayTimeData();
     }
 
     private void feedDataClasses() {

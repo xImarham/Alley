@@ -19,7 +19,7 @@ public class ResetTimeCommand extends BaseCommand {
         Player player = command.getPlayer();
         Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
 
-        profile.getProfileData().getProfileSettingData().setTimeDefault(player);
+        profile.getProfileData().getSettingData().setTimeDefault(player);
         player.sendMessage(CC.translate("&aYou have reset your world time."));
     }
 }

@@ -19,7 +19,7 @@ public class SunsetCommand extends BaseCommand {
         Player player = command.getPlayer();
         Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
 
-        profile.getProfileData().getProfileSettingData().setTimeSunset(player);
+        profile.getProfileData().getSettingData().setTimeSunset(player);
         player.sendMessage(CC.translate("&aYou have set the time to sunset."));
     }
 }

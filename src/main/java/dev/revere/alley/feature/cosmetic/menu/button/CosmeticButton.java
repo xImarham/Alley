@@ -27,7 +27,7 @@ public class CosmeticButton extends Button {
     public ItemStack getButtonItem(Player player) {
         Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
         boolean hasPermission = player.hasPermission(cosmetic.getPermission());
-        boolean isSelected = profile.getProfileData().getProfileCosmeticData().isSelectedCosmetic(cosmetic);
+        boolean isSelected = profile.getProfileData().getCosmeticData().isSelectedCosmetic(cosmetic);
 
         String lore;
         if (hasPermission) {
@@ -62,7 +62,7 @@ public class CosmeticButton extends Button {
         playNeutral(player);
 
         Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
-        if (profile.getProfileData().getProfileCosmeticData().isSelectedCosmetic(cosmetic)) {
+        if (profile.getProfileData().getCosmeticData().isSelectedCosmetic(cosmetic)) {
             player.sendMessage(CC.translate("&cYou already have this cosmetic selected."));
             return;
         }
@@ -73,9 +73,9 @@ public class CosmeticButton extends Button {
         }
 
         if (cosmetic instanceof AbstractKillEffect) {
-            profile.getProfileData().getProfileCosmeticData().setSelectedKillEffect(cosmetic.getName());
+            profile.getProfileData().getCosmeticData().setSelectedKillEffect(cosmetic.getName());
         } else if (cosmetic instanceof AbstractSoundEffect) {
-            profile.getProfileData().getProfileCosmeticData().setSelectedSoundEffect(cosmetic.getName());
+            profile.getProfileData().getCosmeticData().setSelectedSoundEffect(cosmetic.getName());
         }
 
         player.sendMessage(CC.translate("&aYou have successfully selected the &b" + cosmetic.getName() + " &acosmetic."));

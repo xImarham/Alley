@@ -45,7 +45,7 @@ public class PlaytimeCommand extends BaseCommand {
             return;
         }
 
-        ProfilePlayTimeData playTimeData = targetProfile.getProfileData().getProfilePlayTimeData();
+        ProfilePlayTimeData playTimeData = targetProfile.getProfileData().getPlayTimeData();
 
         long totalPlayTime = playTimeData.getTotal();
         long totalTimeInSeconds = totalPlayTime / 1000;

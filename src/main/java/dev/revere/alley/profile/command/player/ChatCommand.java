@@ -32,12 +32,12 @@ public class ChatCommand extends BaseCommand {
             return;
         }
 
-        if (profile.getProfileData().getProfileSettingData().getChatChannel().equalsIgnoreCase(args[0])) {
+        if (profile.getProfileData().getSettingData().getChatChannel().equalsIgnoreCase(args[0])) {
             player.sendMessage(CC.translate("&cYou're already in the " + args[0] + " chat channel."));
             return;
         }
 
-        profile.getProfileData().getProfileSettingData().setChatChannel(EnumChatChannel.getExactChatChannel(args[0], true));
+        profile.getProfileData().getSettingData().setChatChannel(EnumChatChannel.getExactChatChannel(args[0], true));
         player.sendMessage(CC.translate("&aSet your chat channel to &b" + args[0] + "&a."));
     }
 }

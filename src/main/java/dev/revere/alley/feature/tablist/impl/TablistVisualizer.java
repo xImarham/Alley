@@ -32,7 +32,7 @@ public class TablistVisualizer implements ITablist {
 
     @Override
     public void update(Player player) {
-        if (Alley.getInstance().getProfileService().getProfile(player.getUniqueId()).getProfileData().getProfileSettingData().isTablistEnabled()) {
+        if (Alley.getInstance().getProfileService().getProfile(player.getUniqueId()).getProfileData().getSettingData().isTablistEnabled()) {
             List<String> headerLines = getHeader(player).stream()
                     .map(CC::translate)
                     .collect(Collectors.toList());

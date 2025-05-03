@@ -21,8 +21,8 @@ public class ToggleScoreboardCommand extends BaseCommand {
         Player player = command.getPlayer();
 
         Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
-        profile.getProfileData().getProfileSettingData().setScoreboardEnabled(!profile.getProfileData().getProfileSettingData().isScoreboardEnabled());
+        profile.getProfileData().getSettingData().setScoreboardEnabled(!profile.getProfileData().getSettingData().isScoreboardEnabled());
 
-        player.sendMessage(CC.translate(ProfileLocale.TOGGLED_SCOREBOARD.getMessage().replace("{status}", profile.getProfileData().getProfileSettingData().isScoreboardEnabled() ? "&aenabled" : "&cdisabled")));
+        player.sendMessage(CC.translate(ProfileLocale.TOGGLED_SCOREBOARD.getMessage().replace("{status}", profile.getProfileData().getSettingData().isScoreboardEnabled() ? "&aenabled" : "&cdisabled")));
     }
 }

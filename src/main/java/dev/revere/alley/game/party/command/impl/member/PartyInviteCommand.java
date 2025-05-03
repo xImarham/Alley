@@ -47,7 +47,7 @@ public class PartyInviteCommand extends BaseCommand {
         }
 
         Profile targetProfile = this.plugin.getProfileService().getProfile(targetPlayer.getUniqueId());
-        if (!targetProfile.getProfileData().getProfileSettingData().isPartyInvitesEnabled()) {
+        if (!targetProfile.getProfileData().getSettingData().isPartyInvitesEnabled()) {
             player.sendMessage(CC.translate(PartyLocale.PLAYER_DISABLED_PARTY_INVITES.getMessage().replace("{player}", target)));
             return;
         }

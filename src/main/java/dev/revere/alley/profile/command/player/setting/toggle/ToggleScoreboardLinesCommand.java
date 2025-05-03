@@ -20,8 +20,8 @@ public class ToggleScoreboardLinesCommand extends BaseCommand {
         Player player = command.getPlayer();
 
         Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
-        profile.getProfileData().getProfileSettingData().setShowScoreboardLines(!profile.getProfileData().getProfileSettingData().isShowScoreboardLines());
+        profile.getProfileData().getSettingData().setShowScoreboardLines(!profile.getProfileData().getSettingData().isShowScoreboardLines());
 
-        player.sendMessage(CC.translate(ProfileLocale.TOGGLED_SCOREBOARD_LINES.getMessage().replace("{status}", profile.getProfileData().getProfileSettingData().isShowScoreboardLines() ? "&aenabled" : "&cdisabled")));
+        player.sendMessage(CC.translate(ProfileLocale.TOGGLED_SCOREBOARD_LINES.getMessage().replace("{status}", profile.getProfileData().getSettingData().isShowScoreboardLines() ? "&aenabled" : "&cdisabled")));
     }
 }

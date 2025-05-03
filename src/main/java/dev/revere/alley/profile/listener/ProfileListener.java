@@ -66,7 +66,7 @@ public class ProfileListener implements Listener {
         profile.setOnline(true);
         profile.setMatch(null);
 
-        profile.getProfileData().getProfilePlayTimeData().setLastLogin(System.currentTimeMillis());
+        profile.getProfileData().getPlayTimeData().setLastLogin(System.currentTimeMillis());
 
         profile.getProfileData().determineLevel();
 
@@ -79,7 +79,7 @@ public class ProfileListener implements Listener {
 
         event.setJoinMessage(null);
 
-        profile.getProfileData().getProfileSettingData().setTimeBasedOnProfileSetting(player);
+        profile.getProfileData().getSettingData().setTimeBasedOnProfileSetting(player);
 
         profile.save();
 

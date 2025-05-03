@@ -70,7 +70,7 @@ public class ScoreboardVisualizer implements IAssembleAdapter {
      */
     @Override
     public List<String> getLines(Player player) {
-        if (this.plugin.getProfileService().getProfile(player.getUniqueId()).getProfileData().getProfileSettingData().isScoreboardEnabled()) {
+        if (this.plugin.getProfileService().getProfile(player.getUniqueId()).getProfileData().getSettingData().isScoreboardEnabled()) {
             Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
             List<String> lines = new ArrayList<>();
 
@@ -111,7 +111,7 @@ public class ScoreboardVisualizer implements IAssembleAdapter {
      * @return The scoreboard lines.
      */
     private String getScoreboardLines(Profile profile) {
-        if (profile.getProfileData().getProfileSettingData().isShowScoreboardLines()) {
+        if (profile.getProfileData().getSettingData().isShowScoreboardLines()) {
             return this.plugin.getConfigService().getScoreboardConfig().getString("scoreboard.sidebar-format");
         }
 
