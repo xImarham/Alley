@@ -70,9 +70,10 @@ kits:
       NoHunger: false
       BattleRush: false
       StickFight: false
-    potioneffects: []
+    potioneffects:
+      - SPEED:2147483647:1
   BattleRush:
-    display-name: '&bBattle Rush'
+    display-name: '&bBattleRush'
     description: ''
     disclaimer: '&7BattleRush kit disclaimer.'
     enabled: true
@@ -108,7 +109,7 @@ kits:
       StickFight: false
     potioneffects: []
   StickFight:
-    display-name: '&bStick Fight'
+    display-name: '&bStickFight'
     description: ''
     disclaimer: '&7StickFight kit disclaimer.'
     enabled: true
@@ -144,7 +145,7 @@ kits:
       StickFight: false
     potioneffects: []
   PearlFight:
-    display-name: '&bPearl Fight'
+    display-name: '&bPearlFight'
     description: ''
     disclaimer: '&7PearlFight kit disclaimer.'
     enabled: true
@@ -252,7 +253,7 @@ kits:
       StickFight: false
     potioneffects: []
   TopFight:
-    display-name: '&bTop Fight'
+    display-name: '&bTopFight'
     description: '&7TopFight kit description.'
     disclaimer: '&7TopFight kit disclaimer.'
     enabled: true
@@ -287,10 +288,10 @@ kits:
       BattleRush: false
       StickFight: false
     potioneffects: []
-  Bedfight:
-    display-name: '&bBed Fight'
+  bedfight:
+    display-name: '&bbedfight'
     description: '&c&lIN DEVELOPMENT'
-    disclaimer: '&7Bedfight kit disclaimer.'
+    disclaimer: '&7bedfight kit disclaimer.'
     enabled: true
     editable: true
     category: NORMAL
@@ -359,10 +360,10 @@ kits:
       BattleRush: false
       StickFight: false
     potioneffects: []
-  Sumo:
-    display-name: '&bSumo'
+  sumo:
+    display-name: '&bsumo'
     description: ''
-    disclaimer: '&7Sumo kit disclaimer.'
+    disclaimer: '&7sumo kit disclaimer.'
     enabled: true
     editable: true
     category: NORMAL
@@ -396,7 +397,7 @@ kits:
       StickFight: false
     potioneffects: []
   FireballFight:
-    display-name: '&bFireball Fight'
+    display-name: '&bFireballFight'
     description: '&c&lIN DEVELOPMENT'
     disclaimer: '&7FireballFight kit disclaimer.'
     enabled: true
