@@ -24,25 +24,27 @@ public class Kit {
     private String displayName;
     private String description;
     private String disclaimer;
-    private String ffaArenaName;
 
     private boolean enabled;
-    private boolean ffaEnabled;
+    private boolean editable;
 
-    private int unrankedSlot;
-    private int rankedSlot;
-    private int editorSlot;
-    private int ffaSlot;
-
-    private int maxFfaPlayers;
-
-    private ItemStack[] items;
-    private ItemStack[] armor;
+    private EnumKitCategory category;
 
     private Material icon;
     private int durability;
 
-    private EnumKitCategory category;
+    private int unrankedSlot;
+    private int rankedSlot;
+    private int editorSlot;
+
+    private String ffaArenaName;
+    private boolean ffaEnabled;
+    private int ffaSlot;
+    private int maxFfaPlayers;
+
+    private ItemStack[] items;
+    private ItemStack[] armor;
+    private ItemStack[] editorItems;
 
     private List<PotionEffect> potionEffects;
     private final List<KitSetting> kitSettings;
@@ -53,36 +55,49 @@ public class Kit {
      * @param name         The name of the kit.
      * @param displayName  The display name of the kit.
      * @param description  The description of the kit.
-     * @param enabled      Whether the kit is enabled.
-     * @param unrankedSlot The unranked slot of the kit.
-     * @param rankedSlot   The ranked slot of the kit.
-     * @param editorSlot   The editor slot of the kit.
-     * @param items    The inventory of the kit.
-     * @param armor        The armor of the kit.
-     * @param icon         The icon of the kit.
-     * @param durability     The icon data of the kit.
      * @param disclaimer   The disclaimer of the kit.
+     * @param enabled      Whether the kit is enabled.
+     * @param editable     Whether the kit is editable.
+     * @param category     The category of the kit.
+     * @param icon         The icon of the kit.
+     * @param durability   The durability of the icon.
+     * @param unrankedSlot The slot for unranked games.
+     * @param rankedSlot   The slot for ranked games.
+     * @param editorSlot   The slot for the editor.
+     * @param ffaSlot      The slot for FFA games.
+     * @param items        The items in the kit.
+     * @param armor        The armor in the kit.
+     * @param editorItems  The items in the editor.
      */
-    public Kit(String name, String displayName, String description, boolean enabled, int unrankedSlot, int rankedSlot, int editorSlot, int ffaSlot, ItemStack[] items, ItemStack[] armor, Material icon, int durability, String disclaimer, EnumKitCategory category) {
+    public Kit(String name, String displayName, String description, String disclaimer, boolean enabled, boolean editable, EnumKitCategory category, Material icon, int durability, int unrankedSlot, int rankedSlot, int editorSlot, int ffaSlot, ItemStack[] items, ItemStack[] armor, ItemStack[] editorItems) {
         this.name = name;
         this.displayName = displayName;
         this.description = description;
+        this.disclaimer = disclaimer;
+
         this.enabled = enabled;
+        this.editable = editable;
+
+        this.category = category;
+
+        this.icon = icon;
+        this.durability = durability;
+
         this.unrankedSlot = unrankedSlot;
         this.rankedSlot = rankedSlot;
         this.editorSlot = editorSlot;
+
+        this.ffaArenaName = "";
+        this.ffaEnabled = false;
+        this.maxFfaPlayers = 20;
+        this.ffaSlot = ffaSlot;
+
         this.items = items;
         this.armor = armor;
-        this.icon = icon;
-        this.durability = durability;
+        this.editorItems = editorItems;
+
         this.kitSettings = new ArrayList<>();
-        this.disclaimer = disclaimer;
         this.potionEffects = new ArrayList<>();
-        this.ffaEnabled = false;
-        this.ffaSlot = ffaSlot;
-        this.ffaArenaName = "";
-        this.maxFfaPlayers = 20;
-        this.category = category;
     }
 
     /**

@@ -5,10 +5,10 @@ import dev.revere.alley.feature.kit.enums.EnumKitCategory;
 import dev.revere.alley.feature.kit.setting.KitSetting;
 import dev.revere.alley.feature.kit.setting.impl.KitSettingRankedImpl;
 import dev.revere.alley.feature.queue.Queue;
+import dev.revere.alley.tool.item.ItemStackSerializer;
+import dev.revere.alley.tool.logger.Logger;
 import dev.revere.alley.util.PotionUtil;
-import dev.revere.alley.util.chat.CC;
 import lombok.Getter;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -53,43 +53,45 @@ public class KitService {
         for (String name : kitsSection.getKeys(false)) {
             String key = "kits." + name;
 
-            ItemStack[] inventory = config.getList(key + ".items").toArray(new ItemStack[0]);
-            ItemStack[] armor = config.getList(key + ".armor").toArray(new ItemStack[0]);
-
-            Material icon = Material.matchMaterial(config.getString(key + ".icon"));
-            int iconData = config.getInt(key + ".durability");
-            String disclaimer = config.getString(key + ".disclaimer");
-
             Kit kit = new Kit(
                     name,
-                    config.getString(key + ".displayname"),
+                    config.getString(key + ".display-name"),
                     config.getString(key + ".description"),
+                    config.getString(key + ".disclaimer"),
                     config.getBoolean(key + ".enabled"),
-                    config.getInt(key + ".unrankedslot"),
-                    config.getInt(key + ".rankedslot"),
-                    config.getInt(key + ".editorslot"),
+                    config.getBoolean(key + ".editable"),
+                    EnumKitCategory.valueOf(config.getString(key + ".category")),
+                    Material.matchMaterial(config.getString(key + ".icon.material")),
+                    config.getInt(key + ".icon.durability"),
+                    config.getInt(key + ".slots.unranked"),
+                    config.getInt(key + ".slots.ranked"),
+                    config.getInt(key + ".slots.editor"),
                     config.getInt(key + ".ffa.slot"),
-                    inventory,
-                    armor,
-                    icon,
-                    iconData,
-                    disclaimer,
-                    EnumKitCategory.valueOf(config.getString(key + ".category"))
+                    ItemStackSerializer.deserialize(config.getString(key + ".items")),
+                    ItemStackSerializer.deserialize(config.getString(key + ".armor")),
+                    ItemStackSerializer.deserialize(config.getString(key + ".editor-items"))
             );
 
             this.setupFFA(kit, config, key);
             this.loadKitSettings(config, key, kit);
             this.loadPotionEffects(config, key, kit);
-            this.addMissingKitSettings(kit, config, key);
+            this.addMissingKitSettings(kit, config, key); // Only necessary for development purposes if you're lazy like me - to add the new kit setting manually.
             this.kits.add(kit);
             this.addKitToQueue(kit);
         }
     }
 
+    /**
+     * Method to setup the FFA settings of a kit.
+     *
+     * @param kit    The kit.
+     * @param config The configuration file.
+     * @param key    The path key.
+     */
     private void setupFFA(Kit kit, FileConfiguration config, String key) {
         kit.setFfaEnabled(config.getBoolean(key + ".ffa.enabled"));
-        kit.setFfaArenaName(config.getString(key + ".ffa.arena"));
-        kit.setMaxFfaPlayers(config.getInt(key + ".ffa.maxplayers"));
+        kit.setFfaArenaName(config.getString(key + ".ffa.arena-name"));
+        kit.setMaxFfaPlayers(config.getInt(key + ".ffa.max-players"));
         kit.setFfaSlot(config.getInt(key + ".ffa.slot"));
     }
 
@@ -108,13 +110,10 @@ public class KitService {
         }
 
         for (String settingName : settingsSection.getKeys(false)) {
-            String settingKey = key + ".settings." + settingName;
-            String description = config.getString(settingKey + ".description");
-            boolean enabled = config.getBoolean(settingKey + ".enabled");
+            boolean enabled = settingsSection.getBoolean(settingName);
 
             KitSetting kitSetting = this.plugin.getKitSettingService().createSettingByName(settingName);
             if (kitSetting != null) {
-                kitSetting.setDescription(description);
                 kitSetting.setEnabled(enabled);
                 kit.addKitSetting(kitSetting);
             }
@@ -132,13 +131,13 @@ public class KitService {
         try {
             List<PotionEffect> potionEffects = PotionUtil.deserialize(config.getStringList(key + ".potioneffects"));
             kit.setPotionEffects(potionEffects);
-        } catch (Exception e) {
-            Bukkit.getConsoleSender().sendMessage(CC.translate("&cFailed to load potion effects for kit " + kit.getName() + "."));
+        } catch (Exception exception) {
+            Logger.logException("Failed to load potion effects for kit " + kit.getName() + ": " + exception.getMessage(), exception);
         }
     }
 
     /**
-     * Handle creation in config for each kit that has missing settings.
+     * Handle creation in config for each kit that has missing settings (for development purposes).
      *
      * @param kit    The kit.
      * @param config The configuration file.
@@ -148,7 +147,7 @@ public class KitService {
         this.plugin.getKitSettingService().getSettings().forEach(setting -> {
             if (kit.getKitSettings().stream().noneMatch(kitSetting -> kitSetting.getName().equals(setting.getName()))) {
                 kit.addKitSetting(setting);
-                Bukkit.getConsoleSender().sendMessage(CC.translate("&cAdded missing setting " + setting.getName() + " to kit " + kit.getName() + ". Now saving it into the kits config..."));
+                Logger.log("&cAdded missing kit setting to" + kit.getName() + ": " + setting.getName());
                 this.saveKitSettings(config, key, kit);
             }
         });
@@ -177,11 +176,10 @@ public class KitService {
      */
     private void saveKitSettings(FileConfiguration config, String key, Kit kit) {
         for (KitSetting kitSetting : kit.getKitSettings()) {
-            String settingKey = key + ".settings." + kitSetting.getName();
-            config.set(settingKey + ".description", kitSetting.getDescription());
-            config.set(settingKey + ".enabled", kitSetting.isEnabled());
+            config.set(key + ".settings." + kitSetting.getName(), kitSetting.isEnabled());
         }
     }
+
 
     /**
      * Method to save the potion effects of a kit.
@@ -242,13 +240,12 @@ public class KitService {
     public void applyDefaultSettings(FileConfiguration config, String key, Kit kit) {
         this.plugin.getKitSettingService().getSettings().forEach(setting -> {
             kit.addKitSetting(setting);
-            String settingKey = key + ".settings." + setting.getName();
-            config.set(settingKey + ".description", setting.getDescription());
-            config.set(settingKey + ".enabled", setting.isEnabled());
+            config.set(key + ".settings." + setting.getName(), setting.isEnabled());
         });
 
         this.plugin.getConfigService().saveConfig(this.plugin.getConfigService().getConfigFile("storage/kits.yml"), config);
     }
+
 
     /**
      * Method to create a kit.
@@ -261,19 +258,21 @@ public class KitService {
     public void createKit(String kitName, ItemStack[] inventory, ItemStack[] armor, Material icon, int slot) {
         Kit kit = new Kit(
                 kitName,
-                this.plugin.getConfigService().getSettingsConfig().getString("kit.default-name").replace("{kit-name}", kitName),
-                this.plugin.getConfigService().getSettingsConfig().getString("kit.default-description").replace("{kit-name}", kitName),
+                this.plugin.getConfigService().getSettingsConfig().getString("kit.default-values.display-name").replace("{kit-name}", kitName),
+                this.plugin.getConfigService().getSettingsConfig().getString("kit.default-values.description").replace("{kit-name}", kitName),
+                this.plugin.getConfigService().getSettingsConfig().getString("kit.default-values.disclaimer").replace("{kit-name}", kitName),
                 true,
+                true,
+                EnumKitCategory.NORMAL,
+                icon,
+                0,
                 slot,
                 0,
                 0,
                 0,
                 inventory,
                 armor,
-                icon,
-                (byte) 0,
-                kitName + " kit disclaimer.",
-                EnumKitCategory.NORMAL
+                new ItemStack[0]
         );
 
         this.plugin.getKitSettingService().applyAllSettingsToKit(kit);
@@ -324,21 +323,23 @@ public class KitService {
      * @param key    The path key.
      */
     private void kitToConfig(Kit kit, FileConfiguration config, String key) {
-        config.set(key + ".displayname", kit.getDisplayName());
+        config.set(key + ".display-name", kit.getDisplayName());
         config.set(key + ".description", kit.getDescription());
-        config.set(key + ".enabled", kit.isEnabled());
-        config.set(key + ".unrankedslot", kit.getUnrankedSlot());
-        config.set(key + ".rankedslot", kit.getRankedSlot());
-        config.set(key + ".editorslot", kit.getEditorSlot());
-        config.set(key + ".items", kit.getItems());
-        config.set(key + ".armor", kit.getArmor());
-        config.set(key + ".icon", kit.getIcon().name());
-        config.set(key + ".durability", kit.getDurability());
         config.set(key + ".disclaimer", kit.getDisclaimer());
-        config.set(key + ".ffa.enabled", kit.isFfaEnabled());
-        config.set(key + ".ffa.arena", kit.getFfaArenaName());
-        config.set(key + ".ffa.slot", kit.getFfaSlot());
-        config.set(key + ".ffa.maxplayers", kit.getMaxFfaPlayers());
+        config.set(key + ".enabled", kit.isEnabled());
+        config.set(key + ".editable", kit.isEditable());
         config.set(key + ".category", kit.getCategory().name());
+        config.set(key + ".icon.material", kit.getIcon().name());
+        config.set(key + ".icon.durability", kit.getDurability());
+        config.set(key + ".slots.unranked", kit.getUnrankedSlot());
+        config.set(key + ".slots.ranked", kit.getRankedSlot());
+        config.set(key + ".slots.editor", kit.getEditorSlot());
+        config.set(key + ".ffa.arena-name", kit.getFfaArenaName());
+        config.set(key + ".ffa.enabled", kit.isFfaEnabled());
+        config.set(key + ".ffa.slot", kit.getFfaSlot());
+        config.set(key + ".ffa.max-players", kit.getMaxFfaPlayers());
+        config.set(key + ".items", ItemStackSerializer.serialize(kit.getItems()));
+        config.set(key + ".armor", ItemStackSerializer.serialize(kit.getArmor()));
+        config.set(key + ".editor-items", ItemStackSerializer.serialize(kit.getEditorItems()));
     }
 }

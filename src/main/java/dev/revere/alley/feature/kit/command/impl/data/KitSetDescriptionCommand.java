@@ -46,6 +46,6 @@ public class KitSetDescriptionCommand extends BaseCommand {
         String description = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
         kit.setDescription(description);
         Alley.getInstance().getKitService().saveKit(kit);
-        sender.sendMessage(CC.translate(KitLocale.KIT_DESCRIPTION_SET.getMessage().replace("{kit-name}", kit.getName()).replace("{kit-description}", description)));
+        sender.sendMessage(CC.translate(KitLocale.KIT_DESCRIPTION_SET.getMessage().replace("{kit-name}", kit.getName()).replace("{description}", description)));
     }
 }

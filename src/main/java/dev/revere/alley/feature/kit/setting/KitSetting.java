@@ -4,6 +4,8 @@ import dev.revere.alley.feature.kit.setting.annotation.KitSettingData;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Objects;
+
 /**
  * @author Remi
  * @project Alley
@@ -13,12 +15,12 @@ import lombok.Setter;
 @Setter
 public class KitSetting {
     private final String name;
-    private String description;
+    private final String description;
     private boolean enabled;
 
     public KitSetting() {
         KitSettingData data = getClass().getAnnotation(KitSettingData.class);
-        this.name = data.name();
+        this.name = Objects.requireNonNull(data).name();
         this.description = data.description();
         this.enabled = data.enabled();
     }

@@ -38,7 +38,7 @@ kit:
     description-set: "&aSuccessfully set the description of the &b{kit-name} &akit: &r{kit-description}"
     description-cleared: "&aSuccessfully cleared the description of the &b{kit-name} &akit!"
     disclaimer-set: "&aSuccessfully set the disclaimer of the &b{kit-name} &akit: &r{disclaimer}"
-    displayname-set: "&aSuccessfully set the display name of the &b{kit-name} &akit: &r{kit-displayname}"
+    displayname-set: "&aSuccessfully set the display name of the &b{kit-name} &akit: &r{display-name}"
     icon-set: "&aSuccessfully set the icon of the &b{kit-name} &akit to &b{icon}&a!"
     potion-effects-set: "&aSuccessfully set the potion effects of the &b{kit-name} &akit!"
     set-category: "&aSuccessfully set the category of the &b{kit-name} &akit to &b{category}&a!"
