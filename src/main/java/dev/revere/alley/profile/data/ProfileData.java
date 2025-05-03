@@ -29,8 +29,8 @@ public class ProfileData {
     private Map<String, ProfileUnrankedKitData> unrankedKitData;
     private Map<String, ProfileRankedKitData> rankedKitData;
     private Map<String, ProfileFFAData> ffaData;
-    private Map<String, ProfileLayoutData> layoutData;
 
+    private ProfileLayoutData layoutData;
     private ProfileSettingData settingData;
     private ProfileCosmeticData cosmeticData;
     private ProfilePlayTimeData playTimeData;
@@ -60,31 +60,21 @@ public class ProfileData {
         this.settingData = new ProfileSettingData();
         this.cosmeticData = new ProfileCosmeticData();
         this.playTimeData = new ProfilePlayTimeData();
+        this.layoutData = new ProfileLayoutData();
     }
 
     private void feedDataClasses() {
         for (Kit kit : Alley.getInstance().getKitService().getKits()) {
-            this.initializeKitData(kit.getName());
+            this.rankedKitData.put(kit.getName(), new ProfileRankedKitData());
+            this.unrankedKitData.put(kit.getName(), new ProfileUnrankedKitData());
+            this.ffaData.put(kit.getName(), new ProfileFFAData());
         }
-    }
-
-    /**
-     * Initializes the kit data for a given kit name.
-     *
-     * @param kitName The name of the kit.
-     */
-    private void initializeKitData(String kitName) {
-        this.rankedKitData.put(kitName, new ProfileRankedKitData());
-        this.unrankedKitData.put(kitName, new ProfileUnrankedKitData());
-        this.ffaData.put(kitName, new ProfileFFAData());
-        this.layoutData.put(kitName, new ProfileLayoutData());
     }
 
     private void initializeMaps() {
         this.unrankedKitData = Maps.newHashMap();
         this.rankedKitData = Maps.newHashMap();
         this.ffaData = Maps.newHashMap();
-        this.layoutData = Maps.newHashMap();
     }
 
     /**

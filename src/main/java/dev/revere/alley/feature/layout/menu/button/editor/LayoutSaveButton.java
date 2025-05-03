@@ -43,7 +43,7 @@ public class LayoutSaveButton extends Button {
 
         Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
 
-        LayoutRecord layout = profile.getProfileData().getLayoutData().get(this.kit.getName()).getLayout(this.layout.getName());
+        LayoutRecord layout = profile.getProfileData().getLayoutData().getLayout(this.kit.getName(), this.layout.getName());
         layout.setDisplayName(this.layout.getDisplayName());
         layout.setItems(player.getInventory().getContents());
 

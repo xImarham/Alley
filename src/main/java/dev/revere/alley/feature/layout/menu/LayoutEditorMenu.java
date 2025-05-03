@@ -52,7 +52,7 @@ public class LayoutEditorMenu extends Menu {
         buttons.put(15, new LayoutCancelButton());
 
         //if kit isn't the first default one, add delete and rename buttons
-        if (!this.layout.getName().equals(profile.getProfileData().getLayoutData().get(this.kit.getName()).getLayouts().get(0).getName())) {
+        if (!this.layout.getName().equals(profile.getProfileData().getLayoutData().getLayouts().get(this.kit.getName()).get(0).getName())) {
             buttons.put(21, new LayoutDeleteButton(this.layout));
             buttons.put(23, new LayoutRenameButton(this.layout));
         }
@@ -66,5 +66,10 @@ public class LayoutEditorMenu extends Menu {
     public int getSize() {
         //if kit isn't the first/default one, return 9*4 because of the delete and rename buttons
         return 9 * 3;
+    }
+
+    @Override
+    public boolean isUpdateAfterClick() {
+        return false;
     }
 }
