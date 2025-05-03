@@ -55,7 +55,7 @@ public class MongoUtility {
         profileDataDocument.put("rankedKitData", convertRankedKitData(profileData.getRankedKitData()));
         profileDataDocument.put("ffaData", convertFFAData(profileData.getFfaData()));
         profileDataDocument.put("settingData", convertProfileSettingData(profileData.getSettingData()));
-        profileDataDocument.put("settingData", convertProfileCosmeticData(profileData.getCosmeticData()));
+        profileDataDocument.put("cosmeticData", convertProfileCosmeticData(profileData.getCosmeticData()));
         profileDataDocument.put("playTimeData", convertProfilePlayTimeData(profileData.getPlayTimeData()));
 
         document.put("profileData", profileDataDocument);
@@ -204,7 +204,7 @@ public class MongoUtility {
             profileData.setFfaData(existingFFAData);
 
             profileData.setSettingData(parseProfileSettingData((Document) profileDataDocument.get("settingData")));
-            profileData.setCosmeticData(parseProfileCosmeticData((Document) profileDataDocument.get("settingData")));
+            profileData.setCosmeticData(parseProfileCosmeticData((Document) profileDataDocument.get("cosmeticData")));
             profileData.setPlayTimeData(parseProfilePlayTimeData((Document) profileDataDocument.get("playTimeData")));
 
             profile.setProfileData(profileData);
