@@ -102,11 +102,8 @@ public class MatchRoundsImpl extends MatchRegularImpl {
         Location spawnLocation = getParticipants().get(0).containsPlayer(player.getUniqueId()) ? this.getArena().getPos1() : this.getArena().getPos2();
         player.teleport(spawnLocation);
 
-        player.getInventory().setArmorContents(this.getKit().getArmor());
-        player.getInventory().setContents(this.getKit().getItems());
+        this.giveLoadout(player, this.getKit());
         this.applyWoolColor(player);
-
-        this.getKit().applyPotionEffects(player);
 
         this.notifyParticipants("&b" + player.getName() + " &ahas respawned");
         this.notifySpectators("&b" + player.getName() + " &ahas respawned");

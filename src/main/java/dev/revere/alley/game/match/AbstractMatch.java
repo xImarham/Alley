@@ -17,6 +17,7 @@ import dev.revere.alley.feature.kit.Kit;
 import dev.revere.alley.feature.kit.setting.impl.KitSettingBattleRushImpl;
 import dev.revere.alley.feature.kit.setting.impl.KitSettingLivesImpl;
 import dev.revere.alley.feature.kit.setting.impl.KitSettingStickFightImpl;
+import dev.revere.alley.feature.layout.record.LayoutRecord;
 import dev.revere.alley.feature.queue.Queue;
 import dev.revere.alley.game.match.enums.EnumMatchState;
 import dev.revere.alley.game.match.impl.MatchRegularImpl;
@@ -147,13 +148,30 @@ public abstract class AbstractMatch {
             gamePlayer.setDead(false);
             if (!gamePlayer.isDisconnected()) {
                 PlayerUtil.reset(player, true);
-                player.getInventory().setArmorContents(this.kit.getArmor());
-                player.getInventory().setContents(this.kit.getItems());
-                player.updateInventory();
-
-                this.kit.applyPotionEffects(player);
+                this.giveLoadout(player, this.kit);
             }
         }
+    }
+
+    /**
+     * Gives a loadout to a player.
+     *
+     * @param player The player to give the kit to.
+     */
+    public void giveLoadout(Player player, Kit kit) {
+        player.getInventory().setArmorContents(kit.getArmor());
+
+        Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
+        if (profile.getProfileData().getLayoutData().getLayouts().size() > 1) {
+            LayoutRecord kitLayout = profile.getProfileData().getLayoutData().getLayouts().get(kit.getName()).get(0);
+            player.getInventory().setContents(kitLayout.getItems());
+        } else {
+            // give books
+        }
+
+        player.updateInventory();
+
+        this.kit.applyPotionEffects(player);
     }
 
     public void resetBlockChanges() {

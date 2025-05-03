@@ -101,11 +101,8 @@ public class MatchLivesImpl extends MatchRegularImpl {
         Location spawnLocation = getParticipants().get(0).containsPlayer(player.getUniqueId()) ? getArena().getPos1() : getArena().getPos2();
         player.teleport(spawnLocation);
 
-        player.getInventory().setArmorContents(getKit().getArmor());
-        player.getInventory().setContents(getKit().getItems());
+        this.giveLoadout(player, this.getKit());
         this.applyWoolColor(player);
-
-        this.getKit().applyPotionEffects(player);
 
         this.notifyParticipants("&b" + player.getName() + " &ahas respawned");
         this.notifySpectators("&b" + player.getName() + " &ahas respawned");
