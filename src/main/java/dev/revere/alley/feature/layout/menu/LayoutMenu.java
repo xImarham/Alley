@@ -32,7 +32,7 @@ public class LayoutMenu extends Menu {
 
         for (Queue queue : this.plugin.getQueueService().getQueues()) {
             if (!queue.isRanked() && queue.getKit().getCategory() == this.kitCategory) {
-                buttons.put(queue.getKit().getUnrankedSlot(), new LayoutButton(queue.getKit()));
+                buttons.put(queue.getKit().getEditorSlot(), new LayoutButton(queue.getKit()));
             }
         }
 
