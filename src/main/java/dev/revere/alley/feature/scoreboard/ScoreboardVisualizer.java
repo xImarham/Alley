@@ -8,12 +8,14 @@ import dev.revere.alley.feature.scoreboard.impl.QueueScoreboard;
 import dev.revere.alley.feature.scoreboard.impl.SpectatorScoreboard;
 import dev.revere.alley.feature.scoreboard.impl.match.MatchScoreboard;
 import dev.revere.alley.profile.Profile;
+import dev.revere.alley.profile.enums.EnumProfileState;
 import dev.revere.alley.tool.animation.enums.EnumAnimationType;
 import dev.revere.alley.tool.animation.type.config.impl.ScoreboardTitleAnimationImpl;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -70,8 +72,14 @@ public class ScoreboardVisualizer implements IAssembleAdapter {
      */
     @Override
     public List<String> getLines(Player player) {
-        if (this.plugin.getProfileService().getProfile(player.getUniqueId()).getProfileData().getSettingData().isScoreboardEnabled()) {
-            Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
+        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
+
+        if (profile.getProfileData().getSettingData().isScoreboardEnabled()) {
+
+            if (profile.getState() == EnumProfileState.EDITING) {
+                return Collections.emptyList();
+            }
+
             List<String> lines = new ArrayList<>();
 
             switch (profile.getState()) {

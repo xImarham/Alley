@@ -29,15 +29,16 @@ public class ProfileData {
     private Map<String, ProfileUnrankedKitData> unrankedKitData;
     private Map<String, ProfileRankedKitData> rankedKitData;
     private Map<String, ProfileFFAData> ffaData;
+    private Map<String, ProfileLayoutData> layoutData;
 
     private ProfileSettingData settingData;
     private ProfileCosmeticData cosmeticData;
     private ProfilePlayTimeData playTimeData;
 
-    private String globalLevel;
-
-    private String selectedTitle;
     private List<String> unlockedTitles;
+
+    private String selectedTitle = "";
+    private String globalLevel = "";
 
     private int elo = 1000;
     private int coins = 100;
@@ -46,16 +47,13 @@ public class ProfileData {
     private int rankedWins = 0;
     private int rankedLosses = 0;
 
-    private boolean rankedBanned;
+    private boolean rankedBanned = false;
 
     public ProfileData() {
         this.initializeMaps();
         this.feedDataClasses();
         this.initializeDataClasses();
-        this.globalLevel = "";
-        this.selectedTitle = "";
         this.unlockedTitles = new ArrayList<>();
-        this.rankedBanned = false;
     }
 
     private void initializeDataClasses() {
@@ -65,16 +63,28 @@ public class ProfileData {
     }
 
     private void feedDataClasses() {
-        //Alley.getInstance().getKitRepository().getKits().stream().filter(Kit -> Kit.isSettingEnabled(KitSettingRankedImpl.class)).forEach(kit -> this.rankedKitData.put(kit.getName(), new ProfileRankedKitData()));
-        Alley.getInstance().getKitService().getKits().forEach(kit -> this.rankedKitData.put(kit.getName(), new ProfileRankedKitData()));
-        Alley.getInstance().getKitService().getKits().forEach(kit -> this.unrankedKitData.put(kit.getName(), new ProfileUnrankedKitData()));
-        Alley.getInstance().getFfaService().getMatches().forEach(kit -> this.ffaData.put(kit.getName(), new ProfileFFAData()));
+        for (Kit kit : Alley.getInstance().getKitService().getKits()) {
+            this.initializeKitData(kit.getName());
+        }
+    }
+
+    /**
+     * Initializes the kit data for a given kit name.
+     *
+     * @param kitName The name of the kit.
+     */
+    private void initializeKitData(String kitName) {
+        this.rankedKitData.put(kitName, new ProfileRankedKitData());
+        this.unrankedKitData.put(kitName, new ProfileUnrankedKitData());
+        this.ffaData.put(kitName, new ProfileFFAData());
+        this.layoutData.put(kitName, new ProfileLayoutData());
     }
 
     private void initializeMaps() {
         this.unrankedKitData = Maps.newHashMap();
         this.rankedKitData = Maps.newHashMap();
         this.ffaData = Maps.newHashMap();
+        this.layoutData = Maps.newHashMap();
     }
 
     /**
@@ -129,13 +139,23 @@ public class ProfileData {
         String newLevel = Alley.getInstance().getLevelService().getLevel(this.elo).getName();
 
         if (!newLevel.equals(previousLevel)) {
-            Arrays.asList(
-                    "",
-                    "&b&lNEW LEVEL &f| &a&lCONGRATULATIONS!",
-                    " &fYou have reached &b" + newLevel + " &fin the global ranking system.",
-                    ""
-            ).forEach(line -> Bukkit.getPlayer(profile.getUuid()).sendMessage(CC.translate(line)));
+            this.sendLevelUpMessage(profile, newLevel);
         }
+    }
+
+    /**
+     * Sends a level up message to the player
+     *
+     * @param profile  the profile of the player
+     * @param newLevel the new level of the player
+     */
+    private void sendLevelUpMessage(Profile profile, String newLevel) {
+        Arrays.asList(
+                "",
+                "&b&lNEW LEVEL &f| &a&lCONGRATULATIONS!",
+                " &fYou have reached &b" + newLevel + " &fin the global ranking system.",
+                ""
+        ).forEach(line -> Bukkit.getPlayer(profile.getUuid()).sendMessage(CC.translate(line)));
     }
 
     /**

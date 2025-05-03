@@ -95,9 +95,12 @@ public class SpawnListener implements Listener {
             Player player = (Player) event.getWhoClicked();
             Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
 
+            if (profile.getState() == EnumProfileState.EDITING) {
+                return;
+            }
+
             if (player.getGameMode() == GameMode.SURVIVAL
                     && (profile.getState().equals(EnumProfileState.LOBBY)
-                    || profile.getState().equals(EnumProfileState.EDITING)
                     || profile.getState().equals(EnumProfileState.WAITING))) {
                 if (event.getClickedInventory() != null && event.getClickedInventory().equals(player.getInventory())) {
                     event.setCancelled(true);

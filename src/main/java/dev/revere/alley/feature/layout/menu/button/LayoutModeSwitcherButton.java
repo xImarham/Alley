@@ -1,10 +1,8 @@
-package dev.revere.alley.feature.queue.menu.extra.button;
+package dev.revere.alley.feature.layout.menu.button;
 
-import dev.revere.alley.Alley;
 import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.feature.kit.enums.EnumKitCategory;
-import dev.revere.alley.feature.queue.enums.EnumQueueType;
-import dev.revere.alley.feature.queue.menu.extra.ExtraModesMenu;
+import dev.revere.alley.feature.layout.menu.LayoutMenu;
 import dev.revere.alley.tool.item.ItemBuilder;
 import lombok.AllArgsConstructor;
 import org.bukkit.Material;
@@ -15,12 +13,11 @@ import org.bukkit.inventory.ItemStack;
 /**
  * @author Emmy
  * @project Alley
- * @since 01/05/2025
+ * @since 03/05/2025
  */
 @AllArgsConstructor
-public class ModeSwitcherButton extends Button {
-    private final EnumQueueType queueType;
-    private final EnumKitCategory kitCategory;
+public class LayoutModeSwitcherButton extends Button {
+    private EnumKitCategory kitCategory;
 
     @Override
     public ItemStack getButtonItem(Player player) {
@@ -40,10 +37,10 @@ public class ModeSwitcherButton extends Button {
         if (clickType != ClickType.LEFT) return;
 
         if (this.kitCategory == EnumKitCategory.EXTRA) {
-            new ExtraModesMenu(this.queueType).openMenu(player);
+            new LayoutMenu(EnumKitCategory.EXTRA).openMenu(player);
             return;
         }
 
-        Alley.getInstance().getQueueService().getQueueMenu().openMenu(player);
+        new LayoutMenu(EnumKitCategory.NORMAL).openMenu(player);
     }
 }

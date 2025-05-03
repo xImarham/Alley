@@ -7,7 +7,7 @@ import dev.revere.alley.feature.kit.enums.EnumKitCategory;
 import dev.revere.alley.feature.queue.Queue;
 import dev.revere.alley.feature.queue.enums.EnumQueueType;
 import dev.revere.alley.feature.queue.menu.button.UnrankedButton;
-import dev.revere.alley.feature.queue.menu.extra.button.ModeSwitcherButton;
+import dev.revere.alley.feature.queue.menu.extra.button.QueueModeSwitcherButton;
 import lombok.AllArgsConstructor;
 import org.bukkit.entity.Player;
 
@@ -32,7 +32,7 @@ public class ExtraModesMenu extends Menu {
     public Map<Integer, Button> getButtons(Player player) {
         Map<Integer, Button> buttons = new HashMap<>();
 
-        buttons.put(4, new ModeSwitcherButton(this.queueType, EnumKitCategory.NORMAL));
+        buttons.put(4, new QueueModeSwitcherButton(this.queueType, EnumKitCategory.NORMAL));
 
         for (Queue queue : Alley.getInstance().getQueueService().getQueues()) {
             if (!queue.isRanked() && queue.getKit().getCategory() == EnumKitCategory.EXTRA) {

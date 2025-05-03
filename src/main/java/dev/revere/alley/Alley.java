@@ -31,6 +31,7 @@ import dev.revere.alley.feature.hotbar.HotbarService;
 import dev.revere.alley.feature.hotbar.listener.HotbarListener;
 import dev.revere.alley.feature.kit.KitService;
 import dev.revere.alley.feature.kit.setting.KitSettingService;
+import dev.revere.alley.feature.layout.LayoutService;
 import dev.revere.alley.feature.leaderboard.LeaderboardService;
 import dev.revere.alley.feature.level.LevelService;
 import dev.revere.alley.feature.queue.QueueService;
@@ -136,6 +137,7 @@ public class Alley extends JavaPlugin {
     private LevelService levelService;
     private ParkourService parkourService;
     private ProfanityFilter profanityFilter;
+    private LayoutService layoutService;
 
     private boolean loaded;
 
@@ -213,10 +215,12 @@ public class Alley extends JavaPlugin {
         services.put(DivisionService.class.getSimpleName(), () -> this.divisionService = new DivisionService(this));
         services.put(LevelService.class.getSimpleName(), () -> this.levelService = new LevelService(this));
         services.put(TitleService.class.getSimpleName(), () -> this.titleService = new TitleService(this));
+        
         services.put(ProfileService.class.getSimpleName(), () -> {
             this.profileService = new ProfileService();
             this.profileService.loadProfiles();
         });
+
         services.put(HotbarService.class.getSimpleName(), () -> this.hotbarService = new HotbarService());
         services.put(CooldownRepository.class.getSimpleName(), () -> this.cooldownRepository = new CooldownRepository());
         services.put(SnapshotRepository.class.getSimpleName(), () -> this.snapshotRepository = new SnapshotRepository());
@@ -236,6 +240,7 @@ public class Alley extends JavaPlugin {
         services.put(BotFightRepository.class.getSimpleName(), () -> this.botFightRepository = new BotFightRepository());
         services.put(ParkourService.class.getSimpleName(), () -> this.parkourService = new ParkourService(this, this.configService.getSettingsConfig().getString("parkour.starter-location")));
         services.put(ProfanityFilter.class.getSimpleName(), () -> this.profanityFilter = new ProfanityFilter(this));
+        services.put(LayoutService.class.getSimpleName(), () -> this.layoutService = new LayoutService(this));
 
         services.forEach(Logger::logTime);
     }

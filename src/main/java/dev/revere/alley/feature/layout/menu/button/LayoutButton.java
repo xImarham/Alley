@@ -1,0 +1,56 @@
+package dev.revere.alley.feature.layout.menu.button;
+
+import dev.revere.alley.Alley;
+import dev.revere.alley.api.menu.Button;
+import dev.revere.alley.feature.kit.Kit;
+import dev.revere.alley.feature.layout.menu.LayoutEditorMenu;
+import dev.revere.alley.profile.Profile;
+import dev.revere.alley.tool.item.ItemBuilder;
+import dev.revere.alley.util.chat.CC;
+import dev.revere.alley.util.chat.Symbol;
+import lombok.AllArgsConstructor;
+import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.ClickType;
+import org.bukkit.inventory.ItemStack;
+
+/**
+ * @author Emmy
+ * @project Alley
+ * @since 03/05/2025
+ */
+@AllArgsConstructor
+public class LayoutButton extends Button {
+    private final Kit kit;
+
+    @Override
+    public ItemStack getButtonItem(Player player) {
+        return new ItemBuilder(this.kit.getIcon())
+                .name("&b&l" + this.kit.getName())
+                .durability(this.kit.getDurability())
+                .lore(
+                        "&7Shift-Click:",
+                        " &7" + Symbol.SINGULAR_ARROW_R_2 + " More Layouts",
+                        "",
+                        "&aClick to edit!"
+                )
+                .hideMeta()
+                .build();
+    }
+
+    @Override
+    public void clicked(Player player, ClickType clickType) {
+        Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
+
+        if (clickType == ClickType.LEFT) {
+            // This will be changed to open the selected layout within the editor button,
+            // similar to how MinemenClub works, where you can Shift-Click to select your saved/stored layouts.
+            // Why? Because people love minemenclub, so we do it the same way.
+            new LayoutEditorMenu(this.kit, profile.getProfileData().getLayoutData().get(this.kit.getName()).getLayouts().get(0)).openMenu(player);
+            return;
+        }
+
+        if (clickType == ClickType.SHIFT_LEFT) {
+            player.sendMessage(CC.translate("&c&lThis feature is not yet implemented!"));
+        }
+    }
+}

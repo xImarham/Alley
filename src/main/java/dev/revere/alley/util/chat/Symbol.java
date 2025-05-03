@@ -9,6 +9,8 @@ import lombok.experimental.UtilityClass;
  */
 @UtilityClass
 public class Symbol {
+    public String SINGULAR_ARROW_R = "➤";
+    public String SINGULAR_ARROW_R_2 = "►";
     public String RANKED_STAR = "✫";
     public String ARROW_R = "»";
     public String ARROW_L = "«";

@@ -3,17 +3,18 @@ package dev.revere.alley.database.util;
 import dev.revere.alley.Alley;
 import dev.revere.alley.feature.division.Division;
 import dev.revere.alley.feature.division.tier.DivisionTier;
+import dev.revere.alley.feature.layout.record.LayoutRecord;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.data.ProfileData;
 import dev.revere.alley.profile.data.impl.*;
 import dev.revere.alley.profile.enums.EnumChatChannel;
 import dev.revere.alley.profile.enums.EnumWorldTime;
+import dev.revere.alley.tool.item.ItemStackSerializer;
 import lombok.experimental.UtilityClass;
 import org.bson.Document;
+import org.bukkit.inventory.ItemStack;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * @author Remi
@@ -57,6 +58,7 @@ public class MongoUtility {
         profileDataDocument.put("settingData", convertProfileSettingData(profileData.getSettingData()));
         profileDataDocument.put("cosmeticData", convertProfileCosmeticData(profileData.getCosmeticData()));
         profileDataDocument.put("playTimeData", convertProfilePlayTimeData(profileData.getPlayTimeData()));
+        profileDataDocument.put("layoutData", convertLayoutData(profileData.getLayoutData()));
 
         document.put("profileData", profileDataDocument);
         return document;
@@ -162,6 +164,36 @@ public class MongoUtility {
     }
 
     /**
+     * Converts a Map of ProfileLayoutData objects to a Document.
+     *
+     * @param layoutDataMap The layout data to convert.
+     * @return The converted Document.
+     */
+    private Document convertLayoutData(Map<String, ProfileLayoutData> layoutDataMap) {
+        Document layoutDataDocument = new Document();
+
+        for (Map.Entry<String, ProfileLayoutData> entry : layoutDataMap.entrySet()) {
+            String kitName = entry.getKey();
+            ProfileLayoutData layoutData = entry.getValue();
+            Document layoutsDocument = new Document();
+
+            for (LayoutRecord layout : layoutData.getLayouts()) {
+                Document layoutDoc = new Document();
+                layoutDoc.put("name", layout.getName());
+                layoutDoc.put("displayName", layout.getDisplayName());
+                layoutDoc.put("items", ItemStackSerializer.serialize(layout.getItems()));
+
+                layoutsDocument.put(layout.getName(), layoutDoc);
+            }
+
+            layoutDataDocument.put(kitName, layoutsDocument);
+        }
+
+        return layoutDataDocument;
+    }
+
+
+    /**
      * Updates a Profile object from a Document.
      *
      * @param profile  The profile to update.
@@ -202,6 +234,11 @@ public class MongoUtility {
             Map<String, ProfileFFAData> newFFAData = parseFFAData((Document) profileDataDocument.get("ffaData"));
             existingFFAData.putAll(newFFAData);
             profileData.setFfaData(existingFFAData);
+
+            Map<String, ProfileLayoutData> existingLayoutData = profileData.getLayoutData();
+            Map<String, ProfileLayoutData> newLayoutData = parseLayoutData((Document) profileDataDocument.get("layoutData"));
+            existingLayoutData.putAll(newLayoutData);
+            profileData.setLayoutData(existingLayoutData);
 
             profileData.setSettingData(parseProfileSettingData((Document) profileDataDocument.get("settingData")));
             profileData.setCosmeticData(parseProfileCosmeticData((Document) profileDataDocument.get("cosmeticData")));
@@ -278,6 +315,35 @@ public class MongoUtility {
             ffaData.put(entry.getKey(), ffa);
         }
         return ffaData;
+    }
+
+    /**
+     * Parses a Map of ProfileLayoutData objects from a Document.
+     *
+     * @param layoutDataDocument The layout data document to parse.
+     * @return The parsed Map.
+     */
+    private Map<String, ProfileLayoutData> parseLayoutData(Document layoutDataDocument) {
+        Map<String, ProfileLayoutData> layoutData = new HashMap<>();
+
+        for (Map.Entry<String, Object> entry : layoutDataDocument.entrySet()) {
+            String kitName = entry.getKey();
+            Document layoutsDocument = (Document) entry.getValue();
+            ProfileLayoutData profileLayoutData = new ProfileLayoutData();
+
+            for (Map.Entry<String, Object> layoutEntry : layoutsDocument.entrySet()) {
+                Document layoutDoc = (Document) layoutEntry.getValue();
+                String name = layoutDoc.getString("name");
+                String displayName = layoutDoc.getString("displayName");
+                ItemStack[] items = ItemStackSerializer.deserialize(layoutDoc.getString("items"));
+
+                profileLayoutData.addLayout(name, displayName, items);
+            }
+
+            layoutData.put(kitName, profileLayoutData);
+        }
+
+        return layoutData;
     }
 
     /**

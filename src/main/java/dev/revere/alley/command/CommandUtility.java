@@ -4,6 +4,7 @@ import dev.revere.alley.command.impl.other.*;
 import dev.revere.alley.command.impl.main.impl.AlleyCoreCommand;
 import dev.revere.alley.essential.parkour.command.SetParkourSpawnCommand;
 import dev.revere.alley.essential.tip.command.TipCommand;
+import dev.revere.alley.feature.layout.command.LayoutCommand;
 import dev.revere.alley.feature.level.command.LevelCommand;
 import dev.revere.alley.feature.title.command.TitleCommand;
 import dev.revere.alley.game.host.command.HostCommand;
@@ -149,6 +150,7 @@ public class CommandUtility {
             new MatchHistoryCommand();
             new KitEditorCommand();
             new TipCommand();
+            new LayoutCommand();
         });
     }
 }

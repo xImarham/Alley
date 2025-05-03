@@ -8,7 +8,7 @@ import dev.revere.alley.feature.kit.enums.EnumKitCategory;
 import dev.revere.alley.feature.queue.Queue;
 import dev.revere.alley.feature.queue.enums.EnumQueueType;
 import dev.revere.alley.feature.queue.menu.QueuesMenuDefault;
-import dev.revere.alley.feature.queue.menu.extra.button.ModeSwitcherButton;
+import dev.revere.alley.feature.queue.menu.extra.button.QueueModeSwitcherButton;
 import dev.revere.alley.feature.queue.menu.button.UnrankedButton;
 import org.bukkit.entity.Player;
 
@@ -39,7 +39,7 @@ public class UnrankedMenu extends Menu {
             }
         }
 
-        buttons.put(40, new ModeSwitcherButton(EnumQueueType.UNRANKED, EnumKitCategory.EXTRA));
+        buttons.put(40, new QueueModeSwitcherButton(EnumQueueType.UNRANKED, EnumKitCategory.EXTRA));
 
         this.addBorder(buttons, (byte) 15, 5);
 

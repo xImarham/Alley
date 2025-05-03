@@ -166,7 +166,6 @@ public abstract class Menu {
                 || profileState == EnumProfileState.PLAYING_EVENT
                 || profileState == EnumProfileState.PLAYING_TOURNAMENT
                 || profileState == EnumProfileState.FIGHTING_BOT
-                || profileState == EnumProfileState.EDITING
                 || profileState == EnumProfileState.FFA) {
             return;
         }

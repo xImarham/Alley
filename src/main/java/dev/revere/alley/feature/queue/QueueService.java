@@ -8,6 +8,7 @@ import dev.revere.alley.feature.queue.menu.QueuesMenuModern;
 import dev.revere.alley.feature.queue.runnable.QueueRunnable;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
+import dev.revere.alley.tool.logger.Logger;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -36,22 +37,26 @@ public class QueueService {
         this.queues = new ArrayList<>();
         this.plugin = plugin;
         this.initialize();
-        this.determineMenu();
+        this.queueMenu = this.determineMenu();
     }
 
     public void initialize() {
         Alley.getInstance().getServer().getScheduler().runTaskTimer(Alley.getInstance(), new QueueRunnable(), 10L, 10L);
     }
 
-    private void determineMenu() {
+    private Menu determineMenu() {
         FileConfiguration config = Alley.getInstance().getConfigService().getMenusConfig();
         String menuType = config.getString("queues-menu.type");
 
-        if (menuType.equalsIgnoreCase("MODERN")) {
-            this.queueMenu = new QueuesMenuModern();
-        } else if (menuType.equalsIgnoreCase("DEFAULT")) {
-            this.queueMenu = new QueuesMenuDefault();
+        switch (menuType) {
+            case "MODERN":
+                return new QueuesMenuModern();
+            case "DEFAULT":
+                return new QueuesMenuDefault();
         }
+
+        Logger.log("Invalid menu type specified in config.yml. Defaulting to QueuesMenuDefault.");
+        return new QueuesMenuDefault();
     }
 
     public void reloadQueues() {

@@ -9,7 +9,7 @@ import dev.revere.alley.feature.queue.Queue;
 import dev.revere.alley.feature.queue.QueueService;
 import dev.revere.alley.feature.queue.enums.EnumQueueType;
 import dev.revere.alley.feature.queue.menu.button.BotButton;
-import dev.revere.alley.feature.queue.menu.extra.button.ModeSwitcherButton;
+import dev.revere.alley.feature.queue.menu.extra.button.QueueModeSwitcherButton;
 import dev.revere.alley.feature.queue.menu.button.UnrankedButton;
 import dev.revere.alley.game.ffa.AbstractFFAMatch;
 import dev.revere.alley.game.ffa.menu.FFAButton;
@@ -95,7 +95,7 @@ public class QueuesMenuModern extends Menu {
                     }
                 }
 
-                buttons.put(40, new ModeSwitcherButton(EnumQueueType.UNRANKED, EnumKitCategory.EXTRA));
+                buttons.put(40, new QueueModeSwitcherButton(EnumQueueType.UNRANKED, EnumKitCategory.EXTRA));
 
                 break;
             case BOTS:
