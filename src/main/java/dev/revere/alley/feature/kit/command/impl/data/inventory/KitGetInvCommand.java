@@ -33,7 +33,7 @@ public class KitGetInvCommand extends BaseCommand {
             return;
         }
 
-        player.getInventory().setContents(kit.getInventory());
+        player.getInventory().setContents(kit.getItems());
         player.getInventory().setArmorContents(kit.getArmor());
         player.sendMessage(CC.translate(KitLocale.KIT_INVENTORY_GIVEN.getMessage().replace("{kit-name}", kit.getName())));
     }

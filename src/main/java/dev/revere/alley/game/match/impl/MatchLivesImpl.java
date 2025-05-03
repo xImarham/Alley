@@ -102,7 +102,7 @@ public class MatchLivesImpl extends MatchRegularImpl {
         player.teleport(spawnLocation);
 
         player.getInventory().setArmorContents(getKit().getArmor());
-        player.getInventory().setContents(getKit().getInventory());
+        player.getInventory().setContents(getKit().getItems());
         this.applyWoolColor(player);
 
         this.getKit().applyPotionEffects(player);

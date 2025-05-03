@@ -36,7 +36,7 @@ public class Kit {
 
     private int maxFfaPlayers;
 
-    private ItemStack[] inventory;
+    private ItemStack[] items;
     private ItemStack[] armor;
 
     private Material icon;
@@ -57,13 +57,13 @@ public class Kit {
      * @param unrankedSlot The unranked slot of the kit.
      * @param rankedSlot   The ranked slot of the kit.
      * @param editorSlot   The editor slot of the kit.
-     * @param inventory    The inventory of the kit.
+     * @param items    The inventory of the kit.
      * @param armor        The armor of the kit.
      * @param icon         The icon of the kit.
      * @param durability     The icon data of the kit.
      * @param disclaimer   The disclaimer of the kit.
      */
-    public Kit(String name, String displayName, String description, boolean enabled, int unrankedSlot, int rankedSlot, int editorSlot, int ffaSlot, ItemStack[] inventory, ItemStack[] armor, Material icon, int durability, String disclaimer, EnumKitCategory category) {
+    public Kit(String name, String displayName, String description, boolean enabled, int unrankedSlot, int rankedSlot, int editorSlot, int ffaSlot, ItemStack[] items, ItemStack[] armor, Material icon, int durability, String disclaimer, EnumKitCategory category) {
         this.name = name;
         this.displayName = displayName;
         this.description = description;
@@ -71,7 +71,7 @@ public class Kit {
         this.unrankedSlot = unrankedSlot;
         this.rankedSlot = rankedSlot;
         this.editorSlot = editorSlot;
-        this.inventory = inventory;
+        this.items = items;
         this.armor = armor;
         this.icon = icon;
         this.durability = durability;

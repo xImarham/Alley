@@ -26,7 +26,7 @@ public class ProfileLayoutData {
         this.layouts = Alley.getInstance().getKitService().getKits().stream()
                 .collect(Collectors.toMap(Kit::getName, kit -> {
                     List<LayoutRecord> defaultLayoutList = new ArrayList<>();
-                    defaultLayoutList.add(new LayoutRecord("Layout1", "Layout 1", kit.getInventory()));
+                    defaultLayoutList.add(new LayoutRecord("Layout1", "Layout 1", kit.getItems()));
                     return defaultLayoutList;
                 }));
     }

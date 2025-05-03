@@ -95,7 +95,7 @@ public class BotFight {
         PlayerUtil.reset(this.player, true);
 
         this.player.getInventory().clear();
-        this.player.getInventory().setContents(this.kit.getInventory());
+        this.player.getInventory().setContents(this.kit.getItems());
         this.player.getInventory().setArmorContents(this.kit.getArmor());
         this.kit.applyPotionEffects(this.player);
 
@@ -106,7 +106,7 @@ public class BotFight {
         Entity botEntity = this.bot.getNpc().getEntity();
         Player npcPlayer = (Player) botEntity;
         npcPlayer.getInventory().clear();
-        npcPlayer.getInventory().setContents(this.kit.getInventory());
+        npcPlayer.getInventory().setContents(this.kit.getItems());
         npcPlayer.getInventory().setArmorContents(this.kit.getArmor());
         npcPlayer.updateInventory();
 

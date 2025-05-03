@@ -148,7 +148,7 @@ public abstract class AbstractMatch {
             if (!gamePlayer.isDisconnected()) {
                 PlayerUtil.reset(player, true);
                 player.getInventory().setArmorContents(this.kit.getArmor());
-                player.getInventory().setContents(this.kit.getInventory());
+                player.getInventory().setContents(this.kit.getItems());
                 player.updateInventory();
 
                 this.kit.applyPotionEffects(player);

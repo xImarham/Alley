@@ -37,7 +37,7 @@ public class LayoutResetItemsButton extends Button {
         if (clickType != ClickType.LEFT) return;
 
         player.getInventory().clear();
-        player.getInventory().setContents(this.kit.getInventory());
+        player.getInventory().setContents(this.kit.getItems());
         player.updateInventory();
     }
 }

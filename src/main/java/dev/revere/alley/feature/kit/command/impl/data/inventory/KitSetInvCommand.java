@@ -44,7 +44,7 @@ public class KitSetInvCommand extends BaseCommand {
         ItemStack[] inventory = InventoryUtil.cloneItemStackArray(player.getInventory().getContents());
         ItemStack[] armor = InventoryUtil.cloneItemStackArray(player.getInventory().getArmorContents());
 
-        kit.setInventory(inventory);
+        kit.setItems(inventory);
         kit.setArmor(armor);
         kitService.saveKit(kit);
         player.sendMessage(CC.translate(KitLocale.KIT_INVENTORY_SET.getMessage().replace("{kit-name}", kit.getName())));

@@ -85,7 +85,7 @@ public class DefaultFFAMatchImpl extends AbstractFFAMatch {
 
         Kit kit = getKit();
         player.getInventory().setArmorContents(kit.getArmor());
-        player.getInventory().setContents(kit.getInventory());
+        player.getInventory().setContents(kit.getItems());
     }
 
     /**
@@ -106,7 +106,7 @@ public class DefaultFFAMatchImpl extends AbstractFFAMatch {
             Kit kit = getKit();
             player.getInventory().clear();
             player.getInventory().setArmorContents(kit.getArmor());
-            player.getInventory().setContents(kit.getInventory());
+            player.getInventory().setContents(kit.getItems());
             player.updateInventory();
         }, 1L);
     }

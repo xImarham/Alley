@@ -330,7 +330,7 @@ public class KitService {
         config.set(key + ".unrankedslot", kit.getUnrankedSlot());
         config.set(key + ".rankedslot", kit.getRankedSlot());
         config.set(key + ".editorslot", kit.getEditorSlot());
-        config.set(key + ".items", kit.getInventory());
+        config.set(key + ".items", kit.getItems());
         config.set(key + ".armor", kit.getArmor());
         config.set(key + ".icon", kit.getIcon().name());
         config.set(key + ".durability", kit.getDurability());
