@@ -31,7 +31,7 @@ public class LayoutMenu extends Menu {
         Map<Integer, Button> buttons = new HashMap<>();
 
         for (Queue queue : this.plugin.getQueueService().getQueues()) {
-            if (!queue.isRanked() && queue.getKit().getCategory() == this.kitCategory) {
+            if (!queue.isRanked() && queue.getKit().getCategory() == this.kitCategory && queue.getKit().isEditable()) {
                 buttons.put(queue.getKit().getEditorSlot(), new LayoutButton(queue.getKit()));
             }
         }
