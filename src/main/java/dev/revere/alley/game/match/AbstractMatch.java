@@ -166,7 +166,7 @@ public abstract class AbstractMatch {
             LayoutRecord kitLayout = profile.getProfileData().getLayoutData().getLayouts().get(kit.getName()).get(0);
             player.getInventory().setContents(kitLayout.getItems());
         } else {
-            // give books
+            Alley.getInstance().getLayoutService().giveBooks(player, kit.getName());
         }
 
         player.updateInventory();
