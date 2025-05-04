@@ -24,12 +24,6 @@ import java.util.List;
  * @date 27/03/2024 - 14:27
  */
 public class ScoreboardVisualizer implements IAssembleAdapter {
-
-    // TODO: For MatchScoreboard, we need to add a "restarting round" state.
-    //  The "starting" state is intentionally used for the countdown before the match begins, not for round countdowns... obviously.
-    //  However, in the current implementation (e.g., Battle Rush), "starting" is also used to begin a new round.
-    //  And since the scoreboard relies on match states (and kit settings), we shouldn't use one state for multiple purposes within the match system.
-
     protected final Alley plugin;
 
     private final LobbyScoreboard lobbyScoreboard;
