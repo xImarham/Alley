@@ -71,8 +71,8 @@ public class LayoutService {
      * @param kitName The name of the kit.
      */
     public void giveBooks(Player player, String kitName) {
-        this.plugin.getProfileService().getProfile(player.getUniqueId()).getProfileData().getLayoutData().getLayouts().get(kitName).forEach(layout -> {
-            player.getInventory().addItem(this.getLayoutBook(layout));
-        });
+        this.plugin.getProfileService().getProfile(player.getUniqueId()).getProfileData().getLayoutData().getLayouts().get(kitName).forEach(layout ->
+                player.getInventory().addItem(this.getLayoutBook(layout))
+        );
     }
 }
