@@ -157,40 +157,4 @@ public class MatchRunnable extends BukkitRunnable {
     private void playSoundStarted() {
         this.match.getParticipants().forEach(participant -> SoundUtil.playBlast(participant.getPlayer().getPlayer()));
     }
-
-    /**
-     * Represent the stage of the match via numbers and colors.
-     *
-     * @return The string representation of the stage.
-     */
-    public String representStage() {
-        String format;
-
-        switch (this.stage) {
-            case 6:
-                format = "&a6";
-                break;
-            case 5:
-                format = "&a5";
-                break;
-            case 4:
-                format = "&e4";
-                break;
-            case 3:
-                format = "&63";
-                break;
-            case 2:
-                format = "&c2";
-                break;
-            case 1:
-                format = "&41";
-                break;
-            case 0:
-            default:
-                format = "&40";
-                break;
-        }
-
-        return CC.translate(format);
-    }
 }
