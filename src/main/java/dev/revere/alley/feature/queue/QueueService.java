@@ -41,11 +41,16 @@ public class QueueService {
     }
 
     public void initialize() {
-        Alley.getInstance().getServer().getScheduler().runTaskTimer(Alley.getInstance(), new QueueRunnable(), 10L, 10L);
+        this.plugin.getServer().getScheduler().runTaskTimer(this.plugin, new QueueRunnable(), 10L, 10L);
     }
 
+    /**
+     * Determines the menu type based on the configuration.
+     * 
+     * @return the appropriate menu instance
+     */
     private Menu determineMenu() {
-        FileConfiguration config = Alley.getInstance().getConfigService().getMenusConfig();
+        FileConfiguration config = this.plugin.getConfigService().getMenusConfig();
         String menuType = config.getString("queues-menu.type");
 
         switch (menuType) {
@@ -61,7 +66,7 @@ public class QueueService {
 
     public void reloadQueues() {
         this.queues.clear();
-        Alley.getInstance().getKitService().getKits().forEach(kit -> {
+        this.plugin.getKitService().getKits().forEach(kit -> {
             if (!kit.isEnabled()) return;
             new Queue(kit, false);
 
