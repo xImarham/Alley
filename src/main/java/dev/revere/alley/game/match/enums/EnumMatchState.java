@@ -12,6 +12,7 @@ public enum EnumMatchState {
     STARTING("Starting", "Starting"),
     RUNNING("Running", "In-Game"),
     ENDING_ROUND("Ending Round", "Ending"),
+    RESTARTING_ROUND("Restarting Round", "Restarting"),
     ENDING_MATCH("Ending Match", "Ending");
 
     private final String name;

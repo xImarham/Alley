@@ -95,7 +95,7 @@ public class MatchListener implements Listener {
         }
 
         if (profile.getState() == EnumProfileState.PLAYING) {
-            if (match.getState() == EnumMatchState.STARTING || match.getState() == EnumMatchState.ENDING_ROUND) {
+            if (match.getState() == EnumMatchState.STARTING || match.getState() == EnumMatchState.ENDING_ROUND || match.getState() == EnumMatchState.RESTARTING_ROUND) {
                 if (matchKit.isSettingEnabled(KitSettingDenyMovementImpl.class)) {
                     List<GameParticipant<MatchGamePlayerImpl>> participants = match.getParticipants();
                     match.denyPlayerMovement(participants);
@@ -229,8 +229,9 @@ public class MatchListener implements Listener {
                         return;
                     }
 
-                    if (match.getState() == EnumMatchState.ENDING_ROUND || match.getState() == EnumMatchState.ENDING_MATCH)
+                    if (match.getState() == EnumMatchState.ENDING_ROUND || match.getState() == EnumMatchState.ENDING_MATCH || match.getState() == EnumMatchState.RESTARTING_ROUND) {
                         return;
+                    }
 
                     GameParticipant<MatchGamePlayerImpl> opponent = match.getParticipantA().containsPlayer(player.getUniqueId()) ? match.getParticipantB() : match.getParticipantA();
                     opponent.getPlayers().forEach(matchGamePlayer -> matchGamePlayer.setDead(true));

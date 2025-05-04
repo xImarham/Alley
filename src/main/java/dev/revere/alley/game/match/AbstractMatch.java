@@ -280,7 +280,9 @@ public abstract class AbstractMatch {
      * @param player The player that died.
      */
     public void handleDeath(Player player) {
-        if (!(this.state == EnumMatchState.STARTING || this.state == EnumMatchState.RUNNING)) return;
+        if (!(this.state == EnumMatchState.STARTING || this.state == EnumMatchState.RUNNING)) {
+            return;
+        }
 
         MatchGamePlayerImpl gamePlayer = this.getGamePlayer(player);
         if (gamePlayer.isDead()) {

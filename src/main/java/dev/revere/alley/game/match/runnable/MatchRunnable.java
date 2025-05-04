@@ -2,10 +2,8 @@ package dev.revere.alley.game.match.runnable;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.feature.kit.setting.impl.KitSettingBattleRushImpl;
-import dev.revere.alley.feature.kit.setting.impl.KitSettingStickFightImpl;
 import dev.revere.alley.game.match.AbstractMatch;
 import dev.revere.alley.game.match.enums.EnumMatchState;
-import dev.revere.alley.game.match.impl.MatchRoundsImpl;
 import dev.revere.alley.reflection.impl.TitleReflectionService;
 import dev.revere.alley.util.SoundUtil;
 import dev.revere.alley.util.chat.CC;
@@ -45,26 +43,35 @@ public class MatchRunnable extends BukkitRunnable {
             case STARTING:
                 if (this.stage == 0) {
                     Alley.getInstance().getServer().getScheduler().runTask(Alley.getInstance(), this.match::handleRoundStart);
-                    this.match.setState(EnumMatchState.RUNNING);
 
-                    if (this.match.getKit().isSettingEnabled(KitSettingBattleRushImpl.class) || this.match.getKit().isSettingEnabled(KitSettingStickFightImpl.class) && ((MatchRoundsImpl) this.match).getCurrentRound() > 0) {
-                        this.match.sendMessage(CC.translate("&aRound Started!"));
-                        this.playSoundStarted();
-                    } else {
-                        this.match.sendMessage(CC.translate("&aMatch has started. Good luck!"));
-                        this.sendTitleStarted();
-                        this.playSoundStarted();
-                        this.sendDisclaimer();
-                    }
+                    this.match.setState(EnumMatchState.RUNNING);
+                    this.match.sendMessage(CC.translate("&aMatch has started. Good luck!"));
+
+                    this.sendTitleStarted();
+                    this.playSoundStarted();
+                    this.sendDisclaimer();
                 } else {
                     this.match.sendMessage(CC.translate("&a" + this.stage + "..."));
+
                     this.sendTitleStarting();
+                    this.playSoundStarting();
+                }
+                break;
+            case RESTARTING_ROUND:
+                if (this.stage == 0) {
+                    Alley.getInstance().getServer().getScheduler().runTask(Alley.getInstance(), this.match::handleRoundStart);
+                    this.match.setState(EnumMatchState.RUNNING);
+
+                    this.match.sendMessage(CC.translate("&aRound Started!"));
+                    this.playSoundStarted();
+                } else {
+                    this.match.sendMessage(CC.translate("&a" + this.stage + "..."));
                     this.playSoundStarting();
                 }
                 break;
             case ENDING_ROUND:
                 if (this.match.canStartRound()) {
-                    this.match.setState(EnumMatchState.STARTING);
+                    this.match.setState(EnumMatchState.RESTARTING_ROUND);
                     this.match.getRunnable().setStage(4);
                 }
                 break;

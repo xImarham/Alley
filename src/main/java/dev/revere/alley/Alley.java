@@ -16,8 +16,6 @@ import dev.revere.alley.essential.chat.ChatListener;
 import dev.revere.alley.essential.emoji.EmojiRepository;
 import dev.revere.alley.essential.emoji.listener.EmojiListener;
 import dev.revere.alley.essential.filter.ProfanityFilter;
-import dev.revere.alley.essential.parkour.ParkourService;
-import dev.revere.alley.essential.parkour.listener.ParkourListener;
 import dev.revere.alley.feature.arena.AbstractArena;
 import dev.revere.alley.feature.arena.ArenaService;
 import dev.revere.alley.feature.arena.listener.ArenaListener;
@@ -32,6 +30,7 @@ import dev.revere.alley.feature.hotbar.listener.HotbarListener;
 import dev.revere.alley.feature.kit.KitService;
 import dev.revere.alley.feature.kit.setting.KitSettingService;
 import dev.revere.alley.feature.layout.LayoutService;
+import dev.revere.alley.feature.layout.listener.LayoutListener;
 import dev.revere.alley.feature.leaderboard.LeaderboardService;
 import dev.revere.alley.feature.level.LevelService;
 import dev.revere.alley.feature.queue.QueueService;
@@ -135,7 +134,7 @@ public class Alley extends JavaPlugin {
     private BotFightRepository botFightRepository;
     private TitleService titleService;
     private LevelService levelService;
-    private ParkourService parkourService;
+    //private ParkourService parkourService;
     private ProfanityFilter profanityFilter;
     private LayoutService layoutService;
 
@@ -238,7 +237,7 @@ public class Alley extends JavaPlugin {
         services.put(ReflectionRepository.class.getSimpleName(), () -> this.reflectionRepository = new ReflectionRepository(this));
         services.put(BotMechanics.class.getSimpleName(), () -> this.botMechanics = new BotMechanics());
         services.put(BotFightRepository.class.getSimpleName(), () -> this.botFightRepository = new BotFightRepository());
-        services.put(ParkourService.class.getSimpleName(), () -> this.parkourService = new ParkourService(this, this.configService.getSettingsConfig().getString("parkour.starter-location")));
+        //services.put(ParkourService.class.getSimpleName(), () -> this.parkourService = new ParkourService(this, this.configService.getSettingsConfig().getString("parkour.starter-location")));
         services.put(ProfanityFilter.class.getSimpleName(), () -> this.profanityFilter = new ProfanityFilter(this));
         services.put(LayoutService.class.getSimpleName(), () -> this.layoutService = new LayoutService(this));
 
@@ -265,8 +264,9 @@ public class Alley extends JavaPlugin {
                 new CombatListener(this),
                 new BotFightListener(),
                 new BotFightDeathListener(),
-                new ParkourListener(this),
-                new CoreChatListener(this)
+                //new ParkourListener(this),
+                new CoreChatListener(this),
+                new LayoutListener(this)
         ).forEach(listener -> getServer().getPluginManager().registerEvents(listener, this));
     }
 

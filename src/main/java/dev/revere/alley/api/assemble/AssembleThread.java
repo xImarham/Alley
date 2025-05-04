@@ -30,7 +30,8 @@ public class AssembleThread extends Thread {
                 tick();
                 sleep(this.assemble.getTicks() * 50);
             } catch (Exception exception) {
-                Logger.logException(this.getClass().getSimpleName(), exception);
+                Logger.logError("There was an error in the Assemble Thread.");
+                exception.printStackTrace();
             }
         }
     }
@@ -95,7 +96,7 @@ public class AssembleThread extends Thread {
                     player.setScoreboard(scoreboard);
                 }
             } catch (Exception exception) {
-                Logger.logException(this.getClass().getSimpleName(), exception);
+                exception.printStackTrace();
                 throw new AssembleException("There was an error updating " + player.getName() + "'s scoreboard.");
             }
         }

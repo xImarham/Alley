@@ -1,7 +1,6 @@
 package dev.revere.alley.feature.queue.runnable;
 
 import dev.revere.alley.Alley;
-import dev.revere.alley.essential.parkour.ParkourService;
 import dev.revere.alley.feature.arena.AbstractArena;
 import dev.revere.alley.feature.arena.enums.EnumArenaType;
 import dev.revere.alley.feature.hotbar.enums.EnumHotbarType;
@@ -47,10 +46,10 @@ public class QueueRunnable implements Runnable {
                     queue.removePlayer(profile);
                     Player player = Alley.getInstance().getServer().getPlayer(profile.getUuid());
 
-                    ParkourService parkourService = Alley.getInstance().getParkourService();
-                    if (parkourService.isPlaying(player)) {
-                        parkourService.removePlayer(player, false);
-                    }
+//                    ParkourService parkourService = Alley.getInstance().getParkourService();
+//                    if (parkourService.isPlaying(player)) {
+//                        parkourService.removePlayer(player, false);
+//                    }
 
                     player.sendMessage(CC.translate("&cYou have been removed from the queue due to inactivity."));
                     Alley.getInstance().getProfileService().getProfile(profile.getUuid()).setQueueProfile(null);
@@ -80,11 +79,23 @@ public class QueueRunnable implements Runnable {
                         return;
                     }
 
-                    this.clearQueueProfiles(queue, firstProfile, secondProfile);
                     GamePlayerList gamePlayerList = getGamePlayerList(firstPlayerOpt.get(), secondPlayerOpt.get(), firstProfile, secondProfile);
                     GameParticipantList gameParticipantList = getGameParticipantList(gamePlayerList);
 
-                    this.processGame(queue, gameParticipantList);
+                    AbstractArena arena = this.getArena(queue);
+                    if (arena == null || arena.getType().equals(EnumArenaType.FFA)) {
+                        gameParticipantList.getParticipants().forEach(participant -> {
+                            Player player = Alley.getInstance().getServer().getPlayer(participant.getPlayer().getUuid());
+                            player.sendMessage(CC.translate("&cThere are no available arenas for the kit you're playing."));
+                        });
+
+                        queue.removePlayer(firstProfile);
+                        queue.removePlayer(secondProfile);
+
+                        return;
+                    }
+
+                    this.processGame(queue, arena, gameParticipantList, firstProfile, secondProfile);
                 }
             }
         }
@@ -103,44 +114,18 @@ public class QueueRunnable implements Runnable {
     /**
      * Method to process the game.
      *
-     * @param queue               The queue.
+     * @param queue             The queue.
+     * @param arena             The arena.
      * @param gameParticipantList The game participant list.
+     * @param firstProfile      The first profile.
+     * @param secondProfile     The second profile.
      */
-    private void processGame(Queue queue, GameParticipantList gameParticipantList) {
-        AbstractArena arena = this.getArena(queue);
-        if (arena == null || arena.getType().equals(EnumArenaType.FFA)) {
-            gameParticipantList.getParticipants().forEach(participant -> {
-                Player player = Alley.getInstance().getServer().getPlayer(participant.getPlayer().getUuid());
-                player.sendMessage(CC.translate("&cThere are no available arenas for the kit you're playing."));
-
-                this.removeFromParkourIfPlaying(gameParticipantList, true);
-
-            });
-            return;
-        }
-
-        this.removeFromParkourIfPlaying(gameParticipantList, false);
-
+    private void processGame(Queue queue, AbstractArena arena, GameParticipantList gameParticipantList, QueueProfile firstProfile, QueueProfile secondProfile) {
         Alley.getInstance().getMatchRepository().createAndStartMatch(
                 queue.getKit(), arena, gameParticipantList.participantA, gameParticipantList.participantB
         );
-    }
 
-    /**
-     * Method to remove players from parkour if they are playing.
-     *
-     * @param gameParticipantList The game participant list.
-     * @param tpToSpawn           Whether to teleport to spawn.
-     */
-    private void removeFromParkourIfPlaying(GameParticipantList gameParticipantList, boolean tpToSpawn) {
-        for (GameParticipant<MatchGamePlayerImpl> participant : gameParticipantList.getParticipants()) {
-            Player player = Alley.getInstance().getServer().getPlayer(participant.getPlayer().getUuid());
-            if (player == null) {
-                return;
-            }
-
-            Alley.getInstance().getParkourService().removeIfPlayingParkour(player, tpToSpawn);
-        }
+        this.clearQueueProfiles(queue, firstProfile, secondProfile);
     }
 
     /**
@@ -160,7 +145,7 @@ public class QueueRunnable implements Runnable {
      * @param firstProfile  The first profile.
      * @param secondProfile The second profile.
      */
-    private void clearQueueProfiles(Queue queue, QueueProfile firstProfile, QueueProfile secondProfile) {
+    public void clearQueueProfiles(Queue queue, QueueProfile firstProfile, QueueProfile secondProfile) {
         ProfileService profileService = Alley.getInstance().getProfileService();
         profileService.getProfile(firstProfile.getUuid()).setQueueProfile(null);
         profileService.getProfile(secondProfile.getUuid()).setQueueProfile(null);

@@ -56,7 +56,7 @@ public class MatchBlockListener implements Listener {
         switch (profile.getState()) {
             case PLAYING:
                 EnumMatchState matchState = match.getState();
-                if (matchState == EnumMatchState.STARTING || matchState == EnumMatchState.ENDING_MATCH) {
+                if (matchState == EnumMatchState.STARTING || matchState == EnumMatchState.ENDING_MATCH || matchState == EnumMatchState.RESTARTING_ROUND) {
                     event.setCancelled(true);
                     return;
                 }
@@ -114,6 +114,7 @@ public class MatchBlockListener implements Listener {
             case PLAYING:
                 if (match.getState() == EnumMatchState.STARTING) event.setCancelled(true);
                 if (match.getState() == EnumMatchState.ENDING_MATCH) event.setCancelled(true);
+                if (match.getState() == EnumMatchState.RESTARTING_ROUND) event.setCancelled(true);
 
                 if ((match.getArena() instanceof StandAloneArena) && blockY > ((StandAloneArena) profile.getMatch().getArena()).getHeightLimit()) {
                     player.sendMessage(CC.translate("&cYou cannot place blocks above the height limit!"));

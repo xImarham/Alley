@@ -21,7 +21,7 @@ public enum HotbarItems {
 
     UNRANKED_QUEUES("&bUnranked Queues &7(Right Click)", Material.IRON_SWORD, 0, 0, "", EnumHotbarType.LOBBY),
     RANKED_QUEUES("&bRanked Queues &7(Right Click)", Material.DIAMOND_SWORD, 0, 1, "", EnumHotbarType.LOBBY),
-    KIT_EDITOR("&bKit Editor &7(Right Click)", Material.BOOK, 0, 2, "kiteditor", EnumHotbarType.LOBBY, EnumHotbarType.QUEUE),
+    KIT_EDITOR("&bKit Editor &7(Right Click)", Material.BOOK, 0, 2, "kiteditor", EnumHotbarType.LOBBY),
     CURRENT_MATCHES("&bCurrent Matches &7(Right Click)", Material.COMPASS, 0, 3, "currentmatches", EnumHotbarType.LOBBY),
     PARTY("&bCreate Party &7(Right Click)", Material.NAME_TAG, 0, 5, "party create", EnumHotbarType.LOBBY),
     LEADERBOARD("&bLeaderboards &7(Right Click)", Material.EMERALD, 0, 6, "leaderboards", EnumHotbarType.LOBBY),
@@ -35,7 +35,8 @@ public enum HotbarItems {
     PARTY_INFO("&bParty Info &7(Right Click)", Material.PAPER, 0, 7, "party info", EnumHotbarType.PARTY),
     PARTY_LEAVE("&cLeave Party &7(Right Click)", Material.REDSTONE, 0, 8, "party leave", EnumHotbarType.PARTY),
 
-    PLAY_PARKOUR("&bPlay Parkour &7(Right Click)", Material.WATER_LILY, 0, 0, "", EnumHotbarType.QUEUE),
+    //Yes, two times kiteditor, because i want it to be in the first slot and i cant be bothered to make the necessary changes
+    KIT_EDITOR_2("&bKit Editor &7(Right Click)", Material.BOOK, 0, 0, "kiteditor", EnumHotbarType.QUEUE),
     TIPS("&bTip Of The Day &7(Right Click)", Material.PAPER, 0, 1, "tip", EnumHotbarType.QUEUE),
     LEAVE_QUEUE("&cLeave Queue &7(Right Click)", Material.REDSTONE, 0, 8, "leavequeue", EnumHotbarType.QUEUE),
 
