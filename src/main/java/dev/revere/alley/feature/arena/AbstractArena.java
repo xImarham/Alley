@@ -16,14 +16,12 @@ import java.util.List;
 @Getter
 @Setter
 public abstract class AbstractArena {
-    private List<String> kits = new ArrayList<>();
-
-    private String name;
+    private final String name;
     private String displayName;
 
-    private EnumArenaType type;
-
     private boolean enabled;
+
+    private EnumArenaType type;
 
     private Location pos1;
     private Location pos2;
@@ -32,6 +30,8 @@ public abstract class AbstractArena {
 
     private Location minimum;
     private Location maximum;
+
+    private List<String> kits = new ArrayList<>();
 
     /**
      * Constructor for the Arena class.

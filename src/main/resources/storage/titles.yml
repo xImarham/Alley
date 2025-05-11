@@ -1,28 +1,28 @@
 titles:
   NoDebuff:
     prefix: '&b&lNODEBUFF GRANDMASTER'
-    required_division: Grandmaster
+    required: Grandmaster
   Classic:
     prefix: '&b&lCLASSIC GRANDMASTER'
-    required_division: Grandmaster
+    required: Grandmaster
   Boxing:
     prefix: '&b&lBOXING GRANDMASTER'
-    required_division: Grandmaster
+    required: Grandmaster
   Sumo:
     prefix: '&b&lSUMO GRANDMASTER'
-    required_division: Grandmaster
+    required: Grandmaster
   Spleef:
     prefix: '&b&lSPLEEF GRANDMASTER'
-    required_division: Grandmaster
+    required: Grandmaster
   Parkour:
     prefix: '&b&lPARKOUR GRANDMASTER'
-    required_division: Grandmaster
+    required: Grandmaster
   BattleRush:
     prefix: '&b&lBATTLERUSH GRANDMASTER'
-    required_division: Grandmaster
+    required: Grandmaster
   PearlFight:
     prefix: '&b&lPEARLFIGHT GRANDMASTER'
-    required_division: Grandmaster
+    required: Grandmaster
   StickFight:
     prefix: '&b&lSTICKFIGHT GRANDMASTER'
-    required_division: Grandmaster
+    required: Grandmaster

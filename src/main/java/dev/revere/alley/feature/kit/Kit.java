@@ -20,7 +20,7 @@ import java.util.List;
 @Getter
 @Setter
 public class Kit {
-    private String name;
+    private final String name;
     private String displayName;
     private String description;
     private String disclaimer;

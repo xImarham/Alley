@@ -32,22 +32,22 @@ public class FreeForAllArena extends AbstractArena {
     @Override
     public void createArena() {
         Alley.getInstance().getArenaService().getArenas().add(this);
-        saveArena();
+        this.saveArena();
     }
 
     @Override
     public void saveArena() {
-        String name = "arenas." + getName();
+        String name = "arenas." + this.getName();
         FileConfiguration config = Alley.getInstance().getConfigService().getConfig("storage/arenas.yml");
 
         config.set(name, null);
-        config.set(name + ".type", getType().name());
-        config.set(name + ".safezone.pos1", Serializer.serializeLocation(getMinimum()));
-        config.set(name + ".safezone.pos2", Serializer.serializeLocation(getMaximum()));
-        config.set(name + ".center", Serializer.serializeLocation(getCenter()));
-        config.set(name + ".pos1", Serializer.serializeLocation(getPos1()));
-        config.set(name + ".enabled", isEnabled());
-        config.set(name + ".displayName", getDisplayName());
+        config.set(name + ".type", this.getType().name());
+        config.set(name + ".safe-zone.pos1", Serializer.serializeLocation(this.getMinimum()));
+        config.set(name + ".safe-zone.pos2", Serializer.serializeLocation(this.getMaximum()));
+        config.set(name + ".center", Serializer.serializeLocation(this.getCenter()));
+        config.set(name + ".pos1", Serializer.serializeLocation(this.getPos1()));
+        config.set(name + ".enabled", this.isEnabled());
+        config.set(name + ".display-name", this.getDisplayName());
 
         Alley.getInstance().getConfigService().saveConfig(Alley.getInstance().getConfigService().getConfigFile("storage/arenas.yml"), config);
     }
@@ -55,7 +55,7 @@ public class FreeForAllArena extends AbstractArena {
     @Override
     public void deleteArena() {
         FileConfiguration config = Alley.getInstance().getConfigService().getConfig("storage/arenas.yml");
-        config.set("arenas." + getName(), null);
+        config.set("arenas." + this.getName(), null);
 
         Alley.getInstance().getArenaService().getArenas().remove(this);
         Alley.getInstance().getConfigService().saveConfig(Alley.getInstance().getConfigService().getConfigFile("storage/arenas.yml"), config);

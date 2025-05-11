@@ -47,7 +47,7 @@ public class TitleService {
             if (!this.isKitPresentInConfig(config, kit)) {
                 missingKits.getAndIncrement();
                 config.set(path + kit.getName() + ".prefix", this.getPrefixBasedOnHighestDivision(kit));
-                config.set(path + kit.getName() + ".required_division", this.plugin.getDivisionService().getHighestDivision().getName());
+                config.set(path + kit.getName() + ".required", this.plugin.getDivisionService().getHighestDivision().getName());
             }
         });
 
@@ -67,7 +67,7 @@ public class TitleService {
 
         this.plugin.getKitService().getKits().forEach(kit -> {
             String prefix = config.getString(path + kit.getName() + ".prefix");
-            String requiredDivisionName = config.getString(path + kit.getName() + ".required_division");
+            String requiredDivisionName = config.getString(path + kit.getName() + ".required");
 
             Division requiredDivision = this.plugin.getDivisionService().getDivision(requiredDivisionName);
             if (requiredDivision == null) {

@@ -22,10 +22,9 @@ import java.util.stream.Collectors;
 @Getter
 public class FFAService {
     protected final Alley plugin;
-
     private final List<AbstractFFAMatch> matches;
-    private final List<Kit> ffaKits;
 
+    private final List<Kit> ffaKits;
     private final int defaultPlayerSize;
 
     /**

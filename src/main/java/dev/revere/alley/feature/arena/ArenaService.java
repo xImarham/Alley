@@ -56,10 +56,6 @@ public class ArenaService {
             Location minimum = Serializer.deserializeLocation(config.getString(name + ".minimum"));
             Location maximum = Serializer.deserializeLocation(config.getString(name + ".maximum"));
 
-            Location team1Portal = Serializer.deserializeLocation(config.getString(name + ".team1Portal"));
-            Location team2Portal = Serializer.deserializeLocation(config.getString(name + ".team2Portal"));
-            int heightLimit = config.getInt(name + ".heightLimit");
-
             AbstractArena arena;
             switch (arenaType) {
                 case SHARED:
@@ -74,19 +70,16 @@ public class ArenaService {
                             arenaName,
                             minimum,
                             maximum,
-                            team1Portal,
-                            team2Portal,
-                            heightLimit
+                            Serializer.deserializeLocation(config.getString(name + ".team-one-portal")),
+                            Serializer.deserializeLocation(config.getString(name + ".team-two-portal")),
+                            config.getInt(name + ".height-limit")
                     );
                     break;
                 case FFA:
-                    Location safeZonePos1 = Serializer.deserializeLocation(config.getString(name + ".safezone.pos1"));
-                    Location safeZonePos2 = Serializer.deserializeLocation(config.getString(name + ".safezone.pos2"));
-
                     arena = new FreeForAllArena(
                             arenaName,
-                            safeZonePos1,
-                            safeZonePos2
+                            Serializer.deserializeLocation(config.getString(name + ".safe-zone.pos1")),
+                            Serializer.deserializeLocation(config.getString(name + ".safe-zone.pos2"))
                     );
                     break;
                 default:
@@ -113,8 +106,8 @@ public class ArenaService {
                 arena.setCenter(Serializer.deserializeLocation(config.getString(name + ".center")));
             }
 
-            if (config.contains(name + ".displayName")) {
-                arena.setDisplayName(config.getString(name + ".displayName"));
+            if (config.contains(name + ".display-name")) {
+                arena.setDisplayName(config.getString(name + ".display-name"));
             }
 
             if (config.contains(name + ".enabled")) {

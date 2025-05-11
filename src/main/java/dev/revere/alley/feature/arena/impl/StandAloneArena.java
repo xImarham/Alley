@@ -52,29 +52,29 @@ public class StandAloneArena extends AbstractArena {
     @Override
     public void createArena() {
         Alley.getInstance().getArenaService().getArenas().add(this);
-        saveArena();
+        this.saveArena();
     }
 
     @Override
     public void saveArena() {
-        String name = "arenas." + getName();
+        String name = "arenas." + this.getName();
         FileConfiguration config = Alley.getInstance().getConfigService().getConfig("storage/arenas.yml");
 
         config.set(name, null);
-        config.set(name + ".type", getType().name());
-        config.set(name + ".minimum", Serializer.serializeLocation(getMinimum()));
-        config.set(name + ".maximum", Serializer.serializeLocation(getMaximum()));
-        config.set(name + ".center", Serializer.serializeLocation(getCenter()));
-        config.set(name + ".pos1", Serializer.serializeLocation(getPos1()));
-        config.set(name + ".pos2", Serializer.serializeLocation(getPos2()));
-        config.set(name + ".kits", getKits());
-        config.set(name + ".enabled", isEnabled());
-        config.set(name + ".displayName", getDisplayName());
+        config.set(name + ".type", this.getType().name());
+        config.set(name + ".minimum", Serializer.serializeLocation(this.getMinimum()));
+        config.set(name + ".maximum", Serializer.serializeLocation(this.getMaximum()));
+        config.set(name + ".center", Serializer.serializeLocation(this.getCenter()));
+        config.set(name + ".pos1", Serializer.serializeLocation(this.getPos1()));
+        config.set(name + ".pos2", Serializer.serializeLocation(this.getPos2()));
+        config.set(name + ".kits", this.getKits());
+        config.set(name + ".enabled", this.isEnabled());
+        config.set(name + ".display-name", this.getDisplayName());
 
-        if (this.team1Portal != null) config.set(name + ".team1Portal", Serializer.serializeLocation(this.team1Portal));
-        if (this.team2Portal != null) config.set(name + ".team2Portal", Serializer.serializeLocation(this.team2Portal));
+        if (this.team1Portal != null) config.set(name + ".team-one-portal", Serializer.serializeLocation(this.team1Portal));
+        if (this.team2Portal != null) config.set(name + ".team-two-portal", Serializer.serializeLocation(this.team2Portal));
 
-        config.set(name + ".heightLimit", this.heightLimit);
+        config.set(name + ".height-limit", this.heightLimit);
 
         Alley.getInstance().getConfigService().saveConfig(Alley.getInstance().getConfigService().getConfigFile("storage/arenas.yml"), config);
     }
@@ -82,7 +82,7 @@ public class StandAloneArena extends AbstractArena {
     @Override
     public void deleteArena() {
         FileConfiguration config = Alley.getInstance().getConfigService().getConfig("storage/arenas.yml");
-        config.set("arenas." + getName(), null);
+        config.set("arenas." + this.getName(), null);
 
         Alley.getInstance().getArenaService().getArenas().remove(this);
         Alley.getInstance().getConfigService().saveConfig(Alley.getInstance().getConfigService().getConfigFile("storage/arenas.yml"), config);

@@ -43,8 +43,8 @@ public class FFASpawnService extends CuboidService {
         }
 
         this.spawn = Serializer.deserializeLocation(config.getString("arenas." + arena.getName() + ".pos1"));
-        this.minimum = Serializer.deserializeLocation(config.getString("arenas." + arena.getName() + ".safezone.pos1"));
-        this.maximum = Serializer.deserializeLocation(config.getString("arenas." + arena.getName() + ".safezone.pos2"));
+        this.minimum = Serializer.deserializeLocation(config.getString("arenas." + arena.getName() + ".safe-zone.pos1"));
+        this.maximum = Serializer.deserializeLocation(config.getString("arenas." + arena.getName() + ".safe-zone.pos2"));
 
         if (this.minimum == null || this.maximum == null) {
             Logger.logError("FFA safezone not found! Please set the ffa arena safezone and save it using the /arena save command.");
