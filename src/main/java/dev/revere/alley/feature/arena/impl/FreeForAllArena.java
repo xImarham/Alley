@@ -3,7 +3,7 @@ package dev.revere.alley.feature.arena.impl;
 import dev.revere.alley.Alley;
 import dev.revere.alley.feature.arena.AbstractArena;
 import dev.revere.alley.feature.arena.enums.EnumArenaType;
-import dev.revere.alley.util.location.LocationUtil;
+import dev.revere.alley.tool.serializer.Serializer;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
 
@@ -42,10 +42,10 @@ public class FreeForAllArena extends AbstractArena {
 
         config.set(name, null);
         config.set(name + ".type", getType().name());
-        config.set(name + ".safezone.pos1", LocationUtil.serialize(getMinimum()));
-        config.set(name + ".safezone.pos2", LocationUtil.serialize(getMaximum()));
-        config.set(name + ".center", LocationUtil.serialize(getCenter()));
-        config.set(name + ".pos1", LocationUtil.serialize(getPos1()));
+        config.set(name + ".safezone.pos1", Serializer.serializeLocation(getMinimum()));
+        config.set(name + ".safezone.pos2", Serializer.serializeLocation(getMaximum()));
+        config.set(name + ".center", Serializer.serializeLocation(getCenter()));
+        config.set(name + ".pos1", Serializer.serializeLocation(getPos1()));
         config.set(name + ".enabled", isEnabled());
         config.set(name + ".displayName", getDisplayName());
 

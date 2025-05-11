@@ -5,8 +5,8 @@ import dev.revere.alley.tool.visual.LoreHelper;
 import org.bukkit.Material;
 
 import java.util.Arrays;
-import java.util.function.Function;
 import java.util.List;
+import java.util.function.Function;
 
 /**
  * @author Emmy

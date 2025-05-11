@@ -6,7 +6,6 @@ import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.util.chat.CC;
-import dev.revere.alley.util.reflection.BukkitReflection;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -36,8 +35,8 @@ public class MatchScoreboardLivesImpl implements IMatchScoreboard {
         for (String line : this.plugin.getConfigService().getConfig("providers/scoreboard.yml").getStringList("scoreboard.lines.playing.lives-match")) {
             scoreboardLines.add(CC.translate(line)
                     .replaceAll("\\{opponent}", this.getColoredName(opponent.getPlayer().getPlayer()))
-                    .replaceAll("\\{opponent-ping}", String.valueOf(BukkitReflection.getPing(opponent.getPlayer().getPlayer())))
-                    .replaceAll("\\{player-ping}", String.valueOf(BukkitReflection.getPing(player)))
+                    .replaceAll("\\{opponent-ping}", String.valueOf(this.getPing(opponent.getPlayer().getPlayer())))
+                    .replaceAll("\\{player-ping}", String.valueOf(this.getPing(player)))
                     .replaceAll("\\{player-lives}", String.valueOf(profile.getMatch().getGamePlayer(player).getData().getLives()))
                     .replaceAll("\\{opponent-lives}", String.valueOf(profile.getMatch().getGamePlayer(opponent.getPlayer().getPlayer()).getData().getLives()))
                     .replaceAll("\\{duration}", profile.getMatch().getDuration())

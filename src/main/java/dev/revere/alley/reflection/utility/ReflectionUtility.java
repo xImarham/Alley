@@ -1,4 +1,4 @@
-package dev.revere.alley.util.reflection;
+package dev.revere.alley.reflection.utility;
 
 import org.bukkit.Bukkit;
 
@@ -25,9 +25,9 @@ import java.util.Map;
  * @author DarkBlade12
  * @version 1.1
  */
-public final class ReflectionUtils {
+public final class ReflectionUtility {
     // Prevent accidental construction
-    private ReflectionUtils() {
+    private ReflectionUtility() {
     }
 
     /**

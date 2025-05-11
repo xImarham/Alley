@@ -9,7 +9,7 @@ import dev.revere.alley.profile.data.ProfileData;
 import dev.revere.alley.profile.data.impl.*;
 import dev.revere.alley.profile.enums.EnumChatChannel;
 import dev.revere.alley.profile.enums.EnumWorldTime;
-import dev.revere.alley.tool.item.ItemStackSerializer;
+import dev.revere.alley.tool.serializer.Serializer;
 import lombok.experimental.UtilityClass;
 import org.bson.Document;
 import org.bukkit.inventory.ItemStack;
@@ -132,7 +132,7 @@ public class MongoUtility {
                 Document recordDocument = new Document();
                 recordDocument.put("name", record.getName());
                 recordDocument.put("displayName", record.getDisplayName());
-                recordDocument.put("items", ItemStackSerializer.serialize(record.getItems()));
+                recordDocument.put("items", Serializer.serializeItemStack(record.getItems()));
                 layoutRecords.add(recordDocument);
             }
             layoutDocument.put(entry.getKey(), layoutRecords);
@@ -321,7 +321,7 @@ public class MongoUtility {
             for (Document record : records) {
                 String name = record.getString("name");
                 String displayName = record.getString("displayName");
-                ItemStack[] items = ItemStackSerializer.deserialize(record.get("items", String.class));
+                ItemStack[] items = Serializer.deserializeItemStack(record.get("items", String.class));
                 LayoutData layoutRecord = new LayoutData(name, displayName, items);
                 layoutRecords.add(layoutRecord);
             }

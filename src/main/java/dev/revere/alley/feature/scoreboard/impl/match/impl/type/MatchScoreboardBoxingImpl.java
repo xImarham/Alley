@@ -6,7 +6,6 @@ import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.util.chat.CC;
-import dev.revere.alley.util.reflection.BukkitReflection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
@@ -49,8 +48,8 @@ public class MatchScoreboardBoxingImpl implements IMatchScoreboard {
         for (String line : template) {
             lines.add(CC.translate(line)
                     .replace("{opponent}", this.getColoredName(opponent.getPlayer().getPlayer()))
-                    .replace("{opponent-ping}", String.valueOf(BukkitReflection.getPing(opponent.getPlayer().getPlayer())))
-                    .replace("{player-ping}", String.valueOf(BukkitReflection.getPing(player)))
+                    .replace("{opponent-ping}", String.valueOf(this.getPing(opponent.getPlayer().getPlayer())))
+                    .replace("{player-ping}", String.valueOf(this.getPing(player)))
                     .replace("{player-hits}", String.valueOf(playerHits))
                     .replace("{opponent-hits}", String.valueOf(opponentHits))
                     .replace("{difference}", hitDifference)

@@ -7,7 +7,6 @@ import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.util.chat.CC;
-import dev.revere.alley.util.reflection.BukkitReflection;
 import dev.revere.alley.util.visual.ScoreboardUtil;
 import org.bukkit.entity.Player;
 
@@ -40,8 +39,8 @@ public class MatchScoreboardStickFightImpl implements IMatchScoreboard {
         for (String line : this.plugin.getConfigService().getConfig("providers/scoreboard.yml").getStringList("scoreboard.lines.playing.stickfight-match")) {
             scoreboardLines.add(CC.translate(line)
                     .replaceAll("\\{opponent}", this.getColoredName(opponent.getPlayer().getPlayer()))
-                    .replaceAll("\\{opponent-ping}", String.valueOf(BukkitReflection.getPing(opponent.getPlayer().getPlayer())))
-                    .replaceAll("\\{player-ping}", String.valueOf(BukkitReflection.getPing(player)))
+                    .replaceAll("\\{opponent-ping}", String.valueOf(this.getPing(opponent.getPlayer().getPlayer())))
+                    .replaceAll("\\{player-ping}", String.valueOf(this.getPing(player)))
                     .replaceAll("\\{goals}", ScoreboardUtil.visualizeGoalsAsCircles(stickFightMatch.getParticipantA().getPlayer().getData().getGoals(), 5))
                     .replaceAll("\\{opponent-goals}", ScoreboardUtil.visualizeGoalsAsCircles(stickFightMatch.getParticipantB().getPlayer().getData().getGoals(), 5))
                     .replaceAll("\\{current-round}", String.valueOf(stickFightMatch.getCurrentRound()))

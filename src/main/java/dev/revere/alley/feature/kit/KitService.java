@@ -5,9 +5,8 @@ import dev.revere.alley.feature.kit.enums.EnumKitCategory;
 import dev.revere.alley.feature.kit.setting.KitSetting;
 import dev.revere.alley.feature.kit.setting.impl.KitSettingRankedImpl;
 import dev.revere.alley.feature.queue.Queue;
-import dev.revere.alley.tool.item.ItemStackSerializer;
 import dev.revere.alley.tool.logger.Logger;
-import dev.revere.alley.util.PotionUtil;
+import dev.revere.alley.tool.serializer.Serializer;
 import lombok.Getter;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
@@ -67,9 +66,9 @@ public class KitService {
                     config.getInt(key + ".slots.ranked"),
                     config.getInt(key + ".slots.editor"),
                     config.getInt(key + ".ffa.slot"),
-                    ItemStackSerializer.deserialize(config.getString(key + ".items")),
-                    ItemStackSerializer.deserialize(config.getString(key + ".armor")),
-                    ItemStackSerializer.deserialize(config.getString(key + ".editor-items"))
+                    Serializer.deserializeItemStack(config.getString(key + ".items")),
+                    Serializer.deserializeItemStack(config.getString(key + ".armor")),
+                    Serializer.deserializeItemStack(config.getString(key + ".editor-items"))
             );
 
             this.setupFFA(kit, config, key);
@@ -129,7 +128,7 @@ public class KitService {
      */
     private void loadPotionEffects(FileConfiguration config, String key, Kit kit) {
         try {
-            List<PotionEffect> potionEffects = PotionUtil.deserialize(config.getStringList(key + ".potioneffects"));
+            List<PotionEffect> potionEffects = Serializer.deserializePotionEffects(config.getStringList(key + ".potioneffects"));
             kit.setPotionEffects(potionEffects);
         } catch (Exception exception) {
             Logger.logException("Failed to load potion effects for kit " + kit.getName() + ": " + exception.getMessage(), exception);
@@ -189,7 +188,7 @@ public class KitService {
      * @param kit    The kit.
      */
     private void savePotionEffects(FileConfiguration config, String key, Kit kit) {
-        List<String> potionEffects = PotionUtil.serialize(kit.getPotionEffects());
+        List<String> potionEffects = Serializer.serializePotionEffects(kit.getPotionEffects());
         config.set(key + ".potioneffects", potionEffects);
     }
 
@@ -338,8 +337,8 @@ public class KitService {
         config.set(key + ".ffa.enabled", kit.isFfaEnabled());
         config.set(key + ".ffa.slot", kit.getFfaSlot());
         config.set(key + ".ffa.max-players", kit.getMaxFfaPlayers());
-        config.set(key + ".items", ItemStackSerializer.serialize(kit.getItems()));
-        config.set(key + ".armor", ItemStackSerializer.serialize(kit.getArmor()));
-        config.set(key + ".editor-items", ItemStackSerializer.serialize(kit.getEditorItems()));
+        config.set(key + ".items", Serializer.serializeItemStack(kit.getItems()));
+        config.set(key + ".armor", Serializer.serializeItemStack(kit.getArmor()));
+        config.set(key + ".editor-items", Serializer.serializeItemStack(kit.getEditorItems()));
     }
 }

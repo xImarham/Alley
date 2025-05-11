@@ -5,7 +5,6 @@ import dev.revere.alley.feature.scoreboard.IScoreboard;
 import dev.revere.alley.game.match.impl.MatchRegularImpl;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.util.chat.CC;
-import dev.revere.alley.util.reflection.BukkitReflection;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -38,8 +37,8 @@ public class SpectatorScoreboard implements IScoreboard {
                 scoreboardLines.add(CC.translate(line)
                         .replaceAll("\\{playerA}", profile.getMatch().getParticipants().get(0).getPlayer().getUsername())
                         .replaceAll("\\{playerB}", profile.getMatch().getParticipants().get(1).getPlayer().getUsername())
-                        .replaceAll("\\{pingA}", String.valueOf(BukkitReflection.getPing(profile.getMatch().getParticipants().get(0).getPlayer().getPlayer())))
-                        .replaceAll("\\{pingB}", String.valueOf(BukkitReflection.getPing(profile.getMatch().getParticipants().get(1).getPlayer().getPlayer())))
+                        .replaceAll("\\{pingA}", String.valueOf(this.getPing(profile.getMatch().getParticipants().get(0).getPlayer().getPlayer())))
+                        .replaceAll("\\{pingB}", String.valueOf(this.getPing(profile.getMatch().getParticipants().get(1).getPlayer().getPlayer())))
                         .replaceAll("\\{colorA}", String.valueOf(((MatchRegularImpl) profile.getMatch()).getTeamAColor()))
                         .replaceAll("\\{colorB}", String.valueOf(((MatchRegularImpl) profile.getMatch()).getTeamBColor()))
                         .replaceAll("\\{duration}", profile.getMatch().getDuration())

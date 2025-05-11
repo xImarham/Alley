@@ -2,7 +2,7 @@ package dev.revere.alley.feature.spawn;
 
 import dev.revere.alley.config.ConfigService;
 import dev.revere.alley.tool.logger.Logger;
-import dev.revere.alley.util.location.LocationUtil;
+import dev.revere.alley.tool.serializer.Serializer;
 import lombok.Getter;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -30,7 +30,7 @@ public class SpawnService {
 
     private void loadSpawnLocation() {
         FileConfiguration config = this.configService.getSettingsConfig();
-        Location location = LocationUtil.deserialize(config.getString("spawn.join-location"));
+        Location location = Serializer.deserializeLocation(config.getString("spawn.join-location"));
         if (location == null) {
             Logger.logError("Spawn location is null.");
             return;
@@ -46,7 +46,7 @@ public class SpawnService {
      */
     public void updateSpawnLocation(Location location) {
         FileConfiguration config = this.configService.getSettingsConfig();
-        config.set("spawn.join-location", LocationUtil.serialize(location));
+        config.set("spawn.join-location", Serializer.serializeLocation(location));
 
         this.location = location;
         this.configService.saveConfig(this.configService.getConfigFile("settings.yml"), config);

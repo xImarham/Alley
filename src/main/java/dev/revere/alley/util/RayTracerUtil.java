@@ -1,4 +1,4 @@
-package dev.revere.alley.util.location;
+package dev.revere.alley.util;
 
 import lombok.experimental.UtilityClass;
 import org.bukkit.Location;

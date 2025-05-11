@@ -8,8 +8,8 @@ import dev.revere.alley.feature.kit.enums.EnumKitCategory;
 import dev.revere.alley.feature.queue.Queue;
 import dev.revere.alley.feature.queue.enums.EnumQueueType;
 import dev.revere.alley.feature.queue.menu.QueuesMenuDefault;
-import dev.revere.alley.feature.queue.menu.extra.button.QueueModeSwitcherButton;
 import dev.revere.alley.feature.queue.menu.button.UnrankedButton;
+import dev.revere.alley.feature.queue.menu.extra.button.QueueModeSwitcherButton;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;

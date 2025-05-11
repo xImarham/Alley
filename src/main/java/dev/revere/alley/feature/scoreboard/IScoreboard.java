@@ -4,6 +4,7 @@ import dev.revere.alley.Alley;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.tool.animation.enums.EnumAnimationType;
 import dev.revere.alley.tool.animation.type.internal.impl.DotAnimationImpl;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 import java.util.List;
@@ -38,5 +39,15 @@ public interface IScoreboard {
      */
     default DotAnimationImpl getDotAnimation() {
         return Alley.getInstance().getAnimationRepository().getAnimation(DotAnimationImpl.class, EnumAnimationType.INTERNAL);
+    }
+
+    /**
+     * Gets the ping of the player by using reflection.
+     *
+     * @param player The player to get the ping for.
+     * @return The ping of the player.
+     */
+    default int getPing(Player player) {
+        return ((CraftPlayer) player).getHandle().ping;
     }
 }

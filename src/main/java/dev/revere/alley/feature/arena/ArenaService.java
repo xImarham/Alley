@@ -6,7 +6,7 @@ import dev.revere.alley.feature.arena.impl.FreeForAllArena;
 import dev.revere.alley.feature.arena.impl.SharedArena;
 import dev.revere.alley.feature.arena.impl.StandAloneArena;
 import dev.revere.alley.feature.kit.Kit;
-import dev.revere.alley.util.location.LocationUtil;
+import dev.revere.alley.tool.serializer.Serializer;
 import lombok.Getter;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
@@ -53,11 +53,11 @@ public class ArenaService {
             String name = "arenas." + arenaName;
 
             EnumArenaType arenaType = EnumArenaType.valueOf(config.getString(name + ".type"));
-            Location minimum = LocationUtil.deserialize(config.getString(name + ".minimum"));
-            Location maximum = LocationUtil.deserialize(config.getString(name + ".maximum"));
+            Location minimum = Serializer.deserializeLocation(config.getString(name + ".minimum"));
+            Location maximum = Serializer.deserializeLocation(config.getString(name + ".maximum"));
 
-            Location team1Portal = LocationUtil.deserialize(config.getString(name + ".team1Portal"));
-            Location team2Portal = LocationUtil.deserialize(config.getString(name + ".team2Portal"));
+            Location team1Portal = Serializer.deserializeLocation(config.getString(name + ".team1Portal"));
+            Location team2Portal = Serializer.deserializeLocation(config.getString(name + ".team2Portal"));
             int heightLimit = config.getInt(name + ".heightLimit");
 
             AbstractArena arena;
@@ -80,8 +80,8 @@ public class ArenaService {
                     );
                     break;
                 case FFA:
-                    Location safeZonePos1 = LocationUtil.deserialize(config.getString(name + ".safezone.pos1"));
-                    Location safeZonePos2 = LocationUtil.deserialize(config.getString(name + ".safezone.pos2"));
+                    Location safeZonePos1 = Serializer.deserializeLocation(config.getString(name + ".safezone.pos1"));
+                    Location safeZonePos2 = Serializer.deserializeLocation(config.getString(name + ".safezone.pos2"));
 
                     arena = new FreeForAllArena(
                             arenaName,
@@ -102,15 +102,15 @@ public class ArenaService {
             }
 
             if (config.contains(name + ".pos1")) {
-                arena.setPos1(LocationUtil.deserialize(config.getString(name + ".pos1")));
+                arena.setPos1(Serializer.deserializeLocation(config.getString(name + ".pos1")));
             }
 
             if (config.contains(name + ".pos2")) {
-                arena.setPos2(LocationUtil.deserialize(config.getString(name + ".pos2")));
+                arena.setPos2(Serializer.deserializeLocation(config.getString(name + ".pos2")));
             }
 
             if (config.contains(name + ".center")) {
-                arena.setCenter(LocationUtil.deserialize(config.getString(name + ".center")));
+                arena.setCenter(Serializer.deserializeLocation(config.getString(name + ".center")));
             }
 
             if (config.contains(name + ".displayName")) {

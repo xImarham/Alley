@@ -6,7 +6,7 @@ import dev.revere.alley.feature.arena.enums.EnumArenaType;
 import dev.revere.alley.game.match.impl.MatchRoundsImpl;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
-import dev.revere.alley.util.location.LocationUtil;
+import dev.revere.alley.tool.serializer.Serializer;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Location;
@@ -62,17 +62,17 @@ public class StandAloneArena extends AbstractArena {
 
         config.set(name, null);
         config.set(name + ".type", getType().name());
-        config.set(name + ".minimum", LocationUtil.serialize(getMinimum()));
-        config.set(name + ".maximum", LocationUtil.serialize(getMaximum()));
-        config.set(name + ".center", LocationUtil.serialize(getCenter()));
-        config.set(name + ".pos1", LocationUtil.serialize(getPos1()));
-        config.set(name + ".pos2", LocationUtil.serialize(getPos2()));
+        config.set(name + ".minimum", Serializer.serializeLocation(getMinimum()));
+        config.set(name + ".maximum", Serializer.serializeLocation(getMaximum()));
+        config.set(name + ".center", Serializer.serializeLocation(getCenter()));
+        config.set(name + ".pos1", Serializer.serializeLocation(getPos1()));
+        config.set(name + ".pos2", Serializer.serializeLocation(getPos2()));
         config.set(name + ".kits", getKits());
         config.set(name + ".enabled", isEnabled());
         config.set(name + ".displayName", getDisplayName());
 
-        if (this.team1Portal != null) config.set(name + ".team1Portal", LocationUtil.serialize(this.team1Portal));
-        if (this.team2Portal != null) config.set(name + ".team2Portal", LocationUtil.serialize(this.team2Portal));
+        if (this.team1Portal != null) config.set(name + ".team1Portal", Serializer.serializeLocation(this.team1Portal));
+        if (this.team2Portal != null) config.set(name + ".team2Portal", Serializer.serializeLocation(this.team2Portal));
 
         config.set(name + ".heightLimit", this.heightLimit);
 

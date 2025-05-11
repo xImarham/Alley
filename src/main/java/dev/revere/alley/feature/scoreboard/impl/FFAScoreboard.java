@@ -5,7 +5,6 @@ import dev.revere.alley.feature.combat.CombatService;
 import dev.revere.alley.feature.scoreboard.IScoreboard;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.util.chat.CC;
-import dev.revere.alley.util.reflection.BukkitReflection;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -64,7 +63,7 @@ public class FFAScoreboard implements IScoreboard {
                         .replaceAll("\\{zone}", this.plugin.getFfaSpawnService().getCuboid().isIn(player) ? "Spawn" : "Warzone")
                         .replaceAll("\\{kills}", String.valueOf(profile.getProfileData().getFfaData().get(profile.getFfaMatch().getKit().getName()).getKills()))
                         .replaceAll("\\{deaths}", String.valueOf(profile.getProfileData().getFfaData().get(profile.getFfaMatch().getKit().getName()).getDeaths()))
-                        .replaceAll("\\{ping}", String.valueOf(BukkitReflection.getPing(player))));
+                        .replaceAll("\\{ping}", String.valueOf(this.getPing(player))));
             }
         }
 
