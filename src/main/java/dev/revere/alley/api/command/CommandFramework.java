@@ -24,7 +24,7 @@ import java.util.Map.Entry;
 public class CommandFramework implements CommandExecutor {
 
     private final Map<String, Entry<Method, Object>> commandMap;
-    private final Alley plugin;
+    protected final Alley plugin;
     private CommandMap map;
 
     /**

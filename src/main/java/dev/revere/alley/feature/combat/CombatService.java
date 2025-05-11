@@ -18,12 +18,19 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 @Getter
 public class CombatService {
+    protected final Alley plugin;
     private final Map<UUID, Combat> combatMap;
 
     private final long ffaExpirationTime;
     private final long defaultExpirationTime;
 
-    public CombatService() {
+    /**
+     * Constructor for the CombatService class.
+     *
+     * @param plugin The Alley plugin instance.
+     */
+    public CombatService(Alley plugin) {
+        this.plugin = plugin;
         this.combatMap = new ConcurrentHashMap<>();
         this.ffaExpirationTime = 15 * 1000L; // 15 seconds
         this.defaultExpirationTime = 5 * 1000L; // 5 seconds
@@ -36,7 +43,7 @@ public class CombatService {
      * @param attacker The player who attacked.
      */
     public void setLastAttacker(Player victim, Player attacker) {
-        EnumProfileState profileState = Alley.getInstance().getProfileService().getProfile(victim.getUniqueId()).getState();
+        EnumProfileState profileState = this.plugin.getProfileService().getProfile(victim.getUniqueId()).getState();
 
         long expirationTime = (profileState == EnumProfileState.FFA) ? this.ffaExpirationTime : this.defaultExpirationTime;
         long currentTime = System.currentTimeMillis();

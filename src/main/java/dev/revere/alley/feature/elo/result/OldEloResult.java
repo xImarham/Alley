@@ -1,13 +1,16 @@
 package dev.revere.alley.feature.elo.result;
 
+import lombok.Getter;
+
 /**
  * @author Emmy
  * @project Alley
  * @date 09/11/2024 - 15:23
  */
+@Getter
 public class OldEloResult {
-    public final int oldWinnerElo;
-    public final int oldLoserElo;
+    private final int oldWinnerElo;
+    private final int oldLoserElo;
 
     /**
      * Constructor for the OldEloResult class.

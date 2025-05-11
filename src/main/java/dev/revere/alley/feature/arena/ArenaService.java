@@ -24,9 +24,16 @@ import java.util.stream.Collectors;
  */
 @Getter
 public class ArenaService {
+    protected final Alley plugin;
     private final List<AbstractArena> arenas;
 
-    public ArenaService() {
+    /**
+     * Constructor for the ArenaService class.
+     *
+     * @param plugin The Alley plugin instance.
+     */
+    public ArenaService(Alley plugin) {
+        this.plugin = plugin;
         this.arenas = new ArrayList<>();
         this.loadArenas();
     }
@@ -35,7 +42,7 @@ public class ArenaService {
      * Method to load all arenas from the arenas.yml file.
      */
     public void loadArenas() {
-        FileConfiguration config = Alley.getInstance().getConfigService().getConfig("storage/arenas.yml");
+        FileConfiguration config = this.plugin.getConfigService().getConfig("storage/arenas.yml");
 
         ConfigurationSection arenasConfig = config.getConfigurationSection("arenas");
         if (arenasConfig == null) {
@@ -88,7 +95,7 @@ public class ArenaService {
 
             if (config.contains(name + ".kits")) {
                 for (String kitName : config.getStringList(name + ".kits")) {
-                    if (Alley.getInstance().getKitService().getKit(kitName) != null) {
+                    if (this.plugin.getKitService().getKit(kitName) != null) {
                         arena.getKits().add(kitName);
                     }
                 }

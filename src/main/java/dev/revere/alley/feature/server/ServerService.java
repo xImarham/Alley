@@ -31,12 +31,12 @@ public class ServerService {
     }
 
     /**
-     * Checks if the player is allowed to queue.
+     * Checks if queueing is enabled on the server, and if not, sends a message to the player.
      *
      * @param player the player to check.
      * @return true if the player is allowed to queue, false otherwise.
      */
-    public boolean check(Player player) {
+    public boolean isQueueingEnabled(Player player) {
         if (!this.allowQueueing) {
             player.sendMessage(CC.translate("&cThe server is currently preparing for a reboot. You cannot queue at this time."));
             return true;

@@ -4,7 +4,7 @@ import dev.revere.alley.Alley;
 import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.feature.kit.Kit;
 import dev.revere.alley.feature.layout.menu.LayoutEditorMenu;
-import dev.revere.alley.feature.layout.record.LayoutRecord;
+import dev.revere.alley.feature.layout.data.LayoutData;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.tool.item.ItemBuilder;
 import dev.revere.alley.util.chat.CC;
@@ -46,7 +46,7 @@ public class LayoutButton extends Button {
             // This will be changed to open the selected layout within the editor button,
             // similar to how MinemenClub works, where you can Shift-Click to select your saved/stored layouts.
             // Why? Because people love minemenclub, so we do it the same way.
-            LayoutRecord layout = profile.getProfileData().getLayoutData().getLayouts().get(this.kit.getName()).get(0);
+            LayoutData layout = profile.getProfileData().getLayoutData().getLayouts().get(this.kit.getName()).get(0);
             new LayoutEditorMenu(this.kit, layout).openMenu(player);
             return;
         }

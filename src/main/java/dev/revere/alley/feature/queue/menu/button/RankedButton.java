@@ -75,7 +75,7 @@ public class RankedButton extends Button {
     public void clicked(Player player, int slot, ClickType clickType, int hotbarSlot) {
         if (clickType != ClickType.LEFT) return;
 
-        if (Alley.getInstance().getServerService().check(player)) return;
+        if (Alley.getInstance().getServerService().isQueueingEnabled(player)) return;
 
         Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
         if (profile.getProfileData().isRankedBanned()) {

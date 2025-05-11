@@ -4,7 +4,7 @@ import dev.revere.alley.Alley;
 import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.api.menu.pagination.PaginatedMenu;
 import dev.revere.alley.feature.kit.Kit;
-import dev.revere.alley.feature.title.Title;
+import dev.revere.alley.feature.title.record.TitleRecord;
 import dev.revere.alley.profile.Profile;
 import lombok.AllArgsConstructor;
 import org.bukkit.entity.Player;
@@ -41,8 +41,8 @@ public class TitleMenu extends PaginatedMenu {
 
         int slot = 0;
 
-        Map<Kit, Title> titleMap = Alley.getInstance().getTitleService().getTitles();
-        for (Title title : titleMap.values()) {
+        Map<Kit, TitleRecord> titleMap = Alley.getInstance().getTitleService().getTitles();
+        for (TitleRecord title : titleMap.values()) {
             slot = this.validateSlot(slot);
             buttons.put(slot++, new TitleButton(this.profile, title));
         }

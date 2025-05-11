@@ -23,14 +23,22 @@ import java.util.UUID;
  */
 @Getter
 public class ProfileService {
+    protected final Alley plugin;
     private final HashMap<UUID, Profile> profiles;
+
     public MongoCollection<Document> collection;
     public IProfile iProfile;
 
-    public ProfileService() {
+    /**
+     * Constructor for the ProfileService class.
+     *
+     * @param plugin The Alley plugin instance.
+     */
+    public ProfileService(Alley plugin) {
+        this.plugin = plugin;
         this.profiles = new HashMap<>();
-        this.collection = Alley.getInstance().getMongoService().getMongoDatabase().getCollection("profiles");
-        this.iProfile = new MongoProfileImpl();
+        this.collection = plugin.getMongoService().getMongoDatabase().getCollection("profiles");
+        this.iProfile = new MongoProfileImpl(plugin);
     }
 
     /**

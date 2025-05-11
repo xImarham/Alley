@@ -18,20 +18,22 @@ import org.bukkit.configuration.file.FileConfiguration;
  */
 @Getter
 public class MongoService {
+    protected final Alley plugin;
     private MongoDatabase mongoDatabase;
     private MongoClient mongoClient;
+
     private final String databaseName;
     private final String uri;
 
     /**
      * Constructor for the MongoService class.
      *
-     * @param uri          The MongoDB URI.
-     * @param databaseName The name of the database.
+     * @param plugin The Alley plugin instance.
      */
-    public MongoService(String uri, String databaseName) {
-        this.uri = uri;
-        this.databaseName = databaseName;
+    public MongoService(Alley plugin) {
+        this.plugin = plugin;
+        this.uri = plugin.getConfigService().getDatabaseConfig().getString("mongo.uri");
+        this.databaseName = plugin.getConfigService().getDatabaseConfig().getString("mongo.database");
         this.createConnection();
     }
 
@@ -50,7 +52,7 @@ public class MongoService {
             this.mongoDatabase = this.mongoClient.getDatabase(this.databaseName);
             Bukkit.getConsoleSender().sendMessage(CC.translate("&f[&bAlley&f] &fSuccessfully connected to MongoDB."));
         } catch (Exception e) {
-            FileConfiguration config = Alley.getInstance().getConfigService().getDatabaseConfig();
+            FileConfiguration config = this.plugin.getConfigService().getDatabaseConfig();
             Bukkit.getConsoleSender().sendMessage(CC.translate("&f[&bAlley&f] &cFailed to connect to MongoDB. &7(Connection String: " + config.getString("mongo.uri") + ", Database: " + config.getString("mongo.database") + ")"));
             System.exit(2);
         }

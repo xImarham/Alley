@@ -26,7 +26,7 @@ import java.util.Map;
  */
 @AllArgsConstructor
 public class QueuesMenuDefault extends Menu {
-    private final Alley plugin;
+    protected final Alley plugin;
 
     public QueuesMenuDefault() {
         this.plugin = Alley.getInstance();

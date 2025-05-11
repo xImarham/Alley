@@ -22,18 +22,25 @@ public class LeaderboardService {
 
     //TODO: this is just a test, it is gonna be fixed/recoded.
 
+    protected final Alley plugin;
     private final Map<Kit, List<LeaderboardRecord>> leaderboardEntries;
 
-    public LeaderboardService() {
+    /**
+     * Constructor for the LeaderboardService class.
+     *
+     * @param plugin The Alley plugin instance.
+     */
+    public LeaderboardService(Alley plugin) {
+        this.plugin = plugin;
         this.leaderboardEntries = new HashMap<>();
         this.initializeLeaderboards();
     }
 
     private void initializeLeaderboards() {
-        ProfileService profileService = Alley.getInstance().getProfileService();
+        ProfileService profileService = this.plugin.getProfileService();
         Collection<Profile> profiles = profileService.getProfiles().values();
 
-        for (Kit kit : Alley.getInstance().getKitService().getKits()) {
+        for (Kit kit : this.plugin.getKitService().getKits()) {
             this.leaderboardEntries.put(kit, new ArrayList<>());
 
             for (EnumLeaderboardType type : EnumLeaderboardType.values()) {

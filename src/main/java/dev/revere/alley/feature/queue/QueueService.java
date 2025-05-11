@@ -24,8 +24,8 @@ import java.util.List;
 @Getter
 @Setter
 public class QueueService {
+    protected final Alley plugin;
     private final List<Queue> queues;
-    private final Alley plugin;
     private Menu queueMenu;
 
     /**
@@ -34,8 +34,8 @@ public class QueueService {
      * @param plugin the plugin instance
      */
     public QueueService(Alley plugin) {
-        this.queues = new ArrayList<>();
         this.plugin = plugin;
+        this.queues = new ArrayList<>();
         this.initialize();
         this.queueMenu = this.determineMenu();
     }
@@ -46,7 +46,7 @@ public class QueueService {
 
     /**
      * Determines the menu type based on the configuration.
-     * 
+     *
      * @return the appropriate menu instance
      */
     private Menu determineMenu() {

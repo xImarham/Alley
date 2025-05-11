@@ -4,7 +4,7 @@ import com.google.common.collect.Maps;
 import dev.revere.alley.Alley;
 import dev.revere.alley.feature.kit.Kit;
 import dev.revere.alley.feature.kit.setting.impl.KitSettingRankedImpl;
-import dev.revere.alley.feature.title.Title;
+import dev.revere.alley.feature.title.record.TitleRecord;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.data.impl.*;
 import dev.revere.alley.util.chat.CC;
@@ -103,7 +103,7 @@ public class ProfileData {
     }
 
     public void determineTitles() {
-        for (Title title : Alley.getInstance().getTitleService().getTitles().values()) {
+        for (TitleRecord title : Alley.getInstance().getTitleService().getTitles().values()) {
             if (this.unrankedKitData.get(title.getKit().getName()).getDivision() == title.getRequiredDivision()) {
                 if (!this.unlockedTitles.contains(title.getKit().getName())) {
                     this.unlockedTitles.add(title.getKit().getName());

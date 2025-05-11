@@ -1,4 +1,4 @@
-package dev.revere.alley.feature.level;
+package dev.revere.alley.feature.level.record;
 
 import lombok.Getter;
 import org.bukkit.Material;
@@ -9,7 +9,7 @@ import org.bukkit.Material;
  * @since 22/04/2025
  */
 @Getter
-public class Level {
+public class LevelRecord {
     private final String name;
     private final String displayName;
 
@@ -20,7 +20,7 @@ public class Level {
     private final int maxElo;
 
     /**
-     * Constructor for the Level class.
+     * Constructor for the LevelRecord class.
      *
      * @param name        The name of the level.
      * @param displayName The display name of the level.
@@ -29,7 +29,7 @@ public class Level {
      * @param minElo      The minimum Elo rating for this level.
      * @param maxElo      The maximum Elo rating for this level.
      */
-    public Level(String name, String displayName, Material material, int durability, int minElo, int maxElo) {
+    public LevelRecord(String name, String displayName, Material material, int durability, int minElo, int maxElo) {
         this.name = name;
         this.displayName = displayName;
         this.material = material;

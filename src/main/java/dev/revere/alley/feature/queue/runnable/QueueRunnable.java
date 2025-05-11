@@ -114,11 +114,11 @@ public class QueueRunnable implements Runnable {
     /**
      * Method to process the game.
      *
-     * @param queue             The queue.
-     * @param arena             The arena.
+     * @param queue               The queue.
+     * @param arena               The arena.
      * @param gameParticipantList The game participant list.
-     * @param firstProfile      The first profile.
-     * @param secondProfile     The second profile.
+     * @param firstProfile        The first profile.
+     * @param secondProfile       The second profile.
      */
     private void processGame(Queue queue, AbstractArena arena, GameParticipantList gameParticipantList, QueueProfile firstProfile, QueueProfile secondProfile) {
         Alley.getInstance().getMatchRepository().createAndStartMatch(

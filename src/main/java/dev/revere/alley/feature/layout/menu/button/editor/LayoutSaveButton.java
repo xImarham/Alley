@@ -3,7 +3,7 @@ package dev.revere.alley.feature.layout.menu.button.editor;
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.feature.kit.Kit;
-import dev.revere.alley.feature.layout.record.LayoutRecord;
+import dev.revere.alley.feature.layout.data.LayoutData;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.tool.item.ItemBuilder;
 import lombok.AllArgsConstructor;
@@ -20,7 +20,7 @@ import org.bukkit.inventory.ItemStack;
 @AllArgsConstructor
 public class LayoutSaveButton extends Button {
     private final Kit kit;
-    private final LayoutRecord layout;
+    private final LayoutData layout;
 
     @Override
     public ItemStack getButtonItem(Player player) {
@@ -43,7 +43,7 @@ public class LayoutSaveButton extends Button {
 
         Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
 
-        LayoutRecord layout = profile.getProfileData().getLayoutData().getLayout(this.kit.getName(), this.layout.getName());
+        LayoutData layout = profile.getProfileData().getLayoutData().getLayout(this.kit.getName(), this.layout.getName());
         layout.setDisplayName(this.layout.getDisplayName());
         layout.setItems(player.getInventory().getContents());
 

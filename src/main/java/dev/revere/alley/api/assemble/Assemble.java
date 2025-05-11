@@ -29,7 +29,7 @@ public class Assemble {
     private AssembleListener listeners;
     private EnumAssembleStyle assembleStyle;
 
-    private final Alley plugin;
+    protected final Alley plugin;
 
     private boolean hook;
     private boolean debugMode;

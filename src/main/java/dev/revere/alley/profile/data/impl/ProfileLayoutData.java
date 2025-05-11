@@ -2,7 +2,7 @@ package dev.revere.alley.profile.data.impl;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.feature.kit.Kit;
-import dev.revere.alley.feature.layout.record.LayoutRecord;
+import dev.revere.alley.feature.layout.data.LayoutData;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.inventory.ItemStack;
@@ -20,13 +20,13 @@ import java.util.stream.Collectors;
 @Getter
 @Setter
 public class ProfileLayoutData {
-    private Map<String, List<LayoutRecord>> layouts;
+    private Map<String, List<LayoutData>> layouts;
 
     public ProfileLayoutData() {
         this.layouts = Alley.getInstance().getKitService().getKits().stream()
                 .collect(Collectors.toMap(Kit::getName, kit -> {
-                    List<LayoutRecord> defaultLayoutList = new ArrayList<>();
-                    defaultLayoutList.add(new LayoutRecord("Layout1", "Layout 1", kit.getItems()));
+                    List<LayoutData> defaultLayoutList = new ArrayList<>();
+                    defaultLayoutList.add(new LayoutData("Layout1", "Layout 1", kit.getItems()));
                     return defaultLayoutList;
                 }));
     }
@@ -39,12 +39,12 @@ public class ProfileLayoutData {
      * @param items       the items in the layout.
      */
     public void addLayout(String kitName, String name, String displayName, ItemStack[] items) {
-        LayoutRecord newLayout = new LayoutRecord(name, displayName, items);
+        LayoutData newLayout = new LayoutData(name, displayName, items);
 
         if (this.layouts.containsKey(kitName)) {
             this.layouts.get(kitName).add(newLayout);
         } else {
-            List<LayoutRecord> newList = new ArrayList<>();
+            List<LayoutData> newList = new ArrayList<>();
             newList.add(newLayout);
             this.layouts.put(kitName, newList);
         }
@@ -57,9 +57,9 @@ public class ProfileLayoutData {
      * @param layoutName the name of the layout.
      * @return the layout record if found, null otherwise.
      */
-    public LayoutRecord getLayout(String kitName, String layoutName) {
+    public LayoutData getLayout(String kitName, String layoutName) {
         if (this.layouts.containsKey(kitName)) {
-            for (LayoutRecord layout : this.layouts.get(kitName)) {
+            for (LayoutData layout : this.layouts.get(kitName)) {
                 if (layout.getName().equalsIgnoreCase(layoutName)) {
                     return layout;
                 }

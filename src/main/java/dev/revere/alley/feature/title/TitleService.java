@@ -3,6 +3,7 @@ package dev.revere.alley.feature.title;
 import dev.revere.alley.Alley;
 import dev.revere.alley.feature.division.Division;
 import dev.revere.alley.feature.kit.Kit;
+import dev.revere.alley.feature.title.record.TitleRecord;
 import dev.revere.alley.tool.logger.Logger;
 import dev.revere.alley.tool.visual.TextFormatter;
 import dev.revere.alley.util.chat.CC;
@@ -22,7 +23,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Getter
 public class TitleService {
     protected final Alley plugin;
-    private final Map<Kit, Title> titles;
+    private final Map<Kit, TitleRecord> titles;
 
     /**
      * Constructor for the TitleService class.
@@ -70,7 +71,7 @@ public class TitleService {
             if (requiredDivision == null) {
                 Logger.logError("Division " + requiredDivisionName + " for kit " + kit.getName() + " does not exist.");
             } else {
-                Title title = new Title(kit, prefix, requiredDivision);
+                TitleRecord title = new TitleRecord(kit, prefix, requiredDivision);
                 this.titles.put(kit, title);
             }
         });

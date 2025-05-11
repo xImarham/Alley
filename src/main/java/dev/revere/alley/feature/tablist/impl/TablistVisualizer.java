@@ -19,20 +19,30 @@ import java.util.stream.Collectors;
  * @date 07/09/2024 - 15:16
  */
 public class TablistVisualizer implements ITablist {
+    protected final Alley plugin;
+
+    /**
+     * Constructor for the TablistVisualizer class.
+     *
+     * @param plugin The Alley plugin instance.
+     */
+    public TablistVisualizer(Alley plugin) {
+        this.plugin = plugin;
+    }
 
     @Override
     public List<String> getHeader(Player player) {
-        return Alley.getInstance().getConfigService().getTablistConfig().getStringList("tablist.header");
+        return this.plugin.getConfigService().getTablistConfig().getStringList("tablist.header");
     }
 
     @Override
     public List<String> getFooter(Player player) {
-        return Alley.getInstance().getConfigService().getTablistConfig().getStringList("tablist.footer");
+        return this.plugin.getConfigService().getTablistConfig().getStringList("tablist.footer");
     }
 
     @Override
     public void update(Player player) {
-        if (Alley.getInstance().getProfileService().getProfile(player.getUniqueId()).getProfileData().getSettingData().isTablistEnabled()) {
+        if (this.plugin.getProfileService().getProfile(player.getUniqueId()).getProfileData().getSettingData().isTablistEnabled()) {
             List<String> headerLines = getHeader(player).stream()
                     .map(CC::translate)
                     .collect(Collectors.toList());

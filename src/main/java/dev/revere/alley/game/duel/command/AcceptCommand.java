@@ -36,7 +36,7 @@ public class AcceptCommand extends BaseCommand {
             return;
         }
 
-        if (this.plugin.getServerService().check(player)) {
+        if (this.plugin.getServerService().isQueueingEnabled(player)) {
             return;
         }
 

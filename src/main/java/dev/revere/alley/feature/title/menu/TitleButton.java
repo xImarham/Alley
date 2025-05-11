@@ -3,7 +3,7 @@ package dev.revere.alley.feature.title.menu;
 import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.feature.division.Division;
 import dev.revere.alley.feature.division.tier.DivisionTier;
-import dev.revere.alley.feature.title.Title;
+import dev.revere.alley.feature.title.record.TitleRecord;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.data.ProfileData;
 import dev.revere.alley.tool.item.ItemBuilder;
@@ -26,7 +26,7 @@ import java.util.List;
 @AllArgsConstructor
 public class TitleButton extends Button {
     private final Profile profile;
-    private final Title title;
+    private final TitleRecord title;
 
     @Override
     public ItemStack getButtonItem(Player player) {

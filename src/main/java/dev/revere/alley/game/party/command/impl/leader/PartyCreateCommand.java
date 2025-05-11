@@ -40,7 +40,7 @@ public class PartyCreateCommand extends BaseCommand {
             return;
         }
 
-        if (this.plugin.getServerService().check(player)) {
+        if (this.plugin.getServerService().isQueueingEnabled(player)) {
             return;
         }
 

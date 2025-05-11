@@ -22,9 +22,9 @@ import java.util.UUID;
  * @since 25/01/2025
  */
 public class FFACuboidListener implements Listener {
+    protected final Alley plugin;
     private final Map<UUID, Boolean> playerStates;
     private final Cuboid cuboid;
-    private final Alley plugin;
 
     /**
      * Constructor for the CuboidBoundaryListener.
@@ -33,9 +33,9 @@ public class FFACuboidListener implements Listener {
      * @param plugin The instance of the Alley plugin.
      */
     public FFACuboidListener(Cuboid cuboid, Alley plugin) {
-        this.cuboid = cuboid;
         this.plugin = plugin;
         this.playerStates = new HashMap<>();
+        this.cuboid = cuboid;
     }
 
     @EventHandler

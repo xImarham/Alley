@@ -1,7 +1,7 @@
 package dev.revere.alley.feature.layout.menu.button.editor;
 
 import dev.revere.alley.api.menu.Button;
-import dev.revere.alley.feature.layout.record.LayoutRecord;
+import dev.revere.alley.feature.layout.data.LayoutData;
 import dev.revere.alley.tool.item.ItemBuilder;
 import lombok.AllArgsConstructor;
 import org.bukkit.Material;
@@ -16,7 +16,7 @@ import org.bukkit.inventory.ItemStack;
  */
 @AllArgsConstructor
 public class LayoutRenameButton extends Button {
-    private final LayoutRecord layout;
+    private final LayoutData layout;
 
     @Override
     public ItemStack getButtonItem(Player player) {

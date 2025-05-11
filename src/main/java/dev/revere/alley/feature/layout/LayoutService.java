@@ -4,7 +4,7 @@ import dev.revere.alley.Alley;
 import dev.revere.alley.api.menu.Menu;
 import dev.revere.alley.feature.kit.enums.EnumKitCategory;
 import dev.revere.alley.feature.layout.menu.LayoutMenu;
-import dev.revere.alley.feature.layout.record.LayoutRecord;
+import dev.revere.alley.feature.layout.data.LayoutData;
 import dev.revere.alley.tool.item.ItemBuilder;
 import dev.revere.alley.tool.logger.Logger;
 import lombok.Getter;
@@ -36,7 +36,7 @@ public class LayoutService {
     }
 
     private Menu determineMenu() {
-        FileConfiguration config = Alley.getInstance().getConfigService().getMenusConfig();
+        FileConfiguration config = this.plugin.getConfigService().getMenusConfig();
         String menuType = config.getString("layout-menu.type");
 
         switch (menuType) {
@@ -57,7 +57,7 @@ public class LayoutService {
      * @param layout The layout record.
      * @return The ItemStack representing the layout book.
      */
-    public ItemStack getLayoutBook(LayoutRecord layout) {
+    public ItemStack getLayoutBook(LayoutData layout) {
         return new ItemBuilder(Material.BOOK)
                 .name(layout.getDisplayName())
                 .lore("&7Click to select this layout.")

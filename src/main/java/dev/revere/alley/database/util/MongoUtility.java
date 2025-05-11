@@ -3,7 +3,7 @@ package dev.revere.alley.database.util;
 import dev.revere.alley.Alley;
 import dev.revere.alley.feature.division.Division;
 import dev.revere.alley.feature.division.tier.DivisionTier;
-import dev.revere.alley.feature.layout.record.LayoutRecord;
+import dev.revere.alley.feature.layout.data.LayoutData;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.data.ProfileData;
 import dev.revere.alley.profile.data.impl.*;
@@ -126,9 +126,9 @@ public class MongoUtility {
      */
     private Document convertLayoutData(ProfileLayoutData layoutData) {
         Document layoutDocument = new Document();
-        for (Map.Entry<String, List<LayoutRecord>> entry : layoutData.getLayouts().entrySet()) {
+        for (Map.Entry<String, List<LayoutData>> entry : layoutData.getLayouts().entrySet()) {
             List<Document> layoutRecords = new ArrayList<>();
-            for (LayoutRecord record : entry.getValue()) {
+            for (LayoutData record : entry.getValue()) {
                 Document recordDocument = new Document();
                 recordDocument.put("name", record.getName());
                 recordDocument.put("displayName", record.getDisplayName());
@@ -270,7 +270,6 @@ public class MongoUtility {
         return kitData;
     }
 
-
     /**
      * Parses a Map of ProfileKitData objects from a Document.
      *
@@ -317,13 +316,13 @@ public class MongoUtility {
     private ProfileLayoutData parseProfileLayoutData(Document layoutDocument) {
         ProfileLayoutData layoutData = new ProfileLayoutData();
         for (Map.Entry<String, Object> entry : layoutDocument.entrySet()) {
-            List<LayoutRecord> layoutRecords = new ArrayList<>();
+            List<LayoutData> layoutRecords = new ArrayList<>();
             List<Document> records = (List<Document>) entry.getValue();
             for (Document record : records) {
                 String name = record.getString("name");
                 String displayName = record.getString("displayName");
                 ItemStack[] items = ItemStackSerializer.deserialize(record.get("items", String.class));
-                LayoutRecord layoutRecord = new LayoutRecord(name, displayName, items);
+                LayoutData layoutRecord = new LayoutData(name, displayName, items);
                 layoutRecords.add(layoutRecord);
             }
             layoutData.getLayouts().put(entry.getKey(), layoutRecords);

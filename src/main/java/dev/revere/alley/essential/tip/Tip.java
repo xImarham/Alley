@@ -10,6 +10,7 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 public class Tip {
     private final Map<UUID, Long> lastTip;
+
     public final long COOLDOWN_TIME;
 
     public Tip() {

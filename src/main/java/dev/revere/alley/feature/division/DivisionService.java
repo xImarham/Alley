@@ -20,8 +20,8 @@ import java.util.List;
  */
 @Getter
 public class DivisionService {
+    protected final Alley plugin;
     private final List<Division> divisions;
-    private final Alley plugin;
 
     /**
      * Constructor for the DivisionService class.

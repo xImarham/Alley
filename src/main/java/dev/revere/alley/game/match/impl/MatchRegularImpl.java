@@ -173,12 +173,12 @@ public class MatchRegularImpl extends AbstractMatch {
     public void handleData(GameParticipant<MatchGamePlayerImpl> winner, GameParticipant<MatchGamePlayerImpl> loser, GameParticipant<MatchGamePlayerImpl> participantA, GameParticipant<MatchGamePlayerImpl> participantB) {
         if (participantA.getPlayers().size() == 1 && participantB.getPlayers().size() == 1 && isRanked()) {
             OldEloResult result = this.getOldEloResult(winner, loser);
-            EloResult eloResult = this.getEloResult(result.oldWinnerElo, result.oldLoserElo);
+            EloResult eloResult = this.getEloResult(result.getOldWinnerElo(), result.getOldLoserElo());
 
-            this.handleWinner(eloResult.newWinnerElo, winner);
-            this.handleLoser(eloResult.newLoserElo, loser);
+            this.handleWinner(eloResult.getNewWinnerElo(), winner);
+            this.handleLoser(eloResult.getNewLoserElo(), loser);
 
-            this.sendEloResult(winner.getPlayer().getPlayer().getName(), loser.getPlayer().getPlayer().getName(), result.oldWinnerElo, result.oldLoserElo, eloResult.newWinnerElo, eloResult.newLoserElo);
+            this.sendEloResult(winner.getPlayer().getPlayer().getName(), loser.getPlayer().getPlayer().getName(), result.getOldWinnerElo(), result.getOldLoserElo(), eloResult.getNewWinnerElo(), eloResult.getNewLoserElo());
         } else if (participantA.getPlayers().size() == 1 && participantB.getPlayers().size() == 1 && !isRanked()) {
             ProfileService profileService = Alley.getInstance().getProfileService();
 

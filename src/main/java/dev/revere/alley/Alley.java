@@ -201,42 +201,42 @@ public class Alley extends JavaPlugin {
         services.put(PluginConstant.class.getSimpleName(), () -> this.pluginConstant = new PluginConstant(this, "dev.revere.alley", ChatColor.AQUA));
         services.put(ServerEnvironment.class.getSimpleName(), () -> this.serverEnvironment = new ServerEnvironment(this, false, false, false, false, true));
         services.put(ConfigService.class.getSimpleName(), () -> this.configService = new ConfigService());
-        services.put(MongoService.class.getSimpleName(), () -> this.mongoService = new MongoService(this.configService.getDatabaseConfig().getString("mongo.uri"), this.configService.getDatabaseConfig().getString("mongo.database")));
+        services.put(MongoService.class.getSimpleName(), () -> this.mongoService = new MongoService(this));
         services.put(CommandFramework.class.getSimpleName(), () -> this.commandFramework = new CommandFramework(this));
         services.put(CommandDataCollector.class.getSimpleName(), () -> this.commandDataCollector = new CommandDataCollector());
         services.put(CoreAdapter.class.getSimpleName(), () -> this.coreAdapter = new CoreAdapter(this));
         services.put(QueueService.class.getSimpleName(), () -> this.queueService = new QueueService(this));
         services.put(KitSettingService.class.getSimpleName(), () -> this.kitSettingService = new KitSettingService());
         services.put(KitService.class.getSimpleName(), () -> this.kitService = new KitService(this));
-        services.put(ArenaService.class.getSimpleName(), () -> this.arenaService = new ArenaService());
+        services.put(ArenaService.class.getSimpleName(), () -> this.arenaService = new ArenaService(this));
         services.put(FFAService.class.getSimpleName(), () -> this.ffaService = new FFAService(this));
         services.put(CosmeticRepository.class.getSimpleName(), () -> this.cosmeticRepository = new CosmeticRepository());
         services.put(DivisionService.class.getSimpleName(), () -> this.divisionService = new DivisionService(this));
         services.put(LevelService.class.getSimpleName(), () -> this.levelService = new LevelService(this));
         services.put(TitleService.class.getSimpleName(), () -> this.titleService = new TitleService(this));
-        
+
         services.put(ProfileService.class.getSimpleName(), () -> {
-            this.profileService = new ProfileService();
+            this.profileService = new ProfileService(this);
             this.profileService.loadProfiles();
         });
 
-        services.put(HotbarService.class.getSimpleName(), () -> this.hotbarService = new HotbarService());
+        services.put(HotbarService.class.getSimpleName(), () -> this.hotbarService = new HotbarService(this));
         services.put(CooldownRepository.class.getSimpleName(), () -> this.cooldownRepository = new CooldownRepository());
         services.put(SnapshotRepository.class.getSimpleName(), () -> this.snapshotRepository = new SnapshotRepository());
-        services.put(MatchRepository.class.getSimpleName(), () -> this.matchRepository = new MatchRepository());
-        services.put(PartyService.class.getSimpleName(), () -> this.partyService = new PartyService());
+        services.put(MatchRepository.class.getSimpleName(), () -> this.matchRepository = new MatchRepository(this));
+        services.put(PartyService.class.getSimpleName(), () -> this.partyService = new PartyService(this));
         services.put(SpawnService.class.getSimpleName(), () -> this.spawnService = new SpawnService(this.configService));
         services.put(FFASpawnService.class.getSimpleName(), () -> this.ffaSpawnService = new FFASpawnService());
         services.put(DuelRequestService.class.getSimpleName(), () -> this.duelRequestService = new DuelRequestService(this));
-        services.put(CombatService.class.getSimpleName(), () -> this.combatService = new CombatService());
-        services.put(LeaderboardService.class.getSimpleName(), () -> this.leaderboardService = new LeaderboardService());
+        services.put(CombatService.class.getSimpleName(), () -> this.combatService = new CombatService(this));
+        services.put(LeaderboardService.class.getSimpleName(), () -> this.leaderboardService = new LeaderboardService(this));
         services.put(EloCalculator.class.getSimpleName(), () -> this.eloCalculator = new EloCalculator());
         services.put(ServerService.class.getSimpleName(), () -> this.serverService = new ServerService());
         services.put(AnimationRepository.class.getSimpleName(), () -> this.animationRepository = new AnimationRepository(this));
         services.put(Assemble.class.getSimpleName() + " API", () -> this.assemble = new Assemble(this, new ScoreboardVisualizer(this)));
         services.put(ReflectionRepository.class.getSimpleName(), () -> this.reflectionRepository = new ReflectionRepository(this));
         services.put(BotMechanics.class.getSimpleName(), () -> this.botMechanics = new BotMechanics());
-        services.put(BotFightRepository.class.getSimpleName(), () -> this.botFightRepository = new BotFightRepository());
+        services.put(BotFightRepository.class.getSimpleName(), () -> this.botFightRepository = new BotFightRepository(this));
         //services.put(ParkourService.class.getSimpleName(), () -> this.parkourService = new ParkourService(this, this.configService.getSettingsConfig().getString("parkour.starter-location")));
         services.put(ProfanityFilter.class.getSimpleName(), () -> this.profanityFilter = new ProfanityFilter(this));
         services.put(LayoutService.class.getSimpleName(), () -> this.layoutService = new LayoutService(this));

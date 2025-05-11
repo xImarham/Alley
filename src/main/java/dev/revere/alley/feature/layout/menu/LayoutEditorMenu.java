@@ -5,7 +5,7 @@ import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.api.menu.Menu;
 import dev.revere.alley.feature.kit.Kit;
 import dev.revere.alley.feature.layout.menu.button.editor.*;
-import dev.revere.alley.feature.layout.record.LayoutRecord;
+import dev.revere.alley.feature.layout.data.LayoutData;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
 import lombok.AllArgsConstructor;
@@ -22,7 +22,7 @@ import java.util.Map;
 @AllArgsConstructor
 public class LayoutEditorMenu extends Menu {
     private final Kit kit;
-    private final LayoutRecord layout;
+    private final LayoutData layout;
 
     @Override
     public void onOpen(Player player) {

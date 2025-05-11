@@ -26,9 +26,16 @@ import java.util.List;
  */
 @Getter
 public class MatchRepository {
+    protected final Alley plugin;
     private final List<AbstractMatch> matches;
 
-    public MatchRepository() {
+    /**
+     * Constructor for the MatchRepository class.
+     *
+     * @param plugin The Alley plugin instance.
+     */
+    public MatchRepository(Alley plugin) {
+        this.plugin = plugin;
         this.matches = new ArrayList<>();
     }
 
@@ -41,7 +48,7 @@ public class MatchRepository {
      * @param participantB The second participant in the match.
      */
     public void createAndStartMatch(Kit kit, AbstractArena arena, GameParticipant<MatchGamePlayerImpl> participantA, GameParticipant<MatchGamePlayerImpl> participantB) {
-        Queue matchingQueue = Alley.getInstance().getQueueService().getQueues().stream()
+        Queue matchingQueue = this.plugin.getQueueService().getQueues().stream()
                 .filter(queue -> queue.getKit().equals(kit) && !queue.isRanked())
                 .findFirst()
                 .orElse(null);

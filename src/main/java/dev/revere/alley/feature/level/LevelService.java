@@ -1,6 +1,7 @@
 package dev.revere.alley.feature.level;
 
 import dev.revere.alley.Alley;
+import dev.revere.alley.feature.level.record.LevelRecord;
 import lombok.Getter;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
@@ -17,7 +18,7 @@ import java.util.List;
 @Getter
 public class LevelService {
     protected final Alley plugin;
-    private final List<Level> levels;
+    private final List<LevelRecord> levels;
 
     /**
      * Constructor for the LevelService class.
@@ -49,7 +50,7 @@ public class LevelService {
             int minElo = config.getInt(path + ".min-elo");
             int maxElo = config.getInt(path + ".max-elo");
 
-            Level level = new Level(key, displayName, material, durability, minElo, maxElo);
+            LevelRecord level = new LevelRecord(key, displayName, material, durability, minElo, maxElo);
             this.levels.add(level);
         }
     }
@@ -60,7 +61,7 @@ public class LevelService {
      * @param elo Elo rating.
      * @return Matching level tier or null.
      */
-    public Level getLevel(int elo) {
+    public LevelRecord getLevel(int elo) {
         return this.levels.stream().filter(tier -> elo >= tier.getMinElo() && elo <= tier.getMaxElo()).findFirst().orElse(null);
     }
 
@@ -70,7 +71,7 @@ public class LevelService {
      * @param name Name of the level.
      * @return Matching level tier or null.
      */
-    public Level getLevel(String name) {
+    public LevelRecord getLevel(String name) {
         return this.levels.stream().filter(tier -> tier.getName().equalsIgnoreCase(name)).findFirst().orElse(null);
     }
 }

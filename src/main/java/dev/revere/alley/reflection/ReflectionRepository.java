@@ -15,7 +15,7 @@ import java.util.List;
  */
 @Getter
 public class ReflectionRepository {
-    private final Alley plugin;
+    protected final Alley plugin;
     private final List<IReflection> reflectionServices;
 
     /**

@@ -15,7 +15,7 @@ import org.bukkit.entity.Player;
  */
 @Getter
 public class SpawnService {
-    private final ConfigService configService;
+    protected final ConfigService configService;
     private Location location;
 
     /**

@@ -23,7 +23,7 @@ import java.util.List;
 @Getter
 @Setter
 public class DuelRequestService {
-    private final Alley plugin;
+    protected final Alley plugin;
     private final List<DuelRequest> duelRequests;
 
     /**
@@ -133,7 +133,7 @@ public class DuelRequestService {
         GameParticipant<MatchGamePlayerImpl> participantA = new GameParticipant<>(playerA);
         GameParticipant<MatchGamePlayerImpl> participantB = new GameParticipant<>(playerB);
 
-        Alley.getInstance().getMatchRepository().createAndStartMatch(
+        this.plugin.getMatchRepository().createAndStartMatch(
                 duelRequest.getKit(), duelRequest.getArena(), participantA, participantB
         );
 

@@ -26,8 +26,8 @@ import java.util.List;
  */
 @Getter
 public class KitService {
+    protected final Alley plugin;
     private final List<Kit> kits;
-    private final Alley plugin;
 
     /**
      * Constructor for the KitService class.
@@ -35,8 +35,8 @@ public class KitService {
      * @param plugin The main class.
      */
     public KitService(Alley plugin) {
-        this.kits = new ArrayList<>();
         this.plugin = plugin;
+        this.kits = new ArrayList<>();
         this.loadKits();
     }
 

@@ -18,9 +18,16 @@ import java.util.List;
  */
 @Getter
 public class BotFightRepository {
+    protected final Alley plugin;
     private final List<BotFight> botFights;
 
-    public BotFightRepository() {
+    /**
+     * Constructor for the BotFightRepository class.
+     *
+     * @param plugin The Alley plugin instance.
+     */
+    public BotFightRepository(Alley plugin) {
+        this.plugin = plugin;
         this.botFights = new ArrayList<>();
     }
 

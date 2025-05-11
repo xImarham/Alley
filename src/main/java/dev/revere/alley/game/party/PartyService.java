@@ -32,14 +32,21 @@ import java.util.UUID;
 @Getter
 @Setter
 public class PartyService {
+    protected final Alley plugin;
     private final List<Party> parties;
     private final List<PartyRequest> partyRequests;
     private String chatFormat;
 
-    public PartyService() {
+    /**
+     * Constructor for the PartyService class.
+     *
+     * @param plugin The Alley plugin instance.
+     */
+    public PartyService(Alley plugin) {
+        this.plugin = plugin;
         this.parties = new ArrayList<>();
         this.partyRequests = new ArrayList<>();
-        this.chatFormat = Alley.getInstance().getConfigService().getConfig("messages.yml").getString("party.chat-format");
+        this.chatFormat = plugin.getConfigService().getConfig("messages.yml").getString("party.chat-format");
     }
 
     /**
@@ -48,7 +55,7 @@ public class PartyService {
      * @param player The leader of the party.
      */
     public void createParty(Player player) {
-        Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
+        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
         if (profile.getState() != EnumProfileState.LOBBY) {
             player.sendMessage(CC.translate("&cYou cannot create a party in this state."));
             return;
@@ -56,9 +63,9 @@ public class PartyService {
 
         Party party = new Party(player);
         profile.setParty(party);
-        Alley.getInstance().getHotbarService().applyHotbarItems(player, EnumHotbarType.PARTY);
+        this.plugin.getHotbarService().applyHotbarItems(player, EnumHotbarType.PARTY);
 
-        Alley.getInstance().getReflectionRepository().getReflectionService(TitleReflectionService.class).sendTitle(
+        this.plugin.getReflectionRepository().getReflectionService(TitleReflectionService.class).sendTitle(
                 player,
                 "&a&l" + Symbol.CROSSED_SWORDS + " Party Created",
                 "&7Type /p for help.",
@@ -86,7 +93,7 @@ public class PartyService {
         party.notifyParty("&b&lParty &7&l" + Symbol.ARROW_R + " &b" + leader.getName() + " &cdisbanded the party.");
         this.parties.remove(party);
 
-        Cooldown cooldown = Alley.getInstance().getCooldownRepository().getCooldown(leader.getUniqueId(), EnumCooldownType.PARTY_ANNOUNCE_COOLDOWN);
+        Cooldown cooldown = this.plugin.getCooldownRepository().getCooldown(leader.getUniqueId(), EnumCooldownType.PARTY_ANNOUNCE_COOLDOWN);
         if (cooldown != null && cooldown.isActive()) {
             cooldown.resetCooldown();
         }
@@ -95,7 +102,7 @@ public class PartyService {
             this.setupProfile(leader, false);
         }
 
-        Alley.getInstance().getReflectionRepository().getReflectionService(TitleReflectionService.class).sendTitle(
+        this.plugin.getReflectionRepository().getReflectionService(TitleReflectionService.class).sendTitle(
                 leader,
                 "&c&l✖ Party Disbanded",
                 "&7You've removed your party.",
@@ -222,8 +229,8 @@ public class PartyService {
      * @param join   Whether the player is joining a party.
      */
     private void setupProfile(Player player, boolean join) {
-        Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
-        HotbarService hotbarService = Alley.getInstance().getHotbarService();
+        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
+        HotbarService hotbarService = this.plugin.getHotbarService();
 
         profile.setParty(join ? this.getPartyByMember(player.getUniqueId()) : null);
         if (join && (profile.getState() == EnumProfileState.LOBBY || profile.getState() == EnumProfileState.WAITING)) {

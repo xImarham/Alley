@@ -21,7 +21,6 @@ import java.util.Set;
 @Getter
 public class ProfanityFilter {
     protected final Alley plugin;
-
     private final Set<String> filteredWords;
 
     private final String notificationMessage;
@@ -98,10 +97,10 @@ public class ProfanityFilter {
      * @param insulter The player who sent the message.
      */
     public void notifyStaff(String message, Player insulter) {
-        String permission = Alley.getInstance().getPluginConstant().getAdminPermissionPrefix();
+        String permission = this.plugin.getPluginConstant().getAdminPermissionPrefix();
         String replacedMessage = this.notificationMessage.replace("{player}", insulter.getName()).replace("{message}", message);
 
-        Alley.getInstance().getServer().getOnlinePlayers().stream().filter(player -> player.hasPermission(permission))
+        this.plugin.getServer().getOnlinePlayers().stream().filter(player -> player.hasPermission(permission))
                 .forEach(player ->
                         player.sendMessage(CC.translate(replacedMessage
                         ))

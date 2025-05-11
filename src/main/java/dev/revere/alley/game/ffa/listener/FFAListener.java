@@ -34,7 +34,7 @@ import java.util.Optional;
  * @date 25/05/2024 - 14:24
  */
 public class FFAListener implements Listener {
-    private final Alley plugin;
+    protected final Alley plugin;
 
     /**
      * Constructor for the FFAListener class.
@@ -73,7 +73,7 @@ public class FFAListener implements Listener {
 
         ListenerUtil.clearDroppedItemsOnDeath(event, player);
 
-        Player killer = Alley.getInstance().getCombatService().getLastAttacker(player);
+        Player killer = this.plugin.getCombatService().getLastAttacker(player);
 
         this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> player.spigot().respawn(), 1L);
         Bukkit.getScheduler().runTaskLater(this.plugin, () -> profile.getFfaMatch().handleDeath(player, killer), 1L);
@@ -85,7 +85,7 @@ public class FFAListener implements Listener {
         Profile profile = this.accessProfile(player);
         if (profile.getState() != EnumProfileState.FFA) return;
 
-        CombatService combatService = Alley.getInstance().getCombatService();
+        CombatService combatService = this.plugin.getCombatService();
         if (combatService.isPlayerInCombat(player.getUniqueId())) {
             profile.getFfaMatch().handleCombatLog(player, combatService.getLastAttacker(player));
         }
@@ -99,7 +99,7 @@ public class FFAListener implements Listener {
         Profile profile = this.accessProfile(player);
         if (profile.getState() != EnumProfileState.FFA) return;
 
-        CombatService combatService = Alley.getInstance().getCombatService();
+        CombatService combatService = this.plugin.getCombatService();
         if (combatService.isPlayerInCombat(player.getUniqueId())) {
             profile.getFfaMatch().handleCombatLog(player, combatService.getLastAttacker(player));
         }
@@ -120,9 +120,9 @@ public class FFAListener implements Listener {
 
             Player player = (Player) event.getEntity();
             Player attacker = (Player) event.getDamager();
-            Alley.getInstance().getCombatService().setLastAttacker(player, attacker);
+            this.plugin.getCombatService().setLastAttacker(player, attacker);
 
-            CombatService combatService = Alley.getInstance().getCombatService();
+            CombatService combatService = this.plugin.getCombatService();
             combatService.setLastAttacker(player, attacker);
         }
     }
@@ -141,7 +141,7 @@ public class FFAListener implements Listener {
                 || !ffaSpawnService.getCuboid().isIn(victim) && ffaSpawnService.getCuboid().isIn(attacker)
                 || ffaSpawnService.getCuboid().isIn(victim) && !ffaSpawnService.getCuboid().isIn(attacker)) {
 
-            CombatService combatService = Alley.getInstance().getCombatService();
+            CombatService combatService = this.plugin.getCombatService();
             if (combatService.isPlayerInCombat(victim.getUniqueId()) && combatService.isPlayerInCombat(attacker.getUniqueId())) {
                 return;
             }

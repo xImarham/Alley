@@ -73,7 +73,7 @@ public class UnrankedButton extends Button {
     public void clicked(Player player, int slot, ClickType clickType, int hotbarSlot) {
         if (clickType != ClickType.LEFT) return;
 
-        if (Alley.getInstance().getServerService().check(player)) return;
+        if (Alley.getInstance().getServerService().isQueueingEnabled(player)) return;
 
         Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
         queue.addPlayer(player, queue.isRanked() ? profile.getProfileData().getRankedKitData().get(queue.getKit().getName()).getElo() : 0);

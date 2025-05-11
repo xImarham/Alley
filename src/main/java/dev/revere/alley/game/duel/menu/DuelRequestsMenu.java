@@ -92,7 +92,7 @@ public class DuelRequestsMenu extends PaginatedMenu {
                 return;
             }
 
-            if (Alley.getInstance().getServerService().check(player)) {
+            if (Alley.getInstance().getServerService().isQueueingEnabled(player)) {
                 return;
             }
 

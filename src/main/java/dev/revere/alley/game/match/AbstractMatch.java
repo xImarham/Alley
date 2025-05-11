@@ -17,7 +17,7 @@ import dev.revere.alley.feature.kit.Kit;
 import dev.revere.alley.feature.kit.setting.impl.KitSettingBattleRushImpl;
 import dev.revere.alley.feature.kit.setting.impl.KitSettingLivesImpl;
 import dev.revere.alley.feature.kit.setting.impl.KitSettingStickFightImpl;
-import dev.revere.alley.feature.layout.record.LayoutRecord;
+import dev.revere.alley.feature.layout.data.LayoutData;
 import dev.revere.alley.feature.queue.Queue;
 import dev.revere.alley.game.match.enums.EnumMatchState;
 import dev.revere.alley.game.match.impl.MatchRegularImpl;
@@ -163,7 +163,7 @@ public abstract class AbstractMatch {
 
         Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
         if (profile.getProfileData().getLayoutData().getLayouts().size() > 1) {
-            LayoutRecord kitLayout = profile.getProfileData().getLayoutData().getLayouts().get(kit.getName()).get(0);
+            LayoutData kitLayout = profile.getProfileData().getLayoutData().getLayouts().get(kit.getName()).get(0);
             player.getInventory().setContents(kitLayout.getItems());
         } else {
             Alley.getInstance().getLayoutService().giveBooks(player, kit.getName());

@@ -19,6 +19,17 @@ import java.util.UUID;
  * @date 5/22/2024
  */
 public class MongoProfileImpl implements IProfile {
+    protected final Alley plugin;
+
+    /**
+     * Constructor for the MongoProfileImpl class.
+     *
+     * @param plugin The Alley plugin instance.
+     */
+    public MongoProfileImpl(Alley plugin) {
+        this.plugin = plugin;
+    }
+
     /**
      * Saves a profile to the database.
      *
@@ -27,7 +38,7 @@ public class MongoProfileImpl implements IProfile {
     @Override
     public void saveProfile(Profile profile) {
         Document document = MongoUtility.toDocument(profile);
-        Alley.getInstance().getProfileService().getCollection()
+        this.plugin.getProfileService().getCollection()
                 .replaceOne(Filters.eq("uuid", profile.getUuid().toString()), document, new ReplaceOptions().upsert(true));
     }
 
@@ -39,9 +50,9 @@ public class MongoProfileImpl implements IProfile {
     @Override
     public void loadProfile(Profile profile) {
         if (profile.getUuid() == null) return;
-        if (Alley.getInstance().getProfileService().getCollection() == null) return;
+        if (this.plugin.getProfileService().getCollection() == null) return;
 
-        Document document = Alley.getInstance().getProfileService().getCollection().find(Filters.eq("uuid", profile.getUuid().toString())).first();
+        Document document = this.plugin.getProfileService().getCollection().find(Filters.eq("uuid", profile.getUuid().toString())).first();
         if (document == null) {
             this.saveProfile(profile);
             return;
@@ -66,7 +77,7 @@ public class MongoProfileImpl implements IProfile {
         archiveDocument.put("archived_at", dateFormatter.getDateFormat().format(dateFormatter.getDate()));
         archiveDocument.put("data", MongoUtility.toDocument(profile));
 
-        Alley.getInstance().getMongoService().getMongoDatabase().getCollection("profile_archives").updateOne(
+        this.plugin.getMongoService().getMongoDatabase().getCollection("profile_archives").updateOne(
                 new Document("uuid", profile.getUuid().toString()),
                 new Document("$push", new Document("archives", archiveDocument)),
                 new UpdateOptions().upsert(true)
