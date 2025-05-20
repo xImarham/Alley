@@ -15,11 +15,25 @@ Alley is currently a work in progress. While it provides a strong base for PvP-f
 
 ## Todo List
 
-- ~~Recode division system: Recode to be based on unranked wins~~
-- **Finish events system**: Tasks, and overall improvements
-- **Add arena generator**: via WorldEdit
-- **Implement Leaderboards and global stats**
-- **Finish Match making implementations**: Party Events: Split and FFA, Lives, Bed, etc
+- Hosting (Events / Tournaments)
+- Arena Generating upon queue
+- Fix/Finish Leaderboards
+- Implement Fireball logic, BedFight gamemode, FFA Matchmaking, Duo Queue
+- Expand on config files for flexibility
+- Management Commands for Titles and Levels
+- Finish LayoutMenu to support multiple layout creation
+- properly handle disconnecting during a match
+- Implement proper Bots
+- Add custom death messages (cosmetics)
+- Add Queue ping-range setting
+- Enderpearl xp bar cooldown
+- Implement FlatFile data storage
+- Allow reverting stat resets
+- Implement Match History & Replay
+- Fix inventory snapshots
+- Visibility handling
+- Column type tablist?
+- Global Placeholders (via PAPI)
 
 ## Table of Contents
 
