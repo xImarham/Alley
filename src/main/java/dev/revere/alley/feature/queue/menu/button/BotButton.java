@@ -4,8 +4,8 @@ import dev.revere.alley.Alley;
 import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.feature.arena.AbstractArena;
 import dev.revere.alley.feature.kit.Kit;
-import dev.revere.alley.game.bot.enums.EnumBotPreset;
 import dev.revere.alley.tool.item.ItemBuilder;
+import dev.revere.alley.util.chat.CC;
 import lombok.AllArgsConstructor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
@@ -28,7 +28,6 @@ public class BotButton extends Button {
                 .lore(
                         "&7Click to fight a bot!",
                         "",
-                        "&7Difficulty: &b" + EnumBotPreset.EASY.getName(),
                         "&7Kit: &b" + kit.getName(),
                         "",
                         "&7Click to start the fight!"
@@ -44,6 +43,6 @@ public class BotButton extends Button {
             return;
         }
 
-        Alley.getInstance().getBotFightRepository().createMatch(player, arena, this.kit);
+        player.sendMessage(CC.translate("&cThis feature is not yet available."));
     }
 }
