@@ -23,6 +23,9 @@ import java.util.List;
 @Getter
 @Setter
 public abstract class AbstractFFAMatch {
+    
+    // TODO: State should be player specific
+    
     private EnumFFAState state = EnumFFAState.SPAWN;
 
     private final String name;
