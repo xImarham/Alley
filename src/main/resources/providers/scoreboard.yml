@@ -32,7 +32,7 @@ scoreboard:
       - "   &b&lPractice   "
   footer-addition:
     - ""
-    - "&balley.club"
+    - "&bplay.revere.dev"
     - "{sidebar}"
   lines:
     lobby:
@@ -55,16 +55,6 @@ scoreboard:
       - " &f&l● &rWins: &b{wins}"
       - " &f&l● &rLevel: &b{level}"
     waiting:
-#      - "{sidebar}"
-#      - "&b&lServer"
-#      - " &f&l● &rOnline: &b{online}"
-#      - " &f&l● &rPlaying: &b{playing}"
-#      - " &f&l● &rIn Queue: &b{in-queue}"
-#      - ""
-#      - "&b&lStats"
-#      - " &f&l● &rWins: &b{wins}"
-#      - " &f&l● &rLevel: &b{level}"
-#      - ""
       - "{sidebar}"
       - "&b&l{queued-type} Queue"
       - " &f&l● &rKit: &b{queued-kit}"
