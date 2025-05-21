@@ -2,7 +2,7 @@ package dev.revere.alley.feature.queue;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.menu.Menu;
-import dev.revere.alley.feature.kit.setting.impl.KitSettingRankedImpl;
+import dev.revere.alley.feature.kit.setting.impl.mode.KitSettingRankedImpl;
 import dev.revere.alley.feature.queue.menu.QueuesMenuDefault;
 import dev.revere.alley.feature.queue.menu.QueuesMenuModern;
 import dev.revere.alley.feature.queue.runnable.QueueRunnable;

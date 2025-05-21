@@ -1,10 +1,12 @@
 package dev.revere.alley.feature.kit.setting;
 
+import dev.revere.alley.Alley;
 import dev.revere.alley.feature.kit.Kit;
-import dev.revere.alley.feature.kit.setting.impl.*;
+import dev.revere.alley.feature.kit.setting.annotation.KitSettingData;
 import dev.revere.alley.tool.logger.Logger;
 import lombok.Getter;
 import lombok.Setter;
+import org.reflections.Reflections;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,32 +31,19 @@ public class KitSettingService {
     }
 
     private void registerSettings() {
-        this.registerSetting(KitSettingBuildImpl.class);
-        this.registerSetting(KitSettingRankedImpl.class);
-        this.registerSetting(KitSettingBoxingImpl.class);
-        this.registerSetting(KitSettingSumoImpl.class);
-        this.registerSetting(KitSettingSpleefImpl.class);
-        this.registerSetting(KitSettingDenyMovementImpl.class);
-        this.registerSetting(KitSettingParkourImpl.class);
-        this.registerSetting(KitSettingLivesImpl.class);
-        this.registerSetting(KitSettingNoDamageImpl.class);
-        this.registerSetting(KitSettingNoHungerImpl.class);
-        this.registerSetting(KitSettingBattleRushImpl.class);
-        this.registerSetting(KitSettingStickFightImpl.class);
-    }
+        Reflections reflections = Alley.getInstance().getPluginConstant().getReflections();
 
-    /**
-     * Method to register a setting class.
-     *
-     * @param clazz The setting class.
-     */
-    public void registerSetting(Class<? extends KitSetting> clazz) {
-        try {
-            KitSetting instance = clazz.getDeclaredConstructor().newInstance();
-            this.settings.add(instance);
-            this.settingClasses.put(instance.getName(), clazz);
-        } catch (Exception e) {
-            Logger.logError("Failed to register setting class " + clazz.getSimpleName() + "!");
+        for (Class<? extends KitSetting> clazz : reflections.getSubTypesOf(KitSetting.class)) {
+            KitSettingData annotation = clazz.getAnnotation(KitSettingData.class);
+            if (annotation != null) {
+                try {
+                    KitSetting instance = clazz.getDeclaredConstructor().newInstance();
+                    this.settings.add(instance);
+                    this.settingClasses.put(instance.getName(), clazz);
+                } catch (Exception exception) {
+                    Logger.logError("Failed to register setting class " + clazz.getSimpleName() + "!");
+                }
+            }
         }
     }
 

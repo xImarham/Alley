@@ -3,7 +3,7 @@ package dev.revere.alley.profile.data;
 import com.google.common.collect.Maps;
 import dev.revere.alley.Alley;
 import dev.revere.alley.feature.kit.Kit;
-import dev.revere.alley.feature.kit.setting.impl.KitSettingRankedImpl;
+import dev.revere.alley.feature.kit.setting.impl.mode.KitSettingRankedImpl;
 import dev.revere.alley.feature.title.record.TitleRecord;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.data.impl.*;

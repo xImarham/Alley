@@ -5,7 +5,7 @@ import dev.revere.alley.Alley;
 import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.api.menu.Menu;
 import dev.revere.alley.feature.kit.Kit;
-import dev.revere.alley.feature.kit.setting.impl.KitSettingRankedImpl;
+import dev.revere.alley.feature.kit.setting.impl.mode.KitSettingRankedImpl;
 import dev.revere.alley.feature.leaderboard.LeaderboardService;
 import dev.revere.alley.feature.leaderboard.data.LeaderboardPlayerData;
 import dev.revere.alley.feature.leaderboard.enums.EnumLeaderboardType;
