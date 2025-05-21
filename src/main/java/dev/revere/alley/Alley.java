@@ -55,6 +55,7 @@ import dev.revere.alley.game.match.listener.impl.MatchInteractListener;
 import dev.revere.alley.game.match.snapshot.SnapshotRepository;
 import dev.revere.alley.game.party.PartyService;
 import dev.revere.alley.game.party.listener.PartyListener;
+import dev.revere.alley.papi.AlleyPlaceholderExpansion;
 import dev.revere.alley.profile.ProfileService;
 import dev.revere.alley.profile.listener.ProfileListener;
 import dev.revere.alley.reflection.ReflectionRepository;
@@ -146,6 +147,7 @@ public class Alley extends JavaPlugin {
 
         this.checkDescription();
         this.initializeServices();
+        this.registerExpansion();
         this.registerListeners();
         this.runTasks();
         this.initializeEssentials();
@@ -234,6 +236,16 @@ public class Alley extends JavaPlugin {
         services.put(LayoutService.class.getSimpleName(), () -> this.layoutService = new LayoutService(this));
 
         services.forEach(Logger::logTime);
+    }
+
+    private void registerExpansion() {
+        if (this.getServer().getPluginManager().isPluginEnabled("PlaceholderAPI")) {
+            Logger.logTime(AlleyPlaceholderExpansion.class.getSimpleName(), () -> {
+                AlleyPlaceholderExpansion expansion = new AlleyPlaceholderExpansion(this);
+                expansion.register();
+                Logger.log("Successfully registered PlaceholderAPI expansion.");
+            });
+        }
     }
 
     private void registerListeners() {

@@ -33,7 +33,7 @@ Alley is currently a work in progress. While it provides a strong base for PvP-f
 - Fix inventory snapshots
 - Visibility handling
 - Column type tablist?
-- Global Placeholders (via PAPI)
+- ~~Global Placeholders (via PAPI)~~
 
 ## Table of Contents
 
