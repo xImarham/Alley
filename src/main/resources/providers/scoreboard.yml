@@ -133,9 +133,6 @@ scoreboard:
       - ""
       - "&fWinner: &b{winner}"
       - "&fDuration: &b{duration}"
-      - ""
-      - "&fYour Ping: &b{player-ping}ms"
-      - "&fTheir Ping: &b{opponent-ping}ms"
     spectating:
       - "{sidebar}"
       - "&b&lSpectating"

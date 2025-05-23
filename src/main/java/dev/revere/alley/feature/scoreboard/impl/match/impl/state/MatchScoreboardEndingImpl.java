@@ -2,6 +2,7 @@ package dev.revere.alley.feature.scoreboard.impl.match.impl.state;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.feature.scoreboard.impl.match.IMatchScoreboard;
+import dev.revere.alley.game.match.AbstractMatch;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.profile.Profile;
@@ -32,16 +33,17 @@ public class MatchScoreboardEndingImpl implements IMatchScoreboard {
     public List<String> getLines(Profile profile, Player player, GameParticipant<MatchGamePlayerImpl> you, GameParticipant<MatchGamePlayerImpl> opponent) {
         List<String> scoreboardLines = new ArrayList<>();
 
+        AbstractMatch match = profile.getMatch();
+        if (match == null) return scoreboardLines;
+
         for (String line : this.plugin.getConfigService().getConfig("providers/scoreboard.yml").getStringList("scoreboard.lines.ending")) {
             scoreboardLines.add(CC.translate(line)
-                    .replaceAll("\\{opponent}", this.getColoredName(opponent.getPlayer().getPlayer()))
-                    .replaceAll("\\{opponent-ping}", String.valueOf(this.getPing(opponent.getPlayer().getPlayer())))
-                    .replaceAll("\\{player-ping}", String.valueOf(this.getPing(player)))
-                    .replaceAll("\\{duration}", profile.getMatch().getDuration())
-                    .replaceAll("\\{arena}", profile.getMatch().getArena().getDisplayName() == null ? "&c&lNULL" : profile.getMatch().getArena().getDisplayName())
-                    .replaceAll("\\{kit}", profile.getMatch().getKit().getDisplayName() == null ? "&c&lNULL" : profile.getMatch().getKit().getDisplayName())
-                    .replaceAll("\\{winner}", opponent.getPlayer().isDead() ? you.getPlayer().getUsername() : opponent.getPlayer().getUsername())
-                    .replaceAll("\\{end-result}", opponent.getPlayer().isDead() ? "&a&lVICTORY!" : "&c&lDEFEAT!"));
+                    .replace("{opponent}", opponent.getPlayer().getUsername())
+                    .replace("{duration}", match.getDuration())
+                    .replace("{arena}", String.valueOf(match.getArena()))
+                    .replace("{kit}", String.valueOf(match.getKit()))
+                    .replace("{winner}", opponent.getPlayer().isDead() ? you.getPlayer().getUsername() : opponent.getPlayer().getUsername())
+                    .replace("{end-result}", opponent.getPlayer().isDead() ? "&a&lVICTORY!" : "&c&lDEFEAT!"));
         }
 
         return scoreboardLines;
