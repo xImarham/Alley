@@ -22,7 +22,7 @@ Alley is currently a work in progress. While it provides a strong base for PvP-f
 - Expand on config files for flexibility
 - Management Commands for Titles and Levels
 - Finish LayoutMenu to support multiple layout creation
-- properly handle disconnecting during a match
+- ~~properly handle disconnecting during a match~~
 - Implement proper Bots
 - Add custom death messages (cosmetics)
 - Add Queue ping-range setting

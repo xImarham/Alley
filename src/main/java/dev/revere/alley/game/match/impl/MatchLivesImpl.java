@@ -107,4 +107,9 @@ public class MatchLivesImpl extends MatchRegularImpl {
         this.notifyParticipants("&b" + player.getName() + " &ahas respawned");
         this.notifySpectators("&b" + player.getName() + " &ahas respawned");
     }
+
+    @Override
+    public void handleDisconnect(Player player) {
+        super.handleDeath(player);
+    }
 }

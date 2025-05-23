@@ -52,6 +52,11 @@ public class MatchFFAImpl extends AbstractMatch {
     }
 
     @Override
+    public void handleDisconnect(Player player) {
+
+    }
+
+    @Override
     public List<GameParticipant<MatchGamePlayerImpl>> getParticipants() {
         return participants;
     }

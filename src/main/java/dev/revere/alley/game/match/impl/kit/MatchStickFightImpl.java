@@ -156,4 +156,9 @@ public class MatchStickFightImpl extends MatchRoundsImpl {
             super.setupPlayer(player1);
         }));
     }
+
+    @Override
+    public void handleDisconnect(Player player) {
+        super.handleDisconnect(player);
+    }
 }

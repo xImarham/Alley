@@ -169,4 +169,9 @@ public class MatchRoundsImpl extends MatchRegularImpl {
             }
         }
     }
+
+    @Override
+    public void handleDisconnect(Player player) {
+        super.handleDisconnect(player);
+    }
 }

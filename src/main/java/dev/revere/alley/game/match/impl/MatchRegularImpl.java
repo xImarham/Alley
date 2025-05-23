@@ -8,6 +8,7 @@ import dev.revere.alley.feature.elo.result.OldEloResult;
 import dev.revere.alley.feature.kit.Kit;
 import dev.revere.alley.feature.queue.Queue;
 import dev.revere.alley.game.match.AbstractMatch;
+import dev.revere.alley.game.match.enums.EnumMatchState;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.game.match.utility.MatchUtility;
@@ -300,5 +301,20 @@ public class MatchRegularImpl extends AbstractMatch {
     public void handleRespawn(Player player) {
         player.spigot().respawn();
         PlayerUtil.reset(player, false);
+    }
+
+    @Override
+    public void handleDisconnect(Player player) {
+        if (!(this.getState() == EnumMatchState.STARTING || this.getState() == EnumMatchState.RUNNING)) {
+            return;
+        }
+
+        MatchGamePlayerImpl gamePlayer = this.getGamePlayer(player);
+        if (gamePlayer != null) {
+            gamePlayer.setDisconnected(true);
+            if (!gamePlayer.isDead()) {
+                this.handleDeath(player);
+            }
+        }
     }
 }

@@ -26,6 +26,7 @@ import dev.revere.alley.game.match.impl.kit.MatchStickFightImpl;
 import dev.revere.alley.game.match.player.GamePlayer;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
+import dev.revere.alley.game.match.runnable.other.MatchRespawnRunnable;
 import dev.revere.alley.game.match.runnable.MatchRunnable;
 import dev.revere.alley.game.match.snapshot.Snapshot;
 import dev.revere.alley.profile.Profile;
@@ -42,7 +43,6 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 import java.util.*;
@@ -93,14 +93,46 @@ public abstract class AbstractMatch {
         Alley.getInstance().getMatchRepository().getMatches().add(this);
     }
 
+    /**
+     * Handles the respawn of a player.
+     *
+     * @param player The player to respawn.
+     */
     public abstract void handleRespawn(Player player);
 
+    /**
+     * Handles the disconnection/leaving process of a player in a match.
+     *
+     * @param player The player that disconnected.
+     */
+    public abstract void handleDisconnect(Player player);
+
+    /**
+     * Method to get a list of participants.
+     *
+     * @return A list of game participants in the match.
+     */
     public abstract List<GameParticipant<MatchGamePlayerImpl>> getParticipants();
 
+    /**
+     * Method to determine whether a round can be started.
+     *
+     * @return True if a round can be started, false otherwise.
+     */
     public abstract boolean canStartRound();
 
+    /**
+     * Method to determine whether a round can be ended.
+     *
+     * @return True if a round can be ended, false otherwise.
+     */
     public abstract boolean canEndRound();
 
+    /**
+     * Method to determine whether a match can be ended.
+     *
+     * @return True if a match can be ended, false otherwise.
+     */
     public abstract boolean canEndMatch();
 
     /**
@@ -319,26 +351,7 @@ public abstract class AbstractMatch {
      * @param player The player to start the respawn process for.
      */
     public void startRespawnProcess(Player player) {
-        new BukkitRunnable() {
-            int count = 3;
-
-            @Override
-            public void run() {
-                if (this.count == 0) {
-                    this.cancel();
-                    handleRespawn(player);
-                    return;
-                }
-
-                if (getState() == EnumMatchState.ENDING_MATCH || getState() == EnumMatchState.ENDING_ROUND) {
-                    this.cancel();
-                    return;
-                }
-
-                player.sendMessage(CC.translate("&a" + this.count + "..."));
-                this.count--;
-            }
-        }.runTaskTimer(Alley.getInstance(), 0L, 20L);
+        new MatchRespawnRunnable(player, this, 3).runTaskTimer(Alley.getInstance(), 0L, 20L);
     }
 
     /**
@@ -433,23 +446,6 @@ public abstract class AbstractMatch {
                 } else {
                     this.handleDeath(player);
                 }
-            }
-        }
-    }
-
-    /**
-     * Handles the disconnect of a player.
-     *
-     * @param player The player that disconnected.
-     */
-    public void handleDisconnect(Player player) {
-        if (!(this.state == EnumMatchState.STARTING || this.state == EnumMatchState.RUNNING)) return;
-
-        MatchGamePlayerImpl gamePlayer = getGamePlayer(player);
-        if (gamePlayer != null) {
-            gamePlayer.setDisconnected(true);
-            if (!gamePlayer.isDead()) {
-                this.handleDeath(player);
             }
         }
     }
