@@ -1,12 +1,12 @@
 package dev.revere.alley.feature.level;
 
 import dev.revere.alley.Alley;
-import dev.revere.alley.feature.level.record.LevelRecord;
 import lombok.Getter;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,7 +18,7 @@ import java.util.List;
 @Getter
 public class LevelService {
     protected final Alley plugin;
-    private final List<LevelRecord> levels;
+    private final List<Level> levels;
 
     /**
      * Constructor for the LevelService class.
@@ -50,9 +50,58 @@ public class LevelService {
             int minElo = config.getInt(path + ".min-elo");
             int maxElo = config.getInt(path + ".max-elo");
 
-            LevelRecord level = new LevelRecord(key, displayName, material, durability, minElo, maxElo);
+            Level level = new Level(key, displayName, material, durability, minElo, maxElo);
             this.levels.add(level);
         }
+    }
+
+    /**
+     * Creates a new level tier.
+     *
+     * @param name   Name of the level.
+     * @param minElo Minimum Elo rating for this level.
+     * @param maxElo Maximum Elo rating for this level.
+     */
+    public void createLevel(String name, int minElo, int maxElo) {
+        Level level = new Level(name, "&b" + name, Material.DIAMOND_SWORD, 0, minElo, maxElo);
+        this.levels.add(level);
+        this.saveLevel(level);
+    }
+
+    /**
+     * Deletes an existing level record.
+     *
+     * @param level LevelRecord object containing the level data to be deleted.
+     */
+    public void deleteLevel(Level level) {
+        this.levels.remove(level);
+        FileConfiguration config = this.plugin.getConfigService().getLevelsConfig();
+        File file = this.plugin.getConfigService().getConfigFile("storage/levels.yml");
+
+        String path = "levels." + level.getName();
+        config.set(path, null);
+
+        this.plugin.getConfigService().saveConfig(file, config);
+    }
+
+    /**
+     * Saves a level tier to the configuration file.
+     *
+     * @param level LevelRecord object containing the level data.
+     */
+    public void saveLevel(Level level) {
+        FileConfiguration config = this.plugin.getConfigService().getLevelsConfig();
+        File file = this.plugin.getConfigService().getConfigFile("storage/levels.yml");
+
+        String path = "levels." + level.getName();
+
+        config.set(path + ".display-name", level.getDisplayName());
+        config.set(path + ".material", level.getMaterial().name());
+        config.set(path + ".durability", level.getDurability());
+        config.set(path + ".min-elo", level.getMinElo());
+        config.set(path + ".max-elo", level.getMaxElo());
+
+        this.plugin.getConfigService().saveConfig(file, config);
     }
 
     /**
@@ -61,7 +110,7 @@ public class LevelService {
      * @param elo Elo rating.
      * @return Matching level tier or null.
      */
-    public LevelRecord getLevel(int elo) {
+    public Level getLevel(int elo) {
         return this.levels.stream().filter(tier -> elo >= tier.getMinElo() && elo <= tier.getMaxElo()).findFirst().orElse(null);
     }
 
@@ -71,7 +120,7 @@ public class LevelService {
      * @param name Name of the level.
      * @return Matching level tier or null.
      */
-    public LevelRecord getLevel(String name) {
+    public Level getLevel(String name) {
         return this.levels.stream().filter(tier -> tier.getName().equalsIgnoreCase(name)).findFirst().orElse(null);
     }
 }

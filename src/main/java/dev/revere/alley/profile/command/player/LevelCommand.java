@@ -1,4 +1,4 @@
-package dev.revere.alley.feature.level.command;
+package dev.revere.alley.profile.command.player;
 
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;

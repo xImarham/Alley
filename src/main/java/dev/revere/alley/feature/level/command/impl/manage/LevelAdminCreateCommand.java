@@ -1,0 +1,60 @@
+package dev.revere.alley.feature.level.command.impl.manage;
+
+import dev.revere.alley.api.command.BaseCommand;
+import dev.revere.alley.api.command.CommandArgs;
+import dev.revere.alley.api.command.annotation.CommandData;
+import dev.revere.alley.feature.level.Level;
+import dev.revere.alley.feature.level.LevelService;
+import dev.revere.alley.util.chat.CC;
+import org.bukkit.command.CommandSender;
+
+/**
+ * @author Emmy
+ * @project Alley
+ * @since 26/05/2025
+ */
+public class LevelAdminCreateCommand extends BaseCommand {
+    @CommandData(name = "leveladmin.create", isAdminOnly = true, description = "Create a new level", inGameOnly = false)
+    @Override
+    public void onCommand(CommandArgs command) {
+        CommandSender sender = command.getSender();
+        String[] args = command.getArgs();
+
+        if (args.length < 3) {
+            sender.sendMessage(CC.translate("&6Usage: &e/leveladmin create &b<levelName> <minElo> <maxElo>"));
+            return;
+        }
+
+        String levelName = args[0];
+        LevelService levelService = this.plugin.getLevelService();
+        Level level = levelService.getLevel(levelName);
+        if (level != null) {
+            sender.sendMessage(CC.translate("&cA level with that name already exists!"));
+            return;
+        }
+
+        int minElo;
+        try {
+            minElo = Integer.parseInt(args[1]);
+        } catch (NumberFormatException e) {
+            sender.sendMessage(CC.translate("&cInvalid minimum Elo value!"));
+            return;
+        }
+
+        int maxElo;
+        try {
+            maxElo = Integer.parseInt(args[2]);
+        } catch (NumberFormatException e) {
+            sender.sendMessage(CC.translate("&cInvalid maximum Elo value!"));
+            return;
+        }
+
+        if (minElo >= maxElo) {
+            sender.sendMessage(CC.translate("&cMinimum Elo must be less than maximum Elo!"));
+            return;
+        }
+
+        levelService.createLevel(levelName, minElo, maxElo);
+        sender.sendMessage(CC.translate("&aLevel &b" + levelName + " &acreated successfully with min Elo &b" + minElo + " &aand max Elo &b" + maxElo + "&a!"));
+    }
+}
