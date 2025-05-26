@@ -4,9 +4,8 @@ import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.feature.level.LevelService;
+import dev.revere.alley.util.chat.CC;
 import org.bukkit.command.CommandSender;
-
-import java.util.Arrays;
 
 /**
  * @author Emmy
@@ -22,12 +21,12 @@ public class LevelAdminListCommand extends BaseCommand {
         LevelService levelService = this.plugin.getLevelService();
 
         sender.sendMessage("");
-        sender.sendMessage("     &b&lLevel List &f(" + levelService.getLevels().size() + "&f)");
+        sender.sendMessage(CC.translate("     &b&lLevel List &f(" + levelService.getLevels().size() + "&f)"));
         if (levelService.getLevels().isEmpty()) {
-            sender.sendMessage("      &f● &cNo levels available.");
+            sender.sendMessage(CC.translate("      &f● &cNo levels available."));
         } else {
             levelService.getLevels()
-                    .forEach(level -> sender.sendMessage("      &f● &b" + level.getDisplayName() + " &f(" + level.getMinElo() + " - " + level.getMaxElo() + " elo)"));
+                    .forEach(level -> sender.sendMessage(CC.translate("      &f● &b" + level.getDisplayName() + " &f(" + level.getMinElo() + " - " + level.getMaxElo() + " elo)")));
         }
         sender.sendMessage("");
     }
