@@ -19,11 +19,12 @@ import org.bukkit.configuration.file.FileConfiguration;
 @Getter
 public class MongoService {
     protected final Alley plugin;
+
+    protected final String databaseName;
+    protected final String uri;
+
     private MongoDatabase mongoDatabase;
     private MongoClient mongoClient;
-
-    private final String databaseName;
-    private final String uri;
 
     /**
      * Constructor for the MongoService class.
@@ -32,8 +33,10 @@ public class MongoService {
      */
     public MongoService(Alley plugin) {
         this.plugin = plugin;
+
         this.uri = plugin.getConfigService().getDatabaseConfig().getString("mongo.uri");
         this.databaseName = plugin.getConfigService().getDatabaseConfig().getString("mongo.database");
+
         this.createConnection();
     }
 

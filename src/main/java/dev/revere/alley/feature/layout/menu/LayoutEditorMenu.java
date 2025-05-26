@@ -3,7 +3,7 @@ package dev.revere.alley.feature.layout.menu;
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.api.menu.Menu;
-import dev.revere.alley.feature.kit.Kit;
+import dev.revere.alley.base.kit.Kit;
 import dev.revere.alley.feature.layout.data.LayoutData;
 import dev.revere.alley.feature.layout.menu.button.editor.*;
 import dev.revere.alley.profile.Profile;

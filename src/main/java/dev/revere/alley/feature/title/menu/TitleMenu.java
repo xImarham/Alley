@@ -3,7 +3,7 @@ package dev.revere.alley.feature.title.menu;
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.api.menu.pagination.PaginatedMenu;
-import dev.revere.alley.feature.kit.Kit;
+import dev.revere.alley.base.kit.Kit;
 import dev.revere.alley.feature.title.record.TitleRecord;
 import dev.revere.alley.profile.Profile;
 import lombok.AllArgsConstructor;

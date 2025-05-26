@@ -22,7 +22,7 @@ import xyz.refinedev.phoenix.SharedAPI;
 @Setter
 public class CoreAdapter {
     protected final Alley plugin;
-    private ICore core;
+    private final ICore core;
 
     /**
      * Constructor for the CoreAdapter class.

@@ -3,9 +3,9 @@ package dev.revere.alley.game.ffa.command.impl;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
-import dev.revere.alley.feature.arena.AbstractArena;
-import dev.revere.alley.feature.arena.ArenaService;
-import dev.revere.alley.feature.arena.enums.EnumArenaType;
+import dev.revere.alley.base.arena.AbstractArena;
+import dev.revere.alley.base.arena.ArenaService;
+import dev.revere.alley.base.arena.enums.EnumArenaType;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.entity.Player;
 

@@ -1,13 +1,13 @@
 package dev.revere.alley.game.party;
 
 import dev.revere.alley.Alley;
-import dev.revere.alley.feature.cooldown.Cooldown;
-import dev.revere.alley.feature.cooldown.enums.EnumCooldownType;
-import dev.revere.alley.feature.hotbar.HotbarService;
-import dev.revere.alley.feature.hotbar.enums.EnumHotbarType;
+import dev.revere.alley.base.cooldown.Cooldown;
+import dev.revere.alley.base.cooldown.enums.EnumCooldownType;
+import dev.revere.alley.base.hotbar.HotbarService;
+import dev.revere.alley.base.hotbar.enums.EnumHotbarType;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
-import dev.revere.alley.reflection.impl.TitleReflectionService;
+import dev.revere.alley.tool.reflection.impl.TitleReflectionService;
 import dev.revere.alley.util.SoundUtil;
 import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.util.chat.ClickableUtil;
@@ -46,7 +46,7 @@ public class PartyService {
         this.plugin = plugin;
         this.parties = new ArrayList<>();
         this.partyRequests = new ArrayList<>();
-        this.chatFormat = plugin.getConfigService().getConfig("messages.yml").getString("party.chat-format");
+        this.chatFormat = plugin.getConfigService().getMessagesConfig().getString("party.chat-format");
     }
 
     /**

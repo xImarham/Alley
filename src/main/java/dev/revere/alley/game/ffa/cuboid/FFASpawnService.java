@@ -1,8 +1,8 @@
 package dev.revere.alley.game.ffa.cuboid;
 
 import dev.revere.alley.Alley;
-import dev.revere.alley.feature.arena.AbstractArena;
-import dev.revere.alley.feature.arena.enums.EnumArenaType;
+import dev.revere.alley.base.arena.AbstractArena;
+import dev.revere.alley.base.arena.enums.EnumArenaType;
 import dev.revere.alley.tool.cuboid.Cuboid;
 import dev.revere.alley.tool.cuboid.CuboidService;
 import dev.revere.alley.tool.logger.Logger;

@@ -1,7 +1,7 @@
 package dev.revere.alley.feature.title.record;
 
 import dev.revere.alley.feature.division.Division;
-import dev.revere.alley.feature.kit.Kit;
+import dev.revere.alley.base.kit.Kit;
 import lombok.Getter;
 
 /**

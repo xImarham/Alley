@@ -1,7 +1,7 @@
 package dev.revere.alley.feature.layout.menu.button;
 
 import dev.revere.alley.api.menu.Button;
-import dev.revere.alley.feature.kit.enums.EnumKitCategory;
+import dev.revere.alley.base.kit.enums.EnumKitCategory;
 import dev.revere.alley.feature.layout.menu.LayoutMenu;
 import dev.revere.alley.tool.item.ItemBuilder;
 import lombok.AllArgsConstructor;

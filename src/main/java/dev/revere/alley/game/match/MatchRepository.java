@@ -1,13 +1,13 @@
 package dev.revere.alley.game.match;
 
 import dev.revere.alley.Alley;
-import dev.revere.alley.feature.arena.AbstractArena;
-import dev.revere.alley.feature.kit.Kit;
-import dev.revere.alley.feature.kit.setting.impl.mode.KitSettingBattleRushImpl;
-import dev.revere.alley.feature.kit.setting.impl.mode.KitSettingBedImpl;
-import dev.revere.alley.feature.kit.setting.impl.mode.KitSettingLivesImpl;
-import dev.revere.alley.feature.kit.setting.impl.mode.KitSettingStickFightImpl;
-import dev.revere.alley.feature.queue.Queue;
+import dev.revere.alley.base.arena.AbstractArena;
+import dev.revere.alley.base.kit.Kit;
+import dev.revere.alley.base.kit.setting.impl.mode.KitSettingBattleRushImpl;
+import dev.revere.alley.base.kit.setting.impl.mode.KitSettingBedImpl;
+import dev.revere.alley.base.kit.setting.impl.mode.KitSettingLivesImpl;
+import dev.revere.alley.base.kit.setting.impl.mode.KitSettingStickFightImpl;
+import dev.revere.alley.base.queue.Queue;
 import dev.revere.alley.game.match.impl.MatchBedImpl;
 import dev.revere.alley.game.match.impl.MatchLivesImpl;
 import dev.revere.alley.game.match.impl.MatchRegularImpl;

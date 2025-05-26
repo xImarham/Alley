@@ -3,7 +3,7 @@ package dev.revere.alley.game.ffa.command.impl.player;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
-import dev.revere.alley.feature.kit.Kit;
+import dev.revere.alley.base.kit.Kit;
 import dev.revere.alley.game.ffa.FFAService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.util.chat.CC;

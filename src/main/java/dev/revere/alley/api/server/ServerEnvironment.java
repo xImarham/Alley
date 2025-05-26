@@ -1,5 +1,6 @@
 package dev.revere.alley.api.server;
 
+import dev.revere.alley.api.server.listener.ServerEnvironmentListener;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.Difficulty;
 import org.bukkit.World;
@@ -46,19 +47,16 @@ public class ServerEnvironment {
         this.doMobLoot = doMobLoot;
 
         this.removeDroppedItemsOnEnable = removeDroppedItemsOnEnable;
+
+        plugin.getServer().getPluginManager().registerEvents(new ServerEnvironmentListener(), plugin);
+        this.setupWorld();
     }
 
-    /**
-     * Disconnect all players from the server.
-     */
     public void disconnectPlayers() {
         this.plugin.getServer().getOnlinePlayers().forEach(player -> player.kickPlayer(CC.translate("&cThe server is restarting.")));
     }
 
-    /**
-     * Set the world difficulty to hard and remove all dropped items.
-     */
-    public void setupWorld() {
+    private void setupWorld() {
         for (World world : this.plugin.getServer().getWorlds()) {
             world.setDifficulty(Difficulty.HARD);
             world.setTime(6000);
@@ -91,9 +89,6 @@ public class ServerEnvironment {
         }
     }
 
-    /**
-     * Clear all entities from the server.
-     */
     public void clearAllEntities() {
         for (World world : this.plugin.getServer().getWorlds()) {
             world.getEntities().forEach(Entity::remove);

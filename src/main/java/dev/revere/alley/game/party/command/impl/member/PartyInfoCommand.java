@@ -5,7 +5,7 @@ import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.game.party.Party;
 import dev.revere.alley.game.party.PartyService;
-import dev.revere.alley.locale.PartyLocale;
+import dev.revere.alley.config.locale.impl.PartyLocale;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -43,7 +43,7 @@ public class PartyInfoCommand extends BaseCommand {
                 .map(Player::getName)
                 .collect(Collectors.joining(", "));
 
-        FileConfiguration config = this.plugin.getConfigService().getConfig("messages.yml");
+        FileConfiguration config = this.plugin.getConfigService().getMessagesConfig();
         List<String> info = config.getStringList("party.info-command.text");
         String noMembersFormat = CC.translate(config.getString("party.info-command.no-members-format"));
 

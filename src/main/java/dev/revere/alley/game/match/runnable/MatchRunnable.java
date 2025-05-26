@@ -1,10 +1,10 @@
 package dev.revere.alley.game.match.runnable;
 
 import dev.revere.alley.Alley;
-import dev.revere.alley.feature.kit.setting.impl.mode.KitSettingBattleRushImpl;
+import dev.revere.alley.base.kit.setting.impl.mode.KitSettingBattleRushImpl;
 import dev.revere.alley.game.match.AbstractMatch;
 import dev.revere.alley.game.match.enums.EnumMatchState;
-import dev.revere.alley.reflection.impl.TitleReflectionService;
+import dev.revere.alley.tool.reflection.impl.TitleReflectionService;
 import dev.revere.alley.util.SoundUtil;
 import dev.revere.alley.util.chat.CC;
 import lombok.Getter;

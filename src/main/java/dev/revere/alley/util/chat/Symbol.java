@@ -9,24 +9,47 @@ import lombok.experimental.UtilityClass;
  */
 @UtilityClass
 public class Symbol {
-    public String SINGULAR_ARROW_R = "➤";
-    public String SINGULAR_ARROW_R_2 = "►";
-    public String RANKED_STAR = "✫";
-    public String ARROW_R = "»";
-    public String ARROW_L = "«";
-    public String STAR_FILLED = "★";
-    public String STAR_EMPTY = "☆";
-    public String HEART = "❤";
-    public String TICK = "✔";
-    public String CROSS = "✘";
-    public String CROWN = "♛";
-    public String WARNING = "[⚠]";
-    public String QUESTION = "❓";
-    public String EXCLAMATION = "❗";
-    public String CHECK = "✓";
-    public String X = "✗";
-    public String FLAG = "⚑";
-    public String SKULL = "☠";
-    public String GEAR = "⚙";
-    public String CROSSED_SWORDS = "⚔";
+    public final String SINGULAR_ARROW_R;
+    public final String SINGULAR_ARROW_R_2;
+    public final String RANKED_STAR;
+    public final String ARROW_R;
+    public final String ARROW_L;
+    public final String STAR_FILLED;
+    public final String STAR_EMPTY;
+    public final String HEART;
+    public final String TICK;
+    public final String CROSS;
+    public final String CROWN;
+    public final String WARNING;
+    public final String QUESTION;
+    public final String EXCLAMATION;
+    public final String CHECK;
+    public final String X;
+    public final String FLAG;
+    public final String SKULL;
+    public final String GEAR;
+    public final String CROSSED_SWORDS;
+
+    static {
+        SINGULAR_ARROW_R = "➤";
+        SINGULAR_ARROW_R_2 = "►";
+        RANKED_STAR = "✫";
+        ARROW_R = "»";
+        ARROW_L = "«";
+        STAR_FILLED = "★";
+        STAR_EMPTY = "☆";
+        HEART = "❤";
+        TICK = "✔";
+        CROSS = "✘";
+        CROWN = "♛";
+        WARNING = "[⚠]";
+        QUESTION = "❓";
+        EXCLAMATION = "❗";
+        CHECK = "✓";
+        X = "✗";
+        FLAG = "⚑";
+        SKULL = "☠";
+        GEAR = "⚙";
+        CROSSED_SWORDS = "⚔";
+    }
 }

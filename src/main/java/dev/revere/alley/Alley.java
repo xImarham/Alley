@@ -6,41 +6,37 @@ import dev.revere.alley.api.constant.PluginConstant;
 import dev.revere.alley.api.discord.DiscordBridge;
 import dev.revere.alley.api.menu.MenuListener;
 import dev.revere.alley.api.server.ServerEnvironment;
+import dev.revere.alley.base.arena.AbstractArena;
+import dev.revere.alley.base.arena.ArenaService;
+import dev.revere.alley.base.arena.listener.ArenaListener;
+import dev.revere.alley.base.combat.CombatService;
+import dev.revere.alley.base.combat.listener.CombatListener;
+import dev.revere.alley.base.cooldown.CooldownRepository;
+import dev.revere.alley.base.hotbar.HotbarService;
+import dev.revere.alley.base.hotbar.listener.HotbarListener;
+import dev.revere.alley.base.kit.KitService;
+import dev.revere.alley.base.kit.setting.KitSettingService;
+import dev.revere.alley.base.queue.QueueService;
+import dev.revere.alley.base.spawn.SpawnService;
+import dev.revere.alley.base.spawn.listener.SpawnListener;
 import dev.revere.alley.command.CommandDataCollector;
 import dev.revere.alley.command.CommandUtility;
 import dev.revere.alley.config.ConfigService;
 import dev.revere.alley.core.CoreAdapter;
 import dev.revere.alley.core.listener.CoreChatListener;
 import dev.revere.alley.database.MongoService;
-import dev.revere.alley.essential.chat.ChatListener;
-import dev.revere.alley.essential.emoji.EmojiRepository;
-import dev.revere.alley.essential.emoji.listener.EmojiListener;
-import dev.revere.alley.essential.filter.ProfanityFilter;
-import dev.revere.alley.feature.arena.AbstractArena;
-import dev.revere.alley.feature.arena.ArenaService;
-import dev.revere.alley.feature.arena.listener.ArenaListener;
-import dev.revere.alley.feature.combat.CombatService;
-import dev.revere.alley.feature.combat.listener.CombatListener;
-import dev.revere.alley.feature.cooldown.CooldownRepository;
 import dev.revere.alley.feature.cosmetic.repository.CosmeticRepository;
 import dev.revere.alley.feature.division.DivisionService;
-import dev.revere.alley.feature.elo.EloCalculator;
-import dev.revere.alley.feature.hotbar.HotbarService;
-import dev.revere.alley.feature.hotbar.listener.HotbarListener;
-import dev.revere.alley.feature.kit.KitService;
-import dev.revere.alley.feature.kit.setting.KitSettingService;
+import dev.revere.alley.feature.emoji.EmojiRepository;
+import dev.revere.alley.feature.emoji.listener.EmojiListener;
+import dev.revere.alley.feature.filter.ProfanityFilter;
 import dev.revere.alley.feature.layout.LayoutService;
 import dev.revere.alley.feature.layout.listener.LayoutListener;
 import dev.revere.alley.feature.leaderboard.LeaderboardService;
 import dev.revere.alley.feature.level.LevelService;
-import dev.revere.alley.feature.queue.QueueService;
-import dev.revere.alley.feature.scoreboard.ScoreboardVisualizer;
 import dev.revere.alley.feature.server.ServerService;
-import dev.revere.alley.feature.spawn.SpawnService;
-import dev.revere.alley.feature.spawn.listener.SpawnListener;
-import dev.revere.alley.feature.tablist.task.TablistUpdateTask;
 import dev.revere.alley.feature.title.TitleService;
-import dev.revere.alley.feature.world.WorldListener;
+import dev.revere.alley.feature.webhook.WebhookListener;
 import dev.revere.alley.game.duel.DuelRequestService;
 import dev.revere.alley.game.ffa.FFAService;
 import dev.revere.alley.game.ffa.cuboid.FFASpawnService;
@@ -55,15 +51,18 @@ import dev.revere.alley.game.match.listener.impl.MatchInteractListener;
 import dev.revere.alley.game.match.snapshot.SnapshotRepository;
 import dev.revere.alley.game.party.PartyService;
 import dev.revere.alley.game.party.listener.PartyListener;
-import dev.revere.alley.papi.AlleyPlaceholderExpansion;
 import dev.revere.alley.profile.ProfileService;
 import dev.revere.alley.profile.listener.ProfileListener;
-import dev.revere.alley.reflection.ReflectionRepository;
+import dev.revere.alley.provider.expansion.AlleyPlaceholderExpansion;
+import dev.revere.alley.provider.scoreboard.ScoreboardVisualizer;
+import dev.revere.alley.provider.tablist.task.TablistUpdateTask;
 import dev.revere.alley.task.ArrowRemovalTask;
 import dev.revere.alley.task.RepositoryCleanupTask;
 import dev.revere.alley.tool.animation.AnimationRepository;
+import dev.revere.alley.tool.elo.EloCalculator;
 import dev.revere.alley.tool.logger.Logger;
 import dev.revere.alley.tool.logger.PluginLogger;
+import dev.revere.alley.tool.reflection.ReflectionRepository;
 import lombok.Getter;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -153,7 +152,6 @@ public class Alley extends JavaPlugin {
         this.initializeEssentials();
 
         CommandUtility.registerCommands();
-        this.serverEnvironment.setupWorld();
 
         long end = System.currentTimeMillis();
         long timeTaken = end - start;
@@ -263,7 +261,6 @@ public class Alley extends JavaPlugin {
                 new SpawnListener(),
                 new FFAListener(this),
                 new FFACuboidListener(this.ffaSpawnService.getCuboid(), this),
-                new WorldListener(),
                 new EmojiListener(this),
                 new CombatListener(this),
                 //new ParkourListener(this),
@@ -299,7 +296,7 @@ public class Alley extends JavaPlugin {
             String webhookUrl = config.getString("essentials.chat-logging.webhook-url");
             if (config.getBoolean("essentials.chat-logging.enabled")) {
                 this.discordBridge = new DiscordBridge(this, webhookUrl);
-                this.getServer().getPluginManager().registerEvents(new ChatListener(this), this);
+                this.getServer().getPluginManager().registerEvents(new WebhookListener(this), this);
                 Logger.log("Chat logging is enabled. Discord Webhook URL: " + webhookUrl);
             }
         });

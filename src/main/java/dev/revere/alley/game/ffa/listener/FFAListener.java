@@ -1,10 +1,10 @@
 package dev.revere.alley.game.ffa.listener;
 
 import dev.revere.alley.Alley;
-import dev.revere.alley.feature.combat.CombatService;
-import dev.revere.alley.feature.cooldown.Cooldown;
-import dev.revere.alley.feature.cooldown.CooldownRepository;
-import dev.revere.alley.feature.cooldown.enums.EnumCooldownType;
+import dev.revere.alley.base.combat.CombatService;
+import dev.revere.alley.base.cooldown.Cooldown;
+import dev.revere.alley.base.cooldown.CooldownRepository;
+import dev.revere.alley.base.cooldown.enums.EnumCooldownType;
 import dev.revere.alley.game.ffa.cuboid.FFASpawnService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;

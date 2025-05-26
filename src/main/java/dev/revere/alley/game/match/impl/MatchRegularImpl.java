@@ -1,12 +1,12 @@
 package dev.revere.alley.game.match.impl;
 
 import dev.revere.alley.Alley;
-import dev.revere.alley.feature.arena.AbstractArena;
-import dev.revere.alley.feature.elo.EloCalculator;
-import dev.revere.alley.feature.elo.result.EloResult;
-import dev.revere.alley.feature.elo.result.OldEloResult;
-import dev.revere.alley.feature.kit.Kit;
-import dev.revere.alley.feature.queue.Queue;
+import dev.revere.alley.base.arena.AbstractArena;
+import dev.revere.alley.tool.elo.EloCalculator;
+import dev.revere.alley.tool.elo.result.EloResult;
+import dev.revere.alley.tool.elo.result.OldEloResult;
+import dev.revere.alley.base.kit.Kit;
+import dev.revere.alley.base.queue.Queue;
 import dev.revere.alley.game.match.AbstractMatch;
 import dev.revere.alley.game.match.enums.EnumMatchState;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
@@ -14,7 +14,7 @@ import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.game.match.utility.MatchUtility;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.ProfileService;
-import dev.revere.alley.reflection.impl.TitleReflectionService;
+import dev.revere.alley.tool.reflection.impl.TitleReflectionService;
 import dev.revere.alley.tool.item.ItemBuilder;
 import dev.revere.alley.util.PlayerUtil;
 import lombok.Getter;

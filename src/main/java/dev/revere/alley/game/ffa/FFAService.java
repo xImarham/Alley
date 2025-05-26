@@ -1,8 +1,8 @@
 package dev.revere.alley.game.ffa;
 
 import dev.revere.alley.Alley;
-import dev.revere.alley.feature.arena.AbstractArena;
-import dev.revere.alley.feature.kit.Kit;
+import dev.revere.alley.base.arena.AbstractArena;
+import dev.revere.alley.base.kit.Kit;
 import dev.revere.alley.game.ffa.impl.DefaultFFAMatchImpl;
 import dev.revere.alley.tool.logger.Logger;
 import dev.revere.alley.util.chat.CC;

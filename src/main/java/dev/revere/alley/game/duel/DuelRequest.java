@@ -1,7 +1,7 @@
 package dev.revere.alley.game.duel;
 
-import dev.revere.alley.feature.arena.AbstractArena;
-import dev.revere.alley.feature.kit.Kit;
+import dev.revere.alley.base.arena.AbstractArena;
+import dev.revere.alley.base.kit.Kit;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.entity.Player;

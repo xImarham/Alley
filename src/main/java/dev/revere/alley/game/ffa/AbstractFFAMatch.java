@@ -1,9 +1,9 @@
 package dev.revere.alley.game.ffa;
 
 import dev.revere.alley.Alley;
-import dev.revere.alley.feature.arena.AbstractArena;
-import dev.revere.alley.feature.combat.CombatService;
-import dev.revere.alley.feature.kit.Kit;
+import dev.revere.alley.base.arena.AbstractArena;
+import dev.revere.alley.base.combat.CombatService;
+import dev.revere.alley.base.kit.Kit;
 import dev.revere.alley.game.ffa.enums.EnumFFAState;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.ProfileService;

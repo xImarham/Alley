@@ -15,10 +15,10 @@ import org.bukkit.inventory.ItemStack;
 @UtilityClass
 public class PlayerUtil {
     /**
-     * Reset a player's stats
+     * Reset a player's state to default values.
      *
-     * @param player         the player to reset
-     * @param closeInventory whether to close the player's inventory
+     * @param player         the player to reset.
+     * @param closeInventory whether to close the player's inventory after resetting.
      */
     public void reset(Player player, boolean closeInventory) {
         player.setHealth(20.0D);

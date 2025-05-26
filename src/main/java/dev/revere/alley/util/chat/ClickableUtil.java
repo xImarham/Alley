@@ -19,18 +19,20 @@ public class ClickableUtil {
     }
 
     /**
-     * Create a clickable text component.
+     * Create a clickable component with a command and hover text.
      *
-     * @param message   the message
-     * @param command   the command
-     * @param hoverText the hover text
-     * @return the text component
+     * @param message   the message to be displayed.
+     * @param command   the command to be executed when clicked.
+     * @param hoverText the text to be displayed when hovered over.
+     * @return a TextComponent that is clickable and has hover text.
      */
     public @NotNull TextComponent createComponent(String message, String command, String hoverText) {
         TextComponent clickableMessage = new TextComponent(CC.translate(message));
         clickableMessage.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, command));
+
         String hover = CC.translate(hoverText);
         BaseComponent[] hoverComponent = new ComponentBuilder(hover).create();
+
         clickableMessage.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, hoverComponent));
         return clickableMessage;
     }

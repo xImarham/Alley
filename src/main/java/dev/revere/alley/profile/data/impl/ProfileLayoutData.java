@@ -1,7 +1,7 @@
 package dev.revere.alley.profile.data.impl;
 
 import dev.revere.alley.Alley;
-import dev.revere.alley.feature.kit.Kit;
+import dev.revere.alley.base.kit.Kit;
 import dev.revere.alley.feature.layout.data.LayoutData;
 import lombok.Getter;
 import lombok.Setter;

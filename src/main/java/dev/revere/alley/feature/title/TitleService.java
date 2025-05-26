@@ -2,7 +2,7 @@ package dev.revere.alley.feature.title;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.feature.division.Division;
-import dev.revere.alley.feature.kit.Kit;
+import dev.revere.alley.base.kit.Kit;
 import dev.revere.alley.feature.title.record.TitleRecord;
 import dev.revere.alley.tool.logger.Logger;
 import dev.revere.alley.tool.visual.TextFormatter;

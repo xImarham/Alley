@@ -1,9 +1,9 @@
 package dev.revere.alley.game.match.listener.impl;
 
 import dev.revere.alley.Alley;
-import dev.revere.alley.feature.arena.impl.StandAloneArena;
-import dev.revere.alley.feature.kit.setting.impl.mechanic.KitSettingBuildImpl;
-import dev.revere.alley.feature.kit.setting.impl.mode.KitSettingSpleefImpl;
+import dev.revere.alley.base.arena.impl.StandAloneArena;
+import dev.revere.alley.base.kit.setting.impl.mechanic.KitSettingBuildImpl;
+import dev.revere.alley.base.kit.setting.impl.mode.KitSettingSpleefImpl;
 import dev.revere.alley.game.match.AbstractMatch;
 import dev.revere.alley.game.match.enums.EnumMatchState;
 import dev.revere.alley.profile.Profile;

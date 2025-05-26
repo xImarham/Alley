@@ -1,13 +1,13 @@
 package dev.revere.alley.game.ffa.impl;
 
 import dev.revere.alley.Alley;
-import dev.revere.alley.feature.arena.AbstractArena;
-import dev.revere.alley.feature.hotbar.enums.EnumHotbarType;
-import dev.revere.alley.feature.kit.Kit;
+import dev.revere.alley.base.arena.AbstractArena;
+import dev.revere.alley.base.hotbar.enums.EnumHotbarType;
+import dev.revere.alley.base.kit.Kit;
 import dev.revere.alley.game.ffa.AbstractFFAMatch;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
-import dev.revere.alley.reflection.impl.ActionBarReflectionService;
+import dev.revere.alley.tool.reflection.impl.ActionBarReflectionService;
 import dev.revere.alley.util.PlayerUtil;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.Bukkit;

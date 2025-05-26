@@ -26,8 +26,8 @@ public class ProfileService {
     protected final Alley plugin;
     private final HashMap<UUID, Profile> profiles;
 
-    public MongoCollection<Document> collection;
-    public IProfile iProfile;
+    private final MongoCollection<Document> collection;
+    private final IProfile iProfile;
 
     /**
      * Constructor for the ProfileService class.

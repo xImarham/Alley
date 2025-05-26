@@ -34,7 +34,7 @@ kits:
       NoHunger: false
       BattleRush: false
       StickFight: false
-    potioneffects: []
+    potion-effects: []
   Boxing:
     display-name: '&bBoxing'
     description: 1st to 100 hits!
@@ -70,7 +70,7 @@ kits:
       NoHunger: true
       BattleRush: false
       StickFight: false
-    potioneffects:
+    potion-effects:
       - SPEED:2147483647:1
   BattleRush:
     display-name: '&bBattle Rush'
@@ -107,7 +107,7 @@ kits:
       NoHunger: true
       BattleRush: true
       StickFight: false
-    potioneffects: []
+    potion-effects: []
   StickFight:
     display-name: '&bStick Fight'
     description: ''
@@ -143,7 +143,7 @@ kits:
       NoHunger: false
       BattleRush: false
       StickFight: true
-    potioneffects: []
+    potion-effects: []
   PearlFight:
     display-name: '&bPearl Fight'
     description: ''
@@ -179,7 +179,7 @@ kits:
       NoHunger: true
       BattleRush: false
       StickFight: false
-    potioneffects: []
+    potion-effects: []
   Spleef:
     display-name: '&bSpleef'
     description: '&7Spleef kit description.'
@@ -215,7 +215,7 @@ kits:
       NoHunger: false
       BattleRush: false
       StickFight: false
-    potioneffects: []
+    potion-effects: []
   Classic:
     display-name: '&bClassic'
     description: ''
@@ -251,7 +251,7 @@ kits:
       NoHunger: false
       BattleRush: false
       StickFight: false
-    potioneffects: []
+    potion-effects: []
   Top Fight:
     display-name: '&bTop Fight'
     description: ''
@@ -287,7 +287,7 @@ kits:
       NoHunger: false
       BattleRush: false
       StickFight: false
-    potioneffects: []
+    potion-effects: []
   BedFight:
     display-name: '&bBed Fight'
     description: '&c&lIN DEVELOPMENT'
@@ -323,7 +323,7 @@ kits:
       NoHunger: false
       BattleRush: false
       StickFight: false
-    potioneffects: []
+    potion-effects: []
   Gapple:
     display-name: '&bGapple'
     description: ''
@@ -359,7 +359,7 @@ kits:
       NoHunger: false
       BattleRush: false
       StickFight: false
-    potioneffects: []
+    potion-effects: []
   Sumo:
     display-name: '&bSumo'
     description: ''
@@ -395,7 +395,7 @@ kits:
       NoHunger: true
       BattleRush: false
       StickFight: false
-    potioneffects: []
+    potion-effects: []
   FireballFight:
     display-name: '&bFireball Fight'
     description: '&c&lIN DEVELOPMENT'
@@ -431,4 +431,4 @@ kits:
       NoHunger: false
       BattleRush: false
       StickFight: false
-    potioneffects: []
+    potion-effects: []

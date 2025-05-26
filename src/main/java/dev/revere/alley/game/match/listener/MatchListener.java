@@ -1,11 +1,11 @@
 package dev.revere.alley.game.match.listener;
 
 import dev.revere.alley.Alley;
-import dev.revere.alley.feature.arena.impl.StandAloneArena;
-import dev.revere.alley.feature.kit.Kit;
-import dev.revere.alley.feature.kit.setting.impl.mechanic.KitSettingDenyMovementImpl;
-import dev.revere.alley.feature.kit.setting.impl.mechanic.KitSettingNoHungerImpl;
-import dev.revere.alley.feature.kit.setting.impl.mode.*;
+import dev.revere.alley.base.arena.impl.StandAloneArena;
+import dev.revere.alley.base.kit.Kit;
+import dev.revere.alley.base.kit.setting.impl.mechanic.KitSettingDenyMovementImpl;
+import dev.revere.alley.base.kit.setting.impl.mechanic.KitSettingNoHungerImpl;
+import dev.revere.alley.base.kit.setting.impl.mode.*;
 import dev.revere.alley.game.match.AbstractMatch;
 import dev.revere.alley.game.match.enums.EnumMatchState;
 import dev.revere.alley.game.match.impl.MatchRoundsImpl;
@@ -15,7 +15,7 @@ import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.game.match.utility.MatchUtility;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
-import dev.revere.alley.reflection.impl.ActionBarReflectionService;
+import dev.revere.alley.tool.reflection.impl.ActionBarReflectionService;
 import dev.revere.alley.util.ListenerUtil;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.GameMode;

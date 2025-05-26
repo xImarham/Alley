@@ -6,7 +6,7 @@ import dev.revere.alley.api.menu.Menu;
 import dev.revere.alley.game.party.Party;
 import dev.revere.alley.game.party.menu.event.impl.ffa.PartyEventFFAMenu;
 import dev.revere.alley.game.party.menu.event.impl.split.PartyEventSplitMenu;
-import dev.revere.alley.locale.PartyLocale;
+import dev.revere.alley.config.locale.impl.PartyLocale;
 import dev.revere.alley.tool.item.ItemBuilder;
 import dev.revere.alley.util.chat.CC;
 import lombok.AllArgsConstructor;

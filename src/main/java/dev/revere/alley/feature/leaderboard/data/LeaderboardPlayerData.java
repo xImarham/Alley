@@ -1,6 +1,6 @@
 package dev.revere.alley.feature.leaderboard.data;
 
-import dev.revere.alley.feature.kit.Kit;
+import dev.revere.alley.base.kit.Kit;
 import lombok.Data;
 
 import java.util.UUID;

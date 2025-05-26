@@ -2,10 +2,10 @@ package dev.revere.alley.feature.layout.menu;
 
 import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.api.menu.Menu;
-import dev.revere.alley.feature.kit.enums.EnumKitCategory;
+import dev.revere.alley.base.kit.enums.EnumKitCategory;
 import dev.revere.alley.feature.layout.menu.button.LayoutButton;
 import dev.revere.alley.feature.layout.menu.button.LayoutModeSwitcherButton;
-import dev.revere.alley.feature.queue.Queue;
+import dev.revere.alley.base.queue.Queue;
 import lombok.AllArgsConstructor;
 import org.bukkit.entity.Player;
 

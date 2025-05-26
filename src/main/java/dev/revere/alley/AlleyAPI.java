@@ -1,7 +1,7 @@
 package dev.revere.alley;
 
-import dev.revere.alley.feature.arena.AbstractArena;
-import dev.revere.alley.feature.kit.Kit;
+import dev.revere.alley.base.arena.AbstractArena;
+import dev.revere.alley.base.kit.Kit;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.data.ProfileData;
 import dev.revere.alley.util.chat.CC;

@@ -3,7 +3,7 @@ package dev.revere.alley.profile.command.player.setting.toggle;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
-import dev.revere.alley.locale.ProfileLocale;
+import dev.revere.alley.config.locale.impl.ProfileLocale;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.entity.Player;

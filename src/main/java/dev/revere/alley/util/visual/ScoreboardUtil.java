@@ -11,13 +11,13 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class ScoreboardUtil {
     /**
-     * Visualizes the goals as circles.
+     * Visualizes the goals in a scoreboard format.
      *
-     * @param currentGoals The current goals.
-     * @param maxGoals     The maximum goals.
-     * @return The goals visualized as circles.
+     * @param currentGoals The current number of goals achieved.
+     * @param maxGoals     The maximum number of goals to visualize.
+     * @return A string representation of the goals, with filled and empty indicators.
      */
-    public String visualizeGoalsAsCircles(int currentGoals, int maxGoals) {
+    public String visualizeGoals(int currentGoals, int maxGoals) {
         StringBuilder stringBuilder = new StringBuilder();
         for (int i = 0; i < maxGoals; i++) {
             if (i < currentGoals) {
