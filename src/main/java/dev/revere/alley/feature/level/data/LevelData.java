@@ -1,4 +1,4 @@
-package dev.revere.alley.feature.level;
+package dev.revere.alley.feature.level.data;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -11,7 +11,7 @@ import org.bukkit.Material;
  */
 @Getter
 @Setter
-public class Level {
+public class LevelData {
     private final String name;
     private String displayName;
 
@@ -22,7 +22,7 @@ public class Level {
     private int maxElo;
 
     /**
-     * Constructor for the LevelRecord class.
+     * Constructor for the LevelData class.
      *
      * @param name        The name of the level.
      * @param displayName The display name of the level.
@@ -31,7 +31,7 @@ public class Level {
      * @param minElo      The minimum Elo rating for this level.
      * @param maxElo      The maximum Elo rating for this level.
      */
-    public Level(String name, String displayName, Material material, int durability, int minElo, int maxElo) {
+    public LevelData(String name, String displayName, Material material, int durability, int minElo, int maxElo) {
         this.name = name;
         this.displayName = displayName;
         this.material = material;

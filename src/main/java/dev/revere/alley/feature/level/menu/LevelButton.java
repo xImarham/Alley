@@ -1,7 +1,7 @@
 package dev.revere.alley.feature.level.menu;
 
 import dev.revere.alley.api.menu.Button;
-import dev.revere.alley.feature.level.Level;
+import dev.revere.alley.feature.level.data.LevelData;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.tool.item.ItemBuilder;
 import lombok.AllArgsConstructor;
@@ -17,7 +17,7 @@ import org.bukkit.inventory.ItemStack;
 @AllArgsConstructor
 public class LevelButton extends Button {
     private final Profile profile;
-    private final Level level;
+    private final LevelData level;
 
     @Override
     public ItemStack getButtonItem(Player player) {

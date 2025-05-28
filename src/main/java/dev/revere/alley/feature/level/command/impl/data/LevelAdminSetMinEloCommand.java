@@ -4,7 +4,7 @@ import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.feature.level.LevelService;
-import dev.revere.alley.feature.level.Level;
+import dev.revere.alley.feature.level.data.LevelData;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.command.CommandSender;
 
@@ -27,7 +27,7 @@ public class LevelAdminSetMinEloCommand extends BaseCommand {
 
         String levelName = args[0];
         LevelService levelService = this.plugin.getLevelService();
-        Level level = levelService.getLevel(levelName);
+        LevelData level = levelService.getLevel(levelName);
         if (level == null) {
             sender.sendMessage(CC.translate("&cA level with that name does not exist!"));
             return;
