@@ -55,6 +55,22 @@ public class ActionBarReflectionService implements IReflection {
     }
 
     /**
+     * Method to send an action bar message to a player.
+     *
+     * @param player  The player to send the message to.
+     * @param message The message to send.
+     */
+    public void sendMessage(Player player, String message) {
+        try {
+            IChatBaseComponent chatBaseComponent = IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + CC.translate(message) + "\"}");
+            PacketPlayOutChat packet = new PacketPlayOutChat(chatBaseComponent, (byte) 2);
+            this.sendPacket(player, packet);
+        } catch (Exception exception) {
+            Logger.logException("An error occurred while trying to send an action bar message to " + player.getName(), exception);
+        }
+    }
+
+    /**
      * Sends a death message to the killer.
      *
      * @param killer The player who killed the victim.
