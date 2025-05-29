@@ -54,6 +54,7 @@ public class KitCommand extends BaseCommand {
         new KitToggleFFACommand();
         new KitSetFfaSlotCommand();
         new KitSetCategoryCommand();
+        new KitSetEditableCommand();
     }
 
     @SuppressWarnings("unused")
@@ -65,7 +66,7 @@ public class KitCommand extends BaseCommand {
                     "list", "saveall", "settings", "save", "view", "viewsettings", "delete", "create",
                     "seticon", "setinv", "getinv", "setdesc", "setdisclaimer", "seteditorslot",
                     "setrankedslot", "setslotall", "setunrankedslot", "setffaslot", "setsetting",
-                    "setdisplayname", "setpotion", "toggleffa", "setupffa", "setcategory"
+                    "setdisplayname", "setpotion", "toggleffa", "setupffa", "setcategory", "seteditable"
             ));
         }
 
