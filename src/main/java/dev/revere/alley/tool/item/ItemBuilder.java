@@ -8,6 +8,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.SkullMeta;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -142,6 +143,20 @@ public class ItemBuilder implements Listener {
 
     public ItemBuilder commandEnabled(boolean enabled) {
         this.commandEnabled = enabled;
+        return this;
+    }
+
+    public ItemBuilder setSkull(String owner) {
+        if (itemStack.getType() != Material.SKULL_ITEM) {
+            throw new IllegalArgumentException("ItemStack must be a skull to set an owner.");
+        }
+
+        SkullMeta meta = (SkullMeta) itemStack.getItemMeta();
+        meta.setOwner(Bukkit.getPlayer(owner) != null ? Bukkit.getPlayer(owner).getName() : owner);
+        itemStack.setItemMeta(meta);
+
+        this.durability(3);
+
         return this;
     }
 
