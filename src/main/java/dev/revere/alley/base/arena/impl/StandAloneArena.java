@@ -3,14 +3,19 @@ package dev.revere.alley.base.arena.impl;
 import dev.revere.alley.Alley;
 import dev.revere.alley.base.arena.AbstractArena;
 import dev.revere.alley.base.arena.enums.EnumArenaType;
+import dev.revere.alley.game.match.impl.MatchBedImpl;
 import dev.revere.alley.game.match.impl.MatchRoundsImpl;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
+import dev.revere.alley.profile.Profile;
 import dev.revere.alley.tool.serializer.Serializer;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Location;
+import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
+
+import java.util.UUID;
 
 /**
  * @author Emmy
@@ -71,8 +76,10 @@ public class StandAloneArena extends AbstractArena {
         config.set(name + ".enabled", this.isEnabled());
         config.set(name + ".display-name", this.getDisplayName());
 
-        if (this.team1Portal != null) config.set(name + ".team-one-portal", Serializer.serializeLocation(this.team1Portal));
-        if (this.team2Portal != null) config.set(name + ".team-two-portal", Serializer.serializeLocation(this.team2Portal));
+        if (this.team1Portal != null)
+            config.set(name + ".team-one-portal", Serializer.serializeLocation(this.team1Portal));
+        if (this.team2Portal != null)
+            config.set(name + ".team-two-portal", Serializer.serializeLocation(this.team2Portal));
 
         config.set(name + ".height-limit", this.heightLimit);
 
@@ -99,5 +106,33 @@ public class StandAloneArena extends AbstractArena {
     public boolean isEnemyPortal(MatchRoundsImpl match, Location playerLocation, GameParticipant<MatchGamePlayerImpl> playerTeam) {
         Location enemyPortal = playerTeam == match.getParticipantA() ? this.team2Portal : this.team1Portal;
         return playerLocation.distance(enemyPortal) < this.portalRadius;
+    }
+
+    /**
+     * Check if the block is an enemy bed.
+     *
+     * @param block   The block to check.
+     * @param breakerParticipant The player who is breaking the bed.
+     * @return Whether the block is an enemy bed or not.
+     */
+    public boolean isEnemyBed(Block block, GameParticipant<MatchGamePlayerImpl> breakerParticipant) {
+        Location bedLocation = block.getLocation();
+
+        UUID breakerUUID = breakerParticipant.getPlayer().getUuid();
+        Profile profile = Alley.getInstance().getProfileService().getProfile(breakerUUID);
+
+        Location spawnA = this.getPos1();
+        Location spawnB = this.getPos2();
+
+        MatchBedImpl match = (MatchBedImpl) profile.getMatch();
+
+        boolean isBreakerTeamA = match != null && match.getParticipantA() == breakerParticipant;
+        Location ownSpawn = isBreakerTeamA ? spawnA : spawnB;
+        Location enemySpawn = isBreakerTeamA ? spawnB : spawnA;
+
+        double distanceToOwn = bedLocation.distanceSquared(ownSpawn);
+        double distanceToEnemy = bedLocation.distanceSquared(enemySpawn);
+
+        return distanceToEnemy < distanceToOwn;
     }
 }

@@ -3,15 +3,22 @@ package dev.revere.alley.game.match.listener.impl;
 import dev.revere.alley.Alley;
 import dev.revere.alley.base.arena.impl.StandAloneArena;
 import dev.revere.alley.base.kit.setting.impl.mechanic.KitSettingBuildImpl;
+import dev.revere.alley.base.kit.setting.impl.mode.KitSettingBedImpl;
 import dev.revere.alley.base.kit.setting.impl.mode.KitSettingSpleefImpl;
 import dev.revere.alley.game.match.AbstractMatch;
 import dev.revere.alley.game.match.enums.EnumMatchState;
+import dev.revere.alley.game.match.impl.MatchBedImpl;
+import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
+import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
+import dev.revere.alley.tool.reflection.impl.TitleReflectionService;
 import dev.revere.alley.util.RayTracerUtil;
+import dev.revere.alley.util.SoundUtil;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.EntityType;
@@ -24,6 +31,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -53,8 +61,11 @@ public class MatchBlockListener implements Listener {
             return;
         }
 
+        GameParticipant<MatchGamePlayerImpl> participant = match.getParticipant(player);
+
         switch (profile.getState()) {
             case PLAYING:
+                player.sendMessage("calling block break event");
                 EnumMatchState matchState = match.getState();
                 if (matchState == EnumMatchState.STARTING || matchState == EnumMatchState.ENDING_MATCH || matchState == EnumMatchState.RESTARTING_ROUND) {
                     event.setCancelled(true);
@@ -62,6 +73,59 @@ public class MatchBlockListener implements Listener {
                 }
 
                 if (match.getKit().isSettingEnabled(KitSettingBuildImpl.class)) {
+                    if (match.getKit().isSettingEnabled(KitSettingBedImpl.class)) {
+                        MatchBedImpl matchBed = (MatchBedImpl) profile.getMatch();
+                        if (matchBed == null) {
+                            event.setCancelled(true);
+                            return;
+                        }
+
+                        Block block = event.getBlock();
+                        if (block.getType() != Material.BED_BLOCK) {
+                            event.setCancelled(true);
+                            return;
+                        }
+
+                        StandAloneArena arena = (StandAloneArena) match.getArena();
+                        if (!arena.isEnemyBed(block, participant)) {
+                            player.sendMessage(CC.translate("You cannot break your own bed!"));
+                            event.setCancelled(true);
+                            return;
+                        }
+
+                        GameParticipant<MatchGamePlayerImpl> opponent = matchBed.getParticipantA().containsPlayer(player.getUniqueId())
+                                ? matchBed.getParticipantB()
+                                : matchBed.getParticipantA();
+
+                        if (opponent == null) {
+                            event.setCancelled(true);
+                            return;
+                        }
+
+                        opponent.getPlayer().getData().setBedBroken(true);
+
+                        match.sendMessage("");
+                        match.sendMessage(CC.translate("&6&lBED DESTRUCTION!"));
+                        match.sendMessage(CC.translate(" &b" + player.getName() + " &7has destroyed the bed of &b" + opponent.getPlayer().getUsername() + "&7!"));
+                        match.sendMessage("");
+
+                        List<GameParticipant<MatchGamePlayerImpl>> participants = match.getParticipants();
+
+                        participants.forEach(
+                                p -> {
+                                    SoundUtil.playCustomSound(p.getPlayer().getPlayer(), Sound.ENDERDRAGON_GROWL, 1.0F, 1.0F);
+                                    Alley.getInstance().getReflectionRepository().getReflectionService(TitleReflectionService.class).sendTitle(
+                                            p.getPlayer().getPlayer(),
+                                            "&6&lBED DESTRUCTION!",
+                                            CC.translate(" &b" + player.getName() + " &7has destroyed the bed of &b" + opponent.getPlayer().getUsername() + "&7!"),
+                                            10, 70, 20
+                                    );
+                                }
+                        );
+
+                        return;
+                    }
+
                     BlockState blockState = event.getBlock().getState();
 
                     if (match.getPlacedBlocks().containsKey(blockState)) {
