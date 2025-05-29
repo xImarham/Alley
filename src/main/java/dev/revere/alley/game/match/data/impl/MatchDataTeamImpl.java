@@ -14,8 +14,8 @@ import java.util.UUID;
  */
 @Getter
 public class MatchDataTeamImpl extends AbstractMatchData {
-    private final List<UUID> playerTeam;
-    private final List<UUID> opponentTeam;
+    private final List<UUID> players;
+    private final List<UUID> opponentPlayers;
 
     private final List<UUID> winners;
 
@@ -27,17 +27,17 @@ public class MatchDataTeamImpl extends AbstractMatchData {
     /**
      * Constructor for the MatchDataTeamImpl class.
      *
-     * @param playerTeam        The list of player UUIDs in the team.
-     * @param opponentTeam      The list of opponent UUIDs in the team.
+     * @param players           The list of player UUIDs in the team.
+     * @param opponentPlayers   The list of opponent UUIDs in the team.
      * @param winners           The list of winner UUIDs.
      * @param winnerTeam        The name of the winning team.
      * @param snapshots         The list of snapshots for the team.
      * @param opponentSnapshots The list of snapshots for the opponent team.
      */
-    public MatchDataTeamImpl(String kit, String arena, List<UUID> playerTeam, List<UUID> opponentTeam, List<UUID> winners, String winnerTeam, List<Snapshot> snapshots, List<Snapshot> opponentSnapshots) {
+    public MatchDataTeamImpl(String kit, String arena, List<UUID> players, List<UUID> opponentPlayers, List<UUID> winners, String winnerTeam, List<Snapshot> snapshots, List<Snapshot> opponentSnapshots) {
         super(kit, arena);
-        this.playerTeam = playerTeam;
-        this.opponentTeam = opponentTeam;
+        this.players = players;
+        this.opponentPlayers = opponentPlayers;
         this.winners = winners;
         this.winnerTeam = winnerTeam;
         this.snapshots = snapshots;
