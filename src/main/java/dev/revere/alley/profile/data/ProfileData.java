@@ -5,6 +5,7 @@ import dev.revere.alley.Alley;
 import dev.revere.alley.base.kit.Kit;
 import dev.revere.alley.base.kit.setting.impl.mode.KitSettingRankedImpl;
 import dev.revere.alley.feature.title.record.TitleRecord;
+import dev.revere.alley.game.match.data.AbstractMatchData;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.data.impl.*;
 import dev.revere.alley.util.chat.CC;
@@ -35,6 +36,8 @@ public class ProfileData {
     private ProfileCosmeticData cosmeticData;
     private ProfilePlayTimeData playTimeData;
 
+    private List<AbstractMatchData> previousMatches;
+
     private List<String> unlockedTitles;
 
     private String selectedTitle = "";
@@ -53,6 +56,7 @@ public class ProfileData {
         this.initializeMaps();
         this.feedDataClasses();
         this.initializeDataClasses();
+        this.previousMatches = new ArrayList<>();
         this.unlockedTitles = new ArrayList<>();
     }
 
