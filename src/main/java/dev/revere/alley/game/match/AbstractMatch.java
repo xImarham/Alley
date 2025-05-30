@@ -3,6 +3,13 @@ package dev.revere.alley.game.match;
 import dev.revere.alley.Alley;
 import dev.revere.alley.base.arena.AbstractArena;
 import dev.revere.alley.base.arena.impl.StandAloneArena;
+import dev.revere.alley.base.hotbar.HotbarService;
+import dev.revere.alley.base.hotbar.enums.EnumHotbarType;
+import dev.revere.alley.base.kit.Kit;
+import dev.revere.alley.base.kit.setting.impl.mode.KitSettingBattleRushImpl;
+import dev.revere.alley.base.kit.setting.impl.mode.KitSettingLivesImpl;
+import dev.revere.alley.base.kit.setting.impl.mode.KitSettingStickFightImpl;
+import dev.revere.alley.base.queue.Queue;
 import dev.revere.alley.feature.cosmetic.impl.killeffect.AbstractKillEffect;
 import dev.revere.alley.feature.cosmetic.impl.killeffect.KillEffectRepository;
 import dev.revere.alley.feature.cosmetic.impl.soundeffect.AbstractSoundEffect;
@@ -11,14 +18,7 @@ import dev.revere.alley.feature.cosmetic.interfaces.ICosmeticRepository;
 import dev.revere.alley.feature.cosmetic.repository.CosmeticRepository;
 import dev.revere.alley.feature.division.Division;
 import dev.revere.alley.feature.division.tier.DivisionTier;
-import dev.revere.alley.base.hotbar.HotbarService;
-import dev.revere.alley.base.hotbar.enums.EnumHotbarType;
-import dev.revere.alley.base.kit.Kit;
-import dev.revere.alley.base.kit.setting.impl.mode.KitSettingBattleRushImpl;
-import dev.revere.alley.base.kit.setting.impl.mode.KitSettingLivesImpl;
-import dev.revere.alley.base.kit.setting.impl.mode.KitSettingStickFightImpl;
 import dev.revere.alley.feature.layout.data.LayoutData;
-import dev.revere.alley.base.queue.Queue;
 import dev.revere.alley.game.match.enums.EnumMatchState;
 import dev.revere.alley.game.match.impl.MatchRegularImpl;
 import dev.revere.alley.game.match.impl.MatchRoundsImpl;
@@ -26,13 +26,15 @@ import dev.revere.alley.game.match.impl.kit.MatchStickFightImpl;
 import dev.revere.alley.game.match.player.GamePlayer;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
-import dev.revere.alley.game.match.runnable.other.MatchRespawnRunnable;
 import dev.revere.alley.game.match.runnable.MatchRunnable;
+import dev.revere.alley.game.match.runnable.other.MatchRespawnRunnable;
 import dev.revere.alley.game.match.snapshot.Snapshot;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.data.ProfileData;
 import dev.revere.alley.profile.enums.EnumProfileState;
+import dev.revere.alley.tool.reflection.impl.TitleReflectionService;
 import dev.revere.alley.util.PlayerUtil;
+import dev.revere.alley.util.SoundUtil;
 import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.util.visual.ProgressBarUtil;
 import lombok.Getter;
@@ -41,6 +43,7 @@ import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
@@ -602,22 +605,87 @@ public abstract class AbstractMatch {
     }
 
     /**
+     * Plays a sound for a player.
+     *
+     * @param sound The sound to play.
+     */
+    public void playSound(Sound sound) {
+        this.getParticipants().forEach(gameParticipant -> gameParticipant.getPlayers().forEach(uuid -> {
+            Player player = Alley.getInstance().getServer().getPlayer(uuid.getUuid());
+            if (player != null) {
+                SoundUtil.playCustomSound(player, sound, 1.0F, 1.0F);
+            }
+        }));
+
+        this.getSpectators().forEach(uuid -> {
+            Player player = Alley.getInstance().getServer().getPlayer(uuid);
+            if (player != null) {
+                SoundUtil.playCustomSound(player, sound, 1.0F, 1.0F);
+            }
+        });
+    }
+
+    /**
+     * Sends a title to all participants and spectators.
+     *
+     * @param title    The title to send.
+     * @param subtitle The subtitle to send.
+     * @param fadeIn   The fade-in time in ticks.
+     * @param stay     The stay time in ticks.
+     * @param fadeOut  The fade-out time in ticks.
+     */
+    public void sendTitle(String title, String subtitle, int fadeIn, int stay, int fadeOut) {
+        this.getParticipants().forEach(gameParticipant -> gameParticipant.getPlayers().forEach(uuid -> {
+            Player player = Alley.getInstance().getServer().getPlayer(uuid.getUuid());
+            if (player != null) {
+                Alley.getInstance().getReflectionRepository().getReflectionService(TitleReflectionService.class).sendTitle(
+                        player,
+                        title,
+                        subtitle,
+                        fadeIn, stay, fadeOut
+                );
+            }
+        }));
+
+        this.getSpectators().forEach(uuid -> {
+            Player player = Alley.getInstance().getServer().getPlayer(uuid);
+            if (player != null) {
+                Alley.getInstance().getReflectionRepository().getReflectionService(TitleReflectionService.class).sendTitle(
+                        player,
+                        title,
+                        subtitle,
+                        fadeIn, stay, fadeOut
+                );
+            }
+        });
+    }
+
+    /**
+     * Sends a list of messages to all participants.
+     *
+     * @param messages The list of messages to send.
+     */
+    public void sendMessage(List<String> messages) {
+        messages.forEach(this::sendMessage);
+    }
+
+    /**
      * Sends a message to all participants.
      *
      * @param message The message to send.
      */
     public void sendMessage(String message) {
-        getParticipants().forEach(gameParticipant -> gameParticipant.getPlayers().forEach(uuid -> {
+        this.getParticipants().forEach(gameParticipant -> gameParticipant.getPlayers().forEach(uuid -> {
             Player player = Alley.getInstance().getServer().getPlayer(uuid.getUuid());
             if (player != null) {
-                player.sendMessage(message);
+                player.sendMessage(CC.translate(message));
             }
         }));
 
-        getSpectators().forEach(uuid -> {
+        this.getSpectators().forEach(uuid -> {
             Player player = Alley.getInstance().getServer().getPlayer(uuid);
             if (player != null) {
-                player.sendMessage(message);
+                player.sendMessage(CC.translate(message));
             }
         });
     }

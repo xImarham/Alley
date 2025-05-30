@@ -12,9 +12,7 @@ import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
-import dev.revere.alley.tool.reflection.impl.TitleReflectionService;
 import dev.revere.alley.util.RayTracerUtil;
-import dev.revere.alley.util.SoundUtil;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -31,7 +29,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.List;
+import java.util.Arrays;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -104,25 +102,25 @@ public class MatchBlockListener implements Listener {
 
                         opponent.getPlayer().getData().setBedBroken(true);
 
-                        match.sendMessage("");
-                        match.sendMessage(CC.translate("&6&lBED DESTRUCTION!"));
-                        match.sendMessage(CC.translate(" &b" + player.getName() + " &7has destroyed the bed of &b" + opponent.getPlayer().getUsername() + "&7!"));
-                        match.sendMessage("");
+                        String destructionMessage = "&6&lBED DESTRUCTION!";
+                        String subMessage = " &b" + player.getName() + " &7has destroyed the bed of &b" + opponent.getPlayer().getUsername() + "&7!";
 
-                        List<GameParticipant<MatchGamePlayerImpl>> participants = match.getParticipants();
-
-                        participants.forEach(
-                                p -> {
-                                    SoundUtil.playCustomSound(p.getPlayer().getPlayer(), Sound.ENDERDRAGON_GROWL, 1.0F, 1.0F);
-                                    Alley.getInstance().getReflectionRepository().getReflectionService(TitleReflectionService.class).sendTitle(
-                                            p.getPlayer().getPlayer(),
-                                            "&6&lBED DESTRUCTION!",
-                                            CC.translate(" &b" + player.getName() + " &7has destroyed the bed of &b" + opponent.getPlayer().getUsername() + "&7!"),
-                                            10, 70, 20
-                                    );
-                                }
+                        match.sendMessage(
+                                Arrays.asList(
+                                        "",
+                                        destructionMessage,
+                                        subMessage,
+                                        ""
+                                )
                         );
 
+                        match.sendTitle(
+                                destructionMessage,
+                                subMessage,
+                                10, 70, 20
+                        );
+
+                        match.playSound(Sound.ENDERDRAGON_GROWL);
                         return;
                     }
 
