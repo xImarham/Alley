@@ -45,20 +45,20 @@ public class MatchBedImpl extends MatchRegularImpl {
 
     @Override
     public boolean canEndMatch() {
-        return this.participantA.isAllDead() && !this.participantA.getPlayer().getData().isBedBroken()
-                || this.participantB.isAllDead() && !this.participantB.getPlayer().getData().isBedBroken();
+        return (this.participantA.isAllDead() && !this.participantA.getPlayer().getData().isBedBroken())
+                || (this.participantB.isAllDead() && !this.participantB.getPlayer().getData().isBedBroken());
     }
 
     @Override
     public boolean canEndRound() {
-        return this.participantA.isAllDead() && !this.participantA.getPlayer().getData().isBedBroken()
-                || this.participantB.isAllDead() && !this.participantB.getPlayer().getData().isBedBroken();
+        return (this.participantA.isAllDead() && !this.participantA.getPlayer().getData().isBedBroken())
+                || (this.participantB.isAllDead() && !this.participantB.getPlayer().getData().isBedBroken());
     }
 
     @Override
     public boolean canStartRound() {
-        return !this.participantA.isAllDead() && !this.participantA.getPlayer().getData().isBedBroken()
-                && !this.participantB.isAllDead() && !this.participantB.getPlayer().getData().isBedBroken();
+        return (!this.participantA.isAllDead() && !this.participantA.getPlayer().getData().isBedBroken())
+                && (!this.participantB.isAllDead() && !this.participantB.getPlayer().getData().isBedBroken());
     }
 
     @Override
