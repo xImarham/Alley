@@ -63,7 +63,6 @@ public class MatchBlockListener implements Listener {
 
         switch (profile.getState()) {
             case PLAYING:
-                player.sendMessage("calling block break event");
                 EnumMatchState matchState = match.getState();
                 if (matchState == EnumMatchState.STARTING || matchState == EnumMatchState.ENDING_MATCH || matchState == EnumMatchState.RESTARTING_ROUND) {
                     event.setCancelled(true);
