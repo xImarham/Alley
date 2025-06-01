@@ -32,12 +32,12 @@ public class TablistVisualizer implements ITablist {
 
     @Override
     public List<String> getHeader(Player player) {
-        return this.plugin.getConfigService().getTablistConfig().getStringList("tablist.header");
+        return this.plugin.getConfigService().getTabListConfig().getStringList("tablist.header");
     }
 
     @Override
     public List<String> getFooter(Player player) {
-        return this.plugin.getConfigService().getTablistConfig().getStringList("tablist.footer");
+        return this.plugin.getConfigService().getTabListConfig().getStringList("tablist.footer");
     }
 
     @Override

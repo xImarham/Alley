@@ -269,16 +269,16 @@ public class Alley extends JavaPlugin {
     }
 
     private void runTasks() {
-        final Map<String, Runnable> runnables = new LinkedHashMap<>();
+        final Map<String, Runnable> tasks = new LinkedHashMap<>();
 
-        runnables.put(RepositoryCleanupTask.class.getSimpleName(), () -> new RepositoryCleanupTask().runTaskTimer(this, 0L, 40L));
-        runnables.put(ArrowRemovalTask.class.getSimpleName(), () -> new ArrowRemovalTask().runTaskTimer(this, 20L, 20L));
+        tasks.put(RepositoryCleanupTask.class.getSimpleName(), () -> new RepositoryCleanupTask().runTaskTimer(this, 0L, 40L));
+        tasks.put(ArrowRemovalTask.class.getSimpleName(), () -> new ArrowRemovalTask().runTaskTimer(this, 20L, 20L));
 
-        if (this.configService.getTablistConfig().getBoolean("tablist.enabled")) {
-            runnables.put(TablistUpdateTask.class.getSimpleName(), () -> new TablistUpdateTask().runTaskTimer(this, 0L, 20L));
+        if (this.configService.getTabListConfig().getBoolean("tablist.enabled")) {
+            tasks.put(TablistUpdateTask.class.getSimpleName(), () -> new TablistUpdateTask().runTaskTimer(this, 0L, 20L));
         }
 
-        runnables.forEach(Logger::logTimeTask);
+        tasks.forEach(Logger::logTimeTask);
     }
 
     private void initializeEssentials() {

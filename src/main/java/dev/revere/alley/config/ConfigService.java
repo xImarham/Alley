@@ -20,17 +20,10 @@ public class ConfigService {
     private final Map<String, FileConfiguration> fileConfigurations;
     private final Map<String, File> configFiles;
 
-    private final FileConfiguration settingsConfig;
-    private final FileConfiguration messagesConfig;
-    private final FileConfiguration databaseConfig;
-    private final FileConfiguration kitsConfig;
-    private final FileConfiguration arenasConfig;
-    private final FileConfiguration scoreboardConfig;
-    private final FileConfiguration tablistConfig;
-    private final FileConfiguration divisionsConfig;
-    private final FileConfiguration menusConfig;
-    private final FileConfiguration titlesConfig;
-    private final FileConfiguration levelsConfig;
+    private final FileConfiguration settingsConfig, messagesConfig,
+            databaseConfig, kitsConfig, arenasConfig,
+            scoreboardConfig, tabListConfig, divisionsConfig,
+            menusConfig, titlesConfig, levelsConfig;
 
     private final String[] configFileNames = {
             "settings.yml", "messages.yml", "menus.yml",
@@ -53,7 +46,7 @@ public class ConfigService {
         this.kitsConfig = this.getConfig("storage/kits.yml");
         this.arenasConfig = this.getConfig("storage/arenas.yml");
         this.scoreboardConfig = this.getConfig("providers/scoreboard.yml");
-        this.tablistConfig = this.getConfig("providers/tablist.yml");
+        this.tabListConfig = this.getConfig("providers/tablist.yml");
         this.divisionsConfig = this.getConfig("storage/divisions.yml");
         this.menusConfig = this.getConfig("menus.yml");
         this.titlesConfig = this.getConfig("storage/titles.yml");
