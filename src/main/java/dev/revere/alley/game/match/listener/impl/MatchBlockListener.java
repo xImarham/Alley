@@ -100,6 +100,7 @@ public class MatchBlockListener implements Listener {
                             return;
                         }
 
+                        match.addBlockToBrokenBlocksMap(block.getState(), block.getLocation());
                         opponent.getPlayer().getData().setBedBroken(true);
 
                         String destructionMessage = "&6&lBED DESTRUCTION!";
