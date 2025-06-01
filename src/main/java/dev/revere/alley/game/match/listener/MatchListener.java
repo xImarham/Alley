@@ -87,7 +87,10 @@ public class MatchListener implements Listener {
                     return;
                 }
 
-                if (matchKit.isSettingEnabled(KitSettingLivesImpl.class) || matchKit.isSettingEnabled(KitSettingBattleRushImpl.class)) {
+                if (matchKit.isSettingEnabled(KitSettingLivesImpl.class)
+                        || matchKit.isSettingEnabled(KitSettingBattleRushImpl.class)
+                        || matchKit.isSettingEnabled(KitSettingBedImpl.class)
+                        || matchKit.isSettingEnabled(KitSettingStickFightImpl.class)) {
                     player.setHealth(0);
                     player.setAllowFlight(true);
                     player.setFlying(true);
@@ -160,6 +163,7 @@ public class MatchListener implements Listener {
             Kit matchKit = profile.getMatch().getKit();
             if (matchKit.isSettingEnabled(KitSettingLivesImpl.class)
                     || matchKit.isSettingEnabled(KitSettingBattleRushImpl.class)
+                    || matchKit.isSettingEnabled(KitSettingBedImpl.class)
                     || matchKit.isSettingEnabled(KitSettingStickFightImpl.class)) {
                 return;
             }

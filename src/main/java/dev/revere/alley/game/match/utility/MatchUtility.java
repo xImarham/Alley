@@ -2,6 +2,7 @@ package dev.revere.alley.game.match.utility;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.base.arena.AbstractArena;
+import dev.revere.alley.base.kit.setting.impl.mode.*;
 import dev.revere.alley.game.match.AbstractMatch;
 import dev.revere.alley.game.match.enums.EnumMatchState;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
@@ -26,7 +27,7 @@ import org.bukkit.entity.Player;
 public class MatchUtility {
 
     /**
-     * Check if a location is beyond the bounds of an arena.
+     * Check if a location is beyond the bounds of an arena excluding specific conditions.
      *
      * @param location the location
      * @param profile  the profile
@@ -45,7 +46,12 @@ public class MatchUtility {
         double maxZ = Math.max(corner1.getZ(), corner2.getZ());
 
         boolean withinBounds;
-        if (profile.getMatch().getState() == EnumMatchState.ENDING_MATCH) {
+        if (profile.getMatch().getState() == EnumMatchState.ENDING_MATCH
+                || profile.getMatch().getKit().isSettingEnabled(KitSettingBedImpl.class)
+                || profile.getMatch().getKit().isSettingEnabled(KitSettingLivesImpl.class)
+                || profile.getMatch().getKit().isSettingEnabled(KitSettingBattleRushImpl.class)
+                || profile.getMatch().getKit().isSettingEnabled(KitSettingStickFightImpl.class)
+                || profile.getMatch().getKit().isSettingEnabled(KitSettingRankedImpl.class)) {
             withinBounds = location.getX() >= minX && location.getX() <= maxX && location.getZ() >= minZ && location.getZ() <= maxZ;
         } else {
             withinBounds = location.getX() >= minX && location.getX() <= maxX && location.getY() >= minY && location.getY() <= maxY && location.getZ() >= minZ && location.getZ() <= maxZ;
