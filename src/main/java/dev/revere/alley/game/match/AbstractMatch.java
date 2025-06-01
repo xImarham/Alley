@@ -760,17 +760,16 @@ public abstract class AbstractMatch {
     }
 
     /**
-     * Sends the division progress to the winner of the match.
+     * Sends the progress of the winner to the player.
      *
-     * @param winner The winner of the match.
+     * @param winner          The winner of the match.
+     * @param currentDivision The current division of the winner.
+     * @param currentTier     The current tier of the winner.
      */
-    public void sendProgressToWinner(Player winner) {
+    public void sendProgressToWinner(Player winner, Division currentDivision, DivisionTier currentTier) {
         Profile winnerProfile = Alley.getInstance().getProfileService().getProfile(winner.getUniqueId());
         ProfileData profileData = winnerProfile.getProfileData();
         int wins = profileData.getUnrankedKitData().get(this.getKit().getName()).getWins();
-
-        Division currentDivision = profileData.getUnrankedKitData().get(this.getKit().getName()).getDivision();
-        DivisionTier currentTier = profileData.getUnrankedKitData().get(this.getKit().getName()).getTier();
 
         List<DivisionTier> tiers = currentDivision.getTiers();
         int tierIndex = tiers.indexOf(currentTier);
@@ -790,9 +789,16 @@ public abstract class AbstractMatch {
         int requiredWinsToUnlock = nextTierWins - wins;
         String winOrWins = requiredWinsToUnlock == 1 ? "win" : "wins";
 
+        String progressLine;
+        if (wins == nextTierWins) {
+            progressLine = " &b&l● &fUNLOCKED &b" + nextRank + "&f!";
+        } else {
+            progressLine = " &b&l● &fUnlock &b" + nextRank + " &fwith " + requiredWinsToUnlock + " more " + winOrWins + "!";
+        }
+
         Arrays.asList(
                 "&b&lProgress",
-                " &b&l● &fUnlock &b" + nextRank + " &fwith " + requiredWinsToUnlock + " more " + winOrWins + "!",
+                progressLine,
                 "  &7(" + progressBar + "&7) " + progressPercent,
                 " &b&l● &fDaily Streak: &b" + "N/A" + " &f(Best: " + "N/A" + ")",
                 " &b&l● &fWin Streak: &b" + "N/A" + " &f(Best: " + "N/A" + ")",

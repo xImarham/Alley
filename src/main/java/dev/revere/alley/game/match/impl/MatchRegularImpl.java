@@ -2,6 +2,9 @@ package dev.revere.alley.game.match.impl;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.base.arena.AbstractArena;
+import dev.revere.alley.feature.division.Division;
+import dev.revere.alley.feature.division.tier.DivisionTier;
+import dev.revere.alley.profile.data.ProfileData;
 import dev.revere.alley.tool.elo.EloCalculator;
 import dev.revere.alley.tool.elo.result.EloResult;
 import dev.revere.alley.tool.elo.result.OldEloResult;
@@ -127,11 +130,16 @@ public class MatchRegularImpl extends AbstractMatch {
             MatchUtility.sendConjoinedMatchResult(this, this.winner, this.loser);
         }
 
-        if (!this.isRanked()) {
-            this.sendProgressToWinner(this.winner.getPlayer().getPlayer());
-        }
+        ProfileData profileData = Alley.getInstance().getProfileService().getProfile(this.winner.getPlayer().getUuid()).getProfileData();
+        Division currentDivision = profileData.getUnrankedKitData().get(this.getKit().getName()).getDivision();
+        DivisionTier currentTier = profileData.getUnrankedKitData().get(this.getKit().getName()).getTier();
 
         this.handleData(this.winner, this.loser, this.participantA, this.participantB);
+
+        if (!this.isRanked()) {
+            this.sendProgressToWinner(this.winner.getPlayer().getPlayer(), currentDivision, currentTier);
+        }
+
         super.handleRoundEnd();
     }
 

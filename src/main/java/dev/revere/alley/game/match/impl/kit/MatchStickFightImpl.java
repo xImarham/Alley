@@ -1,8 +1,11 @@
 package dev.revere.alley.game.match.impl.kit;
 
+import dev.revere.alley.Alley;
 import dev.revere.alley.base.arena.AbstractArena;
 import dev.revere.alley.base.kit.Kit;
 import dev.revere.alley.base.queue.Queue;
+import dev.revere.alley.feature.division.Division;
+import dev.revere.alley.feature.division.tier.DivisionTier;
 import dev.revere.alley.game.match.enums.EnumMatchState;
 import dev.revere.alley.game.match.impl.MatchRoundsImpl;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
@@ -10,6 +13,7 @@ import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.game.match.player.participant.TeamGameParticipant;
 import dev.revere.alley.game.match.snapshot.Snapshot;
 import dev.revere.alley.game.match.utility.MatchUtility;
+import dev.revere.alley.profile.data.ProfileData;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -124,11 +128,15 @@ public class MatchStickFightImpl extends MatchRoundsImpl {
                 MatchUtility.sendConjoinedMatchResult(this, this.winner, this.loser);
             }
 
-            if (!this.isRanked()) {
-                this.sendProgressToWinner(this.winner.getPlayer().getPlayer());
-            }
+            ProfileData profileData = Alley.getInstance().getProfileService().getProfile(this.winner.getPlayer().getUuid()).getProfileData();
+            Division currentDivision = profileData.getUnrankedKitData().get(this.getKit().getName()).getDivision();
+            DivisionTier currentTier = profileData.getUnrankedKitData().get(this.getKit().getName()).getTier();
 
             this.handleData(this.winner, this.loser, this.participantA, this.participantB);
+
+            if (!this.isRanked()) {
+                this.sendProgressToWinner(this.winner.getPlayer().getPlayer(), currentDivision, currentTier);
+            }
 
             this.getParticipants().forEach(gameParticipant -> {
                 if (gameParticipant.isAllDead()) {
