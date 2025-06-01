@@ -10,7 +10,7 @@ import lombok.Getter;
 @Getter
 public enum EnumProfileState {
     LOBBY("Lobby", "The player is in the lobby"),
-    WAITING("Waiting", "The player is waiting for a match"),
+    WAITING("Waiting", "The player is waiting to queue for an opponent"),
     PLAYING("Playing", "The player is playing a match"),
     FIGHTING_BOT("Fighting Bot", "The player is fighting a bot"),
     SPECTATING("Spectating", "The player is spectating a match"),
