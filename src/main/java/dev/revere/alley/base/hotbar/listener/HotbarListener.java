@@ -82,13 +82,6 @@ public class HotbarListener implements Listener {
                                 break;
                         }
                         break;
-//                    case WAITING:
-//                        switch (hotbarItem.getHotbarItems()) {
-//                            case PLAY_PARKOUR:
-//                                Alley.getInstance().getParkourService().addPlayer(player);
-//                                break;
-//                        }
-//                        break;
                 }
             }
         }

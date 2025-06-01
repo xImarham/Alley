@@ -129,7 +129,6 @@ public class Alley extends JavaPlugin {
     private DiscordBridge discordBridge;
     private TitleService titleService;
     private LevelService levelService;
-    //private ParkourService parkourService;
     private ProfanityFilter profanityFilter;
     private LayoutService layoutService;
 
@@ -230,7 +229,6 @@ public class Alley extends JavaPlugin {
         services.put(AnimationRepository.class.getSimpleName(), () -> this.animationRepository = new AnimationRepository(this));
         services.put(Assemble.class.getSimpleName() + " API", () -> this.assemble = new Assemble(this, new ScoreboardVisualizer(this)));
         services.put(ReflectionRepository.class.getSimpleName(), () -> this.reflectionRepository = new ReflectionRepository(this));
-        //services.put(ParkourService.class.getSimpleName(), () -> this.parkourService = new ParkourService(this, this.configService.getSettingsConfig().getString("parkour.starter-location")));
         services.put(ProfanityFilter.class.getSimpleName(), () -> this.profanityFilter = new ProfanityFilter(this));
         services.put(LayoutService.class.getSimpleName(), () -> this.layoutService = new LayoutService(this));
 
@@ -264,7 +262,6 @@ public class Alley extends JavaPlugin {
                 new FFACuboidListener(this.ffaSpawnService.getCuboid(), this),
                 new EmojiListener(this),
                 new CombatListener(this),
-                //new ParkourListener(this),
                 new QueueListener(),
                 new CoreChatListener(this),
                 new LayoutListener(this)

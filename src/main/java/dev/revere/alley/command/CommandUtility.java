@@ -92,7 +92,6 @@ public class CommandUtility {
             new PlaytimeCommand();
             new SpawnItemsCommand();
             new SetSpawnCommand();
-            //new SetParkourSpawnCommand();
             new SpawnCommand();
             new SetCoinsCommand();
 

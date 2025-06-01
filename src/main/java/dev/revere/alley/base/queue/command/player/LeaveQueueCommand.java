@@ -24,11 +24,6 @@ public class LeaveQueueCommand extends BaseCommand {
             return;
         }
 
-//        ParkourService parkourService = Alley.getInstance().getParkourService();
-//        if (parkourService.isPlaying(player)) {
-//            parkourService.removePlayer(player, false);
-//        }
-
         profile.getQueueProfile().getQueue().removePlayer(profile.getQueueProfile());
     }
 }

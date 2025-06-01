@@ -44,14 +44,10 @@ public class QueueRunnable implements Runnable {
                 if (queue.getProfile(profile.getUuid()).getState().equals(EnumProfileState.WAITING)) {
                     queue.getProfiles().remove(profile);
                     queue.removePlayer(profile);
+
                     Player player = Alley.getInstance().getServer().getPlayer(profile.getUuid());
-
-//                    ParkourService parkourService = Alley.getInstance().getParkourService();
-//                    if (parkourService.isPlaying(player)) {
-//                        parkourService.removePlayer(player, false);
-//                    }
-
                     player.sendMessage(CC.translate("&cYou have been removed from the queue due to inactivity."));
+
                     Alley.getInstance().getProfileService().getProfile(profile.getUuid()).setQueueProfile(null);
                     Alley.getInstance().getHotbarService().applyHotbarItems(player, EnumHotbarType.LOBBY);
                 } else {
