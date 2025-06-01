@@ -9,7 +9,10 @@ import dev.revere.alley.util.PlayerUtil;
 import dev.revere.alley.util.TaskUtil;
 import lombok.Getter;
 import org.bukkit.Location;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
+
+import java.util.Arrays;
 
 /**
  * @author Emmy
@@ -85,5 +88,27 @@ public class MatchBedImpl extends MatchRegularImpl {
     @Override
     public void handleDisconnect(Player player) {
         super.handleDisconnect(player);
+    }
+
+    public void alertBedDestruction(Player breaker, GameParticipant<MatchGamePlayerImpl> opponent) {
+        String destructionMessage = "&6&lBED DESTRUCTION!";
+        String subMessage = " &b" + breaker.getName() + " &7has destroyed the bed of &b" + opponent.getPlayer().getUsername() + "&7!";
+
+        this.sendMessage(
+                Arrays.asList(
+                        "",
+                        destructionMessage,
+                        subMessage,
+                        ""
+                )
+        );
+
+        this.sendTitle(
+                destructionMessage,
+                subMessage,
+                10, 70, 20
+        );
+
+        this.playSound(Sound.ENDERDRAGON_GROWL);
     }
 }

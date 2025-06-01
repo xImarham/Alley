@@ -103,25 +103,7 @@ public class MatchBlockListener implements Listener {
                         match.addBlockToBrokenBlocksMap(block.getState(), block.getLocation());
                         opponent.getPlayer().getData().setBedBroken(true);
 
-                        String destructionMessage = "&6&lBED DESTRUCTION!";
-                        String subMessage = " &b" + player.getName() + " &7has destroyed the bed of &b" + opponent.getPlayer().getUsername() + "&7!";
-
-                        match.sendMessage(
-                                Arrays.asList(
-                                        "",
-                                        destructionMessage,
-                                        subMessage,
-                                        ""
-                                )
-                        );
-
-                        match.sendTitle(
-                                destructionMessage,
-                                subMessage,
-                                10, 70, 20
-                        );
-
-                        match.playSound(Sound.ENDERDRAGON_GROWL);
+                        matchBed.alertBedDestruction(player, opponent);
                         return;
                     }
 
