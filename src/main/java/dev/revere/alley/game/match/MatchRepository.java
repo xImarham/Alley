@@ -51,22 +51,24 @@ public class MatchRepository {
      */
     public void createAndStartMatch(Kit kit, AbstractArena arena, GameParticipant<MatchGamePlayerImpl> participantA, GameParticipant<MatchGamePlayerImpl> participantB) {
         Queue matchingQueue = this.plugin.getQueueService().getQueues().stream()
-                .filter(queue -> queue.getKit().equals(kit) && !queue.isRanked())
+                .filter(queue -> queue.getKit().equals(kit))
                 .findFirst()
                 .orElse(null);
+
+        boolean isRanked = matchingQueue != null && matchingQueue.isRanked();
 
         AbstractMatch match;
 
         if (kit.isSettingEnabled(KitSettingLivesImpl.class)) {
-            match = new MatchLivesImpl(matchingQueue, kit, arena, false, participantA, participantB);
+            match = new MatchLivesImpl(matchingQueue, kit, arena, isRanked, participantA, participantB);
         } else if (kit.isSettingEnabled(KitSettingBattleRushImpl.class)) {
-            match = new MatchRoundsImpl(matchingQueue, kit, arena, false, participantA, participantB, 3);
+            match = new MatchRoundsImpl(matchingQueue, kit, arena, isRanked, participantA, participantB, 3);
         } else if (kit.isSettingEnabled(KitSettingStickFightImpl.class)) {
-            match = new MatchStickFightImpl(matchingQueue, kit, arena, false, participantA, participantB, 5);
+            match = new MatchStickFightImpl(matchingQueue, kit, arena, isRanked, participantA, participantB, 5);
         } else if (kit.isSettingEnabled(KitSettingBedImpl.class)) {
-            match = new MatchBedImpl(matchingQueue, kit, arena, false, participantA, participantB);
+            match = new MatchBedImpl(matchingQueue, kit, arena, isRanked, participantA, participantB);
         } else {
-            match = new MatchRegularImpl(matchingQueue, kit, arena, false, participantA, participantB);
+            match = new MatchRegularImpl(matchingQueue, kit, arena, isRanked, participantA, participantB);
         }
 
         match.startMatch();
