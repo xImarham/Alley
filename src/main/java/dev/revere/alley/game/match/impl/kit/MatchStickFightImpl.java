@@ -122,20 +122,22 @@ public class MatchStickFightImpl extends MatchRoundsImpl {
             this.setState(EnumMatchState.ENDING_MATCH);
             this.getRunnable().setStage(4);
 
-            if (this.participantA.getPlayers().size() == 1 && this.participantB.getPlayers().size() == 1) {
-                MatchUtility.sendMatchResult(this, winner.getPlayer().getPlayer().getName(), loser.getPlayer().getPlayer().getName());
-            } else {
+            if (this.isTeamMatch()) {
                 MatchUtility.sendConjoinedMatchResult(this, this.winner, this.loser);
+            } else {
+                MatchUtility.sendMatchResult(this, this.winner.getPlayer().getPlayer().getName(), this.loser.getPlayer().getPlayer().getName());
             }
 
-            ProfileData profileData = Alley.getInstance().getProfileService().getProfile(this.winner.getPlayer().getUuid()).getProfileData();
-            Division currentDivision = profileData.getUnrankedKitData().get(this.getKit().getName()).getDivision();
-            DivisionTier currentTier = profileData.getUnrankedKitData().get(this.getKit().getName()).getTier();
+            if (this.isAffectStatistics()) {
+                ProfileData profileData = Alley.getInstance().getProfileService().getProfile(this.winner.getPlayer().getUuid()).getProfileData();
+                Division currentDivision = profileData.getUnrankedKitData().get(this.getKit().getName()).getDivision();
+                DivisionTier currentTier = profileData.getUnrankedKitData().get(this.getKit().getName()).getTier();
 
-            this.handleData(this.winner, this.loser, this.participantA, this.participantB);
+                this.handleData(this.winner, this.loser, this.participantA, this.participantB);
 
-            if (!this.isRanked()) {
-                this.sendProgressToWinner(this.winner.getPlayer().getPlayer(), currentDivision, currentTier);
+                if (!this.isRanked()) {
+                    this.sendProgressToWinner(this.winner.getPlayer().getPlayer(), currentDivision, currentTier);
+                }
             }
 
             this.getParticipants().forEach(gameParticipant -> {

@@ -2,14 +2,10 @@ package dev.revere.alley.game.match.impl;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.base.arena.AbstractArena;
-import dev.revere.alley.feature.division.Division;
-import dev.revere.alley.feature.division.tier.DivisionTier;
-import dev.revere.alley.profile.data.ProfileData;
-import dev.revere.alley.tool.elo.EloCalculator;
-import dev.revere.alley.tool.elo.result.EloResult;
-import dev.revere.alley.tool.elo.result.OldEloResult;
 import dev.revere.alley.base.kit.Kit;
 import dev.revere.alley.base.queue.Queue;
+import dev.revere.alley.feature.division.Division;
+import dev.revere.alley.feature.division.tier.DivisionTier;
 import dev.revere.alley.game.match.AbstractMatch;
 import dev.revere.alley.game.match.enums.EnumMatchState;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
@@ -17,8 +13,12 @@ import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.game.match.utility.MatchUtility;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.ProfileService;
-import dev.revere.alley.tool.reflection.impl.TitleReflectionService;
+import dev.revere.alley.profile.data.ProfileData;
+import dev.revere.alley.tool.elo.EloCalculator;
+import dev.revere.alley.tool.elo.result.EloResult;
+import dev.revere.alley.tool.elo.result.OldEloResult;
 import dev.revere.alley.tool.item.ItemBuilder;
+import dev.revere.alley.tool.reflection.impl.TitleReflectionService;
 import dev.revere.alley.util.PlayerUtil;
 import lombok.Getter;
 import lombok.Setter;
@@ -124,20 +124,22 @@ public class MatchRegularImpl extends AbstractMatch {
         this.sendVictory(this.winner.getPlayer().getPlayer());
         this.sendDefeat(this.loser.getPlayer().getPlayer());
 
-        if (this.participantA.getPlayers().size() == 1 && this.participantB.getPlayers().size() == 1) {
-            MatchUtility.sendMatchResult(this, this.winner.getPlayer().getPlayer().getName(), this.loser.getPlayer().getPlayer().getName());
-        } else {
+        if (this.isTeamMatch()) {
             MatchUtility.sendConjoinedMatchResult(this, this.winner, this.loser);
+        } else {
+            MatchUtility.sendMatchResult(this, this.winner.getPlayer().getPlayer().getName(), this.loser.getPlayer().getPlayer().getName());
         }
 
-        ProfileData profileData = Alley.getInstance().getProfileService().getProfile(this.winner.getPlayer().getUuid()).getProfileData();
-        Division currentDivision = profileData.getUnrankedKitData().get(this.getKit().getName()).getDivision();
-        DivisionTier currentTier = profileData.getUnrankedKitData().get(this.getKit().getName()).getTier();
+        if (this.isAffectStatistics()) {
+            ProfileData profileData = Alley.getInstance().getProfileService().getProfile(this.winner.getPlayer().getUuid()).getProfileData();
+            Division currentDivision = profileData.getUnrankedKitData().get(this.getKit().getName()).getDivision();
+            DivisionTier currentTier = profileData.getUnrankedKitData().get(this.getKit().getName()).getTier();
 
-        this.handleData(this.winner, this.loser, this.participantA, this.participantB);
+            this.handleData(this.winner, this.loser, this.participantA, this.participantB);
 
-        if (!this.isRanked()) {
-            this.sendProgressToWinner(this.winner.getPlayer().getPlayer(), currentDivision, currentTier);
+            if (!this.isRanked()) {
+                this.sendProgressToWinner(this.winner.getPlayer().getPlayer(), currentDivision, currentTier);
+            }
         }
 
         super.handleRoundEnd();

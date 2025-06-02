@@ -118,7 +118,7 @@ public class QueueRunnable implements Runnable {
      */
     private void processGame(Queue queue, AbstractArena arena, GameParticipantList gameParticipantList, QueueProfile firstProfile, QueueProfile secondProfile) {
         Alley.getInstance().getMatchRepository().createAndStartMatch(
-                queue.getKit(), arena, gameParticipantList.participantA, gameParticipantList.participantB
+                queue.getKit(), arena, gameParticipantList.participantA, gameParticipantList.participantB, false, true
         );
 
         this.clearQueueProfiles(queue, firstProfile, secondProfile);

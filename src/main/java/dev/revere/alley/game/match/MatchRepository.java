@@ -49,7 +49,7 @@ public class MatchRepository {
      * @param participantA The first participant in the match.
      * @param participantB The second participant in the match.
      */
-    public void createAndStartMatch(Kit kit, AbstractArena arena, GameParticipant<MatchGamePlayerImpl> participantA, GameParticipant<MatchGamePlayerImpl> participantB) {
+    public void createAndStartMatch(Kit kit, AbstractArena arena, GameParticipant<MatchGamePlayerImpl> participantA, GameParticipant<MatchGamePlayerImpl> participantB, boolean teamMatch, boolean affectStatistics) {
         Queue matchingQueue = this.plugin.getQueueService().getQueues().stream()
                 .filter(queue -> queue.getKit().equals(kit))
                 .findFirst()
@@ -70,6 +70,9 @@ public class MatchRepository {
         } else {
             match = new MatchRegularImpl(matchingQueue, kit, arena, isRanked, participantA, participantB);
         }
+
+        match.setTeamMatch(teamMatch);
+        match.setAffectStatistics(affectStatistics);
 
         match.startMatch();
     }

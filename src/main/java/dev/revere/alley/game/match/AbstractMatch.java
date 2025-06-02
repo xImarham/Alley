@@ -73,6 +73,8 @@ public abstract class AbstractMatch {
     private Map<BlockState, Location> placedBlocks;
 
     private boolean ranked;
+    private boolean teamMatch;
+    private boolean affectStatistics;
 
     private long startTime;
     private long endTime;
@@ -80,15 +82,18 @@ public abstract class AbstractMatch {
     /**
      * Constructor for the AbstractMatch class.
      *
-     * @param queue The queue of the match.
-     * @param kit   The kit of the match.
-     * @param arena The matchArena of the match.
+     * @param queue            The queue associated with the match.
+     * @param kit              The kit used in the match.
+     * @param arena            The arena where the match takes place.
+     * @param ranked           Whether the match is ranked.
      */
     public AbstractMatch(Queue queue, Kit kit, AbstractArena arena, boolean ranked) {
         this.queue = queue;
         this.kit = kit;
         this.arena = arena;
         this.ranked = ranked;
+        this.teamMatch = false;
+        this.affectStatistics = true;
         this.snapshots = new ArrayList<>();
         this.placedBlocks = new HashMap<>();
         this.brokenBlocks = new HashMap<>();
