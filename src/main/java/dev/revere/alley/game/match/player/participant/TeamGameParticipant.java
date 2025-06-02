@@ -6,6 +6,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * @author Remi
+ * @project Alley
+ * @date 5/21/2024
+ */
 public class TeamGameParticipant<T extends GamePlayer> extends GameParticipant<T> {
     private final List<T> players;
 
@@ -21,13 +26,33 @@ public class TeamGameParticipant<T extends GamePlayer> extends GameParticipant<T
         this.players.add(t);
     }
 
+    /**
+     * Method to retrieve the players in the team participant.
+     *
+     * @return the list of players in the team participant.
+     */
     @Override
     public List<T> getPlayers() {
         return this.players;
     }
 
+    /**
+     * Gets the size of all players added to the list of players in the team participant.
+     *
+     * @return the size of the player list.
+     */
     @Override
-    public int getAliveCount() {
+    public int getPlayerSize() {
+        return this.players.size();
+    }
+
+    /**
+     * Gets the amount of players that are alive in the team participant.
+     *
+     * @return the amount of alive players in the team participant.
+     */
+    @Override
+    public int getAlivePlayerSize() {
         int i = 0;
 
         for (GamePlayer gamePlayer : this.players) {
@@ -39,6 +64,11 @@ public class TeamGameParticipant<T extends GamePlayer> extends GameParticipant<T
         return i;
     }
 
+    /**
+     * Checks if all players in the team participant are dead or disconnected.
+     *
+     * @return true if all players are dead or disconnected, false otherwise.
+     */
     @Override
     public boolean isAllDead() {
         int i = 0;
@@ -52,6 +82,12 @@ public class TeamGameParticipant<T extends GamePlayer> extends GameParticipant<T
         return this.players.size() == i;
     }
 
+    /**
+     * Method to determine whether the provided UUID is contained within the team participant's player list.
+     *
+     * @param uuid The UUID of the player.
+     * @return true if the participant contains the player, false otherwise.
+     */
     @Override
     public boolean containsPlayer(UUID uuid) {
         for (GamePlayer gamePlayer : this.players) {
@@ -63,6 +99,11 @@ public class TeamGameParticipant<T extends GamePlayer> extends GameParticipant<T
         return false;
     }
 
+    /**
+     * Gets the conjoined names of all players in the team participant.
+     *
+     * @return a string containing the conjoined names of the players.
+     */
     @Override
     public String getConjoinedNames() {
         StringBuilder builder = new StringBuilder();

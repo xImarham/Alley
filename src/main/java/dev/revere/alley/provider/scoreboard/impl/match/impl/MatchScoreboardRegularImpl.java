@@ -1,6 +1,7 @@
 package dev.revere.alley.provider.scoreboard.impl.match.impl;
 
 import dev.revere.alley.Alley;
+import dev.revere.alley.game.match.impl.MatchRegularImpl;
 import dev.revere.alley.provider.scoreboard.impl.match.IMatchScoreboard;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
@@ -32,14 +33,23 @@ public class MatchScoreboardRegularImpl implements IMatchScoreboard {
     public List<String> getLines(Profile profile, Player player, GameParticipant<MatchGamePlayerImpl> you, GameParticipant<MatchGamePlayerImpl> opponent) {
         List<String> scoreboardLines = new ArrayList<>();
 
-        for (String line : this.plugin.getConfigService().getScoreboardConfig().getStringList("scoreboard.lines.playing.solo.regular-match")) {
+        MatchRegularImpl regularMatch = (MatchRegularImpl) profile.getMatch();
+        boolean isTeamMatch = regularMatch.isTeamMatch();
+        String configPath = isTeamMatch ? "scoreboard.lines.playing.team.regular-match" : "scoreboard.lines.playing.solo.regular-match";
+
+        for (String line : this.plugin.getConfigService().getScoreboardConfig().getStringList(configPath)) {
             scoreboardLines.add(CC.translate(line)
                     .replaceAll("\\{opponent}", this.getColoredName(opponent.getPlayer().getPlayer()))
                     .replaceAll("\\{opponent-ping}", String.valueOf(this.getPing(opponent.getPlayer().getPlayer())))
                     .replaceAll("\\{player-ping}", String.valueOf(this.getPing(player)))
-                    .replaceAll("\\{duration}", profile.getMatch().getDuration())
-                    .replaceAll("\\{arena}", profile.getMatch().getArena().getDisplayName() == null ? "&c&lNULL" : profile.getMatch().getArena().getDisplayName())
-                    .replaceAll("\\{kit}", profile.getMatch().getKit().getDisplayName()));
+                    .replaceAll("\\{duration}", regularMatch.getDuration())
+                    .replaceAll("\\{arena}", regularMatch.getArena().getDisplayName() == null ? "&c&lNULL" : regularMatch.getArena().getDisplayName())
+                    .replaceAll("\\{kit}", regularMatch.getKit().getDisplayName())
+                    .replaceAll("\\{playersA}", String.valueOf(regularMatch.getParticipantA().getPlayerSize()))
+                    .replaceAll("\\{playersB}", String.valueOf(regularMatch.getParticipantB().getPlayerSize()))
+                    .replaceAll("\\{aliveA}", String.valueOf(regularMatch.getParticipantA().getAlivePlayerSize()))
+                    .replaceAll("\\{aliveB}", String.valueOf(regularMatch.getParticipantB().getAlivePlayerSize()))
+            );
         }
 
         return scoreboardLines;

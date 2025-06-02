@@ -28,8 +28,17 @@ public class GameParticipant<T extends GamePlayer> {
         this.player = player;
     }
 
+    /**
+     * Gets the player associated with the participant.
+     *
+     * @return The player associated with the participant.
+     */
     public List<T> getPlayers() {
         return Collections.singletonList(this.player);
+    }
+
+    public int getPlayerSize() {
+        return 0; // 0 since this is the solo representation of a participant.
     }
 
     /**
@@ -37,7 +46,7 @@ public class GameParticipant<T extends GamePlayer> {
      *
      * @return The amount of players that are alive.
      */
-    public int getAliveCount() {
+    public int getAlivePlayerSize() {
         return this.player.isDead() ? 0 : 1;
     }
 

@@ -33,6 +33,10 @@ public interface IMatchScoreboard {
      * @return The formatted player name with color.
      */
     default String getColoredName(Player player) {
+        if (player == null) {
+            return "null";
+        }
+
         return Alley.getInstance().getCoreAdapter().getCore().getPlayerColor(player) + player.getName();
     }
 
@@ -43,6 +47,10 @@ public interface IMatchScoreboard {
      * @return The ping of the player.
      */
     default int getPing(Player player) {
+        if (player == null) {
+            return 0;
+        }
+
         return ((CraftPlayer) player).getHandle().ping;
     }
 }
