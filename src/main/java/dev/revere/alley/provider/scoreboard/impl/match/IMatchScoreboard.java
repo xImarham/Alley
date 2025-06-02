@@ -1,6 +1,5 @@
 package dev.revere.alley.provider.scoreboard.impl.match;
 
-import dev.revere.alley.Alley;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.profile.Profile;
@@ -29,15 +28,11 @@ public interface IMatchScoreboard {
     /**
      * Gets the corresponding color of the player including the player's name.
      *
-     * @param player The player to get the color for.
+     * @param profile The profile of the player.
      * @return The formatted player name with color.
      */
-    default String getColoredName(Player player) {
-        if (player == null) {
-            return "null";
-        }
-
-        return Alley.getInstance().getCoreAdapter().getCore().getPlayerColor(player) + player.getName();
+    default String getColoredName(Profile profile) {
+        return profile.getNameColor() + profile.getName();
     }
 
     /**

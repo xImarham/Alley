@@ -40,7 +40,7 @@ public class MatchScoreboardRoundsImpl implements IMatchScoreboard {
 
         for (String line : this.plugin.getConfigService().getScoreboardConfig().getStringList("scoreboard.lines.playing.solo.battlerush-match")) {
             scoreboardLines.add(CC.translate(line)
-                    .replaceAll("\\{opponent}", this.getColoredName(opponent.getPlayer().getPlayer()))
+                    .replaceAll("\\{opponent}", this.getColoredName(profile))
                     .replaceAll("\\{opponent-ping}", String.valueOf(this.getPing(opponent.getPlayer().getPlayer())))
                     .replaceAll("\\{player-ping}", String.valueOf(this.getPing(player)))
                     .replaceAll("\\{time-left}", this.getFormattedTime(profile))

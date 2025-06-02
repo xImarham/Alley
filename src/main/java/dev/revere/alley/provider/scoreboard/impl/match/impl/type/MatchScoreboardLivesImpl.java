@@ -34,7 +34,7 @@ public class MatchScoreboardLivesImpl implements IMatchScoreboard {
 
         for (String line : this.plugin.getConfigService().getScoreboardConfig().getStringList("scoreboard.lines.playing.solo.lives-match")) {
             scoreboardLines.add(CC.translate(line)
-                    .replaceAll("\\{opponent}", this.getColoredName(opponent.getPlayer().getPlayer()))
+                    .replaceAll("\\{opponent}", this.getColoredName(profile))
                     .replaceAll("\\{opponent-ping}", String.valueOf(this.getPing(opponent.getPlayer().getPlayer())))
                     .replaceAll("\\{player-ping}", String.valueOf(this.getPing(player)))
                     .replaceAll("\\{player-lives}", String.valueOf(profile.getMatch().getGamePlayer(player).getData().getLives()))

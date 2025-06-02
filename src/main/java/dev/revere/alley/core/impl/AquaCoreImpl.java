@@ -3,6 +3,7 @@ package dev.revere.alley.core.impl;
 import dev.revere.alley.Alley;
 import dev.revere.alley.core.ICore;
 import dev.revere.alley.core.enums.EnumCoreType;
+import dev.revere.alley.profile.Profile;
 import dev.revere.alley.util.chat.CC;
 import me.activated.core.plugin.AquaCoreAPI;
 import org.bukkit.ChatColor;
@@ -62,9 +63,10 @@ public class AquaCoreImpl implements ICore {
 
     @Override
     public String getChatFormat(Player player, String eventMessage, String separator) {
+        Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
         String prefix = CC.translate(this.getRankPrefix(player));
         String suffix = CC.translate(this.getRankSuffix(player));
-        ChatColor color = this.getPlayerColor(player);
+        ChatColor nameColor = profile.getNameColor() != null ? profile.getNameColor() : this.getPlayerColor(player);
 
         String selectedTitle = CC.translate(Alley.getInstance().getProfileService().getProfile(player.getUniqueId()).getProfileData().getSelectedTitle());
 
@@ -72,6 +74,6 @@ public class AquaCoreImpl implements ICore {
             eventMessage = CC.translate(eventMessage);
         }
 
-        return prefix + color + player.getName() + suffix + this.aquaCoreAPI.getTagFormat(player) + separator + eventMessage + selectedTitle;
+        return prefix + nameColor + player.getName() + suffix + this.aquaCoreAPI.getTagFormat(player) + separator + eventMessage + selectedTitle;
     }
 }

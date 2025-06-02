@@ -2,6 +2,7 @@ package dev.revere.alley.core;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.core.enums.EnumCoreType;
+import dev.revere.alley.profile.Profile;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -76,20 +77,22 @@ public interface ICore {
      * @return The formatted chat message as a String.
      */
     default String getChatFormat(Player player, String eventMessage, String separator) {
+        Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
+
         String prefix = CC.translate(this.getRankPrefix(player));
         String suffix = CC.translate(this.getRankSuffix(player));
         String tagPrefix = CC.translate(this.getTagPrefix(player));
 
-        ChatColor color = this.getPlayerColor(player);
+        ChatColor nameColor = profile.getNameColor() != null ? profile.getNameColor() : this.getPlayerColor(player);
         ChatColor rankColor = this.getRankColor(player);
         ChatColor tagColor = this.getTagColor(player);
 
-        String selectedTitle = CC.translate(Alley.getInstance().getProfileService().getProfile(player.getUniqueId()).getProfileData().getSelectedTitle());
+        String selectedTitle = CC.translate(profile.getProfileData().getSelectedTitle());
 
         if (player.hasPermission("alley.chat.color")) {
             eventMessage = CC.translate(eventMessage);
         }
 
-        return prefix + rankColor + color + player.getName() + suffix + tagColor + tagPrefix + separator + eventMessage + selectedTitle;
+        return prefix + rankColor + nameColor + player.getName() + suffix + tagColor + tagPrefix + separator + eventMessage + selectedTitle;
     }
 }

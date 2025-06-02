@@ -19,6 +19,7 @@ import dev.revere.alley.profile.enums.EnumProfileState;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 
 import java.util.Comparator;
 import java.util.List;
@@ -48,6 +49,8 @@ public class Profile {
     private AbstractFFAMatch ffaMatch;
     private AbstractMatch match;
     private Party party;
+
+    private ChatColor nameColor;
 
     private boolean online;
 
