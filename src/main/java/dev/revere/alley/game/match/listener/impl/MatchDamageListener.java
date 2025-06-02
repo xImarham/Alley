@@ -8,6 +8,9 @@ import dev.revere.alley.game.match.AbstractMatch;
 import dev.revere.alley.game.match.enums.EnumMatchState;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
+import dev.revere.alley.util.chat.CC;
+import dev.revere.alley.util.chat.Symbol;
+import org.bukkit.entity.Arrow;
 import org.bukkit.entity.EnderPearl;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
@@ -146,6 +149,15 @@ public class MatchDamageListener implements Listener {
 
                 attackerProfile.getMatch().getGamePlayer(attacker).getData().handleAttack();
                 damagedprofile.getMatch().getGamePlayer(damaged).getData().resetCombo();
+
+                if (event.getDamager() instanceof Arrow) {
+                    double finalHealth = damaged.getHealth() - event.getFinalDamage();
+                    finalHealth = Math.max(0, finalHealth);
+
+                    if (finalHealth > 0) {
+                        attacker.sendMessage(CC.translate(this.plugin.getCoreAdapter().getCore().getPlayerColor(damaged) + damaged.getName() + " &7&l" + Symbol.ARROW_R + " &b" + String.format("%.1f", finalHealth) + " &c❤"));
+                    }
+                }
 
                 if (match.getKit().isSettingEnabled(KitSettingBoxingImpl.class)) {
                     if (match.getGamePlayer(attacker).getData().getHits() >= 100) {
