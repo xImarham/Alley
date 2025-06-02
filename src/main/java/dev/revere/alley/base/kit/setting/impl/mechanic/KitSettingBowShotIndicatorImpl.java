@@ -8,6 +8,6 @@ import dev.revere.alley.base.kit.setting.annotation.KitSettingData;
  * @project Alley
  * @since 02/06/2025
  */
-@KitSettingData(name = "Bow Shot Indicator", description = "Shows how your opponent's health when you shoot them with a bow via message.", enabled = true)
+@KitSettingData(name = "BowShotIndicator", description = "Shows how your opponent's health when you shoot them with a bow via message.", enabled = true)
 public class KitSettingBowShotIndicatorImpl extends KitSetting {
 }
