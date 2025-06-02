@@ -46,6 +46,12 @@ public class MatchUtility {
         double maxZ = Math.max(corner1.getZ(), corner2.getZ());
 
         boolean withinBounds;
+
+        /*
+         * If the match is ending or has specific kit settings enabled, we only check X and Z bounds and exclude Y bounds,
+         * because there is a death y level coordinate that eliminates players when they fall below it.
+         * This is to prevent players from being stuck in the air because by default, moving out of bounds is cancelled.
+         */
         if (profile.getMatch().getState() == EnumMatchState.ENDING_MATCH
                 || profile.getMatch().getKit().isSettingEnabled(KitSettingBedImpl.class)
                 || profile.getMatch().getKit().isSettingEnabled(KitSettingLivesImpl.class)
