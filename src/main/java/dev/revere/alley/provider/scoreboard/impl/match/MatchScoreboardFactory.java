@@ -1,17 +1,11 @@
 package dev.revere.alley.provider.scoreboard.impl.match;
 
 import dev.revere.alley.Alley;
-import dev.revere.alley.base.kit.setting.impl.mode.KitSettingBattleRushImpl;
-import dev.revere.alley.base.kit.setting.impl.mode.KitSettingBoxingImpl;
-import dev.revere.alley.base.kit.setting.impl.mode.KitSettingLivesImpl;
-import dev.revere.alley.base.kit.setting.impl.mode.KitSettingStickFightImpl;
+import dev.revere.alley.base.kit.setting.impl.mode.*;
 import dev.revere.alley.provider.scoreboard.impl.match.impl.MatchScoreboardRegularImpl;
 import dev.revere.alley.provider.scoreboard.impl.match.impl.state.MatchScoreboardEndingImpl;
 import dev.revere.alley.provider.scoreboard.impl.match.impl.state.MatchScoreboardStartingImpl;
-import dev.revere.alley.provider.scoreboard.impl.match.impl.type.MatchScoreboardBoxingImpl;
-import dev.revere.alley.provider.scoreboard.impl.match.impl.type.MatchScoreboardLivesImpl;
-import dev.revere.alley.provider.scoreboard.impl.match.impl.type.MatchScoreboardRoundsImpl;
-import dev.revere.alley.provider.scoreboard.impl.match.impl.type.MatchScoreboardStickFightImpl;
+import dev.revere.alley.provider.scoreboard.impl.match.impl.type.*;
 import dev.revere.alley.game.match.AbstractMatch;
 import dev.revere.alley.game.match.enums.EnumMatchState;
 import dev.revere.alley.profile.Profile;
@@ -31,6 +25,7 @@ public class MatchScoreboardFactory {
     private final MatchScoreboardRoundsImpl matchScoreboardRounds;
     private final MatchScoreboardStickFightImpl matchScoreboardStickFight;
     private final MatchScoreboardLivesImpl matchScoreboardLives;
+    private final MatchScoreboardBedImpl matchScoreboardBed;
 
     private final MatchScoreboardRegularImpl matchScoreboardRegular;
 
@@ -49,6 +44,7 @@ public class MatchScoreboardFactory {
         this.matchScoreboardRounds = new MatchScoreboardRoundsImpl(this.plugin);
         this.matchScoreboardStickFight = new MatchScoreboardStickFightImpl(this.plugin);
         this.matchScoreboardLives = new MatchScoreboardLivesImpl(this.plugin);
+        this.matchScoreboardBed = new MatchScoreboardBedImpl(this.plugin);
 
         this.matchScoreboardRegular = new MatchScoreboardRegularImpl(this.plugin);
     }
@@ -68,6 +64,7 @@ public class MatchScoreboardFactory {
         if (match.getKit().isSettingEnabled(KitSettingBattleRushImpl.class)) return this.matchScoreboardRounds;
         if (match.getKit().isSettingEnabled(KitSettingStickFightImpl.class)) return this.matchScoreboardStickFight;
         if (match.getKit().isSettingEnabled(KitSettingLivesImpl.class)) return this.matchScoreboardLives;
+        if (match.getKit().isSettingEnabled(KitSettingBedImpl.class)) return this.matchScoreboardBed;
 
         return this.matchScoreboardRegular;
     }

@@ -32,7 +32,7 @@ public class MatchScoreboardLivesImpl implements IMatchScoreboard {
     public List<String> getLines(Profile profile, Player player, GameParticipant<MatchGamePlayerImpl> you, GameParticipant<MatchGamePlayerImpl> opponent) {
         List<String> scoreboardLines = new ArrayList<>();
 
-        for (String line : this.plugin.getConfigService().getScoreboardConfig().getStringList("scoreboard.lines.playing.lives-match")) {
+        for (String line : this.plugin.getConfigService().getScoreboardConfig().getStringList("scoreboard.lines.playing.solo.lives-match")) {
             scoreboardLines.add(CC.translate(line)
                     .replaceAll("\\{opponent}", this.getColoredName(opponent.getPlayer().getPlayer()))
                     .replaceAll("\\{opponent-ping}", String.valueOf(this.getPing(opponent.getPlayer().getPlayer())))

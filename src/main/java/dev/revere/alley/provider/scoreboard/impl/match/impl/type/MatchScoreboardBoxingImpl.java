@@ -34,7 +34,7 @@ public class MatchScoreboardBoxingImpl implements IMatchScoreboard {
         List<String> lines = new ArrayList<>();
 
         FileConfiguration config = plugin.getConfigService().getScoreboardConfig();
-        List<String> template = config.getStringList("scoreboard.lines.playing.boxing-match");
+        List<String> template = config.getStringList("scoreboard.lines.playing.solo.boxing-match");
 
         int playerHits = profile.getMatch().getGamePlayer(player).getData().getHits();
         int opponentHits = profile.getMatch().getGamePlayer(opponent.getPlayer().getPlayer()).getData().getHits();

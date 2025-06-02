@@ -1,6 +1,7 @@
 package dev.revere.alley.util.visual;
 
 import dev.revere.alley.util.chat.CC;
+import dev.revere.alley.util.chat.Symbol;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -28,5 +29,15 @@ public class ScoreboardUtil {
         }
 
         return stringBuilder.toString();
+    }
+
+    /**
+     * Visualizes the bed status in a scoreboard format.
+     *
+     * @param isBroken Whether the bed is broken or not.
+     * @return A string representation of the bed status, with a tick for intact and an X for broken.
+     */
+    public String visualizeBed(boolean isBroken) {
+        return CC.translate(isBroken ? "&c" + Symbol.X : "&a" + Symbol.TICK);
     }
 }

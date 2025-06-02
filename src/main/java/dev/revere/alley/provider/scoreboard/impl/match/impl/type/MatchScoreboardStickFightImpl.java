@@ -36,7 +36,7 @@ public class MatchScoreboardStickFightImpl implements IMatchScoreboard {
 
         MatchStickFightImpl stickFightMatch = (MatchStickFightImpl) profile.getMatch();
 
-        for (String line : this.plugin.getConfigService().getScoreboardConfig().getStringList("scoreboard.lines.playing.stickfight-match")) {
+        for (String line : this.plugin.getConfigService().getScoreboardConfig().getStringList("scoreboard.lines.playing.solo.stickfight-match")) {
             scoreboardLines.add(CC.translate(line)
                     .replaceAll("\\{opponent}", this.getColoredName(opponent.getPlayer().getPlayer()))
                     .replaceAll("\\{opponent-ping}", String.valueOf(this.getPing(opponent.getPlayer().getPlayer())))
