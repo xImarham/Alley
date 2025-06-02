@@ -57,7 +57,7 @@ public class MatchUtility {
                 || profile.getMatch().getKit().isSettingEnabled(KitSettingLivesImpl.class)
                 || profile.getMatch().getKit().isSettingEnabled(KitSettingBattleRushImpl.class)
                 || profile.getMatch().getKit().isSettingEnabled(KitSettingStickFightImpl.class)
-                || profile.getMatch().getKit().isSettingEnabled(KitSettingRankedImpl.class)) {
+                || profile.getMatch().getKit().isSettingEnabled(KitSettingParkourImpl.class)) {
             withinBounds = location.getX() >= minX && location.getX() <= maxX && location.getZ() >= minZ && location.getZ() <= maxZ;
         } else {
             withinBounds = location.getX() >= minX && location.getX() <= maxX && location.getY() >= minY && location.getY() <= maxY && location.getZ() >= minZ && location.getZ() <= maxZ;
