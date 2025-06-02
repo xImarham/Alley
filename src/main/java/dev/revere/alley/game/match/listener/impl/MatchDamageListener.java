@@ -2,6 +2,7 @@ package dev.revere.alley.game.match.listener.impl;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.base.kit.Kit;
+import dev.revere.alley.base.kit.setting.impl.mechanic.KitSettingBowShotIndicatorImpl;
 import dev.revere.alley.base.kit.setting.impl.mechanic.KitSettingNoDamageImpl;
 import dev.revere.alley.base.kit.setting.impl.mode.*;
 import dev.revere.alley.game.match.AbstractMatch;
@@ -150,7 +151,7 @@ public class MatchDamageListener implements Listener {
                 attackerProfile.getMatch().getGamePlayer(attacker).getData().handleAttack();
                 damagedprofile.getMatch().getGamePlayer(damaged).getData().resetCombo();
 
-                if (event.getDamager() instanceof Arrow) {
+                if (match.getKit().isSettingEnabled(KitSettingBowShotIndicatorImpl.class) && event.getDamager() instanceof Arrow) {
                     double finalHealth = damaged.getHealth() - event.getFinalDamage();
                     finalHealth = Math.max(0, finalHealth);
 
