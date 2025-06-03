@@ -27,7 +27,6 @@ Alley is currently a work in progress. While it provides a strong base for PvP-f
 - Add custom death messages (cosmetics)
 - Add Queue ping-range setting
 - Enderpearl xp bar cooldown
-- Implement FlatFile data storage
 - Allow reverting stat resets
 - Implement Match History & Replay
 - Fix inventory snapshots
