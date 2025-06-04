@@ -5,6 +5,4 @@ authors: ["Emmy", "Remi"]
 description: '${project.description}'
 website: https://discord.gg/revere
 softdepend:
-  - AquaCore
-  - Phoenix
-  - Helium
+  - PlaceholderAPI
