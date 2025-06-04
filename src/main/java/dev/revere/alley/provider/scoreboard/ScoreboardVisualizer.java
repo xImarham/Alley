@@ -2,13 +2,13 @@ package dev.revere.alley.provider.scoreboard;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.assemble.interfaces.IAssembleAdapter;
+import dev.revere.alley.profile.Profile;
+import dev.revere.alley.profile.enums.EnumProfileState;
 import dev.revere.alley.provider.scoreboard.impl.FFAScoreboard;
 import dev.revere.alley.provider.scoreboard.impl.LobbyScoreboard;
 import dev.revere.alley.provider.scoreboard.impl.QueueScoreboard;
 import dev.revere.alley.provider.scoreboard.impl.SpectatorScoreboard;
 import dev.revere.alley.provider.scoreboard.impl.match.MatchScoreboard;
-import dev.revere.alley.profile.Profile;
-import dev.revere.alley.profile.enums.EnumProfileState;
 import dev.revere.alley.tool.animation.enums.EnumAnimationType;
 import dev.revere.alley.tool.animation.type.config.impl.ScoreboardTitleAnimationImpl;
 import dev.revere.alley.util.chat.CC;

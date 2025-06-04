@@ -66,7 +66,7 @@ public class ProfileListener implements Listener {
         profile.setOnline(true);
         profile.setMatch(null);
         profile.setParty(null);
-        
+
         profile.setNameColor(Alley.getInstance().getCoreAdapter().getCore().getPlayerColor(player));
 
         profile.getProfileData().getPlayTimeData().setLastLogin(System.currentTimeMillis());

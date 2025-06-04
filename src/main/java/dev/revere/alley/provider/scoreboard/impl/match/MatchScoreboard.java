@@ -1,11 +1,11 @@
 package dev.revere.alley.provider.scoreboard.impl.match;
 
 import dev.revere.alley.Alley;
-import dev.revere.alley.provider.scoreboard.IScoreboard;
 import dev.revere.alley.game.match.AbstractMatch;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.profile.Profile;
+import dev.revere.alley.provider.scoreboard.IScoreboard;
 import org.bukkit.entity.Player;
 
 import java.util.Collections;

@@ -79,9 +79,7 @@ public class FFAService {
      * @return An Optional containing the FFA match if found, or empty if not
      */
     public Optional<AbstractFFAMatch> getMatchByPlayer(Player player) {
-        return this.matches.stream()
-                .filter(match -> match.getPlayers().contains(player))
-                .findFirst();
+        return this.matches.stream().filter(match -> match.getPlayers().contains(match.getGameFFAPlayer(player))).findFirst();
     }
 
     /**
@@ -101,13 +99,13 @@ public class FFAService {
      * @return The FFA match instance
      */
     public AbstractFFAMatch getFFAMatch(Player player) {
-        return this.matches.stream().filter(match -> match.getPlayers().contains(player)).findFirst().orElse(null);
+        return this.matches.stream().filter(match -> match.getPlayers().contains(match.getGameFFAPlayer(player))).findFirst().orElse(null);
     }
 
     public void reloadFFAKits() {
-        this.matches.forEach(match -> match.getPlayers().forEach(player -> {
-            player.sendMessage(CC.translate("&cThe FFA match has been reloaded. Please rejoin."));
-            match.leave(player);
+        this.matches.forEach(match -> match.getPlayers().forEach(ffaPlayer -> {
+            ffaPlayer.getPlayer().sendMessage(CC.translate("&cThe FFA match has been reloaded. Please rejoin."));
+            match.leave(ffaPlayer.getPlayer());
         }));
 
         this.matches.clear();

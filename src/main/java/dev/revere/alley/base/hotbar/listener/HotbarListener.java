@@ -2,8 +2,8 @@ package dev.revere.alley.base.hotbar.listener;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.base.hotbar.HotbarItem;
-import dev.revere.alley.feature.leaderboard.menu.LeaderboardMenu;
 import dev.revere.alley.base.queue.menu.sub.RankedMenu;
+import dev.revere.alley.feature.leaderboard.menu.LeaderboardMenu;
 import dev.revere.alley.game.match.menu.CurrentMatchesMenu;
 import dev.revere.alley.game.party.menu.duel.DuelOtherPartyMenu;
 import dev.revere.alley.game.party.menu.event.PartyEventMenu;

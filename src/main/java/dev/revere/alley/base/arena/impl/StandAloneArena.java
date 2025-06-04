@@ -111,7 +111,7 @@ public class StandAloneArena extends AbstractArena {
     /**
      * Check if the block is an enemy bed.
      *
-     * @param block   The block to check.
+     * @param block              The block to check.
      * @param breakerParticipant The player who is breaking the bed.
      * @return Whether the block is an enemy bed or not.
      */

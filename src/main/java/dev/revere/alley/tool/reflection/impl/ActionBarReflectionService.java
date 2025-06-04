@@ -1,8 +1,8 @@
 package dev.revere.alley.tool.reflection.impl;
 
 import dev.revere.alley.Alley;
-import dev.revere.alley.tool.reflection.IReflection;
 import dev.revere.alley.tool.logger.Logger;
+import dev.revere.alley.tool.reflection.IReflection;
 import dev.revere.alley.util.chat.CC;
 import net.minecraft.server.v1_8_R3.IChatBaseComponent;
 import net.minecraft.server.v1_8_R3.PacketPlayOutChat;

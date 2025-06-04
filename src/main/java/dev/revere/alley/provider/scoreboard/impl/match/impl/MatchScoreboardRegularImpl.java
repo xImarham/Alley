@@ -2,10 +2,10 @@ package dev.revere.alley.provider.scoreboard.impl.match.impl;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.game.match.impl.MatchRegularImpl;
-import dev.revere.alley.provider.scoreboard.impl.match.IMatchScoreboard;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.profile.Profile;
+import dev.revere.alley.provider.scoreboard.impl.match.IMatchScoreboard;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.entity.Player;
 

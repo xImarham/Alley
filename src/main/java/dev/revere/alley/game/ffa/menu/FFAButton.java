@@ -22,16 +22,16 @@ public class FFAButton extends Button {
 
     @Override
     public ItemStack getButtonItem(Player player) {
-        return new ItemBuilder(match.getKit().getIcon())
-                .name("&b&l" + match.getName())
-                .durability(match.getKit().getDurability())
+        return new ItemBuilder(this.match.getKit().getIcon())
+                .name("&b&l" + this.match.getName())
+                .durability(this.match.getKit().getDurability())
                 .lore(Arrays.asList(
                         "",
-                        "&fPlaying: &b" + match.getPlayers().size() + "/" + match.getMaxPlayers(),
-                        "&fArena: &b" + match.getArena().getName(),
-                        "&fKit: &b" + match.getKit().getName(),
+                        "&fPlaying: &b" + this.match.getPlayers().size() + "/" + this.match.getMaxPlayers(),
+                        "&fArena: &b" + this.match.getArena().getName(),
+                        "&fKit: &b" + this.match.getKit().getName(),
                         "",
-                        "&fClick to join the &b" + match.getName() + " &fqueue.")
+                        "&fClick to join the &b" + this.match.getName() + " &fqueue.")
                 )
                 .hideMeta()
                 .build();
@@ -41,6 +41,6 @@ public class FFAButton extends Button {
     public void clicked(Player player, int slot, ClickType clickType, int hotbarSlot) {
         if (clickType != ClickType.LEFT) return;
         SoundUtil.playSuccess(player);
-        match.join(player);
+        this.match.join(player);
     }
 }

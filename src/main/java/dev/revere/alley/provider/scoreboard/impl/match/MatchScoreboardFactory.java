@@ -2,13 +2,13 @@ package dev.revere.alley.provider.scoreboard.impl.match;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.base.kit.setting.impl.mode.*;
+import dev.revere.alley.game.match.AbstractMatch;
+import dev.revere.alley.game.match.enums.EnumMatchState;
+import dev.revere.alley.profile.Profile;
 import dev.revere.alley.provider.scoreboard.impl.match.impl.MatchScoreboardRegularImpl;
 import dev.revere.alley.provider.scoreboard.impl.match.impl.state.MatchScoreboardEndingImpl;
 import dev.revere.alley.provider.scoreboard.impl.match.impl.state.MatchScoreboardStartingImpl;
 import dev.revere.alley.provider.scoreboard.impl.match.impl.type.*;
-import dev.revere.alley.game.match.AbstractMatch;
-import dev.revere.alley.game.match.enums.EnumMatchState;
-import dev.revere.alley.profile.Profile;
 
 /**
  * @author Emmy

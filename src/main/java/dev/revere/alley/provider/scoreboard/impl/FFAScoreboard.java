@@ -2,8 +2,8 @@ package dev.revere.alley.provider.scoreboard.impl;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.base.combat.CombatService;
-import dev.revere.alley.provider.scoreboard.IScoreboard;
 import dev.revere.alley.profile.Profile;
+import dev.revere.alley.provider.scoreboard.IScoreboard;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.entity.Player;
 

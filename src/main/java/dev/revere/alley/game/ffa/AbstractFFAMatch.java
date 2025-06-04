@@ -4,7 +4,7 @@ import dev.revere.alley.Alley;
 import dev.revere.alley.base.arena.AbstractArena;
 import dev.revere.alley.base.combat.CombatService;
 import dev.revere.alley.base.kit.Kit;
-import dev.revere.alley.game.ffa.enums.EnumFFAState;
+import dev.revere.alley.game.ffa.player.GameFFAPlayer;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.ProfileService;
 import dev.revere.alley.util.chat.CC;
@@ -23,16 +23,11 @@ import java.util.List;
 @Getter
 @Setter
 public abstract class AbstractFFAMatch {
-
-    // TODO: State should be player specific
-
-    private EnumFFAState state = EnumFFAState.SPAWN;
-
     private final String name;
     private final AbstractArena arena;
     private final Kit kit;
     private int maxPlayers;
-    private List<Player> players;
+    private List<GameFFAPlayer> players;
 
     /**
      * Constructor for the AbstractFFAMatch class.
@@ -61,6 +56,19 @@ public abstract class AbstractFFAMatch {
     public abstract void leave(Player player);
 
     /**
+     * Method to get an instance of GameFFAPlayer from a Player object.
+     *
+     * @param player The Player object to get the GameFFAPlayer from.
+     * @return The GameFFAPlayer instance associated with the Player, or null if not found.
+     */
+    public GameFFAPlayer getGameFFAPlayer(Player player) {
+        return this.players.stream()
+                .filter(ffaPlayer -> ffaPlayer.getUuid().equals(player.getUniqueId()))
+                .findFirst()
+                .orElse(null);
+    }
+
+    /**
      * Handle the combat log of a player and killer, updating stats of the combat logger, ect...
      *
      * @param player The player
@@ -74,7 +82,7 @@ public abstract class AbstractFFAMatch {
         profile.getProfileData().getFfaData().get(this.getKit().getName()).incrementDeaths();
         killerProfile.getProfileData().getFfaData().get(this.getKit().getName()).incrementKills();
 
-        this.getPlayers().forEach(online -> online.sendMessage(CC.translate("&7(Combat Log) &c" + player.getName() + " has been killed by " + killer.getName() + ".")));
+        this.getPlayers().forEach(ffaPlayer -> ffaPlayer.getPlayer().sendMessage(CC.translate("&7(Combat Log) &c" + player.getName() + " has been killed by " + killer.getName() + ".")));
 
         CombatService combatService = Alley.getInstance().getCombatService();
         combatService.resetCombatLog(player);

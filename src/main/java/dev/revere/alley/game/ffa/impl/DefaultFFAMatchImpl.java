@@ -5,6 +5,8 @@ import dev.revere.alley.base.arena.AbstractArena;
 import dev.revere.alley.base.hotbar.enums.EnumHotbarType;
 import dev.revere.alley.base.kit.Kit;
 import dev.revere.alley.game.ffa.AbstractFFAMatch;
+import dev.revere.alley.game.ffa.enums.EnumFFAState;
+import dev.revere.alley.game.ffa.player.GameFFAPlayer;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
 import dev.revere.alley.tool.reflection.impl.ActionBarReflectionService;
@@ -38,14 +40,15 @@ public class DefaultFFAMatchImpl extends AbstractFFAMatch {
      */
     @Override
     public void join(Player player) {
-        if (getPlayers().size() >= getMaxPlayers()) {
+        GameFFAPlayer gameFFAPlayer = new GameFFAPlayer(player.getUniqueId(), player.getName());
+        if (this.getPlayers().size() >= this.getMaxPlayers()) {
             player.sendMessage(CC.translate("&cThis FFA match is full. " + getMaxPlayers() + " players are already in the match."));
             return;
         }
 
-        getPlayers().add(player);
-        getPlayers().forEach(online -> online.sendMessage(CC.translate("&a" + player.getName() + " has joined the FFA match.")));
-        setupPlayer(player);
+        this.getPlayers().add(gameFFAPlayer);
+        this.getPlayers().forEach(ffaPlayer -> ffaPlayer.getPlayer().sendMessage(CC.translate("&a" + player.getName() + " has joined the FFA match.")));
+        this.setupPlayer(player);
     }
 
     /**
@@ -55,8 +58,10 @@ public class DefaultFFAMatchImpl extends AbstractFFAMatch {
      */
     @Override
     public void leave(Player player) {
-        getPlayers().remove(player);
-        getPlayers().forEach(online -> online.sendMessage(CC.translate("&c" + player.getName() + " has left the FFA match.")));
+        GameFFAPlayer gameFFAPlayer = this.getGameFFAPlayer(player);
+        this.getPlayers().remove(gameFFAPlayer);
+
+        this.getPlayers().forEach(ffaPlayer -> ffaPlayer.getPlayer().sendMessage(CC.translate("&c" + player.getName() + " has left the FFA match.")));
 
         player.sendMessage(CC.translate("&aYou have left the FFA match."));
 
@@ -76,14 +81,17 @@ public class DefaultFFAMatchImpl extends AbstractFFAMatch {
      */
     @Override
     public void setupPlayer(Player player) {
+        GameFFAPlayer gameFFAPlayer = this.getGameFFAPlayer(player);
+        gameFFAPlayer.setState(EnumFFAState.SPAWN);
+
         Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
         profile.setState(EnumProfileState.FFA);
         profile.setFfaMatch(this);
 
-        AbstractArena arena = getArena();
+        AbstractArena arena = this.getArena();
         player.teleport(arena.getPos1());
 
-        Kit kit = getKit();
+        Kit kit = this.getKit();
         player.getInventory().setArmorContents(kit.getArmor());
         player.getInventory().setContents(kit.getItems());
     }
@@ -98,17 +106,20 @@ public class DefaultFFAMatchImpl extends AbstractFFAMatch {
         profile.setState(EnumProfileState.FFA);
         profile.setFfaMatch(this);
 
-        AbstractArena arena = getArena();
+        AbstractArena arena = this.getArena();
 
         Bukkit.getScheduler().runTaskLater(Alley.getInstance(), () -> {
             player.teleport(arena.getPos1());
 
-            Kit kit = getKit();
+            Kit kit = this.getKit();
             player.getInventory().clear();
             player.getInventory().setArmorContents(kit.getArmor());
             player.getInventory().setContents(kit.getItems());
             player.updateInventory();
         }, 1L);
+
+        GameFFAPlayer gameFFAPlayer = this.getGameFFAPlayer(player);
+        gameFFAPlayer.setState(EnumFFAState.SPAWN);
     }
 
     /**
@@ -121,9 +132,9 @@ public class DefaultFFAMatchImpl extends AbstractFFAMatch {
     public void handleDeath(Player player, Player killer) {
         if (killer == null) {
             Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
-            profile.getProfileData().getFfaData().get(getKit().getName()).incrementDeaths();
-            getPlayers().forEach(online -> online.sendMessage(CC.translate("&c" + player.getName() + " has died.")));
-            handleRespawn(player);
+            profile.getProfileData().getFfaData().get(this.getKit().getName()).incrementDeaths();
+            this.getPlayers().forEach(ffaPlayer -> ffaPlayer.getPlayer().sendMessage(CC.translate("&c" + player.getName() + " has died.")));
+            this.handleRespawn(player);
             return;
         }
 
@@ -138,8 +149,7 @@ public class DefaultFFAMatchImpl extends AbstractFFAMatch {
         Alley.getInstance().getReflectionRepository().getReflectionService(ActionBarReflectionService.class).sendDeathMessage(killer, player);
         Alley.getInstance().getCombatService().resetCombatLog(player);
 
-        this.getPlayers().forEach(online -> online.sendMessage(CC.translate("&b" + player.getName() + " &ahas been killed by &b" + killer.getName() + "&a.")));
-        //PlayerUtil.resetLastAttacker(player);
+        this.getPlayers().forEach(ffaPlayer -> ffaPlayer.getPlayer().sendMessage(CC.translate("&b" + player.getName() + " &ahas been killed by &b" + killer.getName() + "&a.")));
         this.handleRespawn(player);
     }
 }

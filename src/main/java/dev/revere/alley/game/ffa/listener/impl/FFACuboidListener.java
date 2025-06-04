@@ -65,10 +65,10 @@ public class FFACuboidListener implements Listener {
             if (isInCuboid) {
                 if (this.plugin.getCombatService().isPlayerInCombat(playerId)) return;
                 player.sendMessage(CC.translate("&aYou have entered the FFA spawn area."));
-                this.plugin.getFfaService().getMatchByPlayer(player).ifPresent(match -> match.setState(EnumFFAState.SPAWN));
+                this.plugin.getFfaService().getMatchByPlayer(player).ifPresent(match -> match.getGameFFAPlayer(player).setState(EnumFFAState.SPAWN));
             } else {
                 player.sendMessage(CC.translate("&cYou have left the FFA spawn area."));
-                this.plugin.getFfaService().getMatchByPlayer(player).ifPresent(match -> match.setState(EnumFFAState.FIGHTING));
+                this.plugin.getFfaService().getMatchByPlayer(player).ifPresent(match -> match.getGameFFAPlayer(player).setState(EnumFFAState.FIGHTING));
             }
 
             this.playerStates.put(playerId, isInCuboid);

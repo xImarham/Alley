@@ -82,10 +82,10 @@ public abstract class AbstractMatch {
     /**
      * Constructor for the AbstractMatch class.
      *
-     * @param queue            The queue associated with the match.
-     * @param kit              The kit used in the match.
-     * @param arena            The arena where the match takes place.
-     * @param ranked           Whether the match is ranked.
+     * @param queue  The queue associated with the match.
+     * @param kit    The kit used in the match.
+     * @param arena  The arena where the match takes place.
+     * @param ranked Whether the match is ranked.
      */
     public AbstractMatch(Queue queue, Kit kit, AbstractArena arena, boolean ranked) {
         this.queue = queue;
