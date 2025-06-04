@@ -40,7 +40,7 @@ public class SpectateCommand extends BaseCommand {
 
         Profile targetProfile = this.plugin.getProfileService().getProfile(target.getUniqueId());
         if (targetProfile.getFfaMatch() != null) {
-            targetProfile.getFfaMatch().addSpectator(target);
+            targetProfile.getFfaMatch().addSpectator(player);
             return;
         }
 
