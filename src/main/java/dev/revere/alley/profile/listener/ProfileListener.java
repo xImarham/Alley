@@ -21,17 +21,18 @@ import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.InventoryHolder;
 
-
 public class ProfileListener implements Listener {
-    private final ProfileService profileService;
+    protected final Alley plugin;
+    protected final ProfileService profileService;
 
     /**
      * Constructor for the ProfileListener class.
      *
-     * @param profileService The profile repository.
+     * @param plugin The Alley instance
      */
-    public ProfileListener(ProfileService profileService) {
-        this.profileService = profileService;
+    public ProfileListener(Alley plugin) {
+        this.plugin = plugin;
+        this.profileService = plugin.getProfileService();
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -52,50 +53,19 @@ public class ProfileListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onJoin(PlayerJoinEvent event) {
+    private void onJoin(PlayerJoinEvent event) {
         if (!Alley.getInstance().isLoaded()) {
             event.getPlayer().kickPlayer(CC.translate("&cThe server is still loading, please try again in a few seconds."));
             return;
         }
 
-        Player player = event.getPlayer();
-        Profile profile = this.profileService.getProfile(player.getUniqueId());
-        profile.setState(EnumProfileState.LOBBY);
-        profile.setName(player.getName());
-        profile.setFfaMatch(null);
-        profile.setOnline(true);
-        profile.setMatch(null);
-        profile.setParty(null);
-
-        profile.setNameColor(Alley.getInstance().getCoreAdapter().getCore().getPlayerColor(player));
-
-        profile.getProfileData().getPlayTimeData().setLastLogin(System.currentTimeMillis());
-
-        profile.getProfileData().determineLevel();
-
-        player.setFlySpeed(1 * 0.1F);
-        player.setWalkSpeed(2 * 0.1F);
-        player.getInventory().setHeldItemSlot(0);
-
-        Alley.getInstance().getSpawnService().teleportToSpawn(player);
-        Alley.getInstance().getHotbarService().applyHotbarItems(player, EnumHotbarType.LOBBY);
-
         event.setJoinMessage(null);
 
-        profile.getProfileData().getSettingData().setTimeBasedOnProfileSetting(player);
+        Player player = event.getPlayer();
+        Profile profile = this.profileService.getProfile(player.getUniqueId());
 
-        profile.save();
-
-        FileConfiguration config = Alley.getInstance().getConfigService().getMessagesConfig();
-        if (config.getBoolean("welcome-message.enabled")) {
-            for (String message : config.getStringList("welcome-message.message")) {
-                player.sendMessage(CC.translate(message)
-                        .replace("{player}", player.getName())
-                        .replace("{version}", Alley.getInstance().getPluginConstant().getVersion())
-                        .replace("{author}", Alley.getInstance().getDescription().getAuthors().toString().replace("[", "").replace("]", ""))
-                );
-            }
-        }
+        this.handlePlayerJoin(profile, player);
+        this.sendJoinMessage(player);
     }
 
     @EventHandler
@@ -112,7 +82,7 @@ public class ProfileListener implements Listener {
     }
 
     @EventHandler
-    public void onPlayerQuitEvent(PlayerQuitEvent event) {
+    private void onPlayerQuitEvent(PlayerQuitEvent event) {
         Player player = event.getPlayer();
         Profile profile = this.profileService.getProfile(player.getUniqueId());
 
@@ -124,7 +94,7 @@ public class ProfileListener implements Listener {
     }
 
     @EventHandler
-    public void onPlayerInteract(PlayerInteractEvent event) {
+    private void onPlayerInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
         Profile profile = this.profileService.getProfile(player.getUniqueId());
         if (profile.getState() == EnumProfileState.LOBBY) {
@@ -137,6 +107,55 @@ public class ProfileListener implements Listener {
             if (block.getType() == Material.CHEST || block.getType() == Material.DISPENSER ||
                     block.getType() == Material.FURNACE || block.getType() == Material.BREWING_STAND) {
                 event.setCancelled(true);
+            }
+        }
+    }
+
+    /**
+     * Handles the player joining the server.
+     * This method sets the player's profile state to LOBBY, updates their name
+     * and online status, including other profile-related data.
+     * Also teleports the player to the spawn and applies the lobby hotbar items.
+     *
+     * @param profile The profile of the player.
+     * @param player  The player who joined.
+     */
+    private void handlePlayerJoin(Profile profile, Player player) {
+        profile.setState(EnumProfileState.LOBBY);
+        profile.setName(player.getName());
+        profile.setOnline(true);
+        profile.setMatch(null);
+        profile.setParty(null);
+        profile.setFfaMatch(null);
+
+        profile.setNameColor(Alley.getInstance().getCoreAdapter().getCore().getPlayerColor(player));
+        profile.getProfileData().getSettingData().setTimeBasedOnProfileSetting(player);
+        profile.getProfileData().getPlayTimeData().setLastLogin(System.currentTimeMillis());
+        profile.getProfileData().determineLevel();
+
+        player.setFlySpeed(1 * 0.1F);
+        player.setWalkSpeed(2 * 0.1F);
+        player.getInventory().setHeldItemSlot(0);
+
+        Alley.getInstance().getSpawnService().teleportToSpawn(player);
+        Alley.getInstance().getHotbarService().applyHotbarItems(player, EnumHotbarType.LOBBY);
+    }
+
+    /**
+     * Sends a welcome message to the player when they join the server.
+     * The message is configured in the messages.yml file.
+     *
+     * @param player The player who joined.
+     */
+    private void sendJoinMessage(Player player) {
+        FileConfiguration config = Alley.getInstance().getConfigService().getMessagesConfig();
+        if (config.getBoolean("welcome-message.enabled")) {
+            for (String message : config.getStringList("welcome-message.message")) {
+                player.sendMessage(CC.translate(message)
+                        .replace("{player}", player.getName())
+                        .replace("{version}", Alley.getInstance().getPluginConstant().getVersion())
+                        .replace("{author}", Alley.getInstance().getDescription().getAuthors().toString().replace("[", "").replace("]", ""))
+                );
             }
         }
     }

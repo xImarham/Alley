@@ -247,7 +247,7 @@ public class Alley extends JavaPlugin {
 
     private void registerListeners() {
         Arrays.asList(
-                new ProfileListener(this.profileService),
+                new ProfileListener(this),
                 new HotbarListener(),
                 new PartyListener(),
                 new MatchListener(this),
