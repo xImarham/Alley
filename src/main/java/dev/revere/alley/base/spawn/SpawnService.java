@@ -64,5 +64,10 @@ public class SpawnService {
         } else {
             Logger.logError("Spawn location is null.");
         }
+
+        if (player.hasPermission("alley.donator.fly")) {
+            player.setAllowFlight(true);
+            player.setFlying(true);
+        }
     }
 }

@@ -73,12 +73,12 @@ public class ProfileListener implements Listener {
 
         profile.getProfileData().determineLevel();
 
-        Alley.getInstance().getSpawnService().teleportToSpawn(player);
-        Alley.getInstance().getHotbarService().applyHotbarItems(player, EnumHotbarType.LOBBY);
-
         player.setFlySpeed(1 * 0.1F);
         player.setWalkSpeed(2 * 0.1F);
         player.getInventory().setHeldItemSlot(0);
+
+        Alley.getInstance().getSpawnService().teleportToSpawn(player);
+        Alley.getInstance().getHotbarService().applyHotbarItems(player, EnumHotbarType.LOBBY);
 
         event.setJoinMessage(null);
 
@@ -95,11 +95,6 @@ public class ProfileListener implements Listener {
                         .replace("{author}", Alley.getInstance().getDescription().getAuthors().toString().replace("[", "").replace("]", ""))
                 );
             }
-        }
-
-        if (player.hasPermission("alley.donator.fly")) {
-            player.setAllowFlight(true);
-            player.setFlying(true);
         }
     }
 
