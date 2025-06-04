@@ -18,7 +18,8 @@ Alley is currently a work in progress. While it provides a strong base for PvP-f
 - Hosting (Events / Tournaments)
 - Arena Generating upon queue
 - Fix/Finish Leaderboards
-- Implement Fireball logic, BedFight gamemode, FFA Matchmaking, Duo Queue
+- BedFight GameMode (added but ensure it works properly)
+- Duo Queue
 - Expand on config files for flexibility
 - Management Commands for Titles and Levels
 - Finish LayoutMenu to support multiple layout creation
@@ -26,7 +27,7 @@ Alley is currently a work in progress. While it provides a strong base for PvP-f
 - Implement proper Bots
 - Add custom death messages (cosmetics)
 - Add Queue ping-range setting
-- Enderpearl xp bar cooldown
+- EnderPearl XP Bar cooldown
 - Allow reverting stat resets
 - Implement Match History & Replay
 - Fix inventory snapshots
