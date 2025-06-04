@@ -88,6 +88,8 @@ public class DefaultFFAMatchImpl extends AbstractFFAMatch {
         profile.setState(EnumProfileState.FFA);
         profile.setFfaMatch(this);
 
+        PlayerUtil.reset(player, true);
+
         AbstractArena arena = this.getArena();
         player.teleport(arena.getPos1());
 
