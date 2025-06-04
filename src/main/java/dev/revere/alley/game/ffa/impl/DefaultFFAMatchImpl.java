@@ -22,7 +22,7 @@ import org.bukkit.entity.Player;
  */
 public class DefaultFFAMatchImpl extends AbstractFFAMatch {
     /**
-     * Constructor for the DefaultFFAMatchImpl class
+     * Constructor for the DefaultFFAMatchImpl class.
      *
      * @param name       The name of the match
      * @param arena      The arena the match is being played in
@@ -34,7 +34,7 @@ public class DefaultFFAMatchImpl extends AbstractFFAMatch {
     }
 
     /**
-     * Join a player to the FFA match
+     * Join a player to the FFA match.
      *
      * @param player The player
      */
@@ -52,7 +52,19 @@ public class DefaultFFAMatchImpl extends AbstractFFAMatch {
     }
 
     /**
-     * Leave a player from the FFA match
+     * Force a player to join the FFA match.
+     *
+     * @param player The player
+     */
+    public void forceJoin(Player player) {
+        GameFFAPlayer gameFFAPlayer = new GameFFAPlayer(player.getUniqueId(), player.getName());
+        this.getPlayers().add(gameFFAPlayer);
+        this.getPlayers().forEach(ffaPlayer -> ffaPlayer.getPlayer().sendMessage(CC.translate("&a" + player.getName() + " has been forced into the FFA match.")));
+        this.setupPlayer(player);
+    }
+
+    /**
+     * Leave a player from the FFA match.
      *
      * @param player The player
      */
@@ -75,7 +87,7 @@ public class DefaultFFAMatchImpl extends AbstractFFAMatch {
     }
 
     /**
-     * Setup a player for the FFA match
+     * Setup a player for the FFA match.
      *
      * @param player The player
      */
@@ -99,7 +111,7 @@ public class DefaultFFAMatchImpl extends AbstractFFAMatch {
     }
 
     /**
-     * Handle the respawn of a player
+     * Handle the respawn of a player.
      *
      * @param player The player
      */
@@ -125,7 +137,7 @@ public class DefaultFFAMatchImpl extends AbstractFFAMatch {
     }
 
     /**
-     * Handle the death of a player
+     * Handle the death of a player.
      *
      * @param player The player
      * @param killer The killer

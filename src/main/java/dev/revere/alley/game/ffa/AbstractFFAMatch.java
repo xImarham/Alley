@@ -3,10 +3,12 @@ package dev.revere.alley.game.ffa;
 import dev.revere.alley.Alley;
 import dev.revere.alley.base.arena.AbstractArena;
 import dev.revere.alley.base.combat.CombatService;
+import dev.revere.alley.base.hotbar.enums.EnumHotbarType;
 import dev.revere.alley.base.kit.Kit;
 import dev.revere.alley.game.ffa.player.GameFFAPlayer;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.ProfileService;
+import dev.revere.alley.profile.enums.EnumProfileState;
 import dev.revere.alley.util.chat.CC;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,6 +16,7 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * @author Remi
@@ -24,10 +27,14 @@ import java.util.List;
 @Setter
 public abstract class AbstractFFAMatch {
     private final String name;
+
     private final AbstractArena arena;
     private final Kit kit;
+
     private int maxPlayers;
+
     private List<GameFFAPlayer> players;
+    private List<UUID> spectators;
 
     /**
      * Constructor for the AbstractFFAMatch class.
@@ -43,6 +50,7 @@ public abstract class AbstractFFAMatch {
         this.kit = kit;
         this.maxPlayers = maxPlayers;
         this.players = new ArrayList<>();
+        this.spectators = new ArrayList<>();
     }
 
     public abstract void join(Player player);
@@ -54,6 +62,59 @@ public abstract class AbstractFFAMatch {
     public abstract void handleRespawn(Player player);
 
     public abstract void leave(Player player);
+
+
+    /**
+     * Method to spectate the match as a player.
+     *
+     * @param player The player who wants to spectate the match.
+     */
+    public void addSpectator(Player player) {
+        ProfileService profileService = Alley.getInstance().getProfileService();
+        Profile profile = profileService.getProfile(player.getUniqueId());
+
+        if (this.arena.getCenter() == null) {
+            player.sendMessage(CC.translate("&cThe arena is not set up for spectating"));
+            return;
+        }
+
+        if (profile.getState() != EnumProfileState.SPECTATING) {
+            profile.setState(EnumProfileState.SPECTATING);
+            profile.setFfaMatch(this);
+            Alley.getInstance().getHotbarService().applyHotbarItems(player, EnumHotbarType.SPECTATOR);
+        }
+
+        player.teleport(this.arena.getCenter());
+        player.spigot().setCollidesWithEntities(false);
+        player.setAllowFlight(true);
+        player.setFlying(true);
+
+        this.spectators.add(player.getUniqueId());
+    }
+
+    /**
+     * Method to remove a player from the spectator list and reset their state.
+     *
+     * @param player The player to remove from the spectator list.
+     */
+    public void removeSpectator(Player player) {
+        ProfileService profileService = Alley.getInstance().getProfileService();
+        Profile profile = profileService.getProfile(player.getUniqueId());
+
+        if (profile.getState() == EnumProfileState.SPECTATING) {
+            profile.setState(EnumProfileState.LOBBY);
+            profile.setFfaMatch(null);
+            Alley.getInstance().getHotbarService().applyHotbarItems(player, EnumHotbarType.LOBBY);
+        }
+
+        player.spigot().setCollidesWithEntities(true);
+        player.setAllowFlight(false);
+        player.setFlying(false);
+
+        Alley.getInstance().getSpawnService().teleportToSpawn(player);
+
+        this.spectators.remove(player.getUniqueId());
+    }
 
     /**
      * Method to get an instance of GameFFAPlayer from a Player object.

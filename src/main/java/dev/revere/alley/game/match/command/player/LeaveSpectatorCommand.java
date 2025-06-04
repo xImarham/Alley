@@ -25,6 +25,11 @@ public class LeaveSpectatorCommand extends BaseCommand {
             return;
         }
 
+        if (profile.getFfaMatch() != null) {
+            profile.getFfaMatch().removeSpectator(player);
+            return;
+        }
+
         profile.getMatch().removeSpectator(player, true);
     }
 }

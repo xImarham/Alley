@@ -39,6 +39,11 @@ public class SpectateCommand extends BaseCommand {
         }
 
         Profile targetProfile = this.plugin.getProfileService().getProfile(target.getUniqueId());
+        if (targetProfile.getFfaMatch() != null) {
+            targetProfile.getFfaMatch().addSpectator(target);
+            return;
+        }
+
         if (targetProfile.getState() != EnumProfileState.PLAYING) {
             player.sendMessage(CC.translate("&cYou are unable to spectate that player."));
             return;

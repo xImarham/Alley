@@ -6,6 +6,7 @@ import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.game.ffa.command.impl.*;
 import dev.revere.alley.game.ffa.command.impl.player.FFAJoinCommand;
 import dev.revere.alley.game.ffa.command.impl.player.FFALeaveCommand;
+import dev.revere.alley.game.ffa.command.impl.player.SpectateFFACommand;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.entity.Player;
 
@@ -22,12 +23,14 @@ public class FFACommand extends BaseCommand {
      * Register all FFA subcommands in the constructor
      */
     public FFACommand() {
+        new FFAJoinCommand();
+        new FFALeaveCommand();
+        new SpectateFFACommand();
+        new FFAAddCommand();
         new FFAKickCommand();
         new FFAListCommand();
         new FFAListPlayersCommand();
         new FFAMaxPlayersCommand();
-        new FFAJoinCommand();
-        new FFALeaveCommand();
         new FFASetSafeZoneCommand();
         new FFASetSpawnCommand();
     }
