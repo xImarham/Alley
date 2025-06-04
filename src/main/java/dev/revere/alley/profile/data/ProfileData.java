@@ -36,6 +36,7 @@ public class ProfileData {
     private ProfileCosmeticData cosmeticData;
     private ProfilePlayTimeData playTimeData;
 
+    //should probably be a map or a data class... will do.
     private List<AbstractMatchData> previousMatches;
 
     private List<String> unlockedTitles;

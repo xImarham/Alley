@@ -1,7 +1,6 @@
 package dev.revere.alley.game.match.data.impl;
 
 import dev.revere.alley.game.match.data.AbstractMatchData;
-import dev.revere.alley.game.match.snapshot.Snapshot;
 import lombok.Getter;
 
 import java.util.List;
@@ -21,27 +20,20 @@ public class MatchDataTeamImpl extends AbstractMatchData {
 
     private final String winnerTeam;
 
-    private final List<Snapshot> snapshots;
-    private final List<Snapshot> opponentSnapshots;
-
     /**
      * Constructor for the MatchDataTeamImpl class.
      *
-     * @param players           The list of player UUIDs in the team.
-     * @param opponentPlayers   The list of opponent UUIDs in the team.
-     * @param winners           The list of winner UUIDs.
-     * @param winnerTeam        The name of the winning team.
-     * @param snapshots         The list of snapshots for the team.
-     * @param opponentSnapshots The list of snapshots for the opponent team.
+     * @param players         The list of player UUIDs in the team.
+     * @param opponentPlayers The list of opponent UUIDs in the team.
+     * @param winners         The list of winner UUIDs.
+     * @param winnerTeam      The name of the winning team.
      */
-    public MatchDataTeamImpl(String kit, String arena, List<UUID> players, List<UUID> opponentPlayers, List<UUID> winners, String winnerTeam, List<Snapshot> snapshots, List<Snapshot> opponentSnapshots) {
+    public MatchDataTeamImpl(String kit, String arena, List<UUID> players, List<UUID> opponentPlayers, List<UUID> winners, String winnerTeam) {
         super(kit, arena);
         this.players = players;
         this.opponentPlayers = opponentPlayers;
         this.winners = winners;
         this.winnerTeam = winnerTeam;
-        this.snapshots = snapshots;
-        this.opponentSnapshots = opponentSnapshots;
     }
 
 }

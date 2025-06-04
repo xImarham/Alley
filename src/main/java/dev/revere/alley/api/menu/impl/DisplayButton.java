@@ -30,4 +30,3 @@ public class DisplayButton extends Button {
         return this.cancel;
     }
 }
-

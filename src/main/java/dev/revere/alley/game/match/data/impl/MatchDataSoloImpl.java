@@ -1,7 +1,6 @@
 package dev.revere.alley.game.match.data.impl;
 
 import dev.revere.alley.game.match.data.AbstractMatchData;
-import dev.revere.alley.game.match.snapshot.Snapshot;
 import lombok.Getter;
 
 import java.util.UUID;
@@ -13,29 +12,18 @@ import java.util.UUID;
  */
 @Getter
 public class MatchDataSoloImpl extends AbstractMatchData {
-    private final UUID player;
-    private final UUID opponent;
-
     private final UUID winner;
-
-    private final Snapshot snapshot;
-    private final Snapshot opponentSnapshot;
+    private final UUID loser;
 
     /**
      * Constructor for the MatchDataSoloImpl class.
      *
-     * @param player           The UUID of the player.
-     * @param opponent         The UUID of the opponent.
-     * @param winner           The UUID of the winner.
-     * @param snapshot         The snapshot of the player.
-     * @param opponentSnapshot The snapshot of the opponent.
+     * @param winner   The UUID of the winner.
+     * @param loser The UUID of the loser.
      */
-    public MatchDataSoloImpl(String kit, String arena, UUID winner, UUID player, UUID opponent, Snapshot snapshot, Snapshot opponentSnapshot) {
+    public MatchDataSoloImpl(String kit, String arena, UUID winner, UUID loser) {
         super(kit, arena);
-        this.player = player;
-        this.opponent = opponent;
+        this.loser = loser;
         this.winner = winner;
-        this.snapshot = snapshot;
-        this.opponentSnapshot = opponentSnapshot;
     }
 }

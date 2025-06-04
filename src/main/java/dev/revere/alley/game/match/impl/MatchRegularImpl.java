@@ -7,6 +7,8 @@ import dev.revere.alley.base.queue.Queue;
 import dev.revere.alley.feature.division.Division;
 import dev.revere.alley.feature.division.tier.DivisionTier;
 import dev.revere.alley.game.match.AbstractMatch;
+import dev.revere.alley.game.match.data.AbstractMatchData;
+import dev.revere.alley.game.match.data.impl.MatchDataSoloImpl;
 import dev.revere.alley.game.match.enums.EnumMatchState;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
@@ -182,26 +184,48 @@ public class MatchRegularImpl extends AbstractMatch {
      * @param participantB The second participant.
      */
     public void handleData(GameParticipant<MatchGamePlayerImpl> winner, GameParticipant<MatchGamePlayerImpl> loser, GameParticipant<MatchGamePlayerImpl> participantA, GameParticipant<MatchGamePlayerImpl> participantB) {
-        if (participantA.getPlayers().size() == 1 && participantB.getPlayers().size() == 1 && isRanked()) {
-            OldEloResult result = this.getOldEloResult(winner, loser);
-            EloResult eloResult = this.getEloResult(result.getOldWinnerElo(), result.getOldLoserElo());
+        if (!this.isTeamMatch()) {
+            if (this.isRanked()) {
+                OldEloResult result = this.getOldEloResult(winner, loser);
+                EloResult eloResult = this.getEloResult(result.getOldWinnerElo(), result.getOldLoserElo());
 
-            this.handleWinner(eloResult.getNewWinnerElo(), winner);
-            this.handleLoser(eloResult.getNewLoserElo(), loser);
+                this.handleWinner(eloResult.getNewWinnerElo(), winner);
+                this.handleLoser(eloResult.getNewLoserElo(), loser);
 
-            this.sendEloResult(winner.getPlayer().getPlayer().getName(), loser.getPlayer().getPlayer().getName(), result.getOldWinnerElo(), result.getOldLoserElo(), eloResult.getNewWinnerElo(), eloResult.getNewLoserElo());
-        } else if (participantA.getPlayers().size() == 1 && participantB.getPlayers().size() == 1 && !isRanked()) {
-            ProfileService profileService = Alley.getInstance().getProfileService();
+                this.sendEloResult(winner.getPlayer().getPlayer().getName(), loser.getPlayer().getPlayer().getName(), result.getOldWinnerElo(), result.getOldLoserElo(), eloResult.getNewWinnerElo(), eloResult.getNewLoserElo());
+            } else {
+                ProfileService profileService = Alley.getInstance().getProfileService();
 
-            Profile winnerProfile = profileService.getProfile(winner.getPlayer().getUuid());
-            winnerProfile.getProfileData().getUnrankedKitData().get(getKit().getName()).incrementWins();
-            winnerProfile.getProfileData().incrementUnrankedWins();
-            winnerProfile.getProfileData().determineTitles();
+                Profile winnerProfile = profileService.getProfile(winner.getPlayer().getUuid());
+                winnerProfile.getProfileData().getUnrankedKitData().get(getKit().getName()).incrementWins();
+                winnerProfile.getProfileData().incrementUnrankedWins();
+                winnerProfile.getProfileData().determineTitles();
+                this.createMatchDataForHistory(winner, loser, winnerProfile);
 
-            Profile loserProfile = profileService.getProfile(loser.getPlayer().getUuid());
-            loserProfile.getProfileData().getUnrankedKitData().get(getKit().getName()).incrementLosses();
-            loserProfile.getProfileData().incrementUnrankedLosses();
+                Profile loserProfile = profileService.getProfile(loser.getPlayer().getUuid());
+                loserProfile.getProfileData().getUnrankedKitData().get(getKit().getName()).incrementLosses();
+                loserProfile.getProfileData().incrementUnrankedLosses();
+                this.createMatchDataForHistory(loser, winner, loserProfile);
+            }
         }
+    }
+
+    /**
+     * Creates match data for the history of the winner.
+     *
+     * @param winner       The winner of the match.
+     * @param loser        The loser of the match.
+     * @param profileToAdd The profile to add the match data to.
+     */
+    public void createMatchDataForHistory(GameParticipant<MatchGamePlayerImpl> winner, GameParticipant<MatchGamePlayerImpl> loser, Profile profileToAdd) {
+        AbstractMatchData matchData = new MatchDataSoloImpl(
+                this.getKit().getName(),
+                this.getArena().getName(),
+                winner.getPlayer().getUuid(),
+                loser.getPlayer().getUuid()
+        );
+
+        profileToAdd.getProfileData().getPreviousMatches().add(matchData);
     }
 
     /**
