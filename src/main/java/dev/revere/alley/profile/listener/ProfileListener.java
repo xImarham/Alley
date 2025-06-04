@@ -5,6 +5,7 @@ import dev.revere.alley.base.hotbar.enums.EnumHotbarType;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.ProfileService;
 import dev.revere.alley.profile.enums.EnumProfileState;
+import dev.revere.alley.util.PlayerUtil;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -141,6 +142,8 @@ public class ProfileListener implements Listener {
         player.setFlySpeed(1 * 0.1F);
         player.setWalkSpeed(2 * 0.1F);
         player.getInventory().setHeldItemSlot(0);
+
+        PlayerUtil.reset(player, false);
 
         Alley.getInstance().getSpawnService().teleportToSpawn(player);
         Alley.getInstance().getHotbarService().applyHotbarItems(player, EnumHotbarType.LOBBY);
