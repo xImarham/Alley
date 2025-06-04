@@ -6,6 +6,9 @@ import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.base.kit.Kit;
 import dev.revere.alley.game.ffa.AbstractFFAMatch;
 import dev.revere.alley.game.ffa.FFAService;
+import dev.revere.alley.profile.Profile;
+import dev.revere.alley.profile.ProfileService;
+import dev.revere.alley.profile.enums.EnumProfileState;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.entity.Player;
 
@@ -23,6 +26,13 @@ public class SpectateFFACommand extends BaseCommand {
 
         if (args.length < 1) {
             player.sendMessage(CC.translate("&6Usage: &e/spectateffa &b<ffaKit>"));
+            return;
+        }
+
+        ProfileService profileService = this.plugin.getProfileService();
+        Profile profile = profileService.getProfile(player.getUniqueId());
+        if (profile.getState() != EnumProfileState.LOBBY) {
+            player.sendMessage(CC.translate("&cYou cannot do this right now!"));
             return;
         }
 
