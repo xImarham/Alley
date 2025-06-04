@@ -48,7 +48,17 @@ public class ArenaTeleportCommand extends BaseCommand {
             return;
         }
 
-        player.teleport(arena.getCenter());
+        if (arena.getCenter() == null) {
+            player.sendMessage(CC.translate("&cThe arena does not have a defined center location."));
+            if (arena.getPos1() == null) {
+                return;
+            }
 
+            player.teleport(arena.getPos1());
+            player.sendMessage(CC.translate("&aYou have been teleported to position 1 instead."));
+            return;
+        }
+
+        player.teleport(arena.getCenter());
     }
 }
