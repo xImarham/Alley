@@ -37,8 +37,14 @@ public class GameParticipant<T extends GamePlayer> {
         return Collections.singletonList(this.player);
     }
 
+    /**
+     * Gets the size of the players in the participant.
+     * (This is always 0 for a solo participant, as it represents a single player.)
+     *
+     * @return The size of the players in the participant, which is always 0 for solo participants.
+     */
     public int getPlayerSize() {
-        return 0; // 0 since this is the solo representation of a participant.
+        return 0;
     }
 
     /**
