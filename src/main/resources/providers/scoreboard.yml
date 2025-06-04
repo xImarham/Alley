@@ -153,16 +153,6 @@ scoreboard:
       - ""
       - "&fWinner: &b{winner}"
       - "&fDuration: &b{duration}"
-    spectating:
-      - "{sidebar}"
-      - "&b&lSpectating"
-      - " &fDuration: &b{duration}"
-      - " &fArena: &b{arena}"
-      - " &fKit: &b{kit}"
-      - ""
-      - " {colorA}{playerA} &f(&b{pingA}ms&f)"
-      - "  &fvs"
-      - " {colorB}{playerB} &f(&b{pingB}ms&f)"
     ffa:
       - "{sidebar}"
       - "&fPlaying FFA"
@@ -176,6 +166,22 @@ scoreboard:
       - " &fPlayers: &b{players}"
       - ""
       - "&fYour Ping: &b{ping}ms"
+    spectating:
+      regular-match:
+        - "{sidebar}"
+        - "&b&lSpectating"
+        - " &fDuration: &b{duration}"
+        - " &fArena: &b{arena}"
+        - " &fKit: &b{kit}"
+        - ""
+        - " {colorA}{playerA} &f(&b{pingA}ms&f)"
+        - "  &fvs"
+        - " {colorB}{playerB} &f(&b{pingB}ms&f)"
+      ffa:
+        - "{sidebar}"
+        - "&b&lSpectating FFA"
+        - " &fArena: &b{arena}"
+        - " &fKit: &b{kit}"
 
 ffa-combat-tag:
   - " &fCombat: &b{combat-tag}"

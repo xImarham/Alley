@@ -33,7 +33,7 @@ public class SpectatorScoreboard implements IScoreboard {
         List<String> scoreboardLines = new ArrayList<>();
 
         if (profile.getMatch() instanceof MatchRegularImpl) {
-            for (String line : this.plugin.getConfigService().getScoreboardConfig().getStringList("scoreboard.lines.spectating")) {
+            for (String line : this.plugin.getConfigService().getScoreboardConfig().getStringList("scoreboard.lines.spectating.regular-match")) {
                 scoreboardLines.add(CC.translate(line)
                         .replaceAll("\\{playerA}", profile.getMatch().getParticipants().get(0).getPlayer().getUsername())
                         .replaceAll("\\{playerB}", profile.getMatch().getParticipants().get(1).getPlayer().getUsername())
@@ -44,6 +44,12 @@ public class SpectatorScoreboard implements IScoreboard {
                         .replaceAll("\\{duration}", profile.getMatch().getDuration())
                         .replaceAll("\\{arena}", profile.getMatch().getArena().getDisplayName() == null ? "&c&lNULL" : profile.getMatch().getArena().getDisplayName())
                         .replaceAll("\\{kit}", profile.getMatch().getKit().getDisplayName()));
+            }
+        } else if (profile.getFfaMatch() != null) {
+            for (String line : this.plugin.getConfigService().getScoreboardConfig().getStringList("scoreboard.lines.spectating.ffa")) {
+                scoreboardLines.add(CC.translate(line)
+                        .replaceAll("\\{arena}", profile.getFfaMatch().getArena().getDisplayName() == null ? "&c&lNULL" : profile.getFfaMatch().getArena().getDisplayName())
+                        .replaceAll("\\{kit}", profile.getFfaMatch().getKit().getDisplayName()));
             }
         }
 
