@@ -21,19 +21,24 @@ Alley is currently a work in progress. While it provides a strong base for PvP-f
 - BedFight GameMode (added but ensure it works properly)
 - Duo Queue
 - Expand on config files for flexibility
-- Management Commands for Titles and Levels
+- ~~Management Commands for Levels~~
+- Management Commands for Titles
 - Finish LayoutMenu to support multiple layout creation
-- ~~properly handle disconnecting during a match~~
+- Handle match disconnecting case
+- Scoreboard for team fights
+- Match type FFA (not the seperate ffa system, the match implementation)
 - Implement proper Bots
+- Add soup consuming listener
 - Add custom death messages (cosmetics)
 - Add Queue ping-range setting
 - EnderPearl XP Bar cooldown
 - Allow reverting stat resets
-- Implement Match History & Replay
+- ~~Implement Match History~~ (added just the base yet)
+- Implement Match-Replay
 - Fix inventory snapshots
 - Visibility handling
 - Column type tablist?
-- ~~Global Placeholders (via PAPI)~~
+- ~~Global Placeholders (via PAPI)~~ (need to add some more placeholders)
 
 ## Table of Contents
 
