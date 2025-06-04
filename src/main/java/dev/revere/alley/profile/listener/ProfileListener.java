@@ -21,6 +21,11 @@ import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.InventoryHolder;
 
+/**
+ * @author Emmy
+ * @project Alley
+ * @since 19/04/2024
+ */
 public class ProfileListener implements Listener {
     protected final Alley plugin;
     protected final ProfileService profileService;
