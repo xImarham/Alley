@@ -32,7 +32,7 @@ public class CurrentMatchesMenu extends PaginatedMenu {
      */
     @Override
     public String getPrePaginatedTitle(Player player) {
-        return "&b&lCurrent Matches (" + Alley.getInstance().getMatchRepository().getMatches().size() + ")";
+        return "&b&lCurrent Matches (" + Alley.getInstance().getMatchService().getMatches().size() + ")";
     }
 
     /**
@@ -46,7 +46,7 @@ public class CurrentMatchesMenu extends PaginatedMenu {
         final Map<Integer, Button> buttons = new ConcurrentHashMap<>();
         int slot = 0;
 
-        for (AbstractMatch match : Alley.getInstance().getMatchRepository().getMatches()) {
+        for (AbstractMatch match : Alley.getInstance().getMatchService().getMatches()) {
             buttons.put(slot++, new CurrentMatchButton(match));
         }
 

@@ -10,10 +10,7 @@ import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.util.chat.CC;
 import lombok.experimental.UtilityClass;
-import net.md_5.bungee.api.chat.ClickEvent;
-import net.md_5.bungee.api.chat.ComponentBuilder;
-import net.md_5.bungee.api.chat.HoverEvent;
-import net.md_5.bungee.api.chat.TextComponent;
+import net.md_5.bungee.api.chat.*;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -55,7 +52,7 @@ public class MatchUtility {
         if (profile.getMatch().getState() == EnumMatchState.ENDING_MATCH
                 || profile.getMatch().getKit().isSettingEnabled(KitSettingBedImpl.class)
                 || profile.getMatch().getKit().isSettingEnabled(KitSettingLivesImpl.class)
-                || profile.getMatch().getKit().isSettingEnabled(KitSettingBattleRushImpl.class)
+                || profile.getMatch().getKit().isSettingEnabled(KitSettingRoundsImpl.class)
                 || profile.getMatch().getKit().isSettingEnabled(KitSettingStickFightImpl.class)
                 || profile.getMatch().getKit().isSettingEnabled(KitSettingParkourImpl.class)) {
             withinBounds = location.getX() >= minX && location.getX() <= maxX && location.getZ() >= minZ && location.getZ() <= maxZ;
@@ -98,7 +95,7 @@ public class MatchUtility {
                     loserComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, loserCommand));
                     loserComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(CC.translate(loserHover)).create()));
 
-                    match.sendCombinedSpigotMessage(
+                    sendCombinedSpigotMessage(match, 
                             new TextComponent(CC.translate(parts[0])),
                             winnerComponent,
                             new TextComponent(CC.translate(loserParts[0])),
@@ -113,7 +110,7 @@ public class MatchUtility {
                 winnerComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, winnerCommand));
                 winnerComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(CC.translate(winnerHover)).create()));
 
-                match.sendCombinedSpigotMessage(
+                sendCombinedSpigotMessage(match, 
                         new TextComponent(CC.translate(parts[0])),
                         winnerComponent,
                         new TextComponent(parts.length > 1 ? CC.translate(parts[1]) : "")
@@ -125,7 +122,7 @@ public class MatchUtility {
                 loserComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, loserCommand));
                 loserComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(CC.translate(loserHover)).create()));
 
-                match.sendCombinedSpigotMessage(
+                sendCombinedSpigotMessage(match, 
                         new TextComponent(CC.translate(parts[0])),
                         loserComponent,
                         new TextComponent(parts.length > 1 ? CC.translate(parts[1]) : "")
@@ -144,23 +141,10 @@ public class MatchUtility {
      * @param loserParticipant  The loser participant.
      */
     public void sendConjoinedMatchResult(AbstractMatch match, GameParticipant<MatchGamePlayerImpl> winnerParticipant, GameParticipant<MatchGamePlayerImpl> loserParticipant) {
-
-        // this is untested, it might not work as expected :D
-
-        FileConfiguration config = Alley.getInstance().getConfigService().getMessagesConfig();
-        String path = "match.ended.match-result.conjoined.";
-
         String winnerTeamName = winnerParticipant.getPlayer().getUsername();
         String loserTeamName = loserParticipant.getPlayer().getUsername();
 
-        for (String line : config.getStringList(path + "format")) {
-            String translated = CC.translate(line)
-                    .replace("{winner}", winnerTeamName)
-                    .replace("{loser}", loserTeamName);
-            match.sendMessage(translated);
-        }
-
-        match.sendMessage(CC.translate("&7&m------------------------------"));
+        match.sendMessage("");
         match.sendMessage(CC.translate("&aWinner Team: &f" + winnerTeamName));
 
         for (MatchGamePlayerImpl player : winnerParticipant.getPlayers()) {
@@ -172,7 +156,7 @@ public class MatchUtility {
             playerComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
                     new ComponentBuilder(CC.translate("&eClick to view " + playerName + "'s inventory")).create()));
 
-            match.sendCombinedSpigotMessage(playerComponent);
+            sendCombinedSpigotMessage(match, playerComponent);
         }
 
         match.sendMessage("");
@@ -187,9 +171,32 @@ public class MatchUtility {
             playerComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
                     new ComponentBuilder(CC.translate("&eClick to view " + playerName + "'s inventory")).create()));
 
-            match.sendCombinedSpigotMessage(playerComponent);
+            sendCombinedSpigotMessage(match, playerComponent);
         }
 
         match.sendMessage(CC.translate(""));
+    }
+
+    /**
+     * Sends a combined spigot (clickable) message to all participants including spectators.
+     *
+     * @param message The message to send.
+     */
+    public void sendCombinedSpigotMessage(AbstractMatch match, BaseComponent... message) {
+        match.getParticipants().forEach(gameParticipant -> {
+            gameParticipant.getPlayers().forEach(uuid -> {
+                Player player = Alley.getInstance().getServer().getPlayer(uuid.getUuid());
+                if (player != null) {
+                    player.spigot().sendMessage(message);
+                }
+            });
+        });
+
+        match.getSpectators().forEach(uuid -> {
+            Player player = Alley.getInstance().getServer().getPlayer(uuid);
+            if (player != null) {
+                player.spigot().sendMessage(message);
+            }
+        });
     }
 }

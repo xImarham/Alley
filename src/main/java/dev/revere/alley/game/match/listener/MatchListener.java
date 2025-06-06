@@ -2,6 +2,7 @@ package dev.revere.alley.game.match.listener;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.base.arena.impl.StandAloneArena;
+import dev.revere.alley.base.combat.CombatService;
 import dev.revere.alley.base.kit.Kit;
 import dev.revere.alley.base.kit.setting.impl.mechanic.KitSettingDenyMovementImpl;
 import dev.revere.alley.base.kit.setting.impl.mechanic.KitSettingNoHungerImpl;
@@ -9,7 +10,6 @@ import dev.revere.alley.base.kit.setting.impl.mode.*;
 import dev.revere.alley.game.match.AbstractMatch;
 import dev.revere.alley.game.match.enums.EnumMatchState;
 import dev.revere.alley.game.match.impl.MatchRoundsImpl;
-import dev.revere.alley.game.match.impl.kit.MatchStickFightImpl;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.game.match.utility.MatchUtility;
@@ -82,14 +82,27 @@ public class MatchListener implements Listener {
                 if (player.getGameMode() == GameMode.CREATIVE) return;
 
                 if (match.getKit().isSettingEnabled(KitSettingStickFightImpl.class)) {
-                    MatchStickFightImpl matchStickFight = (MatchStickFightImpl) match;
-                    matchStickFight.handleDeath(player);
+                    MatchRoundsImpl roundsMatch = (MatchRoundsImpl) match;
+
+                    CombatService combatService = Alley.getInstance().getCombatService();
+                    Player lastAttacker = combatService.getLastAttacker(player);
+                    if (lastAttacker == null) {
+                        GameParticipant<MatchGamePlayerImpl> opponent = roundsMatch.getParticipantA().containsPlayer(player.getUniqueId())
+                                ? roundsMatch.getParticipantB()
+                                : roundsMatch.getParticipantA();
+
+                        roundsMatch.setScorer(opponent.getPlayer().getUsername());
+                    } else {
+                        roundsMatch.setScorer(lastAttacker.getName());
+                    }
+
+                    roundsMatch.handleDeath(player);
                     return;
                 }
 
                 if (matchKit.isSettingEnabled(KitSettingLivesImpl.class)
-                        || matchKit.isSettingEnabled(KitSettingBattleRushImpl.class)
                         || matchKit.isSettingEnabled(KitSettingBedImpl.class)
+                        || matchKit.isSettingEnabled(KitSettingRoundsImpl.class)
                         || matchKit.isSettingEnabled(KitSettingStickFightImpl.class)) {
                     player.setHealth(0);
                     player.setAllowFlight(true);
@@ -143,14 +156,12 @@ public class MatchListener implements Listener {
             GameParticipant<MatchGamePlayerImpl> killerParticipant = profile.getMatch().getParticipant(killer);
             killerParticipant.getPlayer().getData().incrementKills();
 
+            Profile killerProfile = this.plugin.getProfileService().getProfile(killer.getUniqueId());
+
             Alley.getInstance().getReflectionRepository().getReflectionService(ActionBarReflectionService.class).sendDeathMessage(killer, player);
-            profile.getMatch().getParticipants()
-                    .forEach(participant -> participant.getPlayer().getPlayer().sendMessage(CC.translate("&c" + player.getName() + " &fwas killed by &c" + killer.getName() + "&f.")));
-            profile.getMatch().createSnapshot(player.getUniqueId(), killer.getUniqueId());
-            //PlayerUtil.resetLastAttacker(player);
+            profile.getMatch().getParticipants().forEach(participant -> participant.getPlayer().getPlayer().sendMessage(CC.translate("&c" + profile.getNameColor() + player.getName() + " &fwas slain by &c" + killerProfile.getNameColor() + killer.getName() + "&f.")));
         } else {
-            profile.getMatch().getParticipants()
-                    .forEach(participant -> participant.getPlayer().getPlayer().sendMessage(CC.translate("&c" + player.getName() + " &fdied.")));
+            profile.getMatch().getParticipants().forEach(participant -> participant.getPlayer().getPlayer().sendMessage(CC.translate("&c" + profile.getNameColor() + player.getName() + " &fdied.")));
         }
 
         ListenerUtil.clearDroppedItemsOnDeath(event, player);
@@ -162,9 +173,8 @@ public class MatchListener implements Listener {
         if (!profile.getMatch().getParticipant(player).isAllDead()) {
             Kit matchKit = profile.getMatch().getKit();
             if (matchKit.isSettingEnabled(KitSettingLivesImpl.class)
-                    || matchKit.isSettingEnabled(KitSettingBattleRushImpl.class)
-                    || matchKit.isSettingEnabled(KitSettingBedImpl.class)
-                    || matchKit.isSettingEnabled(KitSettingStickFightImpl.class)) {
+                    || matchKit.isSettingEnabled(KitSettingRoundsImpl.class)
+                    || matchKit.isSettingEnabled(KitSettingBedImpl.class)) {
                 return;
             }
 
@@ -217,7 +227,7 @@ public class MatchListener implements Listener {
         Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
         if (profile.getState() == EnumProfileState.PLAYING) {
             MatchRoundsImpl match = (MatchRoundsImpl) profile.getMatch();
-            if (match.getKit().isSettingEnabled(KitSettingBattleRushImpl.class) /*|| profile.getMatch().getKit().isSettingEnabled(KitSettingBridgesImpl.class)*/) {
+            if (match.getKit().isSettingEnabled(KitSettingRoundsImpl.class) /*|| profile.getMatch().getKit().isSettingEnabled(KitSettingBridgesImpl.class)*/) {
                 if (player.getGameMode() == GameMode.CREATIVE) return;
                 if (player.getGameMode() == GameMode.SPECTATOR) return;
                 if (player.getLocation().getBlock().getType() == Material.ENDER_PORTAL || player.getLocation().getBlock().getType() == Material.ENDER_PORTAL_FRAME) {

@@ -43,7 +43,7 @@ import dev.revere.alley.game.ffa.FFAService;
 import dev.revere.alley.game.ffa.cuboid.FFASpawnService;
 import dev.revere.alley.game.ffa.listener.FFAListener;
 import dev.revere.alley.game.ffa.listener.impl.FFACuboidListener;
-import dev.revere.alley.game.match.MatchRepository;
+import dev.revere.alley.game.match.MatchService;
 import dev.revere.alley.game.match.listener.MatchListener;
 import dev.revere.alley.game.match.listener.impl.MatchBlockListener;
 import dev.revere.alley.game.match.listener.impl.MatchDamageListener;
@@ -109,7 +109,7 @@ public class Alley extends JavaPlugin {
     private ArenaService arenaService;
     private QueueService queueService;
     private ConfigService configService;
-    private MatchRepository matchRepository;
+    private MatchService matchService;
     private PartyService partyService;
     private CooldownRepository cooldownRepository;
     private KitService kitService;
@@ -165,7 +165,7 @@ public class Alley extends JavaPlugin {
     @Override
     public void onDisable() {
         this.profileService.getProfiles().forEach((uuid, profile) -> profile.save());
-        this.matchRepository.endPresentMatches();
+        this.matchService.endPresentMatches();
 
         this.assemble.interruptAndClose(true);
 
@@ -217,7 +217,7 @@ public class Alley extends JavaPlugin {
         services.put(HotbarService.class.getSimpleName(), () -> this.hotbarService = new HotbarService(this));
         services.put(CooldownRepository.class.getSimpleName(), () -> this.cooldownRepository = new CooldownRepository());
         services.put(SnapshotRepository.class.getSimpleName(), () -> this.snapshotRepository = new SnapshotRepository());
-        services.put(MatchRepository.class.getSimpleName(), () -> this.matchRepository = new MatchRepository(this));
+        services.put(MatchService.class.getSimpleName(), () -> this.matchService = new MatchService(this));
         services.put(PartyService.class.getSimpleName(), () -> this.partyService = new PartyService(this));
         services.put(SpawnService.class.getSimpleName(), () -> this.spawnService = new SpawnService(this.configService));
         services.put(FFASpawnService.class.getSimpleName(), () -> this.ffaSpawnService = new FFASpawnService());

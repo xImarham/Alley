@@ -7,6 +7,7 @@ import dev.revere.alley.config.locale.impl.PartyLocale;
 import dev.revere.alley.game.party.Party;
 import dev.revere.alley.game.party.PartyRequest;
 import dev.revere.alley.game.party.PartyService;
+import dev.revere.alley.game.party.enums.EnumPartyState;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -40,6 +41,12 @@ public class PartyAcceptCommand extends BaseCommand {
         Party party = partyService.getPartyByLeader(target);
         if (party == null) {
             player.sendMessage(CC.translate("&cThe player you are trying to join does not have a party."));
+            return;
+        }
+
+        if (party.getState() == EnumPartyState.PUBLIC) {
+            partyService.joinParty(player, target);
+            player.sendMessage(CC.translate(PartyLocale.JOINED_PARTY.getMessage().replace("{player}", target.getName())));
             return;
         }
 

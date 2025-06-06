@@ -12,9 +12,7 @@ import lombok.Getter;
  */
 @Getter
 public class KillEffectRepository extends BaseCosmeticRepository<AbstractKillEffect> implements ICosmeticRepository<AbstractKillEffect> {
-    /**
-     * Constructor to register all kill effects
-     */
+
     public KillEffectRepository() {
         this.registerCosmetic(BloodKillEffect.class);
         this.registerCosmetic(BodyFallKillEffect.class);

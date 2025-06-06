@@ -25,7 +25,7 @@ public class LeaveMatchCommand extends BaseCommand {
             return;
         }
 
-        profile.getMatch().handleLeaving(player);
+        profile.getMatch().handleDisconnect(player);
         player.sendMessage(CC.translate("&cYou've commited suicide :("));
     }
 }

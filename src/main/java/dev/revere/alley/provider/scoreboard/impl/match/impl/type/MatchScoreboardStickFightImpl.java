@@ -1,7 +1,7 @@
 package dev.revere.alley.provider.scoreboard.impl.match.impl.type;
 
 import dev.revere.alley.Alley;
-import dev.revere.alley.game.match.impl.kit.MatchStickFightImpl;
+import dev.revere.alley.game.match.impl.MatchRoundsImpl;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.profile.Profile;
@@ -34,19 +34,19 @@ public class MatchScoreboardStickFightImpl implements IMatchScoreboard {
     public List<String> getLines(Profile profile, Player player, GameParticipant<MatchGamePlayerImpl> you, GameParticipant<MatchGamePlayerImpl> opponent) {
         List<String> scoreboardLines = new ArrayList<>();
 
-        MatchStickFightImpl stickFightMatch = (MatchStickFightImpl) profile.getMatch();
+        MatchRoundsImpl roundsMatch = (MatchRoundsImpl) profile.getMatch();
 
         for (String line : this.plugin.getConfigService().getScoreboardConfig().getStringList("scoreboard.lines.playing.solo.stickfight-match")) {
             scoreboardLines.add(CC.translate(line)
-                    .replaceAll("\\{opponent}", this.getColoredName(profile))
+                    .replaceAll("\\{opponent}", this.getColoredName(this.plugin.getProfileService().getProfile(opponent.getPlayer().getUuid())))
                     .replaceAll("\\{opponent-ping}", String.valueOf(this.getPing(opponent.getPlayer().getPlayer())))
                     .replaceAll("\\{player-ping}", String.valueOf(this.getPing(player)))
-                    .replaceAll("\\{goals}", ScoreboardUtil.visualizeGoals(stickFightMatch.getParticipantA().getPlayer().getData().getGoals(), 5))
-                    .replaceAll("\\{opponent-goals}", ScoreboardUtil.visualizeGoals(stickFightMatch.getParticipantB().getPlayer().getData().getGoals(), 5))
-                    .replaceAll("\\{current-round}", String.valueOf(stickFightMatch.getCurrentRound()))
+                    .replaceAll("\\{goals}", ScoreboardUtil.visualizeGoals(roundsMatch.getParticipantA().getPlayer().getData().getScores(), 5))
+                    .replaceAll("\\{opponent-goals}", ScoreboardUtil.visualizeGoals(roundsMatch.getParticipantB().getPlayer().getData().getScores(), 5))
+                    .replaceAll("\\{current-round}", String.valueOf(roundsMatch.getCurrentRound()))
                     .replaceAll("\\{duration}", profile.getMatch().getDuration())
-                    .replaceAll("\\{color}", String.valueOf(stickFightMatch.getTeamAColor()))
-                    .replaceAll("\\{opponent-color}", String.valueOf(stickFightMatch.getTeamBColor()))
+                    .replaceAll("\\{color}", String.valueOf(roundsMatch.getTeamAColor()))
+                    .replaceAll("\\{opponent-color}", String.valueOf(roundsMatch.getTeamBColor()))
                     .replaceAll("\\{arena}", profile.getMatch().getArena().getDisplayName() == null ? "&c&lNULL" : profile.getMatch().getArena().getDisplayName())
                     .replaceAll("\\{kit}", profile.getMatch().getKit().getDisplayName()));
         }

@@ -133,7 +133,7 @@ public class DuelRequestService {
         GameParticipant<MatchGamePlayerImpl> participantA = new GameParticipant<>(playerA);
         GameParticipant<MatchGamePlayerImpl> participantB = new GameParticipant<>(playerB);
 
-        this.plugin.getMatchRepository().createAndStartMatch(
+        this.plugin.getMatchService().createAndStartMatch(
                 duelRequest.getKit(), duelRequest.getArena(), participantA, participantB, false, false
         );
 

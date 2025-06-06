@@ -38,7 +38,7 @@ public class MatchScoreboardBedImpl implements IMatchScoreboard {
 
         for (String line : this.plugin.getConfigService().getScoreboardConfig().getStringList("scoreboard.lines.playing.solo.bed-match")) {
             scoreboardLines.add(CC.translate(line)
-                    .replaceAll("\\{opponent}", this.getColoredName(profile))
+                    .replaceAll("\\{opponent}", this.getColoredName(this.plugin.getProfileService().getProfile(opponent.getPlayer().getUuid())))
                     .replaceAll("\\{opponent-ping}", String.valueOf(this.getPing(opponent.getPlayer().getPlayer())))
                     .replaceAll("\\{player-ping}", String.valueOf(this.getPing(player)))
                     .replaceAll("\\{player-bed}", ScoreboardUtil.visualizeBed(you.getPlayer().getData().isBedBroken()))

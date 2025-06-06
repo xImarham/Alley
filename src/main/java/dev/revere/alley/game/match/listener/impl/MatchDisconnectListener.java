@@ -1,8 +1,6 @@
 package dev.revere.alley.game.match.listener.impl;
 
 import dev.revere.alley.Alley;
-import dev.revere.alley.base.kit.setting.impl.mode.KitSettingBattleRushImpl;
-import dev.revere.alley.base.kit.setting.impl.mode.KitSettingLivesImpl;
 import dev.revere.alley.game.match.AbstractMatch;
 import dev.revere.alley.game.match.enums.EnumMatchState;
 import dev.revere.alley.profile.Profile;
@@ -40,7 +38,6 @@ public class MatchDisconnectListener implements Listener {
             AbstractMatch match = profile.getMatch();
 
             if (match.getState() == EnumMatchState.STARTING || match.getState() == EnumMatchState.RUNNING) {
-                if (handleUniqueKitCases(match, player)) return;
                 match.handleDisconnect(player);
             }
         }
@@ -55,28 +52,8 @@ public class MatchDisconnectListener implements Listener {
             AbstractMatch match = profile.getMatch();
 
             if (match.getState() == EnumMatchState.STARTING || match.getState() == EnumMatchState.RUNNING) {
-                if (handleUniqueKitCases(match, player)) return;
                 match.handleDisconnect(player);
             }
         }
-    }
-
-    /**
-     * Handles unique kit cases when a player disconnects.
-     *
-     * @param match  The match.
-     * @param player The player.
-     * @return Whether the player was handled.
-     */
-    private boolean handleUniqueKitCases(AbstractMatch match, Player player) {
-        if (match.getKit().isSettingEnabled(KitSettingLivesImpl.class)) {
-            match.getGamePlayer(player).getData().setLives(0);
-            match.handleDeath(player);
-            return true;
-        } else if (match.getKit().isSettingEnabled(KitSettingBattleRushImpl.class)) {
-            //TODO: handle battle rush disconnect, couldnt be bothered to implement it right now
-            return true;
-        }
-        return false;
     }
 }

@@ -1,6 +1,7 @@
 package dev.revere.alley.tool.reflection.impl;
 
 import dev.revere.alley.Alley;
+import dev.revere.alley.profile.Profile;
 import dev.revere.alley.tool.logger.Logger;
 import dev.revere.alley.tool.reflection.IReflection;
 import dev.revere.alley.util.chat.CC;
@@ -77,6 +78,7 @@ public class ActionBarReflectionService implements IReflection {
      * @param victim The player who died.
      */
     public void sendDeathMessage(Player killer, Player victim) {
-        this.sendMessage(killer, "&c&lKILL! &f" + victim.getName(), 3);
+        Profile victimProfile = this.plugin.getProfileService().getProfile(victim.getUniqueId());
+        this.sendMessage(killer, "&c&lKILL! &f" + victimProfile.getNameColor() + victim.getName(), 3);
     }
 }

@@ -4,6 +4,9 @@ import dev.revere.alley.Alley;
 import dev.revere.alley.base.kit.setting.impl.mode.*;
 import dev.revere.alley.game.match.AbstractMatch;
 import dev.revere.alley.game.match.enums.EnumMatchState;
+import dev.revere.alley.game.match.impl.MatchBedImpl;
+import dev.revere.alley.game.match.impl.MatchLivesImpl;
+import dev.revere.alley.game.match.impl.MatchRoundsImpl;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.provider.scoreboard.impl.match.impl.MatchScoreboardRegularImpl;
 import dev.revere.alley.provider.scoreboard.impl.match.impl.state.MatchScoreboardEndingImpl;
@@ -18,16 +21,17 @@ import dev.revere.alley.provider.scoreboard.impl.match.impl.type.*;
 public class MatchScoreboardFactory {
     protected final Alley plugin;
 
-    private final MatchScoreboardStartingImpl matchScoreboardStarting;
-    private final MatchScoreboardEndingImpl matchScoreboardEnding;
+    protected final MatchScoreboardStartingImpl matchScoreboardStarting;
+    protected final MatchScoreboardEndingImpl matchScoreboardEnding;
 
-    private final MatchScoreboardBoxingImpl matchScoreboardBoxing;
-    private final MatchScoreboardRoundsImpl matchScoreboardRounds;
-    private final MatchScoreboardStickFightImpl matchScoreboardStickFight;
-    private final MatchScoreboardLivesImpl matchScoreboardLives;
-    private final MatchScoreboardBedImpl matchScoreboardBed;
+    protected final MatchScoreboardStickFightImpl matchScoreboardStickFight;
+    protected final MatchScoreboardBoxingImpl matchScoreboardBoxing;
 
-    private final MatchScoreboardRegularImpl matchScoreboardRegular;
+    protected final MatchScoreboardRoundsImpl matchScoreboardRounds;
+    protected final MatchScoreboardLivesImpl matchScoreboardLives;
+    protected final MatchScoreboardBedImpl matchScoreboardBed;
+
+    protected final MatchScoreboardRegularImpl matchScoreboardRegular;
 
     /**
      * Constructor for the MatchScoreboardFactory class.
@@ -40,9 +44,10 @@ public class MatchScoreboardFactory {
         this.matchScoreboardStarting = new MatchScoreboardStartingImpl(this.plugin);
         this.matchScoreboardEnding = new MatchScoreboardEndingImpl(this.plugin);
 
-        this.matchScoreboardBoxing = new MatchScoreboardBoxingImpl(this.plugin);
-        this.matchScoreboardRounds = new MatchScoreboardRoundsImpl(this.plugin);
         this.matchScoreboardStickFight = new MatchScoreboardStickFightImpl(this.plugin);
+        this.matchScoreboardBoxing = new MatchScoreboardBoxingImpl(this.plugin);
+
+        this.matchScoreboardRounds = new MatchScoreboardRoundsImpl(this.plugin);
         this.matchScoreboardLives = new MatchScoreboardLivesImpl(this.plugin);
         this.matchScoreboardBed = new MatchScoreboardBedImpl(this.plugin);
 
@@ -60,11 +65,13 @@ public class MatchScoreboardFactory {
 
         if (match.getState() == EnumMatchState.STARTING) return this.matchScoreboardStarting;
         if (match.getState() == EnumMatchState.ENDING_MATCH) return this.matchScoreboardEnding;
+
         if (match.getKit().isSettingEnabled(KitSettingBoxingImpl.class)) return this.matchScoreboardBoxing;
-        if (match.getKit().isSettingEnabled(KitSettingBattleRushImpl.class)) return this.matchScoreboardRounds;
         if (match.getKit().isSettingEnabled(KitSettingStickFightImpl.class)) return this.matchScoreboardStickFight;
-        if (match.getKit().isSettingEnabled(KitSettingLivesImpl.class)) return this.matchScoreboardLives;
-        if (match.getKit().isSettingEnabled(KitSettingBedImpl.class)) return this.matchScoreboardBed;
+
+        if (match instanceof MatchRoundsImpl) return this.matchScoreboardRounds;
+        if (match instanceof MatchLivesImpl) return this.matchScoreboardLives;
+        if (match instanceof MatchBedImpl) return this.matchScoreboardBed;
 
         return this.matchScoreboardRegular;
     }

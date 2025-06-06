@@ -102,7 +102,7 @@ public class MatchLivesImpl extends MatchRegularImpl {
         player.teleport(spawnLocation);
 
         this.giveLoadout(player, this.getKit());
-        this.applyWoolColor(player);
+        this.applyWoolAndArmorColor(player);
 
         this.notifyParticipants("&b" + player.getName() + " &ahas respawned");
         this.notifySpectators("&b" + player.getName() + " &ahas respawned");

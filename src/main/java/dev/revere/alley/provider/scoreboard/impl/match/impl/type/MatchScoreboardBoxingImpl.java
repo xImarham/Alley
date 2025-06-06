@@ -47,7 +47,7 @@ public class MatchScoreboardBoxingImpl implements IMatchScoreboard {
 
         for (String line : template) {
             lines.add(CC.translate(line)
-                    .replace("{opponent}", this.getColoredName(profile))
+                    .replace("{opponent}", this.getColoredName(this.plugin.getProfileService().getProfile(opponent.getPlayer().getUuid())))
                     .replace("{opponent-ping}", String.valueOf(this.getPing(opponent.getPlayer().getPlayer())))
                     .replace("{player-ping}", String.valueOf(this.getPing(player)))
                     .replace("{player-hits}", String.valueOf(playerHits))

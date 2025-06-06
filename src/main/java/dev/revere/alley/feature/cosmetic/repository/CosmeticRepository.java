@@ -32,4 +32,20 @@ public class CosmeticRepository {
     private void registerCosmeticRepository(String name, ICosmeticRepository<?> repository) {
         this.cosmeticRepositories.put(name, repository);
     }
+
+    /**
+     * Get a cosmetic repository by its class type.
+     *
+     * @param clazz the class type of the cosmetic repository to retrieve.
+     * @param <T>   the type of the cosmetic repository, extending ICosmeticRepository.
+     * @return the cosmetic repository instance if found, or null if not found.
+     */
+    public <T extends ICosmeticRepository<?>> T getCosmeticRepository(Class<T> clazz) {
+        for (ICosmeticRepository<?> repository : this.cosmeticRepositories.values()) {
+            if (clazz.isInstance(repository)) {
+                return clazz.cast(repository);
+            }
+        }
+        return null; // or throw an exception if not found
+    }
 }

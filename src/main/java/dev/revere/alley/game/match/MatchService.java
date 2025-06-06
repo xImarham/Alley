@@ -3,16 +3,15 @@ package dev.revere.alley.game.match;
 import dev.revere.alley.Alley;
 import dev.revere.alley.base.arena.AbstractArena;
 import dev.revere.alley.base.kit.Kit;
-import dev.revere.alley.base.kit.setting.impl.mode.KitSettingBattleRushImpl;
 import dev.revere.alley.base.kit.setting.impl.mode.KitSettingBedImpl;
 import dev.revere.alley.base.kit.setting.impl.mode.KitSettingLivesImpl;
+import dev.revere.alley.base.kit.setting.impl.mode.KitSettingRoundsImpl;
 import dev.revere.alley.base.kit.setting.impl.mode.KitSettingStickFightImpl;
 import dev.revere.alley.base.queue.Queue;
 import dev.revere.alley.game.match.impl.MatchBedImpl;
 import dev.revere.alley.game.match.impl.MatchLivesImpl;
 import dev.revere.alley.game.match.impl.MatchRegularImpl;
 import dev.revere.alley.game.match.impl.MatchRoundsImpl;
-import dev.revere.alley.game.match.impl.kit.MatchStickFightImpl;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.tool.logger.Logger;
@@ -27,16 +26,16 @@ import java.util.List;
  * @date 5/21/2024
  */
 @Getter
-public class MatchRepository {
+public class MatchService {
     protected final Alley plugin;
     private final List<AbstractMatch> matches;
 
     /**
-     * Constructor for the MatchRepository class.
+     * Constructor for the MatchService class.
      *
      * @param plugin The Alley plugin instance.
      */
-    public MatchRepository(Alley plugin) {
+    public MatchService(Alley plugin) {
         this.plugin = plugin;
         this.matches = new ArrayList<>();
     }
@@ -61,10 +60,10 @@ public class MatchRepository {
 
         if (kit.isSettingEnabled(KitSettingLivesImpl.class)) {
             match = new MatchLivesImpl(matchingQueue, kit, arena, isRanked, participantA, participantB);
-        } else if (kit.isSettingEnabled(KitSettingBattleRushImpl.class)) {
+        } else if (kit.isSettingEnabled(KitSettingRoundsImpl.class)) {
             match = new MatchRoundsImpl(matchingQueue, kit, arena, isRanked, participantA, participantB, 3);
         } else if (kit.isSettingEnabled(KitSettingStickFightImpl.class)) {
-            match = new MatchStickFightImpl(matchingQueue, kit, arena, isRanked, participantA, participantB, 5);
+            match = new MatchRoundsImpl(matchingQueue, kit, arena, isRanked, participantA, participantB, 5);
         } else if (kit.isSettingEnabled(KitSettingBedImpl.class)) {
             match = new MatchBedImpl(matchingQueue, kit, arena, isRanked, participantA, participantB);
         } else {

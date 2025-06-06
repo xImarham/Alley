@@ -102,7 +102,7 @@ public class PartyEventSplitArenaSelectorMenu extends Menu {
                 }
             }
 
-            Alley.getInstance().getMatchRepository().createAndStartMatch(
+            Alley.getInstance().getMatchService().createAndStartMatch(
                     this.kit, this.arena, participantA, participantB, true, false
             );
         }

@@ -48,7 +48,7 @@ public class Queue {
      * @return The amount of people playing that queue.
      */
     public int getQueueFightCount() {
-        return Alley.getInstance().getMatchRepository().getMatches().stream().filter(match -> match.getQueue().equals(this)).toArray().length;
+        return Alley.getInstance().getMatchService().getMatches().stream().filter(match -> match.getQueue().equals(this)).toArray().length;
     }
 
     /**

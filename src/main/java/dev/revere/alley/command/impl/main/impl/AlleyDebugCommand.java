@@ -82,7 +82,7 @@ public class AlleyDebugCommand extends BaseCommand {
                 "",
                 "     &b&lAlley &7┃ &fInstance Information",
                 "      &f┃ Profiles: &b" + this.formatNumber(this.plugin.getProfileService().getProfiles().size()),
-                "      &f┃ Matches: &b" + this.formatNumber(this.plugin.getMatchRepository().getMatches().size()),
+                "      &f┃ Matches: &b" + this.formatNumber(this.plugin.getMatchService().getMatches().size()),
                 "      &f┃ Queues: &b" + this.formatNumber(this.plugin.getQueueService().getQueues().size()),
                 "      &f┃ Queue profiles: &b" + this.formatNumber(Arrays.stream(this.plugin.getQueueService().getQueues().stream().mapToInt(queue -> queue.getProfiles().size()).toArray()).sum()),
                 "      &f┃ Cooldowns: &b" + this.formatNumber(this.plugin.getCooldownRepository().getCooldowns().size()),

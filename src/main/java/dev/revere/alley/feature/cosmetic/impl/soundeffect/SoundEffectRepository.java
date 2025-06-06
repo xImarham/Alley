@@ -14,9 +14,7 @@ import lombok.Getter;
  */
 @Getter
 public class SoundEffectRepository extends BaseCosmeticRepository<AbstractSoundEffect> implements ICosmeticRepository<AbstractSoundEffect> {
-    /**
-     * Constructor to register all kill effects
-     */
+
     public SoundEffectRepository() {
         this.registerCosmetic(ExplosionSoundEffect.class);
         this.registerCosmetic(NoneSoundEffect.class);

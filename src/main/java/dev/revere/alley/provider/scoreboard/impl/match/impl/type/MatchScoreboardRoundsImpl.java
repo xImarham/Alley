@@ -38,14 +38,14 @@ public class MatchScoreboardRoundsImpl implements IMatchScoreboard {
 
         MatchRoundsImpl roundsMatch = (MatchRoundsImpl) profile.getMatch();
 
-        for (String line : this.plugin.getConfigService().getScoreboardConfig().getStringList("scoreboard.lines.playing.solo.battlerush-match")) {
+        for (String line : this.plugin.getConfigService().getScoreboardConfig().getStringList("scoreboard.lines.playing.solo.rounds-match")) {
             scoreboardLines.add(CC.translate(line)
-                    .replaceAll("\\{opponent}", this.getColoredName(profile))
+                    .replaceAll("\\{opponent}", this.getColoredName(this.plugin.getProfileService().getProfile(opponent.getPlayer().getUuid())))
                     .replaceAll("\\{opponent-ping}", String.valueOf(this.getPing(opponent.getPlayer().getPlayer())))
                     .replaceAll("\\{player-ping}", String.valueOf(this.getPing(player)))
                     .replaceAll("\\{time-left}", this.getFormattedTime(profile))
-                    .replaceAll("\\{goals}", ScoreboardUtil.visualizeGoals(roundsMatch.getParticipantA().getPlayer().getData().getGoals(), 3))
-                    .replaceAll("\\{opponent-goals}", ScoreboardUtil.visualizeGoals(roundsMatch.getParticipantB().getPlayer().getData().getGoals(), 3))
+                    .replaceAll("\\{goals}", ScoreboardUtil.visualizeGoals(roundsMatch.getParticipantA().getPlayer().getData().getScores(), 3))
+                    .replaceAll("\\{opponent-goals}", ScoreboardUtil.visualizeGoals(roundsMatch.getParticipantB().getPlayer().getData().getScores(), 3))
                     .replaceAll("\\{kills}", String.valueOf(profile.getMatch().getGamePlayer(player).getData().getKills()))
                     .replaceAll("\\{current-round}", String.valueOf(roundsMatch.getCurrentRound()))
                     .replaceAll("\\{duration}", profile.getMatch().getDuration())

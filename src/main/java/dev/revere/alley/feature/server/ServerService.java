@@ -3,7 +3,7 @@ package dev.revere.alley.feature.server;
 import dev.revere.alley.Alley;
 import dev.revere.alley.base.hotbar.enums.EnumHotbarType;
 import dev.revere.alley.game.match.AbstractMatch;
-import dev.revere.alley.game.match.MatchRepository;
+import dev.revere.alley.game.match.MatchService;
 import dev.revere.alley.game.party.Party;
 import dev.revere.alley.game.party.PartyService;
 import dev.revere.alley.profile.Profile;
@@ -52,8 +52,8 @@ public class ServerService {
      * @param plugin the instance of the plugin
      */
     public void disbandMatches(Player player, Alley plugin) {
-        MatchRepository matchRepository = plugin.getMatchRepository();
-        List<AbstractMatch> matches = new ArrayList<>(matchRepository.getMatches());
+        MatchService matchService = plugin.getMatchService();
+        List<AbstractMatch> matches = new ArrayList<>(matchService.getMatches());
         if (matches.isEmpty()) {
             player.sendMessage(CC.translate("&cCould not find any matches to end."));
         } else {

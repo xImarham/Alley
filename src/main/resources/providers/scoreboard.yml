@@ -92,7 +92,7 @@ scoreboard:
           - ""
           - "&fYour Ping: &b{player-ping}ms"
           - "&fTheir Ping: &b{opponent-ping}ms"
-        battlerush-match:
+        rounds-match:
           - "{sidebar}"
           #        - "&fOpponent: &b{opponent}"
           #        - "&fDuration: &b{duration}"

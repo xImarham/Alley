@@ -79,17 +79,18 @@ public class MatchBedImpl extends MatchRegularImpl {
         player.teleport(spawnLocation);
 
         this.giveLoadout(player, this.getKit());
-        this.applyWoolColor(player);
+        this.applyWoolAndArmorColor(player);
 
         this.notifyParticipants("&b" + player.getName() + " &ahas respawned");
         this.notifySpectators("&b" + player.getName() + " &ahas respawned");
     }
 
-    @Override
-    public void handleDisconnect(Player player) {
-        super.handleDisconnect(player);
-    }
-
+    /**
+     * Alerts the participants about the bed destruction.
+     *
+     * @param breaker  The player who broke the bed.
+     * @param opponent The opponent whose bed was destroyed.
+     */
     public void alertBedDestruction(Player breaker, GameParticipant<MatchGamePlayerImpl> opponent) {
         String destructionMessage = "&6&lBED DESTRUCTION!";
         String subMessage = " &b" + breaker.getName() + " &7has destroyed the bed of &b" + opponent.getPlayer().getUsername() + "&7!";

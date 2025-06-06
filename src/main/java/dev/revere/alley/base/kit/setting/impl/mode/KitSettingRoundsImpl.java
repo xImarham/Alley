@@ -8,6 +8,6 @@ import dev.revere.alley.base.kit.setting.annotation.KitSettingData;
  * @project Alley
  * @date 05/10/2024 - 10:41
  */
-@KitSettingData(name = "BattleRush", description = "The Battle Rush Kit Setting, first having 3 goals wins.", enabled = false)
-public class KitSettingBattleRushImpl extends KitSetting {
+@KitSettingData(name = "Rounds", description = "The Rounds Kit Setting, first to have specific amount of scores, wins.", enabled = false)
+public class KitSettingRoundsImpl extends KitSetting {
 }

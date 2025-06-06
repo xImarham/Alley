@@ -39,7 +39,7 @@ public class MatchScoreboardStartingImpl implements IMatchScoreboard {
 
         for (String line : this.plugin.getConfigService().getScoreboardConfig().getStringList("scoreboard.lines.starting")) {
             scoreboardLines.add(CC.translate(line)
-                    .replaceAll("\\{player}", this.getColoredName(profile))
+                    .replaceAll("\\{player}", this.getColoredName(this.plugin.getProfileService().getProfile(opponent.getPlayer().getUuid())))
                     .replaceAll("\\{opponent}", this.getColoredName(this.plugin.getProfileService().getProfile(opponent.getPlayer().getUuid())))
                     .replaceAll("\\{opponent-ping}", String.valueOf(this.getPing(opponent.getPlayer().getPlayer())))
                     .replaceAll("\\{player-ping}", String.valueOf(this.getPing(player)))

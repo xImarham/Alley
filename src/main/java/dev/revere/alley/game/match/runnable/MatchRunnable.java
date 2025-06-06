@@ -1,7 +1,7 @@
 package dev.revere.alley.game.match.runnable;
 
 import dev.revere.alley.Alley;
-import dev.revere.alley.base.kit.setting.impl.mode.KitSettingBattleRushImpl;
+import dev.revere.alley.base.kit.setting.impl.mode.KitSettingRoundsImpl;
 import dev.revere.alley.game.match.AbstractMatch;
 import dev.revere.alley.game.match.enums.EnumMatchState;
 import dev.revere.alley.tool.reflection.impl.TitleReflectionService;
@@ -90,7 +90,7 @@ public class MatchRunnable extends BukkitRunnable {
      */
     private boolean hasToEnd() {
         long elapsedTime = System.currentTimeMillis() - match.getStartTime();
-        if (this.match.getKit().isSettingEnabled(KitSettingBattleRushImpl.class)) {
+        if (this.match.getKit().isSettingEnabled(KitSettingRoundsImpl.class)) {
             return checkTime(elapsedTime, 900_000); // 15 minutes
         } else {
             return this.checkTime(elapsedTime, 1800_000); // 30 minutes (default)

@@ -117,7 +117,7 @@ public class QueueRunnable implements Runnable {
      * @param secondProfile       The second profile.
      */
     private void processGame(Queue queue, AbstractArena arena, GameParticipantList gameParticipantList, QueueProfile firstProfile, QueueProfile secondProfile) {
-        Alley.getInstance().getMatchRepository().createAndStartMatch(
+        Alley.getInstance().getMatchService().createAndStartMatch(
                 queue.getKit(), arena, gameParticipantList.participantA, gameParticipantList.participantB, false, true
         );
 

@@ -1,5 +1,6 @@
 package dev.revere.alley.profile.data.impl;
 
+import dev.revere.alley.Alley;
 import dev.revere.alley.feature.cosmetic.impl.killeffect.AbstractKillEffect;
 import dev.revere.alley.feature.cosmetic.impl.killeffect.KillEffectRepository;
 import dev.revere.alley.feature.cosmetic.impl.soundeffect.AbstractSoundEffect;
@@ -20,10 +21,10 @@ public class ProfileCosmeticData {
     private String selectedSoundEffect;
 
     public ProfileCosmeticData() {
-        KillEffectRepository killEffectRepository = new KillEffectRepository();
+        KillEffectRepository killEffectRepository = Alley.getInstance().getCosmeticRepository().getCosmeticRepository(KillEffectRepository.class);
         this.selectedKillEffect = killEffectRepository.getCosmetics().isEmpty() ? "None" : killEffectRepository.getCosmetics().get(0).getName();
 
-        SoundEffectRepository soundEffectRepository = new SoundEffectRepository();
+        SoundEffectRepository soundEffectRepository = Alley.getInstance().getCosmeticRepository().getCosmeticRepository(SoundEffectRepository.class);
         this.selectedSoundEffect = soundEffectRepository.getCosmetics().isEmpty() ? "None" : soundEffectRepository.getCosmetics().get(0).getName();
     }
 
@@ -35,9 +36,9 @@ public class ProfileCosmeticData {
      */
     public void setActiveCosmetic(String type, ICosmetic name) {
         if (type.equalsIgnoreCase("KillEffect")) {
-            selectedKillEffect = name.getName();
+            this.selectedKillEffect = name.getName();
         } else if (type.equalsIgnoreCase("SoundEffect")) {
-            selectedSoundEffect = name.getName();
+            this.selectedSoundEffect = name.getName();
         }
     }
 
@@ -49,9 +50,9 @@ public class ProfileCosmeticData {
      */
     public String getActiveCosmetic(String type) {
         if (type.equalsIgnoreCase("KillEffect")) {
-            return selectedKillEffect != null ? selectedKillEffect : "None";
+            return this.selectedKillEffect != null ? this.selectedKillEffect : "None";
         } else if (type.equalsIgnoreCase("SoundEffect")) {
-            return selectedSoundEffect != null ? selectedSoundEffect : "None";
+            return this.selectedSoundEffect != null ? this.selectedSoundEffect : "None";
         }
         return "None";
     }
@@ -64,9 +65,9 @@ public class ProfileCosmeticData {
      */
     public String getActiveCosmetic(ICosmetic cosmetic) {
         if (cosmetic instanceof AbstractKillEffect) {
-            return selectedKillEffect != null ? selectedKillEffect : "None";
+            return this.selectedKillEffect != null ? this.selectedKillEffect : "None";
         } else if (cosmetic instanceof AbstractSoundEffect) {
-            return selectedSoundEffect != null ? selectedSoundEffect : "None";
+            return this.selectedSoundEffect != null ? this.selectedSoundEffect : "None";
         }
         return "None";
     }
@@ -79,9 +80,9 @@ public class ProfileCosmeticData {
      */
     public boolean isSelectedCosmetic(ICosmetic cosmetic) {
         if (cosmetic instanceof AbstractKillEffect) {
-            return selectedKillEffect != null && selectedKillEffect.equals(cosmetic.getName());
+            return this.selectedKillEffect != null && this.selectedKillEffect.equals(cosmetic.getName());
         } else if (cosmetic instanceof AbstractSoundEffect) {
-            return selectedSoundEffect != null && selectedSoundEffect.equals(cosmetic.getName());
+            return this.selectedSoundEffect != null && this.selectedSoundEffect.equals(cosmetic.getName());
         }
         return false;
     }

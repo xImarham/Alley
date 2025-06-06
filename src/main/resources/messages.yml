@@ -121,13 +121,13 @@ match:
         loser:
           command: "/inventory {loser}"
           hover: "&cClick to view {loser}'s inventory"
-      conjoined:
-        format:
-          - ""
-          - "&b&lTeam Match Results:"
-          - "&aWinner Team: &f{winner}"
-          - "&cLoser Team: &f{loser}"
-          - ""
+      #conjoined:
+      #  format:
+      #    - ""
+      #    - "&b&lTeam Match Results:"
+      #    - "&aWinner Team: &f{winner}"
+      #    - "&cLoser Team: &f{loser}"
+      #    - ""
     elo-changes:
       winner-indicator-color: "&a"  # Color for positive Elo gain
       loser-indicator-color: "&c"   # Color for negative Elo loss

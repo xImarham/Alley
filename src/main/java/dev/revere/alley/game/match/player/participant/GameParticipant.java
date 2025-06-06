@@ -38,13 +38,12 @@ public class GameParticipant<T extends GamePlayer> {
     }
 
     /**
-     * Gets the size of the players in the participant.
-     * (This is always 0 for a solo participant, as it represents a single player.)
+     * Gets the player associated with the participant.
      *
-     * @return The size of the players in the participant, which is always 0 for solo participants.
+     * @return The player associated with the participant.
      */
     public int getPlayerSize() {
-        return 0;
+        return this.player.isDead() ? 0 : 1;
     }
 
     /**
