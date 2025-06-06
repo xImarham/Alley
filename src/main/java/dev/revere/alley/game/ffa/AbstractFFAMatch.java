@@ -26,6 +26,8 @@ import java.util.UUID;
 @Getter
 @Setter
 public abstract class AbstractFFAMatch {
+    private final Alley plugin = Alley.getInstance();
+
     private final String name;
 
     private final AbstractArena arena;
@@ -70,7 +72,7 @@ public abstract class AbstractFFAMatch {
      * @param player The player who wants to spectate the match.
      */
     public void addSpectator(Player player) {
-        ProfileService profileService = Alley.getInstance().getProfileService();
+        ProfileService profileService = this.plugin.getProfileService();
         Profile profile = profileService.getProfile(player.getUniqueId());
 
         if (this.arena.getCenter() == null) {
@@ -81,7 +83,9 @@ public abstract class AbstractFFAMatch {
         if (profile.getState() != EnumProfileState.SPECTATING) {
             profile.setState(EnumProfileState.SPECTATING);
             profile.setFfaMatch(this);
-            Alley.getInstance().getHotbarService().applyHotbarItems(player, EnumHotbarType.SPECTATOR);
+
+            this.plugin.getVisibilityService().updateVisibility(player);
+            this.plugin.getHotbarService().applyHotbarItems(player, EnumHotbarType.SPECTATOR);
         }
 
         player.teleport(this.arena.getCenter());
@@ -98,20 +102,22 @@ public abstract class AbstractFFAMatch {
      * @param player The player to remove from the spectator list.
      */
     public void removeSpectator(Player player) {
-        ProfileService profileService = Alley.getInstance().getProfileService();
+        ProfileService profileService = this.plugin.getProfileService();
         Profile profile = profileService.getProfile(player.getUniqueId());
 
         if (profile.getState() == EnumProfileState.SPECTATING) {
             profile.setState(EnumProfileState.LOBBY);
             profile.setFfaMatch(null);
-            Alley.getInstance().getHotbarService().applyHotbarItems(player, EnumHotbarType.LOBBY);
+
+            this.plugin.getVisibilityService().updateVisibility(player);
+            this.plugin.getHotbarService().applyHotbarItems(player, EnumHotbarType.LOBBY);
         }
 
         player.spigot().setCollidesWithEntities(true);
         player.setAllowFlight(false);
         player.setFlying(false);
 
-        Alley.getInstance().getSpawnService().teleportToSpawn(player);
+        this.plugin.getSpawnService().teleportToSpawn(player);
 
         this.spectators.remove(player.getUniqueId());
     }
@@ -136,7 +142,7 @@ public abstract class AbstractFFAMatch {
      * @param killer The killer
      */
     public void handleCombatLog(Player player, Player killer) {
-        ProfileService profileService = Alley.getInstance().getProfileService();
+        ProfileService profileService = this.plugin.getProfileService();
         Profile profile = profileService.getProfile(player.getUniqueId());
         Profile killerProfile = profileService.getProfile(killer.getUniqueId());
 
@@ -145,7 +151,7 @@ public abstract class AbstractFFAMatch {
 
         this.getPlayers().forEach(ffaPlayer -> ffaPlayer.getPlayer().sendMessage(CC.translate("&7(Combat Log) &c" + player.getName() + " has been killed by " + killer.getName() + ".")));
 
-        CombatService combatService = Alley.getInstance().getCombatService();
+        CombatService combatService = this.plugin.getCombatService();
         combatService.resetCombatLog(player);
     }
 }

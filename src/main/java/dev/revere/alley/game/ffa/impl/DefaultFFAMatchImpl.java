@@ -21,6 +21,8 @@ import org.bukkit.entity.Player;
  * @date 5/27/2024
  */
 public class DefaultFFAMatchImpl extends AbstractFFAMatch {
+    protected final Alley plugin = Alley.getInstance();
+
     /**
      * Constructor for the DefaultFFAMatchImpl class.
      *
@@ -77,13 +79,15 @@ public class DefaultFFAMatchImpl extends AbstractFFAMatch {
 
         player.sendMessage(CC.translate("&aYou have left the FFA match."));
 
-        Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
+        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
         profile.setState(EnumProfileState.LOBBY);
         profile.setFfaMatch(null);
 
+        this.plugin.getVisibilityService().updateVisibility(player);
+
         PlayerUtil.reset(player, false);
-        Alley.getInstance().getSpawnService().teleportToSpawn(player);
-        Alley.getInstance().getHotbarService().applyHotbarItems(player, EnumHotbarType.LOBBY);
+        this.plugin.getSpawnService().teleportToSpawn(player);
+        this.plugin.getHotbarService().applyHotbarItems(player, EnumHotbarType.LOBBY);
     }
 
     /**
@@ -96,9 +100,11 @@ public class DefaultFFAMatchImpl extends AbstractFFAMatch {
         GameFFAPlayer gameFFAPlayer = this.getGameFFAPlayer(player);
         gameFFAPlayer.setState(EnumFFAState.SPAWN);
 
-        Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
+        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
         profile.setState(EnumProfileState.FFA);
         profile.setFfaMatch(this);
+
+        this.plugin.getVisibilityService().updateVisibility(player);
 
         PlayerUtil.reset(player, true);
 
@@ -116,13 +122,13 @@ public class DefaultFFAMatchImpl extends AbstractFFAMatch {
      * @param player The player
      */
     public void handleRespawn(Player player) {
-        Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
+        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
         profile.setState(EnumProfileState.FFA);
         profile.setFfaMatch(this);
 
         AbstractArena arena = this.getArena();
 
-        Bukkit.getScheduler().runTaskLater(Alley.getInstance(), () -> {
+        Bukkit.getScheduler().runTaskLater(this.plugin, () -> {
             player.teleport(arena.getPos1());
 
             Kit kit = this.getKit();
@@ -145,23 +151,23 @@ public class DefaultFFAMatchImpl extends AbstractFFAMatch {
     @Override
     public void handleDeath(Player player, Player killer) {
         if (killer == null) {
-            Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
+            Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
             profile.getProfileData().getFfaData().get(this.getKit().getName()).incrementDeaths();
             this.getPlayers().forEach(ffaPlayer -> ffaPlayer.getPlayer().sendMessage(CC.translate("&c" + player.getName() + " has died.")));
             this.handleRespawn(player);
             return;
         }
 
-        Profile killerProfile = Alley.getInstance().getProfileService().getProfile(killer.getUniqueId());
+        Profile killerProfile = this.plugin.getProfileService().getProfile(killer.getUniqueId());
         if (killerProfile.getProfileData().getFfaData().get(getKit().getName()) != null) {
             killerProfile.getProfileData().getFfaData().get(getKit().getName()).incrementKills();
         }
 
-        Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
+        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
         profile.getProfileData().getFfaData().get(getKit().getName()).incrementDeaths();
 
-        Alley.getInstance().getReflectionRepository().getReflectionService(ActionBarReflectionService.class).sendDeathMessage(killer, player);
-        Alley.getInstance().getCombatService().resetCombatLog(player);
+        this.plugin.getReflectionRepository().getReflectionService(ActionBarReflectionService.class).sendDeathMessage(killer, player);
+        this.plugin.getCombatService().resetCombatLog(player);
 
         this.getPlayers().forEach(ffaPlayer -> ffaPlayer.getPlayer().sendMessage(CC.translate("&b" + player.getName() + " &ahas been killed by &b" + killer.getName() + "&a.")));
         this.handleRespawn(player);

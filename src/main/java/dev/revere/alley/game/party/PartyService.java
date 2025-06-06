@@ -238,6 +238,8 @@ public class PartyService {
         } else {
             hotbarService.applyHotbarItems(player, EnumHotbarType.LOBBY);
         }
+
+        this.plugin.getVisibilityService().updateVisibility(player);
     }
 
     /**
