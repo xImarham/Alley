@@ -7,6 +7,7 @@ import dev.revere.alley.profile.ProfileService;
 import dev.revere.alley.profile.enums.EnumProfileState;
 import dev.revere.alley.util.PlayerUtil;
 import dev.revere.alley.util.chat.CC;
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -147,6 +148,8 @@ public class ProfileListener implements Listener {
 
         Alley.getInstance().getSpawnService().teleportToSpawn(player);
         Alley.getInstance().getHotbarService().applyHotbarItems(player, EnumHotbarType.LOBBY);
+
+        this.plugin.getVisibilityService().updateVisibilityAll(player);
     }
 
     /**

@@ -20,6 +20,7 @@ import dev.revere.alley.base.queue.QueueService;
 import dev.revere.alley.base.queue.listener.QueueListener;
 import dev.revere.alley.base.spawn.SpawnService;
 import dev.revere.alley.base.spawn.listener.SpawnListener;
+import dev.revere.alley.base.visibility.VisibilityService;
 import dev.revere.alley.command.CommandDataCollector;
 import dev.revere.alley.command.CommandUtility;
 import dev.revere.alley.config.ConfigService;
@@ -131,6 +132,7 @@ public class Alley extends JavaPlugin {
     private LevelService levelService;
     private ProfanityFilter profanityFilter;
     private LayoutService layoutService;
+    private VisibilityService visibilityService;
 
     private boolean loaded;
 
@@ -231,6 +233,7 @@ public class Alley extends JavaPlugin {
         services.put(ReflectionRepository.class.getSimpleName(), () -> this.reflectionRepository = new ReflectionRepository(this));
         services.put(ProfanityFilter.class.getSimpleName(), () -> this.profanityFilter = new ProfanityFilter(this));
         services.put(LayoutService.class.getSimpleName(), () -> this.layoutService = new LayoutService(this));
+        services.put(VisibilityService.class.getSimpleName(), () -> this.visibilityService = new VisibilityService(this));
 
         services.forEach(Logger::logTime);
     }
