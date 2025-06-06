@@ -59,7 +59,7 @@ public class MatchRoundsImpl extends MatchRegularImpl {
     @Override
     public void handleRoundEnd() {
         this.winner = this.participantA.isAllDead() ? this.participantB : this.participantA;
-        this.winner.getPlayer().getData().incrementScores();
+        this.winner.getPlayer().getData().incrementScore();
         this.loser = this.participantA.isAllDead() ? this.participantA : this.participantB;
         this.currentRound++;
 
@@ -161,7 +161,7 @@ public class MatchRoundsImpl extends MatchRegularImpl {
 
     @Override
     public boolean canStartRound() {
-        return this.participantA.getPlayer().getData().getScores() < this.rounds && this.participantB.getPlayer().getData().getScores() < this.rounds;
+        return this.participantA.getPlayer().getData().getScore() < this.rounds && this.participantB.getPlayer().getData().getScore() < this.rounds;
     }
 
     @Override
@@ -171,7 +171,7 @@ public class MatchRoundsImpl extends MatchRegularImpl {
 
     @Override
     public boolean canEndMatch() {
-        return this.participantA.getPlayer().getData().getScores() == this.rounds || this.participantB.getPlayer().getData().getScores() == this.rounds;
+        return this.participantA.getPlayer().getData().getScore() == this.rounds || this.participantB.getPlayer().getData().getScore() == this.rounds;
     }
 
     /**
@@ -194,10 +194,10 @@ public class MatchRoundsImpl extends MatchRegularImpl {
                         .replace("{scorer}", scorer)
                         .replace("{winner}", winner.getPlayer().getUsername())
                         .replace("{winner-color}", teamWinnerColor.toString())
-                        .replace("{winner-goals}", String.valueOf(winner.getPlayer().getData().getScores()))
+                        .replace("{winner-goals}", String.valueOf(winner.getPlayer().getData().getScore()))
                         .replace("{loser}", loser.getPlayer().getUsername())
                         .replace("{loser-color}", teamLoserColor.toString())
-                        .replace("{loser-goals}", String.valueOf(loser.getPlayer().getData().getScores()))
+                        .replace("{loser-goals}", String.valueOf(loser.getPlayer().getData().getScore()))
                 );
             }
         }

@@ -17,14 +17,14 @@ public class MatchGamePlayerData {
     private int combo;
     private int hits;
     private int lives;
-    private int scores;
+    private int score;
     private int kills;
     private int deaths;
 
     public MatchGamePlayerData() {
         this.bedBroken = false;
         this.lives = Alley.getInstance().getConfigService().getSettingsConfig().getInt("game.lives", 3);
-        this.scores = 0;
+        this.score = 0;
     }
 
     /**
@@ -46,8 +46,8 @@ public class MatchGamePlayerData {
         this.combo = 0;
     }
 
-    public void incrementScores() {
-        this.scores++;
+    public void incrementScore() {
+        this.score++;
     }
 
     public void incrementKills() {
