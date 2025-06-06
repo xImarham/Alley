@@ -59,7 +59,7 @@ public class MatchRoundsImpl extends MatchRegularImpl {
     @Override
     public void handleRoundEnd() {
         this.winner = this.participantA.isAllDead() ? this.participantB : this.participantA;
-        this.winner.getPlayer().getData().incrementGoals();
+        this.winner.getPlayer().getData().incrementScores();
         this.loser = this.participantA.isAllDead() ? this.participantA : this.participantB;
         this.currentRound++;
 

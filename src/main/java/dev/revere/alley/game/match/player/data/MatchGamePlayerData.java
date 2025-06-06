@@ -46,7 +46,7 @@ public class MatchGamePlayerData {
         this.combo = 0;
     }
 
-    public void incrementGoals() {
+    public void incrementScores() {
         this.scores++;
     }
 
