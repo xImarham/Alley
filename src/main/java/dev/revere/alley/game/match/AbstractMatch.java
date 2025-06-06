@@ -107,7 +107,7 @@ public abstract class AbstractMatch {
             ((StandAloneArena) this.arena).setActive(true);
         }
 
-        this.sendMessage(CC.translate("&7[&bMatch&7] &b" + this.getParticipants().get(0).getPlayer().getUsername() + " &avs &b" + this.getParticipants().get(1).getPlayer().getUsername()));
+        this.sendPlayerVersusPlayerMessage();
 
         this.state = EnumMatchState.STARTING;
         this.runnable = new MatchRunnable(this);
@@ -143,6 +143,9 @@ public abstract class AbstractMatch {
                 Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
                 profile.setState(EnumProfileState.PLAYING);
                 profile.setMatch(this);
+
+                this.plugin.getVisibilityService().updateVisibility(player);
+
                 this.setupPlayer(player);
             }
         });
@@ -162,6 +165,9 @@ public abstract class AbstractMatch {
                     Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
                     profile.setState(EnumProfileState.LOBBY);
                     profile.setMatch(null);
+
+                    this.plugin.getVisibilityService().updateVisibility(player);
+
                     this.teleportPlayerToSpawn(player);
                 }
             }
@@ -296,6 +302,9 @@ public abstract class AbstractMatch {
         Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
         profile.setState(EnumProfileState.SPECTATING);
         profile.setMatch(this);
+
+        this.plugin.getVisibilityService().updateVisibility(player);
+
         this.plugin.getHotbarService().applyHotbarItems(player, EnumHotbarType.SPECTATOR);
 
         if (this.arena.getCenter() == null) {
@@ -322,6 +331,8 @@ public abstract class AbstractMatch {
         Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
         profile.setState(EnumProfileState.LOBBY);
         profile.setMatch(null);
+
+        this.plugin.getVisibilityService().updateVisibility(player);
 
         player.setAllowFlight(false);
         player.setFlying(false);
@@ -699,5 +710,26 @@ public abstract class AbstractMatch {
     public void removePlacedBlocks() {
         this.placedBlocks.forEach((blockState, location) -> location.getBlock().setType(Material.AIR));
         this.placedBlocks.clear();
+    }
+
+    private void sendPlayerVersusPlayerMessage() {
+        String prefix = CC.translate("&7[&bMatch&7] &r");
+
+        if (this.isTeamMatch()) {
+            GameParticipant<MatchGamePlayerImpl> participantA = this.getParticipants().get(0);
+            GameParticipant<MatchGamePlayerImpl> participantB = this.getParticipants().get(1);
+
+            int teamSizeA = participantA.getPlayerSize();
+            int teamSizeB = participantB.getPlayerSize();
+
+            String message = CC.translate(prefix + "&b" + participantA.getPlayer().getUsername() + "'s Team &7(&a" + teamSizeA + "&7) &avs &b" + participantB.getPlayer().getUsername() + "'s Team &7(&a" + teamSizeB + "&7)");
+            this.sendMessage(message);
+        } else {
+            GameParticipant<MatchGamePlayerImpl> participant = this.getParticipants().get(0);
+            GameParticipant<MatchGamePlayerImpl> opponent = this.getParticipants().get(1);
+
+            String message = CC.translate(prefix + "&b" + participant.getPlayer().getUsername() + " &avs &b" + opponent.getPlayer().getUsername());
+            this.sendMessage(message);
+        }
     }
 }
