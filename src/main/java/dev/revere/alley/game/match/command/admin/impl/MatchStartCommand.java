@@ -95,7 +95,7 @@ public class MatchStartCommand extends BaseCommand {
         GameParticipant<MatchGamePlayerImpl> participantB = new GameParticipant<>(playerB);
 
         Alley.getInstance().getMatchService().createAndStartMatch(
-                kit, arena, participantA, participantB, false, false
+                kit, arena, participantA, participantB, false, false, false
         );
     }
 }

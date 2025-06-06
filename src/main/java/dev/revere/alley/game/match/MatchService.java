@@ -48,13 +48,11 @@ public class MatchService {
      * @param participantA The first participant in the match.
      * @param participantB The second participant in the match.
      */
-    public void createAndStartMatch(Kit kit, AbstractArena arena, GameParticipant<MatchGamePlayerImpl> participantA, GameParticipant<MatchGamePlayerImpl> participantB, boolean teamMatch, boolean affectStatistics) {
+    public void createAndStartMatch(Kit kit, AbstractArena arena, GameParticipant<MatchGamePlayerImpl> participantA, GameParticipant<MatchGamePlayerImpl> participantB, boolean teamMatch, boolean affectStatistics, boolean isRanked) {
         Queue matchingQueue = this.plugin.getQueueService().getQueues().stream()
                 .filter(queue -> queue.getKit().equals(kit))
                 .findFirst()
                 .orElse(null);
-
-        boolean isRanked = matchingQueue != null && matchingQueue.isRanked();
 
         AbstractMatch match;
 
