@@ -144,6 +144,12 @@ public class MatchRoundsImpl extends MatchRegularImpl {
                 this.handleRoundEnd();
             }
         } else {
+            GameParticipant<MatchGamePlayerImpl> participant = this.participantA.containsPlayer(player.getUniqueId()) ? this.participantA : this.participantB;
+            if (participant.getPlayer().getData().isBedBroken() && participant.isAllDead()) {
+                this.handleRoundEnd();
+                return;
+            }
+
             super.startRespawnProcess(player);
         }
     }
