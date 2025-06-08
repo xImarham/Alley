@@ -17,7 +17,7 @@
 - [Authors](#authors)
 
 
-## ✅ Installation
+## Installation
 
 1. Clone this repository to your local machine.
 2. Open the project in your preferred IDE and build it to generate `Alley.jar`.
