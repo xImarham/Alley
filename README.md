@@ -1,44 +1,12 @@
 # Alley
 
-**Developed by [Revere Development](https://www.revere.dev)**  
+**Developed By [Revere Development](https://www.revere.dev)**  
 *Primary Authors: [Remi](https://github.com/hmRemi) & [Emmy](https://github.com/hmEmmy)*
 
-Alley is a fully custom, feature-rich Practice PvP core developed from the ground up for Minecraft 1.8. Designed for high performance and extensive customization, Alley provides a powerful foundation for Practice PvP servers, offering a robust set of tools to enhance gameplay, manage players, and ensure a streamlined server experience. This core includes advanced match systems, customizable player management, making it an ideal choice for server owners who want a competitive, reliable PvP environment.
+**Alley** is a custom Practice PvP core for **Minecraft 1.8**, built for performance, flexibility, and competitive gameplay. It's modular, customizable, and designed to support server admins with powerful tools for match management, player control, and visuals.
 
-Alley is currently a work in progress. While it provides a strong base for PvP-focused servers, it is not a finished product. We encourage developers from the community to contribute to its development and help bring Alley to its full potential. Together, we can build a seamless and enjoyable PvP experience for players and admins alike.
+> Alley is currently in **active development** and is **not** considered a final product.
 
-## Features
-
-- **Optimized Performance**: Built for efficient performance to ensure the smoothest PvP experience possible.
-- **Fully Customizable Configurations**: Tailor settings to meet your server’s unique requirements.
-- **Modular Design**: Built with a modular approach, making updates and expansions simple and efficient.
-
-## Todo List
-
-- Hosting (Events / Tournaments)
-- Arena Generating upon queue
-- Fix/Finish Leaderboards
-- BedFight GameMode (added but ensure it works properly)
-- Duo Queue
-- Expand on config files for flexibility
-- ~~Management Commands for Levels~~
-- Management Commands for Titles
-- Finish LayoutMenu to support multiple layout creation
-- Handle match disconnecting case
-- Scoreboard for team fights
-- Match type FFA (not the seperate ffa system, the match implementation)
-- Implement proper Bots
-- Add soup consuming listener
-- Add custom death messages (cosmetics)
-- Add Queue ping-range setting
-- EnderPearl XP Bar cooldown
-- Allow reverting stat resets
-- ~~Implement Match History~~ (added just the base yet)
-- Implement Match-Replay
-- Fix inventory snapshots
-- Visibility handling
-- Column type tablist?
-- ~~Global Placeholders (via PAPI)~~ (need to add some more placeholders)
 
 ## Table of Contents
 
@@ -48,17 +16,20 @@ Alley is currently a work in progress. While it provides a strong base for PvP-f
 - [Contributing](#contributing)
 - [Authors](#authors)
 
-## Installation
 
-1. Download the latest release of Alley from this repository.
-2. Move the Alley.jar file into your server’s plugins directory.
-3. Restart your server to load the plugin.
+## ✅ Installation
 
-> **Note**: Alley is designed for Minecraft 1.8 and may not be compatible with other versions.
+1. Clone this repository to your local machine.
+2. Open the project in your preferred IDE and build it to generate `Alley.jar`.
+3. Place the compiled `Alley.jar` into your server’s `plugins` directory.
+4. Start your server. After startup, configure your database settings in `database.yml`.
+5. Restart the server and once fully loaded — you're ready to go!
+
 
 ## Usage
 
 Alley is built to be easily configurable. After installation, access the configuration files in the `plugins` folder to customize settings such as match parameters, visuals, and player permissions to fit your server’s specific needs.
+
 
 ## Guidelines
 
@@ -69,6 +40,7 @@ By using Alley, you agree to the following terms:
 - Do not claim this project as your own, and do not remove existing copyright notices or license information.
 - Alley must remain free of charge and may not be used as a paid product.
 
+
 ## Contributing
 
 We welcome contributions to improve Alley! If you would like to contribute, please follow these steps:
@@ -78,6 +50,7 @@ We welcome contributions to improve Alley! If you would like to contribute, plea
 3. Commit your changes with a descriptive message.
 4. Push your changes to your forked repository.
 5. Open a pull request with a summary of the changes and why they should be merged.
+
 
 ## Authors
 
