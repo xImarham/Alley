@@ -24,9 +24,6 @@ public class MatchBedImpl extends MatchRegularImpl {
     private final GameParticipant<MatchGamePlayerImpl> participantA;
     private final GameParticipant<MatchGamePlayerImpl> participantB;
 
-    private GameParticipant<MatchGamePlayerImpl> winner;
-    private GameParticipant<MatchGamePlayerImpl> loser;
-
     /**
      * Constructor for the MatchBedImpl class.
      *
