@@ -44,6 +44,7 @@ public class KitCommand extends BaseCommand {
         new KitSetRankedSlotCommand();
         new KitSetSlotAllCommand();
         new KitSetUnrankedSlotCommand();
+        new KitSetExtraSlotCommand();
         new KitSetSettingCommand();
         new KitSettingsCommand();
         new KitSetIconCommand();
