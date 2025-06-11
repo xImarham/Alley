@@ -32,6 +32,11 @@ import java.util.Optional;
 public class FireballListener implements Listener {
     protected final Alley plugin;
 
+    /**
+     * Constructor for the FireballListener class.
+     *
+     * @param plugin the Alley plugin instance
+     */
     public FireballListener(Alley plugin) {
         this.plugin = plugin;
     }

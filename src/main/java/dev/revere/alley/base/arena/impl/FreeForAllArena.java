@@ -13,6 +13,8 @@ import org.bukkit.configuration.file.FileConfiguration;
  * @date 20/05/2024 - 19:15
  */
 public class FreeForAllArena extends AbstractArena {
+    protected final Alley plugin = Alley.getInstance();
+
     /**
      * Constructor for the FreeForAllArena class.
      *
@@ -31,14 +33,14 @@ public class FreeForAllArena extends AbstractArena {
 
     @Override
     public void createArena() {
-        Alley.getInstance().getArenaService().getArenas().add(this);
+        this.plugin.getArenaService().getArenas().add(this);
         this.saveArena();
     }
 
     @Override
     public void saveArena() {
         String name = "arenas." + this.getName();
-        FileConfiguration config = Alley.getInstance().getConfigService().getArenasConfig();
+        FileConfiguration config = this.plugin.getConfigService().getArenasConfig();
 
         config.set(name, null);
         config.set(name + ".type", this.getType().name());
@@ -49,15 +51,15 @@ public class FreeForAllArena extends AbstractArena {
         config.set(name + ".enabled", this.isEnabled());
         config.set(name + ".display-name", this.getDisplayName());
 
-        Alley.getInstance().getConfigService().saveConfig(Alley.getInstance().getConfigService().getConfigFile("storage/arenas.yml"), config);
+        this.plugin.getConfigService().saveConfig(this.plugin.getConfigService().getConfigFile("storage/arenas.yml"), config);
     }
 
     @Override
     public void deleteArena() {
-        FileConfiguration config = Alley.getInstance().getConfigService().getArenasConfig();
+        FileConfiguration config = this.plugin.getConfigService().getArenasConfig();
         config.set("arenas." + this.getName(), null);
 
-        Alley.getInstance().getArenaService().getArenas().remove(this);
-        Alley.getInstance().getConfigService().saveConfig(Alley.getInstance().getConfigService().getConfigFile("storage/arenas.yml"), config);
+        this.plugin.getArenaService().getArenas().remove(this);
+        this.plugin.getConfigService().saveConfig(this.plugin.getConfigService().getConfigFile("storage/arenas.yml"), config);
     }
 }

@@ -25,6 +25,8 @@ import java.util.UUID;
 @Setter
 @Getter
 public class StandAloneArena extends AbstractArena {
+    private final Alley plugin = Alley.getInstance();
+
     private boolean active = false;
 
     private Location team1Portal;
@@ -45,7 +47,7 @@ public class StandAloneArena extends AbstractArena {
 
         if (team1Portal != null) this.team1Portal = team1Portal;
         if (team2Portal != null) this.team2Portal = team2Portal;
-        this.portalRadius = Alley.getInstance().getConfigService().getSettingsConfig().getInt("game.portal-radius");
+        this.portalRadius = this.plugin.getConfigService().getSettingsConfig().getInt("game.portal-radius");
         this.heightLimit = heightLimit;
     }
 
@@ -56,14 +58,14 @@ public class StandAloneArena extends AbstractArena {
 
     @Override
     public void createArena() {
-        Alley.getInstance().getArenaService().getArenas().add(this);
+        this.plugin.getArenaService().getArenas().add(this);
         this.saveArena();
     }
 
     @Override
     public void saveArena() {
         String name = "arenas." + this.getName();
-        FileConfiguration config = Alley.getInstance().getConfigService().getArenasConfig();
+        FileConfiguration config = this.plugin.getConfigService().getArenasConfig();
 
         config.set(name, null);
         config.set(name + ".type", this.getType().name());
@@ -83,16 +85,16 @@ public class StandAloneArena extends AbstractArena {
 
         config.set(name + ".height-limit", this.heightLimit);
 
-        Alley.getInstance().getConfigService().saveConfig(Alley.getInstance().getConfigService().getConfigFile("storage/arenas.yml"), config);
+        this.plugin.getConfigService().saveConfig(this.plugin.getConfigService().getConfigFile("storage/arenas.yml"), config);
     }
 
     @Override
     public void deleteArena() {
-        FileConfiguration config = Alley.getInstance().getConfigService().getArenasConfig();
+        FileConfiguration config = this.plugin.getConfigService().getArenasConfig();
         config.set("arenas." + this.getName(), null);
 
-        Alley.getInstance().getArenaService().getArenas().remove(this);
-        Alley.getInstance().getConfigService().saveConfig(Alley.getInstance().getConfigService().getConfigFile("storage/arenas.yml"), config);
+        this.plugin.getArenaService().getArenas().remove(this);
+        this.plugin.getConfigService().saveConfig(this.plugin.getConfigService().getConfigFile("storage/arenas.yml"), config);
     }
 
     /**
@@ -119,7 +121,7 @@ public class StandAloneArena extends AbstractArena {
         Location bedLocation = block.getLocation();
 
         UUID breakerUUID = breakerParticipant.getPlayer().getUuid();
-        Profile profile = Alley.getInstance().getProfileService().getProfile(breakerUUID);
+        Profile profile = this.plugin.getProfileService().getProfile(breakerUUID);
 
         Location spawnA = this.getPos1();
         Location spawnB = this.getPos2();

@@ -31,7 +31,7 @@ import dev.revere.alley.feature.cosmetic.repository.CosmeticRepository;
 import dev.revere.alley.feature.division.DivisionService;
 import dev.revere.alley.feature.emoji.EmojiRepository;
 import dev.revere.alley.feature.emoji.listener.EmojiListener;
-import dev.revere.alley.feature.filter.ProfanityFilter;
+import dev.revere.alley.feature.filter.FilterService;
 import dev.revere.alley.feature.fireball.FireballService;
 import dev.revere.alley.feature.layout.LayoutService;
 import dev.revere.alley.feature.layout.listener.LayoutListener;
@@ -131,7 +131,7 @@ public class Alley extends JavaPlugin {
     private DiscordBridge discordBridge;
     private TitleService titleService;
     private LevelService levelService;
-    private ProfanityFilter profanityFilter;
+    private FilterService filterService;
     private LayoutService layoutService;
     private VisibilityService visibilityService;
     private FireballService fireballService;
@@ -233,7 +233,7 @@ public class Alley extends JavaPlugin {
         services.put(AnimationRepository.class.getSimpleName(), () -> this.animationRepository = new AnimationRepository(this));
         services.put(Assemble.class.getSimpleName() + " API", () -> this.assemble = new Assemble(this, new ScoreboardVisualizer(this)));
         services.put(ReflectionRepository.class.getSimpleName(), () -> this.reflectionRepository = new ReflectionRepository(this));
-        services.put(ProfanityFilter.class.getSimpleName(), () -> this.profanityFilter = new ProfanityFilter(this));
+        services.put(FilterService.class.getSimpleName(), () -> this.filterService = new FilterService(this));
         services.put(LayoutService.class.getSimpleName(), () -> this.layoutService = new LayoutService(this));
         services.put(VisibilityService.class.getSimpleName(), () -> this.visibilityService = new VisibilityService(this));
         services.put(FireballService.class.getSimpleName(), () -> this.fireballService = new FireballService(this));

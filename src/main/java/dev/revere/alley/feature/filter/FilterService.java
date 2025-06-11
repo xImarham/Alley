@@ -19,18 +19,18 @@ import java.util.Set;
  * @since 27/04/2025
  */
 @Getter
-public class ProfanityFilter {
+public class FilterService {
     protected final Alley plugin;
     private final Set<String> filteredWords;
 
     private final String notificationMessage;
 
     /**
-     * Constructor for the ProfanityFilter class.
+     * Constructor for the FilterService class.
      *
      * @param plugin The Alley plugin instance.
      */
-    public ProfanityFilter(Alley plugin) {
+    public FilterService(Alley plugin) {
         this.plugin = plugin;
         this.filteredWords = new HashSet<>();
         this.notificationMessage = plugin.getConfigService().getSettingsConfig().getString("profanity-filter.staff-notification-format");
@@ -100,11 +100,9 @@ public class ProfanityFilter {
         String permission = this.plugin.getPluginConstant().getAdminPermissionPrefix();
         String replacedMessage = this.notificationMessage.replace("{player}", insulter.getName()).replace("{message}", message);
 
-        this.plugin.getServer().getOnlinePlayers().stream().filter(player -> player.hasPermission(permission))
-                .forEach(player ->
-                        player.sendMessage(CC.translate(replacedMessage
-                        ))
-                )
+        this.plugin.getServer().getOnlinePlayers().stream().filter(player ->
+                player.hasPermission(permission)).forEach(player ->
+                        player.sendMessage(CC.translate(replacedMessage)))
         ;
 
         Bukkit.getConsoleSender().sendMessage(CC.translate(replacedMessage)); // idk why, but i felt like its necessary to send it to console too

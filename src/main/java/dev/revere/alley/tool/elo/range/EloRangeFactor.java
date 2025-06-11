@@ -14,7 +14,7 @@ public class EloRangeFactor {
     private final int factor;
 
     /**
-     * Constructor for the EloRange.
+     * Constructor for the EloRangeFactor class.
      *
      * @param lowerBound The lower bound of the range.
      * @param upperBound The upper bound of the range.

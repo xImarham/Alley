@@ -38,11 +38,13 @@ public class Tip {
         if (lastTime == null) {
             return true;
         }
+
         long currentTime = System.currentTimeMillis();
         if (currentTime - lastTime >= COOLDOWN_TIME) {
             this.lastTip.put(uuid, currentTime);
             return true;
         }
+
         return false;
     }
 

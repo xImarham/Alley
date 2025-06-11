@@ -34,12 +34,12 @@ public class CoreChatListener implements Listener {
 
         ICore core = this.plugin.getCoreAdapter().getCore();
 
-        if (this.plugin.getProfanityFilter().isProfanity(event.getMessage())) {
-            this.plugin.getProfanityFilter().notifyStaff(event.getMessage(), player);
+        if (this.plugin.getFilterService().isProfanity(event.getMessage())) {
+            this.plugin.getFilterService().notifyStaff(event.getMessage(), player);
         }
 
         String format = core.getChatFormat(player, event.getMessage(), CC.translate("&7: &f"));
-        String censoredFormat = core.getChatFormat(player, this.plugin.getProfanityFilter().censorWords(event.getMessage()), CC.translate("&7: &f"));
+        String censoredFormat = core.getChatFormat(player, this.plugin.getFilterService().censorWords(event.getMessage()), CC.translate("&7: &f"));
 
         Bukkit.getConsoleSender().sendMessage(format);
 
