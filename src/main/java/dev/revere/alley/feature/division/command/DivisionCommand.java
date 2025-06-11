@@ -43,7 +43,7 @@ public class DivisionCommand extends BaseCommand {
         if (player.hasPermission("alley.admin")) {
             player.sendMessage(" ");
             player.sendMessage(CC.translate("&b&lDivision Commands Help:"));
-            player.sendMessage(CC.translate(" &f● &b/division create  &8(&7divisionName&8) &8(&7requiredWins&8) &7| Create a division"));
+            player.sendMessage(CC.translate(" &f● &b/division create &8(&7divisionName&8) &8(&7requiredWins&8) &7| Create a division"));
             player.sendMessage(CC.translate(" &f● &b/division delete &8(&7divisionName&8) &7| Delete a division"));
             player.sendMessage(CC.translate(" &f● &b/division view &8(&7divisionName&8) &7| View division info"));
             player.sendMessage(CC.translate(" &f● &b/division setwins &8(&7divisionName&8) &8(&7requiredWins&8) &8(&7tier&8) &7| Set required wins of a tier"));
