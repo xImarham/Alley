@@ -2,7 +2,6 @@ package dev.revere.alley.command;
 
 import dev.revere.alley.base.arena.command.ArenaCommand;
 import dev.revere.alley.base.kit.command.KitCommand;
-import dev.revere.alley.base.kit.editor.command.KitEditorCommand;
 import dev.revere.alley.base.queue.command.admin.QueueCommand;
 import dev.revere.alley.base.queue.command.player.LeaveQueueCommand;
 import dev.revere.alley.base.queue.command.player.QueuesCommand;
@@ -143,7 +142,6 @@ public class CommandUtility {
             new ShopCommand();
             new ChallengesCommand();
             new MatchHistoryCommand();
-            new KitEditorCommand();
             new TipCommand();
             new LayoutCommand();
         });
