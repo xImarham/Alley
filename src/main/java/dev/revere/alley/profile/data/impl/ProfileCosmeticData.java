@@ -3,8 +3,10 @@ package dev.revere.alley.profile.data.impl;
 import dev.revere.alley.Alley;
 import dev.revere.alley.feature.cosmetic.impl.killeffect.AbstractKillEffect;
 import dev.revere.alley.feature.cosmetic.impl.killeffect.KillEffectRepository;
+import dev.revere.alley.feature.cosmetic.impl.killeffect.impl.NoneKillEffect;
 import dev.revere.alley.feature.cosmetic.impl.soundeffect.AbstractSoundEffect;
 import dev.revere.alley.feature.cosmetic.impl.soundeffect.SoundEffectRepository;
+import dev.revere.alley.feature.cosmetic.impl.soundeffect.impl.NoneSoundEffect;
 import dev.revere.alley.feature.cosmetic.interfaces.ICosmetic;
 import lombok.Getter;
 import lombok.Setter;
@@ -22,10 +24,10 @@ public class ProfileCosmeticData {
 
     public ProfileCosmeticData() {
         KillEffectRepository killEffectRepository = Alley.getInstance().getCosmeticRepository().getCosmeticRepository(KillEffectRepository.class);
-        this.selectedKillEffect = killEffectRepository.getCosmetics().isEmpty() ? "None" : killEffectRepository.getCosmetics().get(0).getName();
+        this.selectedKillEffect = killEffectRepository.getCosmetics().isEmpty() ? "None" : killEffectRepository.getCosmetic(NoneKillEffect.class).getName();
 
         SoundEffectRepository soundEffectRepository = Alley.getInstance().getCosmeticRepository().getCosmeticRepository(SoundEffectRepository.class);
-        this.selectedSoundEffect = soundEffectRepository.getCosmetics().isEmpty() ? "None" : soundEffectRepository.getCosmetics().get(0).getName();
+        this.selectedSoundEffect = soundEffectRepository.getCosmetics().isEmpty() ? "None" : soundEffectRepository.getCosmetic(NoneSoundEffect.class).getName();
     }
 
     /**

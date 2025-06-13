@@ -264,12 +264,12 @@ public abstract class AbstractMatch {
         KillEffectRepository killEffectRepository = this.plugin.getCosmeticRepository().getCosmeticRepository(KillEffectRepository.class);
         SoundEffectRepository soundEffectRepository = this.plugin.getCosmeticRepository().getCosmeticRepository(SoundEffectRepository.class);
 
-        AbstractKillEffect killEffect = killEffectRepository.getByName(selectedKillEffectName);
+        AbstractKillEffect killEffect = killEffectRepository.getCosmetic(selectedKillEffectName);
         if (killEffect != null) {
             killEffect.spawnEffect(player);
         }
 
-        AbstractSoundEffect soundEffect = soundEffectRepository.getByName(selectedSoundEffectName);
+        AbstractSoundEffect soundEffect = soundEffectRepository.getCosmetic(selectedSoundEffectName);
         if (soundEffect != null) {
             soundEffect.spawnEffect(killer);
         }

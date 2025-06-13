@@ -14,7 +14,11 @@ import java.util.List;
  */
 @Getter
 public abstract class BaseCosmeticRepository<T extends ICosmetic> {
-    private final List<T> cosmetics = new ArrayList<>();
+    private final List<T> cosmetics;
+
+    public BaseCosmeticRepository() {
+        this.cosmetics = new ArrayList<>();
+    }
 
     /**
      * Register a cosmetic class to the repository
@@ -31,14 +35,29 @@ public abstract class BaseCosmeticRepository<T extends ICosmetic> {
     }
 
     /**
-     * Get a cosmetic by its name
+     * Method to retrieve a cosmetic by its name.
      *
      * @param name The name of the cosmetic
      * @return The cosmetic
      */
-    public T getByName(String name) {
+    public T getCosmetic(String name) {
         for (T cosmetic : this.cosmetics) {
             if (cosmetic.getName().equals(name)) {
+                return cosmetic;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Method to retrieve a cosmetic by its class.
+     *
+     * @param clazz The class of the cosmetic
+     * @return The cosmetic
+     */
+    public T getCosmetic(Class<? extends T> clazz) {
+        for (T cosmetic : this.cosmetics) {
+            if (cosmetic.getClass().equals(clazz)) {
                 return cosmetic;
             }
         }
