@@ -180,7 +180,6 @@ public class KitService {
         }
     }
 
-
     /**
      * Method to save the potion effects of a kit.
      *

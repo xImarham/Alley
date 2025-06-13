@@ -58,7 +58,7 @@ public class KitSetPotionCommand extends BaseCommand {
             return;
         }
 
-        kit.setPotionEffects(effects);
+        effects.forEach(effect -> kit.getPotionEffects().add(effect));
         kitService.saveKit(kit);
         player.sendMessage(CC.translate(KitLocale.KIT_POTION_EFFECTS_SET.getMessage()).replace("{kit-name}", kit.getName()));
     }
