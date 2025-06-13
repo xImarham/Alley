@@ -13,7 +13,7 @@ import org.bukkit.command.CommandSender;
  * @since 11/06/2025
  */
 public class FireballHorizontalCommand extends BaseCommand {
-    @CommandData(name = "fireball.horizontal", aliases = {"fb.horizontal"}, isAdminOnly = true)
+    @CommandData(name = "fireball.horizontal", aliases = {"fb.horizontal"}, isAdminOnly = true, inGameOnly = false)
     @Override
     public void onCommand(CommandArgs command) {
         CommandSender sender = command.getSender();
