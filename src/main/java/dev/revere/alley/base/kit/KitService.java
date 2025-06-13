@@ -64,9 +64,9 @@ public class KitService {
                     config.getInt(key + ".icon.durability"),
                     config.getInt(key + ".slots.unranked"),
                     config.getInt(key + ".slots.ranked"),
-                    config.getInt(key + ".extra-slot"),
                     config.getInt(key + ".slots.editor"),
                     config.getInt(key + ".ffa.slot"),
+                    config.getInt(key + ".slots.extra"),
                     Serializer.deserializeItemStack(config.getString(key + ".items")),
                     Serializer.deserializeItemStack(config.getString(key + ".armor")),
                     Serializer.deserializeItemStack(config.getString(key + ".editor-items"))
@@ -335,6 +335,7 @@ public class KitService {
         config.set(key + ".slots.unranked", kit.getUnrankedSlot());
         config.set(key + ".slots.ranked", kit.getRankedSlot());
         config.set(key + ".slots.editor", kit.getEditorSlot());
+        config.set(key + ".slots.extra", kit.getExtraSlot());
         config.set(key + ".ffa.arena-name", kit.getFfaArenaName());
         config.set(key + ".ffa.enabled", kit.isFfaEnabled());
         config.set(key + ".ffa.slot", kit.getFfaSlot());
