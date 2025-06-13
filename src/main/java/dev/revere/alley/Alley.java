@@ -21,7 +21,6 @@ import dev.revere.alley.base.queue.listener.QueueListener;
 import dev.revere.alley.base.spawn.SpawnService;
 import dev.revere.alley.base.spawn.listener.SpawnListener;
 import dev.revere.alley.base.visibility.VisibilityService;
-import dev.revere.alley.command.CommandDataCollector;
 import dev.revere.alley.command.CommandUtility;
 import dev.revere.alley.config.ConfigService;
 import dev.revere.alley.core.CoreAdapter;
@@ -101,7 +100,6 @@ public class Alley extends JavaPlugin {
     private ServerEnvironment serverEnvironment;
     private Assemble assemble;
     private CommandFramework commandFramework;
-    private CommandDataCollector commandDataCollector;
     private CoreAdapter coreAdapter;
     private CosmeticRepository cosmeticRepository;
     private ProfileService profileService;
@@ -201,7 +199,6 @@ public class Alley extends JavaPlugin {
         services.put(ConfigService.class.getSimpleName(), () -> this.configService = new ConfigService());
         services.put(MongoService.class.getSimpleName(), () -> this.mongoService = new MongoService(this));
         services.put(CommandFramework.class.getSimpleName(), () -> this.commandFramework = new CommandFramework(this));
-        services.put(CommandDataCollector.class.getSimpleName(), () -> this.commandDataCollector = new CommandDataCollector());
         services.put(CoreAdapter.class.getSimpleName(), () -> this.coreAdapter = new CoreAdapter(this));
         services.put(QueueService.class.getSimpleName(), () -> this.queueService = new QueueService(this));
         services.put(KitSettingService.class.getSimpleName(), () -> this.kitSettingService = new KitSettingService());
