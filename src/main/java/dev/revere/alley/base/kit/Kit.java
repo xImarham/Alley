@@ -66,6 +66,7 @@ public class Kit {
      * @param rankedSlot   The slot for ranked games.
      * @param editorSlot   The slot for the editor.
      * @param ffaSlot      The slot for FFA games.
+     * @param extraSlot    The slot for extra games.
      * @param items        The items in the kit.
      * @param armor        The armor in the kit.
      * @param editorItems  The items in the editor.
