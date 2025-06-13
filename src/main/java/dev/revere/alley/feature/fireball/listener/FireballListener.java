@@ -35,7 +35,7 @@ public class FireballListener implements Listener {
     /**
      * Constructor for the FireballListener class.
      *
-     * @param plugin the Alley plugin instance
+     * @param plugin the Alley plugin instance.
      */
     public FireballListener(Alley plugin) {
         this.plugin = plugin;
@@ -46,22 +46,13 @@ public class FireballListener implements Listener {
         Player player = event.getPlayer();
 
         Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
-        if (profile == null) {
-            return;
-        }
-
-        if (profile.getState() != EnumProfileState.PLAYING) {
-            return;
-        }
+        if (profile == null) return;
+        if (profile.getState() != EnumProfileState.PLAYING) return;
 
         AbstractMatch match = profile.getMatch();
-        if (match == null) {
-            return;
-        }
+        if (match == null) return;
 
-        if (!match.getKit().isSettingEnabled(KitSettingFireballImpl.class)) {
-            return;
-        }
+        if (!match.getKit().isSettingEnabled(KitSettingFireballImpl.class)) return;
 
         ItemStack item = event.getItem();
         if (item == null || item.getType() != Material.FIREBALL) return;
@@ -92,9 +83,7 @@ public class FireballListener implements Listener {
 
         //SoundUtil.playCustomSound(player, Sound.GHAST_FIREBALL, 1.0f, 1.0f);
 
-        if (player.getGameMode() == GameMode.CREATIVE) {
-            return;
-        }
+        if (player.getGameMode() == GameMode.CREATIVE) return;
 
         if (item.getAmount() > 1) {
             item.setAmount(item.getAmount() - 1);
