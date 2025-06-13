@@ -9,9 +9,6 @@ import dev.revere.alley.base.spawn.command.SetSpawnCommand;
 import dev.revere.alley.base.spawn.command.SpawnCommand;
 import dev.revere.alley.base.spawn.command.SpawnItemsCommand;
 import dev.revere.alley.command.impl.main.AlleyCommand;
-import dev.revere.alley.command.impl.main.impl.AlleyCoreCommand;
-import dev.revere.alley.command.impl.main.impl.AlleyDebugCommand;
-import dev.revere.alley.command.impl.main.impl.AlleyReloadCommand;
 import dev.revere.alley.command.impl.other.*;
 import dev.revere.alley.command.impl.other.troll.*;
 import dev.revere.alley.feature.cosmetic.command.CosmeticCommand;
@@ -29,7 +26,6 @@ import dev.revere.alley.game.duel.command.DuelRequestsCommand;
 import dev.revere.alley.game.ffa.command.FFACommand;
 import dev.revere.alley.game.host.command.HostCommand;
 import dev.revere.alley.game.match.command.admin.MatchCommand;
-import dev.revere.alley.game.match.command.admin.impl.MatchInfoCommand;
 import dev.revere.alley.game.match.command.player.CurrentMatchesCommand;
 import dev.revere.alley.game.match.command.player.LeaveMatchCommand;
 import dev.revere.alley.game.match.command.player.LeaveSpectatorCommand;
@@ -60,12 +56,8 @@ public class CommandUtility {
      * Registers all commands.
      */
     public void registerCommands() {
-        Logger.logTimeWithAction("registered", "Admin Commands", () -> {
+        Logger.logTimeWithAction("registered", "Commands", () -> {
             new AlleyCommand();
-
-            new AlleyCoreCommand();
-            new AlleyDebugCommand();
-            new AlleyReloadCommand();
 
             new KitCommand();
             new ArenaCommand();
@@ -78,7 +70,6 @@ public class CommandUtility {
             new TitleCommand();
             new LevelAdminCommand();
             new LevelCommand();
-            new MatchInfoCommand();
             new ServiceCommand();
             new EnchantCommand();
             new InvSeeCommand();
@@ -101,14 +92,7 @@ public class CommandUtility {
             new TrollCommand();
 
             new ViewErrorCommand();
-        });
 
-        Logger.logTimeWithAction("registered", "Donator Commands", () -> {
-            new HostCommand();
-            new EmojiCommand();
-        });
-
-        Logger.logTimeWithAction("registered", "Player Commands", () -> {
             new ChatCommand();
             new DayCommand();
             new NightCommand();
@@ -144,6 +128,9 @@ public class CommandUtility {
             new MatchHistoryCommand();
             new TipCommand();
             new LayoutCommand();
+
+            new HostCommand();
+            new EmojiCommand();
         });
     }
 }

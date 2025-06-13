@@ -4,7 +4,6 @@ import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.util.chat.CC;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 /**
@@ -24,7 +23,7 @@ public class FakeExplosionCommand extends BaseCommand {
             return;
         }
 
-        Player targetPlayer = Bukkit.getPlayer(args[0]);
+        Player targetPlayer = this.plugin.getServer().getPlayer(args[0]);
         if (targetPlayer == null) {
             player.sendMessage(CC.translate("&cPlayer not found."));
             return;

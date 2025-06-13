@@ -4,6 +4,7 @@ import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.game.match.command.admin.impl.MatchCancelCommand;
+import dev.revere.alley.game.match.command.admin.impl.MatchInfoCommand;
 import dev.revere.alley.game.match.command.admin.impl.MatchStartCommand;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.command.CommandSender;
@@ -18,6 +19,7 @@ public class MatchCommand extends BaseCommand {
     public MatchCommand() {
         new MatchStartCommand();
         new MatchCancelCommand();
+        new MatchInfoCommand();
     }
 
     @Override

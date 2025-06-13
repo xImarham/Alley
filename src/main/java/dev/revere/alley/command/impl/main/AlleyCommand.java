@@ -3,10 +3,16 @@ package dev.revere.alley.command.impl.main;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
+import dev.revere.alley.api.command.annotation.CompleterData;
+import dev.revere.alley.command.impl.main.impl.AlleyCoreCommand;
+import dev.revere.alley.command.impl.main.impl.AlleyDebugCommand;
+import dev.revere.alley.command.impl.main.impl.AlleyReloadCommand;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.command.CommandSender;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author Emmy
@@ -14,7 +20,27 @@ import java.util.Arrays;
  * @date 19/04/2024 - 17:39
  */
 public class AlleyCommand extends BaseCommand {
-    @CommandData(name = "alley", aliases = {"apractice", "aprac", "practice", "emmy", "remi", "revere"}, inGameOnly = false)
+
+    public AlleyCommand() {
+        new AlleyCoreCommand();
+        new AlleyDebugCommand();
+        new AlleyReloadCommand();
+    }
+
+    @SuppressWarnings("unused")
+    @CompleterData(name = "alley")
+    public List<String> alleyCompleter(CommandArgs command) {
+        List<String> completion = new ArrayList<>();
+        if (command.getArgs().length == 1 && command.getPlayer().hasPermission("alley.admin")) {
+            completion.addAll(Arrays.asList(
+                    "reload", "debug", "core"
+            ));
+        }
+
+        return completion;
+    }
+
+    @CommandData(name = "alley", aliases = {"apractice", "aprac", "practice", "prac", "emmy", "remi", "revere"}, inGameOnly = false)
     @Override
     public void onCommand(CommandArgs command) {
         CommandSender sender = command.getSender();
