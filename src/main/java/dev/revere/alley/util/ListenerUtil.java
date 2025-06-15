@@ -72,4 +72,36 @@ public class ListenerUtil {
             Material.IRON_PLATE,
             Material.GOLD_PLATE
     );
+
+    /**
+     * Checks if the material is a door or gate.
+     *
+     * @param material The material to check.
+     * @return true if the material is a door or gate, false otherwise.
+     */
+    public boolean isDoorOrGate(Material material) {
+        return doors.contains(material);
+    }
+
+    /**
+     * List of door and gate materials.
+     */
+    private final List<Material> doors = Arrays.asList(
+            Material.WOODEN_DOOR,
+            Material.SPRUCE_DOOR,
+            Material.BIRCH_DOOR,
+            Material.JUNGLE_DOOR,
+            Material.ACACIA_DOOR,
+            Material.DARK_OAK_DOOR,
+
+            Material.FENCE_GATE,
+            Material.SPRUCE_FENCE_GATE,
+            Material.BIRCH_FENCE_GATE,
+            Material.JUNGLE_FENCE_GATE,
+            Material.ACACIA_FENCE_GATE,
+            Material.DARK_OAK_FENCE_GATE,
+
+            Material.TRAP_DOOR,
+            Material.IRON_TRAPDOOR
+    );
 }

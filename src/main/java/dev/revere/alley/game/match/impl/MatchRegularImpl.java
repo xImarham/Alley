@@ -2,6 +2,7 @@ package dev.revere.alley.game.match.impl;
 
 import dev.revere.alley.base.arena.AbstractArena;
 import dev.revere.alley.base.kit.Kit;
+import dev.revere.alley.base.kit.setting.impl.mode.KitSettingRaidingImpl;
 import dev.revere.alley.base.queue.Queue;
 import dev.revere.alley.feature.division.Division;
 import dev.revere.alley.feature.division.tier.DivisionTier;
@@ -9,6 +10,7 @@ import dev.revere.alley.game.match.AbstractMatch;
 import dev.revere.alley.game.match.data.AbstractMatchData;
 import dev.revere.alley.game.match.data.impl.MatchDataSoloImpl;
 import dev.revere.alley.game.match.enums.EnumMatchState;
+import dev.revere.alley.game.match.player.enums.EnumBaseRaiderRole;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.game.match.utility.MatchUtility;
@@ -19,13 +21,17 @@ import dev.revere.alley.tool.elo.EloCalculator;
 import dev.revere.alley.tool.elo.result.EloResult;
 import dev.revere.alley.tool.elo.result.OldEloResult;
 import dev.revere.alley.tool.item.ItemBuilder;
+import dev.revere.alley.tool.logger.Logger;
 import dev.revere.alley.tool.reflection.impl.TitleReflectionService;
 import dev.revere.alley.util.PlayerUtil;
 import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.util.visual.ProgressBarUtil;
 import lombok.Getter;
 import lombok.Setter;
-import org.bukkit.*;
+import org.bukkit.ChatColor;
+import org.bukkit.Color;
+import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -77,6 +83,10 @@ public class MatchRegularImpl extends AbstractMatch {
 
         Location spawnLocation = this.participantA.containsPlayer(player.getUniqueId()) ? getArena().getPos1() : getArena().getPos2();
         player.teleport(spawnLocation);
+
+        if (this.getKit().isSettingEnabled(KitSettingRaidingImpl.class)) {
+            this.determineRolesAndGiveKit(player);
+        }
     }
 
     @Override
@@ -413,6 +423,38 @@ public class MatchRegularImpl extends AbstractMatch {
             if (!gamePlayer.isDead()) {
                 this.handleDeath(player);
             }
+        }
+    }
+
+    /**
+     * Gives the base raiding kit to the player based on their team.
+     *
+     * @param player The player to give the kit to.
+     */
+    public void determineRolesAndGiveKit(Player player) {
+        Kit toBeGivenKit;
+
+        if (this.getParticipantA() != null || this.getParticipantB() != null) {
+            assert this.getParticipantA() != null;
+            if (this.getParticipantA().containsPlayer(player.getUniqueId())) {
+                toBeGivenKit = this.plugin.getKitService().getKit("BaseTrapper");
+
+                GameParticipant<MatchGamePlayerImpl> participant = this.getParticipant(player);
+                participant.getPlayer().getData().setRole(EnumBaseRaiderRole.TRAPPER);
+
+                Logger.log("player a role: " + participant.getPlayer().getData().getRole());
+            } else {
+                toBeGivenKit = this.plugin.getKitService().getKit("BaseRaider");
+
+                GameParticipant<MatchGamePlayerImpl> participant = this.getParticipant(player);
+                participant.getPlayer().getData().setRole(EnumBaseRaiderRole.RAIDER);
+
+                Logger.log("player b role: " + participant.getPlayer().getData().getRole());
+            }
+
+            player.getInventory().setArmorContents(toBeGivenKit.getArmor());
+            player.getInventory().setContents(toBeGivenKit.getItems());
+            player.updateInventory();
         }
     }
 }

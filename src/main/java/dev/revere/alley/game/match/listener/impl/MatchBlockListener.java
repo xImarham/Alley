@@ -4,14 +4,18 @@ import dev.revere.alley.Alley;
 import dev.revere.alley.base.arena.impl.StandAloneArena;
 import dev.revere.alley.base.kit.setting.impl.mechanic.KitSettingBuildImpl;
 import dev.revere.alley.base.kit.setting.impl.mode.KitSettingBedImpl;
+import dev.revere.alley.base.kit.setting.impl.mode.KitSettingRaidingImpl;
 import dev.revere.alley.base.kit.setting.impl.mode.KitSettingSpleefImpl;
 import dev.revere.alley.game.match.AbstractMatch;
 import dev.revere.alley.game.match.enums.EnumMatchState;
 import dev.revere.alley.game.match.impl.MatchBedImpl;
+import dev.revere.alley.game.match.player.enums.EnumBaseRaiderRole;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
+import dev.revere.alley.tool.logger.Logger;
+import dev.revere.alley.util.ListenerUtil;
 import dev.revere.alley.util.RayTracerUtil;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.Location;
@@ -26,6 +30,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.concurrent.ThreadLocalRandom;
@@ -64,6 +69,18 @@ public class MatchBlockListener implements Listener {
                 EnumMatchState matchState = match.getState();
                 if (matchState == EnumMatchState.STARTING || matchState == EnumMatchState.ENDING_MATCH || matchState == EnumMatchState.RESTARTING_ROUND) {
                     event.setCancelled(true);
+                    return;
+                }
+
+                if (match.getKit().isSettingEnabled(KitSettingBuildImpl.class) && match.getKit().isSettingEnabled(KitSettingRaidingImpl.class)) {
+                    Logger.log("condition met for raiding and building");
+                    if (participant.getPlayer().getData().getRole() == EnumBaseRaiderRole.TRAPPER) {
+                        event.setCancelled(false);
+                        match.addBlockToBrokenBlocksMap(event.getBlock().getState(), event.getBlock().getLocation());
+                        return;
+                    } else {
+                        event.setCancelled(true);
+                    }
                     return;
                 }
 
@@ -164,7 +181,16 @@ public class MatchBlockListener implements Listener {
                     return;
                 }
 
-                if (match.getKit().isSettingEnabled(KitSettingBuildImpl.class)) {
+                if (match.getKit().isSettingEnabled(KitSettingRaidingImpl.class) && match.getKit().isSettingEnabled(KitSettingBuildImpl.class)) {
+                    GameParticipant<MatchGamePlayerImpl> participant = match.getParticipant(player);
+                    if (participant.getPlayer().getData().getRole() == EnumBaseRaiderRole.TRAPPER) {
+                        event.setCancelled(false);
+                        match.addBlockToBrokenBlocksMap(event.getBlock().getState(), event.getBlock().getLocation());
+                    } else {
+                        event.setCancelled(true);
+                    }
+                    return;
+                } else if (match.getKit().isSettingEnabled(KitSettingBuildImpl.class)) {
                     match.addBlockToPlacedBlocksMap(event.getBlock().getState(), event.getBlockPlaced().getLocation());
                     return;
                 }
@@ -194,6 +220,26 @@ public class MatchBlockListener implements Listener {
                 profile.getMatch().addBlockToBrokenBlocksMap(hitLocation.getBlock().getState(), hitLocation);
                 hitLocation.getBlock().setType(Material.AIR);
             }
+        }
+    }
+
+    @EventHandler
+    private void onDoorOpen(PlayerInteractEvent event) {
+        Player player = event.getPlayer();
+        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
+
+        if (profile.getState() != EnumProfileState.PLAYING) return;
+        if (profile.getMatch().getState() != EnumMatchState.RUNNING) return;
+
+        if (!profile.getMatch().getKit().isSettingEnabled(KitSettingRaidingImpl.class)) return;
+
+        Block block = event.getClickedBlock();
+        if (block == null || block.getType() == Material.AIR) return;
+
+        GameParticipant<MatchGamePlayerImpl> participant = profile.getMatch().getParticipant(player);
+        if (participant.getPlayer().getData().getRole() == EnumBaseRaiderRole.RAIDER && ListenerUtil.isDoorOrGate(block.getType())) {
+            event.setCancelled(true);
+            player.sendMessage(CC.translate("&cYou cannot open doors or gates during a match!"));
         }
     }
 }

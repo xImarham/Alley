@@ -1,6 +1,7 @@
 package dev.revere.alley.game.match.player.data;
 
 import dev.revere.alley.Alley;
+import dev.revere.alley.game.match.player.enums.EnumBaseRaiderRole;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,6 +21,7 @@ public class MatchGamePlayerData {
     private int score;
     private int kills;
     private int deaths;
+    private EnumBaseRaiderRole role;
 
     public MatchGamePlayerData() {
         this.bedBroken = false;
