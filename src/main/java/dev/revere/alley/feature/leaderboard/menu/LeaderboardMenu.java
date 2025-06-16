@@ -57,27 +57,28 @@ public class LeaderboardMenu extends Menu {
         buttons.put(2, new StatisticsButton());
         buttons.put(6, new DisplayTypeButton());
 
-        Alley.getInstance().getKitService().getKits().stream()
-                .filter(Kit::isEnabled)
-                .filter(kit -> kit.getIcon() != null)
-                .forEach(kit -> {
-                    List<LeaderboardPlayerData> leaderboard = leaderboardService.getLeaderboardEntries(kit, currentType);
+        int slot = 10;  // declare slot here once
 
-                    switch (currentType) {
-                        case RANKED:
-                            if (kit.isSettingEnabled(KitSettingRankedImpl.class)) {
-                                buttons.put(kit.getRankedSlot(), new LeaderboardKitButton(kit, leaderboard, currentType));
-                            }
-                            break;
-                        case UNRANKED:
-                        case UNRANKED_MONTHLY:
-                        case TOURNAMENT:
-                        case WIN_STREAK:
-                        case FFA:
-                            buttons.put(kit.getUnrankedSlot(), new LeaderboardKitButton(kit, leaderboard, currentType));
-                            break;
+        for (Kit kit : Alley.getInstance().getKitService().getKits()) {
+            if (!kit.isEnabled() || kit.getIcon() == null) continue;
+
+            List<LeaderboardPlayerData> leaderboard = leaderboardService.getLeaderboardEntries(kit, currentType);
+
+            switch (currentType) {
+                case RANKED:
+                    if (!kit.isSettingEnabled(KitSettingRankedImpl.class)) {
+                        break;
                     }
-                });
+                case UNRANKED:
+                case UNRANKED_MONTHLY:
+                case TOURNAMENT:
+                case WIN_STREAK:
+                case FFA:
+                    slot = this.skipIfSlotCrossingBorder(slot);
+                    buttons.put(slot++, new LeaderboardKitButton(kit, leaderboard, currentType));
+                    break;
+            }
+        }
 
         this.addBorder(buttons, (byte) 15, 5);
 

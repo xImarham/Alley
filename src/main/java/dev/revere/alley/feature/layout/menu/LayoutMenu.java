@@ -30,9 +30,12 @@ public class LayoutMenu extends Menu {
     public Map<Integer, Button> getButtons(Player player) {
         Map<Integer, Button> buttons = new HashMap<>();
 
+        int slot = 10;
+
         for (Queue queue : this.plugin.getQueueService().getQueues()) {
             if (!queue.isRanked() && queue.getKit().getCategory() == this.kitCategory && queue.getKit().isEditable()) {
-                buttons.put(queue.getKit().getEditorSlot(), new LayoutButton(queue.getKit()));
+                slot = this.skipIfSlotCrossingBorder(slot);
+                buttons.put(slot++, new LayoutButton(queue.getKit()));
             }
         }
 
@@ -46,6 +49,7 @@ public class LayoutMenu extends Menu {
 
         return buttons;
     }
+
 
     @Override
     public int getSize() {

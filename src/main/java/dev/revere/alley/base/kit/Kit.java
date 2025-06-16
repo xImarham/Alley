@@ -21,6 +21,7 @@ import java.util.List;
 @Setter
 public class Kit {
     private final String name;
+
     private String displayName;
     private String description;
     private String disclaimer;
@@ -28,24 +29,19 @@ public class Kit {
     private boolean enabled;
     private boolean editable;
 
-    private EnumKitCategory category;
-
     private Material icon;
     private int durability;
 
-    private int unrankedSlot;
-    private int rankedSlot;
-    private int editorSlot;
-    private int extraSlot;
+    private ItemStack[] items;
+    private ItemStack[] armor;
+    private ItemStack[] editorItems;
 
     private String ffaArenaName;
     private boolean ffaEnabled;
     private int ffaSlot;
     private int maxFfaPlayers;
 
-    private ItemStack[] items;
-    private ItemStack[] armor;
-    private ItemStack[] editorItems;
+    private EnumKitCategory category;
 
     private List<PotionEffect> potionEffects;
     private final List<KitSetting> kitSettings;
@@ -53,51 +49,40 @@ public class Kit {
     /**
      * Constructor for the Kit class.
      *
-     * @param name         The name of the kit.
-     * @param displayName  The display name of the kit.
-     * @param description  The description of the kit.
-     * @param disclaimer   The disclaimer of the kit.
-     * @param enabled      Whether the kit is enabled.
-     * @param editable     Whether the kit is editable.
-     * @param category     The category of the kit.
-     * @param icon         The icon of the kit.
-     * @param durability   The durability of the icon.
-     * @param unrankedSlot The slot for unranked games.
-     * @param rankedSlot   The slot for ranked games.
-     * @param editorSlot   The slot for the editor.
-     * @param ffaSlot      The slot for FFA games.
-     * @param extraSlot    The slot for extra games.
-     * @param items        The items in the kit.
-     * @param armor        The armor in the kit.
-     * @param editorItems  The items in the editor.
+     * @param name          The name of the kit.
+     * @param displayName   The display name of the kit.
+     * @param description   The description of the kit.
+     * @param disclaimer    The disclaimer of the kit.
+     * @param category      The category of the kit.
+     * @param icon          The icon of the kit.
+     * @param durability    The durability of the kit's icon.
+     * @param items         The items in the kit.
+     * @param armor         The armor in the kit.
+     * @param editorItems   The items used in the editor for this kit.
      */
-    public Kit(String name, String displayName, String description, String disclaimer, boolean enabled, boolean editable, EnumKitCategory category, Material icon, int durability, int unrankedSlot, int rankedSlot, int editorSlot, int ffaSlot, int extraSlot, ItemStack[] items, ItemStack[] armor, ItemStack[] editorItems) {
+    public Kit(String name, String displayName, String description, String disclaimer, EnumKitCategory category, Material icon, int durability, ItemStack[] items, ItemStack[] armor, ItemStack[] editorItems) {
         this.name = name;
+
         this.displayName = displayName;
         this.description = description;
         this.disclaimer = disclaimer;
 
-        this.enabled = enabled;
-        this.editable = editable;
+        this.enabled = false;
+        this.editable = true;
 
         this.category = category;
 
         this.icon = icon;
         this.durability = durability;
 
-        this.unrankedSlot = unrankedSlot;
-        this.rankedSlot = rankedSlot;
-        this.editorSlot = editorSlot;
-        this.extraSlot = extraSlot;
-
-        this.ffaArenaName = "";
-        this.ffaEnabled = false;
-        this.maxFfaPlayers = 20;
-        this.ffaSlot = ffaSlot;
-
         this.items = items;
         this.armor = armor;
         this.editorItems = editorItems;
+
+        this.ffaEnabled = false;
+        this.ffaArenaName = "";
+        this.maxFfaPlayers = 20;
+        this.ffaSlot = 0;
 
         this.kitSettings = new ArrayList<>();
         this.potionEffects = new ArrayList<>();

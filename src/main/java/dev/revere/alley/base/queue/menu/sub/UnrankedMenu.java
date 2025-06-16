@@ -33,9 +33,11 @@ public class UnrankedMenu extends Menu {
 
         buttons.put(0, new BackButton(new QueuesMenuDefault()));
 
+        int slot = 10;
         for (Queue queue : Alley.getInstance().getQueueService().getQueues()) {
             if (!queue.isRanked() && queue.getKit().getCategory() == EnumKitCategory.NORMAL) {
-                buttons.put(queue.getKit().getUnrankedSlot(), new UnrankedButton(queue));
+                slot = this.skipIfSlotCrossingBorder(slot);
+                buttons.put(slot++, new UnrankedButton(queue));
             }
         }
 

@@ -26,18 +26,20 @@ public class RankedMenu extends Menu {
     public Map<Integer, Button> getButtons(Player player) {
         Map<Integer, Button> buttons = new HashMap<>();
 
-        //buttons.put(0, new BackButton(new QueuesMenu()));
+        int slot = 10;
 
-        for (Queue queue : Alley.getInstance().getQueueService().getQueues()) {
+        for (Queue queue : this.plugin.getQueueService().getQueues()) {
             if (queue.isRanked()) {
-                buttons.put(queue.getKit().getRankedSlot(), new RankedButton(queue));
+                slot = this.skipIfSlotCrossingBorder(slot);
+                buttons.put(slot++, new RankedButton(queue));
             }
         }
 
-        addBorder(buttons, (byte) 15, 5);
+        this.addBorder(buttons, (byte) 15, 5);
 
         return buttons;
     }
+
 
     @Override
     public int getSize() {

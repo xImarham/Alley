@@ -57,20 +57,16 @@ public class KitService {
                     config.getString(key + ".display-name"),
                     config.getString(key + ".description"),
                     config.getString(key + ".disclaimer"),
-                    config.getBoolean(key + ".enabled"),
-                    config.getBoolean(key + ".editable"),
                     EnumKitCategory.valueOf(config.getString(key + ".category")),
                     Material.matchMaterial(config.getString(key + ".icon.material")),
                     config.getInt(key + ".icon.durability"),
-                    config.getInt(key + ".slots.unranked"),
-                    config.getInt(key + ".slots.ranked"),
-                    config.getInt(key + ".slots.editor"),
-                    config.getInt(key + ".ffa.slot"),
-                    config.getInt(key + ".slots.extra"),
                     Serializer.deserializeItemStack(config.getString(key + ".items")),
                     Serializer.deserializeItemStack(config.getString(key + ".armor")),
                     Serializer.deserializeItemStack(config.getString(key + ".editor-items"))
             );
+
+            kit.setEnabled(config.getBoolean(key + ".enabled"));
+            kit.setEditable(config.getBoolean(key + ".editable"));
 
             this.setupFFA(kit, config, key);
             this.loadKitSettings(config, key, kit);
@@ -254,21 +250,14 @@ public class KitService {
      * @param armor     The armor of the kit.
      * @param icon      The icon of the kit.
      */
-    public void createKit(String kitName, ItemStack[] inventory, ItemStack[] armor, Material icon, int slot) {
+    public void createKit(String kitName, ItemStack[] inventory, ItemStack[] armor, Material icon) {
         Kit kit = new Kit(
                 kitName,
                 this.plugin.getConfigService().getSettingsConfig().getString("kit.default-values.display-name").replace("{kit-name}", kitName),
                 this.plugin.getConfigService().getSettingsConfig().getString("kit.default-values.description").replace("{kit-name}", kitName),
                 this.plugin.getConfigService().getSettingsConfig().getString("kit.default-values.disclaimer").replace("{kit-name}", kitName),
-                true,
-                true,
                 EnumKitCategory.NORMAL,
                 icon,
-                0,
-                slot,
-                0,
-                0,
-                0,
                 0,
                 inventory,
                 armor,
@@ -331,10 +320,6 @@ public class KitService {
         config.set(key + ".category", kit.getCategory().name());
         config.set(key + ".icon.material", kit.getIcon().name());
         config.set(key + ".icon.durability", kit.getDurability());
-        config.set(key + ".slots.unranked", kit.getUnrankedSlot());
-        config.set(key + ".slots.ranked", kit.getRankedSlot());
-        config.set(key + ".slots.editor", kit.getEditorSlot());
-        config.set(key + ".slots.extra", kit.getExtraSlot());
         config.set(key + ".ffa.arena-name", kit.getFfaArenaName());
         config.set(key + ".ffa.enabled", kit.isFfaEnabled());
         config.set(key + ".ffa.slot", kit.getFfaSlot());

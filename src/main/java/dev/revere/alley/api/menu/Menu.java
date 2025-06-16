@@ -133,6 +133,31 @@ public abstract class Menu {
 
     /**
      * Addition by Emmy
+     * Skips the slot if it crosses the border.
+     *
+     * @param slot the slot
+     * @return the new slot
+     */
+    public int skipIfSlotCrossingBorder(int slot) {
+        if (slot == 17 || slot == 26 || slot == 35 || slot == 44 || slot == 53 || slot == 62) {
+            slot += 2;
+        }
+        return slot;
+    }
+
+    /**
+     * Addition by Emmy
+     * Checks if the slot is a border slot.
+     *
+     * @param slot the slot
+     * @return true if it is a border slot, false otherwise
+     */
+    public boolean isBorderSlot(int slot) {
+        return slot == 17 || slot == 26 || slot == 35 || slot == 44 || slot == 53 || slot == 62;
+    }
+
+    /**
+     * Addition by Emmy
      * Refills glass to the empty slots of a menu.
      *
      * @param buttons the button

@@ -34,9 +34,11 @@ public class ExtraModesMenu extends Menu {
 
         buttons.put(4, new QueueModeSwitcherButton(this.queueType, EnumKitCategory.NORMAL));
 
+        int slot = 10;
         for (Queue queue : Alley.getInstance().getQueueService().getQueues()) {
             if (!queue.isRanked() && queue.getKit().getCategory() == EnumKitCategory.EXTRA) {
-                buttons.put(queue.getKit().getExtraSlot(), new UnrankedButton(queue));
+                slot = this.skipIfSlotCrossingBorder(slot);
+                buttons.put(slot++, new UnrankedButton(queue));
             }
         }
 

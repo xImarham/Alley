@@ -87,11 +87,14 @@ public class QueuesMenuModern extends Menu {
                 this.getLore(profile, EnumQueueType.FFA)
         )));
 
+        int slot = 10;
         switch (profile.getQueueType()) {
             case UNRANKED:
+
                 for (Queue queue : this.plugin.getQueueService().getQueues()) {
                     if (!queue.isRanked() && queue.getKit().getCategory() == EnumKitCategory.NORMAL) {
-                        buttons.put(queue.getKit().getUnrankedSlot(), new UnrankedButton(queue));
+                        slot = this.skipIfSlotCrossingBorder(slot);
+                        buttons.put(slot++, new UnrankedButton(queue));
                     }
                 }
 
@@ -100,7 +103,8 @@ public class QueuesMenuModern extends Menu {
                 break;
             case BOTS:
                 for (Kit kit : this.plugin.getKitService().getKits()) {
-                    buttons.put(kit.getUnrankedSlot(), new BotButton(kit));
+                    slot = this.skipIfSlotCrossingBorder(slot);
+                    buttons.put(slot++, new BotButton(kit));
                 }
                 break;
             case FFA:

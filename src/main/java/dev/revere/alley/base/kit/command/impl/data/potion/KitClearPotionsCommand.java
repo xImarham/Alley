@@ -1,4 +1,4 @@
-package dev.revere.alley.base.kit.command.impl.data.slot;
+package dev.revere.alley.base.kit.command.impl.data.potion;
 
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
@@ -12,37 +12,36 @@ import org.bukkit.entity.Player;
 /**
  * @author Emmy
  * @project Alley
- * @date 21/05/2024 - 00:23
+ * @since 16/06/2025
  */
-public class KitSetRankedSlotCommand extends BaseCommand {
-    @CommandData(name = "kit.setrankedslot", isAdminOnly = true)
+public class KitClearPotionsCommand extends BaseCommand {
+
+    @CommandData(name = "kit.clearpotions", isAdminOnly = true)
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
         String[] args = command.getArgs();
 
-        if (command.length() < 2) {
-            player.sendMessage(CC.translate("&6Usage: &e/kit setrankedslot &b<kitName> <slot>"));
+        if (args.length < 1) {
+            player.sendMessage(CC.translate("&6Usage: &e/kit removepotion &b<kitName>"));
             return;
         }
 
         KitService kitService = this.plugin.getKitService();
         Kit kit = kitService.getKit(args[0]);
+
         if (kit == null) {
             player.sendMessage(CC.translate(KitLocale.KIT_NOT_FOUND.getMessage()));
             return;
         }
 
-        int slot;
-        try {
-            slot = Integer.parseInt(args[1]);
-        } catch (NumberFormatException e) {
-            player.sendMessage(CC.translate(KitLocale.SLOT_MUST_BE_NUMBER.getMessage()));
+        if (kit.getPotionEffects().isEmpty()) {
+            player.sendMessage(CC.translate("&cThis kit has no potion effects to remove."));
             return;
         }
 
-        kit.setRankedSlot(slot);
+        kit.getPotionEffects().clear();
         kitService.saveKit(kit);
-        player.sendMessage(CC.translate(KitLocale.KIT_RANKEDSLOT_SET.getMessage()).replace("{kit-name}", kit.getName()).replace("{slot}", String.valueOf(slot)));
+        player.sendMessage(CC.translate("&aAll potion effects have been removed from kit &e" + kit.getName() + "&a."));
     }
 }

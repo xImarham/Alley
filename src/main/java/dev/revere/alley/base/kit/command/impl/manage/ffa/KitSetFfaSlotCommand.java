@@ -1,4 +1,4 @@
-package dev.revere.alley.base.kit.command.impl.data.slot;
+package dev.revere.alley.base.kit.command.impl.manage.ffa;
 
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
@@ -12,23 +12,22 @@ import org.bukkit.entity.Player;
 /**
  * @author Emmy
  * @project Alley
- * @since 08/06/2025
+ * @date 21/05/2024 - 00:25
  */
-public class KitSetExtraSlotCommand extends BaseCommand {
-    @CommandData(name = "kit.setextraslot", isAdminOnly = true)
+public class KitSetFfaSlotCommand extends BaseCommand {
+    @CommandData(name = "kit.setffaslot", isAdminOnly = true)
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
         String[] args = command.getArgs();
 
-        if (args.length < 2) {
-            player.sendMessage(CC.translate("&6Usage: &e/kit setextraslot &b<kitName> <slot>"));
+        if (command.length() < 2) {
+            player.sendMessage(CC.translate("&6Usage: &e/kit setffaslot &b<kitName> <slot>"));
             return;
         }
 
-        String kitName = args[0];
         KitService kitService = this.plugin.getKitService();
-        Kit kit = kitService.getKit(kitName);
+        Kit kit = kitService.getKit(args[0]);
         if (kit == null) {
             player.sendMessage(CC.translate(KitLocale.KIT_NOT_FOUND.getMessage()));
             return;
@@ -38,12 +37,12 @@ public class KitSetExtraSlotCommand extends BaseCommand {
         try {
             slot = Integer.parseInt(args[1]);
         } catch (NumberFormatException e) {
-            player.sendMessage(CC.translate("&cInvalid slot number! Please enter a valid integer."));
+            player.sendMessage(CC.translate(KitLocale.SLOT_MUST_BE_NUMBER.getMessage()));
             return;
         }
 
-        kit.setExtraSlot(slot);
+        kit.setFfaSlot(slot);
         kitService.saveKit(kit);
-        player.sendMessage(CC.translate("&aSuccessfully set the extra slot for the &b" + kit.getName() + " &akit to &b" + slot + "&a!"));
+        player.sendMessage(CC.translate(KitLocale.KIT_FFASLOT_SET.getMessage()).replace("{kit-name}", kit.getName()).replace("{slot}", String.valueOf(slot)));
     }
 }

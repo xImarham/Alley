@@ -1,4 +1,4 @@
-package dev.revere.alley.base.kit.command.impl.data;
+package dev.revere.alley.base.kit.command.impl.data.potion;
 
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
@@ -20,16 +20,16 @@ import java.util.List;
  * @project Alley
  * @since 14/03/2025
  */
-public class KitSetPotionCommand extends BaseCommand {
+public class KitAddPotionCommand extends BaseCommand {
 
-    @CommandData(name = "kit.setpotion", aliases = {"kit.setpotioneffects"}, isAdminOnly = true)
+    @CommandData(name = "kit.addpotion", aliases = {"kit.potion"}, isAdminOnly = true)
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
         String[] args = command.getArgs();
 
         if (args.length < 1) {
-            player.sendMessage(CC.translate("&6Usage: &e/kit setpotion &b<kitName>"));
+            player.sendMessage(CC.translate("&6Usage: &e/kit addpotion &b<kitName>"));
             return;
         }
 
