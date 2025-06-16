@@ -21,18 +21,19 @@ import java.util.Map;
  */
 @AllArgsConstructor
 public class LayoutEditorMenu extends Menu {
+    protected final Alley plugin = Alley.getInstance();
     private final Kit kit;
     private final LayoutData layout;
 
     @Override
     public void onOpen(Player player) {
-        Alley.getInstance().getProfileService().getProfile(player.getUniqueId()).setState(EnumProfileState.EDITING);
+        this.plugin.getProfileService().getProfile(player.getUniqueId()).setState(EnumProfileState.EDITING);
         player.getInventory().setContents(this.layout.getItems());
     }
 
     @Override
     public void onClose(Player player) {
-        Alley.getInstance().getProfileService().getProfile(player.getUniqueId()).setState(EnumProfileState.LOBBY);
+        this.plugin.getProfileService().getProfile(player.getUniqueId()).setState(EnumProfileState.LOBBY);
         super.onClose(player);
     }
 
@@ -45,7 +46,7 @@ public class LayoutEditorMenu extends Menu {
     public Map<Integer, Button> getButtons(Player player) {
         Map<Integer, Button> buttons = new HashMap<>();
 
-        Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
+        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
 
         buttons.put(11, new LayoutSaveButton(this.kit, this.layout));
         buttons.put(13, new LayoutResetItemsButton(this.kit));
@@ -57,7 +58,7 @@ public class LayoutEditorMenu extends Menu {
             buttons.put(23, new LayoutRenameButton(this.layout));
         }
 
-        this.addGlass(buttons, (byte) 15);
+        this.addGlass(buttons, 15);
 
         return buttons;
     }

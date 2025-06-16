@@ -1,7 +1,8 @@
 package dev.revere.alley.provider.scoreboard.impl.match;
 
 import dev.revere.alley.Alley;
-import dev.revere.alley.base.kit.setting.impl.mode.*;
+import dev.revere.alley.base.kit.setting.impl.mode.KitSettingBoxingImpl;
+import dev.revere.alley.base.kit.setting.impl.mode.KitSettingStickFightImpl;
 import dev.revere.alley.game.match.AbstractMatch;
 import dev.revere.alley.game.match.enums.EnumMatchState;
 import dev.revere.alley.game.match.impl.MatchBedImpl;

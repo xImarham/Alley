@@ -34,6 +34,8 @@ import java.util.stream.Collectors;
 @Getter
 @Setter
 public class Profile {
+    protected final Alley plugin = Alley.getInstance();
+
     private final UUID uuid;
     private String name;
 
@@ -73,14 +75,14 @@ public class Profile {
      * Loads the profile from the database.
      */
     public void load() {
-        Alley.getInstance().getProfileService().getIProfile().loadProfile(this);
+        this.plugin.getProfileService().getIProfile().loadProfile(this);
     }
 
     /**
      * Saves the profile to the database.
      */
     public void save() {
-        Alley.getInstance().getProfileService().getIProfile().saveProfile(this);
+        this.plugin.getProfileService().getIProfile().saveProfile(this);
     }
 
     /**
@@ -90,7 +92,7 @@ public class Profile {
      * @return A sorted list of kits that the profile has participated in.
      */
     public List<Kit> getSortedKits() {
-        return Alley.getInstance().getKitService().getKits()
+        return this.plugin.getKitService().getKits()
                 .stream()
                 .filter(kit -> {
                     ProfileRankedKitData rankedData = this.profileData.getRankedKitData().get(kit.getName());
@@ -162,7 +164,7 @@ public class Profile {
             return division.getName() + " " + nextTier.getName();
         }
 
-        List<Division> divisions = Alley.getInstance().getDivisionService().getDivisions();
+        List<Division> divisions = this.plugin.getDivisionService().getDivisions();
         int divisionIndex = divisions.indexOf(division);
 
         if (divisionIndex < divisions.size() - 1) {
@@ -183,7 +185,7 @@ public class Profile {
         ProfileUnrankedKitData profileUnrankedKitData = this.profileData.getUnrankedKitData().get(kitName);
         Division division = profileUnrankedKitData.getDivision();
 
-        List<Division> divisions = Alley.getInstance().getDivisionService().getDivisions();
+        List<Division> divisions = this.plugin.getDivisionService().getDivisions();
         int divisionIndex = divisions.indexOf(division);
 
         if (divisionIndex < divisions.size() - 1) {

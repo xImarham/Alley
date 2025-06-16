@@ -1,6 +1,5 @@
 package dev.revere.alley.game.match.command.admin.impl;
 
-import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
@@ -94,7 +93,7 @@ public class MatchStartCommand extends BaseCommand {
         GameParticipant<MatchGamePlayerImpl> participantA = new GameParticipant<>(playerA);
         GameParticipant<MatchGamePlayerImpl> participantB = new GameParticipant<>(playerB);
 
-        Alley.getInstance().getMatchService().createAndStartMatch(
+        this.plugin.getMatchService().createAndStartMatch(
                 kit, arena, participantA, participantB, false, false, false
         );
     }

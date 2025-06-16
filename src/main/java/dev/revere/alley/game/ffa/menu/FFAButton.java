@@ -9,8 +9,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.Arrays;
-
 /**
  * @author Emmy
  * @project Alley
@@ -25,13 +23,13 @@ public class FFAButton extends Button {
         return new ItemBuilder(this.match.getKit().getIcon())
                 .name("&b&l" + this.match.getName())
                 .durability(this.match.getKit().getDurability())
-                .lore(Arrays.asList(
+                .lore(
                         "",
                         "&fPlaying: &b" + this.match.getPlayers().size() + "/" + this.match.getMaxPlayers(),
                         "&fArena: &b" + this.match.getArena().getName(),
                         "&fKit: &b" + this.match.getKit().getName(),
                         "",
-                        "&fClick to join the &b" + this.match.getName() + " &fqueue.")
+                        "&fClick to join the &b" + this.match.getName() + " &fqueue."
                 )
                 .hideMeta()
                 .build();

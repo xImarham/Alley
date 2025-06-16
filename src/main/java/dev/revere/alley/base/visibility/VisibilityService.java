@@ -76,8 +76,8 @@ public class VisibilityService {
     /**
      * Handles the visibility logic for players in lobby and queue states.
      *
-     * @param viewer the player who is viewing.
-     * @param target player to be viewed.
+     * @param viewer             the player who is viewing.
+     * @param target             player to be viewed.
      * @param targetProfileState the profile state of the target player.
      */
     private void handleLobbyAndQueueState(Player viewer, Player target, EnumProfileState targetProfileState) {
@@ -91,9 +91,9 @@ public class VisibilityService {
     /**
      * Handles the visibility logic for players in playing state.
      *
-     * @param viewer          The player who is viewing.
-     * @param target          The target player to be viewed.
-     * @param viewerProfile   The profile of the viewer.
+     * @param viewer        The player who is viewing.
+     * @param target        The target player to be viewed.
+     * @param viewerProfile The profile of the viewer.
      */
     private void handlePlayingCase(Player viewer, Player target, Profile viewerProfile) {
         MatchGamePlayerImpl targetGamePlayer = viewerProfile.getMatch().getGamePlayer(target);
@@ -111,9 +111,9 @@ public class VisibilityService {
     /**
      * Handles the visibility logic for players in spectating state.
      *
-     * @param viewer          The player who is viewing.
-     * @param target          The target player to be viewed.
-     * @param viewerProfile   The profile of the viewer.
+     * @param viewer        The player who is viewing.
+     * @param target        The target player to be viewed.
+     * @param viewerProfile The profile of the viewer.
      */
     private void handleSpectatingCase(Player viewer, Player target, Profile viewerProfile) {
         MatchGamePlayerImpl spectatingTargetGamePlayer = viewerProfile.getMatch().getGamePlayer(target);

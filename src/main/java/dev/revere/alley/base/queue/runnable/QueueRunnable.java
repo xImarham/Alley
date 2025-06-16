@@ -27,9 +27,11 @@ import java.util.Optional;
  * @date 5/21/2024
  */
 public class QueueRunnable implements Runnable {
+    protected final Alley plugin = Alley.getInstance();
+
     @Override
     public void run() {
-        Alley.getInstance().getQueueService().getQueues().forEach(this::processQueue);
+        this.plugin.getQueueService().getQueues().forEach(this::processQueue);
     }
 
     /**
@@ -45,14 +47,14 @@ public class QueueRunnable implements Runnable {
                     queue.getProfiles().remove(profile);
                     queue.removePlayer(profile);
 
-                    Player player = Alley.getInstance().getServer().getPlayer(profile.getUuid());
+                    Player player = this.plugin.getServer().getPlayer(profile.getUuid());
                     player.sendMessage(CC.translate("&cYou have been removed from the queue due to inactivity."));
 
-                    Alley.getInstance().getProfileService().getProfile(profile.getUuid()).setQueueProfile(null);
-                    Alley.getInstance().getHotbarService().applyHotbarItems(player, EnumHotbarType.LOBBY);
+                    this.plugin.getProfileService().getProfile(profile.getUuid()).setQueueProfile(null);
+                    this.plugin.getHotbarService().applyHotbarItems(player, EnumHotbarType.LOBBY);
                 } else {
                     Logger.logError("&cPlayer &4" + Bukkit.getPlayer(profile.getUuid()) + "&c couldn't be removed from the queue because their state was changed.");
-                    Alley.getInstance().getProfileService().getProfile(profile.getUuid()).setQueueProfile(null);
+                    this.plugin.getProfileService().getProfile(profile.getUuid()).setQueueProfile(null);
                     queue.getProfiles().remove(profile);
                 }
             }
@@ -81,7 +83,7 @@ public class QueueRunnable implements Runnable {
                     AbstractArena arena = this.getArena(queue);
                     if (arena == null || arena.getType().equals(EnumArenaType.FFA)) {
                         gameParticipantList.getParticipants().forEach(participant -> {
-                            Player player = Alley.getInstance().getServer().getPlayer(participant.getPlayer().getUuid());
+                            Player player = this.plugin.getServer().getPlayer(participant.getPlayer().getUuid());
                             player.sendMessage(CC.translate("&cThere are no available arenas for the kit you're playing."));
                         });
 
@@ -104,7 +106,7 @@ public class QueueRunnable implements Runnable {
      * @return The player.
      */
     private Optional<Player> getPlayer(QueueProfile profile) {
-        return Optional.ofNullable(Alley.getInstance().getServer().getPlayer(profile.getUuid()));
+        return Optional.ofNullable(this.plugin.getServer().getPlayer(profile.getUuid()));
     }
 
     /**
@@ -117,7 +119,7 @@ public class QueueRunnable implements Runnable {
      * @param secondProfile       The second profile.
      */
     private void processGame(Queue queue, AbstractArena arena, GameParticipantList gameParticipantList, QueueProfile firstProfile, QueueProfile secondProfile) {
-        Alley.getInstance().getMatchService().createAndStartMatch(
+        this.plugin.getMatchService().createAndStartMatch(
                 queue.getKit(), arena, gameParticipantList.participantA, gameParticipantList.participantB, false, true, queue.isRanked()
         );
 
@@ -131,7 +133,7 @@ public class QueueRunnable implements Runnable {
      * @return The arena.
      */
     private AbstractArena getArena(Queue queue) {
-        return Alley.getInstance().getArenaService().getRandomArena(queue.getKit());
+        return this.plugin.getArenaService().getRandomArena(queue.getKit());
     }
 
     /**
@@ -142,7 +144,7 @@ public class QueueRunnable implements Runnable {
      * @param secondProfile The second profile.
      */
     public void clearQueueProfiles(Queue queue, QueueProfile firstProfile, QueueProfile secondProfile) {
-        ProfileService profileService = Alley.getInstance().getProfileService();
+        ProfileService profileService = this.plugin.getProfileService();
         profileService.getProfile(firstProfile.getUuid()).setQueueProfile(null);
         profileService.getProfile(secondProfile.getUuid()).setQueueProfile(null);
 

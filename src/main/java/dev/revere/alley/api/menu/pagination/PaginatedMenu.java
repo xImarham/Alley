@@ -82,10 +82,22 @@ public abstract class PaginatedMenu extends Menu {
         return buttons;
     }
 
+    /**
+     * Method to get the maximum number of items that can be displayed on a single page.
+     *
+     * @return the maximum number of items per page.
+     */
     public int getMaxItemsPerPage() {
         return 36;
     }
 
+    /**
+     * Validates the slot number to ensure it does not conflict with reserved slots.
+     * Reserved slots are typically used for glass panes or other UI elements.
+     *
+     * @param slot the original slot number to validate
+     * @return a valid slot number that does not conflict with reserved slots
+     */
     public int validateSlot(int slot) {
         int slotsPerPage = 36;
 
@@ -107,6 +119,12 @@ public abstract class PaginatedMenu extends Menu {
         return slot;
     }
 
+    /**
+     * Adds glass panes to the inventory to avoid reserved slots.
+     * This method fills the reserved slots with glass buttons to ensure they are not used for other items.
+     *
+     * @param buttons a map of buttons representing the inventory slots
+     */
     public void addGlassToAvoidedSlots(Map<Integer, Button> buttons) {
         int slotsPerPage = getMaxItemsPerPage();
         List<Integer> baseSlotsToAvoid = Arrays.asList(0, 8, 9, 17, 18, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36);

@@ -12,7 +12,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,8 +20,8 @@ import java.util.Map;
  * @project Alley
  * @date 22/10/2024 - 18:18
  */
-@AllArgsConstructor
 public class DuelRequestsMenu extends PaginatedMenu {
+    protected final Alley plugin = Alley.getInstance();
 
     @Override
     public String getPrePaginatedTitle(Player player) {
@@ -44,7 +43,7 @@ public class DuelRequestsMenu extends PaginatedMenu {
     public Map<Integer, Button> getAllPagesButtons(Player player) {
         Map<Integer, Button> buttons = new HashMap<>();
 
-        Alley.getInstance().getDuelRequestService().getDuelRequests()
+        this.plugin.getDuelRequestService().getDuelRequests()
                 .stream()
                 .filter(duelRequest -> !duelRequest.getSender().equals(player))
                 .forEach(duelRequest -> buttons.put(buttons.size(), new DuelRequestsButton(duelRequest)));
@@ -55,19 +54,20 @@ public class DuelRequestsMenu extends PaginatedMenu {
 
     @AllArgsConstructor
     private static class DuelRequestsButton extends Button {
+        protected final Alley plugin = Alley.getInstance();
         private DuelRequest duelRequest;
 
         @Override
         public ItemStack getButtonItem(Player player) {
             return new ItemBuilder(Material.PAPER).name("&b&l" + this.duelRequest.getSender().getName()).durability(0).hideMeta()
-                    .lore(Arrays.asList(
+                    .lore(
                             "&fKit: &f" + this.duelRequest.getKit().getDisplayName(),
                             "&fArena: &f" + this.duelRequest.getArena().getDisplayName(),
                             "",
                             "&fExpires in: &b" + this.duelRequest.getRemainingTimeFormatted(),
                             "",
                             "&aClick to accept!"
-                    ))
+                    )
                     .hideMeta().build();
         }
 
@@ -87,16 +87,16 @@ public class DuelRequestsMenu extends PaginatedMenu {
                 return;
             }
 
-            if (Alley.getInstance().getProfileService().getProfile(player.getUniqueId()).getMatch() != null) {
+            if (this.plugin.getProfileService().getProfile(player.getUniqueId()).getMatch() != null) {
                 player.sendMessage(CC.translate("&cYou are already in a match."));
                 return;
             }
 
-            if (Alley.getInstance().getServerService().isQueueingEnabled(player)) {
+            if (this.plugin.getServerService().isQueueingEnabled(player)) {
                 return;
             }
 
-            Alley.getInstance().getDuelRequestService().acceptPendingRequest(this.duelRequest);
+            this.plugin.getDuelRequestService().acceptPendingRequest(this.duelRequest);
             player.closeInventory();
         }
     }

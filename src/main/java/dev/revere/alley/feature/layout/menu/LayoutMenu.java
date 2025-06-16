@@ -45,7 +45,7 @@ public class LayoutMenu extends Menu {
             buttons.put(4, new LayoutModeSwitcherButton(EnumKitCategory.NORMAL));
         }
 
-        this.addGlass(buttons, (byte) 15);
+        this.addGlass(buttons, 15);
 
         return buttons;
     }

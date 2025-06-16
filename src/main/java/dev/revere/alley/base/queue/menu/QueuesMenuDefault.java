@@ -82,7 +82,7 @@ public class QueuesMenuDefault extends Menu {
                 "&aClick to play!"
         )));
 
-        this.addGlass(buttons, (byte) 15);
+        this.addGlass(buttons, 15);
 
         return buttons;
     }
@@ -125,7 +125,7 @@ public class QueuesMenuDefault extends Menu {
                     break;
             }
 
-            playNeutral(player);
+            this.playNeutral(player);
         }
     }
 }

@@ -1,6 +1,5 @@
 package dev.revere.alley.game.match.snapshot.command;
 
-import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
@@ -35,7 +34,7 @@ public class InventoryCommand extends BaseCommand {
             return;
         }
 
-        SnapshotRepository snapshotRepository = Alley.getInstance().getSnapshotRepository();
+        SnapshotRepository snapshotRepository = this.plugin.getSnapshotRepository();
         if (snapshotRepository.getSnapshot(uuid) == null) {
             player.sendMessage(CC.translate("&cYou cannot view that player's inventory any longer."));
             return;

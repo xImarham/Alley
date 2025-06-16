@@ -20,7 +20,7 @@ import org.bukkit.inventory.ItemStack;
  */
 @AllArgsConstructor
 public class ShopEffectButton extends Button {
-
+    private final Alley plugin = Alley.getInstance();
     private final ICosmetic cosmetic;
 
     @Override
@@ -58,9 +58,9 @@ public class ShopEffectButton extends Button {
         if (clickType == ClickType.MIDDLE || clickType == ClickType.RIGHT || clickType == ClickType.NUMBER_KEY || clickType == ClickType.DROP || clickType == ClickType.SHIFT_LEFT || clickType == ClickType.SHIFT_RIGHT) {
             return;
         }
-        playNeutral(player);
+        this.playNeutral(player);
 
-        Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
+        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
         if (player.hasPermission(cosmetic.getPermission())) {
             player.sendMessage(CC.translate("&cYou already own this cosmetic."));
             return;
@@ -74,7 +74,7 @@ public class ShopEffectButton extends Button {
         profile.getProfileData().setCoins(profile.getProfileData().getCoins() - cosmetic.getPrice());
 
 
-        FileConfiguration config = Alley.getInstance().getConfigService().getSettingsConfig();
+        FileConfiguration config = this.plugin.getConfigService().getSettingsConfig();
         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), config.get("command.grant-cosmetic-permission-command").toString().replace("{player}", player.getName()).replace("%permission%", cosmetic.getPermission()));
 
         player.sendMessage(CC.translate("&aYou have successfully purchased the " + cosmetic.getName() + " cosmetic for &b" + cosmetic.getPrice() + " coins."));

@@ -38,7 +38,7 @@ public class SoundEffectButton extends Button {
         if (clickType == ClickType.MIDDLE || clickType == ClickType.RIGHT || clickType == ClickType.NUMBER_KEY || clickType == ClickType.DROP || clickType == ClickType.SHIFT_LEFT || clickType == ClickType.SHIFT_RIGHT) {
             return;
         }
-        playNeutral(player);
+        this.playNeutral(player);
         new CosmeticsMenu("SoundEffect").openMenu(player);
     }
 }

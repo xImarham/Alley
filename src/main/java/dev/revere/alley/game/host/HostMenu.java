@@ -47,7 +47,7 @@ public class HostMenu extends Menu {
                 "&aClick to host!"
         )));
 
-        this.addGlass(buttons, (byte) 15);
+        this.addGlass(buttons, 15);
         return buttons;
     }
 
@@ -81,7 +81,7 @@ public class HostMenu extends Menu {
                     break;
             }
 
-            playNeutral(player);
+            this.playNeutral(player);
         }
     }
 

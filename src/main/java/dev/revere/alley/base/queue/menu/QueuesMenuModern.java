@@ -33,7 +33,6 @@ import java.util.Map;
  * @project Alley
  * @date 23/05/2024 - 01:28
  */
-@AllArgsConstructor
 public class QueuesMenuModern extends Menu {
     /**
      * Get the title of the menu.
@@ -115,7 +114,7 @@ public class QueuesMenuModern extends Menu {
                 break;
         }
 
-        this.addGlass(buttons, (byte) 15);
+        this.addGlass(buttons, 15);
 
         return buttons;
     }
@@ -162,7 +161,7 @@ public class QueuesMenuModern extends Menu {
 
             new QueuesMenuModern().openMenu(player);
 
-            playNeutral(player);
+            this.playNeutral(player);
         }
     }
 

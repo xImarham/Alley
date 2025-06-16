@@ -44,7 +44,7 @@ public class StatisticsButton extends Button {
     public void clicked(Player player, ClickType clickType) {
         if (clickType != ClickType.LEFT) return;
 
-        playNeutral(player);
+        this.playNeutral(player);
         new StatisticsMenu(player).openMenu(player);
     }
 }

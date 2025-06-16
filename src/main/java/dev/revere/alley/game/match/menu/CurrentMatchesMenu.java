@@ -13,7 +13,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -63,7 +62,7 @@ public class CurrentMatchesMenu extends PaginatedMenu {
     public Map<Integer, Button> getGlobalButtons(Player player) {
         final Map<Integer, Button> buttons = new HashMap<>();
 
-        addGlassHeader(buttons, (byte) 15);
+        this.addGlassHeader(buttons, 15);
 
         buttons.put(4, new RefreshButton());
         return buttons;
@@ -82,13 +81,13 @@ public class CurrentMatchesMenu extends PaginatedMenu {
         @Override
         public ItemStack getButtonItem(Player player) {
             return new ItemBuilder(match.getKit().getIcon()).name("&b&l" + match.getParticipants().get(0).getPlayer().getUsername() + " &7vs &b&l" + match.getParticipants().get(1).getPlayer().getUsername()).durability(match.getKit().getDurability()).hideMeta()
-                    .lore(Arrays.asList(
+                    .lore(
                             " &f● &bArena: &f" + match.getArena().getName(),
                             " &f● &bKit: &f" + match.getKit().getName(),
                             " &f● &bQueue: &f" + (match.getQueue() == null ? "None" : match.getQueue().getQueueType()),
                             " ",
                             "&aClick to spectate!"
-                    ))
+                    )
                     .hideMeta().build();
         }
 
@@ -110,7 +109,7 @@ public class CurrentMatchesMenu extends PaginatedMenu {
             }
 
             match.addSpectator(player);
-            playNeutral(player);
+            this.playNeutral(player);
         }
     }
 
@@ -143,7 +142,7 @@ public class CurrentMatchesMenu extends PaginatedMenu {
         public void clicked(Player player, int slot, ClickType clickType, int hotbarButton) {
             if (clickType != ClickType.LEFT) return;
             new CurrentMatchesMenu().openMenu(player);
-            playNeutral(player);
+            this.playNeutral(player);
         }
     }
 }

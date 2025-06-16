@@ -49,16 +49,16 @@ public class Kit {
     /**
      * Constructor for the Kit class.
      *
-     * @param name          The name of the kit.
-     * @param displayName   The display name of the kit.
-     * @param description   The description of the kit.
-     * @param disclaimer    The disclaimer of the kit.
-     * @param category      The category of the kit.
-     * @param icon          The icon of the kit.
-     * @param durability    The durability of the kit's icon.
-     * @param items         The items in the kit.
-     * @param armor         The armor in the kit.
-     * @param editorItems   The items used in the editor for this kit.
+     * @param name        The name of the kit.
+     * @param displayName The display name of the kit.
+     * @param description The description of the kit.
+     * @param disclaimer  The disclaimer of the kit.
+     * @param category    The category of the kit.
+     * @param icon        The icon of the kit.
+     * @param durability  The durability of the kit's icon.
+     * @param items       The items in the kit.
+     * @param armor       The armor in the kit.
+     * @param editorItems The items used in the editor for this kit.
      */
     public Kit(String name, String displayName, String description, String disclaimer, EnumKitCategory category, Material icon, int durability, ItemStack[] items, ItemStack[] armor, ItemStack[] editorItems) {
         this.name = name;

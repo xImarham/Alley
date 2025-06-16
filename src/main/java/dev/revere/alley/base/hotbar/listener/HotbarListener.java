@@ -22,8 +22,16 @@ import org.bukkit.inventory.ItemStack;
  * @date 5/27/2024
  */
 public class HotbarListener implements Listener {
-    /*private final Map<UUID, Long> lastInteraction = new HashMap<>();
-    protected final long COOLDOWN_TIME = 300;*/
+    protected final Alley plugin;
+
+    /**
+     * Constructor for the HotbarListener class.
+     *
+     * @param plugin The Alley plugin instance.
+     */
+    public HotbarListener(Alley plugin) {
+        this.plugin = plugin;
+    }
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
@@ -33,22 +41,14 @@ public class HotbarListener implements Listener {
         }
 
         Player player = event.getPlayer();
-        /*UUID playerId = player.getUniqueId();
-        long currentTime = System.currentTimeMillis();
-
-        if (this.lastInteraction.containsKey(playerId) && (currentTime - this.lastInteraction.get(playerId)) < this.COOLDOWN_TIME) {
-            return;
-        }
-
-        this.lastInteraction.put(playerId, currentTime);*/
 
         ItemStack item = player.getItemInHand();
         if (item == null || !item.hasItemMeta() || !item.getItemMeta().hasDisplayName()) {
             return;
         }
 
-        Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
-        HotbarItem hotbarItem = Alley.getInstance().getHotbarService().getItemByStack(item);
+        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
+        HotbarItem hotbarItem = this.plugin.getHotbarService().getItemByStack(item);
 
         if (hotbarItem != null) {
             String command = hotbarItem.getHotbarItems().getCommand();
@@ -59,7 +59,7 @@ public class HotbarListener implements Listener {
                     case LOBBY:
                         switch (hotbarItem.getHotbarItems()) {
                             case UNRANKED_QUEUES:
-                                Alley.getInstance().getQueueService().getQueueMenu().openMenu(player);
+                                this.plugin.getQueueService().getQueueMenu().openMenu(player);
                                 break;
                             case RANKED_QUEUES:
                                 new RankedMenu().openMenu(player);

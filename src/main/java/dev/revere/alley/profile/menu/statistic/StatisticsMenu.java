@@ -53,7 +53,7 @@ public class StatisticsMenu extends Menu {
             }
         }
 
-        this.addBorder(buttons, (byte) 15, 5);
+        this.addBorder(buttons, 15, 5);
 
         return buttons;
     }

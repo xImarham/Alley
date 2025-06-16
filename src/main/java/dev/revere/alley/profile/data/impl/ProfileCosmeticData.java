@@ -19,14 +19,15 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ProfileCosmeticData {
+    protected final Alley plugin = Alley.getInstance();
     private String selectedKillEffect;
     private String selectedSoundEffect;
 
     public ProfileCosmeticData() {
-        KillEffectRepository killEffectRepository = Alley.getInstance().getCosmeticRepository().getCosmeticRepository(KillEffectRepository.class);
+        KillEffectRepository killEffectRepository = this.plugin.getCosmeticRepository().getCosmeticRepository(KillEffectRepository.class);
         this.selectedKillEffect = killEffectRepository.getCosmetics().isEmpty() ? "None" : killEffectRepository.getCosmetic(NoneKillEffect.class).getName();
 
-        SoundEffectRepository soundEffectRepository = Alley.getInstance().getCosmeticRepository().getCosmeticRepository(SoundEffectRepository.class);
+        SoundEffectRepository soundEffectRepository = this.plugin.getCosmeticRepository().getCosmeticRepository(SoundEffectRepository.class);
         this.selectedSoundEffect = soundEffectRepository.getCosmetics().isEmpty() ? "None" : soundEffectRepository.getCosmetic(NoneSoundEffect.class).getName();
     }
 

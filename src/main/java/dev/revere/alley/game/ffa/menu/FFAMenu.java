@@ -35,7 +35,7 @@ public class FFAMenu extends Menu {
             buttons.put(match.getKit().getFfaSlot(), new FFAButton(match));
         }
 
-        addBorder(buttons, (byte) 15, 5);
+        this.addBorder(buttons, 15, 5);
 
         return buttons;
     }

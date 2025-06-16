@@ -20,12 +20,12 @@ import org.bukkit.inventory.ItemStack;
  */
 @AllArgsConstructor
 public class CosmeticButton extends Button {
-
+    protected final Alley plugin = Alley.getInstance();
     private final ICosmetic cosmetic;
 
     @Override
     public ItemStack getButtonItem(Player player) {
-        Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
+        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
         boolean hasPermission = player.hasPermission(cosmetic.getPermission());
         boolean isSelected = profile.getProfileData().getCosmeticData().isSelectedCosmetic(cosmetic);
 
@@ -59,9 +59,9 @@ public class CosmeticButton extends Button {
         if (clickType == ClickType.MIDDLE || clickType == ClickType.RIGHT || clickType == ClickType.NUMBER_KEY || clickType == ClickType.DROP || clickType == ClickType.SHIFT_LEFT || clickType == ClickType.SHIFT_RIGHT) {
             return;
         }
-        playNeutral(player);
+        this.playNeutral(player);
 
-        Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
+        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
         if (profile.getProfileData().getCosmeticData().isSelectedCosmetic(cosmetic)) {
             player.sendMessage(CC.translate("&cYou already have this cosmetic selected."));
             return;

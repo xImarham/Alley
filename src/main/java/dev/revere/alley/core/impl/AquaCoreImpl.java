@@ -15,15 +15,18 @@ import org.bukkit.entity.Player;
  * @since 26/04/2025
  */
 public class AquaCoreImpl implements ICore {
+    protected final Alley plugin;
     protected final AquaCoreAPI aquaCoreAPI;
 
     /**
      * Constructor for the AquaCoreImpl class.
      *
-     * @param aquaCoreAPI The AquaCoreAPI instance.
+     * @param aquaCoreAPI The AquaCoreAPI instance to use.
+     * @param plugin      The Alley plugin instance.
      */
-    public AquaCoreImpl(AquaCoreAPI aquaCoreAPI) {
+    public AquaCoreImpl(AquaCoreAPI aquaCoreAPI, Alley plugin) {
         this.aquaCoreAPI = aquaCoreAPI;
+        this.plugin = plugin;
     }
 
     @Override
@@ -63,12 +66,12 @@ public class AquaCoreImpl implements ICore {
 
     @Override
     public String getChatFormat(Player player, String eventMessage, String separator) {
-        Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
+        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
         String prefix = CC.translate(this.getRankPrefix(player));
         String suffix = CC.translate(this.getRankSuffix(player));
         ChatColor nameColor = profile.getNameColor() != null ? profile.getNameColor() : this.getPlayerColor(player);
 
-        String selectedTitle = CC.translate(Alley.getInstance().getProfileService().getProfile(player.getUniqueId()).getProfileData().getSelectedTitle());
+        String selectedTitle = CC.translate(this.plugin.getProfileService().getProfile(player.getUniqueId()).getProfileData().getSelectedTitle());
 
         if (player.hasPermission("alley.chat.color")) {
             eventMessage = CC.translate(eventMessage);

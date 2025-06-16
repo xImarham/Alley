@@ -14,7 +14,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -58,10 +57,10 @@ public class DuelArenaSelectorMenu extends Menu {
         @Override
         public ItemStack getButtonItem(Player player) {
             return new ItemBuilder(Material.PAPER).name("&b" + arena.getName()).durability(0).hideMeta()
-                    .lore(Arrays.asList(
+                    .lore(
                             "",
                             "&7Click to send a duel request to " + targetPlayer.getName() + " in the " + arena.getName() + " arena.",
-                            "")
+                            ""
                     )
                     .hideMeta().build();
         }

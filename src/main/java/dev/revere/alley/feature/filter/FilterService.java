@@ -102,7 +102,7 @@ public class FilterService {
 
         this.plugin.getServer().getOnlinePlayers().stream().filter(player ->
                 player.hasPermission(permission)).forEach(player ->
-                        player.sendMessage(CC.translate(replacedMessage)))
+                player.sendMessage(CC.translate(replacedMessage)))
         ;
 
         Bukkit.getConsoleSender().sendMessage(CC.translate(replacedMessage)); // idk why, but i felt like its necessary to send it to console too

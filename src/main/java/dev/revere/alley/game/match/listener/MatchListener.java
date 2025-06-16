@@ -84,7 +84,7 @@ public class MatchListener implements Listener {
                 if (match.getKit().isSettingEnabled(KitSettingStickFightImpl.class)) {
                     MatchRoundsImpl roundsMatch = (MatchRoundsImpl) match;
 
-                    CombatService combatService = Alley.getInstance().getCombatService();
+                    CombatService combatService = this.plugin.getCombatService();
                     Player lastAttacker = combatService.getLastAttacker(player);
                     if (lastAttacker == null) {
                         GameParticipant<MatchGamePlayerImpl> opponent = roundsMatch.getParticipantA().containsPlayer(player.getUniqueId())
@@ -145,7 +145,7 @@ public class MatchListener implements Listener {
     @EventHandler
     private void onPlayerDeath(PlayerDeathEvent event) {
         Player player = event.getEntity();
-        Player killer = Alley.getInstance().getCombatService().getLastAttacker(player);
+        Player killer = this.plugin.getCombatService().getLastAttacker(player);
 
         Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
         if (profile.getState() != EnumProfileState.PLAYING) return;
@@ -158,7 +158,7 @@ public class MatchListener implements Listener {
 
             Profile killerProfile = this.plugin.getProfileService().getProfile(killer.getUniqueId());
 
-            Alley.getInstance().getReflectionRepository().getReflectionService(ActionBarReflectionService.class).sendDeathMessage(killer, player);
+            this.plugin.getReflectionRepository().getReflectionService(ActionBarReflectionService.class).sendDeathMessage(killer, player);
             profile.getMatch().getParticipants().forEach(participant -> participant.getPlayer().getPlayer().sendMessage(CC.translate("&c" + profile.getNameColor() + player.getName() + " &fwas slain by &c" + killerProfile.getNameColor() + killer.getName() + "&f.")));
         } else {
             profile.getMatch().getParticipants().forEach(participant -> participant.getPlayer().getPlayer().sendMessage(CC.translate("&c" + profile.getNameColor() + player.getName() + " &fdied.")));

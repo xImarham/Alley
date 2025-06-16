@@ -19,20 +19,30 @@ import java.util.List;
  * @since 09/03/2025
  */
 public class RepositoryCleanupTask extends BukkitRunnable {
+    protected final Alley plugin;
+
+    /**
+     * Constructor for the RepositoryCleanupTask class.
+     *
+     * @param plugin the Alley plugin instance
+     */
+    public RepositoryCleanupTask(Alley plugin) {
+        this.plugin = plugin;
+    }
 
     @Override
     public void run() {
-        CombatService combatService = Alley.getInstance().getCombatService();
+        CombatService combatService = this.plugin.getCombatService();
         if (!combatService.getCombatMap().isEmpty()) {
             combatService.getCombatMap().forEach((uuid, combat) -> {
-                Player player = Alley.getInstance().getServer().getPlayer(uuid);
+                Player player = this.plugin.getServer().getPlayer(uuid);
                 if (combatService.isExpired(player)) {
                     combatService.removeLastAttacker(player, false);
                 }
             });
         }
 
-        DuelRequestService duelRequestService = Alley.getInstance().getDuelRequestService();
+        DuelRequestService duelRequestService = this.plugin.getDuelRequestService();
         if (!duelRequestService.getDuelRequests().isEmpty()) {
             List<DuelRequest> expiredRequests = new ArrayList<>();
             synchronized (duelRequestService.getDuelRequests()) {
@@ -47,7 +57,7 @@ public class RepositoryCleanupTask extends BukkitRunnable {
             this.notifyDuelRequestIndividuals(expiredRequests);
         }
 
-        PartyService partyService = Alley.getInstance().getPartyService();
+        PartyService partyService = this.plugin.getPartyService();
         if (!partyService.getParties().isEmpty()) {
             List<PartyRequest> expiredRequests = new ArrayList<>();
             synchronized (partyService.getPartyRequests()) {

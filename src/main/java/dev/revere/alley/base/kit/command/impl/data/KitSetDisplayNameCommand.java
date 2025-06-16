@@ -1,6 +1,5 @@
 package dev.revere.alley.base.kit.command.impl.data;
 
-import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
@@ -38,7 +37,7 @@ public class KitSetDisplayNameCommand extends BaseCommand {
 
         String displayName = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
         kit.setDisplayName(displayName);
-        Alley.getInstance().getKitService().saveKit(kit);
+        this.plugin.getKitService().saveKit(kit);
         player.sendMessage(CC.translate(KitLocale.KIT_DISPLAYNAME_SET.getMessage()).replace("{kit-name}", kit.getName()).replace("{display-name}", displayName));
     }
 }

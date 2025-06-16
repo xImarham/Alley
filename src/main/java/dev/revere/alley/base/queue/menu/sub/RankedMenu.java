@@ -1,6 +1,5 @@
 package dev.revere.alley.base.queue.menu.sub;
 
-import dev.revere.alley.Alley;
 import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.api.menu.Menu;
 import dev.revere.alley.base.queue.Queue;
@@ -35,7 +34,7 @@ public class RankedMenu extends Menu {
             }
         }
 
-        this.addBorder(buttons, (byte) 15, 5);
+        this.addBorder(buttons, 15, 5);
 
         return buttons;
     }

@@ -40,7 +40,7 @@ public class CosmeticsMenu extends Menu {
                 .filter(cosmetic -> cosmetic.getIcon() != null)
                 .forEach(cosmetic -> buttons.put(cosmetic.getSlot(), new CosmeticButton(cosmetic)));
 
-        this.addBorder(buttons, (byte) 15, 5);
+        this.addBorder(buttons, 15, 5);
 
         return buttons;
     }

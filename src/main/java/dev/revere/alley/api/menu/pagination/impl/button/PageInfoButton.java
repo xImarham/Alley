@@ -35,7 +35,7 @@ public class PageInfoButton extends Button {
     public void clicked(Player player, ClickType clickType) {
         if (clickType == ClickType.RIGHT) {
             new ViewAllPagesMenu(this.menu).openMenu(player);
-            playNeutral(player);
+            this.playNeutral(player);
         }
     }
 

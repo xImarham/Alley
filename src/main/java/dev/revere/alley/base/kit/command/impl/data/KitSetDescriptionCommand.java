@@ -1,6 +1,5 @@
 package dev.revere.alley.base.kit.command.impl.data;
 
-import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
@@ -38,14 +37,14 @@ public class KitSetDescriptionCommand extends BaseCommand {
 
         if (args[1].equalsIgnoreCase("clear")) {
             kit.setDescription("");
-            Alley.getInstance().getKitService().saveKit(kit);
+            this.plugin.getKitService().saveKit(kit);
             sender.sendMessage(CC.translate(KitLocale.KIT_DESCRIPTION_CLEARED.getMessage().replace("{kit-name}", kit.getName())));
             return;
         }
 
         String description = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
         kit.setDescription(description);
-        Alley.getInstance().getKitService().saveKit(kit);
+        this.plugin.getKitService().saveKit(kit);
         sender.sendMessage(CC.translate(KitLocale.KIT_DESCRIPTION_SET.getMessage().replace("{kit-name}", kit.getName()).replace("{description}", description)));
     }
 }

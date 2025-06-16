@@ -76,7 +76,7 @@ public class ShopEffectMenu extends Menu {
                 .filter(cosmetic -> cosmetic.getIcon() != null)
                 .forEach(cosmetic -> buttons.put(cosmetic.getSlot(), new ShopEffectButton(cosmetic)));
 
-        addBorder(buttons, (byte) 15, 5);
+        this.addBorder(buttons, 15, 5);
         return buttons;
     }
 }

@@ -39,7 +39,7 @@ public class PracticeSettingsMenu extends Menu {
             ));
         }
 
-        this.addBorder(buttons, (byte) 15, 4);
+        this.addBorder(buttons, 15, 4);
 
         return buttons;
     }

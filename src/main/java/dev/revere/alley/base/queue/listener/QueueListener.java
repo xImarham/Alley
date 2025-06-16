@@ -15,11 +15,21 @@ import org.bukkit.event.player.PlayerQuitEvent;
  * @date 5/25/2024
  */
 public class QueueListener implements Listener {
+    protected final Alley plugin;
+
+    /**
+     * Constructor for the QueueListener class.
+     *
+     * @param plugin The Alley plugin instance.
+     */
+    public QueueListener(Alley plugin) {
+        this.plugin = plugin;
+    }
 
     @EventHandler
     private void onPlayerQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
-        Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
+        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
 
         if (profile.getState() == EnumProfileState.WAITING) {
             if (profile.getQueueProfile().getQueue() != null) {
@@ -31,7 +41,7 @@ public class QueueListener implements Listener {
     @EventHandler
     private void onPlayerKick(PlayerKickEvent event) {
         Player player = event.getPlayer();
-        Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
+        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
 
         if (profile.getState() == EnumProfileState.WAITING) {
             if (profile.getQueueProfile().getQueue() != null) {

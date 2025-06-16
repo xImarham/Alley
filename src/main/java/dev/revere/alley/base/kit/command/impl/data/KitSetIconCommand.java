@@ -1,6 +1,5 @@
 package dev.revere.alley.base.kit.command.impl.data;
 
-import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
@@ -36,7 +35,7 @@ public class KitSetIconCommand extends BaseCommand {
 
         kit.setIcon(player.getItemInHand().getType());
         kit.setDurability(player.getItemInHand().getDurability());
-        Alley.getInstance().getKitService().saveKit(kit);
+        this.plugin.getKitService().saveKit(kit);
         player.sendMessage(CC.translate(KitLocale.KIT_ICON_SET.getMessage()).replace("{kit-name}", kit.getName()).replace("{icon}", player.getItemInHand().getType().name().toUpperCase() + ":" + player.getItemInHand().getDurability()));
     }
 }

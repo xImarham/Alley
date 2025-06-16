@@ -201,7 +201,7 @@ public class Alley extends JavaPlugin {
         services.put(CommandFramework.class.getSimpleName(), () -> this.commandFramework = new CommandFramework(this));
         services.put(CoreAdapter.class.getSimpleName(), () -> this.coreAdapter = new CoreAdapter(this));
         services.put(QueueService.class.getSimpleName(), () -> this.queueService = new QueueService(this));
-        services.put(KitSettingService.class.getSimpleName(), () -> this.kitSettingService = new KitSettingService());
+        services.put(KitSettingService.class.getSimpleName(), () -> this.kitSettingService = new KitSettingService(this));
         services.put(KitService.class.getSimpleName(), () -> this.kitService = new KitService(this));
         services.put(ArenaService.class.getSimpleName(), () -> this.arenaService = new ArenaService(this));
         services.put(FFAService.class.getSimpleName(), () -> this.ffaService = new FFAService(this));
@@ -251,7 +251,7 @@ public class Alley extends JavaPlugin {
     private void registerListeners() {
         Arrays.asList(
                 new ProfileListener(this),
-                new HotbarListener(),
+                new HotbarListener(this),
                 new PartyListener(),
                 new MatchListener(this),
                 new MatchInteractListener(this),
@@ -259,13 +259,13 @@ public class Alley extends JavaPlugin {
                 new MatchDamageListener(this),
                 new MatchBlockListener(this),
                 new ArenaListener(),
-                new MenuListener(),
-                new SpawnListener(),
+                new MenuListener(this),
+                new SpawnListener(this),
                 new FFAListener(this),
                 new FFACuboidListener(this.ffaSpawnService.getCuboid(), this),
                 new EmojiListener(this),
                 new CombatListener(this),
-                new QueueListener(),
+                new QueueListener(this),
                 new CoreChatListener(this),
                 new LayoutListener(this)
         ).forEach(listener -> getServer().getPluginManager().registerEvents(listener, this));
@@ -274,7 +274,7 @@ public class Alley extends JavaPlugin {
     private void runTasks() {
         final Map<String, Runnable> tasks = new LinkedHashMap<>();
 
-        tasks.put(RepositoryCleanupTask.class.getSimpleName(), () -> new RepositoryCleanupTask().runTaskTimer(this, 0L, 40L));
+        tasks.put(RepositoryCleanupTask.class.getSimpleName(), () -> new RepositoryCleanupTask(this).runTaskTimer(this, 0L, 40L));
         tasks.put(ArrowRemovalTask.class.getSimpleName(), () -> new ArrowRemovalTask().runTaskTimer(this, 20L, 20L));
 
         if (this.configService.getTabListConfig().getBoolean("tablist.enabled")) {

@@ -12,7 +12,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,38 +22,40 @@ import java.util.Map;
  */
 @AllArgsConstructor
 public class DuelKitSelectorMenu extends Menu {
+    protected final Alley plugin = Alley.getInstance();
     private final Player targetPlayer;
 
     @Override
     public String getTitle(Player player) {
-        return "Duel " + targetPlayer.getName();
+        return "Duel " + this.targetPlayer.getName();
     }
 
     @Override
     public Map<Integer, Button> getButtons(Player player) {
         Map<Integer, Button> buttons = new HashMap<>();
 
-        Alley.getInstance().getKitService().getKits().stream()
+        this.plugin.getKitService().getKits().stream()
                 .filter(Kit::isEnabled)
                 .filter(kit -> kit.isSettingEnabled(KitSettingRankedImpl.class))
-                .forEach(kit -> buttons.put(buttons.size(), new DuelButton(targetPlayer, kit)));
+                .forEach(kit -> buttons.put(buttons.size(), new DuelButton(this.targetPlayer, kit)));
 
         return buttons;
     }
 
     @AllArgsConstructor
     private static class DuelButton extends Button {
+        protected final Alley plugin = Alley.getInstance();
         private Player targetPlayer;
         private Kit kit;
 
         @Override
         public ItemStack getButtonItem(Player player) {
-            return new ItemBuilder(kit.getIcon()).name(kit.getDisplayName() == null ? "&b&l" + kit.getName() : kit.getDisplayName()).durability(kit.getDurability()).hideMeta()
-                    .lore(Arrays.asList(
-                            "&7" + kit.getDescription(),
+            return new ItemBuilder(this.kit.getIcon()).name(this.kit.getDisplayName() == null ? "&b&l" + this.kit.getName() : this.kit.getDisplayName()).durability(this.kit.getDurability()).hideMeta()
+                    .lore(
+                            "&7" + this.kit.getDescription(),
                             "",
-                            "&aClick to send a duel request to " + targetPlayer.getName() + "!"
-                    ))
+                            "&aClick to send a duel request to " + this.targetPlayer.getName() + "!"
+                    )
                     .hideMeta().build();
         }
 
@@ -63,13 +64,13 @@ public class DuelKitSelectorMenu extends Menu {
             if (clickType != ClickType.LEFT) return;
 
             if (player.hasPermission("alley.duel.arena.selector")) {
-                new DuelArenaSelectorMenu(targetPlayer, kit).openMenu(player);
+                new DuelArenaSelectorMenu(this.targetPlayer, this.kit).openMenu(player);
                 return;
             }
 
             player.closeInventory();
-            Alley.getInstance().getDuelRequestService().sendDuelRequest(player, targetPlayer, kit);
-            player.sendMessage(CC.translate("&aYou have sent a duel request to " + targetPlayer.getName() + " in the " + Alley.getInstance().getDuelRequestService().getDuelRequest(player, targetPlayer).getArena().getName() + " arena with the " + kit.getName() + " kit."));
+            this.plugin.getDuelRequestService().sendDuelRequest(player, this.targetPlayer, this.kit);
+            player.sendMessage(CC.translate("&aYou have sent a duel request to " + this.targetPlayer.getName() + " in the " + this.plugin.getDuelRequestService().getDuelRequest(player, this.targetPlayer).getArena().getName() + " arena with the " + this.kit.getName() + " kit."));
         }
     }
 }

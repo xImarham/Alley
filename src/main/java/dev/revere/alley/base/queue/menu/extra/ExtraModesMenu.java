@@ -42,7 +42,7 @@ public class ExtraModesMenu extends Menu {
             }
         }
 
-        this.addGlass(buttons, (byte) 15);
+        this.addGlass(buttons, 15);
 
         return buttons;
     }

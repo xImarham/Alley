@@ -24,10 +24,11 @@ import java.util.Map;
  * @date 25/05/2024 - 14:51
  */
 public class LeaderboardMenu extends Menu {
+    protected final Alley plugin = Alley.getInstance();
 
     @Override
     public String getTitle(Player player) {
-        Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
+        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
 
         switch (profile.getLeaderboardType()) {
             case RANKED:
@@ -50,16 +51,16 @@ public class LeaderboardMenu extends Menu {
     @Override
     public Map<Integer, Button> getButtons(Player player) {
         final Map<Integer, Button> buttons = Maps.newHashMap();
-        Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
+        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
         EnumLeaderboardType currentType = profile.getLeaderboardType();
-        LeaderboardService leaderboardService = Alley.getInstance().getLeaderboardService();
+        LeaderboardService leaderboardService = this.plugin.getLeaderboardService();
 
         buttons.put(2, new StatisticsButton());
         buttons.put(6, new DisplayTypeButton());
 
         int slot = 10;  // declare slot here once
 
-        for (Kit kit : Alley.getInstance().getKitService().getKits()) {
+        for (Kit kit : this.plugin.getKitService().getKits()) {
             if (!kit.isEnabled() || kit.getIcon() == null) continue;
 
             List<LeaderboardPlayerData> leaderboard = leaderboardService.getLeaderboardEntries(kit, currentType);
@@ -80,7 +81,7 @@ public class LeaderboardMenu extends Menu {
             }
         }
 
-        this.addBorder(buttons, (byte) 15, 5);
+        this.addBorder(buttons, 15, 5);
 
         return buttons;
     }

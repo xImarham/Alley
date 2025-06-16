@@ -7,7 +7,6 @@ import dev.revere.alley.profile.ProfileService;
 import dev.revere.alley.profile.enums.EnumProfileState;
 import dev.revere.alley.util.PlayerUtil;
 import dev.revere.alley.util.chat.CC;
-import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -44,7 +43,7 @@ public class ProfileListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     private void onLogin(PlayerLoginEvent event) {
-        if (!Alley.getInstance().isLoaded()) {
+        if (!this.plugin.isLoaded()) {
             event.disallow(PlayerLoginEvent.Result.KICK_OTHER, CC.translate("&cThe server is still loading, please try again in a few seconds."));
             return;
         }
@@ -61,7 +60,7 @@ public class ProfileListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     private void onJoin(PlayerJoinEvent event) {
-        if (!Alley.getInstance().isLoaded()) {
+        if (!this.plugin.isLoaded()) {
             event.getPlayer().kickPlayer(CC.translate("&cThe server is still loading, please try again in a few seconds."));
             return;
         }
@@ -135,7 +134,7 @@ public class ProfileListener implements Listener {
         profile.setParty(null);
         profile.setFfaMatch(null);
 
-        profile.setNameColor(Alley.getInstance().getCoreAdapter().getCore().getPlayerColor(player));
+        profile.setNameColor(this.plugin.getCoreAdapter().getCore().getPlayerColor(player));
         profile.getProfileData().getSettingData().setTimeBasedOnProfileSetting(player);
         profile.getProfileData().getPlayTimeData().setLastLogin(System.currentTimeMillis());
         profile.getProfileData().determineLevel();
@@ -146,8 +145,8 @@ public class ProfileListener implements Listener {
 
         PlayerUtil.reset(player, false);
 
-        Alley.getInstance().getSpawnService().teleportToSpawn(player);
-        Alley.getInstance().getHotbarService().applyHotbarItems(player, EnumHotbarType.LOBBY);
+        this.plugin.getSpawnService().teleportToSpawn(player);
+        this.plugin.getHotbarService().applyHotbarItems(player, EnumHotbarType.LOBBY);
 
         this.plugin.getVisibilityService().updateVisibilityAll(player);
     }
@@ -159,13 +158,13 @@ public class ProfileListener implements Listener {
      * @param player The player who joined.
      */
     private void sendJoinMessage(Player player) {
-        FileConfiguration config = Alley.getInstance().getConfigService().getMessagesConfig();
+        FileConfiguration config = this.plugin.getConfigService().getMessagesConfig();
         if (config.getBoolean("welcome-message.enabled")) {
             for (String message : config.getStringList("welcome-message.message")) {
                 player.sendMessage(CC.translate(message)
                         .replace("{player}", player.getName())
-                        .replace("{version}", Alley.getInstance().getPluginConstant().getVersion())
-                        .replace("{author}", Alley.getInstance().getDescription().getAuthors().toString().replace("[", "").replace("]", ""))
+                        .replace("{version}", this.plugin.getPluginConstant().getVersion())
+                        .replace("{author}", this.plugin.getDescription().getAuthors().toString().replace("[", "").replace("]", ""))
                 );
             }
         }

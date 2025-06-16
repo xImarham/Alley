@@ -25,6 +25,7 @@ import java.util.List;
  */
 @AllArgsConstructor
 public class UnrankedButton extends Button {
+    protected final Alley plugin = Alley.getInstance();
     private final Queue queue;
 
     @Override
@@ -73,13 +74,13 @@ public class UnrankedButton extends Button {
     public void clicked(Player player, int slot, ClickType clickType, int hotbarSlot) {
         if (clickType != ClickType.LEFT) return;
 
-        if (Alley.getInstance().getServerService().isQueueingEnabled(player)) return;
+        if (this.plugin.getServerService().isQueueingEnabled(player)) return;
 
-        Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
-        queue.addPlayer(player, queue.isRanked() ? profile.getProfileData().getRankedKitData().get(queue.getKit().getName()).getElo() : 0);
+        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
+        this.queue.addPlayer(player, this.queue.isRanked() ? profile.getProfileData().getRankedKitData().get(this.queue.getKit().getName()).getElo() : 0);
         PlayerUtil.reset(player, false);
         player.closeInventory();
-        playNeutral(player);
-        Alley.getInstance().getHotbarService().applyHotbarItems(player, EnumHotbarType.QUEUE);
+        this.playNeutral(player);
+        this.plugin.getHotbarService().applyHotbarItems(player, EnumHotbarType.QUEUE);
     }
 }

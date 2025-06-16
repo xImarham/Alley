@@ -6,7 +6,6 @@ import dev.revere.alley.feature.leaderboard.enums.EnumLeaderboardType;
 import dev.revere.alley.feature.leaderboard.menu.LeaderboardMenu;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.tool.item.ItemBuilder;
-import lombok.AllArgsConstructor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
@@ -20,8 +19,9 @@ import java.util.List;
  * @project Alley
  * @date 5/26/2024
  */
-@AllArgsConstructor
 public class DisplayTypeButton extends Button {
+    protected final Alley plugin = Alley.getInstance();
+
     /**
      * Gets the item to display in the menu.
      *
@@ -30,7 +30,7 @@ public class DisplayTypeButton extends Button {
      */
     @Override
     public ItemStack getButtonItem(Player player) {
-        Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
+        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
         EnumLeaderboardType currentType = profile.getLeaderboardType();
 
         List<String> lore = new ArrayList<>();
@@ -54,7 +54,7 @@ public class DisplayTypeButton extends Button {
      */
     @Override
     public void clicked(Player player, ClickType clickType) {
-        Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
+        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
 
         EnumLeaderboardType currentType = profile.getLeaderboardType();
         EnumLeaderboardType[] types = EnumLeaderboardType.values();
@@ -72,6 +72,6 @@ public class DisplayTypeButton extends Button {
         EnumLeaderboardType newType = types[currentIndex];
         profile.setLeaderboardType(newType);
         new LeaderboardMenu().openMenu(player);
-        playNeutral(player);
+        this.playNeutral(player);
     }
 }

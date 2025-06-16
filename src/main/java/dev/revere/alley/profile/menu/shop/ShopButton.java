@@ -48,6 +48,6 @@ public class ShopButton extends Button {
                 new ShopEffectMenu("KillEffect").openMenu(player);
                 break;
         }
-        playNeutral(player);
+        this.playNeutral(player);
     }
 }

@@ -22,10 +22,10 @@ import java.util.UUID;
 @Getter
 @Setter
 public class Queue {
+    protected final Alley plugin = Alley.getInstance();
+
     private final LinkedList<QueueProfile> profiles;
-
     private final Kit kit;
-
     private final boolean ranked;
     private final long maxQueueTime;
 
@@ -39,7 +39,7 @@ public class Queue {
         this.kit = kit;
         this.ranked = ranked;
         this.maxQueueTime = 300000L; // 5 minutes
-        Alley.getInstance().getQueueService().getQueues().add(this);
+        this.plugin.getQueueService().getQueues().add(this);
     }
 
     /**
@@ -48,7 +48,7 @@ public class Queue {
      * @return The amount of people playing that queue.
      */
     public int getQueueFightCount() {
-        return Alley.getInstance().getMatchService().getMatches().stream().filter(match -> match.getQueue().equals(this)).toArray().length;
+        return this.plugin.getMatchService().getMatches().stream().filter(match -> match.getQueue().equals(this)).toArray().length;
     }
 
     /**
@@ -76,7 +76,7 @@ public class Queue {
         QueueProfile queueProfile = new QueueProfile(this, uuid);
         queueProfile.setElo(elo);
 
-        Profile profile = Alley.getInstance().getProfileService().getProfile(uuid);
+        Profile profile = this.plugin.getProfileService().getProfile(uuid);
         profile.setQueueProfile(queueProfile);
         profile.setState(EnumProfileState.WAITING);
 
@@ -93,7 +93,7 @@ public class Queue {
     public void removePlayer(QueueProfile queueProfile) {
         this.profiles.remove(queueProfile);
 
-        Profile profile = Alley.getInstance().getProfileService().getProfile(queueProfile.getUuid());
+        Profile profile = this.plugin.getProfileService().getProfile(queueProfile.getUuid());
         profile.setQueueProfile(null);
         profile.setState(EnumProfileState.LOBBY);
 
@@ -102,7 +102,7 @@ public class Queue {
             return;
         }
 
-        Alley.getInstance().getHotbarService().applyHotbarItems(player, EnumHotbarType.LOBBY);
+        this.plugin.getHotbarService().applyHotbarItems(player, EnumHotbarType.LOBBY);
         player.sendMessage(CC.translate("&cYou've left the queue."));
     }
 
@@ -113,6 +113,6 @@ public class Queue {
      * @return The profile object.
      */
     public Profile getProfile(UUID uuid) {
-        return Alley.getInstance().getProfileService().getProfile(uuid);
+        return this.plugin.getProfileService().getProfile(uuid);
     }
 }

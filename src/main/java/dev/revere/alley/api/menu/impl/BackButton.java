@@ -9,8 +9,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.Arrays;
-
 @AllArgsConstructor
 public class BackButton extends Button {
     private Menu back;
@@ -20,16 +18,16 @@ public class BackButton extends Button {
         return new ItemBuilder(Material.ARROW)
                 .name("&c&lBack")
                 .durability(0)
-                .lore(Arrays.asList(
+                .lore(
                         "&cClick here to return to",
-                        "&cthe previous menu.")
+                        "&cthe previous menu."
                 )
                 .build();
     }
 
     @Override
     public void clicked(Player player, ClickType clickType) {
-        Button.playNeutral(player);
+        this.playNeutral(player);
         this.back.openMenu(player);
     }
 }

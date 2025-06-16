@@ -43,7 +43,7 @@ public class UnrankedMenu extends Menu {
 
         buttons.put(40, new QueueModeSwitcherButton(EnumQueueType.UNRANKED, EnumKitCategory.EXTRA));
 
-        this.addBorder(buttons, (byte) 15, 5);
+        this.addBorder(buttons, 15, 5);
 
         return buttons;
     }

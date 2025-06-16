@@ -31,7 +31,7 @@ public class BotQueueMenu extends Menu {
 
         buttons.put(0, new BackButton(new QueuesMenuDefault()));
 
-        addBorder(buttons, (byte) 15, 5);
+        this.addBorder(buttons, 15, 5);
 
         return buttons;
     }

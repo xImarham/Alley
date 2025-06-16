@@ -64,7 +64,7 @@ public class PracticeSettingsButton extends Button {
                     break;
             }
 
-            playNeutral(player);
+            this.playNeutral(player);
             return;
         }
 
@@ -103,7 +103,7 @@ public class PracticeSettingsButton extends Button {
                 break;
         }
 
-        playNeutral(player);
+        this.playNeutral(player);
     }
 
     /**

@@ -32,7 +32,7 @@ public class DivisionsMenu extends Menu {
             }
         }
 
-        this.addBorder(buttons, (byte) 15, 6);
+        this.addBorder(buttons, 15, 6);
 
         return buttons;
     }

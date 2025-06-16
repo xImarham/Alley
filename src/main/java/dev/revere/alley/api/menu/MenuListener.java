@@ -12,6 +12,16 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 
 public class MenuListener implements Listener {
+    protected final Alley plugin;
+
+    /**
+     * Constructor for the MenuListener class.
+     *
+     * @param plugin the Alley plugin instance.
+     */
+    public MenuListener(Alley plugin) {
+        this.plugin = plugin;
+    }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public void onButtonPress(InventoryClickEvent event) {
@@ -59,7 +69,7 @@ public class MenuListener implements Listener {
                 }
 
                 if (event.isCancelled()) {
-                    Bukkit.getScheduler().runTaskLater(Alley.getInstance(), player::updateInventory, 1L);
+                    Bukkit.getScheduler().runTaskLater(this.plugin, player::updateInventory, 1L);
                 }
             } else {
                 if (event.getCurrentItem() != null) {

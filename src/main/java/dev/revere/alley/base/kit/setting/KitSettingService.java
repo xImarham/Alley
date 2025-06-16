@@ -21,17 +21,24 @@ import java.util.Map;
 @Getter
 @Setter
 public class KitSettingService {
+    protected final Alley plugin;
     private final List<KitSetting> settings;
     private final Map<String, Class<? extends KitSetting>> settingClasses;
 
-    public KitSettingService() {
+    /**
+     * Constructor for the KitSettingService class.
+     *
+     * @param plugin The Alley plugin instance.
+     */
+    public KitSettingService(Alley plugin) {
+        this.plugin = plugin;
         this.settings = new ArrayList<>();
         this.settingClasses = new HashMap<>();
         this.registerSettings();
     }
 
     private void registerSettings() {
-        Reflections reflections = Alley.getInstance().getPluginConstant().getReflections();
+        Reflections reflections = this.plugin.getPluginConstant().getReflections();
 
         for (Class<? extends KitSetting> clazz : reflections.getSubTypesOf(KitSetting.class)) {
             KitSettingData annotation = clazz.getAnnotation(KitSettingData.class);

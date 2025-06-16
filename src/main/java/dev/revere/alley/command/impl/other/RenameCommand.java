@@ -1,6 +1,5 @@
 package dev.revere.alley.command.impl.other;
 
-import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
@@ -26,7 +25,7 @@ public class RenameCommand extends BaseCommand {
         Player player = command.getPlayer();
 
         if (command.getArgs().length == 0) {
-            player.sendMessage(CC.translate(Alley.getInstance().getConfigService().getMessagesConfig().getString("rename-item.missing-arguments")));
+            player.sendMessage(CC.translate(this.plugin.getConfigService().getMessagesConfig().getString("rename-item.missing-arguments")));
             return;
         }
 
@@ -34,7 +33,7 @@ public class RenameCommand extends BaseCommand {
 
         ItemStack itemStack = player.getItemInHand();
         if (itemStack == null || itemStack.getType() == Material.AIR) {
-            player.sendMessage(CC.translate(Alley.getInstance().getConfigService().getMessagesConfig().getString("rename-item.no-item")));
+            player.sendMessage(CC.translate(this.plugin.getConfigService().getMessagesConfig().getString("rename-item.no-item")));
             return;
         }
 
@@ -51,7 +50,7 @@ public class RenameCommand extends BaseCommand {
 
         player.updateInventory();
 
-        String renameMessage = Alley.getInstance().getConfigService().getMessagesConfig().getString("rename-item.renamed")
+        String renameMessage = this.plugin.getConfigService().getMessagesConfig().getString("rename-item.renamed")
                 .replace("{item}", originalName)
                 .replace("{renamed}", itemRename);
         player.sendMessage(CC.translate(renameMessage));

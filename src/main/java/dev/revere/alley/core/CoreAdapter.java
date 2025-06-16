@@ -40,7 +40,7 @@ public class CoreAdapter {
      * @return The selected core implementation.
      */
     private ICore determineCore() {
-        ICore selectedCore = new DefaultCoreImpl(Alley.getInstance());
+        ICore selectedCore = new DefaultCoreImpl(this.plugin);
 
         for (EnumCoreType coreType : EnumCoreType.values()) {
             if (this.plugin.getServer().getPluginManager().isPluginEnabled(coreType.getPluginName())) {
@@ -49,7 +49,7 @@ public class CoreAdapter {
                         selectedCore = new PhoenixCoreImpl(SharedAPI.getInstance());
                         break;
                     case AQUA:
-                        selectedCore = new AquaCoreImpl(AquaCoreAPI.INSTANCE);
+                        selectedCore = new AquaCoreImpl(AquaCoreAPI.INSTANCE, this.plugin);
                         break;
                     case HELIUM:
                         selectedCore = new HeliumCoreImpl(HeliumAPI.INSTANCE);

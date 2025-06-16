@@ -22,6 +22,7 @@ import org.bukkit.entity.Player;
  */
 @UtilityClass
 public class MatchUtility {
+    private final Alley plugin = Alley.getInstance();
 
     /**
      * Check if a location is beyond the bounds of an arena excluding specific conditions.
@@ -71,7 +72,7 @@ public class MatchUtility {
      * @param loserName  The name of the loser.
      */
     public void sendMatchResult(AbstractMatch match, String winnerName, String loserName) {
-        FileConfiguration config = Alley.getInstance().getConfigService().getMessagesConfig();
+        FileConfiguration config = plugin.getConfigService().getMessagesConfig();
 
         String path = "match.ended.match-result.regular.";
 
@@ -80,7 +81,7 @@ public class MatchUtility {
         String loserCommand = config.getString(path + "loser.command").replace("{loser}", loserName);
         String loserHover = config.getString(path + "loser.hover").replace("{loser}", loserName);
 
-        for (String line : Alley.getInstance().getConfigService().getMessagesConfig().getStringList(path + "format")) {
+        for (String line : plugin.getConfigService().getMessagesConfig().getStringList(path + "format")) {
             if (line.contains("{winner}") && line.contains("{loser}")) {
                 String[] parts = line.split("\\{winner}", 2);
 
@@ -95,7 +96,7 @@ public class MatchUtility {
                     loserComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, loserCommand));
                     loserComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(CC.translate(loserHover)).create()));
 
-                    sendCombinedSpigotMessage(match, 
+                    sendCombinedSpigotMessage(match,
                             new TextComponent(CC.translate(parts[0])),
                             winnerComponent,
                             new TextComponent(CC.translate(loserParts[0])),
@@ -110,7 +111,7 @@ public class MatchUtility {
                 winnerComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, winnerCommand));
                 winnerComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(CC.translate(winnerHover)).create()));
 
-                sendCombinedSpigotMessage(match, 
+                sendCombinedSpigotMessage(match,
                         new TextComponent(CC.translate(parts[0])),
                         winnerComponent,
                         new TextComponent(parts.length > 1 ? CC.translate(parts[1]) : "")
@@ -122,7 +123,7 @@ public class MatchUtility {
                 loserComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, loserCommand));
                 loserComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(CC.translate(loserHover)).create()));
 
-                sendCombinedSpigotMessage(match, 
+                sendCombinedSpigotMessage(match,
                         new TextComponent(CC.translate(parts[0])),
                         loserComponent,
                         new TextComponent(parts.length > 1 ? CC.translate(parts[1]) : "")
@@ -185,7 +186,7 @@ public class MatchUtility {
     public void sendCombinedSpigotMessage(AbstractMatch match, BaseComponent... message) {
         match.getParticipants().forEach(gameParticipant -> {
             gameParticipant.getPlayers().forEach(uuid -> {
-                Player player = Alley.getInstance().getServer().getPlayer(uuid.getUuid());
+                Player player = plugin.getServer().getPlayer(uuid.getUuid());
                 if (player != null) {
                     player.spigot().sendMessage(message);
                 }
@@ -193,7 +194,7 @@ public class MatchUtility {
         });
 
         match.getSpectators().forEach(uuid -> {
-            Player player = Alley.getInstance().getServer().getPlayer(uuid);
+            Player player = plugin.getServer().getPlayer(uuid);
             if (player != null) {
                 player.spigot().sendMessage(message);
             }
