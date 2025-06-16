@@ -1,6 +1,10 @@
 tablist:
   enabled: true
   header:
-    - "&b&lAlley Network &7- &fEU Practice"
+    - ""
+    - "&b&lRevere Network"
+    - ""
   footer:
-    - "&fBuy ranks and more at &bstore.revere.dev"
+    - ""
+    - "&fPlaying with &b&lAlley &fdeveloped by &b&lRevere Inc."
+    - ""

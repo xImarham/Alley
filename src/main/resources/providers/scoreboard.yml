@@ -2,7 +2,7 @@ scoreboard:
   enabled: true
   sidebar-format: "&7&m----------------------"
   title:
-    text: "&b&lPractice &f- &b&lEU"
+    text: "&b&lPractice"
     animated: true
     ticks: 5
     animation:
