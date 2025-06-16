@@ -13,7 +13,7 @@ import org.bukkit.entity.Player;
  * @since 13/06/2025
  */
 public class SurvivalCommand extends BaseCommand {
-    @CommandData(name = "gms", aliases = {"gm.s", "gamemode.s", "gm.0", "gm0", "gamemode.0", "gamemode.survival"}, permission = "artex.command.gms")
+    @CommandData(name = "gms", aliases = {"gm.s", "gamemode.s", "gm.0", "gm0", "gamemode.0", "gamemode.survival"}, isAdminOnly = true)
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();

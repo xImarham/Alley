@@ -13,7 +13,7 @@ import org.bukkit.entity.Player;
  * @since 13/06/2025
  */
 public class SpectatorCommand extends BaseCommand {
-    @CommandData(name = "gmsp", aliases = {"gm.sp", "gamemode.sp", "gm.3", "gm3", "gamemode.3", "gamemode.spectator"}, permission = "artex.command.gmsp")
+    @CommandData(name = "gmsp", aliases = {"gm.sp", "gamemode.sp", "gm.3", "gm3", "gamemode.3", "gamemode.spectator"}, isAdminOnly = true)
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();

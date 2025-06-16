@@ -13,7 +13,7 @@ import org.bukkit.entity.Player;
  * @since 13/06/2025
  */
 public class CreativeCommand extends BaseCommand {
-    @CommandData(name = "gmc", aliases = {"gm.c", "gamemode.c", "gm.1", "gm1", "gamemode.1", "gamemode.creative"}, permission = "artex.command.gmc")
+    @CommandData(name = "gmc", aliases = {"gm.c", "gamemode.c", "gm.1", "gm1", "gamemode.1", "gamemode.creative"}, isAdminOnly = true)
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
