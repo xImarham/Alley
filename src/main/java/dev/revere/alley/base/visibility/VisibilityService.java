@@ -4,6 +4,7 @@ import dev.revere.alley.Alley;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
+import dev.revere.alley.tool.logger.Logger;
 import org.bukkit.entity.Player;
 
 /**
@@ -53,6 +54,11 @@ public class VisibilityService {
      * @param target The target player to hide.
      */
     public void hidePlayer(Player viewer, Player target) {
+        if (target == null || viewer == null || target.equals(viewer)) {
+            Logger.logError("Something went wrong while hiding player. Either no players are online or target is null.");
+            return;
+        }
+
         Profile viewerProfile = this.plugin.getProfileService().getProfile(viewer.getUniqueId());
         Profile targetProfile = this.plugin.getProfileService().getProfile(target.getUniqueId());
 
@@ -117,12 +123,20 @@ public class VisibilityService {
      */
     private void handleSpectatingCase(Player viewer, Player target, Profile viewerProfile) {
         MatchGamePlayerImpl spectatingTargetGamePlayer = viewerProfile.getMatch().getGamePlayer(target);
-        if (spectatingTargetGamePlayer != null) {
-            if (!spectatingTargetGamePlayer.isDead() && !spectatingTargetGamePlayer.isDisconnected()) {
-                viewer.showPlayer(target);
+        if (viewerProfile.getMatch() != null) {
+            if (spectatingTargetGamePlayer != null) {
+                if (!spectatingTargetGamePlayer.isDead() && !spectatingTargetGamePlayer.isDisconnected()) {
+                    viewer.showPlayer(target);
+                } else {
+                    viewer.hidePlayer(target);
+                }
             } else {
                 viewer.hidePlayer(target);
             }
+        } else if (viewerProfile.getFfaMatch() != null) {
+
+            // todo
+
         } else {
             viewer.hidePlayer(target);
         }
