@@ -19,7 +19,7 @@ public class FireballVerticalCommand extends BaseCommand {
         CommandSender sender = command.getSender();
         String[] args = command.getArgs();
 
-        if (args.length < 2) {
+        if (args.length < 1) {
             sender.sendMessage(CC.translate("&6Usage: &e/fireball vertical &b<value>"));
             return;
         }
