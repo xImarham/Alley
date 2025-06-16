@@ -30,6 +30,7 @@ import lombok.Setter;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
@@ -682,14 +683,12 @@ public abstract class AbstractMatch {
         this.placedBlocks.remove(blockState, location);
     }
 
-    /**
-     * Adds a block to the changed blocks map with the intention to handle block changes.
-     *
-     * @param blockState The block state to add.
-     * @param location   The location of the block.
-     */
     public void addBlockToBrokenBlocksMap(BlockState blockState, Location location) {
-        this.brokenBlocks.put(blockState, location);
+        if (this.placedBlocks.containsValue(location)) {
+            this.placedBlocks.values().remove(location);
+        } else {
+            this.brokenBlocks.put(blockState, location);
+        }
     }
 
     /**
@@ -701,16 +700,33 @@ public abstract class AbstractMatch {
         this.brokenBlocks.remove(blockState, location);
     }
 
+    @SuppressWarnings("deprecation")
     public void resetBlockChanges() {
+        // TODO: close all doors and gates in arena region if kit setting baseraiding is enabled
+
         this.removePlacedBlocks();
-        this.brokenBlocks.forEach((blockState, location) -> location.getBlock().setType(blockState.getType()));
+
+        for (Map.Entry<BlockState, Location> entry : this.brokenBlocks.entrySet()) {
+            Location location = entry.getValue();
+            BlockState originalState = entry.getKey();
+
+            Block block = location.getBlock();
+            block.setType(originalState.getType());
+            block.setData(originalState.getRawData());
+        }
+
         this.brokenBlocks.clear();
     }
 
     public void removePlacedBlocks() {
-        this.placedBlocks.forEach((blockState, location) -> location.getBlock().setType(Material.AIR));
+        for (Map.Entry<BlockState, Location> entry : this.placedBlocks.entrySet()) {
+            Location location = entry.getValue();
+            location.getBlock().setType(Material.AIR);
+        }
+
         this.placedBlocks.clear();
     }
+
 
     private void sendPlayerVersusPlayerMessage() {
         String prefix = CC.translate("&7[&bMatch&7] &r");

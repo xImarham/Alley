@@ -14,7 +14,6 @@ import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
-import dev.revere.alley.tool.logger.Logger;
 import dev.revere.alley.util.ListenerUtil;
 import dev.revere.alley.util.RayTracerUtil;
 import dev.revere.alley.util.chat.CC;
@@ -22,11 +21,13 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
+import org.bukkit.block.Sign;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Snowball;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
@@ -73,10 +74,10 @@ public class MatchBlockListener implements Listener {
                 }
 
                 if (match.getKit().isSettingEnabled(KitSettingBuildImpl.class) && match.getKit().isSettingEnabled(KitSettingRaidingImpl.class)) {
-                    Logger.log("condition met for raiding and building");
                     if (participant.getPlayer().getData().getRole() == EnumBaseRaiderRole.TRAPPER) {
                         event.setCancelled(false);
                         match.addBlockToBrokenBlocksMap(event.getBlock().getState(), event.getBlock().getLocation());
+                        match.sendMessage("&7added broken block: &b" + event.getBlock().getType() + " &7" + event.getBlock().getLocation().getBlockY());
                         return;
                     } else {
                         event.setCancelled(true);
@@ -185,7 +186,8 @@ public class MatchBlockListener implements Listener {
                     GameParticipant<MatchGamePlayerImpl> participant = match.getParticipant(player);
                     if (participant.getPlayer().getData().getRole() == EnumBaseRaiderRole.TRAPPER) {
                         event.setCancelled(false);
-                        match.addBlockToBrokenBlocksMap(event.getBlock().getState(), event.getBlock().getLocation());
+                        match.addBlockToPlacedBlocksMap(event.getBlock().getState(), event.getBlock().getLocation());
+                        match.sendMessage("&7added placed block: &b" + event.getBlock().getType() + " &7at " + event.getBlock().getLocation());
                     } else {
                         event.setCancelled(true);
                     }
@@ -231,15 +233,57 @@ public class MatchBlockListener implements Listener {
         if (profile.getState() != EnumProfileState.PLAYING) return;
         if (profile.getMatch().getState() != EnumMatchState.RUNNING) return;
 
-        if (!profile.getMatch().getKit().isSettingEnabled(KitSettingRaidingImpl.class)) return;
+        if (profile.getMatch().getKit().isSettingEnabled(KitSettingRaidingImpl.class)) {
 
-        Block block = event.getClickedBlock();
-        if (block == null || block.getType() == Material.AIR) return;
+            Block block = event.getClickedBlock();
+            if (block == null || block.getType() == Material.AIR) return;
 
-        GameParticipant<MatchGamePlayerImpl> participant = profile.getMatch().getParticipant(player);
-        if (participant.getPlayer().getData().getRole() == EnumBaseRaiderRole.RAIDER && ListenerUtil.isDoorOrGate(block.getType())) {
-            event.setCancelled(true);
-            player.sendMessage(CC.translate("&cYou cannot open doors or gates during a match!"));
+            Action action = event.getAction();
+            if (action == Action.RIGHT_CLICK_BLOCK) {
+                if (block.getType() == Material.SIGN || block.getType() == Material.SIGN_POST || block.getType() == Material.WALL_SIGN) {
+                    BlockState state = block.getState();
+                    this.tpUpIfSignInteractionPresent(event, state, profile, player);
+                }
+
+                GameParticipant<MatchGamePlayerImpl> participant = profile.getMatch().getParticipant(player);
+                if (participant.getPlayer().getData().getRole() == EnumBaseRaiderRole.RAIDER && ListenerUtil.isDoorOrGate(block.getType())) {
+                    event.setCancelled(true);
+                    player.sendMessage(CC.translate("&cYou cannot open doors or gates as a raider!"));
+                }
+            }
+        } else {
+            if (ListenerUtil.isDoorOrGate(event.getClickedBlock().getType())) {
+                event.setCancelled(true);
+                player.sendMessage(CC.translate("&cYou cannot open doors or gates during a match!"));
+            }
+        }
+    }
+
+    /**
+     * Teleports the player up if a sign with the "[elevator]" in its first line is present.
+     *
+     * @param event   The PlayerInteractEvent
+     * @param state   The BlockState of the clicked block
+     * @param profile The Profile of the player
+     * @param player  The Player who interacted with the block
+     */
+    private void tpUpIfSignInteractionPresent(PlayerInteractEvent event, BlockState state, Profile profile, Player player) {
+        if (state instanceof Sign) {
+            Sign sign = (Sign) state;
+            String[] lines = sign.getLines();
+            if (lines.length > 0 && lines[0].equalsIgnoreCase("[elevator]")) {
+                Location pos1 = profile.getMatch().getArena().getPos1();
+                Location tpLocation = pos1.clone();
+                for (int y = tpLocation.getBlockY() + 1; y < tpLocation.getWorld().getMaxHeight(); y++) {
+                    if (tpLocation.getWorld().getBlockAt(tpLocation.getBlockX(), y, tpLocation.getBlockZ()).getType() == Material.AIR) {
+                        tpLocation.setY(y);
+                        player.teleport(tpLocation);
+                        break;
+                    }
+                }
+
+                event.setCancelled(true);
+            }
         }
     }
 }
