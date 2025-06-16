@@ -10,6 +10,10 @@ import dev.revere.alley.base.spawn.command.SpawnCommand;
 import dev.revere.alley.base.spawn.command.SpawnItemsCommand;
 import dev.revere.alley.command.impl.main.AlleyCommand;
 import dev.revere.alley.command.impl.other.*;
+import dev.revere.alley.command.impl.other.gamemode.AdventureCommand;
+import dev.revere.alley.command.impl.other.gamemode.CreativeCommand;
+import dev.revere.alley.command.impl.other.gamemode.SpectatorCommand;
+import dev.revere.alley.command.impl.other.gamemode.SurvivalCommand;
 import dev.revere.alley.command.impl.other.troll.*;
 import dev.revere.alley.feature.cosmetic.command.CosmeticCommand;
 import dev.revere.alley.feature.division.command.DivisionCommand;
@@ -58,6 +62,11 @@ public class CommandUtility {
     public void registerCommands() {
         Logger.logTimeWithAction("registered", "Commands", () -> {
             new AlleyCommand();
+
+            new AdventureCommand();
+            new CreativeCommand();
+            new SurvivalCommand();
+            new SpectatorCommand();
 
             new KitCommand();
             new ArenaCommand();
