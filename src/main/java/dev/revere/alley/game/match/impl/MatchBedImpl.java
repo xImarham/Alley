@@ -9,7 +9,9 @@ import dev.revere.alley.util.PlayerUtil;
 import dev.revere.alley.util.TaskUtil;
 import lombok.Getter;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
 import java.util.Arrays;
@@ -41,15 +43,9 @@ public class MatchBedImpl extends MatchRegularImpl {
     }
 
     @Override
-    public boolean canEndMatch() {
-        return (this.participantA.isAllDead() && !this.participantA.getPlayer().getData().isBedBroken())
-                || (this.participantB.isAllDead() && !this.participantB.getPlayer().getData().isBedBroken());
-    }
-
-    @Override
     public boolean canEndRound() {
-        return (this.participantA.isAllDead() && !this.participantA.getPlayer().getData().isBedBroken())
-                || (this.participantB.isAllDead() && !this.participantB.getPlayer().getData().isBedBroken());
+        return (this.participantA.isAllDead() && this.participantA.getPlayer().getData().isBedBroken())
+                || (this.participantB.isAllDead() && this.participantB.getPlayer().getData().isBedBroken());
     }
 
     @Override
@@ -108,5 +104,27 @@ public class MatchBedImpl extends MatchRegularImpl {
         );
 
         this.playSound(Sound.ENDERDRAGON_GROWL);
+    }
+
+    /**
+     * Checks if a block is near a bed.
+     *
+     * @param block The block to check.
+     * @return true if the block is near a bed, false otherwise.
+     */
+    public boolean isNearBed(Block block) {
+        Location center = block.getLocation();
+        for (int x = -8; x <= 1; x++) {
+            for (int y = -8; y <= 1; y++) {
+                for (int z = -8; z <= 1; z++) {
+                    Block relativeBlock = new Location(block.getWorld(), center.getX() + x, center.getY() + y, center.getZ() + z).getBlock();
+                    if (relativeBlock.getType() == Material.BED_BLOCK) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
     }
 }

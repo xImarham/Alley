@@ -1,10 +1,13 @@
 package dev.revere.alley.base.kit;
 
 import dev.revere.alley.Alley;
+import dev.revere.alley.base.kit.data.BaseRaidingKitData;
 import dev.revere.alley.base.kit.enums.EnumKitCategory;
 import dev.revere.alley.base.kit.setting.KitSetting;
+import dev.revere.alley.base.kit.setting.impl.mode.KitSettingRaidingImpl;
 import dev.revere.alley.base.kit.setting.impl.mode.KitSettingRankedImpl;
 import dev.revere.alley.base.queue.Queue;
+import dev.revere.alley.game.match.player.enums.EnumBaseRaiderRole;
 import dev.revere.alley.tool.logger.Logger;
 import dev.revere.alley.tool.serializer.Serializer;
 import lombok.Getter;
@@ -70,6 +73,10 @@ public class KitService {
 
             this.setupFFA(kit, config, key);
             this.loadKitSettings(config, key, kit);
+
+            //TODO: base trapper and raider kits arent loaded yet so the setup fails, need to fix this later.
+            this.setupBaseRaidingKitData(kit, config, key);
+
             this.loadPotionEffects(config, key, kit);
             this.addMissingKitSettings(kit, config, key); // Only necessary for development purposes if you're lazy like me - to add the new kit setting manually.
             this.kits.add(kit);
@@ -89,6 +96,40 @@ public class KitService {
         kit.setFfaArenaName(config.getString(key + ".ffa.arena-name"));
         kit.setMaxFfaPlayers(config.getInt(key + ".ffa.max-players"));
         kit.setFfaSlot(config.getInt(key + ".ffa.slot"));
+    }
+
+    /**
+     * Method to setup the base raiding kit data of a kit.
+     *
+     * @param kit    The kit.
+     * @param config The configuration file.
+     * @param key    The path key.
+     */
+    private void setupBaseRaidingKitData(Kit kit, FileConfiguration config, String key) {
+        if (!kit.isSettingEnabled(KitSettingRaidingImpl.class)) return;
+
+        ConfigurationSection raidingSection = config.getConfigurationSection(key + ".raiding-role-kits");
+        if (raidingSection == null) return;
+
+        BaseRaidingKitData raidingData = new BaseRaidingKitData();
+
+        for (String roleKey : raidingSection.getKeys(false)) {
+            try {
+                EnumBaseRaiderRole role = EnumBaseRaiderRole.valueOf(roleKey.toUpperCase());
+                String roleKitName = raidingSection.getString(roleKey);
+                Kit roleKit = this.getKit(roleKitName);
+                if (roleKit != null) {
+                    raidingData.setKit(roleKit, role);
+                    roleKit.setEnabled(false);
+                } else {
+                    Logger.log("&cRole kit " + roleKitName + " for role " + role + " not found.");
+                }
+            } catch (IllegalArgumentException ex) {
+                Logger.log("&cInvalid raider role in config: " + roleKey);
+            }
+        }
+
+        kit.setBaseRaidingKitData(raidingData);
     }
 
     /**
@@ -159,6 +200,7 @@ public class KitService {
             this.kitToConfig(kit, config, key);
             this.saveKitSettings(config, key, kit);
             this.savePotionEffects(config, key, kit);
+            this.saveBaseRaidingKitData(config, key, kit);
             this.plugin.getConfigService().saveConfig(this.plugin.getConfigService().getConfigFile("storage/kits.yml"), config);
         }
     }
@@ -173,6 +215,28 @@ public class KitService {
     private void saveKitSettings(FileConfiguration config, String key, Kit kit) {
         for (KitSetting kitSetting : kit.getKitSettings()) {
             config.set(key + ".settings." + kitSetting.getName(), kitSetting.isEnabled());
+        }
+    }
+
+    /**
+     * Method to save the base raiding kit data of a kit.
+     *
+     * @param kit    The kit.
+     * @param config The configuration file.
+     * @param key    The path key.
+     */
+    private void saveBaseRaidingKitData(FileConfiguration config, String key, Kit kit) {
+        BaseRaidingKitData raidingData = kit.getBaseRaidingKitData();
+        if (raidingData == null) return;
+
+        for (EnumBaseRaiderRole role : EnumBaseRaiderRole.values()) {
+            Kit roleKit = raidingData.getKitAssociatedWithRole(role);
+            String path = key + ".raiding-role-kits." + role.name().toLowerCase();
+            if (roleKit != null) {
+                config.set(path, roleKit.getName());
+            } else {
+                config.set(path, null);
+            }
         }
     }
 
@@ -220,6 +284,10 @@ public class KitService {
 
         if (kit.getPotionEffects() != null) {
             this.savePotionEffects(config, key, kit);
+        }
+
+        if (kit.getBaseRaidingKitData() != null) {
+            this.saveBaseRaidingKitData(config, key, kit);
         }
 
         this.plugin.getConfigService().saveConfig(this.plugin.getConfigService().getConfigFile("storage/kits.yml"), config);

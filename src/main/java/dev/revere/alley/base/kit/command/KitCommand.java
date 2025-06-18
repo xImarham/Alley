@@ -13,6 +13,7 @@ import dev.revere.alley.base.kit.command.impl.manage.*;
 import dev.revere.alley.base.kit.command.impl.manage.ffa.KitSetFfaSlotCommand;
 import dev.revere.alley.base.kit.command.impl.manage.ffa.KitSetupFFACommand;
 import dev.revere.alley.base.kit.command.impl.manage.ffa.KitToggleFFACommand;
+import dev.revere.alley.base.kit.command.impl.manage.raiding.KitSetRaidingRoleKitCommand;
 import dev.revere.alley.base.kit.command.impl.settings.KitSetSettingCommand;
 import dev.revere.alley.base.kit.command.impl.settings.KitSettingsCommand;
 import dev.revere.alley.base.kit.command.impl.settings.KitViewSettingsCommand;
@@ -58,6 +59,7 @@ public class KitCommand extends BaseCommand {
         new KitSetEditableCommand();
         new KitToggleCommand();
         new KitClearPotionsCommand();
+        new KitSetRaidingRoleKitCommand();
     }
 
     @SuppressWarnings("unused")
@@ -69,7 +71,7 @@ public class KitCommand extends BaseCommand {
                     "list", "create", "delete", "toggle", "view", "settings", "viewsettings",
                     "setsetting", "setcategory", "setdescription", "setdisclaimer", "setdisplayname",
                     "seteditable", "seticon", "setinv", "getinv", "addpotion", "clearpotions",
-                    "setupffa", "toggleffa", "setffaslot", "saveall", "save"
+                    "setupffa", "toggleffa", "setffaslot", "saveall", "save", "setraidingrolekit"
             ));
         }
 
@@ -142,6 +144,9 @@ public class KitCommand extends BaseCommand {
                     " &f● &b/kit setupffa &8(&7kitName&8) &7| Setup ffa kit",
                     " &f● &b/kit toggleffa &8(&7kitName&8) &7| Toggle ffa kit",
                     " &f● &b/kit setffaslot &8(&7kitName&8) &8(&7slot&8) &7| Set ffa menu slot"
+            },
+            {
+                    " &f● &b/kit setraidingrolekit &8(&7kitName&8) &8(&7role&8) &8(&7roleKitName&8) &7| Set raiding role kit",
             },
             {
                     " &f● &b/kit saveall &7| Save all kits",

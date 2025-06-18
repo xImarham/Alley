@@ -104,4 +104,24 @@ public class ListenerUtil {
             Material.TRAP_DOOR,
             Material.IRON_TRAPDOOR
     );
+
+    /**
+     * Checks if the material is a bed fight protected block.
+     *
+     * @param material The material to check.
+     * @return true if the material is a bed fight protected block, false otherwise.
+     */
+    public boolean isBedFightProtectedBlock(Material material) {
+        return bedFightProtectedBlocks.contains(material);
+    }
+
+    /**
+     * List of bed fight protected block materials.
+     */
+    private final List<Material> bedFightProtectedBlocks = Arrays.asList(
+            Material.ENDER_STONE,
+            Material.WOOD,
+            Material.WOOL,
+            Material.BED_BLOCK
+    );
 }

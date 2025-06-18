@@ -28,10 +28,7 @@ import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.util.visual.ProgressBarUtil;
 import lombok.Getter;
 import lombok.Setter;
-import org.bukkit.ChatColor;
-import org.bukkit.Color;
-import org.bukkit.Location;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -160,11 +157,11 @@ public class MatchRegularImpl extends AbstractMatch {
         }
 
         if (this.isAffectStatistics()) {
+            this.handleData(this.winner, this.loser, this.participantA, this.participantB);
+
             ProfileData profileData = this.plugin.getProfileService().getProfile(this.winner.getPlayer().getUuid()).getProfileData();
             Division currentDivision = profileData.getUnrankedKitData().get(this.getKit().getName()).getDivision();
             DivisionTier currentTier = profileData.getUnrankedKitData().get(this.getKit().getName()).getTier();
-
-            this.handleData(this.winner, this.loser, this.participantA, this.participantB);
 
             if (!this.isRanked()) {
                 this.sendProgressToWinner(this.winner.getPlayer().getPlayer(), currentDivision, currentTier);
@@ -302,27 +299,27 @@ public class MatchRegularImpl extends AbstractMatch {
         ProfileData profileData = winnerProfile.getProfileData();
         int wins = profileData.getUnrankedKitData().get(this.getKit().getName()).getWins();
 
-        List<DivisionTier> tiers = currentDivision.getTiers();
-        int tierIndex = tiers.indexOf(currentTier);
+        List<DivisionTier> tiers = currentDivision.getTiers(); //division 2
+        int tierIndex = tiers.indexOf(currentTier); // 0
 
         int nextTierWins;
-        if (tierIndex < tiers.size() - 1) {
-            nextTierWins = tiers.get(tierIndex + 1).getRequiredWins();
-        } else if (winnerProfile.getNextDivision(this.getKit().getName()) != null) {
+        if (tierIndex < tiers.size() - 1) { // if there is a next tier
+            nextTierWins = tiers.get(tierIndex + 1).getRequiredWins(); // 40
+        } else if (winnerProfile.getNextDivision(this.getKit().getName()) != null) { // if division doesn't have a next tier, but there is a next division
             nextTierWins = winnerProfile.getNextDivision(this.getKit().getName()).getTiers().get(0).getRequiredWins();
         } else {
             nextTierWins = currentTier.getRequiredWins();
         }
 
         String nextRank = winnerProfile.getNextDivisionAndTier(this.getKit().getName());
-        String progressBar = ProgressBarUtil.generate(wins, nextTierWins, 12, "■");
+        String progressBar = ProgressBarUtil.generate(wins, wins == currentTier.getRequiredWins() ? currentTier.getRequiredWins() : nextTierWins, 12, "■");
         String progressPercent = nextTierWins > 0 ? Math.round((float) wins / nextTierWins * 100) + "%" : "100%";
-        int requiredWinsToUnlock = nextTierWins - wins;
+        int requiredWinsToUnlock = nextTierWins - wins; // 40 - 10 (first tier of bronze 1)
         String winOrWins = requiredWinsToUnlock == 1 ? "win" : "wins";
-
+        
         String progressLine;
-        if (wins == nextTierWins) {
-            progressLine = " &b&l● &fUNLOCKED &b" + nextRank + "&f!";
+        if (wins == currentTier.getRequiredWins()) {
+            progressLine = " &b&l● &fUNLOCKED &b" + currentDivision.getName() + " " + currentTier.getName() + "&f!";
         } else {
             progressLine = " &b&l● &fUnlock &b" + nextRank + " &fwith " + requiredWinsToUnlock + " more " + winOrWins + "!";
         }

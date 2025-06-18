@@ -6,6 +6,7 @@ import dev.revere.alley.base.arena.impl.StandAloneArena;
 import dev.revere.alley.base.hotbar.enums.EnumHotbarType;
 import dev.revere.alley.base.kit.Kit;
 import dev.revere.alley.base.kit.setting.impl.mode.KitSettingLivesImpl;
+import dev.revere.alley.base.kit.setting.impl.mode.KitSettingRaidingImpl;
 import dev.revere.alley.base.queue.Queue;
 import dev.revere.alley.feature.cosmetic.impl.killeffect.AbstractKillEffect;
 import dev.revere.alley.feature.cosmetic.impl.killeffect.KillEffectRepository;
@@ -22,6 +23,7 @@ import dev.revere.alley.game.match.runnable.other.MatchRespawnRunnable;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
 import dev.revere.alley.tool.reflection.impl.TitleReflectionService;
+import dev.revere.alley.util.ListenerUtil;
 import dev.revere.alley.util.PlayerUtil;
 import dev.revere.alley.util.SoundUtil;
 import dev.revere.alley.util.chat.CC;
@@ -702,7 +704,32 @@ public abstract class AbstractMatch {
 
     @SuppressWarnings("deprecation")
     public void resetBlockChanges() {
-        // TODO: close all doors and gates in arena region if kit setting baseraiding is enabled
+
+        if (this.getKit().isSettingEnabled(KitSettingRaidingImpl.class)) {
+            AbstractArena arena = this.getArena();
+            Location pos1 = arena.getPos1();
+            Location pos2 = arena.getPos2();
+
+            // TODO: close all doors and gates in arena region if kit setting baseraiding is enabled
+
+            for (int x = pos1.getBlockX(); x <= pos2.getBlockX(); x++) {
+                for (int z = pos1.getBlockZ(); z <= pos2.getBlockZ(); z++) {
+                    for (int y = pos1.getBlockY(); y <= pos2.getBlockY(); y++) {
+                        Location location = new Location(pos1.getWorld(), x, y, z);
+                        Block block = location.getBlock();
+                        if (ListenerUtil.isDoorOrGate(block.getType())) {
+                            BlockState originalState = block.getState();
+                            if (originalState.getType() == Material.AIR) {
+                                continue;
+                            }
+                            this.brokenBlocks.put(originalState, location);
+                            block.setType(Material.AIR); // Remove the door or gate
+                        }
+                    }
+                }
+            }
+        }
+
 
         this.removePlacedBlocks();
 

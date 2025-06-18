@@ -94,12 +94,21 @@ public class MatchBlockListener implements Listener {
                         }
 
                         Block block = event.getBlock();
-                        if (block.getType() != Material.BED_BLOCK) {
+                        if (!ListenerUtil.isBedFightProtectedBlock(block.getType())) {
+                            if (!matchBed.isNearBed(block)) {
+                                event.setCancelled(true);
+                                return;
+                            }
+
                             event.setCancelled(true);
                             return;
                         }
 
                         StandAloneArena arena = (StandAloneArena) match.getArena();
+                        if (block.getType() != Material.BED_BLOCK) {
+                            return;
+                        }
+
                         if (!arena.isEnemyBed(block, participant)) {
                             player.sendMessage(CC.translate("You cannot break your own bed!"));
                             event.setCancelled(true);
@@ -117,9 +126,7 @@ public class MatchBlockListener implements Listener {
 
                         match.addBlockToBrokenBlocksMap(block.getState(), block.getLocation());
                         opponent.getPlayer().getData().setBedBroken(true);
-
                         matchBed.alertBedDestruction(player, opponent);
-                        return;
                     }
 
                     BlockState blockState = event.getBlock().getState();
@@ -231,10 +238,9 @@ public class MatchBlockListener implements Listener {
         Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
 
         if (profile.getState() != EnumProfileState.PLAYING) return;
+        if (profile.getMatch() == null) return;
         if (profile.getMatch().getState() != EnumMatchState.RUNNING) return;
-
         if (profile.getMatch().getKit().isSettingEnabled(KitSettingRaidingImpl.class)) {
-
             Block block = event.getClickedBlock();
             if (block == null || block.getType() == Material.AIR) return;
 

@@ -2,6 +2,7 @@ package dev.revere.alley.provider.scoreboard.impl.match;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.base.kit.setting.impl.mode.KitSettingBoxingImpl;
+import dev.revere.alley.base.kit.setting.impl.mode.KitSettingRaidingImpl;
 import dev.revere.alley.base.kit.setting.impl.mode.KitSettingStickFightImpl;
 import dev.revere.alley.game.match.AbstractMatch;
 import dev.revere.alley.game.match.enums.EnumMatchState;
@@ -31,6 +32,7 @@ public class MatchScoreboardFactory {
     protected final MatchScoreboardRoundsImpl matchScoreboardRounds;
     protected final MatchScoreboardLivesImpl matchScoreboardLives;
     protected final MatchScoreboardBedImpl matchScoreboardBed;
+    protected final MatchScoreboardRaidingImpl matchScoreboardRaiding;
 
     protected final MatchScoreboardRegularImpl matchScoreboardRegular;
 
@@ -51,6 +53,7 @@ public class MatchScoreboardFactory {
         this.matchScoreboardRounds = new MatchScoreboardRoundsImpl(this.plugin);
         this.matchScoreboardLives = new MatchScoreboardLivesImpl(this.plugin);
         this.matchScoreboardBed = new MatchScoreboardBedImpl(this.plugin);
+        this.matchScoreboardRaiding = new MatchScoreboardRaidingImpl(this.plugin);
 
         this.matchScoreboardRegular = new MatchScoreboardRegularImpl(this.plugin);
     }
@@ -69,6 +72,7 @@ public class MatchScoreboardFactory {
 
         if (match.getKit().isSettingEnabled(KitSettingBoxingImpl.class)) return this.matchScoreboardBoxing;
         if (match.getKit().isSettingEnabled(KitSettingStickFightImpl.class)) return this.matchScoreboardStickFight;
+        if (match.getKit().isSettingEnabled(KitSettingRaidingImpl.class)) return this.matchScoreboardRaiding;
 
         if (match instanceof MatchRoundsImpl) return this.matchScoreboardRounds;
         if (match instanceof MatchLivesImpl) return this.matchScoreboardLives;

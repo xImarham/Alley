@@ -1,5 +1,6 @@
 package dev.revere.alley.base.kit;
 
+import dev.revere.alley.base.kit.data.BaseRaidingKitData;
 import dev.revere.alley.base.kit.enums.EnumKitCategory;
 import dev.revere.alley.base.kit.setting.KitSetting;
 import lombok.Getter;
@@ -40,6 +41,8 @@ public class Kit {
     private boolean ffaEnabled;
     private int ffaSlot;
     private int maxFfaPlayers;
+
+    private BaseRaidingKitData baseRaidingKitData;
 
     private EnumKitCategory category;
 
@@ -83,6 +86,8 @@ public class Kit {
         this.ffaArenaName = "";
         this.maxFfaPlayers = 20;
         this.ffaSlot = 0;
+
+        this.baseRaidingKitData = null;
 
         this.kitSettings = new ArrayList<>();
         this.potionEffects = new ArrayList<>();
