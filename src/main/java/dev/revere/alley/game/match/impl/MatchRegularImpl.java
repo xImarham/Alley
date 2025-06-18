@@ -141,7 +141,7 @@ public class MatchRegularImpl extends AbstractMatch {
     public void handleRoundEnd() {
         this.winner = this.participantA.isAllDead() ? this.participantB : this.participantA;
         this.loser = this.participantA.isAllDead() ? this.participantA : this.participantB;
-        this.loser.setEliminated(true);
+        this.loser.getPlayer().setEliminated(true);
 
         this.sendVictory(this.winner.getPlayer().getPlayer());
         this.sendDefeat(this.loser.getPlayer().getPlayer());

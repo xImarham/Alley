@@ -79,7 +79,7 @@ public class MatchInteractListener implements Listener {
 
         if (profile.getMatch().getKit().isSettingEnabled(KitSettingLivesImpl.class)) return;
 
-        if (profile.getState() == EnumProfileState.PLAYING && item != null && item.getType() == Material.ENDER_PEARL) {
+        if (profile.getState() == EnumProfileState.PLAYING && event.getAction().name().contains("RIGHT_CLICK") && item != null && item.getType() == Material.ENDER_PEARL) {
             CooldownRepository cooldownRepository = this.plugin.getCooldownRepository();
             Optional<Cooldown> optionalCooldown = Optional.ofNullable(cooldownRepository.getCooldown(player.getUniqueId(), EnumCooldownType.ENDER_PEARL));
 

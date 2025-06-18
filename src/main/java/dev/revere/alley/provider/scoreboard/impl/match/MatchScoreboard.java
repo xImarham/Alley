@@ -41,12 +41,13 @@ public class MatchScoreboard implements IScoreboard {
         List<GameParticipant<MatchGamePlayerImpl>> participants = match.getParticipants();
 
         GameParticipant<MatchGamePlayerImpl> you = participants.stream()
-                .filter(p -> p.getPlayer().getUuid().equals(profile.getUuid()))
+                .filter(p -> p.containsPlayer(profile.getUuid()))
                 .findFirst().orElse(null);
 
         GameParticipant<MatchGamePlayerImpl> opponent = participants.stream()
-                .filter(p -> !p.getPlayer().getUuid().equals(profile.getUuid()))
+                .filter(p -> !p.containsPlayer(profile.getUuid()))
                 .findFirst().orElse(null);
+
 
         if (you == null || opponent == null) return Collections.emptyList();
 

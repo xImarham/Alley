@@ -23,10 +23,10 @@ public class GamePlayer {
     private String username;
 
     private boolean disconnected;
+    private boolean eliminated;
     private boolean dead;
 
     private List<UUID> players;
-    private List<UUID> alivePlayers;
 
     /**
      * Constructor for the GamePlayer class.

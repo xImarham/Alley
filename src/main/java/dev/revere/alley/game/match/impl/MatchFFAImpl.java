@@ -86,7 +86,7 @@ public class MatchFFAImpl extends AbstractMatch {
                 .findFirst()
                 .ifPresent(remaining -> {
                     this.winner = remaining;
-                    this.winner.setEliminated(false);
+                    this.winner.getPlayer().setEliminated(true);
 
                     // temporarily, couldnt be asked to mess with clickables again
 

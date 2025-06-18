@@ -13,7 +13,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class MatchGamePlayerData {
-    private boolean bedBroken;
     private int longestCombo;
     private int combo;
     private int hits;
@@ -24,7 +23,6 @@ public class MatchGamePlayerData {
     private EnumBaseRaiderRole role;
 
     public MatchGamePlayerData() {
-        this.bedBroken = false;
         this.lives = Alley.getInstance().getConfigService().getSettingsConfig().getInt("game.lives", 3);
         this.score = 0;
     }

@@ -5,8 +5,7 @@ import dev.revere.alley.base.arena.AbstractArena;
 import dev.revere.alley.base.arena.impl.StandAloneArena;
 import dev.revere.alley.base.hotbar.enums.EnumHotbarType;
 import dev.revere.alley.base.kit.Kit;
-import dev.revere.alley.base.kit.setting.impl.mode.KitSettingLivesImpl;
-import dev.revere.alley.base.kit.setting.impl.mode.KitSettingRaidingImpl;
+import dev.revere.alley.base.kit.setting.impl.mode.*;
 import dev.revere.alley.base.queue.Queue;
 import dev.revere.alley.feature.cosmetic.impl.killeffect.AbstractKillEffect;
 import dev.revere.alley.feature.cosmetic.impl.killeffect.KillEffectRepository;
@@ -22,6 +21,7 @@ import dev.revere.alley.game.match.runnable.MatchRunnable;
 import dev.revere.alley.game.match.runnable.other.MatchRespawnRunnable;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
+import dev.revere.alley.tool.reflection.impl.ActionBarReflectionService;
 import dev.revere.alley.tool.reflection.impl.TitleReflectionService;
 import dev.revere.alley.util.ListenerUtil;
 import dev.revere.alley.util.PlayerUtil;
@@ -29,9 +29,7 @@ import dev.revere.alley.util.SoundUtil;
 import dev.revere.alley.util.chat.CC;
 import lombok.Getter;
 import lombok.Setter;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Sound;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.Player;
@@ -141,8 +139,6 @@ public abstract class AbstractMatch {
         gameParticipant.getPlayers().forEach(gamePlayer -> {
             Player player = this.plugin.getServer().getPlayer(gamePlayer.getUuid());
             if (player != null) {
-                this.plugin.getSnapshotRepository().getSnapshots().remove(player.getUniqueId());
-
                 Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
                 profile.setState(EnumProfileState.PLAYING);
                 profile.setMatch(this);
@@ -224,14 +220,19 @@ public abstract class AbstractMatch {
             return;
         }
 
+        GameParticipant<MatchGamePlayerImpl> participant = this.getParticipant(player);
         MatchGamePlayerImpl gamePlayer = this.getGamePlayer(player);
-        if (gamePlayer.isDead()) {
+        if (participant.isAllEliminated()) {
+            Bukkit.broadcastMessage(player.getName() + " has died, but the participant is already eliminated.");
             return;
         }
 
-        this.setParticipantAsDead(player, gamePlayer);
+        this.handleParticipant(player, gamePlayer);
         this.notifySpectators(player.getName() + " has died");
-        //notifyParticipants(player.getName() + " has died");
+
+        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
+        Player killer = this.plugin.getCombatService().getLastAttacker(player);
+        handleDeathMessages(player, killer, profile);
 
         player.setVelocity(new Vector());
 
@@ -240,7 +241,6 @@ public abstract class AbstractMatch {
             this.handleRoundEnd();
 
             if (this.canEndMatch()) {
-                Player killer = this.plugin.getCombatService().getLastAttacker(player);
                 if (killer != null) {
                     this.handleEffects(player, killer);
                 }
@@ -249,8 +249,60 @@ public abstract class AbstractMatch {
             }
             this.runnable.setStage(4);
         } else {
-            this.handleRespawn(player);
+            if (this.shouldHandleRegularRespawn(player)) {
+                // for regular matches (not countdown respawn)
+                this.handleRespawn(player);
+            }
         }
+
+        handleSpectator(player, profile, participant);
+    }
+
+    private void handleSpectator(Player player, Profile profile, GameParticipant<MatchGamePlayerImpl> participant) {
+        if (!profile.getMatch().getParticipant(player).isAllEliminated() && profile.getMatch().getKit().isSettingEnabled(KitSettingBedImpl.class)) {
+            Bukkit.broadcastMessage(player.getName() + " is dead, but the participant is not all eliminated.");
+            MatchGamePlayerImpl gamePlayer = this.getGamePlayer(player);
+
+            if (participant.isBedBroken() && gamePlayer.isEliminated()) {
+                Bukkit.broadcastMessage(player.getName() + " is eliminated, no bed and participant is eliminated. Adding to spectators.");
+                profile.getMatch().addSpectator(player);
+                return;
+            }
+            return;
+        }
+
+        if (!profile.getMatch().getParticipant(player).isAllDead()) {
+            Kit matchKit = profile.getMatch().getKit();
+            if (matchKit.isSettingEnabled(KitSettingStickFightImpl.class) || matchKit.isSettingEnabled(KitSettingRoundsImpl.class)) {
+                return;
+            }
+
+            MatchGamePlayerImpl gamePlayer = this.getGamePlayer(player);
+            Bukkit.broadcastMessage(player.getName() + " is dead, lives: " + gamePlayer.getData().getLives() + " user: " + gamePlayer.getUsername());
+            if (matchKit.isSettingEnabled(KitSettingLivesImpl.class)) {
+                if (gamePlayer.isEliminated()) {
+                    profile.getMatch().addSpectator(player);
+                    return;
+                }
+                return;
+            }
+
+            profile.getMatch().addSpectator(player);
+        }
+    }
+
+    private void handleDeathMessages(Player player, Player killer, Profile profile) {
+        if (killer == null) {
+            notifyParticipants("&c" + profile.getNameColor() + player.getName() + " &fdied.");
+            return;
+        }
+        GameParticipant<MatchGamePlayerImpl> killerParticipant = profile.getMatch().getParticipant(killer);
+        killerParticipant.getPlayer().getData().incrementKills();
+
+        Profile killerProfile = this.plugin.getProfileService().getProfile(killer.getUniqueId());
+
+        this.plugin.getReflectionRepository().getReflectionService(ActionBarReflectionService.class).sendDeathMessage(killer, player);
+        notifyParticipants("&c" + profile.getNameColor() + player.getName() + " &fwas slain by &c" + killerProfile.getNameColor() + killer.getName() + "&f.");
     }
 
     /**
@@ -320,9 +372,25 @@ public abstract class AbstractMatch {
         player.setAllowFlight(true);
         player.setFlying(true);
 
-        this.spectators.add(player.getUniqueId());
+        // if they are a participant, dont add them to spectators- otherwise add them
+        if (this.getParticipant(player) == null) {
+            this.spectators.add(player.getUniqueId());
+        }
 
         this.notifyAll("&b" + profile.getNameColor() + player.getName() + " &fis now spectating the match.");
+        GameParticipant<MatchGamePlayerImpl> participant = this.getParticipant(player);
+
+        Bukkit.broadcastMessage(player.getName() + "'s dead status: " + participant.getPlayers().stream()
+                .filter(gamePlayer -> gamePlayer.getUuid().equals(player.getUniqueId()))
+                .findFirst()
+                .map(MatchGamePlayerImpl::isDead)
+                .orElse(false));
+
+        Bukkit.broadcastMessage(player.getName() + "'s eliminated status: " + participant.getPlayers().stream()
+                .filter(gamePlayer -> gamePlayer.getUuid().equals(player.getUniqueId()))
+                .findFirst()
+                .map(MatchGamePlayerImpl::isEliminated)
+                .orElse(false));
     }
 
     /**
@@ -355,7 +423,32 @@ public abstract class AbstractMatch {
      * @param player The player to start the respawn process for.
      */
     public void startRespawnProcess(Player player) {
+        player.setGameMode(GameMode.SPECTATOR);
+        player.setAllowFlight(true);
+        player.setFlying(true);
+
+        GameParticipant<MatchGamePlayerImpl> participant = this.getParticipant(player);
+        participant.getPlayers().forEach(gamePlayer -> {
+            gamePlayer.setDead(false); // set player alive (allows other players to rape)
+        });
+
+        Location spawnLocation = participant.getPlayers().get(0).getUuid().equals(player.getUniqueId())
+                ? this.arena.getPos1()
+                : this.arena.getPos2();
+        player.teleport(spawnLocation);
+
         new MatchRespawnRunnable(player, this, 3).runTaskTimer(this.plugin, 0L, 20L);
+    }
+
+    /**
+     * Determines whether handleRespawn should be called for a player.
+     * This method can be overridden by subclasses to control the respawn process.
+     *
+     * @param player The player to check.
+     * @return True if handleRespawn should be called, false otherwise.
+     */
+    protected boolean shouldHandleRegularRespawn(Player player) {
+        return true;
     }
 
     /**
@@ -364,16 +457,8 @@ public abstract class AbstractMatch {
      * @param player     The player to set as dead.
      * @param gamePlayer The game player to set as dead.
      */
-    private void setParticipantAsDead(Player player, MatchGamePlayerImpl gamePlayer) {
-        if (this.kit.isSettingEnabled(KitSettingLivesImpl.class)) {
-            if (this.getParticipant(player).getPlayer().getData().getLives() <= 0) {
-                gamePlayer.setDead(true);
-            } else {
-                this.getParticipant(player).getPlayers().forEach(participant -> participant.setDead(false));
-            }
-        } else {
-            gamePlayer.setDead(true);
-        }
+    public void handleParticipant(Player player, MatchGamePlayerImpl gamePlayer) {
+        gamePlayer.setDead(true);
     }
 
     /**
@@ -500,6 +585,7 @@ public abstract class AbstractMatch {
                 .findFirst()
                 .orElse(null);
     }
+
 
     /**
      * Plays a sound for a player.

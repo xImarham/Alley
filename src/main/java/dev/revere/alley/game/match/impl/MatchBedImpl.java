@@ -6,8 +6,8 @@ import dev.revere.alley.base.queue.Queue;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.util.PlayerUtil;
-import dev.revere.alley.util.TaskUtil;
 import lombok.Getter;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -44,24 +44,49 @@ public class MatchBedImpl extends MatchRegularImpl {
 
     @Override
     public boolean canEndRound() {
-        return (this.participantA.isAllDead() && this.participantA.getPlayer().getData().isBedBroken())
-                || (this.participantB.isAllDead() && this.participantB.getPlayer().getData().isBedBroken());
+        return this.participantA.isAllEliminated() || this.participantB.isAllEliminated();
     }
 
     @Override
     public boolean canStartRound() {
-        return (!this.participantA.isAllDead() && !this.participantA.getPlayer().getData().isBedBroken())
-                && (!this.participantB.isAllDead() && !this.participantB.getPlayer().getData().isBedBroken());
+        return !this.participantA.isAllEliminated() && !this.participantB.isAllEliminated();
     }
 
     @Override
     public void handleDeath(Player player) {
         GameParticipant<MatchGamePlayerImpl> participant = this.participantA.containsPlayer(player.getUniqueId()) ? this.participantA : this.participantB;
-        if (participant.getPlayer().getData().isBedBroken()) {
+        if (participant.isBedBroken()) {
             super.handleDeath(player);
         } else {
-            TaskUtil.runTaskLater(() -> this.startRespawnProcess(player), 5L);
+            super.handleDeath(player);
+            this.startRespawnProcess(player);
         }
+    }
+
+    @Override
+    public void handleParticipant(Player player, MatchGamePlayerImpl gamePlayer) {
+        GameParticipant<MatchGamePlayerImpl> gameParticipant = this.getParticipantA().containsPlayer(player.getUniqueId())
+                ? this.getParticipantA()
+                : this.getParticipantB();
+
+        Bukkit.broadcastMessage(player.getName() + " died and their bed is " + (gameParticipant.isBedBroken() ? "broken" : "not broken"));
+        if (gameParticipant.isBedBroken()) {
+            GameParticipant<MatchGamePlayerImpl> participant = getParticipant(player);
+            if (participant == null) {
+                Bukkit.getLogger().warning("Participant not found for player: " + player.getName());
+                return;
+            }
+
+            Bukkit.broadcastMessage(player.getName() + " is dead and set eliminated to true (should end game)");
+            gamePlayer.setEliminated(true);
+        }
+
+        super.handleParticipant(player, gamePlayer);
+    }
+
+    @Override
+    protected boolean shouldHandleRegularRespawn(Player player) {
+        return false;
     }
 
     @Override
@@ -73,9 +98,6 @@ public class MatchBedImpl extends MatchRegularImpl {
 
         this.giveLoadout(player, this.getKit());
         this.applyWoolAndArmorColor(player);
-
-        this.notifyParticipants("&b" + player.getName() + " &ahas respawned");
-        this.notifySpectators("&b" + player.getName() + " &ahas respawned");
     }
 
     /**

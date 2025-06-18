@@ -34,18 +34,19 @@ public class ListenerUtil {
                 droppedItems.add(deadPlayer.getWorld().dropItemNaturally(deadPlayer.getLocation(), drop));
             }
         }
-        event.getDrops().clear();
 
         new BukkitRunnable() {
             @Override
             public void run() {
+                event.getDrops().clear();
+
                 for (Item item : droppedItems) {
                     if (item != null && item.isValid()) {
                         item.remove();
                     }
                 }
             }
-        }.runTaskLater(Alley.getInstance(), 100L);
+        }.runTaskLater(Alley.getInstance(), 5000L);
     }
 
     /**
@@ -123,5 +124,26 @@ public class ListenerUtil {
             Material.WOOD,
             Material.WOOL,
             Material.BED_BLOCK
+    );
+
+    /**
+     * Checks if the material is a bed fight protected block.
+     *
+     * @param material The material to check.
+     * @return true if the material is a bed fight protected block, false otherwise.
+     */
+    public boolean isSword(Material material) {
+        return swords.contains(material);
+    }
+
+    /**
+     * List of bed fight protected block materials.
+     */
+    private final List<Material> swords = Arrays.asList(
+            Material.DIAMOND_SWORD,
+            Material.GOLD_SWORD,
+            Material.IRON_SWORD,
+            Material.STONE_SWORD,
+            Material.WOOD_SWORD
     );
 }

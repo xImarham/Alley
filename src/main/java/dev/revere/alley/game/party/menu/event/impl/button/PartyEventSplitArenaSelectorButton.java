@@ -53,31 +53,39 @@ public class PartyEventSplitArenaSelectorButton extends Button {
             return;
         }
 
-        Player playerA = party.getLeader();
-        Player playerB = Bukkit.getPlayer(party.getMembers().get(1));
+        List<Player> allPartyPlayers = party.getMembers().stream()
+                .map(Bukkit::getPlayer)
+                .collect(Collectors.toList());
 
-        MatchGamePlayerImpl gamePlayerA = new MatchGamePlayerImpl(playerA.getUniqueId(), playerA.getName());
-        MatchGamePlayerImpl gamePlayerB = new MatchGamePlayerImpl(playerB.getUniqueId(), playerB.getName());
+        Collections.shuffle(allPartyPlayers);
 
-        GameParticipant<MatchGamePlayerImpl> participantA = new TeamGameParticipant<>(gamePlayerA);
-        GameParticipant<MatchGamePlayerImpl> participantB = new TeamGameParticipant<>(gamePlayerB);
+        Player leaderA = allPartyPlayers.get(0);
+        Player leaderB = allPartyPlayers.get(1);
 
-        List<Player> players = party.getMembers().stream().map(Bukkit::getPlayer).collect(Collectors.toList());
-        Collections.shuffle(players);
+        MatchGamePlayerImpl gameLeaderA = new MatchGamePlayerImpl(leaderA.getUniqueId(), leaderA.getName());
+        MatchGamePlayerImpl gameLeaderB = new MatchGamePlayerImpl(leaderB.getUniqueId(), leaderB.getName());
 
-        for (Player player1 : players) {
-            if (player1.equals(playerA) || player1.equals(playerB)) continue;
-            MatchGamePlayerImpl gamePlayer = new MatchGamePlayerImpl(player1.getUniqueId(), player1.getName());
+        GameParticipant<MatchGamePlayerImpl> participantA = new TeamGameParticipant<>(gameLeaderA);
+        GameParticipant<MatchGamePlayerImpl> participantB = new TeamGameParticipant<>(gameLeaderB);
 
-            if (players.indexOf(player1) % 2 == 0) {
+        int totalPlayers = allPartyPlayers.size();
+        int teamATargetSize = totalPlayers / 2;
+        int currentTeamACount = 1;
+
+        for (int i = 2; i < allPartyPlayers.size(); i++) {
+            Player currentPlayer = allPartyPlayers.get(i);
+            MatchGamePlayerImpl gamePlayer = new MatchGamePlayerImpl(currentPlayer.getUniqueId(), currentPlayer.getName());
+
+            if (currentTeamACount < teamATargetSize) {
                 participantA.getPlayers().add(gamePlayer);
+                currentTeamACount++;
             } else {
                 participantB.getPlayers().add(gamePlayer);
             }
         }
 
         this.plugin.getMatchService().createAndStartMatch(
-                this.kit, this.arena, participantA, participantB, true, false, false
+                this.kit, this.plugin.getArenaService().getRandomArena(this.kit), participantA, participantB, true, false, false
         );
     }
 }

@@ -125,8 +125,9 @@ public class MatchBlockListener implements Listener {
                         }
 
                         match.addBlockToBrokenBlocksMap(block.getState(), block.getLocation());
-                        opponent.getPlayer().getData().setBedBroken(true);
+                        opponent.setBedBroken(true);
                         matchBed.alertBedDestruction(player, opponent);
+                        return;
                     }
 
                     BlockState blockState = event.getBlock().getState();
@@ -258,6 +259,10 @@ public class MatchBlockListener implements Listener {
                 }
             }
         } else {
+            if (event.getClickedBlock() == null) {
+                return;
+            }
+
             if (ListenerUtil.isDoorOrGate(event.getClickedBlock().getType())) {
                 event.setCancelled(true);
                 player.sendMessage(CC.translate("&cYou cannot open doors or gates during a match!"));

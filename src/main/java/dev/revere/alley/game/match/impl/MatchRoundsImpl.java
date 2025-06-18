@@ -73,7 +73,6 @@ public class MatchRoundsImpl extends MatchRegularImpl {
                 this.getRunnable().setStage(4);
                 super.handleRoundEnd();
             } else {
-
                 this.removePlacedBlocks();
                 this.handleRespawn(this.fallenPlayer);
                 this.setState(EnumMatchState.ENDING_ROUND);
@@ -111,7 +110,35 @@ public class MatchRoundsImpl extends MatchRegularImpl {
 
         this.fallenPlayer = player;
 
+        if (this.getKit().isSettingEnabled(KitSettingStickFightImpl.class)) {
+            Player lastAttacker = this.plugin.getCombatService().getLastAttacker(player);
+            if (lastAttacker == null) {
+                GameParticipant<MatchGamePlayerImpl> opponent = this.participantA.containsPlayer(player.getUniqueId())
+                        ? this.participantB
+                        : this.participantA;
+
+                this.setScorer(opponent.getPlayer().getUsername());
+            } else {
+                this.setScorer(lastAttacker.getName());
+            }
+        }
+
+        super.handleDeath(player);
         this.startRespawnProcess(player);
+    }
+
+    @Override
+    public void handleParticipant(Player player, MatchGamePlayerImpl gamePlayer) {
+        GameParticipant<MatchGamePlayerImpl> participant = this.participantA.containsPlayer(player.getUniqueId()) ? this.participantA : this.participantB;
+        if (participant.getPlayer().getData().getScore() == this.rounds) {
+            GameParticipant<MatchGamePlayerImpl> opponent = participant == this.participantA ? this.participantB : this.participantA;
+            opponent.getPlayer().setEliminated(true);
+        }
+    }
+
+    @Override
+    protected boolean shouldHandleRegularRespawn(Player player) {
+        return false;
     }
 
     @Override
@@ -144,12 +171,6 @@ public class MatchRoundsImpl extends MatchRegularImpl {
                 this.handleRoundEnd();
             }
         } else {
-            GameParticipant<MatchGamePlayerImpl> participant = this.participantA.containsPlayer(player.getUniqueId()) ? this.participantA : this.participantB;
-            if (participant.getPlayer().getData().isBedBroken() && participant.isAllDead()) {
-                this.handleRoundEnd();
-                return;
-            }
-
             super.startRespawnProcess(player);
         }
     }

@@ -16,8 +16,10 @@ import java.util.UUID;
 @Getter
 @Setter
 public class GameParticipant<T extends GamePlayer> {
+    // This is the leader of the participant
     private T player;
-    private boolean eliminated;
+
+    private boolean bedBroken;
 
     /**
      * Constructor for the GameParticipant class.
@@ -71,6 +73,15 @@ public class GameParticipant<T extends GamePlayer> {
      */
     public boolean isAllDead() {
         return this.player.isDead();
+    }
+
+    /**
+     * Checks if all the players in the participant are eliminated.
+     *
+     * @return True if all the players are eliminated.
+     */
+    public boolean isAllEliminated() {
+        return this.player.isEliminated();
     }
 
     /**

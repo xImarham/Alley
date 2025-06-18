@@ -1,6 +1,7 @@
 package dev.revere.alley.game.match.player.participant;
 
 import dev.revere.alley.game.match.player.GamePlayer;
+import org.bukkit.Bukkit;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -78,6 +79,21 @@ public class TeamGameParticipant<T extends GamePlayer> extends GameParticipant<T
                 i++;
             }
         }
+
+        return this.players.size() == i;
+    }
+
+    @Override
+    public boolean isAllEliminated() {
+        int i = 0;
+
+        for (GamePlayer gamePlayer : this.players) {
+            if (gamePlayer.isEliminated() || gamePlayer.isDisconnected()) {
+                i++;
+            }
+        }
+
+        Bukkit.broadcastMessage(this.players.size() + " players in team, " + i + " eliminated or disconnected");
 
         return this.players.size() == i;
     }

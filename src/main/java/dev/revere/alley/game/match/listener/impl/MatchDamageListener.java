@@ -60,10 +60,7 @@ public class MatchDamageListener implements Listener {
             if (matchKit.isSettingEnabled(KitSettingBoxingImpl.class)
                     || matchKit.isSettingEnabled(KitSettingSumoImpl.class)
                     || matchKit.isSettingEnabled(KitSettingSpleefImpl.class)
-                    || matchKit.isSettingEnabled(KitSettingNoDamageImpl.class)
-                    || matchKit.isSettingEnabled(KitSettingLivesImpl.class)
-                    || matchKit.isSettingEnabled(KitSettingRoundsImpl.class)
-                    || matchKit.isSettingEnabled(KitSettingStickFightImpl.class)) {
+                    || matchKit.isSettingEnabled(KitSettingNoDamageImpl.class)) {
                 event.setDamage(0);
                 player.setHealth(20.0);
                 player.updateInventory();
