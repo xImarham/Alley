@@ -6,6 +6,7 @@ import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.base.kit.Kit;
 import dev.revere.alley.base.kit.KitService;
 import dev.revere.alley.base.kit.data.BaseRaidingKitData;
+import dev.revere.alley.base.kit.service.BaseRaidingService;
 import dev.revere.alley.base.kit.setting.impl.mode.KitSettingRaidingImpl;
 import dev.revere.alley.game.match.player.enums.EnumBaseRaiderRole;
 import dev.revere.alley.util.chat.CC;
@@ -62,16 +63,10 @@ public class KitSetRaidingRoleKitCommand extends BaseCommand {
             return;
         }
 
-        if (kit.getBaseRaidingKitData() == null) {
-            BaseRaidingKitData raidingData = new BaseRaidingKitData();
-            raidingData.setKit(roleKit, role);
-            kit.setBaseRaidingKitData(raidingData);
+        BaseRaidingService raidingService = this.plugin.getBaseRaidingService();
+        raidingService.removeRaidingKitMapping(role);
+        raidingService.setRaidingKitMapping(kit, role, roleKit);
 
-        } else {
-            kit.getBaseRaidingKitData().setKit(roleKit, role);
-        }
-
-        kitService.saveKit(kit);
         sender.sendMessage(CC.translate("&aSuccessfully set the &b" + role + " &araiding role kit to &b" + roleKit.getName() + "&a for the &b" + kit.getName() + " &akit."));
     }
 }

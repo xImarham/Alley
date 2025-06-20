@@ -24,22 +24,24 @@ import java.util.UUID;
 public class FFACuboidListener implements Listener {
     protected final Alley plugin;
     private final Map<UUID, Boolean> playerStates;
-    private final Cuboid cuboid;
 
     /**
      * Constructor for the CuboidBoundaryListener.
      *
-     * @param cuboid The cuboid representing the FFA spawn area.
      * @param plugin The instance of the Alley plugin.
      */
-    public FFACuboidListener(Cuboid cuboid, Alley plugin) {
+    public FFACuboidListener(Alley plugin) {
         this.plugin = plugin;
         this.playerStates = new HashMap<>();
-        this.cuboid = cuboid;
     }
 
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
+        Cuboid cuboid = this.plugin.getFfaSpawnService().getCuboid();
+        if (cuboid == null) {
+            return;
+        }
+
         for (AbstractFFAMatch ffaMatch : this.plugin.getFfaService().getMatches()) {
             if (ffaMatch.getPlayers().isEmpty()) {
                 return;
@@ -58,7 +60,7 @@ public class FFACuboidListener implements Listener {
             return;
         }
 
-        boolean isInCuboid = this.cuboid.isIn(player);
+        boolean isInCuboid = cuboid.isIn(player);
         boolean wasInCuboid = this.playerStates.getOrDefault(playerId, true);
 
         if (isInCuboid != wasInCuboid) {

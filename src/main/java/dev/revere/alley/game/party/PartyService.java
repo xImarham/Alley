@@ -5,6 +5,8 @@ import dev.revere.alley.base.cooldown.Cooldown;
 import dev.revere.alley.base.cooldown.enums.EnumCooldownType;
 import dev.revere.alley.base.hotbar.HotbarService;
 import dev.revere.alley.base.hotbar.enums.EnumHotbarType;
+import dev.revere.alley.base.queue.Queue;
+import dev.revere.alley.base.queue.QueueProfile;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
 import dev.revere.alley.tool.reflection.impl.TitleReflectionService;

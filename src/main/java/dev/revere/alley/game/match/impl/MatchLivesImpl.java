@@ -11,6 +11,7 @@ import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.PlayerDeathEvent;
 
 /**
  * @author Emmy
@@ -65,12 +66,10 @@ public class MatchLivesImpl extends MatchRegularImpl {
         MatchGamePlayerData data = this.getGamePlayer(player).getData();
 
         this.reduceLife(data);
+        super.handleDeath(player);
 
         if (data.getLives() > 0) {
-            super.handleDeath(player);
             this.startRespawnProcess(player);
-        } else {
-            super.handleDeath(player);
         }
     }
 
@@ -78,9 +77,7 @@ public class MatchLivesImpl extends MatchRegularImpl {
     public void handleParticipant(Player player, MatchGamePlayerImpl gamePlayer) {
         MatchGamePlayerData data = this.getGamePlayer(player).getData();
 
-        Bukkit.broadcastMessage(player.getName() + " died and their lives are " + data.getLives());
         if (data.getLives() <= 0) {
-            Bukkit.broadcastMessage(player.getName() + " is dead and set eliminated to true (should end game when all players are eliminated)");
             gamePlayer.setEliminated(true);
         }
 

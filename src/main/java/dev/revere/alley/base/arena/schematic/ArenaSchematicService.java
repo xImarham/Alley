@@ -10,7 +10,6 @@ import com.sk89q.worldedit.schematic.MCEditSchematicFormat;
 import com.sk89q.worldedit.schematic.SchematicFormat;
 import dev.revere.alley.Alley;
 import dev.revere.alley.base.arena.AbstractArena;
-import dev.revere.alley.base.arena.schematic.command.ArenaPasteTestCommand;
 import dev.revere.alley.tool.logger.Logger;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -38,7 +37,6 @@ public class ArenaSchematicService {
     public ArenaSchematicService(Alley plugin) {
         this.plugin = plugin;
         this.convertArenasToSchematic();
-        new ArenaPasteTestCommand();
     }
 
     public void convertArenasToSchematic() {

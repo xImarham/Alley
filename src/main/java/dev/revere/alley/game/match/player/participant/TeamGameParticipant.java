@@ -93,8 +93,6 @@ public class TeamGameParticipant<T extends GamePlayer> extends GameParticipant<T
             }
         }
 
-        Bukkit.broadcastMessage(this.players.size() + " players in team, " + i + " eliminated or disconnected");
-
         return this.players.size() == i;
     }
 

@@ -9,13 +9,13 @@ import dev.revere.alley.api.server.ServerEnvironment;
 import dev.revere.alley.base.arena.AbstractArena;
 import dev.revere.alley.base.arena.ArenaService;
 import dev.revere.alley.base.arena.listener.ArenaListener;
-import dev.revere.alley.base.arena.schematic.ArenaSchematicService;
 import dev.revere.alley.base.combat.CombatService;
 import dev.revere.alley.base.combat.listener.CombatListener;
 import dev.revere.alley.base.cooldown.CooldownRepository;
 import dev.revere.alley.base.hotbar.HotbarService;
 import dev.revere.alley.base.hotbar.listener.HotbarListener;
 import dev.revere.alley.base.kit.KitService;
+import dev.revere.alley.base.kit.service.BaseRaidingService;
 import dev.revere.alley.base.kit.setting.KitSettingService;
 import dev.revere.alley.base.queue.QueueService;
 import dev.revere.alley.base.queue.listener.QueueListener;
@@ -134,7 +134,7 @@ public class Alley extends JavaPlugin {
     private LayoutService layoutService;
     private VisibilityService visibilityService;
     private FireballService fireballService;
-    private ArenaSchematicService arenaSchematicService;
+    private BaseRaidingService baseRaidingService;
 
     private boolean loaded;
 
@@ -205,6 +205,7 @@ public class Alley extends JavaPlugin {
         services.put(QueueService.class.getSimpleName(), () -> this.queueService = new QueueService(this));
         services.put(KitSettingService.class.getSimpleName(), () -> this.kitSettingService = new KitSettingService(this));
         services.put(KitService.class.getSimpleName(), () -> this.kitService = new KitService(this));
+        services.put(BaseRaidingService.class.getSimpleName(), () -> this.baseRaidingService = new BaseRaidingService(this));
         services.put(ArenaService.class.getSimpleName(), () -> this.arenaService = new ArenaService(this));
         services.put(FFAService.class.getSimpleName(), () -> this.ffaService = new FFAService(this));
         services.put(CosmeticRepository.class.getSimpleName(), () -> this.cosmeticRepository = new CosmeticRepository());
@@ -236,7 +237,6 @@ public class Alley extends JavaPlugin {
         services.put(LayoutService.class.getSimpleName(), () -> this.layoutService = new LayoutService(this));
         services.put(VisibilityService.class.getSimpleName(), () -> this.visibilityService = new VisibilityService(this));
         services.put(FireballService.class.getSimpleName(), () -> this.fireballService = new FireballService(this));
-        services.put(ArenaSchematicService.class.getSimpleName(), () -> this.arenaSchematicService = new ArenaSchematicService(this));
 
         services.forEach(Logger::logTime);
     }
@@ -265,7 +265,7 @@ public class Alley extends JavaPlugin {
                 new MenuListener(this),
                 new SpawnListener(this),
                 new FFAListener(this),
-                new FFACuboidListener(this.ffaSpawnService.getCuboid(), this),
+                new FFACuboidListener(this),
                 new EmojiListener(this),
                 new CombatListener(this),
                 new QueueListener(this),

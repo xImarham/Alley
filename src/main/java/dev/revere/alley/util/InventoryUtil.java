@@ -1,6 +1,8 @@
 package dev.revere.alley.util;
 
 import lombok.experimental.UtilityClass;
+import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 /**
@@ -24,5 +26,15 @@ public class InventoryUtil {
             cloned[i] = items[i] != null ? items[i].clone() : null;
         }
         return cloned;
+    }
+
+    /**
+     * Give a specific item to a player.
+     *
+     * @param player   the player to give the item to
+     * @param material the material of the item to give
+     */
+    public void giveItem(Player player, Material material, int amount) {
+        player.getInventory().addItem(new ItemStack(material, amount));
     }
 }

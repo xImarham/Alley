@@ -70,7 +70,6 @@ public class MatchService {
 
         match.setTeamMatch(teamMatch);
         match.setAffectStatistics(affectStatistics);
-
         match.startMatch();
     }
 

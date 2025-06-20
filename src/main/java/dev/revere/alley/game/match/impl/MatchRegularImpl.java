@@ -10,6 +10,7 @@ import dev.revere.alley.game.match.AbstractMatch;
 import dev.revere.alley.game.match.data.AbstractMatchData;
 import dev.revere.alley.game.match.data.impl.MatchDataSoloImpl;
 import dev.revere.alley.game.match.enums.EnumMatchState;
+import dev.revere.alley.game.match.player.data.MatchGamePlayerData;
 import dev.revere.alley.game.match.player.enums.EnumBaseRaiderRole;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
@@ -23,6 +24,7 @@ import dev.revere.alley.tool.elo.result.OldEloResult;
 import dev.revere.alley.tool.item.ItemBuilder;
 import dev.revere.alley.tool.logger.Logger;
 import dev.revere.alley.tool.reflection.impl.TitleReflectionService;
+import dev.revere.alley.util.ListenerUtil;
 import dev.revere.alley.util.PlayerUtil;
 import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.util.visual.ProgressBarUtil;
@@ -31,6 +33,7 @@ import lombok.Setter;
 import org.bukkit.*;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.jetbrains.annotations.NotNull;
@@ -409,6 +412,11 @@ public class MatchRegularImpl extends AbstractMatch {
     }
 
     @Override
+    public void handleDeathItemDrop(Player player, PlayerDeathEvent event) {
+        event.getDrops().clear();
+    }
+
+    @Override
     public void handleDisconnect(Player player) {
         if (!(this.getState() == EnumMatchState.STARTING || this.getState() == EnumMatchState.RUNNING)) {
             return;
@@ -429,29 +437,25 @@ public class MatchRegularImpl extends AbstractMatch {
      * @param player The player to give the kit to.
      */
     public void determineRolesAndGiveKit(Player player) {
-        Kit toBeGivenKit;
-
-        if (this.getParticipantA() != null || this.getParticipantB() != null) {
-            assert this.getParticipantA() != null;
-            if (this.getParticipantA().containsPlayer(player.getUniqueId())) {
-                toBeGivenKit = this.plugin.getKitService().getKit("BaseTrapper");
-
-                GameParticipant<MatchGamePlayerImpl> participant = this.getParticipant(player);
-                participant.getPlayer().getData().setRole(EnumBaseRaiderRole.TRAPPER);
-
-                Logger.log("player a role: " + participant.getPlayer().getData().getRole());
-            } else {
-                toBeGivenKit = this.plugin.getKitService().getKit("BaseRaider");
-
-                GameParticipant<MatchGamePlayerImpl> participant = this.getParticipant(player);
-                participant.getPlayer().getData().setRole(EnumBaseRaiderRole.RAIDER);
-
-                Logger.log("player b role: " + participant.getPlayer().getData().getRole());
-            }
-
-            player.getInventory().setArmorContents(toBeGivenKit.getArmor());
-            player.getInventory().setContents(toBeGivenKit.getItems());
-            player.updateInventory();
+        if (this.getParticipantA() == null || this.getParticipantB() == null) {
+            return;
         }
+
+        EnumBaseRaiderRole role = getParticipantA().containsPlayer(player.getUniqueId())
+                ? EnumBaseRaiderRole.TRAPPER
+                : EnumBaseRaiderRole.RAIDER;
+        Kit kitToGive = this.plugin.getBaseRaidingService().getRaidingKitByRole(role);
+
+        if (kitToGive == null) {
+            Logger.log("&cNo kit found for role: " + role.name() + " in base raiding match.");
+            return;
+        }
+
+        MatchGamePlayerData data = this.getGamePlayer(player).getData();
+        data.setRole(role);
+
+        player.getInventory().setArmorContents(kitToGive.getArmor());
+        player.getInventory().setContents(kitToGive.getItems());
+        player.updateInventory();
     }
 }

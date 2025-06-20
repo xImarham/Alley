@@ -5,6 +5,7 @@ import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.base.hotbar.enums.EnumHotbarType;
 import dev.revere.alley.base.kit.Kit;
 import dev.revere.alley.base.queue.Queue;
+import dev.revere.alley.game.party.PartyService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.tool.item.ItemBuilder;
 import dev.revere.alley.util.PlayerUtil;

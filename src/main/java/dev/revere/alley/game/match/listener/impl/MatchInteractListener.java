@@ -10,13 +10,16 @@ import dev.revere.alley.game.match.AbstractMatch;
 import dev.revere.alley.game.match.enums.EnumMatchState;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
+import dev.revere.alley.util.InventoryUtil;
 import dev.revere.alley.util.ListenerUtil;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.Material;
+import org.bukkit.entity.EnderPearl;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -63,40 +66,41 @@ public class MatchInteractListener implements Listener {
     }
 
     @EventHandler
-    private void onPlayerPearl(PlayerInteractEvent event) {
-        Player player = event.getPlayer();
+    private void onPearlLaunch(ProjectileLaunchEvent event) {
+        if (!(event.getEntity() instanceof EnderPearl)) return;
+        if (!(event.getEntity().getShooter() instanceof Player)) return;
+
+        Player player = (Player) event.getEntity().getShooter();
         Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
-        ItemStack item = event.getItem();
 
-        if (profile.getMatch() == null) return;
-
-        if (profile.getMatch().getState() == EnumMatchState.STARTING && item != null && item.getType() == Material.ENDER_PEARL) {
+        if (profile.getState() != EnumProfileState.PLAYING && profile.getState() != EnumProfileState.FFA) return;
+        if (profile.getMatch().getState() != EnumMatchState.RUNNING) {
             event.setCancelled(true);
+            InventoryUtil.giveItem(player, Material.ENDER_PEARL, 1);
             player.updateInventory();
-            player.sendMessage(CC.translate("&cYou cannot use ender pearls during the starting phase."));
+            player.sendMessage(CC.translate("&cYou cannot use ender pearls right now."));
             return;
         }
 
         if (profile.getMatch().getKit().isSettingEnabled(KitSettingLivesImpl.class)) return;
 
-        if (profile.getState() == EnumProfileState.PLAYING && event.getAction().name().contains("RIGHT_CLICK") && item != null && item.getType() == Material.ENDER_PEARL) {
-            CooldownRepository cooldownRepository = this.plugin.getCooldownRepository();
-            Optional<Cooldown> optionalCooldown = Optional.ofNullable(cooldownRepository.getCooldown(player.getUniqueId(), EnumCooldownType.ENDER_PEARL));
+        CooldownRepository cooldownRepository = this.plugin.getCooldownRepository();
+        Optional<Cooldown> optionalCooldown = Optional.ofNullable(cooldownRepository.getCooldown(player.getUniqueId(), EnumCooldownType.ENDER_PEARL));
 
-            if (optionalCooldown.isPresent() && optionalCooldown.get().isActive()) {
-                event.setCancelled(true);
-                player.updateInventory();
-                player.sendMessage(CC.translate("&cYou must wait " + optionalCooldown.get().remainingTime() + " seconds before using another ender pearl."));
-                return;
-            }
-
-            Cooldown cooldown = optionalCooldown.orElseGet(() -> {
-                Cooldown newCooldown = new Cooldown(EnumCooldownType.ENDER_PEARL, () -> player.sendMessage(CC.translate("&aYou can now use pearls again!")));
-                cooldownRepository.addCooldown(player.getUniqueId(), EnumCooldownType.ENDER_PEARL, newCooldown);
-                return newCooldown;
-            });
-
-            cooldown.resetCooldown();
+        if (optionalCooldown.isPresent() && optionalCooldown.get().isActive()) {
+            event.setCancelled(true);
+            InventoryUtil.giveItem(player, Material.ENDER_PEARL, 1);
+            player.updateInventory();
+            player.sendMessage(CC.translate("&cYou must wait " + optionalCooldown.get().remainingTime() + " seconds before using another ender pearl."));
+            return;
         }
+
+        Cooldown cooldown = optionalCooldown.orElseGet(() -> {
+            Cooldown newCooldown = new Cooldown(EnumCooldownType.ENDER_PEARL, () -> player.sendMessage(CC.translate("&aYou can now use pearls again!")));
+            cooldownRepository.addCooldown(player.getUniqueId(), EnumCooldownType.ENDER_PEARL, newCooldown);
+            return newCooldown;
+        });
+
+        cooldown.resetCooldown();
     }
 }

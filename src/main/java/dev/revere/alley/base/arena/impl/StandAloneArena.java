@@ -25,7 +25,7 @@ import java.util.UUID;
 @Setter
 @Getter
 public class StandAloneArena extends AbstractArena {
-    private final Alley plugin = Alley.getInstance();
+    protected final Alley plugin = Alley.getInstance();
 
     private boolean active = false;
 

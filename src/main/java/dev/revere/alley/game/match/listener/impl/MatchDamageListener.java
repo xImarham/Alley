@@ -125,6 +125,10 @@ public class MatchDamageListener implements Listener {
 
             if (damagedprofile.getState() == EnumProfileState.PLAYING) {
                 AbstractMatch match = attackerProfile.getMatch();
+                if (match == null) {
+                    return;
+                }
+
                 if (damagedprofile.getMatch().getState() != EnumMatchState.RUNNING) {
                     event.setCancelled(true);
                     return;

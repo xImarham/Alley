@@ -22,7 +22,7 @@ import org.bukkit.entity.Player;
  */
 @UtilityClass
 public class MatchUtility {
-    private final Alley plugin = Alley.getInstance();
+    protected final Alley plugin = Alley.getInstance();
 
     /**
      * Check if a location is beyond the bounds of an arena excluding specific conditions.

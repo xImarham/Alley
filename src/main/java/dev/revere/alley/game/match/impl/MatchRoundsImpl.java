@@ -105,7 +105,9 @@ public class MatchRoundsImpl extends MatchRegularImpl {
 
     @Override
     public void handleDeath(Player player) {
-        GameParticipant<MatchGamePlayerImpl> participant = this.participantA.containsPlayer(player.getUniqueId()) ? this.participantA : this.participantB;
+        GameParticipant<MatchGamePlayerImpl> participant = this.participantA.containsPlayer(player.getUniqueId())
+                ? this.participantA
+                : this.participantB;
         participant.getPlayer().getData().incrementDeaths();
 
         this.fallenPlayer = player;
@@ -129,7 +131,9 @@ public class MatchRoundsImpl extends MatchRegularImpl {
 
     @Override
     public void handleParticipant(Player player, MatchGamePlayerImpl gamePlayer) {
-        GameParticipant<MatchGamePlayerImpl> participant = this.participantA.containsPlayer(player.getUniqueId()) ? this.participantA : this.participantB;
+        GameParticipant<MatchGamePlayerImpl> participant = this.participantA.containsPlayer(player.getUniqueId())
+                ? this.participantA
+                : this.participantB;
         if (participant.getPlayer().getData().getScore() == this.rounds) {
             GameParticipant<MatchGamePlayerImpl> opponent = participant == this.participantA ? this.participantB : this.participantA;
             opponent.getPlayer().setEliminated(true);

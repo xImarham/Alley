@@ -26,7 +26,7 @@ import java.util.UUID;
 @Getter
 @Setter
 public abstract class AbstractFFAMatch {
-    private final Alley plugin = Alley.getInstance();
+    protected final Alley plugin = Alley.getInstance();
 
     private final String name;
 

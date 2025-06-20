@@ -4,13 +4,14 @@ import dev.revere.alley.Alley;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.util.PlayerUtil;
 import dev.revere.alley.util.chat.CC;
+import lombok.Getter;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 
 import java.util.UUID;
 
 public abstract class BaseCommand {
-    public final Alley plugin;
+    protected final Alley plugin;
 
     /**
      * Constructor for the BaseCommand class.

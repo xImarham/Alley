@@ -131,7 +131,7 @@ public class MatchListener implements Listener {
 
         event.setDeathMessage(null);
 
-        ListenerUtil.clearDroppedItemsOnDeath(event, player);
+        profile.getMatch().handleDeathItemDrop(player, event);
 
         this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> player.spigot().respawn(), 1L);
 

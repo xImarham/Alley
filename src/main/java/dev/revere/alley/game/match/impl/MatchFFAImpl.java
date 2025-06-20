@@ -8,6 +8,7 @@ import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.PlayerDeathEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -75,6 +76,11 @@ public class MatchFFAImpl extends AbstractMatch {
     @Override
     public boolean canEndMatch() {
         return this.canEndRound();
+    }
+
+    @Override
+    public void handleDeathItemDrop(Player player, PlayerDeathEvent event) {
+        event.getDrops().clear();
     }
 
     @Override

@@ -13,7 +13,7 @@ import org.bukkit.configuration.file.FileConfiguration;
  * @date 20/05/2024 - 19:14
  */
 public class SharedArena extends AbstractArena {
-    private final Alley plugin = Alley.getInstance();
+    protected final Alley plugin = Alley.getInstance();
 
     /**
      * Constructor for the SharedArena class.

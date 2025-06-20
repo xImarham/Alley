@@ -20,7 +20,7 @@ import org.bukkit.inventory.ItemStack;
  */
 @AllArgsConstructor
 public class ShopEffectButton extends Button {
-    private final Alley plugin = Alley.getInstance();
+    protected final Alley plugin = Alley.getInstance();
     private final ICosmetic cosmetic;
 
     @Override

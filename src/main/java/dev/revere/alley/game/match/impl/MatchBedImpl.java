@@ -5,6 +5,7 @@ import dev.revere.alley.base.kit.Kit;
 import dev.revere.alley.base.queue.Queue;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
+import dev.revere.alley.util.ListenerUtil;
 import dev.revere.alley.util.PlayerUtil;
 import lombok.Getter;
 import org.bukkit.Bukkit;
@@ -13,6 +14,7 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.PlayerDeathEvent;
 
 import java.util.Arrays;
 
@@ -54,11 +56,13 @@ public class MatchBedImpl extends MatchRegularImpl {
 
     @Override
     public void handleDeath(Player player) {
-        GameParticipant<MatchGamePlayerImpl> participant = this.participantA.containsPlayer(player.getUniqueId()) ? this.participantA : this.participantB;
-        if (participant.isBedBroken()) {
-            super.handleDeath(player);
-        } else {
-            super.handleDeath(player);
+        GameParticipant<MatchGamePlayerImpl> participant = this.participantA.containsPlayer(player.getUniqueId())
+                ? this.participantA
+                : this.participantB;
+
+        super.handleDeath(player);
+
+        if (!participant.isBedBroken()) {
             this.startRespawnProcess(player);
         }
     }
@@ -69,19 +73,29 @@ public class MatchBedImpl extends MatchRegularImpl {
                 ? this.getParticipantA()
                 : this.getParticipantB();
 
-        Bukkit.broadcastMessage(player.getName() + " died and their bed is " + (gameParticipant.isBedBroken() ? "broken" : "not broken"));
         if (gameParticipant.isBedBroken()) {
             GameParticipant<MatchGamePlayerImpl> participant = getParticipant(player);
             if (participant == null) {
-                Bukkit.getLogger().warning("Participant not found for player: " + player.getName());
                 return;
             }
 
-            Bukkit.broadcastMessage(player.getName() + " is dead and set eliminated to true (should end game)");
             gamePlayer.setEliminated(true);
         }
 
         super.handleParticipant(player, gamePlayer);
+    }
+
+    @Override
+    public void handleDeathItemDrop(Player player, PlayerDeathEvent event) {
+        GameParticipant<MatchGamePlayerImpl> participant = this.participantA.containsPlayer(player.getUniqueId())
+                ? this.participantA
+                : this.participantB;
+
+        if (participant.isBedBroken()) {
+            ListenerUtil.clearDroppedItemsOnDeath(event, player);
+            return;
+        }
+        super.handleDeathItemDrop(player, event);
     }
 
     @Override

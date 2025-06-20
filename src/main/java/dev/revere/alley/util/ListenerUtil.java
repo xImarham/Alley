@@ -34,19 +34,18 @@ public class ListenerUtil {
                 droppedItems.add(deadPlayer.getWorld().dropItemNaturally(deadPlayer.getLocation(), drop));
             }
         }
+        event.getDrops().clear();
 
         new BukkitRunnable() {
             @Override
             public void run() {
-                event.getDrops().clear();
-
                 for (Item item : droppedItems) {
                     if (item != null && item.isValid()) {
                         item.remove();
                     }
                 }
             }
-        }.runTaskLater(Alley.getInstance(), 5000L);
+        }.runTaskLater(Alley.getInstance(), 100L);
     }
 
     /**

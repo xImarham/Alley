@@ -33,9 +33,11 @@ import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.util.Vector;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
@@ -51,19 +53,17 @@ public abstract class AbstractMatch {
     private final Queue queue;
     private final Kit kit;
     private final AbstractArena arena;
+    private final boolean ranked;
 
-    private final List<UUID> spectators;
+    private final Map<BlockState, Location> brokenBlocks = new ConcurrentHashMap<>();
+    private final Map<BlockState, Location> placedBlocks = new ConcurrentHashMap<>();
+    private final List<UUID> spectators = new CopyOnWriteArrayList<>();
+
+    private boolean teamMatch;
+    private boolean affectStatistics = true;
 
     private MatchRunnable runnable;
     private EnumMatchState state;
-
-    private Map<BlockState, Location> brokenBlocks;
-    private Map<BlockState, Location> placedBlocks;
-
-    private boolean ranked;
-    private boolean teamMatch;
-    private boolean affectStatistics;
-
     private long startTime;
     private long endTime;
 
@@ -76,23 +76,19 @@ public abstract class AbstractMatch {
      * @param ranked Whether the match is ranked.
      */
     public AbstractMatch(Queue queue, Kit kit, AbstractArena arena, boolean ranked) {
-        this.queue = queue;
-        this.kit = kit;
-        this.arena = arena;
+        this.queue = Objects.requireNonNull(queue, "Queue cannot be null");
+        this.kit = Objects.requireNonNull(kit, "Kit cannot be null");
+        this.arena = Objects.requireNonNull(arena, "Arena cannot be null");
         this.ranked = ranked;
-        this.teamMatch = false;
-        this.affectStatistics = true;
-        this.placedBlocks = new HashMap<>();
-        this.brokenBlocks = new HashMap<>();
-        this.spectators = new CopyOnWriteArrayList<>();
+
         this.plugin.getMatchService().getMatches().add(this);
     }
 
-    public abstract void handleRespawn(Player player);
+    public abstract List<GameParticipant<MatchGamePlayerImpl>> getParticipants();
 
     public abstract void handleDisconnect(Player player);
 
-    public abstract List<GameParticipant<MatchGamePlayerImpl>> getParticipants();
+    public abstract void handleRespawn(Player player);
 
     public abstract boolean canStartRound();
 
@@ -101,13 +97,19 @@ public abstract class AbstractMatch {
     public abstract boolean canEndMatch();
 
     /**
+     * Handles the item drop on death for a player.
+     * This method clears the drops to prevent items from being dropped on death.
+     *
+     * @param player The player that died.
+     * @param event  The PlayerDeathEvent that triggered this method.
+     */
+    public abstract void handleDeathItemDrop(Player player, PlayerDeathEvent event);
+
+    /**
      * Starts the match by setting the state and updating player profiles and running the match runnable.
      */
     public void startMatch() {
-        if (this.arena instanceof StandAloneArena) {
-            ((StandAloneArena) this.arena).setActive(true);
-        }
-
+        this.activateArenaIfStandalone();
         this.sendPlayerVersusPlayerMessage();
 
         this.state = EnumMatchState.STARTING;
@@ -125,8 +127,20 @@ public abstract class AbstractMatch {
         this.plugin.getMatchService().getMatches().remove(this);
         this.runnable.cancel();
 
+        this.deactivateArenaIfStandalone();
+    }
+
+    private void activateArenaIfStandalone() {
         if (this.arena instanceof StandAloneArena) {
-            ((StandAloneArena) this.arena).setActive(false);
+            StandAloneArena standAloneArena = (StandAloneArena) this.arena;
+            standAloneArena.setActive(true);
+        }
+    }
+
+    private void deactivateArenaIfStandalone() {
+        if (this.arena instanceof StandAloneArena) {
+            StandAloneArena standAloneArena = (StandAloneArena) this.arena;
+            standAloneArena.setActive(false);
         }
     }
 
@@ -139,12 +153,8 @@ public abstract class AbstractMatch {
         gameParticipant.getPlayers().forEach(gamePlayer -> {
             Player player = this.plugin.getServer().getPlayer(gamePlayer.getUuid());
             if (player != null) {
-                Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
-                profile.setState(EnumProfileState.PLAYING);
-                profile.setMatch(this);
-
+                this.updatePlayerProfileForMatch(player);
                 this.plugin.getVisibilityService().updateVisibility(player);
-
                 this.setupPlayer(player);
             }
         });
@@ -156,21 +166,21 @@ public abstract class AbstractMatch {
      * @param gameParticipant The game participant to finalize.
      */
     private void finalizeParticipant(GameParticipant<MatchGamePlayerImpl> gameParticipant) {
-        gameParticipant.getPlayers().forEach(gamePlayer -> {
-            if (!gamePlayer.isDisconnected()) {
-                Player player = this.plugin.getServer().getPlayer(gamePlayer.getUuid());
-                if (player != null) {
-                    this.resetPlayerState(player);
-                    Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
-                    profile.setState(EnumProfileState.LOBBY);
-                    profile.setMatch(null);
+        gameParticipant.getPlayers().stream()
+                .filter(gamePlayer -> !gamePlayer.isDisconnected())
+                .forEach(gamePlayer -> {
+                    Player player = this.plugin.getServer().getPlayer(gamePlayer.getUuid());
+                    if (player != null) {
+                        finalizePlayer(player);
+                    }
+                });
+    }
 
-                    this.plugin.getVisibilityService().updateVisibility(player);
-
-                    this.teleportPlayerToSpawn(player);
-                }
-            }
-        });
+    private void finalizePlayer(Player player) {
+        this.resetPlayerState(player);
+        updatePlayerProfileForLobby(player);
+        this.plugin.getVisibilityService().updateVisibility(player);
+        this.teleportPlayerToSpawn(player);
     }
 
     /**
@@ -223,7 +233,6 @@ public abstract class AbstractMatch {
         GameParticipant<MatchGamePlayerImpl> participant = this.getParticipant(player);
         MatchGamePlayerImpl gamePlayer = this.getGamePlayer(player);
         if (participant.isAllEliminated()) {
-            Bukkit.broadcastMessage(player.getName() + " has died, but the participant is already eliminated.");
             return;
         }
 
@@ -250,7 +259,6 @@ public abstract class AbstractMatch {
             this.runnable.setStage(4);
         } else {
             if (this.shouldHandleRegularRespawn(player)) {
-                // for regular matches (not countdown respawn)
                 this.handleRespawn(player);
             }
         }
@@ -259,51 +267,78 @@ public abstract class AbstractMatch {
     }
 
     private void handleSpectator(Player player, Profile profile, GameParticipant<MatchGamePlayerImpl> participant) {
-        if (!profile.getMatch().getParticipant(player).isAllEliminated() && profile.getMatch().getKit().isSettingEnabled(KitSettingBedImpl.class)) {
-            Bukkit.broadcastMessage(player.getName() + " is dead, but the participant is not all eliminated.");
-            MatchGamePlayerImpl gamePlayer = this.getGamePlayer(player);
+        Kit matchKit = profile.getMatch().getKit();
 
-            if (participant.isBedBroken() && gamePlayer.isEliminated()) {
-                Bukkit.broadcastMessage(player.getName() + " is eliminated, no bed and participant is eliminated. Adding to spectators.");
-                profile.getMatch().addSpectator(player);
-                return;
-            }
-            return;
-        }
-
-        if (!profile.getMatch().getParticipant(player).isAllDead()) {
-            Kit matchKit = profile.getMatch().getKit();
-            if (matchKit.isSettingEnabled(KitSettingStickFightImpl.class) || matchKit.isSettingEnabled(KitSettingRoundsImpl.class)) {
-                return;
-            }
-
-            MatchGamePlayerImpl gamePlayer = this.getGamePlayer(player);
-            Bukkit.broadcastMessage(player.getName() + " is dead, lives: " + gamePlayer.getData().getLives() + " user: " + gamePlayer.getUsername());
-            if (matchKit.isSettingEnabled(KitSettingLivesImpl.class)) {
-                if (gamePlayer.isEliminated()) {
-                    profile.getMatch().addSpectator(player);
-                    return;
-                }
-                return;
-            }
-
+        if (this.shouldBecomeSpectatorForEliminationKit(participant, matchKit, player) || shouldBecomeSpectatorForNonRoundKit(participant, matchKit)) {
             profile.getMatch().addSpectator(player);
         }
     }
 
+    private boolean shouldBecomeSpectatorForEliminationKit(GameParticipant<MatchGamePlayerImpl> participant, Kit matchKit, Player player) {
+        if (!participant.isAllEliminated() && this.hasEliminationBasedKit(matchKit)) {
+            MatchGamePlayerImpl gamePlayer = this.getGamePlayer(player);
+            return gamePlayer.isEliminated();
+        }
+        return false;
+    }
+
+    private boolean shouldBecomeSpectatorForNonRoundKit(GameParticipant<MatchGamePlayerImpl> participant, Kit matchKit) {
+        return !participant.isAllDead() && !this.isRoundBasedKit(matchKit);
+    }
+
+    /**
+     * Checks if the kit is elimination-based.
+     *
+     * @param kit The kit to check.
+     * @return True if the kit is elimination-based, false otherwise.
+     */
+    private boolean hasEliminationBasedKit(Kit kit) {
+        return kit.isSettingEnabled(KitSettingBedImpl.class) || kit.isSettingEnabled(KitSettingLivesImpl.class);
+    }
+
+    /**
+     * Checks if the kit is round-based.
+     *
+     * @param kit The kit to check.
+     * @return True if the kit is round-based, false otherwise.
+     */
+    private boolean isRoundBasedKit(Kit kit) {
+        return kit.isSettingEnabled(KitSettingStickFightImpl.class) || kit.isSettingEnabled(KitSettingRoundsImpl.class);
+    }
+
+    /**
+     * Handles the death messages for a player.
+     *
+     * @param player  The player that died.
+     * @param killer  The player that killed the player.
+     * @param profile The profile of the player that died.
+     */
     private void handleDeathMessages(Player player, Player killer, Profile profile) {
         if (killer == null) {
-            notifyParticipants("&c" + profile.getNameColor() + player.getName() + " &fdied.");
+            this.notifyParticipants("&c" + profile.getNameColor() + player.getName() + " &fdied.");
             return;
         }
-        GameParticipant<MatchGamePlayerImpl> killerParticipant = profile.getMatch().getParticipant(killer);
+
+        this.processKillerActions(player, killer, profile);
+    }
+
+    private void processKillerActions(Player player, Player killer, Profile profile) {
+        GameParticipant<MatchGamePlayerImpl> killerParticipant = getParticipant(killer);
+        if (killerParticipant == null) {
+            this.notifyParticipants("&c" + profile.getNameColor() + player.getName() + " &fwas slain by an unknown player.");
+            return;
+        }
         killerParticipant.getPlayer().getData().incrementKills();
 
         Profile killerProfile = this.plugin.getProfileService().getProfile(killer.getUniqueId());
 
-        this.plugin.getReflectionRepository().getReflectionService(ActionBarReflectionService.class).sendDeathMessage(killer, player);
-        notifyParticipants("&c" + profile.getNameColor() + player.getName() + " &fwas slain by &c" + killerProfile.getNameColor() + killer.getName() + "&f.");
+        this.plugin.getReflectionRepository()
+                .getReflectionService(ActionBarReflectionService.class)
+                .sendDeathMessage(killer, player);
+
+        this.notifyParticipants("&c" + profile.getNameColor() + player.getName() + " &fwas slain by &c" + killerProfile.getNameColor() + killer.getName() + "&f.");
     }
+
 
     /**
      * Handles the effects of a player.
@@ -316,15 +351,25 @@ public abstract class AbstractMatch {
         String selectedKillEffectName = profile.getProfileData().getCosmeticData().getSelectedKillEffect();
         String selectedSoundEffectName = profile.getProfileData().getCosmeticData().getSelectedSoundEffect();
 
-        KillEffectRepository killEffectRepository = this.plugin.getCosmeticRepository().getCosmeticRepository(KillEffectRepository.class);
-        SoundEffectRepository soundEffectRepository = this.plugin.getCosmeticRepository().getCosmeticRepository(SoundEffectRepository.class);
+        this.applyKillEffect(player, selectedKillEffectName);
+        this.applySoundEffect(killer, selectedSoundEffectName);
+    }
 
+    private void applyKillEffect(Player player, String selectedKillEffectName) {
+        KillEffectRepository killEffectRepository = this.plugin.getCosmeticRepository()
+                .getCosmeticRepository(KillEffectRepository.class);
         AbstractKillEffect killEffect = killEffectRepository.getCosmetic(selectedKillEffectName);
+
         if (killEffect != null) {
             killEffect.spawnEffect(player);
         }
+    }
 
+    private void applySoundEffect(Player killer, String selectedSoundEffectName) {
+        SoundEffectRepository soundEffectRepository = this.plugin.getCosmeticRepository()
+                .getCosmeticRepository(SoundEffectRepository.class);
         AbstractSoundEffect soundEffect = soundEffectRepository.getCosmetic(selectedSoundEffectName);
+
         if (soundEffect != null) {
             soundEffect.spawnEffect(killer);
         }
@@ -337,7 +382,6 @@ public abstract class AbstractMatch {
         if (this instanceof MatchRoundsImpl && ((MatchRoundsImpl) this).getCurrentRound() > 0) {
             return;
         }
-
         this.startTime = System.currentTimeMillis();
     }
 
@@ -354,9 +398,7 @@ public abstract class AbstractMatch {
      * @param player The player to add.
      */
     public void addSpectator(Player player) {
-        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
-        profile.setState(EnumProfileState.SPECTATING);
-        profile.setMatch(this);
+        this.setupSpectatorProfile(player);
 
         this.plugin.getVisibilityService().updateVisibility(player);
 
@@ -372,25 +414,12 @@ public abstract class AbstractMatch {
         player.setAllowFlight(true);
         player.setFlying(true);
 
-        // if they are a participant, dont add them to spectators- otherwise add them
         if (this.getParticipant(player) == null) {
             this.spectators.add(player.getUniqueId());
         }
 
+        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
         this.notifyAll("&b" + profile.getNameColor() + player.getName() + " &fis now spectating the match.");
-        GameParticipant<MatchGamePlayerImpl> participant = this.getParticipant(player);
-
-        Bukkit.broadcastMessage(player.getName() + "'s dead status: " + participant.getPlayers().stream()
-                .filter(gamePlayer -> gamePlayer.getUuid().equals(player.getUniqueId()))
-                .findFirst()
-                .map(MatchGamePlayerImpl::isDead)
-                .orElse(false));
-
-        Bukkit.broadcastMessage(player.getName() + "'s eliminated status: " + participant.getPlayers().stream()
-                .filter(gamePlayer -> gamePlayer.getUuid().equals(player.getUniqueId()))
-                .findFirst()
-                .map(MatchGamePlayerImpl::isEliminated)
-                .orElse(false));
     }
 
     /**
@@ -429,7 +458,7 @@ public abstract class AbstractMatch {
 
         GameParticipant<MatchGamePlayerImpl> participant = this.getParticipant(player);
         participant.getPlayers().forEach(gamePlayer -> {
-            gamePlayer.setDead(false); // set player alive (allows other players to rape)
+            gamePlayer.setDead(false);
         });
 
         Location spawnLocation = participant.getPlayers().get(0).getUuid().equals(player.getUniqueId())
@@ -481,7 +510,6 @@ public abstract class AbstractMatch {
      * @param message The message to notify.
      */
     public void notifySpectators(String message) {
-        if (this.spectators == null) return;
         this.spectators.stream()
                 .map(uuid -> this.plugin.getServer().getPlayer(uuid))
                 .filter(Objects::nonNull)
@@ -585,7 +613,6 @@ public abstract class AbstractMatch {
                 .findFirst()
                 .orElse(null);
     }
-
 
     /**
      * Plays a sound for a player.
@@ -860,5 +887,24 @@ public abstract class AbstractMatch {
             String message = CC.translate(prefix + "&b" + participant.getPlayer().getUsername() + " &avs &b" + opponent.getPlayer().getUsername());
             this.sendMessage(message);
         }
+    }
+
+    private void updatePlayerProfileForMatch(Player player) {
+        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
+        profile.setState(EnumProfileState.PLAYING);
+        profile.setMatch(this);
+    }
+
+    private void updatePlayerProfileForLobby(Player player) {
+        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
+        profile.setState(EnumProfileState.LOBBY);
+        profile.setMatch(null);
+    }
+
+    private void setupSpectatorProfile(Player player) {
+        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
+        profile.setState(EnumProfileState.SPECTATING);
+        profile.setMatch(this);
+        this.plugin.getVisibilityService().updateVisibility(player);
     }
 }

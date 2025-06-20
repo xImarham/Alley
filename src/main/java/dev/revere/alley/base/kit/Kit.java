@@ -42,8 +42,6 @@ public class Kit {
     private int ffaSlot;
     private int maxFfaPlayers;
 
-    private BaseRaidingKitData baseRaidingKitData;
-
     private EnumKitCategory category;
 
     private List<PotionEffect> potionEffects;
@@ -86,8 +84,6 @@ public class Kit {
         this.ffaArenaName = "";
         this.maxFfaPlayers = 20;
         this.ffaSlot = 0;
-
-        this.baseRaidingKitData = null;
 
         this.kitSettings = new ArrayList<>();
         this.potionEffects = new ArrayList<>();
