@@ -5,6 +5,7 @@ import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.feature.fireball.command.impl.FireballHorizontalCommand;
 import dev.revere.alley.feature.fireball.command.impl.FireballRangeCommand;
+import dev.revere.alley.feature.fireball.command.impl.FireballSpeedCommand;
 import dev.revere.alley.feature.fireball.command.impl.FireballVerticalCommand;
 import dev.revere.alley.util.chat.CC;
 
@@ -19,8 +20,9 @@ public class FireballCommand extends BaseCommand {
 
     public FireballCommand() {
         new FireballHorizontalCommand();
-        new FireballRangeCommand();
         new FireballVerticalCommand();
+        new FireballRangeCommand();
+        new FireballSpeedCommand();
     }
 
     @CommandData(name = "fireball", aliases = {"fb"}, isAdminOnly = true, inGameOnly = false)

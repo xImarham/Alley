@@ -7,14 +7,22 @@ import dev.revere.alley.base.arena.impl.SharedArena;
 import dev.revere.alley.base.arena.impl.StandAloneArena;
 import dev.revere.alley.base.kit.Kit;
 import dev.revere.alley.tool.serializer.Serializer;
+import dev.revere.alley.util.FAWEArenaManager;
+import dev.revere.alley.util.VoidChunkGeneratorImpl;
 import lombok.Getter;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.World;
+import org.bukkit.WorldCreator;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 /**
@@ -26,6 +34,12 @@ import java.util.stream.Collectors;
 public class ArenaService {
     protected final Alley plugin;
     private final List<AbstractArena> arenas;
+    private final List<StandAloneArena> temporaryArenas;
+    private World temporaryWorld;
+    private Location nextCopyLocation;
+    private final int arenaSpacing = 500;
+    private final AtomicInteger copyIdCounter;
+    private final FAWEArenaManager faweArenaManager = new FAWEArenaManager();
 
     /**
      * Constructor for the ArenaService class.
@@ -35,7 +49,32 @@ public class ArenaService {
     public ArenaService(Alley plugin) {
         this.plugin = plugin;
         this.arenas = new ArrayList<>();
+        this.temporaryArenas = new ArrayList<>();
+        this.copyIdCounter = new AtomicInteger(0);
         this.loadArenas();
+        initializeTemporaryWorld();
+    }
+
+    private void initializeTemporaryWorld() {
+        String worldName = "temporary_arena_world";
+
+        World existingWorld = this.plugin.getServer().getWorld(worldName);
+        if (existingWorld != null) {
+            this.plugin.getServer().unloadWorld(existingWorld, false);
+        }
+
+        File worldFolder = new File(Bukkit.getWorldContainer(), worldName);
+        if (worldFolder.exists()) {
+            this.plugin.getServer().unloadWorld(worldName, false);
+            this.plugin.getServer().getWorlds().removeIf(world -> world.getName().equalsIgnoreCase(worldName));
+            worldFolder.delete();
+        }
+
+        WorldCreator creator = new WorldCreator(worldName);
+        creator.generateStructures(false).generator(new VoidChunkGeneratorImpl());
+
+        this.temporaryWorld = creator.createWorld();
+        this.nextCopyLocation = new Location(temporaryWorld, 0, 100, 0);
     }
 
     /**
@@ -114,7 +153,75 @@ public class ArenaService {
                 arena.setEnabled(config.getBoolean(name + ".enabled"));
             }
 
+            if (arena instanceof StandAloneArena) {
+                StandAloneArena standAloneArena = (StandAloneArena) arena;
+                standAloneArena.setClipboard(faweArenaManager.createClipboard(minimum, maximum));
+            }
+
             this.arenas.add(arena);
+        }
+    }
+
+    public StandAloneArena createTemporaryArenaCopy(StandAloneArena originalArena) {
+        if (originalArena.isTemporaryCopy()) {
+            throw new IllegalArgumentException("Cannot create a temporary copy of a temporary arena.");
+        }
+
+        int copyId = copyIdCounter.incrementAndGet();
+        Location copyLocation = getNextCopyLocation();
+
+        StandAloneArena copiedArena = originalArena.createCopy(temporaryWorld, copyLocation, copyId);
+        copiedArena.setHeightLimit(copiedArena.getPos1().getBlockY() + copiedArena.getHeightLimit());
+
+        temporaryArenas.add(copiedArena);
+
+
+        return copiedArena;
+    }
+
+    public Location getNextCopyLocation() {
+        Location location = this.nextCopyLocation.clone();
+
+        nextCopyLocation.add(arenaSpacing, 0, 0);
+
+        if (nextCopyLocation.getX() > arenaSpacing * 10) {
+            nextCopyLocation.setX(0);
+            nextCopyLocation.add(0, 0, arenaSpacing);
+        }
+
+        return location;
+    }
+
+    public void removeTemporaryArena(StandAloneArena arena) {
+        temporaryArenas.remove(arena);
+    }
+
+    public void cleanupTemporaryArenas() {
+        for (StandAloneArena arena : new ArrayList<>(temporaryArenas)) {
+            arena.deleteCopiedArena();;
+        }
+        temporaryArenas.clear();
+    }
+
+    public void shutdown() {
+        cleanupTemporaryArenas();
+
+        if (temporaryWorld != null) {
+            Bukkit.unloadWorld(temporaryWorld, false);
+            File worldFolder = temporaryWorld.getWorldFolder();
+            if (worldFolder.exists()) {
+                for (File file : Objects.requireNonNull(worldFolder.listFiles())) {
+                    if (!file.isDirectory() || !file.getName().equals("uid.dat")) {
+                        file.delete();
+                    }
+                }
+                try {
+                    worldFolder.delete();
+                } catch (Exception e) {
+                    this.plugin.getLogger().warning("Failed to delete temporary world folder: " + worldFolder.getAbsolutePath());
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
@@ -156,7 +263,7 @@ public class ArenaService {
         List<AbstractArena> availableArenas = this.arenas.stream()
                 .filter(arena -> arena.getKits().contains(kit.getName()))
                 .filter(AbstractArena::isEnabled)
-                .filter(arena -> !(arena instanceof StandAloneArena) || !((StandAloneArena) arena).isActive())
+                //.filter(arena -> !(arena instanceof StandAloneArena) || !((StandAloneArena) arena).isActive())
                 .collect(Collectors.toList());
 
         if (availableArenas.isEmpty()) {
@@ -165,9 +272,19 @@ public class ArenaService {
 
         AbstractArena selectedArena = availableArenas.get(ThreadLocalRandom.current().nextInt(availableArenas.size()));
         if (selectedArena instanceof StandAloneArena) {
-            ((StandAloneArena) selectedArena).setActive(true);
+            return createTemporaryArenaCopy((StandAloneArena) selectedArena);
         }
         return selectedArena;
+    }
+
+    public AbstractArena getTemporaryArena(AbstractArena arena) {
+        AbstractArena mutableArena = this.getArenaByName(arena.getName());
+
+        if (!(mutableArena instanceof StandAloneArena)) {
+            return null;
+        }
+
+        return createTemporaryArenaCopy((StandAloneArena) mutableArena);
     }
 
     /**

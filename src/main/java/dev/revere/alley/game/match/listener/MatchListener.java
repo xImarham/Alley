@@ -1,6 +1,7 @@
 package dev.revere.alley.game.match.listener;
 
 import dev.revere.alley.Alley;
+import dev.revere.alley.base.arena.enums.EnumArenaType;
 import dev.revere.alley.base.arena.impl.StandAloneArena;
 import dev.revere.alley.base.kit.Kit;
 import dev.revere.alley.base.kit.setting.impl.mechanic.KitSettingDenyMovementImpl;
@@ -81,6 +82,7 @@ public class MatchListener implements Listener {
             if (player.getLocation().getY() <= this.plugin.getConfigService().getSettingsConfig().getInt("game.death-y-level")) {
                 if (player.getGameMode() == GameMode.SPECTATOR) return;
                 if (player.getGameMode() == GameMode.CREATIVE) return;
+                if (match.getArena().getType() != EnumArenaType.STANDALONE) return;
 
                 if (match.getKit().isSettingEnabled(KitSettingStickFightImpl.class)) {
                     MatchRoundsImpl roundsMatch = (MatchRoundsImpl) match;

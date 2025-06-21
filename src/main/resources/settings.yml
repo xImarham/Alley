@@ -22,6 +22,7 @@ fireball:
   enabled: true # Whether to enable fireballs or not (in case if you want to use your own custom approach)
   values:
     range: 3.0 # Measured in blocks (the distance in which other players will be affected by the fireball)
+    speed: 1.2
     vertical: 0.8
     horizontal: 1.2
 

@@ -49,7 +49,9 @@ public class MatchLivesImpl extends MatchRegularImpl {
 
     @Override
     public boolean canEndRound() {
-        return participantA.isAllEliminated() || participantB.isAllEliminated();
+        return (participantA.isAllEliminated() || participantB.isAllEliminated())
+                || (this.participantA.getPlayers().stream().allMatch(MatchGamePlayerImpl::isDisconnected)
+                || this.participantB.getPlayers().stream().allMatch(MatchGamePlayerImpl::isDisconnected));
     }
 
     /**

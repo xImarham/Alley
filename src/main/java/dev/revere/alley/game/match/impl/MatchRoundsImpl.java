@@ -197,12 +197,16 @@ public class MatchRoundsImpl extends MatchRegularImpl {
 
     @Override
     public boolean canEndRound() {
-        return this.participantA.isAllDead() || this.participantB.isAllDead();
+        return (this.participantA.isAllDead() || this.participantB.isAllDead())
+                || (this.participantA.getPlayers().stream().allMatch(MatchGamePlayerImpl::isDisconnected)
+                || this.participantB.getPlayers().stream().allMatch(MatchGamePlayerImpl::isDisconnected));
     }
 
     @Override
     public boolean canEndMatch() {
-        return this.participantA.getPlayer().getData().getScore() == this.rounds || this.participantB.getPlayer().getData().getScore() == this.rounds;
+        return (this.participantA.getPlayer().getData().getScore() == this.rounds || this.participantB.getPlayer().getData().getScore() == this.rounds)
+                || (this.participantA.getPlayers().stream().allMatch(MatchGamePlayerImpl::isDisconnected)
+                || this.participantB.getPlayers().stream().allMatch(MatchGamePlayerImpl::isDisconnected));
     }
 
     /**

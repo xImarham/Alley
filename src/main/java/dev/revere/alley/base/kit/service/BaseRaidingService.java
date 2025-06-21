@@ -89,7 +89,6 @@ public class BaseRaidingService {
 
         if (!roleKits.isEmpty()) {
             this.raidingKitMappings.put(parentKit.getName(), roleKits);
-            this.plugin.getLogger().info("Loaded raiding kits for " + parentKit.getName() + ": " + roleKits.keySet());
         }
     }
 

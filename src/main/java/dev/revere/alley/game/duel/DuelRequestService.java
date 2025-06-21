@@ -2,6 +2,7 @@ package dev.revere.alley.game.duel;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.base.arena.AbstractArena;
+import dev.revere.alley.base.arena.impl.StandAloneArena;
 import dev.revere.alley.base.kit.Kit;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
@@ -94,6 +95,10 @@ public class DuelRequestService {
      * @param arena  the arena
      */
     public void sendDuelRequest(Player sender, Player target, Kit kit, AbstractArena arena) {
+        if (arena instanceof StandAloneArena) {
+            arena = plugin.getArenaService().getTemporaryArena(arena);
+        }
+
         DuelRequest duelRequest = new DuelRequest(sender, target, kit, arena);
         this.addDuelRequest(duelRequest);
 

@@ -46,6 +46,7 @@ public class ArenaCommand extends BaseCommand {
         new ArenaToolCommand();
         new ArenaSetDisplayNameCommand();
         new ArenaViewCommand();
+        new ArenaTestCommand();
     }
 
     @SuppressWarnings("unused")

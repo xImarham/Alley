@@ -120,7 +120,8 @@ public abstract class AbstractMatch {
     }
 
     public void endMatch() {
-        this.resetBlockChanges();
+        // this.resetBlockChanges();
+        deleteArenaCopyIfStandalone();
 
         this.getParticipants().forEach(this::finalizeParticipant);
 
@@ -141,6 +142,13 @@ public abstract class AbstractMatch {
         if (this.arena instanceof StandAloneArena) {
             StandAloneArena standAloneArena = (StandAloneArena) this.arena;
             standAloneArena.setActive(false);
+        }
+    }
+
+    private void deleteArenaCopyIfStandalone() {
+        if (this.arena instanceof StandAloneArena) {
+            StandAloneArena standAloneArena = (StandAloneArena) this.arena;
+            standAloneArena.deleteCopiedArena();
         }
     }
 
@@ -268,6 +276,11 @@ public abstract class AbstractMatch {
 
     private void handleSpectator(Player player, Profile profile, GameParticipant<MatchGamePlayerImpl> participant) {
         Kit matchKit = profile.getMatch().getKit();
+
+        MatchGamePlayerImpl gamePlayer = this.getGamePlayer(player);
+        if (gamePlayer.isDisconnected()) {
+            return;
+        }
 
         if (this.shouldBecomeSpectatorForEliminationKit(participant, matchKit, player) || shouldBecomeSpectatorForNonRoundKit(participant, matchKit)) {
             profile.getMatch().addSpectator(player);
@@ -461,9 +474,7 @@ public abstract class AbstractMatch {
             gamePlayer.setDead(false);
         });
 
-        Location spawnLocation = participant.getPlayers().get(0).getUuid().equals(player.getUniqueId())
-                ? this.arena.getPos1()
-                : this.arena.getPos2();
+        Location spawnLocation = this.arena.getCenter();
         player.teleport(spawnLocation);
 
         new MatchRespawnRunnable(player, this, 3).runTaskTimer(this.plugin, 0L, 20L);
@@ -806,14 +817,6 @@ public abstract class AbstractMatch {
         }
     }
 
-    /**
-     * Removes a block from the broken blocks map.
-     *
-     * @param blockState The block state to remove.
-     */
-    public void removeBlockFromBrokenBlocksMap(BlockState blockState, Location location) {
-        this.brokenBlocks.remove(blockState, location);
-    }
 
     @SuppressWarnings("deprecation")
     public void resetBlockChanges() {
@@ -822,8 +825,6 @@ public abstract class AbstractMatch {
             AbstractArena arena = this.getArena();
             Location pos1 = arena.getPos1();
             Location pos2 = arena.getPos2();
-
-            // TODO: close all doors and gates in arena region if kit setting baseraiding is enabled
 
             for (int x = pos1.getBlockX(); x <= pos2.getBlockX(); x++) {
                 for (int z = pos1.getBlockZ(); z <= pos2.getBlockZ(); z++) {
@@ -836,7 +837,7 @@ public abstract class AbstractMatch {
                                 continue;
                             }
                             this.brokenBlocks.put(originalState, location);
-                            block.setType(Material.AIR); // Remove the door or gate
+                            block.setType(Material.AIR);
                         }
                     }
                 }

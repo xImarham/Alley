@@ -78,9 +78,6 @@ public class MatchService {
             return;
         }
 
-        List<AbstractMatch> matchList = new ArrayList<>(this.matches);
-        matchList.forEach(AbstractMatch::resetBlockChanges);
-
         Logger.log(this.matches.size() + " matches have been ended.");
     }
 }

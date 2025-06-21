@@ -19,7 +19,7 @@ public class FireballHorizontalCommand extends BaseCommand {
         CommandSender sender = command.getSender();
         String[] args = command.getArgs();
 
-        if (args.length < 1) {
+        if (args.length == 0) {
             sender.sendMessage(CC.translate("&6Usage: &e/fireball horizontal <value>"));
             return;
         }
@@ -35,6 +35,5 @@ public class FireballHorizontalCommand extends BaseCommand {
         FireballService fireballService = this.plugin.getFireballService();
         fireballService.setHorizontal(value);
         sender.sendMessage(CC.translate("&aSuccessfully set the fireball knockback (horizontal) value to &b" + value + "&a."));
-
     }
 }

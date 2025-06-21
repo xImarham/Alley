@@ -19,14 +19,14 @@ public class FireballRangeCommand extends BaseCommand {
         CommandSender sender = command.getSender();
         String[] args = command.getArgs();
 
-        if (args.length < 2) {
+        if (args.length == 0) {
             sender.sendMessage(CC.translate("&6Usage: &e/fireball range &b<value>"));
             return;
         }
 
         double value;
         try {
-            value = Double.parseDouble(args[1]);
+            value = Double.parseDouble(args[0]);
         } catch (NumberFormatException e) {
             sender.sendMessage(CC.translate("&cThe range must be a valid number."));
             return;

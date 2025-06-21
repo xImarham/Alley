@@ -178,6 +178,7 @@ public class Alley extends JavaPlugin {
 
         this.kitService.saveKits();
         this.arenaService.getArenas().forEach(AbstractArena::saveArena);
+        this.arenaService.shutdown();
         this.divisionService.saveDivisions();
 
         PluginLogger.onDisable();

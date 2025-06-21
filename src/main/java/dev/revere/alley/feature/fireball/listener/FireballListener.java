@@ -76,10 +76,11 @@ public class FireballListener implements Listener {
 
         cooldown.resetCooldown();
 
+        FireballService fireballService = this.plugin.getFireballService();
         Fireball fireball = player.launchProjectile(Fireball.class);
         fireball.setIsIncendiary(false);
         fireball.setYield(2.0F);
-        fireball.setVelocity(player.getLocation().getDirection().normalize().multiply(1.5));
+        fireball.setVelocity(player.getLocation().getDirection().normalize().multiply(fireballService.getSpeed()));
 
         //SoundUtil.playCustomSound(player, Sound.GHAST_FIREBALL, 1.0f, 1.0f);
 

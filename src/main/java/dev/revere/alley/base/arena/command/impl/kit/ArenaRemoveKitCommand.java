@@ -42,12 +42,12 @@ public class ArenaRemoveKitCommand extends BaseCommand {
         String arenaName = args[0];
         String kitName = args[1];
 
-        if (this.plugin.getArenaService().getArenaByName(arenaName) == null) {
+        if (this.plugin.getArenaService().getArenaByName(arenaName).getName() == null) {
             player.sendMessage(CC.translate("&cAn arena with that name does not exist!"));
             return;
         }
 
-        if (this.plugin.getKitService().getKit(kitName) == null) {
+        if (this.plugin.getKitService().getKit(kitName).getName() == null) {
             player.sendMessage(CC.translate("&cA kit with that name does not exist!"));
             return;
         }

@@ -20,6 +20,7 @@ public class FireballService {
     private double vertical;
     private double horizontal;
     private double range;
+    private double speed;
 
     /**
      * Constructor for the FireballService class.
@@ -43,9 +44,10 @@ public class FireballService {
      * @param settingsConfig The configuration file containing the settings.
      */
     private void assignValues(FileConfiguration settingsConfig) {
-        this.vertical = settingsConfig.getDouble("fireball.values.vertical");
         this.horizontal = settingsConfig.getDouble("fireball.values.horizontal");
-        this.range = settingsConfig.getDouble("fireball.values.range"); // The range of the explosion effect measured in blocks.
+        this.vertical = settingsConfig.getDouble("fireball.values.vertical");
+        this.range = settingsConfig.getDouble("fireball.values.range");
+        this.speed = settingsConfig.getDouble("fireball.values.speed");
     }
 
     private void registerListener() {

@@ -46,7 +46,9 @@ public class MatchBedImpl extends MatchRegularImpl {
 
     @Override
     public boolean canEndRound() {
-        return this.participantA.isAllEliminated() || this.participantB.isAllEliminated();
+        return (this.participantA.isAllEliminated() || this.participantB.isAllEliminated())
+                || (this.participantA.getPlayers().stream().allMatch(MatchGamePlayerImpl::isDisconnected)
+                || this.participantB.getPlayers().stream().allMatch(MatchGamePlayerImpl::isDisconnected));
     }
 
     @Override
