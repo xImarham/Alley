@@ -468,10 +468,10 @@ public abstract class AbstractMatch {
         player.setAllowFlight(true);
         player.setFlying(true);
 
-        GameParticipant<MatchGamePlayerImpl> participant = this.getParticipant(player);
-        participant.getPlayers().forEach(gamePlayer -> {
+        MatchGamePlayerImpl gamePlayer = this.getGamePlayer(player);
+        if (gamePlayer != null) {
             gamePlayer.setDead(false);
-        });
+        }
 
         Location spawnLocation = this.arena.getCenter();
         this.teleportAndClearSpawn(player, spawnLocation);

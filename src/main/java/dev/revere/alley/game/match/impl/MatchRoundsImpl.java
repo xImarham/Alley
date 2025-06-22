@@ -125,32 +125,7 @@ public class MatchRoundsImpl extends MatchRegularImpl {
             } else {
                 this.setScorer(lastAttacker.getName());
             }
-        }
 
-        super.handleDeath(player);
-        this.startRespawnProcess(player);
-    }
-
-    @Override
-    public void handleParticipant(Player player, MatchGamePlayerImpl gamePlayer) {
-        GameParticipant<MatchGamePlayerImpl> participant = this.participantA.containsPlayer(player.getUniqueId())
-                ? this.participantA
-                : this.participantB;
-        if (participant.getPlayer().getData().getScore() == this.rounds) {
-            GameParticipant<MatchGamePlayerImpl> opponent = participant == this.participantA ? this.participantB : this.participantA;
-            opponent.getPlayer().setEliminated(true);
-        }
-    }
-
-    @Override
-    protected boolean shouldHandleRegularRespawn(Player player) {
-        return false;
-    }
-
-    @Override
-    public void startRespawnProcess(Player player) {
-        if (this.getKit().isSettingEnabled(KitSettingStickFightImpl.class)) {
-            GameParticipant<MatchGamePlayerImpl> participant;
 
             if (this.participantA.containsPlayer(player.getUniqueId())) {
                 participant = this.participantA;
@@ -176,10 +151,29 @@ public class MatchRoundsImpl extends MatchRegularImpl {
                 gamePlayer.setDead(true);
                 this.handleRoundEnd();
             }
-        } else {
-            super.startRespawnProcess(player);
+            return;
+        }
+
+        super.handleDeath(player);
+        this.startRespawnProcess(player);
+    }
+
+    @Override
+    public void handleParticipant(Player player, MatchGamePlayerImpl gamePlayer) {
+        GameParticipant<MatchGamePlayerImpl> participant = this.participantA.containsPlayer(player.getUniqueId())
+                ? this.participantA
+                : this.participantB;
+        if (participant.getPlayer().getData().getScore() == this.rounds) {
+            GameParticipant<MatchGamePlayerImpl> opponent = participant == this.participantA ? this.participantB : this.participantA;
+            opponent.getPlayer().setEliminated(true);
         }
     }
+
+    @Override
+    protected boolean shouldHandleRegularRespawn(Player player) {
+        return false;
+    }
+
 
     @Override
     public void handleRespawn(Player player) {
