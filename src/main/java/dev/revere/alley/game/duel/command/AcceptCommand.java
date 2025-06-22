@@ -4,6 +4,8 @@ import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.game.duel.DuelRequest;
+import dev.revere.alley.profile.Profile;
+import dev.revere.alley.profile.enums.EnumProfileState;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.entity.Player;
 
@@ -31,12 +33,9 @@ public class AcceptCommand extends BaseCommand {
         }
 
         DuelRequest duelRequest = this.plugin.getDuelRequestService().getDuelRequest(player, target);
-        if (duelRequest == null) {
-            player.sendMessage(CC.translate("&cYou do not have a pending duel request from that player."));
-            return;
-        }
 
-        if (this.plugin.getServerService().isQueueingEnabled(player)) {
+        if (duelRequest == null) {
+            player.sendMessage(CC.translate("&cYou do not have a pending duel request from that duelRequest.getSender()."));
             return;
         }
 

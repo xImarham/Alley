@@ -5,6 +5,7 @@ import dev.revere.alley.base.kit.Kit;
 import dev.revere.alley.base.queue.Queue;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
+import dev.revere.alley.game.match.player.participant.TeamGameParticipant;
 import dev.revere.alley.util.ListenerUtil;
 import dev.revere.alley.util.PlayerUtil;
 import lombok.Getter;
@@ -15,6 +16,7 @@ import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 
@@ -47,8 +49,8 @@ public class MatchBedImpl extends MatchRegularImpl {
     @Override
     public boolean canEndRound() {
         return (this.participantA.isAllEliminated() || this.participantB.isAllEliminated())
-                || (this.participantA.getPlayers().stream().allMatch(MatchGamePlayerImpl::isDisconnected)
-                || this.participantB.getPlayers().stream().allMatch(MatchGamePlayerImpl::isDisconnected));
+                || (this.participantA.getAllPlayers().stream().allMatch(MatchGamePlayerImpl::isDisconnected)
+                || this.participantB.getAllPlayers().stream().allMatch(MatchGamePlayerImpl::isDisconnected));
     }
 
     @Override
@@ -110,7 +112,7 @@ public class MatchBedImpl extends MatchRegularImpl {
         PlayerUtil.reset(player, true);
 
         Location spawnLocation = this.getParticipants().get(0).containsPlayer(player.getUniqueId()) ? this.getArena().getPos1() : this.getArena().getPos2();
-        player.teleport(spawnLocation);
+        this.teleportAndClearSpawn(player, spawnLocation);
 
         this.giveLoadout(player, this.getKit());
         this.applyWoolAndArmorColor(player);
@@ -124,7 +126,7 @@ public class MatchBedImpl extends MatchRegularImpl {
      */
     public void alertBedDestruction(Player breaker, GameParticipant<MatchGamePlayerImpl> opponent) {
         String destructionMessage = "&6&lBED DESTRUCTION!";
-        String subMessage = " &b" + breaker.getName() + " &7has destroyed the bed of &b" + opponent.getPlayer().getUsername() + "&7!";
+        String subMessage = getBreakMessage(breaker, opponent);
 
         this.sendMessage(
                 Arrays.asList(
@@ -142,6 +144,24 @@ public class MatchBedImpl extends MatchRegularImpl {
         );
 
         this.playSound(Sound.ENDERDRAGON_GROWL);
+    }
+
+    private @NotNull String getBreakMessage(Player breaker, GameParticipant<MatchGamePlayerImpl> opponent) {
+        String subMessage;
+        if (opponent instanceof TeamGameParticipant) {
+            String opponentTeamName;
+
+            if (this.getParticipantA() == opponent) {
+                opponentTeamName = "&9Blue Team";
+            } else {
+                opponentTeamName = "&cRed Team";
+            }
+
+            subMessage = " &c" + breaker.getName() + " &7has destroyed the bed of " + opponentTeamName + "&7!";
+        } else {
+            subMessage = " &c" + breaker.getName() + " &7has destroyed the bed of &b" + opponent.getPlayer().getUsername() + "&7!";
+        }
+        return subMessage;
     }
 
     /**

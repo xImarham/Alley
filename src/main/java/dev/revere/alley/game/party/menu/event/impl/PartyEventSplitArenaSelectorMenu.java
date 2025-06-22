@@ -32,8 +32,7 @@ public class PartyEventSplitArenaSelectorMenu extends Menu {
         Map<Integer, Button> buttons = new HashMap<>();
 
         for (AbstractArena arena : Alley.getInstance().getArenaService().getArenas()) {
-            if (arena.getKits().contains(kit.getName()) && arena.isEnabled() &&
-                    (!(arena instanceof StandAloneArena) || !((StandAloneArena) arena).isActive())) {
+            if (arena.getKits().contains(kit.getName()) && arena.isEnabled()) {
                 buttons.put(buttons.size(), new PartyEventSplitArenaSelectorButton(kit, arena));
             }
         }

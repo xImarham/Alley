@@ -46,7 +46,6 @@ public class PartyAcceptCommand extends BaseCommand {
 
         if (party.getState() == EnumPartyState.PUBLIC) {
             partyService.joinParty(player, target);
-            player.sendMessage(CC.translate(PartyLocale.JOINED_PARTY.getMessage().replace("{player}", target.getName())));
             return;
         }
 
@@ -64,6 +63,5 @@ public class PartyAcceptCommand extends BaseCommand {
 
         partyService.joinParty(player, target);
         partyService.removeRequest(partyRequest);
-        player.sendMessage(CC.translate(PartyLocale.JOINED_PARTY.getMessage().replace("{player}", target.getName())));
     }
 }

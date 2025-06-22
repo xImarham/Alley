@@ -23,7 +23,7 @@ public class ArenaSetPortalCommand extends BaseCommand {
         String[] args = command.getArgs();
 
         if (args.length < 2) {
-            player.sendMessage(CC.translate("&6Usage: &e/arena setportal &b<name> <1/2>"));
+            player.sendMessage(CC.translate("&6Usage: &e/arena setportal &b<name> <red/blue>"));
             return;
         }
 
@@ -42,15 +42,15 @@ public class ArenaSetPortalCommand extends BaseCommand {
         }
 
         String portal = args[1];
-        if (!portal.equalsIgnoreCase("1") && !portal.equalsIgnoreCase("2")) {
-            player.sendMessage(CC.translate("&cInvalid portal. Please use '1' or '2'."));
+        if (!portal.equalsIgnoreCase("red") && !portal.equalsIgnoreCase("blue")) {
+            player.sendMessage(CC.translate("&cInvalid portal. Please use 'red' or 'blue'."));
             return;
         }
 
         StandAloneArena standAloneArena = (StandAloneArena) arena;
-        if (portal.equalsIgnoreCase("1")) {
+        if (portal.equalsIgnoreCase("red")) {
             standAloneArena.setTeam1Portal(player.getLocation());
-        } else if (portal.equalsIgnoreCase("2")) {
+        } else if (portal.equalsIgnoreCase("blue")) {
             standAloneArena.setTeam2Portal(player.getLocation());
         }
 

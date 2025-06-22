@@ -1,6 +1,9 @@
 scoreboard:
   enabled: true
   sidebar-format: "&7&m----------------------"
+  team-displays:
+    red: "&c&l[R]"
+    blue: "&9&l[B]"
   title:
     text: "&b&lPractice"
     animated: true
@@ -133,8 +136,8 @@ scoreboard:
           - "&fOpponent: &b{opponent}"
           - "&fDuration: &b{duration}"
           - ""
-          - "{color}&l[B] &r{player-bed}"
-          - "{opponent-color}&l[R] &r{opponent-bed}"
+          - "{your-color-display} {your-bed}"
+          - "{opponent-color-display} {opponent-bed}"
           - ""
           - "&fYour Ping: &b{player-ping}ms"
           - "&fTheir Ping: &b{opponent-ping}ms"
@@ -153,8 +156,8 @@ scoreboard:
           - "{sidebar}"
           - "&fDuration: &b{duration}"
           - ""
-          - "&fYour Team: &a{aliveA}&7/&a{playersA}"
-          - "&fTheir Team: &c{aliveB}&7/&c{playersB}"
+          - "&fYour Team: &a{your-alive}&7/&a{your-players}"
+          - "&fTheir Team: &c{opponent-alive}&7/&c{opponent-players}"
           - ""
           - "&fYour Ping: &b{player-ping}ms"
         raiding-match:

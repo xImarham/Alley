@@ -73,7 +73,7 @@ public class MatchInteractListener implements Listener {
         Player player = (Player) event.getEntity().getShooter();
         Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
 
-        if (profile.getState() != EnumProfileState.PLAYING && profile.getState() != EnumProfileState.FFA) return;
+        if (profile.getState() != EnumProfileState.PLAYING) return;
         if (profile.getMatch().getState() != EnumMatchState.RUNNING) {
             event.setCancelled(true);
             InventoryUtil.giveItem(player, Material.ENDER_PEARL, 1);

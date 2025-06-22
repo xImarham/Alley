@@ -22,8 +22,8 @@ public class ArenaSetHeightLimit extends BaseCommand {
         Player player = command.getPlayer();
         String[] args = command.getArgs();
 
-        if (args.length < 1) {
-            player.sendMessage(CC.translate("&6Usage: &e/arena setheightlimit &b<arenaName>"));
+        if (args.length < 2) {
+            player.sendMessage(CC.translate("&6Usage: &e/arena setheightlimit &b<arenaName> <heightLimit>"));
             return;
         }
 
@@ -39,9 +39,20 @@ public class ArenaSetHeightLimit extends BaseCommand {
             return;
         }
 
-        int limit = player.getLocation().getBlockY();
-        ((StandAloneArena) arena).setHeightLimit(limit);
+        int heightLimit;
+        try {
+            heightLimit = Integer.parseInt(args[1]);
+            if (heightLimit < 0 || heightLimit > 256) {
+                player.sendMessage(CC.translate("&cHeight limit must be between 0 and 256!"));
+                return;
+            }
+        } catch (NumberFormatException e) {
+            player.sendMessage(CC.translate("&cInvalid height limit! Please enter a valid number."));
+            return;
+        }
+
+        ((StandAloneArena) arena).setHeightLimit(heightLimit);
         arenaService.saveArena(arena);
-        player.sendMessage(CC.translate("&aHeight limit for arena &b" + arena.getName() + "&a has been set to &b" + limit + "&a!"));
+        player.sendMessage(CC.translate("&aHeight limit for arena &b" + arena.getName() + "&a has been set to &b" + heightLimit + "&a!"));
     }
 }

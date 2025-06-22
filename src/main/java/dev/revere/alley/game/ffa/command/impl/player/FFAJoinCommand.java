@@ -6,6 +6,7 @@ import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.base.kit.Kit;
 import dev.revere.alley.game.ffa.FFAService;
 import dev.revere.alley.profile.Profile;
+import dev.revere.alley.profile.enums.EnumProfileState;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.entity.Player;
 
@@ -39,12 +40,16 @@ public class FFAJoinCommand extends BaseCommand {
             return;
         }
 
+        if (profile.getState() != EnumProfileState.LOBBY) {
+            player.sendMessage(CC.translate("&cYou can only join FFA from the lobby."));
+            return;
+        }
+
         FFAService ffaService = this.plugin.getFfaService();
         ffaService.getMatches().stream()
                 .filter(match -> match.getKit().equals(kit))
                 .filter(match -> match.getPlayers().size() < match.getMaxPlayers())
                 .findFirst()
                 .ifPresent(match -> match.join(player));
-
     }
 }

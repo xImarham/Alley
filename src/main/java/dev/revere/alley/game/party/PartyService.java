@@ -1,12 +1,18 @@
 package dev.revere.alley.game.party;
 
 import dev.revere.alley.Alley;
+import dev.revere.alley.base.arena.AbstractArena;
 import dev.revere.alley.base.cooldown.Cooldown;
 import dev.revere.alley.base.cooldown.enums.EnumCooldownType;
 import dev.revere.alley.base.hotbar.HotbarService;
 import dev.revere.alley.base.hotbar.enums.EnumHotbarType;
+import dev.revere.alley.base.kit.Kit;
 import dev.revere.alley.base.queue.Queue;
 import dev.revere.alley.base.queue.QueueProfile;
+import dev.revere.alley.config.locale.impl.PartyLocale;
+import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
+import dev.revere.alley.game.match.player.participant.GameParticipant;
+import dev.revere.alley.game.match.player.participant.TeamGameParticipant;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
 import dev.revere.alley.tool.reflection.impl.TitleReflectionService;
@@ -21,10 +27,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author Emmy
@@ -49,6 +53,50 @@ public class PartyService {
         this.parties = new ArrayList<>();
         this.partyRequests = new ArrayList<>();
         this.chatFormat = plugin.getConfigService().getMessagesConfig().getString("party.chat-format");
+    }
+
+    /**
+     * Starts a match with the given kit, arena, and party.
+     *
+     * @param kit   The kit to be used in the match.
+     * @param arena The arena where the match will take place.
+     * @param party The party that will participate in the match.
+     */
+    public void startMatch(Kit kit, AbstractArena arena, Party party) {
+        List<Player> allPartyPlayers = party.getMembers().stream()
+                .map(Bukkit::getPlayer)
+                .collect(Collectors.toList());
+
+        Collections.shuffle(allPartyPlayers);
+
+        Player leaderA = allPartyPlayers.get(0);
+        Player leaderB = allPartyPlayers.get(1);
+
+        MatchGamePlayerImpl gameLeaderA = new MatchGamePlayerImpl(leaderA.getUniqueId(), leaderA.getName());
+        MatchGamePlayerImpl gameLeaderB = new MatchGamePlayerImpl(leaderB.getUniqueId(), leaderB.getName());
+
+        GameParticipant<MatchGamePlayerImpl> participantA = new TeamGameParticipant<>(gameLeaderA);
+        GameParticipant<MatchGamePlayerImpl> participantB = new TeamGameParticipant<>(gameLeaderB);
+
+        int totalPlayers = allPartyPlayers.size();
+        int teamATargetSize = totalPlayers / 2;
+        int currentTeamACount = 1;
+
+        for (int i = 2; i < allPartyPlayers.size(); i++) {
+            Player currentPlayer = allPartyPlayers.get(i);
+            MatchGamePlayerImpl gamePlayer = new MatchGamePlayerImpl(currentPlayer.getUniqueId(), currentPlayer.getName());
+
+            if (currentTeamACount < teamATargetSize) {
+                participantA.addPlayer(gamePlayer);
+                currentTeamACount++;
+            } else {
+                participantB.addPlayer(gamePlayer);
+            }
+        }
+
+        this.plugin.getMatchService().createAndStartMatch(
+                kit, this.plugin.getArenaService().selectArenaWithPotentialTemporaryCopy(arena), participantA, participantB, true, false, false
+        );
     }
 
     /**
@@ -209,6 +257,11 @@ public class PartyService {
             return;
         }
 
+        if (party.getLeader() == player) {
+            player.sendMessage(CC.translate("&cYou cannot join your own party."));
+            return;
+        }
+
         if (party.getMembers().contains(player.getUniqueId())) {
             player.sendMessage(CC.translate("&cYou are already in this party."));
             return;
@@ -221,6 +274,9 @@ public class PartyService {
 
         party.getMembers().add(player.getUniqueId());
         party.notifyParty("&a" + player.getName() + " has joined the party.");
+
+        player.sendMessage(CC.translate(PartyLocale.JOINED_PARTY.getMessage().replace("{player}", leader.getName())));
+
         this.setupProfile(player, true);
     }
 
@@ -235,6 +291,11 @@ public class PartyService {
         HotbarService hotbarService = this.plugin.getHotbarService();
 
         profile.setParty(join ? this.getPartyByMember(player.getUniqueId()) : null);
+
+        if (profile.getMatch() != null) {
+            return;
+        }
+
         if (join && (profile.getState() == EnumProfileState.LOBBY || profile.getState() == EnumProfileState.WAITING)) {
             hotbarService.applyHotbarItems(player, EnumHotbarType.PARTY);
         } else {

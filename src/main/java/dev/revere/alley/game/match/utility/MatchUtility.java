@@ -149,8 +149,7 @@ public class MatchUtility {
         match.sendMessage(CC.translate("&aWinner Team: &f" + winnerTeamName));
 
         for (MatchGamePlayerImpl player : winnerParticipant.getPlayers()) {
-            Player bukkitPlayer = player.getPlayer();
-            String playerName = bukkitPlayer.getName();
+            String playerName = player.getUsername();
 
             TextComponent playerComponent = new TextComponent(CC.translate("&7- &f" + playerName));
             playerComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/inventory " + playerName));
@@ -164,8 +163,7 @@ public class MatchUtility {
         match.sendMessage(CC.translate("&cLoser Team: &f" + loserTeamName));
 
         for (MatchGamePlayerImpl player : loserParticipant.getPlayers()) {
-            Player bukkitPlayer = player.getPlayer();
-            String playerName = bukkitPlayer.getName();
+            String playerName = player.getUsername();
 
             TextComponent playerComponent = new TextComponent(CC.translate("&7- &f" + playerName));
             playerComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/inventory " + playerName));

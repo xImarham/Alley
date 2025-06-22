@@ -10,6 +10,7 @@ import dev.revere.alley.base.arena.command.impl.kit.ArenaKitListCommand;
 import dev.revere.alley.base.arena.command.impl.kit.ArenaRemoveKitCommand;
 import dev.revere.alley.base.arena.command.impl.manage.*;
 import dev.revere.alley.base.arena.command.impl.storage.ArenaSaveAllCommand;
+import dev.revere.alley.base.arena.schematic.command.ArenaPasteTestCommand;
 import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.util.chat.ClickableUtil;
 import org.bukkit.command.CommandSender;
@@ -47,6 +48,7 @@ public class ArenaCommand extends BaseCommand {
         new ArenaSetDisplayNameCommand();
         new ArenaViewCommand();
         new ArenaTestCommand();
+        new ArenaPasteTestCommand();
     }
 
     @SuppressWarnings("unused")

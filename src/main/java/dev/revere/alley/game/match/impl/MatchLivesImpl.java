@@ -50,8 +50,8 @@ public class MatchLivesImpl extends MatchRegularImpl {
     @Override
     public boolean canEndRound() {
         return (participantA.isAllEliminated() || participantB.isAllEliminated())
-                || (this.participantA.getPlayers().stream().allMatch(MatchGamePlayerImpl::isDisconnected)
-                || this.participantB.getPlayers().stream().allMatch(MatchGamePlayerImpl::isDisconnected));
+                || (this.participantA.getAllPlayers().stream().allMatch(MatchGamePlayerImpl::isDisconnected)
+                || this.participantB.getAllPlayers().stream().allMatch(MatchGamePlayerImpl::isDisconnected));
     }
 
     /**
@@ -95,10 +95,5 @@ public class MatchLivesImpl extends MatchRegularImpl {
 
         this.giveLoadout(player, this.getKit());
         this.applyWoolAndArmorColor(player);
-    }
-
-    @Override
-    public void handleDisconnect(Player player) {
-        super.handleDeath(player);
     }
 }

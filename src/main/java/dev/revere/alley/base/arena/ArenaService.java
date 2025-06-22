@@ -7,7 +7,6 @@ import dev.revere.alley.base.arena.impl.SharedArena;
 import dev.revere.alley.base.arena.impl.StandAloneArena;
 import dev.revere.alley.base.kit.Kit;
 import dev.revere.alley.tool.serializer.Serializer;
-import dev.revere.alley.util.FAWEArenaManager;
 import dev.revere.alley.util.VoidChunkGeneratorImpl;
 import lombok.Getter;
 import org.bukkit.Bukkit;
@@ -39,7 +38,6 @@ public class ArenaService {
     private Location nextCopyLocation;
     private final int arenaSpacing = 500;
     private final AtomicInteger copyIdCounter;
-    private final FAWEArenaManager faweArenaManager = new FAWEArenaManager();
 
     /**
      * Constructor for the ArenaService class.
@@ -153,11 +151,6 @@ public class ArenaService {
                 arena.setEnabled(config.getBoolean(name + ".enabled"));
             }
 
-            if (arena instanceof StandAloneArena) {
-                StandAloneArena standAloneArena = (StandAloneArena) arena;
-                standAloneArena.setClipboard(faweArenaManager.createClipboard(minimum, maximum));
-            }
-
             this.arenas.add(arena);
         }
     }
@@ -168,22 +161,43 @@ public class ArenaService {
         }
 
         int copyId = copyIdCounter.incrementAndGet();
-        Location copyLocation = getNextCopyLocation();
+        Location copyLocation = getNextCopyLocationForArena(originalArena);
+
+        Location originalPos1 = originalArena.getPos1();
+        Location originalMin = originalArena.getMinimum();
+        Location originalMax = originalArena.getMaximum();
+
+        if (originalPos1 != null && originalMin != null && originalMax != null) {
+            int actualMinY = Math.min(originalMin.getBlockY(), originalMax.getBlockY());
+
+            int pos1OffsetFromActualMin = originalPos1.getBlockY() - actualMinY;
+
+            int targetMinY = 100 - pos1OffsetFromActualMin;
+            copyLocation.setY(targetMinY);
+        }
 
         StandAloneArena copiedArena = originalArena.createCopy(temporaryWorld, copyLocation, copyId);
         copiedArena.setHeightLimit(copiedArena.getPos1().getBlockY() + copiedArena.getHeightLimit());
 
-        temporaryArenas.add(copiedArena);
+        this.plugin.getArenaSchematicService().paste(copyLocation, this.plugin.getArenaSchematicService().getSchematicFile(originalArena.getName()));
 
+        temporaryArenas.add(copiedArena);
 
         return copiedArena;
     }
 
-    public Location getNextCopyLocation() {
+    public Location getNextCopyLocationForArena(StandAloneArena originalArena) {
         Location location = this.nextCopyLocation.clone();
 
-        nextCopyLocation.add(arenaSpacing, 0, 0);
+        Location originalPos1 = originalArena.getPos1();
+        Location originalMin = originalArena.getMinimum();
 
+        if (originalPos1 != null && originalMin != null) {
+            int pos1OffsetFromMin = originalPos1.getBlockY() - originalMin.getBlockY();
+            location.setY(100 - pos1OffsetFromMin);
+        }
+
+        nextCopyLocation.add(arenaSpacing, 0, 0);
         if (nextCopyLocation.getX() > arenaSpacing * 10) {
             nextCopyLocation.setX(0);
             nextCopyLocation.add(0, 0, arenaSpacing);
@@ -263,7 +277,6 @@ public class ArenaService {
         List<AbstractArena> availableArenas = this.arenas.stream()
                 .filter(arena -> arena.getKits().contains(kit.getName()))
                 .filter(AbstractArena::isEnabled)
-                //.filter(arena -> !(arena instanceof StandAloneArena) || !((StandAloneArena) arena).isActive())
                 .collect(Collectors.toList());
 
         if (availableArenas.isEmpty()) {
@@ -275,6 +288,13 @@ public class ArenaService {
             return createTemporaryArenaCopy((StandAloneArena) selectedArena);
         }
         return selectedArena;
+    }
+
+    public AbstractArena selectArenaWithPotentialTemporaryCopy(AbstractArena arena) {
+        if (arena instanceof StandAloneArena) {
+            return createTemporaryArenaCopy((StandAloneArena) arena);
+        }
+        return arena;
     }
 
     public AbstractArena getTemporaryArena(AbstractArena arena) {

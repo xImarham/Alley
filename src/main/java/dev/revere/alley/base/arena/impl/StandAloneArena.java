@@ -1,6 +1,5 @@
 package dev.revere.alley.base.arena.impl;
 
-import com.sk89q.worldedit.extent.clipboard.Clipboard;
 import dev.revere.alley.Alley;
 import dev.revere.alley.base.arena.AbstractArena;
 import dev.revere.alley.base.arena.enums.EnumArenaType;
@@ -10,7 +9,6 @@ import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.tool.serializer.Serializer;
-import dev.revere.alley.util.FAWEArenaManager;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Bukkit;
@@ -30,15 +28,12 @@ import java.util.UUID;
 @Getter
 public class StandAloneArena extends AbstractArena {
     protected final Alley plugin = Alley.getInstance();
-    private final FAWEArenaManager faweArenaManager = new FAWEArenaManager();
 
     private boolean active = false;
 
     private boolean isTemporaryCopy = false;
     private String originalArenaName;
     private int copyId = -1;
-
-    private Clipboard clipboard;
 
     private Location team1Portal;
     private Location team2Portal;
@@ -60,10 +55,6 @@ public class StandAloneArena extends AbstractArena {
         if (team2Portal != null) this.team2Portal = team2Portal;
         this.portalRadius = this.plugin.getConfigService().getSettingsConfig().getInt("game.portal-radius");
         this.heightLimit = heightLimit;
-
-        if (!isTemporaryCopy) {
-            this.clipboard = faweArenaManager.createClipboard(minimum, maximum);
-        }
     }
 
     public StandAloneArena(String originalArenaName, int copyId, Location minimum, Location maximum, Location team1Portal, Location team2Portal, int heightLimit) {
@@ -89,7 +80,6 @@ public class StandAloneArena extends AbstractArena {
         if (!this.isTemporaryCopy) {
             this.plugin.getArenaService().getArenas().add(this);
             this.saveArena();
-            this.clipboard = this.faweArenaManager.createClipboard(this.getMinimum(), this.getMaximum());
         }
     }
 
@@ -118,7 +108,7 @@ public class StandAloneArena extends AbstractArena {
 
         this.plugin.getConfigService().saveConfig(this.plugin.getConfigService().getConfigFile("storage/arenas.yml"), config);
 
-        this.clipboard = this.faweArenaManager.createClipboard(this.getMinimum(), this.getMaximum());
+        this.plugin.getArenaSchematicService().updateSchematic(this);
     }
 
     @Override
@@ -139,10 +129,11 @@ public class StandAloneArena extends AbstractArena {
             return;
         }
 
-        faweArenaManager.deleteCopiedArena(this.getMinimum(), this.getMaximum(), () -> {
+        plugin.getArenaSchematicService().delete(this);
+        /*faweArenaManager.deleteCopiedArena(this.getMinimum(), this.getMaximum(), () -> {
             this.active = false;
             this.plugin.getArenaService().removeTemporaryArena(this);
-        });
+        });*/
     }
 
     public void verifyArenaExists() {
@@ -161,14 +152,12 @@ public class StandAloneArena extends AbstractArena {
         Bukkit.broadcastMessage("[Arena] Bounds: " + this.getMinimum() + " to " + this.getMaximum());
         Bukkit.broadcastMessage("[Arena] World: " + world.getName());
 
-        // Sample a few blocks to see if they're not air
         int nonAirBlocks = 0;
         int totalSampled = 0;
 
         Location min = this.getMinimum();
         Location max = this.getMaximum();
 
-        // Sample every 10th block to avoid lag
         for (int x = min.getBlockX(); x <= max.getBlockX(); x += 10) {
             for (int y = min.getBlockY(); y <= max.getBlockY(); y += 10) {
                 for (int z = min.getBlockZ(); z <= max.getBlockZ(); z += 10) {
@@ -203,29 +192,36 @@ public class StandAloneArena extends AbstractArena {
         Location originalMin = this.getMinimum();
         Location originalMax = this.getMaximum();
 
-        int sizeX = originalMax.getBlockX() - originalMin.getBlockX() + 1;
-        int sizeY = originalMax.getBlockY() - originalMin.getBlockY() + 1;
-        int sizeZ = originalMax.getBlockZ() - originalMin.getBlockZ() + 1;
+        int actualMinX = Math.min(originalMin.getBlockX(), originalMax.getBlockX());
+        int actualMaxX = Math.max(originalMin.getBlockX(), originalMax.getBlockX());
+
+        int actualMinY = Math.min(originalMin.getBlockY(), originalMax.getBlockY());
+        int actualMaxY = Math.max(originalMin.getBlockY(), originalMax.getBlockY());
+
+        int actualMinZ = Math.min(originalMin.getBlockZ(), originalMax.getBlockZ());
+        int actualMaxZ = Math.max(originalMin.getBlockZ(), originalMax.getBlockZ());
+
+        int sizeX = actualMaxX - actualMinX + 1;
+        int sizeY = actualMaxY - actualMinY + 1;
+        int sizeZ = actualMaxZ - actualMinZ + 1;
 
         Location newMin = new Location(targetWorld, targetLocation.getX(), targetLocation.getY(), targetLocation.getZ());
         Location newMax = new Location(targetWorld, targetLocation.getX() + sizeX - 1, targetLocation.getY() + sizeY - 1, targetLocation.getZ() + sizeZ - 1);
-
-        this.copyBlocksWithFAWE(targetLocation);
 
         Location newTeam1Portal = null;
         Location newTeam2Portal = null;
 
         if (this.team1Portal != null) {
-            int offsetX = this.team1Portal.getBlockX() - originalMin.getBlockX();
-            int offsetY = this.team1Portal.getBlockY() - originalMin.getBlockY();
-            int offsetZ = this.team1Portal.getBlockZ() - originalMin.getBlockZ();
+            int offsetX = this.team1Portal.getBlockX() - actualMinX;
+            int offsetY = this.team1Portal.getBlockY() - actualMinY;
+            int offsetZ = this.team1Portal.getBlockZ() - actualMinZ;
             newTeam1Portal = targetLocation.clone().add(offsetX, offsetY, offsetZ);
         }
 
         if (this.team2Portal != null) {
-            int offsetX = this.team2Portal.getBlockX() - originalMin.getBlockX();
-            int offsetY = this.team2Portal.getBlockY() - originalMin.getBlockY();
-            int offsetZ = this.team2Portal.getBlockZ() - originalMin.getBlockZ();
+            int offsetX = this.team2Portal.getBlockX() - actualMinX;
+            int offsetY = this.team2Portal.getBlockY() - actualMinY;
+            int offsetZ = this.team2Portal.getBlockZ() - actualMinZ;
             newTeam2Portal = targetLocation.clone().add(offsetX, offsetY, offsetZ);
         }
 
@@ -238,80 +234,34 @@ public class StandAloneArena extends AbstractArena {
         copiedArena.setDisplayName(this.getDisplayName());
         copiedArena.setKits(this.getKits());
 
+        double middleOffset = 0.5;
+
         if (this.getPos1() != null) {
-            int offsetX = this.getPos1().getBlockX() - originalMin.getBlockX();
-            int offsetY = this.getPos1().getBlockY() - originalMin.getBlockY();
-            int offsetZ = this.getPos1().getBlockZ() - originalMin.getBlockZ();
-            copiedArena.setPos1(targetLocation.clone().add(offsetX, offsetY, offsetZ));
+            int offsetX = this.getPos1().getBlockX() - actualMinX;
+            int offsetY = this.getPos1().getBlockY() - actualMinY;
+            int offsetZ = this.getPos1().getBlockZ() - actualMinZ;
+            Location location = targetLocation.clone().add(offsetX + middleOffset, offsetY, offsetZ + middleOffset);
+            location.setYaw(getPos1().getYaw());
+            copiedArena.setPos1(location);
         }
 
         if (this.getPos2() != null) {
-            int offsetX = this.getPos2().getBlockX() - originalMin.getBlockX();
-            int offsetY = this.getPos2().getBlockY() - originalMin.getBlockY();
-            int offsetZ = this.getPos2().getBlockZ() - originalMin.getBlockZ();
-
-            Location location = targetLocation.clone().add(offsetX, offsetY, offsetZ);
-            location.setYaw(originalMin.getYaw() + 180);
-
+            int offsetX = this.getPos2().getBlockX() - actualMinX;
+            int offsetY = this.getPos2().getBlockY() - actualMinY;
+            int offsetZ = this.getPos2().getBlockZ() - actualMinZ;
+            Location location = targetLocation.clone().add(offsetX + middleOffset, offsetY, offsetZ + middleOffset);
+            location.setYaw(getPos2().getYaw());
             copiedArena.setPos2(location);
         }
 
         if (this.getCenter() != null) {
-            int offsetX = this.getCenter().getBlockX() - originalMin.getBlockX();
-            int offsetY = this.getCenter().getBlockY() - originalMin.getBlockY();
-            int offsetZ = this.getCenter().getBlockZ() - originalMin.getBlockZ();
-            copiedArena.setCenter(targetLocation.clone().add(offsetX, offsetY, offsetZ));
+            int offsetX = this.getCenter().getBlockX() - actualMinX;
+            int offsetY = this.getCenter().getBlockY() - actualMinY;
+            int offsetZ = this.getCenter().getBlockZ() - actualMinZ;
+            copiedArena.setCenter(targetLocation.clone().add(offsetX + middleOffset, offsetY, offsetZ + middleOffset));
         }
 
-        Bukkit.broadcastMessage("[Arena] Copy creation completed for: " + copiedArena.getName());
         return copiedArena;
-    }
-
-    private void copyBlocksWithFAWE(Location destination) {
-        if (this.clipboard == null) {
-            Bukkit.broadcastMessage("clipboard is null, so creating a new one.");
-            this.clipboard = this.faweArenaManager.createClipboard(this.getMinimum(), this.getMaximum());
-        }
-
-        if (this.clipboard != null) {
-            Bukkit.broadcastMessage("Pasting clipboard to " + destination);
-            faweArenaManager.pasteClipboard(this.clipboard, destination, () -> {
-                Bukkit.broadcastMessage("[Arena] FAWE paste operation completed for " + this.getName());
-            });
-        } else {
-            Bukkit.broadcastMessage("Clipboard is null, copying blocks manually.");
-            copyBlocks(this.getMinimum(), this.getMaximum(), destination);
-        }
-    }
-
-    private void copyBlocks(Location sourceMin, Location sourceMax, Location destination) {
-        World world = sourceMin.getWorld();
-        World destinationWorld = destination.getWorld();
-
-        if (world == null || destinationWorld == null) {
-            return;
-        }
-
-        for (int x = sourceMin.getBlockX(); x <= sourceMax.getBlockX(); x++) {
-            for (int y = sourceMin.getBlockY(); y <= sourceMax.getBlockY(); y++) {
-                for (int z = sourceMin.getBlockZ(); z <= sourceMax.getBlockZ(); z++) {
-                    Block sourceBlock = world.getBlockAt(x, y, z);
-
-                    int offsetX = x - sourceMin.getBlockX();
-                    int offsetY = y - sourceMin.getBlockY();
-                    int offsetZ = z - sourceMin.getBlockZ();
-
-                    Block destinationBlock = destinationWorld.getBlockAt(
-                            destination.getBlockX() + offsetX,
-                            destination.getBlockY() + offsetY,
-                            destination.getBlockZ() + offsetZ
-                    );
-
-                    destinationBlock.setType(sourceBlock.getType());
-                    destinationBlock.setData(sourceBlock.getData());
-                }
-            }
-        }
     }
 
     /**

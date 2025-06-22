@@ -4,6 +4,7 @@ import dev.revere.alley.Alley;
 import dev.revere.alley.base.kit.Kit;
 import dev.revere.alley.base.kit.setting.impl.mechanic.KitSettingBowShotIndicatorImpl;
 import dev.revere.alley.base.kit.setting.impl.mechanic.KitSettingNoDamageImpl;
+import dev.revere.alley.base.kit.setting.impl.mechanic.KitSettingNoFallDamageImpl;
 import dev.revere.alley.base.kit.setting.impl.mode.*;
 import dev.revere.alley.game.match.AbstractMatch;
 import dev.revere.alley.game.match.enums.EnumMatchState;
@@ -20,6 +21,8 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+
+import java.util.List;
 
 /**
  * @author Emmy
@@ -46,6 +49,13 @@ public class MatchDamageListener implements Listener {
 
         if (profile.getState() == EnumProfileState.SPECTATING) event.setCancelled(true);
         if (profile.getState() == EnumProfileState.PLAYING) {
+            Kit matchKit = profile.getMatch().getKit();
+
+            if (matchKit.isSettingEnabled(KitSettingNoFallDamageImpl.class)
+                    && event.getCause() == EntityDamageEvent.DamageCause.FALL) {
+                event.setCancelled(true);
+            }
+
             if (profile.getMatch().getState() != EnumMatchState.RUNNING) {
                 event.setCancelled(true);
                 return;
@@ -56,7 +66,6 @@ public class MatchDamageListener implements Listener {
                 return;
             }
 
-            Kit matchKit = profile.getMatch().getKit();
             if (matchKit.isSettingEnabled(KitSettingBoxingImpl.class)
                     || matchKit.isSettingEnabled(KitSettingSumoImpl.class)
                     || matchKit.isSettingEnabled(KitSettingSpleefImpl.class)

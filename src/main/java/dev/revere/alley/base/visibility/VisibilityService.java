@@ -5,6 +5,7 @@ import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
 import dev.revere.alley.tool.logger.Logger;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 /**
@@ -26,25 +27,19 @@ public class VisibilityService {
 
     /**
      * Updates the visibility of a player based on their profile state.
+     * When a player's state changes, we need to update visibility bidirectionally:
+     * 1. How all other players see this player
+     * 2. How this player sees all other players
      *
      * @param player The player whose visibility is to be updated.
      */
     public void updateVisibility(Player player) {
-        this.plugin.getServer().getOnlinePlayers().forEach(player1 ->
-                this.hidePlayer(player, player1)
-        );
-    }
-
-    /**
-     * Updates the visibility of all players for a specific player.
-     *
-     * @param player The player whose visibility is to be updated for all others.
-     */
-    public void updateVisibilityAll(Player player) {
-        for (Player onlinePlayer : this.plugin.getServer().getOnlinePlayers()) {
-            this.hidePlayer(player, onlinePlayer);
-            this.hidePlayer(onlinePlayer, player);
-        }
+        this.plugin.getServer().getOnlinePlayers().stream()
+                .filter(otherPlayer -> !otherPlayer.equals(player))
+                .forEach(otherPlayer -> {
+                    this.handleVisibility(otherPlayer, player);
+                    this.handleVisibility(player, otherPlayer);
+                });
     }
 
     /**
@@ -53,7 +48,7 @@ public class VisibilityService {
      * @param viewer The profile of the viewer.
      * @param target The target player to hide.
      */
-    public void hidePlayer(Player viewer, Player target) {
+    public void handleVisibility(Player viewer, Player target) {
         if (target == null || viewer == null || target.equals(viewer)) {
             Logger.logError("Something went wrong while hiding player. Either no players are online or target is null.");
             return;
@@ -61,6 +56,11 @@ public class VisibilityService {
 
         Profile viewerProfile = this.plugin.getProfileService().getProfile(viewer.getUniqueId());
         Profile targetProfile = this.plugin.getProfileService().getProfile(target.getUniqueId());
+
+        if (viewerProfile == null || targetProfile == null) {
+            Logger.logError("Could not retrieve profile for viewer or target player.");
+            return;
+        }
 
         EnumProfileState viewerProfileState = viewerProfile.getState();
         EnumProfileState targetProfileState = targetProfile.getState();
@@ -70,8 +70,11 @@ public class VisibilityService {
             case WAITING:
                 this.handleLobbyAndQueueState(viewer, target, targetProfileState);
                 break;
+            case FFA:
+                this.handleFfaState(viewer, target, targetProfileState);
+                break;
             case PLAYING:
-                this.handlePlayingCase(viewer, target, viewerProfile);
+                this.handlePlayingCase(viewer, target, viewerProfile, targetProfile);
                 break;
             case SPECTATING:
                 this.handleSpectatingCase(viewer, target, viewerProfile);
@@ -87,11 +90,23 @@ public class VisibilityService {
      * @param targetProfileState the profile state of the target player.
      */
     private void handleLobbyAndQueueState(Player viewer, Player target, EnumProfileState targetProfileState) {
-        if (targetProfileState == EnumProfileState.FFA) {
+        if (targetProfileState == EnumProfileState.LOBBY
+                || targetProfileState == EnumProfileState.EDITING
+                || targetProfileState == EnumProfileState.WAITING) {
+            viewer.showPlayer(target);
+        } else {
             viewer.hidePlayer(target);
         }
 
         //TODO: further logic once we implement /tpv command (TogglePlayerVisibility)
+    }
+
+    private void handleFfaState(Player viewer, Player target, EnumProfileState targetProfileState) {
+        if (targetProfileState == EnumProfileState.FFA) {
+            viewer.showPlayer(target);
+        } else {
+            viewer.hidePlayer(target);
+        }
     }
 
     /**
@@ -101,18 +116,31 @@ public class VisibilityService {
      * @param target        The target player to be viewed.
      * @param viewerProfile The profile of the viewer.
      */
-    private void handlePlayingCase(Player viewer, Player target, Profile viewerProfile) {
-        MatchGamePlayerImpl targetGamePlayer = viewerProfile.getMatch().getGamePlayer(target);
-        if (targetGamePlayer != null) {
-            if (!targetGamePlayer.isDead()) {
-                viewer.showPlayer(target);
-            } else {
-                viewer.hidePlayer(target);
-            }
-        } else {
+    private void handlePlayingCase(Player viewer, Player target, Profile viewerProfile, Profile targetProfile) {
+        if (viewerProfile.getMatch() == null || targetProfile.getMatch() == null) {
             viewer.hidePlayer(target);
+            return;
         }
+
+        if (targetProfile.getState() == EnumProfileState.SPECTATING) {
+            viewer.hidePlayer(target);
+            return;
+        }
+
+        MatchGamePlayerImpl targetGamePlayer = viewerProfile.getMatch().getGamePlayer(target);
+        if (targetProfile.getMatch().getSpectators().contains(target.getUniqueId())) {
+            viewer.hidePlayer(target);
+            return;
+        }
+
+        if (targetGamePlayer.isEliminated()) {
+            viewer.hidePlayer(target);
+            return;
+        }
+
+        viewer.showPlayer(target);
     }
+
 
     /**
      * Handles the visibility logic for players in spectating state.
@@ -122,23 +150,17 @@ public class VisibilityService {
      * @param viewerProfile The profile of the viewer.
      */
     private void handleSpectatingCase(Player viewer, Player target, Profile viewerProfile) {
-        MatchGamePlayerImpl spectatingTargetGamePlayer = viewerProfile.getMatch().getGamePlayer(target);
-        if (viewerProfile.getMatch() != null) {
-            if (spectatingTargetGamePlayer != null) {
-                if (!spectatingTargetGamePlayer.isDead() && !spectatingTargetGamePlayer.isDisconnected()) {
-                    viewer.showPlayer(target);
-                } else {
-                    viewer.hidePlayer(target);
-                }
-            } else {
-                viewer.hidePlayer(target);
-            }
-        } else if (viewerProfile.getFfaMatch() != null) {
-
-            // todo
-
-        } else {
+        if (viewerProfile.getMatch() == null) {
             viewer.hidePlayer(target);
+            return;
         }
+
+        MatchGamePlayerImpl spectatingTargetGamePlayer = viewerProfile.getMatch().getGamePlayer(target);
+        if (spectatingTargetGamePlayer == null) {
+            viewer.hidePlayer(target);
+            return;
+        }
+
+        viewer.showPlayer(target);
     }
 }

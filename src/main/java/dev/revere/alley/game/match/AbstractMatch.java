@@ -17,6 +17,7 @@ import dev.revere.alley.game.match.impl.MatchRoundsImpl;
 import dev.revere.alley.game.match.player.GamePlayer;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
+import dev.revere.alley.game.match.player.participant.TeamGameParticipant;
 import dev.revere.alley.game.match.runnable.MatchRunnable;
 import dev.revere.alley.game.match.runnable.other.MatchRespawnRunnable;
 import dev.revere.alley.profile.Profile;
@@ -200,10 +201,8 @@ public abstract class AbstractMatch {
         MatchGamePlayerImpl gamePlayer = getGamePlayer(player);
         if (gamePlayer != null) {
             gamePlayer.setDead(false);
-            if (!gamePlayer.isDisconnected()) {
-                PlayerUtil.reset(player, true);
-                this.giveLoadout(player, this.kit);
-            }
+            PlayerUtil.reset(player, true);
+            this.giveLoadout(player, this.kit);
         }
     }
 
@@ -239,7 +238,7 @@ public abstract class AbstractMatch {
         }
 
         GameParticipant<MatchGamePlayerImpl> participant = this.getParticipant(player);
-        MatchGamePlayerImpl gamePlayer = this.getGamePlayer(player);
+        MatchGamePlayerImpl gamePlayer = this.getFromAllGamePlayers(player);
         if (participant.isAllEliminated()) {
             return;
         }
@@ -277,7 +276,7 @@ public abstract class AbstractMatch {
     private void handleSpectator(Player player, Profile profile, GameParticipant<MatchGamePlayerImpl> participant) {
         Kit matchKit = profile.getMatch().getKit();
 
-        MatchGamePlayerImpl gamePlayer = this.getGamePlayer(player);
+        MatchGamePlayerImpl gamePlayer = this.getFromAllGamePlayers(player);
         if (gamePlayer.isDisconnected()) {
             return;
         }
@@ -296,7 +295,7 @@ public abstract class AbstractMatch {
     }
 
     private boolean shouldBecomeSpectatorForNonRoundKit(GameParticipant<MatchGamePlayerImpl> participant, Kit matchKit) {
-        return !participant.isAllDead() && !this.isRoundBasedKit(matchKit);
+        return !participant.isAllDead() && !this.isRoundBasedKit(matchKit) && !hasEliminationBasedKit(matchKit);
     }
 
     /**
@@ -422,7 +421,7 @@ public abstract class AbstractMatch {
             return;
         }
 
-        player.teleport(this.arena.getCenter());
+        this.teleportAndClearSpawn(player, this.arena.getCenter());
         player.spigot().setCollidesWithEntities(false);
         player.setAllowFlight(true);
         player.setFlying(true);
@@ -475,7 +474,7 @@ public abstract class AbstractMatch {
         });
 
         Location spawnLocation = this.arena.getCenter();
-        player.teleport(spawnLocation);
+        this.teleportAndClearSpawn(player, spawnLocation);
 
         new MatchRespawnRunnable(player, this, 3).runTaskTimer(this.plugin, 0L, 20L);
     }
@@ -606,6 +605,15 @@ public abstract class AbstractMatch {
     public MatchGamePlayerImpl getGamePlayer(Player player) {
         return this.getParticipants().stream()
                 .map(GameParticipant::getPlayers)
+                .flatMap(List::stream)
+                .filter(gamePlayer -> gamePlayer.getUuid().equals(player.getUniqueId()))
+                .findFirst()
+                .orElse(null);
+    }
+
+    public MatchGamePlayerImpl getFromAllGamePlayers(Player player) {
+        return this.getParticipants().stream()
+                .map(GameParticipant::getAllPlayers)
                 .flatMap(List::stream)
                 .filter(gamePlayer -> gamePlayer.getUuid().equals(player.getUniqueId()))
                 .findFirst()
@@ -763,7 +771,10 @@ public abstract class AbstractMatch {
     private void teleportBackIfMoved(Player player, Location location) {
         Location playerLocation = player.getLocation();
 
-        if (playerLocation.getBlockX() != location.getBlockX() || playerLocation.getBlockZ() != location.getBlockZ()) {
+        double deltaX = Math.abs(playerLocation.getX() - location.getX());
+        double deltaZ = Math.abs(playerLocation.getZ() - location.getZ());
+
+        if (deltaX > 0.1 || deltaZ > 0.1) {
             player.teleport(new Location(location.getWorld(), location.getX(), playerLocation.getY(), location.getZ(), playerLocation.getYaw(), playerLocation.getPitch()));
         }
     }
@@ -890,6 +901,16 @@ public abstract class AbstractMatch {
         }
     }
 
+    public void teleportAndClearSpawn(Player player, Location spawnLocation) {
+        for (int i = 0; i <= 2; i++) {
+            Block block = spawnLocation.clone().add(0, i, 0).getBlock();
+            if (block.getType() != Material.AIR) {
+                block.setType(Material.AIR);
+            }
+        }
+        player.teleport(spawnLocation);
+    }
+
     private void updatePlayerProfileForMatch(Player player) {
         Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
         profile.setState(EnumProfileState.PLAYING);
@@ -898,6 +919,7 @@ public abstract class AbstractMatch {
 
     private void updatePlayerProfileForLobby(Player player) {
         Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
+
         profile.setState(EnumProfileState.LOBBY);
         profile.setMatch(null);
     }

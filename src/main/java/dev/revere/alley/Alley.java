@@ -9,6 +9,7 @@ import dev.revere.alley.api.server.ServerEnvironment;
 import dev.revere.alley.base.arena.AbstractArena;
 import dev.revere.alley.base.arena.ArenaService;
 import dev.revere.alley.base.arena.listener.ArenaListener;
+import dev.revere.alley.base.arena.schematic.ArenaSchematicService;
 import dev.revere.alley.base.combat.CombatService;
 import dev.revere.alley.base.combat.listener.CombatListener;
 import dev.revere.alley.base.cooldown.CooldownRepository;
@@ -135,6 +136,7 @@ public class Alley extends JavaPlugin {
     private VisibilityService visibilityService;
     private FireballService fireballService;
     private BaseRaidingService baseRaidingService;
+    private ArenaSchematicService arenaSchematicService;
 
     private boolean loaded;
 
@@ -208,6 +210,7 @@ public class Alley extends JavaPlugin {
         services.put(KitService.class.getSimpleName(), () -> this.kitService = new KitService(this));
         services.put(BaseRaidingService.class.getSimpleName(), () -> this.baseRaidingService = new BaseRaidingService(this));
         services.put(ArenaService.class.getSimpleName(), () -> this.arenaService = new ArenaService(this));
+        services.put(ArenaSchematicService.class.getSimpleName(), () -> this.arenaSchematicService = new ArenaSchematicService(this));
         services.put(FFAService.class.getSimpleName(), () -> this.ffaService = new FFAService(this));
         services.put(CosmeticRepository.class.getSimpleName(), () -> this.cosmeticRepository = new CosmeticRepository());
         services.put(DivisionService.class.getSimpleName(), () -> this.divisionService = new DivisionService(this));

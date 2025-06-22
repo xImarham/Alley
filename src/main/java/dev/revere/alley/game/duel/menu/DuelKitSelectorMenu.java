@@ -5,6 +5,7 @@ import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.api.menu.Menu;
 import dev.revere.alley.base.kit.Kit;
 import dev.revere.alley.base.kit.setting.impl.mode.KitSettingRankedImpl;
+import dev.revere.alley.profile.Profile;
 import dev.revere.alley.tool.item.ItemBuilder;
 import dev.revere.alley.util.chat.CC;
 import lombok.AllArgsConstructor;
@@ -69,7 +70,10 @@ public class DuelKitSelectorMenu extends Menu {
             }
 
             player.closeInventory();
-            this.plugin.getDuelRequestService().sendDuelRequest(player, this.targetPlayer, this.kit);
+
+            Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
+
+            this.plugin.getDuelRequestService().sendDuelRequest(player, this.targetPlayer, this.kit, profile.getParty() != null);
             player.sendMessage(CC.translate("&aYou have sent a duel request to " + this.targetPlayer.getName() + " in the " + this.plugin.getDuelRequestService().getDuelRequest(player, this.targetPlayer).getArena().getName() + " arena with the " + this.kit.getName() + " kit."));
         }
     }

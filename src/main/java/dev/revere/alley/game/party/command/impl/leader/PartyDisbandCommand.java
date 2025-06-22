@@ -32,6 +32,11 @@ public class PartyDisbandCommand extends BaseCommand {
             return;
         }
 
+        if (profile.getMatch() != null) {
+            player.sendMessage(CC.translate("&cYou cannot disband your party while in a match."));
+            return;
+        }
+
         PartyService partyService = this.plugin.getPartyService();
         if (partyService.getPartyByLeader(player) != null) {
             partyService.disbandParty(player);

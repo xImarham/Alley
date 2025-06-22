@@ -7,6 +7,7 @@ import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
 import dev.revere.alley.tool.cuboid.Cuboid;
 import dev.revere.alley.util.chat.CC;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -42,12 +43,6 @@ public class FFACuboidListener implements Listener {
             return;
         }
 
-        for (AbstractFFAMatch ffaMatch : this.plugin.getFfaService().getMatches()) {
-            if (ffaMatch.getPlayers().isEmpty()) {
-                return;
-            }
-        }
-
         Player player = event.getPlayer();
         UUID playerId = player.getUniqueId();
 
@@ -57,6 +52,10 @@ public class FFACuboidListener implements Listener {
 
         Profile profile = this.plugin.getProfileService().getProfile(playerId);
         if (profile == null || profile.getState() != EnumProfileState.FFA) {
+            return;
+        }
+
+        if (this.plugin.getFfaService().getFFAMatch(player) == null || !this.plugin.getFfaService().getMatchByPlayer(player).isPresent()) {
             return;
         }
 

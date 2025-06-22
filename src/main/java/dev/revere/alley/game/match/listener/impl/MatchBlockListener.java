@@ -194,7 +194,6 @@ public class MatchBlockListener implements Listener {
                     if (participant.getPlayer().getData().getRole() == EnumBaseRaiderRole.TRAPPER) {
                         event.setCancelled(false);
                         match.addBlockToPlacedBlocksMap(event.getBlock().getState(), event.getBlock().getLocation());
-                        match.sendMessage("&7added placed block: &b" + event.getBlock().getType() + " &7at " + event.getBlock().getLocation());
                     } else {
                         event.setCancelled(true);
                     }

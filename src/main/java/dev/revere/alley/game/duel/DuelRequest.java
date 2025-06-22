@@ -22,6 +22,7 @@ public class DuelRequest {
     private AbstractArena arena;
 
     private final long expireTime;
+    private boolean party;
 
     /**
      * Instantiates a new Duel request.
@@ -31,11 +32,12 @@ public class DuelRequest {
      * @param kit    the kit
      * @param arena  the arena
      */
-    public DuelRequest(Player sender, Player target, Kit kit, AbstractArena arena) {
+    public DuelRequest(Player sender, Player target, Kit kit, AbstractArena arena, boolean party) {
         this.sender = sender;
         this.target = target;
         this.kit = kit;
         this.arena = arena;
+        this.party = party;
         this.expireTime = System.currentTimeMillis() + 30000L;
     }
 

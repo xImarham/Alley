@@ -1,0 +1,189 @@
+package dev.revere.alley.base.arena.schematic;
+
+import com.boydti.fawe.FaweAPI;
+import com.boydti.fawe.object.schematic.Schematic;
+import com.sk89q.worldedit.CuboidClipboard;
+import com.sk89q.worldedit.EditSession;
+import com.sk89q.worldedit.Vector;
+import com.sk89q.worldedit.blocks.BaseBlock;
+import com.sk89q.worldedit.bukkit.BukkitUtil;
+import com.sk89q.worldedit.bukkit.BukkitWorld;
+import com.sk89q.worldedit.bukkit.selections.CuboidSelection;
+import com.sk89q.worldedit.extent.clipboard.BlockArrayClipboard;
+import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormat;
+import com.sk89q.worldedit.extent.clipboard.io.ClipboardWriter;
+import com.sk89q.worldedit.function.operation.ForwardExtentCopy;
+import com.sk89q.worldedit.function.operation.Operations;
+import com.sk89q.worldedit.regions.CuboidRegion;
+import com.sk89q.worldedit.schematic.SchematicFormat;
+import dev.revere.alley.Alley;
+import dev.revere.alley.base.arena.AbstractArena;
+import dev.revere.alley.base.arena.impl.StandAloneArena;
+import dev.revere.alley.tool.logger.Logger;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.World;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.nio.file.Files;
+import java.util.List;
+
+/**
+ * @author Emmy
+ * @project Alley
+ * @since 16/06/2025
+ */
+public class ArenaSchematicService {
+    protected final Alley plugin;
+
+    /**
+     * Constructor for the ArenaSchematicService class.
+     *
+     * @param plugin The Alley plugin instance.
+     */
+    public ArenaSchematicService(Alley plugin) {
+        this.plugin = plugin;
+        this.convertArenasToSchematic();
+    }
+
+    public void convertArenasToSchematic() {
+        List<AbstractArena> arenas = this.plugin.getArenaService().getArenas();
+
+        arenas.forEach(arena -> {
+                    File schematicFile = new File(this.plugin.getDataFolder(), "schematics/" + arena.getName() + ".schematic");
+                    schematicFile.getParentFile().mkdirs();
+                    this.save(arena, schematicFile);
+                }
+        );
+    }
+
+    public File createSchematicFile(String name) {
+        File schematicFile = this.getSchematicFile(name);
+
+        schematicFile.getParentFile().mkdirs();
+        try {
+            schematicFile.createNewFile();
+            if (schematicFile.exists()) {
+                Logger.log("Created/updated schematic file: " + schematicFile.getPath());
+            }
+        } catch (Exception e) {
+            Logger.logException("Failed to create schematic file: " + schematicFile.getPath(), e);
+        }
+        return schematicFile;
+    }
+
+    /**
+     * Saves the schematic of the given arena to the specified file.
+     *
+     * @param arena         The arena to save.
+     * @param schematicFile The file to save the schematic to.
+     */
+    public void save(AbstractArena arena, File schematicFile) {
+        try {
+            Location min = arena.getMinimum();
+            Location max = arena.getMaximum();
+
+            World bukkitWorld = min.getWorld();
+            CuboidSelection selection = new CuboidSelection(bukkitWorld, min, max);
+
+            Vector minVector = BukkitUtil.toVector(selection.getMinimumPoint());
+            Vector maxVector = BukkitUtil.toVector(selection.getMaximumPoint());
+
+            CuboidRegion region = new CuboidRegion(minVector, maxVector);
+            BlockArrayClipboard clipboard = new BlockArrayClipboard(region);
+            clipboard.setOrigin(minVector);
+
+            EditSession session = new EditSession(BukkitUtil.getLocalWorld(bukkitWorld), -1);
+            session.setFastMode(true);
+
+            ForwardExtentCopy forwardExtentCopy = new ForwardExtentCopy(session, region, clipboard, region.getMinimumPoint());
+            Operations.complete(forwardExtentCopy);
+
+            try (ClipboardWriter writer = ClipboardFormat.SCHEMATIC.getWriter(Files.newOutputStream(schematicFile.toPath()))) {
+                writer.write(clipboard, session.getWorld().getWorldData());
+            } catch (Exception e) {
+                Logger.logException("Failed to write schematic to file: " + schematicFile.getPath(), e);
+            }
+
+            Logger.log("Saved schematic for arena: " + arena.getName());
+        } catch (Exception exception) {
+            Logger.logException("Failed to save schematic for arena " + arena.getName(), exception);
+        }
+    }
+
+    public void updateSchematic(AbstractArena arena) {
+        File schematicFile = createSchematicFile(arena.getName());
+        if (schematicFile.exists()) {
+            this.save(arena, schematicFile);
+        }
+    }
+
+    /**
+     * Pastes the schematic at the specified location.
+     *
+     * @param location      The location to paste the schematic.
+     * @param schematicFile The file containing the schematic to paste.
+     */
+    public void paste(Location location, File schematicFile) {
+        try {
+            World bukkitWorld = location.getWorld();
+            Vector toVector = BukkitUtil.toVector(location);
+            EditSession session = new EditSession(BukkitUtil.getLocalWorld(bukkitWorld), -1);
+            session.setFastMode(true);
+
+            Schematic schema = FaweAPI.load(schematicFile);
+            schema.paste(session, toVector, false);
+
+            session.flushQueue();
+
+        } catch (Exception exception) {
+            Logger.logException("Failed to paste schematic at " + location.toString(), exception);
+        }
+    }
+
+    public void delete(StandAloneArena arena) {
+        if (!arena.isTemporaryCopy()) {
+            return;
+        }
+
+        try {
+            Location min = arena.getMinimum();
+            Location max = arena.getMaximum();
+
+            World bukkitWorld = min.getWorld();
+            BukkitWorld world = new BukkitWorld(bukkitWorld);
+
+            Vector minVector = BukkitUtil.toVector(min);
+            Vector maxVector = BukkitUtil.toVector(max);
+
+            EditSession session = new EditSession(world, -1);
+            session.setFastMode(true);
+
+            session.setBlocks(new CuboidRegion(minVector, maxVector), new BaseBlock(0));
+            session.flushQueue();
+        } catch (Exception exception) {
+            Logger.logException("Failed to delete arena " + arena.getName(), exception);
+        }
+    }
+
+    /**
+     * Returns the schematic file by name from the schematics directory.
+     *
+     * @param name The name of the schematic (without extension).
+     * @return The File representing the schematic.
+     */
+    public File getSchematicFile(String name) {
+        return new File(this.plugin.getDataFolder(), "schematics/" + name.toLowerCase().replace(" ", "_") + ".schematic");
+    }
+
+    /**
+     * Returns the schematic file associated with the given arena.
+     *
+     * @param arena The arena to get the schematic for.
+     * @return The File representing the schematic associated with the arena.
+     */
+    public File getSchematicFile(AbstractArena arena) {
+        return this.getSchematicFile(arena.getName());
+    }
+}

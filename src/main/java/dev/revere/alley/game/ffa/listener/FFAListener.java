@@ -8,11 +8,14 @@ import dev.revere.alley.base.cooldown.enums.EnumCooldownType;
 import dev.revere.alley.game.ffa.cuboid.FFASpawnService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
+import dev.revere.alley.util.InventoryUtil;
 import dev.revere.alley.util.ListenerUtil;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.entity.EnderPearl;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -20,11 +23,10 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.inventory.ItemStack;
 
 import java.util.Optional;
 
@@ -108,39 +110,53 @@ public class FFAListener implements Listener {
     }
 
     /**
-     * Handles the EntityDamageByEntityEvent. The event is cancelled if the player is in the FFA state and tries to damage another player.
+     * Handles the EntityDamageByEntityEvent.
+     * The event is cancelled if the player is in the FFA state and tries to damage another player.
      *
      * @param event The EntityDamageByEntityEvent
      */
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onEntityDamageByEntityMonitor(EntityDamageByEntityEvent event) {
-        if (event.getEntity() instanceof Player && event.getDamager() instanceof Player) {
-            Profile profile = this.plugin.getProfileService().getProfile(event.getEntity().getUniqueId());
-            if (profile.getState() != EnumProfileState.FFA) return;
+        if (!(event.getDamager() instanceof Player) || !(event.getEntity() instanceof Player)) return;
 
-            Player player = (Player) event.getEntity();
-            Player attacker = (Player) event.getDamager();
-            this.plugin.getCombatService().setLastAttacker(player, attacker);
+        Player player = (Player) event.getEntity();
+        Player attacker = (Player) event.getDamager();
 
-            CombatService combatService = this.plugin.getCombatService();
-            combatService.setLastAttacker(player, attacker);
-        }
+        Profile profile = accessProfile(player);
+        if (profile.getState() != EnumProfileState.FFA) return;
+
+        this.plugin.getCombatService().setLastAttacker(player, attacker);
+
+        CombatService combatService = this.plugin.getCombatService();
+        combatService.setLastAttacker(player, attacker);
     }
 
     @EventHandler
     public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
-        Profile profile = this.plugin.getProfileService().getProfile(event.getEntity().getUniqueId());
-        if (profile.getState() != EnumProfileState.FFA) return;
-        if (!(event.getDamager() instanceof Player) || !(event.getEntity() instanceof Player)) return;
+        Player attacker;
 
+        if (event.getDamager() instanceof Player) {
+            attacker = (Player) event.getDamager();
+        } else if (event.getDamager() instanceof Projectile) {
+            if (((Projectile) event.getDamager()).getShooter() instanceof Player) {
+                attacker = (Player) ((Projectile) event.getDamager()).getShooter();
+            } else {
+                return;
+            }
+        } else {
+            return;
+        }
+
+        if (!(event.getEntity() instanceof Player)) return;
         Player victim = (Player) event.getEntity();
-        Player attacker = (Player) event.getDamager();
+
+        Profile profile = accessProfile(victim);
+        if (profile.getState() != EnumProfileState.FFA) {
+            return;
+        }
 
         FFASpawnService ffaSpawnService = this.plugin.getFfaSpawnService();
-        if (ffaSpawnService.getCuboid().isIn((victim)) && ffaSpawnService.getCuboid().isIn((attacker))
-                || !ffaSpawnService.getCuboid().isIn(victim) && ffaSpawnService.getCuboid().isIn(attacker)
-                || ffaSpawnService.getCuboid().isIn(victim) && !ffaSpawnService.getCuboid().isIn(attacker)) {
-
+        if ((ffaSpawnService.getCuboid().isIn(victim) && ffaSpawnService.getCuboid().isIn(attacker)) || (!ffaSpawnService.getCuboid().isIn(victim) && ffaSpawnService.getCuboid().isIn(attacker)) || (ffaSpawnService.getCuboid().isIn(victim) && !ffaSpawnService.getCuboid().isIn(attacker))) {
             CombatService combatService = this.plugin.getCombatService();
             if (combatService.isPlayerInCombat(victim.getUniqueId()) && combatService.isPlayerInCombat(attacker.getUniqueId())) {
                 return;
@@ -151,7 +167,8 @@ public class FFAListener implements Listener {
     }
 
     /**
-     * Handles the BlockPlaceEvent. The event is cancelled if the player is in the FFA state and tries to place a block.
+     * Handles the BlockPlaceEvent.
+     * The event is cancelled if the player is in the FFA state and tries to place a block.
      *
      * @param event The BlockPlaceEvent
      */
@@ -159,13 +176,15 @@ public class FFAListener implements Listener {
     private void onBlockPlace(BlockPlaceEvent event) {
         Player player = event.getPlayer();
         Profile profile = this.accessProfile(player);
-        if (profile.getState() != EnumProfileState.FFA) return;
-
+        if (profile.getState() != EnumProfileState.FFA) {
+            return;
+        }
         event.setCancelled(true);
     }
 
     /**
-     * Handles the BlockBreakEvent. The event is cancelled if the player is in the FFA state and tries to break a block.
+     * Handles the BlockBreakEvent.
+     * The event is cancelled if the player is in the FFA state and tries to break a block.
      *
      * @param event The BlockBreakEvent
      */
@@ -173,51 +192,47 @@ public class FFAListener implements Listener {
     private void onBlockBreak(BlockBreakEvent event) {
         Player player = event.getPlayer();
         Profile profile = this.accessProfile(player);
-        if (profile.getState() == EnumProfileState.FFA) {
-            event.setCancelled(true);
+        if (profile.getState() != EnumProfileState.FFA) {
+            return;
         }
+        event.setCancelled(true);
     }
 
-    /**
-     * Handles the PlayerInteractEvent. The event is cancelled if the player is in the FFA state and tries to interact with an item.
-     *
-     * @param event The PlayerInteractEvent
-     */
     @EventHandler
-    private void onPlayerInteract(PlayerInteractEvent event) {
-        Player player = event.getPlayer();
-        Profile profile = this.accessProfile(player);
-        ItemStack item = event.getItem();
+    private void onPearlLaunch(ProjectileLaunchEvent event) {
+        if (!(event.getEntity() instanceof EnderPearl)) return;
+        if (!(event.getEntity().getShooter() instanceof Player)) return;
+
+        Player player = (Player) event.getEntity().getShooter();
+        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
 
         if (profile.getState() != EnumProfileState.FFA) return;
-        if (item == null) return;
-        if (item.getType() != Material.ENDER_PEARL) return;
 
-        if (event.getAction().name().contains("RIGHT_CLICK")) {
-            if (this.plugin.getFfaSpawnService().getCuboid().isIn(player)) {
-                event.setCancelled(true);
-                player.updateInventory();
-                player.sendMessage(CC.translate("&cYou cannot use ender pearls at spawn."));
-                return;
-            }
-
-            CooldownRepository cooldownRepository = this.plugin.getCooldownRepository();
-            Optional<Cooldown> optionalCooldown = Optional.ofNullable(cooldownRepository.getCooldown(player.getUniqueId(), EnumCooldownType.ENDER_PEARL));
-
-            if (optionalCooldown.isPresent() && optionalCooldown.get().isActive()) {
-                event.setCancelled(true);
-                player.updateInventory();
-                player.sendMessage(CC.translate("&cYou must wait " + optionalCooldown.get().remainingTime() + " seconds before using another ender pearl."));
-                return;
-            }
-
-            Cooldown cooldown = optionalCooldown.orElseGet(() -> {
-                Cooldown newCooldown = new Cooldown(EnumCooldownType.ENDER_PEARL, () -> player.sendMessage(CC.translate("&aYou can now use pearls again!")));
-                cooldownRepository.addCooldown(player.getUniqueId(), EnumCooldownType.ENDER_PEARL, newCooldown);
-                return newCooldown;
-            });
-
-            cooldown.resetCooldown();
+        if (this.plugin.getFfaSpawnService().getCuboid().isIn(player)) {
+            event.setCancelled(true);
+            InventoryUtil.giveItem(player, Material.ENDER_PEARL, 1);
+            player.updateInventory();
+            player.sendMessage(CC.translate("&cYou cannot use ender pearls at spawn."));
+            return;
         }
+
+        CooldownRepository cooldownRepository = this.plugin.getCooldownRepository();
+        Optional<Cooldown> optionalCooldown = Optional.ofNullable(cooldownRepository.getCooldown(player.getUniqueId(), EnumCooldownType.ENDER_PEARL));
+
+        if (optionalCooldown.isPresent() && optionalCooldown.get().isActive()) {
+            event.setCancelled(true);
+            InventoryUtil.giveItem(player, Material.ENDER_PEARL, 1);
+            player.updateInventory();
+            player.sendMessage(CC.translate("&cYou must wait " + optionalCooldown.get().remainingTime() + " seconds before using another ender pearl."));
+            return;
+        }
+
+        Cooldown cooldown = optionalCooldown.orElseGet(() -> {
+            Cooldown newCooldown = new Cooldown(EnumCooldownType.ENDER_PEARL, () -> player.sendMessage(CC.translate("&aYou can now use pearls again!")));
+            cooldownRepository.addCooldown(player.getUniqueId(), EnumCooldownType.ENDER_PEARL, newCooldown);
+            return newCooldown;
+        });
+
+        cooldown.resetCooldown();
     }
 }

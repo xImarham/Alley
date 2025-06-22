@@ -36,6 +36,15 @@ public class GameParticipant<T extends GamePlayer> {
      * @return The player associated with the participant.
      */
     public List<T> getPlayers() {
+        return this.player.isDisconnected() ? Collections.emptyList() : Collections.singletonList(this.player);
+    }
+
+    /**
+     * Gets the player associated with the participant.
+     *
+     * @return The player associated with the participant.
+     */
+    public List<T> getAllPlayers() {
         return Collections.singletonList(this.player);
     }
 
@@ -64,6 +73,27 @@ public class GameParticipant<T extends GamePlayer> {
      */
     public String getConjoinedNames() {
         return this.player.getUsername();
+    }
+
+
+    /**
+     * Adds a player to the team participant.
+     *
+     * @param player the player to add.
+     */
+    public void addPlayer(T player) {
+        this.player = player;
+    }
+
+    /**
+     * Removes a player from the team participant.
+     *
+     * @param player The player to remove.
+     */
+    public void removePlayer(T player) {
+       if (this.player != null && this.player.getUuid().equals(player.getUuid())) {
+            this.player = null;
+        }
     }
 
     /**

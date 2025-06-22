@@ -40,6 +40,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @author Remi
@@ -119,6 +121,9 @@ public class MatchRegularImpl extends AbstractMatch {
 
         participant.getPlayers().forEach(gamePlayer -> {
             Player teamPlayer = gamePlayer.getPlayer();
+            if (teamPlayer == null || !teamPlayer.isOnline()) {
+                return;
+            }
 
             teamPlayer.getInventory().all(Material.WOOL).forEach((key, value) ->
                     teamPlayer.getInventory().setItem(key, new ItemBuilder(Material.WOOL).durability(woolColor).amount(64).build())
@@ -146,8 +151,13 @@ public class MatchRegularImpl extends AbstractMatch {
         this.loser = this.participantA.isAllDead() ? this.participantA : this.participantB;
         this.loser.getPlayer().setEliminated(true);
 
-        this.sendVictory(this.winner.getPlayer().getPlayer());
-        this.sendDefeat(this.loser.getPlayer().getPlayer());
+        this.winner.getPlayers().forEach(gamePlayer -> {
+            this.sendVictory(gamePlayer.getPlayer());
+        });
+
+        this.loser.getPlayers().forEach(gamePlayer -> {
+            this.sendDefeat(gamePlayer.getPlayer());
+        });
 
         if (this.isTeamMatch()) {
             MatchUtility.sendConjoinedMatchResult(this, this.winner, this.loser);
@@ -422,7 +432,7 @@ public class MatchRegularImpl extends AbstractMatch {
             return;
         }
 
-        MatchGamePlayerImpl gamePlayer = this.getGamePlayer(player);
+        MatchGamePlayerImpl gamePlayer = this.getFromAllGamePlayers(player);
         if (gamePlayer != null) {
             gamePlayer.setDisconnected(true);
             if (!gamePlayer.isDead()) {

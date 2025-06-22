@@ -44,15 +44,27 @@ public class DuelCommand extends BaseCommand {
         }
 
         Profile targetProfile = this.plugin.getProfileService().getProfile(target.getUniqueId());
+        if (targetProfile.getState() != EnumProfileState.LOBBY) {
+            player.sendMessage(CC.translate("&cThat player is not in the lobby."));
+            return;
+        }
+
         if (targetProfile.getParty() != null && profile.getParty() == null) {
             player.sendMessage(CC.translate("&cThat player is in a party and you're not. You can't duel them."));
             return;
         }
 
-        if (profile.getParty() != null && targetProfile.getParty() != null) {
-            player.sendMessage(CC.translate("&cYou're both in a party and dueling other parties through this command is not implemented yet."));
+        if (targetProfile.getParty() == null && profile.getParty() != null) {
+            player.sendMessage(CC.translate("&cYou are in a party and the target player is not. You can't duel them."));
             return;
         }
+
+        if (targetProfile.getParty() != null && profile.getParty().getMembers().contains(target.getUniqueId())) {
+            player.sendMessage(CC.translate("&cYou cannot duel a member of your own party."));
+            return;
+        }
+
+        player.sendMessage(CC.translate("&cYou're both in a party and dueling other parties through this command is not implemented yet."));
 
         if (this.plugin.getServerService().isQueueingEnabled(player)) {
             return;

@@ -6,10 +6,8 @@ import dev.revere.alley.base.arena.impl.StandAloneArena;
 import dev.revere.alley.base.kit.Kit;
 import dev.revere.alley.base.kit.setting.impl.mechanic.KitSettingDenyMovementImpl;
 import dev.revere.alley.base.kit.setting.impl.mechanic.KitSettingNoHungerImpl;
-import dev.revere.alley.base.kit.setting.impl.mode.KitSettingRoundsImpl;
-import dev.revere.alley.base.kit.setting.impl.mode.KitSettingSpleefImpl;
-import dev.revere.alley.base.kit.setting.impl.mode.KitSettingStickFightImpl;
-import dev.revere.alley.base.kit.setting.impl.mode.KitSettingSumoImpl;
+import dev.revere.alley.base.kit.setting.impl.mechanic.KitSettingVoidDeathImpl;
+import dev.revere.alley.base.kit.setting.impl.mode.*;
 import dev.revere.alley.game.match.AbstractMatch;
 import dev.revere.alley.game.match.enums.EnumMatchState;
 import dev.revere.alley.game.match.impl.MatchRoundsImpl;
@@ -79,7 +77,7 @@ public class MatchListener implements Listener {
                 }
             }
 
-            if (player.getLocation().getY() <= this.plugin.getConfigService().getSettingsConfig().getInt("game.death-y-level")) {
+            if (player.getLocation().getY() <= this.plugin.getConfigService().getSettingsConfig().getInt("game.death-y-level") && matchKit.isSettingEnabled(KitSettingVoidDeathImpl.class)) {
                 if (player.getGameMode() == GameMode.SPECTATOR) return;
                 if (player.getGameMode() == GameMode.CREATIVE) return;
                 if (match.getArena().getType() != EnumArenaType.STANDALONE) return;

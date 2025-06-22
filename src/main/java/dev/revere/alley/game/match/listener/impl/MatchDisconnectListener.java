@@ -33,9 +33,16 @@ public class MatchDisconnectListener implements Listener {
         Player player = event.getPlayer();
         Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
 
-        if (profile.getState() == EnumProfileState.PLAYING) {
+        if (profile.getState() == EnumProfileState.PLAYING || profile.getState() == EnumProfileState.SPECTATING) {
             profile.setState(EnumProfileState.LOBBY);
             AbstractMatch match = profile.getMatch();
+            if (match.getSpectators().contains(player.getUniqueId())) {
+                match.removeSpectator(player, true);
+            }
+
+            if (match.getGamePlayer(player) == null) {
+                return;
+            }
 
             if (match.getState() == EnumMatchState.STARTING || match.getState() == EnumMatchState.RUNNING) {
                 match.handleDisconnect(player);

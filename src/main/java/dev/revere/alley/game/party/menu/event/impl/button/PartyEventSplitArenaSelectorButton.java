@@ -5,22 +5,17 @@ import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.base.arena.AbstractArena;
 import dev.revere.alley.base.kit.Kit;
 import dev.revere.alley.config.locale.impl.PartyLocale;
-import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
-import dev.revere.alley.game.match.player.participant.GameParticipant;
-import dev.revere.alley.game.match.player.participant.TeamGameParticipant;
 import dev.revere.alley.game.party.Party;
+import dev.revere.alley.game.party.PartyService;
 import dev.revere.alley.tool.item.ItemBuilder;
 import dev.revere.alley.util.chat.CC;
 import lombok.AllArgsConstructor;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @author Emmy
@@ -53,39 +48,7 @@ public class PartyEventSplitArenaSelectorButton extends Button {
             return;
         }
 
-        List<Player> allPartyPlayers = party.getMembers().stream()
-                .map(Bukkit::getPlayer)
-                .collect(Collectors.toList());
-
-        Collections.shuffle(allPartyPlayers);
-
-        Player leaderA = allPartyPlayers.get(0);
-        Player leaderB = allPartyPlayers.get(1);
-
-        MatchGamePlayerImpl gameLeaderA = new MatchGamePlayerImpl(leaderA.getUniqueId(), leaderA.getName());
-        MatchGamePlayerImpl gameLeaderB = new MatchGamePlayerImpl(leaderB.getUniqueId(), leaderB.getName());
-
-        GameParticipant<MatchGamePlayerImpl> participantA = new TeamGameParticipant<>(gameLeaderA);
-        GameParticipant<MatchGamePlayerImpl> participantB = new TeamGameParticipant<>(gameLeaderB);
-
-        int totalPlayers = allPartyPlayers.size();
-        int teamATargetSize = totalPlayers / 2;
-        int currentTeamACount = 1;
-
-        for (int i = 2; i < allPartyPlayers.size(); i++) {
-            Player currentPlayer = allPartyPlayers.get(i);
-            MatchGamePlayerImpl gamePlayer = new MatchGamePlayerImpl(currentPlayer.getUniqueId(), currentPlayer.getName());
-
-            if (currentTeamACount < teamATargetSize) {
-                participantA.getPlayers().add(gamePlayer);
-                currentTeamACount++;
-            } else {
-                participantB.getPlayers().add(gamePlayer);
-            }
-        }
-
-        this.plugin.getMatchService().createAndStartMatch(
-                this.kit, this.plugin.getArenaService().getRandomArena(this.kit), participantA, participantB, true, false, false
-        );
+        PartyService partyService = this.plugin.getPartyService();
+        partyService.startMatch(this.kit, this.arena, party);
     }
 }

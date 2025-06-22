@@ -5,10 +5,10 @@ import dev.revere.alley.base.kit.setting.impl.mode.KitSettingRoundsImpl;
 import dev.revere.alley.game.match.AbstractMatch;
 import dev.revere.alley.game.match.enums.EnumMatchState;
 import dev.revere.alley.tool.reflection.impl.TitleReflectionService;
-import dev.revere.alley.util.SoundUtil;
 import dev.revere.alley.util.chat.CC;
 import lombok.Getter;
 import lombok.Setter;
+import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -115,21 +115,25 @@ public class MatchRunnable extends BukkitRunnable {
     }
 
     private void sendTitleStarted() {
-        this.match.getParticipants().forEach(participant -> Alley.getInstance().getReflectionRepository().getReflectionService(TitleReflectionService.class).sendTitle(
-                participant.getPlayer().getPlayer(),
-                "&b&lMatch started",
-                "&fGood Luck!",
-                15, 20, 2
-        ));
+        this.match.getParticipants().forEach(gameParticipant -> gameParticipant.getPlayers().forEach(matchGamePlayer -> {
+            Alley.getInstance().getReflectionRepository().getReflectionService(TitleReflectionService.class).sendTitle(
+                    matchGamePlayer.getPlayer(),
+                    "&b&lMatch started",
+                    "&fGood Luck!",
+                    15, 20, 2
+            );
+        }));
     }
 
     private void sendTitleStarting() {
-        this.match.getParticipants().forEach(participant -> Alley.getInstance().getReflectionRepository().getReflectionService(TitleReflectionService.class).sendTitle(
-                participant.getPlayer().getPlayer(),
-                "&a&l" + this.stage,
-                "",
-                2, 10, 2
-        ));
+        this.match.getParticipants().forEach(gameParticipant -> gameParticipant.getPlayers().forEach(matchGamePlayer -> {
+            Alley.getInstance().getReflectionRepository().getReflectionService(TitleReflectionService.class).sendTitle(
+                    matchGamePlayer.getPlayer(),
+                    "&a&l" + this.stage,
+                    "",
+                    2, 10, 2
+            );
+        }));
     }
 
     /**
@@ -151,10 +155,10 @@ public class MatchRunnable extends BukkitRunnable {
     }
 
     private void playSoundStarting() {
-        this.match.getParticipants().forEach(participant -> SoundUtil.playNeutral(participant.getPlayer().getPlayer()));
+        this.match.playSound(Sound.NOTE_STICKS);
     }
 
     private void playSoundStarted() {
-        this.match.getParticipants().forEach(participant -> SoundUtil.playBlast(participant.getPlayer().getPlayer()));
+        this.match.playSound(Sound.FIREWORK_BLAST);
     }
 }

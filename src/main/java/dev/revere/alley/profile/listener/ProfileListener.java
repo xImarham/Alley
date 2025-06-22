@@ -148,7 +148,7 @@ public class ProfileListener implements Listener {
         this.plugin.getSpawnService().teleportToSpawn(player);
         this.plugin.getHotbarService().applyHotbarItems(player, EnumHotbarType.LOBBY);
 
-        this.plugin.getVisibilityService().updateVisibilityAll(player);
+        this.plugin.getVisibilityService().updateVisibility(player);
     }
 
     /**

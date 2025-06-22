@@ -8,7 +8,9 @@ import dev.revere.alley.game.match.enums.EnumMatchState;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.game.match.player.participant.TeamGameParticipant;
+import dev.revere.alley.tool.reflection.impl.TitleReflectionService;
 import dev.revere.alley.util.PlayerUtil;
+import dev.revere.alley.util.SoundUtil;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.ChatColor;
@@ -184,7 +186,7 @@ public class MatchRoundsImpl extends MatchRegularImpl {
         PlayerUtil.reset(player, true);
 
         Location spawnLocation = getParticipants().get(0).containsPlayer(player.getUniqueId()) ? this.getArena().getPos1() : this.getArena().getPos2();
-        player.teleport(spawnLocation);
+        teleportAndClearSpawn(player, spawnLocation);
 
         this.giveLoadout(player, this.getKit());
         this.applyWoolAndArmorColor(player);
@@ -198,15 +200,15 @@ public class MatchRoundsImpl extends MatchRegularImpl {
     @Override
     public boolean canEndRound() {
         return (this.participantA.isAllDead() || this.participantB.isAllDead())
-                || (this.participantA.getPlayers().stream().allMatch(MatchGamePlayerImpl::isDisconnected)
-                || this.participantB.getPlayers().stream().allMatch(MatchGamePlayerImpl::isDisconnected));
+                || (this.participantA.getAllPlayers().stream().allMatch(MatchGamePlayerImpl::isDisconnected)
+                || this.participantB.getAllPlayers().stream().allMatch(MatchGamePlayerImpl::isDisconnected));
     }
 
     @Override
     public boolean canEndMatch() {
         return (this.participantA.getPlayer().getData().getScore() == this.rounds || this.participantB.getPlayer().getData().getScore() == this.rounds)
-                || (this.participantA.getPlayers().stream().allMatch(MatchGamePlayerImpl::isDisconnected)
-                || this.participantB.getPlayers().stream().allMatch(MatchGamePlayerImpl::isDisconnected));
+                || (this.participantA.getAllPlayers().stream().allMatch(MatchGamePlayerImpl::isDisconnected)
+                || this.participantB.getAllPlayers().stream().allMatch(MatchGamePlayerImpl::isDisconnected));
     }
 
     /**
@@ -236,5 +238,15 @@ public class MatchRoundsImpl extends MatchRegularImpl {
                 );
             }
         }
+
+        this.getParticipants().forEach(gameParticipant -> gameParticipant.getPlayers().forEach(uuid -> {
+            Player player = this.plugin.getServer().getPlayer(uuid.getUuid());
+            this.plugin.getReflectionRepository().getReflectionService(TitleReflectionService.class).sendTitle(
+                    player,
+                    teamWinnerColor.toString() + winner.getPlayer().getUsername() + " &fhas scored!",
+                    "&f" + winner.getPlayer().getData().getScore() + " &7/&f " + this.rounds,
+                    2, 20, 2
+            );
+        }));
     }
 }

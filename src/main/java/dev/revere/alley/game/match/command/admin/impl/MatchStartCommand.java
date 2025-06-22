@@ -94,7 +94,7 @@ public class MatchStartCommand extends BaseCommand {
         GameParticipant<MatchGamePlayerImpl> participantB = new GameParticipant<>(playerB);
 
         this.plugin.getMatchService().createAndStartMatch(
-                kit, arena, participantA, participantB, false, false, false
+                kit, this.plugin.getArenaService().selectArenaWithPotentialTemporaryCopy(arena), participantA, participantB, false, false, false
         );
     }
 }

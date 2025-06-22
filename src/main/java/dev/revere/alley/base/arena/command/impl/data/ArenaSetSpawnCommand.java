@@ -36,7 +36,7 @@ public class ArenaSetSpawnCommand extends BaseCommand {
         String[] args = command.getArgs();
 
         if (args.length < 2) {
-            player.sendMessage(CC.translate("&6Usage: &e/arena setspawn &b<arenaName> <pos1/pos2/ffa>"));
+            player.sendMessage(CC.translate("&6Usage: &e/arena setspawn &b<arenaName> <blue/red/ffa>"));
             return;
         }
 
@@ -48,19 +48,19 @@ public class ArenaSetSpawnCommand extends BaseCommand {
             return;
         }
 
-        if (!spawnType.equalsIgnoreCase("pos1") && !spawnType.equalsIgnoreCase("pos2") && !spawnType.equalsIgnoreCase("ffa")) {
-            player.sendMessage(CC.translate("&cInvalid spawn type! Valid types: pos1, pos2, ffa"));
+        if (!spawnType.equalsIgnoreCase("blue") && !spawnType.equalsIgnoreCase("red") && !spawnType.equalsIgnoreCase("ffa")) {
+            player.sendMessage(CC.translate("&cInvalid spawn type! Valid types: blue, red, ffa"));
             return;
         }
 
         switch (spawnType.toLowerCase()) {
-            case "pos1":
+            case "blue":
                 if (this.plugin.getArenaService().getArenaByName(arenaName).getType() == EnumArenaType.FFA) {
                     player.sendMessage(CC.translate("&cFFA Arenas do not need a spawn position!"));
                     return;
                 }
                 this.plugin.getArenaService().getArenaByName(arenaName).setPos1(player.getLocation());
-                player.sendMessage(CC.translate("&aSpawn Position 1 has been set for arena &b" + arenaName + "&a!"));
+                player.sendMessage(CC.translate("&aBlue Spawn Position has been set for arena &b" + arenaName + "&a!"));
                 break;
             case "ffa":
                 if (this.plugin.getArenaService().getArenaByName(arenaName).getType() != EnumArenaType.FFA) {
@@ -76,7 +76,7 @@ public class ArenaSetSpawnCommand extends BaseCommand {
                     return;
                 }
                 this.plugin.getArenaService().getArenaByName(arenaName).setPos2(player.getLocation());
-                player.sendMessage(CC.translate("&aSpawn Position 2 has been set for arena &b" + arenaName + "&a!"));
+                player.sendMessage(CC.translate("&aRed Spawn Position has been set for arena &b" + arenaName + "&a!"));
                 break;
         }
 

@@ -37,6 +37,11 @@ public class MatchScoreboardRegularImpl implements IMatchScoreboard {
         boolean isTeamMatch = regularMatch.isTeamMatch();
         String configPath = isTeamMatch ? "scoreboard.lines.playing.team.regular-match" : "scoreboard.lines.playing.solo.regular-match";
 
+        GameParticipant<MatchGamePlayerImpl> yourTeam = determinePlayerTeam(regularMatch, you);
+        GameParticipant<MatchGamePlayerImpl> opponentTeam = (yourTeam == regularMatch.getParticipantA())
+                ? regularMatch.getParticipantB()
+                : regularMatch.getParticipantA();
+
         for (String line : this.plugin.getConfigService().getScoreboardConfig().getStringList(configPath)) {
             scoreboardLines.add(CC.translate(line)
                     .replaceAll("\\{opponent}", this.getColoredName(this.plugin.getProfileService().getProfile(opponent.getPlayer().getUuid())))
@@ -45,13 +50,25 @@ public class MatchScoreboardRegularImpl implements IMatchScoreboard {
                     .replaceAll("\\{duration}", regularMatch.getDuration())
                     .replaceAll("\\{arena}", regularMatch.getArena().getDisplayName() == null ? "&c&lNULL" : regularMatch.getArena().getDisplayName())
                     .replaceAll("\\{kit}", regularMatch.getKit().getDisplayName())
-                    .replaceAll("\\{playersA}", String.valueOf(regularMatch.getParticipantA().getPlayerSize()))
-                    .replaceAll("\\{playersB}", String.valueOf(regularMatch.getParticipantB().getPlayerSize()))
-                    .replaceAll("\\{aliveA}", String.valueOf(regularMatch.getParticipantA().getAlivePlayerSize()))
-                    .replaceAll("\\{aliveB}", String.valueOf(regularMatch.getParticipantB().getAlivePlayerSize()))
+                    .replaceAll("\\{your-players}", String.valueOf(yourTeam.getPlayerSize()))
+                    .replaceAll("\\{opponent-players}", String.valueOf(opponentTeam.getPlayerSize()))
+                    .replaceAll("\\{your-alive}", String.valueOf(yourTeam.getAlivePlayerSize()))
+                    .replaceAll("\\{opponent-alive}", String.valueOf(opponentTeam.getAlivePlayerSize()))
             );
         }
 
         return scoreboardLines;
+    }
+
+    /**
+     * Determines which participant object represents the player's team.
+     *
+     * @param match The current match.
+     * @param playerParticipant The participant object for the player.
+     * @return The GameParticipant corresponding to the player's team.
+     */
+    private GameParticipant<MatchGamePlayerImpl> determinePlayerTeam(MatchRegularImpl match, GameParticipant<MatchGamePlayerImpl> playerParticipant) {
+        boolean isInParticipantA = match.getParticipantA().getPlayers().contains(playerParticipant.getPlayer());
+        return isInParticipantA ? match.getParticipantA() : match.getParticipantB();
     }
 }

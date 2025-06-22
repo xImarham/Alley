@@ -46,6 +46,11 @@ public class PartyInviteCommand extends BaseCommand {
             return;
         }
 
+        if (party.getLeader() != player) {
+            player.sendMessage(CC.translate("&cYou must be the party leader to invite players."));
+            return;
+        }
+
         Profile targetProfile = this.plugin.getProfileService().getProfile(targetPlayer.getUniqueId());
         if (!targetProfile.getProfileData().getSettingData().isPartyInvitesEnabled()) {
             player.sendMessage(CC.translate(PartyLocale.PLAYER_DISABLED_PARTY_INVITES.getMessage().replace("{player}", target)));

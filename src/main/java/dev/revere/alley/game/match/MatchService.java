@@ -14,8 +14,11 @@ import dev.revere.alley.game.match.impl.MatchRegularImpl;
 import dev.revere.alley.game.match.impl.MatchRoundsImpl;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
+import dev.revere.alley.profile.Profile;
+import dev.revere.alley.profile.enums.EnumProfileState;
 import dev.revere.alley.tool.logger.Logger;
 import lombok.Getter;
+import org.bukkit.Bukkit;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,6 +52,12 @@ public class MatchService {
      * @param participantB The second participant in the match.
      */
     public void createAndStartMatch(Kit kit, AbstractArena arena, GameParticipant<MatchGamePlayerImpl> participantA, GameParticipant<MatchGamePlayerImpl> participantB, boolean teamMatch, boolean affectStatistics, boolean isRanked) {
+        Profile profileA = this.plugin.getProfileService().getProfile(participantA.getPlayers().get(0).getUuid());
+        Profile profileB = this.plugin.getProfileService().getProfile(participantB.getPlayers().get(0).getUuid());
+        if (profileA.getMatch() != null || profileB.getMatch() != null) {
+            return;
+        }
+
         Queue matchingQueue = this.plugin.getQueueService().getQueues().stream()
                 .filter(queue -> queue.getKit().equals(kit))
                 .findFirst()
