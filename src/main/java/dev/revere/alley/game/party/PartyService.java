@@ -139,6 +139,14 @@ public class PartyService {
      */
     public void disbandParty(Player leader) {
         Party party = this.getPartyByLeader(leader);
+
+        for (UUID memberId : new ArrayList<>(party.getMembers())) {
+            Profile memberProfile = plugin.getProfileService().getProfile(memberId);
+            if (memberProfile != null && memberProfile.getQueueProfile() != null && memberProfile.getState().equals(EnumProfileState.WAITING)) {
+                this.handlePartyMemberLeave(Bukkit.getPlayer(memberId));
+            }
+        }
+
         party.getMembers().forEach(member -> this.setupProfile(Bukkit.getPlayer(member), false));
         party.notifyParty("&b&lParty &7&l" + Symbol.ARROW_R + " &b" + leader.getName() + " &cdisbanded the party.");
         this.parties.remove(party);
@@ -179,6 +187,47 @@ public class PartyService {
         party.getMembers().remove(player.getUniqueId());
         party.notifyParty("&a" + player.getName() + " has left the party.");
         this.setupProfile(player, false);
+
+        this.handlePartyMemberLeave(player);
+    }
+
+    /**
+     * Handles a player leaving a party, specifically notifying the QueueService if they were queuing.
+     * This method should be called whenever a party member disconnects or leaves their party.
+     *
+     * @param player The player who left the party (or disconnected).
+     */
+    public void handlePartyMemberLeave(Player player) {
+        if (player == null) return;
+
+        Profile profile = plugin.getProfileService().getProfile(player.getUniqueId());
+        if (profile == null || profile.getQueueProfile() == null || profile.getMatch() != null) {
+            return;
+        }
+
+        QueueProfile associatedQueueProfile = profile.getQueueProfile();
+        Queue queue = associatedQueueProfile.getQueue();
+
+        if (queue.isDuos()) {
+            Player leader = Bukkit.getPlayer(associatedQueueProfile.getUuid());
+            if (leader != null && leader.isOnline()) {
+                Party party = getPartyByLeader(leader);
+                if (party == null || party.getMembers().size() < 2) {
+                    leader.sendMessage(CC.translate("&eA party member has left/disconnected. You are now queuing solo for duos."));
+                } else {
+                    leader.sendMessage(CC.translate("&eA party member has left/disconnected. Your party size is now " + party.getMembers().size() + "."));
+                    if (party.getMembers().size() < 2 && leader.isOnline()) {
+                        leader.sendMessage(CC.translate("&eYou are now queuing solo for duos, awaiting a random teammate."));
+                    }
+                }
+            } else {
+                queue.removePlayer(associatedQueueProfile);
+            }
+        } else {
+            queue.removePlayer(associatedQueueProfile);
+        }
+
+        profile.setQueueProfile(null);
     }
 
     /**
@@ -299,6 +348,7 @@ public class PartyService {
         if (join && (profile.getState() == EnumProfileState.LOBBY || profile.getState() == EnumProfileState.WAITING)) {
             hotbarService.applyHotbarItems(player, EnumHotbarType.PARTY);
         } else {
+            profile.setState(EnumProfileState.LOBBY);
             hotbarService.applyHotbarItems(player, EnumHotbarType.LOBBY);
         }
 

@@ -78,9 +78,9 @@ public class UnrankedButton extends Button {
 
         Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
         this.queue.addPlayer(player, this.queue.isRanked() ? profile.getProfileData().getRankedKitData().get(this.queue.getKit().getName()).getElo() : 0);
+        this.playNeutral(player);
+
         PlayerUtil.reset(player, false);
         player.closeInventory();
-        this.playNeutral(player);
-        this.plugin.getHotbarService().applyHotbarItems(player, EnumHotbarType.QUEUE);
     }
 }

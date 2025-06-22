@@ -68,10 +68,10 @@ public class QueueService {
         this.queues.clear();
         this.plugin.getKitService().getKits().forEach(kit -> {
             if (!kit.isEnabled()) return;
-            new Queue(kit, false);
-
+            new Queue(kit, false, false);
+            new Queue(kit, false, true);
             if (kit.isSettingEnabled(KitSettingRankedImpl.class)) {
-                new Queue(kit, true);
+                new Queue(kit, true, false);
             }
         });
     }

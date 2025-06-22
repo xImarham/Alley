@@ -91,7 +91,7 @@ public class QueuesMenuModern extends Menu {
             case UNRANKED:
 
                 for (Queue queue : this.plugin.getQueueService().getQueues()) {
-                    if (!queue.isRanked() && queue.getKit().getCategory() == EnumKitCategory.NORMAL) {
+                    if (!queue.isRanked() && !queue.isDuos() && queue.getKit().getCategory() == EnumKitCategory.NORMAL) {
                         slot = this.skipIfSlotCrossingBorder(slot);
                         buttons.put(slot++, new UnrankedButton(queue));
                     }
@@ -101,10 +101,18 @@ public class QueuesMenuModern extends Menu {
 
                 break;
             case BOTS:
-                for (Kit kit : this.plugin.getKitService().getKits()) {
+                /*for (Kit kit : this.plugin.getKitService().getKits()) {
                     slot = this.skipIfSlotCrossingBorder(slot);
                     buttons.put(slot++, new BotButton(kit));
+                }*/
+
+                for (Queue queue : this.plugin.getQueueService().getQueues()) {
+                    if (!queue.isRanked() && queue.isDuos() && queue.getKit().getCategory() == EnumKitCategory.NORMAL) {
+                        slot = this.skipIfSlotCrossingBorder(slot);
+                        buttons.put(slot++, new UnrankedButton(queue));
+                    }
                 }
+
                 break;
             case FFA:
                 for (AbstractFFAMatch match : this.plugin.getFfaService().getMatches()) {
@@ -151,8 +159,8 @@ public class QueuesMenuModern extends Menu {
                     profile.setQueueType(EnumQueueType.UNRANKED);
                     break;
                 case GOLD_SWORD:
-                    //profile.setQueueType(EnumQueueType.BOTS);
-                    player.sendMessage(CC.translate("&c&lThis feature is currently being worked on."));
+                    profile.setQueueType(EnumQueueType.BOTS);
+                    //player.sendMessage(CC.translate("&c&lThis feature is currently being worked on."));
                     break;
                 case GOLD_AXE:
                     profile.setQueueType(EnumQueueType.FFA);

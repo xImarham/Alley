@@ -199,10 +199,11 @@ public class KitService {
      */
     private void addKitToQueue(Kit kit) {
         if (!kit.isEnabled()) return;
-        new Queue(kit, false);
+        new Queue(kit, false, false);
+        new Queue(kit, false, true);
 
         if (kit.isSettingEnabled(KitSettingRankedImpl.class)) {
-            new Queue(kit, true);
+            new Queue(kit, true, false);
         }
     }
 

@@ -5,6 +5,7 @@ import dev.revere.alley.base.kit.command.KitCommand;
 import dev.revere.alley.base.queue.command.admin.QueueCommand;
 import dev.revere.alley.base.queue.command.player.LeaveQueueCommand;
 import dev.revere.alley.base.queue.command.player.QueuesCommand;
+import dev.revere.alley.base.queue.command.player.UnrankedCommand;
 import dev.revere.alley.base.spawn.command.SetSpawnCommand;
 import dev.revere.alley.base.spawn.command.SpawnCommand;
 import dev.revere.alley.base.spawn.command.SpawnItemsCommand;
@@ -131,6 +132,7 @@ public class CommandUtility {
             new CurrentMatchesCommand();
             new LeaveQueueCommand();
             new QueuesCommand();
+            new UnrankedCommand();
             new MatchSettingsCommand();
 
             new ShopCommand();

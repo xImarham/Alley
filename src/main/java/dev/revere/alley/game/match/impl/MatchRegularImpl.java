@@ -407,7 +407,9 @@ public class MatchRegularImpl extends AbstractMatch {
 
     @Override
     public boolean canEndRound() {
-        return this.participantA.isAllDead() || this.participantB.isAllDead();
+        return (this.participantA.isAllDead() || this.participantB.isAllDead())
+                || (this.participantA.getAllPlayers().stream().allMatch(MatchGamePlayerImpl::isDisconnected)
+                || this.participantB.getAllPlayers().stream().allMatch(MatchGamePlayerImpl::isDisconnected));
     }
 
     @Override

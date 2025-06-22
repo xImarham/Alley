@@ -38,6 +38,7 @@ public class PartyListener implements Listener {
 
             String partyMessage = partyService.getChatFormat().replace("{player}", event.getPlayer().getName()).replace("{message}", event.getMessage());
             profile.getParty().notifyParty(partyMessage);
+            event.setCancelled(true);
             return;
         }
 
