@@ -148,7 +148,7 @@ public class MatchUtility {
         match.sendMessage("");
         match.sendMessage(CC.translate("&aWinner Team: &f" + winnerTeamName));
 
-        for (MatchGamePlayerImpl player : winnerParticipant.getPlayers()) {
+        for (MatchGamePlayerImpl player : winnerParticipant.getAllPlayers()) {
             String playerName = player.getUsername();
 
             TextComponent playerComponent = new TextComponent(CC.translate("&7- &f" + playerName));
@@ -156,13 +156,16 @@ public class MatchUtility {
             playerComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
                     new ComponentBuilder(CC.translate("&eClick to view " + playerName + "'s inventory")).create()));
 
+            if (player.isDisconnected()) {
+                return;
+            }
             sendCombinedSpigotMessage(match, playerComponent);
         }
 
         match.sendMessage("");
         match.sendMessage(CC.translate("&cLoser Team: &f" + loserTeamName));
 
-        for (MatchGamePlayerImpl player : loserParticipant.getPlayers()) {
+        for (MatchGamePlayerImpl player : loserParticipant.getAllPlayers()) {
             String playerName = player.getUsername();
 
             TextComponent playerComponent = new TextComponent(CC.translate("&7- &f" + playerName));
@@ -170,6 +173,9 @@ public class MatchUtility {
             playerComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
                     new ComponentBuilder(CC.translate("&eClick to view " + playerName + "'s inventory")).create()));
 
+            if (player.isDisconnected()) {
+                return;
+            }
             sendCombinedSpigotMessage(match, playerComponent);
         }
 

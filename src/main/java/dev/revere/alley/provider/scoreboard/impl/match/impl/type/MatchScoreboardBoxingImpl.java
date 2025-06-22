@@ -1,8 +1,10 @@
 package dev.revere.alley.provider.scoreboard.impl.match.impl.type;
 
 import dev.revere.alley.Alley;
+import dev.revere.alley.game.match.impl.MatchRegularImpl;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
+import dev.revere.alley.game.match.player.participant.TeamGameParticipant;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.provider.scoreboard.impl.match.IMatchScoreboard;
 import dev.revere.alley.util.chat.CC;
@@ -36,8 +38,28 @@ public class MatchScoreboardBoxingImpl implements IMatchScoreboard {
         FileConfiguration config = plugin.getConfigService().getScoreboardConfig();
         List<String> template = config.getStringList("scoreboard.lines.playing.solo.boxing-match");
 
-        int playerHits = profile.getMatch().getGamePlayer(player).getData().getHits();
-        int opponentHits = profile.getMatch().getGamePlayer(opponent.getPlayer().getPlayer()).getData().getHits();
+        int playerHits;
+        int opponentHits;
+        if (you instanceof TeamGameParticipant && opponent instanceof TeamGameParticipant) {
+            MatchRegularImpl matchRegular = (MatchRegularImpl) profile.getMatch();
+
+            GameParticipant<MatchGamePlayerImpl> playerTeam;
+            GameParticipant<MatchGamePlayerImpl> opponentTeam;
+
+            if (matchRegular.getParticipantA().getPlayers().contains(you.getPlayer())) {
+                playerTeam = matchRegular.getParticipantA();
+                opponentTeam = matchRegular.getParticipantB();
+            } else {
+                playerTeam = matchRegular.getParticipantB();
+                opponentTeam = matchRegular.getParticipantA();
+            }
+
+            playerHits = playerTeam.getTeamHits();
+            opponentHits = opponentTeam.getTeamHits();
+        } else {
+            playerHits = profile.getMatch().getGamePlayer(player).getData().getHits();
+            opponentHits = profile.getMatch().getGamePlayer(opponent.getPlayer().getPlayer()).getData().getHits();
+        }
 
         int playerCombo = profile.getMatch().getGamePlayer(player).getData().getCombo();
         int opponentCombo = profile.getMatch().getGamePlayer(opponent.getPlayer().getPlayer()).getData().getCombo();

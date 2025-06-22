@@ -25,8 +25,10 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.Optional;
 
@@ -63,7 +65,30 @@ public class FFAListener implements Listener {
         Profile profile = this.accessProfile(player);
         if (profile.getState() != EnumProfileState.FFA) return;
 
-        event.getItemDrop().remove();
+        if (ListenerUtil.isSword(event.getItemDrop().getItemStack().getType())) {
+            event.setCancelled(true);
+            player.sendMessage(CC.translate("&cYou cannot drop your sword during this match."));
+            return;
+        }
+
+        ListenerUtil.clearDroppedItemsOnRegularItemDrop(event.getItemDrop());
+    }
+
+    @EventHandler
+    private void onPlayerItemConsume(PlayerItemConsumeEvent event) {
+        Player player = event.getPlayer();
+        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
+        if (profile.getState() != EnumProfileState.FFA) {
+            return;
+        }
+
+        ItemStack item = event.getItem();
+        if (item.getType() == Material.POTION) {
+            this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> {
+                player.getInventory().removeItem(new ItemStack(Material.GLASS_BOTTLE, 1));
+                player.updateInventory();
+            }, 1L);
+        }
     }
 
     @EventHandler

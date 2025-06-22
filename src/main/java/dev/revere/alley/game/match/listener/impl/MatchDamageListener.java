@@ -8,6 +8,8 @@ import dev.revere.alley.base.kit.setting.impl.mechanic.KitSettingNoFallDamageImp
 import dev.revere.alley.base.kit.setting.impl.mode.*;
 import dev.revere.alley.game.match.AbstractMatch;
 import dev.revere.alley.game.match.enums.EnumMatchState;
+import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
+import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
 import dev.revere.alley.util.chat.CC;
@@ -161,6 +163,9 @@ public class MatchDamageListener implements Listener {
                 attackerProfile.getMatch().getGamePlayer(attacker).getData().handleAttack();
                 damagedprofile.getMatch().getGamePlayer(damaged).getData().resetCombo();
 
+                GameParticipant<MatchGamePlayerImpl> participant = match.getParticipant(attacker);
+                participant.setTeamHits(participant.getTeamHits() + 1);
+
                 if (match.getKit().isSettingEnabled(KitSettingBowShotIndicatorImpl.class) && event.getDamager() instanceof Arrow) {
                     double finalHealth = damaged.getHealth() - event.getFinalDamage();
                     finalHealth = Math.max(0, finalHealth);
@@ -171,7 +176,7 @@ public class MatchDamageListener implements Listener {
                 }
 
                 if (match.getKit().isSettingEnabled(KitSettingBoxingImpl.class)) {
-                    if (match.getGamePlayer(attacker).getData().getHits() >= 100) {
+                    if (participant.getTeamHits() >= participant.getPlayers().size() * 100) {
                         match.handleDeath(damaged);
                     }
                 }

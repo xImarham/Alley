@@ -150,14 +150,17 @@ public class MatchBedImpl extends MatchRegularImpl {
         String subMessage;
         if (opponent instanceof TeamGameParticipant) {
             String opponentTeamName;
+            String color;
 
             if (this.getParticipantA() == opponent) {
                 opponentTeamName = "&9Blue Team";
+                color = "&c";
             } else {
                 opponentTeamName = "&cRed Team";
+                color = "&9";
             }
 
-            subMessage = " &c" + breaker.getName() + " &7has destroyed the bed of " + opponentTeamName + "&7!";
+            subMessage = color + breaker.getName() + " &7has destroyed the bed of " + opponentTeamName + "&7!";
         } else {
             subMessage = " &c" + breaker.getName() + " &7has destroyed the bed of &b" + opponent.getPlayer().getUsername() + "&7!";
         }

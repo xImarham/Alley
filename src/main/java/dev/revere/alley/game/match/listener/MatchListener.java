@@ -28,6 +28,7 @@ import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.*;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 
@@ -163,7 +164,26 @@ public class MatchListener implements Listener {
             if (ListenerUtil.isSword(event.getItemDrop().getItemStack().getType())) {
                 event.setCancelled(true);
                 player.sendMessage(CC.translate("&cYou cannot drop your sword during this match."));
+                return;
             }
+        }
+        ListenerUtil.clearDroppedItemsOnRegularItemDrop(event.getItemDrop());
+    }
+
+    @EventHandler
+    private void onPlayerItemConsume(PlayerItemConsumeEvent event) {
+        Player player = event.getPlayer();
+        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
+        if (profile.getState() != EnumProfileState.PLAYING) {
+            return;
+        }
+
+        ItemStack item = event.getItem();
+        if (item.getType() == Material.POTION) {
+            this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> {
+                player.getInventory().removeItem(new ItemStack(Material.GLASS_BOTTLE, 1));
+                player.updateInventory();
+            }, 1L);
         }
     }
 

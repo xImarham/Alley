@@ -81,6 +81,7 @@ public class CommandUtility {
             new LevelCommand();
             new ServiceCommand();
             new EnchantCommand();
+            new SudoAllCommand();
             new InvSeeCommand();
             new MoreCommand();
             new PotionDurationCommand();

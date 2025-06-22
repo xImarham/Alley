@@ -49,6 +49,22 @@ public class ListenerUtil {
     }
 
     /**
+     * After 5 seconds, clears the dropped items on regular item drop via a BukkitRunnable.
+     *
+     * @param item The dropped item.
+     */
+    public void clearDroppedItemsOnRegularItemDrop(Item item) {
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (item != null && item.isValid()) {
+                    item.remove();
+                }
+            }
+        }.runTaskLater(Alley.getInstance(), 100L);
+    }
+
+    /**
      * Checks if the player is not stepping on a pressure plate.
      *
      * @param event The event.

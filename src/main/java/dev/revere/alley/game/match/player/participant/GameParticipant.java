@@ -20,6 +20,7 @@ public class GameParticipant<T extends GamePlayer> {
     private T player;
 
     private boolean bedBroken;
+    private int teamHits;
 
     /**
      * Constructor for the GameParticipant class.

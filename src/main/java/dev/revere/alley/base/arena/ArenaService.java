@@ -36,7 +36,7 @@ public class ArenaService {
     private final List<StandAloneArena> temporaryArenas;
     private World temporaryWorld;
     private Location nextCopyLocation;
-    private final int arenaSpacing = 500;
+    private final int arenaSpacing = 1500;
     private final AtomicInteger copyIdCounter;
 
     /**
