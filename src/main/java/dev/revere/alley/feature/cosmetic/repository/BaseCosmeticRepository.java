@@ -6,10 +6,7 @@ import dev.revere.alley.feature.cosmetic.interfaces.ICosmeticRepository;
 import dev.revere.alley.tool.logger.Logger;
 import lombok.Getter;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author Remi
@@ -21,7 +18,7 @@ public abstract class BaseCosmeticRepository<T extends AbstractCosmetic> impleme
     private final Map<String, T> cosmeticsByName;
 
     public BaseCosmeticRepository() {
-        this.cosmeticsByName = new HashMap<>();
+        this.cosmeticsByName = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
     }
 
     /**

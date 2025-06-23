@@ -28,7 +28,7 @@ public class DuelKitSelectorMenu extends Menu {
 
     @Override
     public String getTitle(Player player) {
-        return "Duel " + this.targetPlayer.getName();
+        return "&b&lDuel " + this.targetPlayer.getName();
     }
 
     @Override

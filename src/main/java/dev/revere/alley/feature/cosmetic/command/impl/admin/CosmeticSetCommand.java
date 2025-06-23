@@ -7,6 +7,7 @@ import dev.revere.alley.feature.cosmetic.AbstractCosmetic;
 import dev.revere.alley.feature.cosmetic.EnumCosmeticType;
 import dev.revere.alley.feature.cosmetic.repository.BaseCosmeticRepository;
 import dev.revere.alley.profile.Profile;
+import dev.revere.alley.util.StringUtil;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -58,6 +59,6 @@ public class CosmeticSetCommand extends BaseCommand {
         }
 
         profile.getProfileData().getCosmeticData().setSelected(cosmetic);
-        player.sendMessage(CC.translate("&aSuccessfully set &b" + cosmetic.getName() + " " + cosmeticType + " &aas the active cosmetic for &b" + target.getName()));
+        player.sendMessage(CC.translate("&aSuccessfully set &b" + cosmetic.getName() + " " + StringUtil.formatCosmeticTypeName(cosmeticType) + " &aas the active cosmetic for &b" + target.getName()));
     }
 }
