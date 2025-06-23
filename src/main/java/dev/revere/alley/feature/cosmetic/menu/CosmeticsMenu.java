@@ -1,14 +1,11 @@
 package dev.revere.alley.feature.cosmetic.menu;
 
-import dev.revere.alley.Alley;
 import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.api.menu.Menu;
-import dev.revere.alley.api.menu.impl.BackButton;
-import dev.revere.alley.feature.cosmetic.menu.button.CosmeticButton;
-import dev.revere.alley.feature.cosmetic.menu.button.KillEffectButton;
-import dev.revere.alley.feature.cosmetic.menu.button.SoundEffectButton;
-import dev.revere.alley.profile.menu.setting.PracticeSettingsMenu;
+import dev.revere.alley.feature.cosmetic.EnumCosmeticType;
+import dev.revere.alley.feature.cosmetic.menu.button.CosmeticCategoryButton;
 import lombok.AllArgsConstructor;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
@@ -21,27 +18,26 @@ import java.util.Map;
  */
 @AllArgsConstructor
 public class CosmeticsMenu extends Menu {
-    private final String cosmeticType;
-
     @Override
     public String getTitle(Player player) {
-        return "&b&lCosmetics - " + this.cosmeticType + "s";
+        return "&b&lCosmetics";
     }
 
     @Override
     public Map<Integer, Button> getButtons(Player player) {
         final Map<Integer, Button> buttons = new HashMap<>();
 
-        buttons.put(0, new BackButton(new PracticeSettingsMenu()));
-        buttons.put(3, new KillEffectButton());
-        buttons.put(5, new SoundEffectButton());
+        buttons.put(12, new CosmeticCategoryButton(EnumCosmeticType.KILL_EFFECT, Material.DIAMOND_SWORD));
+        buttons.put(13, new CosmeticCategoryButton(EnumCosmeticType.SOUND_EFFECT, Material.NOTE_BLOCK));
+        buttons.put(14, new CosmeticCategoryButton(EnumCosmeticType.PROJECTILE_TRAIL, Material.ARROW));
 
-        Alley.getInstance().getCosmeticRepository().getCosmeticRepositories().get(this.cosmeticType).getCosmetics().stream()
-                .filter(cosmetic -> cosmetic.getIcon() != null)
-                .forEach(cosmetic -> buttons.put(cosmetic.getSlot(), new CosmeticButton(cosmetic)));
-
-        this.addBorder(buttons, 15, 5);
+        this.addBorder(buttons, 15, 3);
 
         return buttons;
+    }
+
+    @Override
+    public int getSize() {
+        return 3 * 9;
     }
 }

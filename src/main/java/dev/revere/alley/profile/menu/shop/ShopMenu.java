@@ -2,17 +2,12 @@ package dev.revere.alley.profile.menu.shop;
 
 import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.api.menu.Menu;
-import dev.revere.alley.feature.cosmetic.impl.killeffect.AbstractKillEffect;
-import dev.revere.alley.feature.cosmetic.impl.killeffect.KillEffectRepository;
-import dev.revere.alley.feature.cosmetic.impl.soundeffect.AbstractSoundEffect;
-import dev.revere.alley.feature.cosmetic.impl.soundeffect.SoundEffectRepository;
+import dev.revere.alley.feature.cosmetic.EnumCosmeticType;
+import dev.revere.alley.profile.menu.shop.button.ShopCategoryButton;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -29,47 +24,18 @@ public class ShopMenu extends Menu {
     @Override
     public Map<Integer, Button> getButtons(Player player) {
         final Map<Integer, Button> buttons = new HashMap<>();
-        SoundEffectRepository soundEffectRepository = new SoundEffectRepository();
-        List<AbstractSoundEffect> soundEffects = soundEffectRepository.getCosmetics();
-        int ownedSoundEffects = (int) soundEffects.stream()
-                .map(AbstractSoundEffect::getPermission)
-                .filter(player::hasPermission)
-                .count();
 
-        KillEffectRepository killEffectRepository = new KillEffectRepository();
-        List<AbstractKillEffect> killEffects = killEffectRepository.getCosmetics();
-        int ownedKillEffects = (int) killEffects.stream()
-                .map(AbstractKillEffect::getPermission)
-                .filter(player::hasPermission)
-                .count();
+        buttons.put(12, new ShopCategoryButton(EnumCosmeticType.KILL_EFFECT, Material.DIAMOND_SWORD));
+        buttons.put(13, new ShopCategoryButton(EnumCosmeticType.SOUND_EFFECT, Material.NOTE_BLOCK));
+        buttons.put(14, new ShopCategoryButton(EnumCosmeticType.PROJECTILE_TRAIL, Material.ARROW));
 
-        buttons.put(21, new ShopButton("&b&lKill Effects", new ItemStack(Material.REDSTONE), Arrays.asList(
-                "",
-                "&fPurchase kill effects",
-                "&fto use in games.",
-                "",
-                "&fYou own &b" + ownedKillEffects + " &fkill effects.",
-                "",
-                "&aClick to view!"
-        )));
-
-        buttons.put(23, new ShopButton("&b&lSound Effects", new ItemStack(Material.FEATHER), Arrays.asList(
-                "",
-                "&fPurchase sound effects",
-                "&fto use in games.",
-                "",
-                "&fYou own &b" + ownedSoundEffects + " &fsound effects.",
-                "",
-                "&aClick to view!"
-        )));
-
-        this.addBorder(buttons, 15, 5);
+        this.addBorder(buttons, 15, 3);
 
         return buttons;
     }
 
     @Override
     public int getSize() {
-        return 5 * 9;
+        return 3 * 9;
     }
 }

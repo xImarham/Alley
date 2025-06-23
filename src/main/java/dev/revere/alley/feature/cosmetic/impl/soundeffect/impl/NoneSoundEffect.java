@@ -1,7 +1,8 @@
 package dev.revere.alley.feature.cosmetic.impl.soundeffect.impl;
 
-import dev.revere.alley.feature.cosmetic.impl.soundeffect.AbstractSoundEffect;
-import dev.revere.alley.feature.cosmetic.impl.soundeffect.annotation.SoundEffectData;
+import dev.revere.alley.feature.cosmetic.AbstractCosmetic;
+import dev.revere.alley.feature.cosmetic.EnumCosmeticType;
+import dev.revere.alley.feature.cosmetic.annotation.CosmeticData;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
@@ -10,11 +11,10 @@ import org.bukkit.entity.Player;
  * @project Alley
  * @date 01/06/2024
  */
-@SoundEffectData(name = "None", description = "Remove your sound effect", icon = Material.BARRIER, slot = 10)
-public class NoneSoundEffect extends AbstractSoundEffect {
-
+@CosmeticData(type = EnumCosmeticType.SOUND_EFFECT, name = "None", description = "Remove your sound effect", icon = Material.BARRIER, slot = 10)
+public class NoneSoundEffect extends AbstractCosmetic {
     @Override
-    public void spawnEffect(Player player) {
+    public void execute(Player player) {
 
     }
 }

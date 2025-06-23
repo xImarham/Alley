@@ -7,17 +7,15 @@ import dev.revere.alley.base.hotbar.enums.EnumHotbarType;
 import dev.revere.alley.base.kit.Kit;
 import dev.revere.alley.base.kit.setting.impl.mode.*;
 import dev.revere.alley.base.queue.Queue;
-import dev.revere.alley.feature.cosmetic.impl.killeffect.AbstractKillEffect;
-import dev.revere.alley.feature.cosmetic.impl.killeffect.KillEffectRepository;
-import dev.revere.alley.feature.cosmetic.impl.soundeffect.AbstractSoundEffect;
-import dev.revere.alley.feature.cosmetic.impl.soundeffect.SoundEffectRepository;
+import dev.revere.alley.feature.cosmetic.AbstractCosmetic;
+import dev.revere.alley.feature.cosmetic.EnumCosmeticType;
+import dev.revere.alley.feature.cosmetic.repository.BaseCosmeticRepository;
 import dev.revere.alley.feature.layout.data.LayoutData;
 import dev.revere.alley.game.match.enums.EnumMatchState;
 import dev.revere.alley.game.match.impl.MatchRoundsImpl;
 import dev.revere.alley.game.match.player.GamePlayer;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
-import dev.revere.alley.game.match.player.participant.TeamGameParticipant;
 import dev.revere.alley.game.match.runnable.MatchRunnable;
 import dev.revere.alley.game.match.runnable.other.MatchRespawnRunnable;
 import dev.revere.alley.profile.Profile;
@@ -30,7 +28,10 @@ import dev.revere.alley.util.SoundUtil;
 import dev.revere.alley.util.chat.CC;
 import lombok.Getter;
 import lombok.Setter;
-import org.bukkit.*;
+import org.bukkit.GameMode;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.Player;
@@ -258,7 +259,7 @@ public abstract class AbstractMatch {
 
             if (this.canEndMatch()) {
                 if (killer != null) {
-                    this.handleEffects(player, killer);
+                    this.handleDeathEffects(player, killer);
                 }
 
                 this.state = EnumMatchState.ENDING_MATCH;
@@ -351,40 +352,48 @@ public abstract class AbstractMatch {
         this.notifyParticipants("&c" + profile.getNameColor() + player.getName() + " &fwas slain by &c" + killerProfile.getNameColor() + killer.getName() + "&f.");
     }
 
-
     /**
-     * Handles the effects of a player.
+     * Handles applying all relevant on-kill cosmetic effects.
+     * This is called when a player is confirmed to be eliminated from the match.
      *
-     * @param player The player to handle the effects of.
-     * @param killer The killer of the player.
+     * @param player The player who died (the victim).
+     * @param killer The player who got the kill.
      */
-    private void handleEffects(Player player, Player killer) {
+    private void handleDeathEffects(Player player, Player killer) {
         Profile profile = this.plugin.getProfileService().getProfile(killer.getUniqueId());
+
         String selectedKillEffectName = profile.getProfileData().getCosmeticData().getSelectedKillEffect();
         String selectedSoundEffectName = profile.getProfileData().getCosmeticData().getSelectedSoundEffect();
 
-        this.applyKillEffect(player, selectedKillEffectName);
-        this.applySoundEffect(killer, selectedSoundEffectName);
+        this.applyCosmetic(EnumCosmeticType.KILL_EFFECT, selectedKillEffectName, player);
+        this.applyCosmetic(EnumCosmeticType.SOUND_EFFECT, selectedSoundEffectName, killer);
     }
 
-    private void applyKillEffect(Player player, String selectedKillEffectName) {
-        KillEffectRepository killEffectRepository = this.plugin.getCosmeticRepository()
-                .getCosmeticRepository(KillEffectRepository.class);
-        AbstractKillEffect killEffect = killEffectRepository.getCosmetic(selectedKillEffectName);
-
-        if (killEffect != null) {
-            killEffect.spawnEffect(player);
+    /**
+     * Applies a selected cosmetic to a target player in a generic, type-safe way.
+     * This method is now updated to use the enum-based repository system.
+     *
+     * @param cosmeticType The type of cosmetic to apply.
+     * @param cosmeticName The name of the cosmetic selected by the player.
+     * @param targetPlayer The player to apply the effect to (e.g., the victim or the killer).
+     */
+    private void applyCosmetic(EnumCosmeticType cosmeticType, String cosmeticName, Player targetPlayer) {
+        if (cosmeticName == null || cosmeticName.equalsIgnoreCase("None")) {
+            return;
         }
-    }
 
-    private void applySoundEffect(Player killer, String selectedSoundEffectName) {
-        SoundEffectRepository soundEffectRepository = this.plugin.getCosmeticRepository()
-                .getCosmeticRepository(SoundEffectRepository.class);
-        AbstractSoundEffect soundEffect = soundEffectRepository.getCosmetic(selectedSoundEffectName);
-
-        if (soundEffect != null) {
-            soundEffect.spawnEffect(killer);
+        BaseCosmeticRepository<?> repository = this.plugin.getCosmeticRepository().getRepository(cosmeticType);
+        if (repository == null) {
+            plugin.getLogger().warning("Could not find cosmetic repository for type " + cosmeticType.name());
+            return;
         }
+
+        AbstractCosmetic cosmetic = repository.getCosmetic(cosmeticName);
+        if (cosmetic == null) {
+            return;
+        }
+
+        cosmetic.execute(targetPlayer);
     }
 
     /**

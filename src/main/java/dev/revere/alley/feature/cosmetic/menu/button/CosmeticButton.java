@@ -2,10 +2,9 @@ package dev.revere.alley.feature.cosmetic.menu.button;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.menu.Button;
-import dev.revere.alley.feature.cosmetic.impl.killeffect.AbstractKillEffect;
-import dev.revere.alley.feature.cosmetic.impl.soundeffect.AbstractSoundEffect;
-import dev.revere.alley.feature.cosmetic.interfaces.ICosmetic;
+import dev.revere.alley.feature.cosmetic.AbstractCosmetic;
 import dev.revere.alley.profile.Profile;
+import dev.revere.alley.profile.data.impl.ProfileCosmeticData;
 import dev.revere.alley.tool.item.ItemBuilder;
 import dev.revere.alley.util.chat.CC;
 import lombok.AllArgsConstructor;
@@ -16,68 +15,56 @@ import org.bukkit.inventory.ItemStack;
 /**
  * @author Remi
  * @project Alley
- * @date 5/26/2024
+ * @date 6/23/2025
  */
 @AllArgsConstructor
 public class CosmeticButton extends Button {
     protected final Alley plugin = Alley.getInstance();
-    private final ICosmetic cosmetic;
+    private final AbstractCosmetic cosmetic;
 
     @Override
     public ItemStack getButtonItem(Player player) {
         Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
+        boolean isSelected = profile.getProfileData().getCosmeticData().isSelected(cosmetic);
         boolean hasPermission = player.hasPermission(cosmetic.getPermission());
-        boolean isSelected = profile.getProfileData().getCosmeticData().isSelectedCosmetic(cosmetic);
 
         String lore;
         if (hasPermission) {
-            lore = isSelected ? "&cYou already have this cosmetic selected." : "&aClick to select this cosmetic.";
+            lore = isSelected ? "&eThis cosmetic is currently selected." : "&aClick to select this cosmetic.";
         } else {
-            lore = "&c&lYou do not have permission to select this cosmetic.";
+            lore = "&cYou do not own this cosmetic.";
         }
 
         return new ItemBuilder(cosmetic.getIcon())
                 .name("&b&l" + cosmetic.getName())
-                .lore(
-                        "",
-                        "&f● &bDescription: &7" + cosmetic.getDescription(),
-                        "",
-                        lore
-
-                )
+                .lore("", "&f" + cosmetic.getDescription(), "", lore)
                 .build();
     }
 
-    /**
-     * Handles the click event for the button.
-     *
-     * @param player    the player who clicked the button
-     * @param clickType the type of click
-     */
     @Override
     public void clicked(Player player, ClickType clickType) {
         if (clickType == ClickType.MIDDLE || clickType == ClickType.RIGHT || clickType == ClickType.NUMBER_KEY || clickType == ClickType.DROP || clickType == ClickType.SHIFT_LEFT || clickType == ClickType.SHIFT_RIGHT) {
             return;
         }
-        this.playNeutral(player);
 
         Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
-        if (profile.getProfileData().getCosmeticData().isSelectedCosmetic(cosmetic)) {
+        ProfileCosmeticData cosmeticData = profile.getProfileData().getCosmeticData();
+
+        if (cosmeticData.isSelected(cosmetic)) {
             player.sendMessage(CC.translate("&cYou already have this cosmetic selected."));
+            this.playFail(player);
             return;
         }
 
         if (!player.hasPermission(cosmetic.getPermission())) {
-            player.sendMessage(CC.translate("&cYou do not have permission to select this cosmetic."));
+            player.sendMessage(CC.translate("&cYou do not have permission to use this cosmetic."));
+            this.playFail(player);
             return;
         }
 
-        if (cosmetic instanceof AbstractKillEffect) {
-            profile.getProfileData().getCosmeticData().setSelectedKillEffect(cosmetic.getName());
-        } else if (cosmetic instanceof AbstractSoundEffect) {
-            profile.getProfileData().getCosmeticData().setSelectedSoundEffect(cosmetic.getName());
-        }
+        cosmeticData.setSelected(cosmetic);
 
-        player.sendMessage(CC.translate("&aYou have successfully selected the &b" + cosmetic.getName() + " &acosmetic."));
+        this.playSuccess(player);
+        player.sendMessage(CC.translate("&aYou have selected the &b" + cosmetic.getName() + " &acosmetic."));
     }
 }

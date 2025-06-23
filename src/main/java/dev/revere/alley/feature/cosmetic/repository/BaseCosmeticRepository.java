@@ -1,11 +1,15 @@
 package dev.revere.alley.feature.cosmetic.repository;
 
-import dev.revere.alley.feature.cosmetic.interfaces.ICosmetic;
+import dev.revere.alley.feature.cosmetic.AbstractCosmetic;
+import dev.revere.alley.feature.cosmetic.EnumCosmeticType;
+import dev.revere.alley.feature.cosmetic.interfaces.ICosmeticRepository;
 import dev.revere.alley.tool.logger.Logger;
 import lombok.Getter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Remi
@@ -13,11 +17,11 @@ import java.util.List;
  * @date 6/1/2024
  */
 @Getter
-public abstract class BaseCosmeticRepository<T extends ICosmetic> {
-    private final List<T> cosmetics;
+public abstract class BaseCosmeticRepository<T extends AbstractCosmetic> implements ICosmeticRepository<T> {
+    private final Map<String, T> cosmeticsByName;
 
     public BaseCosmeticRepository() {
-        this.cosmetics = new ArrayList<>();
+        this.cosmeticsByName = new HashMap<>();
     }
 
     /**
@@ -28,39 +32,27 @@ public abstract class BaseCosmeticRepository<T extends ICosmetic> {
     protected void registerCosmetic(Class<? extends T> clazz) {
         try {
             T instance = clazz.getDeclaredConstructor().newInstance();
-            this.cosmetics.add(instance);
+            this.cosmeticsByName.put(instance.getName(), instance);
         } catch (Exception e) {
             Logger.logError("Failed to register cosmetic class " + clazz.getSimpleName() + ": " + e.getMessage());
         }
     }
 
-    /**
-     * Method to retrieve a cosmetic by its name.
-     *
-     * @param name The name of the cosmetic
-     * @return The cosmetic
-     */
-    public T getCosmetic(String name) {
-        for (T cosmetic : this.cosmetics) {
-            if (cosmetic.getName().equals(name)) {
-                return cosmetic;
-            }
+    @Override
+    public EnumCosmeticType getRepositoryType() {
+        if (cosmeticsByName.isEmpty()) {
+            return null;
         }
-        return null;
+        return cosmeticsByName.values().iterator().next().getType();
     }
 
-    /**
-     * Method to retrieve a cosmetic by its class.
-     *
-     * @param clazz The class of the cosmetic
-     * @return The cosmetic
-     */
-    public T getCosmetic(Class<? extends T> clazz) {
-        for (T cosmetic : this.cosmetics) {
-            if (cosmetic.getClass().equals(clazz)) {
-                return cosmetic;
-            }
-        }
-        return null;
+    @Override
+    public List<T> getCosmetics() {
+        return new ArrayList<>(this.cosmeticsByName.values());
+    }
+
+    @Override
+    public T getCosmetic(String name) {
+        return this.cosmeticsByName.get(name);
     }
 }

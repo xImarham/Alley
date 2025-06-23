@@ -1,5 +1,6 @@
-package dev.revere.alley.feature.cosmetic.impl.killeffect.annotation;
+package dev.revere.alley.feature.cosmetic.annotation;
 
+import dev.revere.alley.feature.cosmetic.EnumCosmeticType;
 import org.bukkit.Material;
 
 import java.lang.annotation.ElementType;
@@ -14,7 +15,9 @@ import java.lang.annotation.Target;
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-public @interface KillEffectData {
+public @interface CosmeticData {
+    EnumCosmeticType type();
+
     String name();
 
     String description();

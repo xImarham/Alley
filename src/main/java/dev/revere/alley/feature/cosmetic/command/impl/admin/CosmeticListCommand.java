@@ -3,10 +3,14 @@ package dev.revere.alley.feature.cosmetic.command.impl.admin;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
-import dev.revere.alley.feature.cosmetic.interfaces.ICosmeticRepository;
+import dev.revere.alley.feature.cosmetic.EnumCosmeticType;
+import dev.revere.alley.feature.cosmetic.interfaces.ICosmetic;
+import dev.revere.alley.feature.cosmetic.repository.BaseCosmeticRepository;
+import dev.revere.alley.util.StringUtil;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.entity.Player;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -19,21 +23,35 @@ public class CosmeticListCommand extends BaseCommand {
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
-        Map<String, ICosmeticRepository<?>> repositories = this.plugin.getCosmeticRepository().getCosmeticRepositories();
+        Map<EnumCosmeticType, BaseCosmeticRepository<?>> repositories = this.plugin.getCosmeticRepository().getRepositories();
 
         player.sendMessage("");
 
         if (repositories.isEmpty()) {
-            player.sendMessage(CC.translate("      &f● &cNo Cosmetics available."));
+            player.sendMessage(CC.translate("&cNo cosmetic repositories are registered."));
+            player.sendMessage("");
+            return;
         }
 
-        repositories.forEach((name, repository) -> {
-            int size = repository.getCosmetics().size();
-            if (size != 0) {
-                player.sendMessage(CC.translate("     &b&l" + name + " &f(" + size + "&f)"));
-                repository.getCosmetics().forEach(cosmetic -> player.sendMessage(CC.translate("      &f● &b" + cosmetic.getName())));
+        for (Map.Entry<EnumCosmeticType, BaseCosmeticRepository<?>> entry : repositories.entrySet()) {
+            EnumCosmeticType type = entry.getKey();
+            BaseCosmeticRepository<?> repository = entry.getValue();
+
+            List<? extends ICosmetic> cosmetics = repository.getCosmetics();
+
+            if (cosmetics.isEmpty()) {
+                continue;
             }
-        });
+
+            String friendlyTypeName = StringUtil.formatCosmeticTypeName(type);
+            String header = String.format("     &b&l%s &f(%d)", friendlyTypeName, cosmetics.size());
+            player.sendMessage(CC.translate(header));
+
+            for (ICosmetic cosmetic : cosmetics) {
+                player.sendMessage(CC.translate("      &f● &b" + cosmetic.getName()));
+            }
+        }
+
 
         player.sendMessage("");
     }
