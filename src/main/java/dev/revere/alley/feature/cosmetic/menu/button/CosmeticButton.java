@@ -38,6 +38,7 @@ public class CosmeticButton extends Button {
         return new ItemBuilder(cosmetic.getIcon())
                 .name("&b&l" + cosmetic.getName())
                 .lore("", "&f" + cosmetic.getDescription(), "", lore)
+                .hideMeta()
                 .build();
     }
 

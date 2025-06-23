@@ -44,6 +44,7 @@ public class ShopItemButton extends Button {
         return new ItemBuilder(cosmetic.getIcon())
                 .name("&b&l" + cosmetic.getName())
                 .lore(lore)
+                .hideMeta()
                 .build();
     }
 

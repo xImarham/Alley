@@ -54,6 +54,7 @@ public class CosmeticCategoryButton extends Button {
         return new ItemBuilder(this.icon)
                 .name("&b&l" + friendlyName + "s")
                 .lore(lore)
+                .hideMeta()
                 .build();
     }
 

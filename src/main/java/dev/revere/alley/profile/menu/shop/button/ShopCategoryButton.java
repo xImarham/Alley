@@ -43,8 +43,10 @@ public class ShopCategoryButton extends Button {
 
         int percentage = (totalCount == 0) ? 0 : (int) (((double) ownedCount / totalCount) * 100);
 
+        String description = cosmeticType.getDescription();
+
         List<String> lore = new ArrayList<>();
-        lore.add(cosmeticType.getDescription());
+        lore.add(String.format("&7%s", description));
         lore.add("");
         lore.add(String.format("&fUnlocked: &b%d/%d &7(%d%%)", ownedCount, totalCount, percentage));
         lore.add("");
@@ -53,6 +55,7 @@ public class ShopCategoryButton extends Button {
         return new ItemBuilder(this.icon)
                 .name("&b&l" + friendlyName + "s")
                 .lore(lore)
+                .hideMeta()
                 .build();
     }
 
