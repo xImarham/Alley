@@ -90,7 +90,7 @@ public class PracticeSettingsButton extends Button {
                 player.sendMessage(CC.translate("&cThis feature is currently in development."));
                 break;
             case NETHER_STAR:
-                new CosmeticsMenu("KillEffect").openMenu(player);
+                new CosmeticsMenu().openMenu(player);
                 break;
             case STRING:
                 player.performCommand("togglescoreboardlines");
