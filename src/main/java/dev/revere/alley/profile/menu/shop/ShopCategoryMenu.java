@@ -41,6 +41,8 @@ public class ShopCategoryMenu extends Menu {
                     .forEach(cosmetic -> buttons.put(cosmetic.getSlot(), new ShopItemButton(cosmetic)));
         }
 
+        this.addBorder(buttons, 15, 5);
+
         return buttons;
     }
 }
