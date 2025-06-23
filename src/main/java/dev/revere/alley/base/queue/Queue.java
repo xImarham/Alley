@@ -92,18 +92,19 @@ public class Queue {
             return;
         }
 
+
         if (this.isDuos()) {
-            if (party == null || !party.getLeader().equals(player)) {
+            if (party != null && !party.getLeader().equals(player)) {
                 player.sendMessage(CC.translate("&cOnly the party leader can queue."));
                 return;
             }
 
-            if (party.getMembers().size() > 2) {
+            if (party != null && party.getMembers().size() > 2) {
                 player.sendMessage(CC.translate("&cYour party size is too large for duo queues."));
                 return;
             }
 
-            if (party.getMembers().size() == 2) {
+            if (party != null && party.getMembers().size() == 2) {
                 for (UUID memberId : party.getMembers()) {
                     if (Bukkit.getPlayer(memberId) == null || !Bukkit.getPlayer(memberId).isOnline()) {
                         player.sendMessage(CC.translate("&cAll party members must be online to queue."));
@@ -116,13 +117,15 @@ public class Queue {
                         return;
                     }
                 }
-            } else if (party.getMembers().size() == 1) {
+            } else {
                 if (profile.getState() != EnumProfileState.LOBBY) {
                     player.sendMessage(CC.translate("&cYou must be in the lobby to queue."));
                     return;
                 }
 
-                player.sendMessage(CC.translate("&eYou are queuing for duos solo. A random teammate will be selected."));
+                if (party == null || party.getMembers().size() == 1) {
+                    player.sendMessage(CC.translate("&eYou are queuing for duos solo. A random teammate will be selected."));
+                }
             }
         } else {
             if (profile.getState() != EnumProfileState.LOBBY) {
@@ -147,7 +150,7 @@ public class Queue {
                         if (memberProfile != null) {
                             memberProfile.setQueueProfile(queueProfile);
                             memberProfile.setState(EnumProfileState.WAITING);
-                            this.plugin.getHotbarService().applyHotbarItems(player, EnumHotbarType.QUEUE);
+                            this.plugin.getHotbarService().applyHotbarItems(player);
                             Player memberPlayer = Bukkit.getPlayer(memberId);
                             if (memberPlayer != null) {
                                 memberPlayer.sendMessage(CC.translate("&fYour party leader has joined the &b" + queueProfile.getQueue().getKit().getDisplayName() + " &fqueue."));
@@ -160,7 +163,7 @@ public class Queue {
 
         player.sendMessage(CC.translate("&aYou've joined the &b" + queueProfile.getQueue().getKit().getName() + " &aqueue."));
 
-        this.plugin.getHotbarService().applyHotbarItems(player, EnumHotbarType.QUEUE);
+        this.plugin.getHotbarService().applyHotbarItems(player);
     }
 
     /**
@@ -182,13 +185,13 @@ public class Queue {
                     memberProfile.setState(EnumProfileState.LOBBY);
                     Player memberPlayer = Bukkit.getPlayer(memberId);
                     if (memberPlayer != null) {
-                        this.plugin.getHotbarService().applyHotbarItems(memberPlayer, EnumHotbarType.PARTY);
+                        this.plugin.getHotbarService().applyHotbarItems(memberPlayer);
                         memberPlayer.sendMessage(CC.translate("&cYour party has left the queue."));
                     }
                 }
             }
             this.profiles.remove(queueProfile);
-        } else if (!this.isDuos() || party == null) {
+        } else {
             this.profiles.remove(queueProfile);
 
             if (playerToRemoveProfile != null) {
@@ -197,7 +200,7 @@ public class Queue {
             }
 
             if (playerToRemove != null) {
-                this.plugin.getHotbarService().applyHotbarItems(playerToRemove, EnumHotbarType.LOBBY);
+                this.plugin.getHotbarService().applyHotbarItems(playerToRemove);
                 playerToRemove.sendMessage(CC.translate("&cYou've left the queue."));
             }
         }

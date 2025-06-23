@@ -61,14 +61,13 @@ public class QueueRunnable implements Runnable {
      * @param queue The queue to validate and cleanup
      */
     private void validateAndCleanupQueuePlayers(Queue queue) {
-        Iterator<QueueProfile> profileIterator = queue.getProfiles().iterator();
-        while (profileIterator.hasNext()) {
-            QueueProfile profile = profileIterator.next();
+        List<QueueProfile> profilesToCheck = new ArrayList<>(queue.getProfiles());
+
+        for (QueueProfile profile : profilesToCheck) {
             Player player = Bukkit.getPlayer(profile.getUuid());
 
             if (shouldRemovePlayerFromQueue(player, profile)) {
                 queue.removePlayer(profile);
-                profileIterator.remove();
                 notifyPlayerOfQueueRemoval(player, profile);
             } else {
                 profile.queueRange(player);
@@ -575,7 +574,6 @@ public class QueueRunnable implements Runnable {
         } else if (team2Party != null && team2Party.getMembers().contains(player.getUniqueId())) {
             participantB.addPlayer(gamePlayer);
         } else {
-            // Balance teams by adding to the smaller team
             if (participantA.getPlayerSize() < participantB.getPlayerSize()) {
                 participantA.addPlayer(gamePlayer);
             } else {

@@ -85,7 +85,7 @@ public abstract class AbstractFFAMatch {
             profile.setFfaMatch(this);
 
             this.plugin.getVisibilityService().updateVisibility(player);
-            this.plugin.getHotbarService().applyHotbarItems(player, EnumHotbarType.SPECTATOR);
+            this.plugin.getHotbarService().applyHotbarItems(player);
         }
 
         player.teleport(this.arena.getCenter());
@@ -110,7 +110,7 @@ public abstract class AbstractFFAMatch {
             profile.setFfaMatch(null);
 
             this.plugin.getVisibilityService().updateVisibility(player);
-            this.plugin.getHotbarService().applyHotbarItems(player, EnumHotbarType.LOBBY);
+            this.plugin.getHotbarService().applyHotbarItems(player);
         }
 
         player.spigot().setCollidesWithEntities(true);

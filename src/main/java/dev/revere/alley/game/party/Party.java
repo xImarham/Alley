@@ -53,6 +53,16 @@ public class Party {
     }
 
     /**
+     * Determines whether the specified player is the leader of the party.
+     *
+     * @param player The player to check.
+     * @return True if the specified player is the leader of the party, false otherwise.
+     */
+    public boolean isLeader(Player player) {
+        return leader == player;
+    }
+
+    /**
      * Sends a message to all party members excluding the leader.
      *
      * @param message The message to notify the party members of.

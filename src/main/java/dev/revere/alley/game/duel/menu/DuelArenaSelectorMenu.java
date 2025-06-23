@@ -69,10 +69,7 @@ public class DuelArenaSelectorMenu extends Menu {
         public void clicked(Player player, ClickType clickType) {
             player.closeInventory();
 
-            Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
-
-            Alley.getInstance().getDuelRequestService().sendDuelRequest(player, targetPlayer, kit, arena, profile.getParty() != null);
-            player.sendMessage(CC.translate("&aYou have sent a duel request to " + targetPlayer.getName() + " in the " + arena.getName() + " arena with the " + kit.getName() + " kit."));
+            Alley.getInstance().getDuelRequestService().createAndSendRequest(player, targetPlayer, kit, arena);
         }
     }
 }

@@ -224,12 +224,10 @@ public class ArenaService {
 
             temporaryWorld = null;
 
-            Bukkit.getScheduler().runTaskLater(plugin, () -> {
-                File worldFolder = new File(Bukkit.getWorldContainer(), worldName);
-                if (worldFolder.exists()) {
-                    FileUtil.deleteWorldFolder(worldFolder);
-                }
-            }, 20L);
+            File worldFolder = new File(Bukkit.getWorldContainer(), worldName);
+            if (worldFolder.exists()) {
+                FileUtil.deleteWorldFolder(worldFolder);
+            }
         }
     }
 
@@ -315,16 +313,6 @@ public class ArenaService {
             return createTemporaryArenaCopy((StandAloneArena) arena);
         }
         return arena;
-    }
-
-    public AbstractArena getTemporaryArena(AbstractArena arena) {
-        AbstractArena mutableArena = this.getArenaByName(arena.getName());
-
-        if (!(mutableArena instanceof StandAloneArena)) {
-            return null;
-        }
-
-        return createTemporaryArenaCopy((StandAloneArena) mutableArena);
     }
 
     /**

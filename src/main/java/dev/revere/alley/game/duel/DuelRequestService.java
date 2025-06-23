@@ -6,17 +6,25 @@ import dev.revere.alley.base.arena.impl.StandAloneArena;
 import dev.revere.alley.base.kit.Kit;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
+import dev.revere.alley.game.match.player.participant.TeamGameParticipant;
+import dev.revere.alley.game.party.Party;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
 import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.util.chat.ClickableUtil;
 import lombok.Getter;
 import lombok.Setter;
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * @author Emmy
@@ -40,95 +48,160 @@ public class DuelRequestService {
     }
 
     /**
-     * Add duel request to the list of duel requests.
+     * The primary, centralized method for creating and validating a duel request.
+     * Call this from any command or menu.
      *
-     * @param duelRequest the duel
+     * @param sender The player initiating the request.
+     * @param initialTarget The player who was initially targeted.
+     * @param kit The kit for the duel.
+     * @param arena The specific arena chosen, or null for a random one.
      */
-    public void addDuelRequest(DuelRequest duelRequest) {
-        this.duelRequests.add(duelRequest);
+    public void createAndSendRequest(Player sender, Player initialTarget, Kit kit, @Nullable AbstractArena arena) {
+        Profile senderProfile = this.plugin.getProfileService().getProfile(sender.getUniqueId());
+        Profile initialTargetProfile = this.plugin.getProfileService().getProfile(initialTarget.getUniqueId());
+
+        Party senderParty = senderProfile.getParty();
+        Party targetParty = initialTargetProfile.getParty();
+
+        boolean isPartyDuel = senderParty != null && targetParty != null;
+        Player finalTarget;
+
+        if (isPartyDuel) {
+            finalTarget = Bukkit.getPlayer(targetParty.getLeader().getUniqueId());
+        } else {
+            finalTarget = initialTarget;
+        }
+
+        if (isRequestInvalid(sender, senderProfile, finalTarget, isPartyDuel)) {
+            return;
+        }
+
+        AbstractArena finalArena = arena != null ? arena : this.plugin.getArenaService().getRandomArena(kit);
+        if (finalArena instanceof StandAloneArena) {
+            finalArena = plugin.getArenaService().getArenaByName(finalArena.getName());
+        }
+
+        if (finalArena == null) {
+            sender.sendMessage(CC.translate("&cCould not find an available arena for that kit."));
+            return;
+        }
+
+        DuelRequest duelRequest = new DuelRequest(sender, finalTarget, kit, finalArena, isPartyDuel);
+        this.addDuelRequest(duelRequest);
+
+        sender.sendMessage(CC.translate("&aYou have successfully sent a " + (isPartyDuel ? "party " : "") + "duel request to &b" + finalTarget.getName() + "&a."));
+        sendInvite(sender, finalTarget, kit, finalArena, isPartyDuel);
     }
 
     /**
-     * Remove duel request from the list of duel requests.
+     * The new, powerful validation method. It checks all conditions for sending a duel request.
+     * This is now the single source of truth for validation.
      *
-     * @param duelRequest the duel
+     * @return true if the request is invalid, false otherwise.
      */
-    public void removeDuelRequest(DuelRequest duelRequest) {
-        this.duelRequests.remove(duelRequest);
-    }
+    private boolean isRequestInvalid(Player sender, Profile senderProfile, Player finalTarget, boolean isPartyDuel) {
+        if (finalTarget == null) {
+            sender.sendMessage(CC.translate("&cThe target player (or their party leader) is not online."));
+            return true;
+        }
 
-    /**
-     * Get a duel request by the sender and target.
-     *
-     * @param sender the sender
-     * @param target the target
-     * @return the duel request
-     */
-    public DuelRequest getDuelRequest(Player sender, Player target) {
-        for (DuelRequest duelRequest : this.duelRequests) {
-            if (duelRequest.getSender().equals(sender) && duelRequest.getTarget().equals(target) || (duelRequest.getSender().equals(target) && duelRequest.getTarget().equals(sender))) {
-                return duelRequest;
+        if (sender.equals(finalTarget)) {
+            sender.sendMessage(CC.translate("&cYou cannot duel yourself."));
+            return true;
+        }
+
+        if (senderProfile.getState() != EnumProfileState.LOBBY) {
+            sender.sendMessage(CC.translate("&cYou must be in the lobby to duel."));
+            return true;
+        }
+
+        Profile finalTargetProfile = this.plugin.getProfileService().getProfile(finalTarget.getUniqueId());
+        if (finalTargetProfile.getState() != EnumProfileState.LOBBY) {
+            sender.sendMessage(CC.translate("&cThe target player is not in the lobby."));
+            return true;
+        }
+
+        if (isPartyDuel) {
+            if (!senderProfile.getParty().isLeader(sender)) {
+                sender.sendMessage(CC.translate("&cYou must be the leader of your party to challenge another party."));
+                return true;
+            }
+            if (senderProfile.getParty().equals(finalTargetProfile.getParty())) {
+                sender.sendMessage(CC.translate("&cYou cannot duel your own party."));
+                return true;
+            }
+        } else {
+            if (senderProfile.getParty() != null || finalTargetProfile.getParty() != null) {
+                sender.sendMessage(CC.translate("&cTo send a 1v1 duel, neither you nor your target can be in a party."));
+                return true;
             }
         }
-        return null;
+
+        if (getDuelRequest(sender, finalTarget) != null) {
+            sender.sendMessage(CC.translate("&cYou already have a pending duel request with that player/party."));
+            return true;
+        }
+
+        return false;
     }
 
     /**
-     * Send duel request to the target player.
-     *
-     * @param player the sender
-     * @param target the target
-     * @param kit    the kit
-     */
-    public void sendDuelRequest(Player player, Player target, Kit kit, boolean party) {
-        if (isInvalidRequest(player, target)) {
-            return;
-        }
-        AbstractArena arena = this.plugin.getArenaService().getRandomArena(kit);
-        DuelRequest duelRequest = new DuelRequest(player, target, kit, arena, party);
-        this.addDuelRequest(duelRequest);
-
-        this.sendInvite(player, target, kit, arena, this.getClickable(player));
-    }
-
-    /**
-     * Send duel request to the target player with a specific arena.
-     *
-     * @param player the sender
-     * @param target the target
-     * @param kit    the kit
-     * @param arena  the arena
-     */
-    public void sendDuelRequest(Player player, Player target, Kit kit, AbstractArena arena, boolean party) {
-        if (isInvalidRequest(player, target)) {
-            return;
-        }
-        if (arena instanceof StandAloneArena) {
-            arena = plugin.getArenaService().getTemporaryArena(arena);
-        }
-
-        DuelRequest duelRequest = new DuelRequest(player, target, kit, arena, party);
-        this.addDuelRequest(duelRequest);
-
-        this.sendInvite(player, target, kit, arena, this.getClickable(player));
-    }
-
-    /**
-     * Send invite to the target player.
+     * Send an invitation to the target player.
      *
      * @param sender     the sender
      * @param target     the target
      * @param kit        the kit
      * @param arena      the arena
-     * @param invitation the invitation
      */
-    private void sendInvite(Player sender, Player target, Kit kit, AbstractArena arena, TextComponent invitation) {
+    private void sendInvite(Player sender, Player target, Kit kit, AbstractArena arena, boolean isParty) {
+        String title = isParty ? "&b&lParty Duel Request" : "&b&lDuel Request";
+        TextComponent fromComponent = new TextComponent();
+        if (isParty) {
+            Party senderParty = this.plugin.getProfileService().getProfile(sender.getUniqueId()).getParty();
+            int partySize = (senderParty != null) ? senderParty.getMembers().size() : 1;
+
+            fromComponent.setText(CC.translate(String.format("&f&l ● &fFrom: &b%s's Party (&a%d&b)", sender.getName(), partySize)));
+
+            StringBuilder hoverText = new StringBuilder();
+            hoverText.append(CC.translate("&b&lParticipants:\n"));
+
+            if (senderParty != null) {
+                List<UUID> members = new ArrayList<>(senderParty.getMembers());
+                final int limit = 5;
+                int displayCount = Math.min(members.size(), limit);
+
+                for (int i = 0; i < displayCount; i++) {
+                    OfflinePlayer member = Bukkit.getOfflinePlayer(members.get(i));
+                    hoverText.append("&b").append(member.getName());
+
+                    if (i < displayCount - 1) {
+                        hoverText.append("&f, ");
+                    }
+                }
+
+                if (members.size() > limit) {
+                    hoverText.append("&f, ...");
+                }
+            }
+
+            HoverEvent hoverEvent = new HoverEvent(HoverEvent.Action.SHOW_TEXT, new BaseComponent[]{new TextComponent(CC.translate(hoverText.toString()))});
+            fromComponent.setHoverEvent(hoverEvent);
+
+        } else {
+            fromComponent.setText(CC.translate("&f&l ● &fFrom: &b" + sender.getName()));
+        }
+
+        TextComponent arenaComponent = new TextComponent(CC.translate("&f&l ● &fArena: &b" + arena.getDisplayName()));
+        TextComponent kitComponent = new TextComponent(CC.translate("&f&l ● &fKit: &b" + kit.getName()));
+
+        TextComponent acceptComponent = getClickable(sender);
+
         target.sendMessage("");
-        target.sendMessage(CC.translate("&b&lDuel Request"));
-        target.sendMessage(CC.translate("&f&l ● &fFrom: &b" + sender.getName()));
-        target.sendMessage(CC.translate("&f&l ● &fArena: &b" + arena.getDisplayName()));
-        target.sendMessage(CC.translate("&f&l ● &fKit: &b" + kit.getName()));
-        target.spigot().sendMessage(invitation);
+        target.spigot().sendMessage(new TextComponent(CC.translate(title)));
+        target.spigot().sendMessage(fromComponent);
+        target.spigot().sendMessage(arenaComponent);
+        target.spigot().sendMessage(kitComponent);
+        target.spigot().sendMessage(acceptComponent);
         target.sendMessage("");
     }
 
@@ -142,65 +215,64 @@ public class DuelRequestService {
             return;
         }
 
-        MatchGamePlayerImpl playerA = new MatchGamePlayerImpl(duelRequest.getSender().getUniqueId(), duelRequest.getSender().getName());
-        MatchGamePlayerImpl playerB = new MatchGamePlayerImpl(duelRequest.getTarget().getUniqueId(), duelRequest.getTarget().getName());
+        if (duelRequest.isParty()) {
+            Profile senderProfile = this.plugin.getProfileService().getProfile(duelRequest.getSender().getUniqueId());
+            Profile targetProfile = this.plugin.getProfileService().getProfile(duelRequest.getTarget().getUniqueId());
 
-        GameParticipant<MatchGamePlayerImpl> participantA = new GameParticipant<>(playerA);
-        GameParticipant<MatchGamePlayerImpl> participantB = new GameParticipant<>(playerB);
+            Party partyA = senderProfile.getParty();
+            Party partyB = targetProfile.getParty();
 
-        this.plugin.getMatchService().createAndStartMatch(
-                duelRequest.getKit(), duelRequest.getArena(), participantA, participantB, false, false, false
-        );
+            if (partyA == null || partyB == null) {
+                duelRequest.getSender().sendMessage(CC.translate("&cThe duel could not be started because one of the parties has disbanded."));
+                duelRequest.getTarget().sendMessage(CC.translate("&cThe duel could not be started because one of the parties has disbanded."));
+                removeDuelRequest(duelRequest);
+                return;
+            }
 
+            MatchGamePlayerImpl leaderA = new MatchGamePlayerImpl(duelRequest.getSender().getUniqueId(), duelRequest.getSender().getName());
+            MatchGamePlayerImpl leaderB = new MatchGamePlayerImpl(duelRequest.getTarget().getUniqueId(), duelRequest.getTarget().getName());
+
+            GameParticipant<MatchGamePlayerImpl> participantA = new TeamGameParticipant<>(leaderA);
+            GameParticipant<MatchGamePlayerImpl> participantB = new TeamGameParticipant<>(leaderB);
+
+            UUID leaderAUUID = leaderA.getUuid();
+            for (UUID memberUUID : partyA.getMembers()) {
+                if (!memberUUID.equals(leaderAUUID)) {
+                    Player memberPlayer = Bukkit.getPlayer(memberUUID);
+                    if (memberPlayer != null) {
+                        participantA.addPlayer(new MatchGamePlayerImpl(memberPlayer.getUniqueId(), memberPlayer.getName()));
+                    }
+                }
+            }
+
+            UUID leaderBUUID = leaderB.getUuid();
+            for (UUID memberUUID : partyB.getMembers()) {
+                if (!memberUUID.equals(leaderBUUID)) {
+                    Player memberPlayer = Bukkit.getPlayer(memberUUID);
+                    if (memberPlayer != null) {
+                        participantB.addPlayer(new MatchGamePlayerImpl(memberPlayer.getUniqueId(), memberPlayer.getName()));
+                    }
+                }
+            }
+
+            boolean isTeamMatch = (!participantA.getPlayers().isEmpty() || !participantB.getPlayers().isEmpty());
+
+            this.plugin.getMatchService().createAndStartMatch(
+                    duelRequest.getKit(), this.plugin.getArenaService().selectArenaWithPotentialTemporaryCopy(duelRequest.getArena()), participantA, participantB, isTeamMatch, false, false
+            );
+
+        } else {
+            MatchGamePlayerImpl playerA = new MatchGamePlayerImpl(duelRequest.getSender().getUniqueId(), duelRequest.getSender().getName());
+            MatchGamePlayerImpl playerB = new MatchGamePlayerImpl(duelRequest.getTarget().getUniqueId(), duelRequest.getTarget().getName());
+
+            GameParticipant<MatchGamePlayerImpl> participantA = new GameParticipant<>(playerA);
+            GameParticipant<MatchGamePlayerImpl> participantB = new GameParticipant<>(playerB);
+
+            this.plugin.getMatchService().createAndStartMatch(
+                    duelRequest.getKit(), this.plugin.getArenaService().selectArenaWithPotentialTemporaryCopy(duelRequest.getArena()), participantA, participantB, false, false, false
+            );
+        }
         this.removeDuelRequest(duelRequest);
-    }
-
-    /**
-     * Checks if the duel request is valid.
-     *
-     * @param player the player sending the request
-     * @param target the target player
-     * @return true if the request is invalid, false otherwise
-     */
-    private boolean isInvalidRequest(Player player, Player target) {
-        if (target == null) {
-            player.sendMessage(CC.translate("&cThat player is not online."));
-            return true;
-        }
-
-        if (target == player) {
-            player.sendMessage(CC.translate("&cYou cannot duel yourself."));
-            return true;
-        }
-
-        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
-        if (profile.getState() != EnumProfileState.LOBBY) {
-            player.sendMessage(CC.translate("&cYou must be in the lobby to duel a player."));
-            return true;
-        }
-
-        Profile targetProfile = this.plugin.getProfileService().getProfile(target.getUniqueId());
-        if (targetProfile.getState() != EnumProfileState.LOBBY) {
-            player.sendMessage(CC.translate("&cThat player is not in the lobby."));
-            return true;
-        }
-
-        if (targetProfile.getParty() != null && profile.getParty() == null) {
-            player.sendMessage(CC.translate("&cThat player is in a party and you're not. You can't duel them."));
-            return true;
-        }
-
-        if (targetProfile.getParty() == null && profile.getParty() != null) {
-            player.sendMessage(CC.translate("&cYou are in a party and the target player is not. You can't duel them."));
-            return true;
-        }
-
-        if (targetProfile.getParty() != null && profile.getParty().getMembers().contains(target.getUniqueId())) {
-            player.sendMessage(CC.translate("&cYou cannot duel a member of your own party."));
-            return true;
-        }
-
-        return false;
     }
 
     /**
@@ -257,6 +329,40 @@ public class DuelRequestService {
             return false;
         }
         return true;
+    }
+
+    /**
+     * Add a duel request to the list of duel requests.
+     *
+     * @param duelRequest the duel
+     */
+    public void addDuelRequest(DuelRequest duelRequest) {
+        this.duelRequests.add(duelRequest);
+    }
+
+    /**
+     * Remove duel request from the list of duel requests.
+     *
+     * @param duelRequest the duel
+     */
+    public void removeDuelRequest(DuelRequest duelRequest) {
+        this.duelRequests.remove(duelRequest);
+    }
+
+    /**
+     * Get a duel request by the sender and target.
+     *
+     * @param sender the sender
+     * @param target the target
+     * @return the duel request
+     */
+    public DuelRequest getDuelRequest(Player sender, Player target) {
+        for (DuelRequest duelRequest : this.duelRequests) {
+            if (duelRequest.getSender().equals(sender) && duelRequest.getTarget().equals(target) || (duelRequest.getSender().equals(target) && duelRequest.getTarget().equals(sender))) {
+                return duelRequest;
+            }
+        }
+        return null;
     }
 
     /**

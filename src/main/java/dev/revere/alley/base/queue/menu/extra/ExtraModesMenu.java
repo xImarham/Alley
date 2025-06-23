@@ -36,7 +36,7 @@ public class ExtraModesMenu extends Menu {
 
         int slot = 10;
         for (Queue queue : Alley.getInstance().getQueueService().getQueues()) {
-            if (!queue.isRanked() && queue.getKit().getCategory() == EnumKitCategory.EXTRA) {
+            if (shouldAddQueue(queue, queueType)) {
                 slot = this.skipIfSlotCrossingBorder(slot);
                 buttons.put(slot++, new UnrankedButton(queue));
             }
@@ -50,5 +50,13 @@ public class ExtraModesMenu extends Menu {
     @Override
     public int getSize() {
         return 9 * 4;
+    }
+
+    private boolean shouldAddQueue(Queue queue, EnumQueueType queueType) {
+        if (queue.isRanked() || queue.getKit().getCategory() != EnumKitCategory.EXTRA) {
+            return false;
+        }
+
+        return (queueType == EnumQueueType.DUOS) == queue.isDuos();
     }
 }

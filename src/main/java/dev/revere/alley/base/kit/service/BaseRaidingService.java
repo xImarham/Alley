@@ -4,6 +4,7 @@ import dev.revere.alley.Alley;
 import dev.revere.alley.base.kit.Kit;
 import dev.revere.alley.base.kit.setting.impl.mode.KitSettingRaidingImpl;
 import dev.revere.alley.game.match.player.enums.EnumBaseRaiderRole;
+import dev.revere.alley.tool.logger.Logger;
 import lombok.Getter;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -40,7 +41,7 @@ public class BaseRaidingService {
         FileConfiguration config = this.plugin.getConfigService().getKitsConfig();
         ConfigurationSection kitsSection = config.getConfigurationSection("kits");
         if (kitsSection == null) {
-            this.plugin.getLogger().warning("No raiding kits found in the configuration.");
+            Logger.logError("No raiding kits found in the configuration.");
             return;
         }
 
@@ -64,7 +65,7 @@ public class BaseRaidingService {
     private void loadRaidingKitMapping(Kit parentKit, FileConfiguration config, String key) {
         ConfigurationSection raidingSection = config.getConfigurationSection(key + ".raiding-role-kits");
         if (raidingSection == null) {
-            this.plugin.getLogger().warning("No raiding role kits found for kit: " + parentKit.getName());
+            Logger.logError("No raiding role kits found for kit: " + parentKit.getName());
             return;
         }
 
@@ -79,11 +80,11 @@ public class BaseRaidingService {
                     roleKits.put(role, roleKit);
                     roleKit.setEnabled(false);
                 } else {
-                    this.plugin.getLogger().warning("Raiding kit for role " + role + " not found: " + roleKitName);
+                    Logger.logError("Raiding kit for role " + role + " not found: " + roleKitName);
                 }
             }
             catch (IllegalArgumentException e) {
-                this.plugin.getLogger().warning("Invalid raiding role: " + roleName + " in kit: " + parentKit.getName());
+                Logger.logError("Invalid raiding role: " + roleName + " in kit: " + parentKit.getName());
             }
         }
 

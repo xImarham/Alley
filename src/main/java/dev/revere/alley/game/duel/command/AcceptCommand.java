@@ -33,9 +33,8 @@ public class AcceptCommand extends BaseCommand {
         }
 
         DuelRequest duelRequest = this.plugin.getDuelRequestService().getDuelRequest(player, target);
-
         if (duelRequest == null) {
-            player.sendMessage(CC.translate("&cYou do not have a pending duel request from that duelRequest.getSender()."));
+            player.sendMessage(CC.translate("&cYou do not have a pending duel request from that player."));
             return;
         }
 

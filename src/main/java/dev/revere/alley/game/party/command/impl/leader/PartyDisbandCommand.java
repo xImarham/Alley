@@ -20,27 +20,6 @@ public class PartyDisbandCommand extends BaseCommand {
     @CommandData(name = "party.disband", aliases = {"p.disband"})
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
-        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
-
-        if (this.plugin.getProfileService().getProfile(player.getUniqueId()).getState() != EnumProfileState.LOBBY) {
-            player.sendMessage(CC.translate("&cYou must be at spawn in order to execute this command :v"));
-            return;
-        }
-
-        if (profile.getParty() == null) {
-            player.sendMessage(CC.translate(PartyLocale.NOT_IN_PARTY.getMessage()));
-            return;
-        }
-
-        if (profile.getMatch() != null) {
-            player.sendMessage(CC.translate("&cYou cannot disband your party while in a match."));
-            return;
-        }
-
-        if (profile.getQueueProfile() != null) {
-            player.sendMessage(CC.translate("&cYou cannot disband your party while in a queue."));
-            return;
-        }
 
         PartyService partyService = this.plugin.getPartyService();
         if (partyService.getPartyByLeader(player) != null) {

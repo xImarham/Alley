@@ -56,7 +56,6 @@ public class FFASpawnService extends CuboidService {
 
     public Cuboid getCuboid() {
         if (this.cuboid == null) {
-            Logger.logError("Cuboid is not initialized. Please load the cuboid first.");
             return null;
         }
         return cuboid;

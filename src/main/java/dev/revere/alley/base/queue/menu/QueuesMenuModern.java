@@ -63,18 +63,18 @@ public class QueuesMenuModern extends Menu {
                 "&7Casual 1v1s with",
                 "&7no loss penalty.",
                 "",
-                "&bPlayers: &f" + queueService.getPlayerCountOfGameType("Unranked"),
+                "&bPlayers: &f" + queueService.getPlayerCountOfGameType("Unranked Solo"),
                 "",
                 this.getLore(profile, EnumQueueType.UNRANKED)
         )));
 
-        buttons.put(4, new QueuesButtonModern("&b&lBots", Material.GOLD_SWORD, 0, Arrays.asList(
-                "&7Practice against bots",
-                "&7to improve your skills.",
+        buttons.put(4, new QueuesButtonModern("&b&lUnranked Duos", Material.GOLD_SWORD, 0, Arrays.asList(
+                "&7Casual 2v2s with",
+                "&7no penalty loss",
                 "",
-                "&bPlayers: &f" + queueService.getPlayerCountOfGameType("Bots"),
+                "&bPlayers: &f" + queueService.getPlayerCountOfGameType("Duos"),
                 "",
-                "&c&lIN DEVELOPMENT"
+                this.getLore(profile, EnumQueueType.DUOS)
         )));
 
         buttons.put(6, new QueuesButtonModern("&b&lFFA", Material.GOLD_AXE, 0, Arrays.asList(
@@ -89,7 +89,6 @@ public class QueuesMenuModern extends Menu {
         int slot = 10;
         switch (profile.getQueueType()) {
             case UNRANKED:
-
                 for (Queue queue : this.plugin.getQueueService().getQueues()) {
                     if (!queue.isRanked() && !queue.isDuos() && queue.getKit().getCategory() == EnumKitCategory.NORMAL) {
                         slot = this.skipIfSlotCrossingBorder(slot);
@@ -101,17 +100,21 @@ public class QueuesMenuModern extends Menu {
 
                 break;
             case BOTS:
-                /*for (Kit kit : this.plugin.getKitService().getKits()) {
+                for (Kit kit : this.plugin.getKitService().getKits()) {
                     slot = this.skipIfSlotCrossingBorder(slot);
                     buttons.put(slot++, new BotButton(kit));
-                }*/
+                }
 
+                break;
+            case DUOS:
                 for (Queue queue : this.plugin.getQueueService().getQueues()) {
                     if (!queue.isRanked() && queue.isDuos() && queue.getKit().getCategory() == EnumKitCategory.NORMAL) {
                         slot = this.skipIfSlotCrossingBorder(slot);
                         buttons.put(slot++, new UnrankedButton(queue));
                     }
                 }
+
+                buttons.put(40, new QueueModeSwitcherButton(EnumQueueType.DUOS, EnumKitCategory.EXTRA));
 
                 break;
             case FFA:
@@ -159,8 +162,7 @@ public class QueuesMenuModern extends Menu {
                     profile.setQueueType(EnumQueueType.UNRANKED);
                     break;
                 case GOLD_SWORD:
-                    profile.setQueueType(EnumQueueType.BOTS);
-                    //player.sendMessage(CC.translate("&c&lThis feature is currently being worked on."));
+                    profile.setQueueType(EnumQueueType.DUOS);
                     break;
                 case GOLD_AXE:
                     profile.setQueueType(EnumQueueType.FFA);

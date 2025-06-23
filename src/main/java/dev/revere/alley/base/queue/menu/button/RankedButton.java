@@ -95,6 +95,6 @@ public class RankedButton extends Button {
         PlayerUtil.reset(player, false);
         player.closeInventory();
         this.playNeutral(player);
-        this.plugin.getHotbarService().applyHotbarItems(player, EnumHotbarType.QUEUE);
+        this.plugin.getHotbarService().applyHotbarItems(player);
     }
 }

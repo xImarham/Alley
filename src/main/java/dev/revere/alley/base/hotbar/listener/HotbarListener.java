@@ -2,6 +2,7 @@ package dev.revere.alley.base.hotbar.listener;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.base.hotbar.HotbarItem;
+import dev.revere.alley.base.queue.enums.EnumQueueType;
 import dev.revere.alley.base.queue.menu.sub.RankedMenu;
 import dev.revere.alley.feature.leaderboard.menu.LeaderboardMenu;
 import dev.revere.alley.game.match.menu.CurrentMatchesMenu;
@@ -59,6 +60,10 @@ public class HotbarListener implements Listener {
                     case LOBBY:
                         switch (hotbarItem.getHotbarItems()) {
                             case UNRANKED_QUEUES:
+                                this.plugin.getQueueService().getQueueMenu().openMenu(player);
+                                break;
+                            case DUO_UNRANKED_QUEUE:
+                                profile.setQueueType(EnumQueueType.DUOS);
                                 this.plugin.getQueueService().getQueueMenu().openMenu(player);
                                 break;
                             case RANKED_QUEUES:

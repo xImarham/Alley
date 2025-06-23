@@ -105,6 +105,7 @@ public class QueueService {
         switch (queue) {
             case "Unranked":
             case "Ranked":
+            case "Duos":
                 return EnumProfileState.PLAYING;
             case "FFA":
                 return EnumProfileState.FFA;
@@ -127,6 +128,8 @@ public class QueueService {
             return true;
         } else if (queue.equals("Ranked")) {
             return profile.getMatch().isRanked();
+        } else if (queue.equals("Duos")) {
+            return true;
         }
 
         return false;

@@ -51,7 +51,7 @@ public class QueueForceCommand extends BaseCommand {
                 queue.addPlayer(target, queue.isRanked() ? profile.getProfileData().getRankedKitData().get(queue.getKit().getName()).getElo() : 0);
                 PlayerUtil.reset(target, false);
                 SoundUtil.playBanHammer(target);
-                this.plugin.getHotbarService().applyHotbarItems(target, EnumHotbarType.QUEUE);
+                this.plugin.getHotbarService().applyHotbarItems(target);
                 player.sendMessage(CC.translate("&aYou've added &b" + target.getName() + " &ato the &b" + queue.getQueueType() + " &aqueue."));
 
                 if (ranked && profile.getProfileData().isRankedBanned()) {

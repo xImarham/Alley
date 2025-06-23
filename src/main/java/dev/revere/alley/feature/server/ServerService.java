@@ -107,7 +107,7 @@ public class ServerService {
                 profile.setState(EnumProfileState.LOBBY);
                 plugin.getQueueService().getQueues().remove(profile.getQueueProfile().getQueue());
                 profile.setQueueProfile(null);
-                plugin.getHotbarService().applyHotbarItems(queuePlayer, EnumHotbarType.LOBBY);
+                plugin.getHotbarService().applyHotbarItems(queuePlayer);
                 plugin.getSpawnService().teleportToSpawn(queuePlayer);
                 queuePlayer.sendMessage(CC.translate("&cYou've been removed from the queue due to a server reboot."));
             }

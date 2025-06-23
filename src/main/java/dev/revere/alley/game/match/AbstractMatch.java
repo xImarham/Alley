@@ -20,6 +20,7 @@ import dev.revere.alley.game.match.runnable.MatchRunnable;
 import dev.revere.alley.game.match.runnable.other.MatchRespawnRunnable;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
+import dev.revere.alley.tool.logger.Logger;
 import dev.revere.alley.tool.reflection.impl.ActionBarReflectionService;
 import dev.revere.alley.tool.reflection.impl.TitleReflectionService;
 import dev.revere.alley.util.ListenerUtil;
@@ -384,7 +385,7 @@ public abstract class AbstractMatch {
 
         BaseCosmeticRepository<?> repository = this.plugin.getCosmeticRepository().getRepository(cosmeticType);
         if (repository == null) {
-            plugin.getLogger().warning("Could not find cosmetic repository for type " + cosmeticType.name());
+            Logger.logError("Could not find cosmetic repository for type " + cosmeticType.name());
             return;
         }
 
@@ -422,8 +423,7 @@ public abstract class AbstractMatch {
         this.setupSpectatorProfile(player);
 
         this.plugin.getVisibilityService().updateVisibility(player);
-
-        this.plugin.getHotbarService().applyHotbarItems(player, EnumHotbarType.SPECTATOR);
+        this.plugin.getHotbarService().applyHotbarItems(player);
 
         if (this.arena.getCenter() == null) {
             player.sendMessage(CC.translate("&cThe arena is not set up for spectating"));

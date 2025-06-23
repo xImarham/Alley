@@ -71,10 +71,7 @@ public class DuelKitSelectorMenu extends Menu {
 
             player.closeInventory();
 
-            Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
-
-            this.plugin.getDuelRequestService().sendDuelRequest(player, this.targetPlayer, this.kit, profile.getParty() != null);
-            player.sendMessage(CC.translate("&aYou have sent a duel request to " + this.targetPlayer.getName() + " in the " + this.plugin.getDuelRequestService().getDuelRequest(player, this.targetPlayer).getArena().getName() + " arena with the " + this.kit.getName() + " kit."));
+            this.plugin.getDuelRequestService().createAndSendRequest(player, this.targetPlayer, this.kit, null);
         }
     }
 }

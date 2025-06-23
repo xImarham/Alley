@@ -32,6 +32,8 @@ public class CooldownRepository {
         this.cooldowns.removeIf(triple -> triple.getA().equals(uuid) && triple.getB().equals(type));
         this.cooldowns.add(new MutableTriple<>(uuid, type, cooldown));
     }
+    
+    
 
     /**
      * Get a cooldown from the repository by the player's uuid and the type of cooldown.
@@ -46,5 +48,15 @@ public class CooldownRepository {
                 .map(MutableTriple::getC)
                 .findFirst()
                 .orElse(null);
+    }
+
+    /**
+     * Remove a cooldown from the repository by the player's uuid and the type of cooldown.
+     *
+     * @param uuid the uuid of the player
+     * @param type the type of cooldown
+     */
+    public void removeCooldown(UUID uuid, EnumCooldownType type) {
+        this.cooldowns.removeIf(triple -> triple.getA().equals(uuid) && triple.getB().equals(type));
     }
 }

@@ -1,6 +1,8 @@
 package dev.revere.alley.command;
 
 import dev.revere.alley.base.arena.command.ArenaCommand;
+import dev.revere.alley.base.cooldown.command.CooldownReset2Command;
+import dev.revere.alley.base.cooldown.command.CooldownResetCommand;
 import dev.revere.alley.base.kit.command.KitCommand;
 import dev.revere.alley.base.queue.command.admin.QueueCommand;
 import dev.revere.alley.base.queue.command.player.LeaveQueueCommand;
@@ -101,6 +103,9 @@ public class CommandUtility {
             new PushCommand();
             new StrikeCommand();
             new TrollCommand();
+
+            new CooldownResetCommand();
+            new CooldownReset2Command();
 
             new ViewErrorCommand();
 

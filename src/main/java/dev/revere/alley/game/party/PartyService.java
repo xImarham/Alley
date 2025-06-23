@@ -113,7 +113,7 @@ public class PartyService {
 
         Party party = new Party(player);
         profile.setParty(party);
-        this.plugin.getHotbarService().applyHotbarItems(player, EnumHotbarType.PARTY);
+        this.plugin.getHotbarService().applyHotbarItems(player);
 
         this.plugin.getReflectionRepository().getReflectionService(TitleReflectionService.class).sendTitle(
                 player,
@@ -138,7 +138,29 @@ public class PartyService {
      * @param leader The leader of the party.
      */
     public void disbandParty(Player leader) {
+        Profile profile = this.plugin.getProfileService().getProfile(leader.getUniqueId());
+
+        if (profile.getState() != EnumProfileState.LOBBY) {
+            leader.sendMessage(CC.translate("&cYou must be at spawn in order to execute this command :v"));
+            return;
+        }
+
         Party party = this.getPartyByLeader(leader);
+
+        if (party == null) {
+            leader.sendMessage(CC.translate(PartyLocale.NOT_IN_PARTY.getMessage()));
+            return;
+        }
+
+        if (profile.getMatch() != null) {
+            leader.sendMessage(CC.translate("&cYou cannot disband your party while in a match."));
+            return;
+        }
+
+        if (profile.getQueueProfile() != null) {
+            leader.sendMessage(CC.translate("&cYou cannot disband your party while in a queue."));
+            return;
+        }
 
         for (UUID memberId : new ArrayList<>(party.getMembers())) {
             Profile memberProfile = plugin.getProfileService().getProfile(memberId);
@@ -392,7 +414,6 @@ public class PartyService {
 
         target.sendMessage("");
         target.sendMessage(CC.translate("&b&lParty Invitation"));
-        target.sendMessage(CC.translate("&f&l ● &fYou've been invited to join &b" + party.getLeader().getName() + "&f's party."));
         target.sendMessage(CC.translate("&f&l ● &fFrom: &b" + sender.getName()));
         target.sendMessage(CC.translate("&f&l ● &fPlayers: &b" + party.getMembers().size() + "&f/&b30")); //TODO: Implement party size limit with permissions ect...
         target.spigot().sendMessage(this.getClickable(sender));
