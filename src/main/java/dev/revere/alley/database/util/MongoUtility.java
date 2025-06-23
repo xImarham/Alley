@@ -169,6 +169,7 @@ public class MongoUtility {
         Document cosmeticDocument = new Document();
         cosmeticDocument.put("selectedKillEffect", cosmeticData.getSelectedKillEffect());
         cosmeticDocument.put("selectedSoundEffect", cosmeticData.getSelectedSoundEffect());
+        cosmeticDocument.put("selectedProjectileTrail", cosmeticData.getSelectedProjectileTrail());
         return cosmeticDocument;
     }
 
@@ -359,6 +360,7 @@ public class MongoUtility {
         ProfileCosmeticData cosmeticData = new ProfileCosmeticData();
         cosmeticData.setSelectedKillEffect(cosmeticDocument.getString("selectedKillEffect"));
         cosmeticData.setSelectedSoundEffect(cosmeticDocument.getString("selectedSoundEffect"));
+        cosmeticData.setSelectedProjectileTrail(cosmeticDocument.getString("selectedProjectileTrail"));
         return cosmeticData;
     }
 
