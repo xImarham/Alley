@@ -6,7 +6,9 @@ import dev.revere.alley.base.arena.impl.FreeForAllArena;
 import dev.revere.alley.base.arena.impl.SharedArena;
 import dev.revere.alley.base.arena.impl.StandAloneArena;
 import dev.revere.alley.base.kit.Kit;
+import dev.revere.alley.tool.logger.Logger;
 import dev.revere.alley.tool.serializer.Serializer;
+import dev.revere.alley.util.FileUtil;
 import dev.revere.alley.util.VoidChunkGeneratorImpl;
 import lombok.Getter;
 import org.bukkit.Bukkit;
@@ -19,7 +21,6 @@ import org.bukkit.configuration.file.FileConfiguration;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
@@ -56,17 +57,7 @@ public class ArenaService {
     private void initializeTemporaryWorld() {
         String worldName = "temporary_arena_world";
 
-        World existingWorld = this.plugin.getServer().getWorld(worldName);
-        if (existingWorld != null) {
-            this.plugin.getServer().unloadWorld(existingWorld, false);
-        }
-
-        File worldFolder = new File(Bukkit.getWorldContainer(), worldName);
-        if (worldFolder.exists()) {
-            this.plugin.getServer().unloadWorld(worldName, false);
-            this.plugin.getServer().getWorlds().removeIf(world -> world.getName().equalsIgnoreCase(worldName));
-            worldFolder.delete();
-        }
+        cleanupExistingWorld(worldName);
 
         WorldCreator creator = new WorldCreator(worldName);
         creator.generateStructures(false).generator(new VoidChunkGeneratorImpl());
@@ -206,13 +197,10 @@ public class ArenaService {
         return location;
     }
 
-    public void removeTemporaryArena(StandAloneArena arena) {
-        temporaryArenas.remove(arena);
-    }
-
     public void cleanupTemporaryArenas() {
         for (StandAloneArena arena : new ArrayList<>(temporaryArenas)) {
-            arena.deleteCopiedArena();;
+            arena.deleteCopiedArena();
+            ;
         }
         temporaryArenas.clear();
     }
@@ -221,21 +209,53 @@ public class ArenaService {
         cleanupTemporaryArenas();
 
         if (temporaryWorld != null) {
-            Bukkit.unloadWorld(temporaryWorld, false);
-            File worldFolder = temporaryWorld.getWorldFolder();
-            if (worldFolder.exists()) {
-                for (File file : Objects.requireNonNull(worldFolder.listFiles())) {
-                    if (!file.isDirectory() || !file.getName().equals("uid.dat")) {
-                        file.delete();
-                    }
-                }
-                try {
-                    worldFolder.delete();
-                } catch (Exception e) {
-                    this.plugin.getLogger().warning("Failed to delete temporary world folder: " + worldFolder.getAbsolutePath());
-                    e.printStackTrace();
-                }
+            String worldName = temporaryWorld.getName();
+
+            temporaryWorld.getPlayers().forEach(player ->
+                    player.teleport(Bukkit.getServer().getWorlds().get(0).getSpawnLocation())
+            );
+
+            boolean unloaded = Bukkit.unloadWorld(temporaryWorld, false);
+            if (unloaded) {
+                Logger.log("Successfully unloaded temporary world: " + worldName);
+            } else {
+                Logger.logError("Failed to unload temporary world: " + worldName);
             }
+
+            temporaryWorld = null;
+
+            Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                File worldFolder = new File(Bukkit.getWorldContainer(), worldName);
+                if (worldFolder.exists()) {
+                    FileUtil.deleteWorldFolder(worldFolder);
+                }
+            }, 20L);
+        }
+    }
+
+    /**
+     * Cleans up an existing world by unloading it and deleting its corresponding folder.
+     * This includes teleporting any players in the world back to the spawn location of the
+     * first loaded world.
+     *
+     * @param worldName the name of the world to be cleaned up
+     */
+    private void cleanupExistingWorld(String worldName) {
+        World existingWorld = this.plugin.getServer().getWorld(worldName);
+        if (existingWorld != null) {
+            existingWorld.getPlayers().forEach(player ->
+                    player.teleport(Bukkit.getServer().getWorlds().get(0).getSpawnLocation())
+            );
+
+            boolean unloaded = this.plugin.getServer().unloadWorld(existingWorld, false);
+            if (!unloaded) {
+                Logger.logError("Failed to unload world: " + worldName);
+            }
+        }
+
+        File worldFolder = new File(Bukkit.getWorldContainer(), worldName);
+        if (worldFolder.exists()) {
+            FileUtil.deleteWorldFolder(worldFolder);
         }
     }
 
