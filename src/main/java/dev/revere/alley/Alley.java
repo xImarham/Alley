@@ -33,7 +33,7 @@ import dev.revere.alley.feature.division.DivisionService;
 import dev.revere.alley.feature.emoji.EmojiRepository;
 import dev.revere.alley.feature.emoji.listener.EmojiListener;
 import dev.revere.alley.feature.filter.FilterService;
-import dev.revere.alley.feature.fireball.FireballService;
+import dev.revere.alley.feature.explosives.ExplosiveService;
 import dev.revere.alley.feature.layout.LayoutService;
 import dev.revere.alley.feature.layout.listener.LayoutListener;
 import dev.revere.alley.feature.leaderboard.LeaderboardService;
@@ -134,7 +134,7 @@ public class Alley extends JavaPlugin {
     private FilterService filterService;
     private LayoutService layoutService;
     private VisibilityService visibilityService;
-    private FireballService fireballService;
+    private ExplosiveService explosiveService;
     private BaseRaidingService baseRaidingService;
     private ArenaSchematicService arenaSchematicService;
 
@@ -240,7 +240,7 @@ public class Alley extends JavaPlugin {
         services.put(FilterService.class.getSimpleName(), () -> this.filterService = new FilterService(this));
         services.put(LayoutService.class.getSimpleName(), () -> this.layoutService = new LayoutService(this));
         services.put(VisibilityService.class.getSimpleName(), () -> this.visibilityService = new VisibilityService(this));
-        services.put(FireballService.class.getSimpleName(), () -> this.fireballService = new FireballService(this));
+        services.put(ExplosiveService.class.getSimpleName(), () -> this.explosiveService = new ExplosiveService(this));
 
         services.forEach(Logger::logTime);
     }

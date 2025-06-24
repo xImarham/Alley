@@ -15,8 +15,8 @@ import org.bukkit.entity.Player;
  * @project Alley
  * @since 06/03/2025
  */
-public class ArenaSetHeightLimit extends BaseCommand {
-    @CommandData(name = "arena.setheightlimit", isAdminOnly = true)
+public class ArenaSetHeightLimitCommand extends BaseCommand {
+    @CommandData(name = "arena.setheightlimit", aliases = "arena.limit", isAdminOnly = true)
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();

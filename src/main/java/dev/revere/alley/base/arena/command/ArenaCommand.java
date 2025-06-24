@@ -30,7 +30,7 @@ public class ArenaCommand extends BaseCommand {
      * Register all Arena subcommands in the constructor
      */
     public ArenaCommand() {
-        new ArenaSetHeightLimit();
+        new ArenaSetHeightLimitCommand();
         new ArenaSetPortalCommand();
         new ArenaSetCenterCommand();
         new ArenaCreateCommand();

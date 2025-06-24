@@ -18,13 +18,14 @@ game:
   # The radius of the portal in blocks.
   portal-radius: 5
 
-fireball:
-  enabled: true # Whether to enable fireballs or not (in case if you want to use your own custom approach)
+explosive:
+  enabled: true # Whether to enable explosives or not (in case if you want to use your own custom approach)
   values:
-    range: 3.0 # Measured in blocks (the distance in which other players will be affected by the fireball)
+    range: 3.0 # Measured in blocks (the distance in which other players will be affected by the explosives)
     speed: 1.2
     vertical: 0.8
     horizontal: 1.2
+    tnt-fuse-ticks: 40
 
 essentials:
   emojis: true # Whether to enable emojis in the chat or not (e.g. :smile:)
