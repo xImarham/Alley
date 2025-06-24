@@ -10,6 +10,7 @@ import dev.revere.alley.feature.explosives.ExplosiveService;
 import dev.revere.alley.game.match.AbstractMatch;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
+import dev.revere.alley.tool.logger.Logger;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -21,6 +22,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
+import org.bukkit.event.entity.ExplosionPrimeEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
@@ -157,31 +159,54 @@ public class ExplosiveListener implements Listener {
     }
 
     @EventHandler
-    public void onEntityExplode(EntityExplodeEvent event) {
+    public void onExplosionPrime(ExplosionPrimeEvent event) {
+        event.setCancelled(true);
+
         if (event.getEntityType() != EntityType.PRIMED_TNT || !event.getEntity().hasMetadata(PRACTICE_TNT_METADATA)) {
             return;
         }
 
-        Location explosionLocation = event.getLocation();
-        explosionLocation.getWorld().createExplosion(explosionLocation, 0F, false);
+        TNTPrimed tnt = (TNTPrimed) event.getEntity();
+        Location explosionLocation = tnt.getLocation();
+
+        handleCustomTntExplosion(tnt, explosionLocation);
+    }
+
+    private void handleCustomTntExplosion(TNTPrimed tnt, Location explosionLocation) {
+        double range = this.plugin.getExplosiveService().getRange();
 
         List<Block> blocksToBreak = new ArrayList<>();
-        Iterator<Block> iterator = event.blockList().iterator();
-        while (iterator.hasNext()) {
-            Block block = iterator.next();
-            Material type = block.getType();
-            if (type == Material.WOOD || type == Material.ENDER_STONE) {
-                blocksToBreak.add(block);
+        int radius = (int) Math.ceil(range);
+
+        for (int x = -radius; x <= radius; x++) {
+            for (int y = -radius; y <= radius; y++) {
+                for (int z = -radius; z <= radius; z++) {
+                    Location blockLoc = explosionLocation.clone().add(x, y, z);
+                    if (blockLoc.distance(explosionLocation) <= range) {
+                        Block block = blockLoc.getBlock();
+                        Material type = block.getType();
+
+                        if (type == Material.WOOD || type == Material.ENDER_STONE) {
+                            blocksToBreak.add(block);
+                            Logger.log("Added block to break list: " + type);
+                        }
+                    }
+                }
             }
-            iterator.remove();
         }
+
+        Logger.log("Breaking " + blocksToBreak.size() + " blocks manually");
 
         for (Block block : blocksToBreak) {
-            block.breakNaturally();
+            Logger.log("Breaking block: " + block.getType() + " at " + block.getLocation());
+            block.setType(Material.AIR);
         }
 
-        applyPlayerKnockback(event.getEntity(), explosionLocation);
+        explosionLocation.getWorld().createExplosion(explosionLocation, 0F, false);
+
+        applyPlayerKnockback(tnt, explosionLocation);
     }
+
 
     @EventHandler
     public void onExplosionDamage(EntityDamageEvent event) {

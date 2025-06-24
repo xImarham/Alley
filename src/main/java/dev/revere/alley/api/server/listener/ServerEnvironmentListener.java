@@ -25,7 +25,7 @@ public class ServerEnvironmentListener implements Listener {
 
     @EventHandler
     private void onPrime(ExplosionPrimeEvent event) {
-        event.setCancelled(true);
+        // event.setCancelled(true);
     }
 
     @EventHandler
