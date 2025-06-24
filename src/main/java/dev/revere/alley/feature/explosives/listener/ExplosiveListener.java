@@ -4,13 +4,12 @@ import dev.revere.alley.Alley;
 import dev.revere.alley.base.cooldown.Cooldown;
 import dev.revere.alley.base.cooldown.CooldownRepository;
 import dev.revere.alley.base.cooldown.enums.EnumCooldownType;
-import dev.revere.alley.base.kit.setting.impl.mechanic.KitSettingFireballImpl;
+import dev.revere.alley.base.kit.setting.impl.mechanic.KitSettingExplosiveImpl;
 import dev.revere.alley.base.kit.setting.impl.mode.KitSettingBedImpl;
 import dev.revere.alley.feature.explosives.ExplosiveService;
 import dev.revere.alley.game.match.AbstractMatch;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
-import dev.revere.alley.tool.logger.Logger;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -21,7 +20,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.ExplosionPrimeEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -30,7 +28,6 @@ import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -78,7 +75,7 @@ public class ExplosiveListener implements Listener {
         AbstractMatch match = profile.getMatch();
         if (match == null) return;
 
-        if (!match.getKit().isSettingEnabled(KitSettingFireballImpl.class)) return;
+        if (!match.getKit().isSettingEnabled(KitSettingExplosiveImpl.class)) return;
 
         ItemStack item = event.getItem();
         if (item == null || item.getType() != Material.FIREBALL) return;
@@ -128,7 +125,7 @@ public class ExplosiveListener implements Listener {
         if (profile == null || profile.getState() != EnumProfileState.PLAYING) return;
 
         AbstractMatch match = profile.getMatch();
-        if (match == null || !match.getKit().isSettingEnabled(KitSettingBedImpl.class)) return;
+        if (match == null || !match.getKit().isSettingEnabled(KitSettingExplosiveImpl.class)) return;
 
         event.setCancelled(true);
 
@@ -171,42 +168,6 @@ public class ExplosiveListener implements Listener {
 
         handleCustomTntExplosion(tnt, explosionLocation);
     }
-
-    private void handleCustomTntExplosion(TNTPrimed tnt, Location explosionLocation) {
-        double range = this.plugin.getExplosiveService().getRange();
-
-        List<Block> blocksToBreak = new ArrayList<>();
-        int radius = (int) Math.ceil(range);
-
-        for (int x = -radius; x <= radius; x++) {
-            for (int y = -radius; y <= radius; y++) {
-                for (int z = -radius; z <= radius; z++) {
-                    Location blockLoc = explosionLocation.clone().add(x, y, z);
-                    if (blockLoc.distance(explosionLocation) <= range) {
-                        Block block = blockLoc.getBlock();
-                        Material type = block.getType();
-
-                        if (type == Material.WOOD || type == Material.ENDER_STONE) {
-                            blocksToBreak.add(block);
-                            Logger.log("Added block to break list: " + type);
-                        }
-                    }
-                }
-            }
-        }
-
-        Logger.log("Breaking " + blocksToBreak.size() + " blocks manually");
-
-        for (Block block : blocksToBreak) {
-            Logger.log("Breaking block: " + block.getType() + " at " + block.getLocation());
-            block.setType(Material.AIR);
-        }
-
-        explosionLocation.getWorld().createExplosion(explosionLocation, 0F, false);
-
-        applyPlayerKnockback(tnt, explosionLocation);
-    }
-
 
     @EventHandler
     public void onExplosionDamage(EntityDamageEvent event) {
@@ -252,5 +213,47 @@ public class ExplosiveListener implements Listener {
                 player.setVelocity(knockback);
             }
         });
+    }
+
+    /**
+     * Handles the logic for a custom TNT explosion.
+     * <p>
+     * This explosion operates in a spherical radius and specifically targets
+     * and destroys only WOOD and ENDER_STONE blocks. It then creates a
+     * purely cosmetic (zero-power) explosion for sounds and particle effects
+     * and applies knockback to nearby players.
+     *
+     * @param tnt The TNTPrimed entity that is exploding. This is used as a reference for applying player knockback.
+     * @param explosionLocation The central Location where the explosion occurs.
+     */
+    private void handleCustomTntExplosion(TNTPrimed tnt, Location explosionLocation) {
+        double range = this.plugin.getExplosiveService().getRange();
+
+        List<Block> blocksToBreak = new ArrayList<>();
+        int radius = (int) Math.ceil(range);
+
+        for (int x = -radius; x <= radius; x++) {
+            for (int y = -radius; y <= radius; y++) {
+                for (int z = -radius; z <= radius; z++) {
+                    Location blockLoc = explosionLocation.clone().add(x, y, z);
+                    if (blockLoc.distance(explosionLocation) <= range) {
+                        Block block = blockLoc.getBlock();
+                        Material type = block.getType();
+
+                        if (type == Material.WOOD || type == Material.ENDER_STONE) {
+                            blocksToBreak.add(block);
+                        }
+                    }
+                }
+            }
+        }
+
+        for (Block block : blocksToBreak) {
+            block.setType(Material.AIR);
+        }
+
+        explosionLocation.getWorld().createExplosion(explosionLocation, 0F, false);
+
+        applyPlayerKnockback(tnt, explosionLocation);
     }
 }

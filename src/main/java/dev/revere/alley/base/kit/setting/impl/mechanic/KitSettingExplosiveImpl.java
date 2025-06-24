@@ -8,6 +8,6 @@ import dev.revere.alley.base.kit.setting.annotation.KitSettingData;
  * @project Alley
  * @since 11/06/2025
  */
-@KitSettingData(name = "Fireball", description = "Allows using fireballs.", enabled = false)
-public class KitSettingFireballImpl extends KitSetting {
+@KitSettingData(name = "Explosive", description = "Allows using fireballs and tnt.", enabled = false)
+public class KitSettingExplosiveImpl extends KitSetting {
 }
