@@ -42,7 +42,7 @@ public class CosmeticGetSelectedCommand extends BaseCommand {
         for (EnumCosmeticType type : EnumCosmeticType.values()) {
             String selectedName = cosmeticData.getSelected(type);
 
-            String friendlyTypeName = StringUtil.formatCosmeticTypeName(type);
+            String friendlyTypeName = StringUtil.formatEnumName(type);
 
             player.sendMessage(CC.translate(String.format("      &f● &b%s: &f%s", friendlyTypeName, selectedName)));
         }

@@ -1,19 +1,18 @@
 package dev.revere.alley.util;
 
-import dev.revere.alley.feature.cosmetic.EnumCosmeticType;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class StringUtil {
     /**
-     * A helper method to convert an enum constant name into a user-friendly, title-cased string.
-     * Example: KILL_EFFECT -> Kill Effect
+     * A helper method to convert any enum constant name into a user-friendly, title-cased string.
+     * Example: SOME_ENUM_CONSTANT -> Some Enum Constant
      *
-     * @param type The EnumCosmeticType to format.
-     * @return A formatted string.
+     * @param anEnum The enum constant to format.
+     * @return A formatted, title-cased string.
      */
-    public String formatCosmeticTypeName(EnumCosmeticType type) {
-        String lowerCase = type.name().replace('_', ' ').toLowerCase();
+    public String formatEnumName(Enum<?> anEnum) {
+        String lowerCase = anEnum.name().replace('_', ' ').toLowerCase();
 
         String[] words = lowerCase.split(" ");
         StringBuilder result = new StringBuilder();

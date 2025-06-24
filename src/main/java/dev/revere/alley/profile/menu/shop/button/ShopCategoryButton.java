@@ -28,7 +28,7 @@ public class ShopCategoryButton extends Button {
 
     @Override
     public ItemStack getButtonItem(Player player) {
-        String friendlyName = StringUtil.formatCosmeticTypeName(cosmeticType);
+        String friendlyName = StringUtil.formatEnumName(cosmeticType);
 
         int totalCount = 0;
         int ownedCount = 0;
