@@ -25,7 +25,7 @@ explosive:
     speed: 1.2
     vertical: 0.8
     horizontal: 1.2
-    tnt-fuse-ticks: 40
+    tnt-fuse-ticks: 80
 
 essentials:
   emojis: true # Whether to enable emojis in the chat or not (e.g. :smile:)

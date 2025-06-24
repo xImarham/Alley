@@ -27,7 +27,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.util.Vector;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -160,16 +162,25 @@ public class ExplosiveListener implements Listener {
             return;
         }
 
+        Location explosionLocation = event.getLocation();
+        explosionLocation.getWorld().createExplosion(explosionLocation, 0F, false);
+
+        List<Block> blocksToBreak = new ArrayList<>();
         Iterator<Block> iterator = event.blockList().iterator();
         while (iterator.hasNext()) {
             Block block = iterator.next();
             Material type = block.getType();
-            if (type != Material.WOOD && type != Material.ENDER_STONE) {
-                iterator.remove();
+            if (type == Material.WOOD || type == Material.ENDER_STONE) {
+                blocksToBreak.add(block);
             }
+            iterator.remove();
         }
 
-        applyPlayerKnockback(event.getEntity(), event.getLocation());
+        for (Block block : blocksToBreak) {
+            block.breakNaturally();
+        }
+
+        applyPlayerKnockback(event.getEntity(), explosionLocation);
     }
 
     @EventHandler
