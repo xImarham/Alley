@@ -7,6 +7,7 @@ import dev.revere.alley.base.kit.setting.impl.mode.KitSettingStickFightImpl;
 import dev.revere.alley.game.match.AbstractMatch;
 import dev.revere.alley.game.match.enums.EnumMatchState;
 import dev.revere.alley.game.match.impl.MatchBedImpl;
+import dev.revere.alley.game.match.impl.MatchCheckpointImpl;
 import dev.revere.alley.game.match.impl.MatchLivesImpl;
 import dev.revere.alley.game.match.impl.MatchRoundsImpl;
 import dev.revere.alley.profile.Profile;
@@ -33,6 +34,7 @@ public class MatchScoreboardFactory {
     protected final MatchScoreboardLivesImpl matchScoreboardLives;
     protected final MatchScoreboardBedImpl matchScoreboardBed;
     protected final MatchScoreboardRaidingImpl matchScoreboardRaiding;
+    protected final MatchScoreboardCheckpointImpl matchScoreboardCheckpoint;
 
     protected final MatchScoreboardRegularImpl matchScoreboardRegular;
 
@@ -54,6 +56,8 @@ public class MatchScoreboardFactory {
         this.matchScoreboardLives = new MatchScoreboardLivesImpl(this.plugin);
         this.matchScoreboardBed = new MatchScoreboardBedImpl(this.plugin);
         this.matchScoreboardRaiding = new MatchScoreboardRaidingImpl(this.plugin);
+        this.matchScoreboardCheckpoint = new MatchScoreboardCheckpointImpl(this.plugin);
+
 
         this.matchScoreboardRegular = new MatchScoreboardRegularImpl(this.plugin);
     }
@@ -77,6 +81,7 @@ public class MatchScoreboardFactory {
         if (match instanceof MatchRoundsImpl) return this.matchScoreboardRounds;
         if (match instanceof MatchLivesImpl) return this.matchScoreboardLives;
         if (match instanceof MatchBedImpl) return this.matchScoreboardBed;
+        if (match instanceof MatchCheckpointImpl) return this.matchScoreboardCheckpoint;
 
         return this.matchScoreboardRegular;
     }

@@ -164,6 +164,8 @@ public class MatchDamageListener implements Listener {
                 damagedprofile.getMatch().getGamePlayer(damaged).getData().resetCombo();
 
                 GameParticipant<MatchGamePlayerImpl> participant = match.getParticipant(attacker);
+                GameParticipant<MatchGamePlayerImpl> opponent = match.getParticipant(damaged);
+
                 participant.setTeamHits(participant.getTeamHits() + 1);
 
                 if (match.getKit().isSettingEnabled(KitSettingBowShotIndicatorImpl.class) && event.getDamager() instanceof Arrow) {
@@ -176,8 +178,18 @@ public class MatchDamageListener implements Listener {
                 }
 
                 if (match.getKit().isSettingEnabled(KitSettingBoxingImpl.class)) {
-                    if (participant.getTeamHits() >= participant.getPlayers().size() * 100) {
-                        match.handleDeath(damaged);
+                    int lowestPlayerCount = match.getParticipants().stream()
+                            .mapToInt(p -> p.getPlayers().size())
+                            .filter(size -> size > 0)
+                            .min()
+                            .orElse(1);
+
+                    int requiredHits = lowestPlayerCount * 100;
+
+                    if (participant.getTeamHits() >= requiredHits) {
+                        opponent.getPlayers().forEach(matchGamePlayer -> {
+                            match.handleDeath(matchGamePlayer.getPlayer());
+                        });
                     }
                 }
             }

@@ -151,6 +151,16 @@ scoreboard:
           - ""
           - "&fYour Ping: &6{player-ping}ms"
           - "&fTheir Ping: &6{opponent-ping}ms"
+        checkpoint-match:
+          - "{sidebar}"
+          - "&fOpponent: &6{opponent}"
+          - "&fDuration: &6{duration}"
+          - ""
+          - "&fCheckpoints"
+          - "&f&l● {checkpoints}"
+          - ""
+          - "&fYour Ping: &6{player-ping}ms"
+          - "&fTheir Ping: &6{opponent-ping}ms"
       team:
         regular-match:
           - "{sidebar}"
