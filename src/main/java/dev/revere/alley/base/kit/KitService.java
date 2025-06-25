@@ -60,6 +60,7 @@ public class KitService {
                     config.getString(key + ".display-name"),
                     config.getString(key + ".description"),
                     config.getString(key + ".disclaimer"),
+                    config.getString(key + ".menu-title"),
                     EnumKitCategory.valueOf(config.getString(key + ".category")),
                     Material.matchMaterial(config.getString(key + ".icon.material")),
                     config.getInt(key + ".icon.durability"),
@@ -246,7 +247,6 @@ public class KitService {
         this.plugin.getConfigService().saveConfig(this.plugin.getConfigService().getConfigFile("storage/kits.yml"), config);
     }
 
-
     /**
      * Method to create a kit.
      *
@@ -256,11 +256,15 @@ public class KitService {
      * @param icon      The icon of the kit.
      */
     public void createKit(String kitName, ItemStack[] inventory, ItemStack[] armor, Material icon) {
+        FileConfiguration config = this.plugin.getConfigService().getKitsConfig();
+        String defaultKey = "kit.default-values";
+
         Kit kit = new Kit(
                 kitName,
-                this.plugin.getConfigService().getSettingsConfig().getString("kit.default-values.display-name").replace("{kit-name}", kitName),
-                this.plugin.getConfigService().getSettingsConfig().getString("kit.default-values.description").replace("{kit-name}", kitName),
-                this.plugin.getConfigService().getSettingsConfig().getString("kit.default-values.disclaimer").replace("{kit-name}", kitName),
+                config.getString(defaultKey + ".display-name").replace("{kit-name}", kitName),
+                config.getString(defaultKey + ".description").replace("{kit-name}", kitName),
+                config.getString(defaultKey + ".disclaimer").replace("{kit-name}", kitName),
+                config.getString(defaultKey + ".menu-title").replace("{kit-name}", kitName),
                 EnumKitCategory.NORMAL,
                 icon,
                 0,

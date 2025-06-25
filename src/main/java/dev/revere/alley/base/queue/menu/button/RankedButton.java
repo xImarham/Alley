@@ -35,7 +35,7 @@ public class RankedButton extends Button {
     public ItemStack getButtonItem(Player player) {
         Kit kit = this.queue.getKit();
         return new ItemBuilder(kit.getIcon())
-                .name(kit.getDisplayName())
+                .name(kit.getMenuTitle())
                 .durability(kit.getDurability())
                 .hideMeta()
                 .lore(this.getLore(kit, player))

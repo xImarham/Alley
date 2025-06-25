@@ -62,6 +62,7 @@ public class KitCommand extends BaseCommand {
         new KitClearPotionsCommand();
         new KitRemovePotionCommand();
         new KitSetRaidingRoleKitCommand();
+        new KitSetMenuTitleCommand();
     }
 
     @SuppressWarnings("unused")
@@ -73,7 +74,7 @@ public class KitCommand extends BaseCommand {
                     "list", "create", "delete", "toggle", "view", "settings", "viewsettings",
                     "setsetting", "setcategory", "setdescription", "setdisclaimer", "setdisplayname",
                     "seteditable", "seticon", "setinv", "getinv", "addpotion", "clearpotions", "removepotion",
-                    "setupffa", "toggleffa", "setffaslot", "saveall", "save", "setraidingrolekit"
+                    "setupffa", "toggleffa", "setffaslot", "saveall", "save", "setraidingrolekit", "setmenutitle"
             ));
         }
 
@@ -131,6 +132,7 @@ public class KitCommand extends BaseCommand {
                     " &f● &b/kit setdescription &8(&7kitName&8) &8(&7description&8) &7| Set description of a kit",
                     " &f● &b/kit setdisclaimer &8(&7kitName&8) &8(&7disclaimer&8) &7| Set disclaimer",
                     " &f● &b/kit setdisplayname &8(&7kitName&8) &8(&7displayname&8) &7| Set display-name of a kit",
+                    " &f● &b/kit setmenutitle &8(&7kitName&8) &8(&7title&8) &7| Set menu title of a kit",
                     " &f● &b/kit seteditable &8(&7kitName&8) &8(&7true/false&8) &7| Set if a kit is editable",
                     " &f● &b/kit seticon &8(&7kitName&8) &7| Set icon of a kit",
             },
@@ -140,6 +142,7 @@ public class KitCommand extends BaseCommand {
             },
             {
                     " &f● &b/kit addpotion &8(&7kitName&8) &7| Set potion effects of a kit",
+                    " &f● &b/kit removepotion &8(&7kitName&8) &7| Remove potion effects of a kit",
                     " &f● &b/kit clearpotions &8(&7kitName&8) &7| Clear potion effects of a kit",
             },
             {

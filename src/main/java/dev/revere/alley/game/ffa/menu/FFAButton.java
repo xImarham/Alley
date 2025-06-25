@@ -21,7 +21,7 @@ public class FFAButton extends Button {
     @Override
     public ItemStack getButtonItem(Player player) {
         return new ItemBuilder(this.match.getKit().getIcon())
-                .name("&b&l" + this.match.getName())
+                .name("&b&l" + this.match.getKit().getMenuTitle())
                 .durability(this.match.getKit().getDurability())
                 .lore(
                         "",
