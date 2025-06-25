@@ -197,6 +197,10 @@ public class ExplosiveListener implements Listener {
         double horizontal = this.plugin.getExplosiveService().getHorizontal();
         double vertical = this.plugin.getExplosiveService().getVertical();
 
+        if (source instanceof TNTPrimed) {
+            range += 2;
+        }
+
         source.getNearbyEntities(range, range, range).forEach(entity -> {
             if (entity instanceof Player) {
                 Player player = (Player) entity;
@@ -240,7 +244,7 @@ public class ExplosiveListener implements Listener {
                         Block block = blockLoc.getBlock();
                         Material type = block.getType();
 
-                        if (type == Material.WOOD || type == Material.ENDER_STONE) {
+                        if (type == Material.WOOD || type == Material.ENDER_STONE || type == Material.WOOL) {
                             blocksToBreak.add(block);
                         }
                     }

@@ -70,7 +70,6 @@ public class ExplosiveService {
         configService.saveConfig(settingsFile, settingsConfig);
     }
 
-
     private void registerListener() {
         this.plugin.getServer().getPluginManager().registerEvents(new ExplosiveListener(this.plugin), this.plugin);
     }
