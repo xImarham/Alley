@@ -42,6 +42,6 @@ public class KitClearPotionsCommand extends BaseCommand {
 
         kit.getPotionEffects().clear();
         kitService.saveKit(kit);
-        player.sendMessage(CC.translate("&aAll potion effects have been removed from kit &e" + kit.getName() + "&a."));
+        player.sendMessage(CC.translate(KitLocale.KIT_POTION_EFFECTS_CLEARED.getMessage().replace("{kit-name}", kit.getName())));
     }
 }

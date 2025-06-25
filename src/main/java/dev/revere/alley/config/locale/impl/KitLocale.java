@@ -29,8 +29,10 @@ public enum KitLocale implements ILocale {
     KIT_DISCLAIMER_SET("messages.yml", "kit.data.disclaimer-set"),
     KIT_DISPLAYNAME_SET("messages.yml", "kit.data.displayname-set"),
     KIT_ICON_SET("messages.yml", "kit.data.icon-set"),
-    KIT_POTION_EFFECTS_SET("messages.yml", "kit.data.potion-effects-set"),
     KIT_SET_CATEGORY("messages.yml", "kit.data.set-category"),
+
+    KIT_POTION_EFFECTS_SET("messages.yml", "kit.data.potion-effects-set"),
+    KIT_POTION_EFFECTS_CLEARED("messages.yml", "kit.data.potion-effects-cleared"),
 
     KIT_CREATED("messages.yml", "kit.manage.created"),
     KIT_DELETED("messages.yml", "kit.manage.deleted"),

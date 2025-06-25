@@ -9,6 +9,7 @@ import dev.revere.alley.base.kit.command.impl.data.inventory.KitGetInvCommand;
 import dev.revere.alley.base.kit.command.impl.data.inventory.KitSetInvCommand;
 import dev.revere.alley.base.kit.command.impl.data.potion.KitAddPotionCommand;
 import dev.revere.alley.base.kit.command.impl.data.potion.KitClearPotionsCommand;
+import dev.revere.alley.base.kit.command.impl.data.potion.KitRemovePotionCommand;
 import dev.revere.alley.base.kit.command.impl.manage.*;
 import dev.revere.alley.base.kit.command.impl.manage.ffa.KitSetFfaSlotCommand;
 import dev.revere.alley.base.kit.command.impl.manage.ffa.KitSetupFFACommand;
@@ -59,6 +60,7 @@ public class KitCommand extends BaseCommand {
         new KitSetEditableCommand();
         new KitToggleCommand();
         new KitClearPotionsCommand();
+        new KitRemovePotionCommand();
         new KitSetRaidingRoleKitCommand();
     }
 
@@ -70,7 +72,7 @@ public class KitCommand extends BaseCommand {
             completion.addAll(Arrays.asList(
                     "list", "create", "delete", "toggle", "view", "settings", "viewsettings",
                     "setsetting", "setcategory", "setdescription", "setdisclaimer", "setdisplayname",
-                    "seteditable", "seticon", "setinv", "getinv", "addpotion", "clearpotions",
+                    "seteditable", "seticon", "setinv", "getinv", "addpotion", "clearpotions", "removepotion",
                     "setupffa", "toggleffa", "setffaslot", "saveall", "save", "setraidingrolekit"
             ));
         }
