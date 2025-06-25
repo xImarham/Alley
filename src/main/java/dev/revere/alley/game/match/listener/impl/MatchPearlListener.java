@@ -5,6 +5,7 @@ import dev.revere.alley.base.cooldown.Cooldown;
 import dev.revere.alley.base.cooldown.CooldownRepository;
 import dev.revere.alley.base.cooldown.enums.EnumCooldownType;
 import dev.revere.alley.base.kit.setting.impl.mode.KitSettingLivesImpl;
+import dev.revere.alley.base.kit.setting.impl.mode.KitSettingRaidingImpl;
 import dev.revere.alley.game.match.enums.EnumMatchState;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
@@ -52,11 +53,18 @@ public class MatchPearlListener implements Listener {
         EnderPearl enderPearl = (EnderPearl) event.getEntity();
         Player player = (Player) enderPearl.getShooter();
 
+        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
+
         if (!isValidGameState(player, event)) {
             return;
         }
 
         if (hasPearlCooldown(player, event)) {
+            return;
+        }
+
+        if (!profile.getMatch().getKit().isSettingEnabled(KitSettingRaidingImpl.class)) {
+            applyCooldown(player);
             return;
         }
 
