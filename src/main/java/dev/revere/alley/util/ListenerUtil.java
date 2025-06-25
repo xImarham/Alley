@@ -2,7 +2,9 @@ package dev.revere.alley.util;
 
 import dev.revere.alley.Alley;
 import lombok.experimental.UtilityClass;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.PlayerDeathEvent;
@@ -67,16 +69,44 @@ public class ListenerUtil {
     /**
      * Checks if the player is not stepping on a pressure plate.
      *
-     * @param event The event.
+     * @param block The block you are standing on.
      * @return true if the player is stepping on a pressure plate, false otherwise.
      */
-    public boolean notSteppingOnPlate(PlayerInteractEvent event) {
-        if (event.getClickedBlock() == null) {
+    public boolean notSteppingOnPlate(Block block) {
+        if (block == null) {
             return false;
         }
 
-        Material type = event.getClickedBlock().getType();
+        Material type = block.getType();
         return !pressurePlates.contains(type);
+    }
+
+    public boolean checkSteppingOnGoldPressurePlate(Block block) {
+        if (block == null) {
+            return false;
+        }
+
+        Material type = block.getType();
+        return type == Material.GOLD_PLATE;
+    }
+
+    public boolean checkSteppingOnIronPressurePlate(Block block) {
+        if (block == null) {
+            return false;
+        }
+
+        Material type = block.getType();
+        return type == Material.IRON_PLATE;
+    }
+
+    public void teleportAndClearSpawn(Player player, Location spawnLocation) {
+        for (int i = 0; i <= 2; i++) {
+            Block block = spawnLocation.clone().add(0, i, 0).getBlock();
+            if (block.getType() != Material.AIR) {
+                block.setType(Material.AIR);
+            }
+        }
+        player.teleport(spawnLocation);
     }
 
     /**

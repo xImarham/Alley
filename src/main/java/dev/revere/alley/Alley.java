@@ -28,6 +28,7 @@ import dev.revere.alley.config.ConfigService;
 import dev.revere.alley.core.CoreAdapter;
 import dev.revere.alley.core.listener.CoreChatListener;
 import dev.revere.alley.database.MongoService;
+import dev.revere.alley.feature.abilities.AbilityService;
 import dev.revere.alley.feature.cosmetic.repository.CosmeticRepository;
 import dev.revere.alley.feature.division.DivisionService;
 import dev.revere.alley.feature.emoji.EmojiRepository;
@@ -134,6 +135,7 @@ public class Alley extends JavaPlugin {
     private ExplosiveService explosiveService;
     private BaseRaidingService baseRaidingService;
     private ArenaSchematicService arenaSchematicService;
+    private AbilityService abilityService;
 
     private boolean loaded;
 
@@ -238,6 +240,7 @@ public class Alley extends JavaPlugin {
         services.put(LayoutService.class.getSimpleName(), () -> this.layoutService = new LayoutService(this));
         services.put(VisibilityService.class.getSimpleName(), () -> this.visibilityService = new VisibilityService(this));
         services.put(ExplosiveService.class.getSimpleName(), () -> this.explosiveService = new ExplosiveService(this));
+        services.put(AbilityService.class.getSimpleName(), () -> this.abilityService = new AbilityService());
 
         services.forEach(Logger::logTime);
     }

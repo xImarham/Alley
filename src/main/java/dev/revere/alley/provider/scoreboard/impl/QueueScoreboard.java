@@ -43,7 +43,7 @@ public class QueueScoreboard implements IScoreboard {
                     .replaceAll("\\{level}", String.valueOf(this.plugin.getLevelService().getLevel(profile.getProfileData().getGlobalLevel()).getDisplayName()))
                     .replaceAll("\\{queued-time}", profile.getQueueProfile().getFormattedElapsedTime())
                     .replaceAll("\\{dot-animation}", this.getDotAnimation().getCurrentFrame())
-                    .replaceAll("\\{queued-kit}", profile.getQueueProfile().getQueue().getKit().getName())
+                    .replaceAll("\\{queued-kit}", profile.getQueueProfile().getQueue().getKit().getDisplayName())
             );
         }
 

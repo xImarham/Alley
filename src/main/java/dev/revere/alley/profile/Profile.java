@@ -4,6 +4,7 @@ import dev.revere.alley.Alley;
 import dev.revere.alley.base.kit.Kit;
 import dev.revere.alley.base.queue.QueueProfile;
 import dev.revere.alley.base.queue.enums.EnumQueueType;
+import dev.revere.alley.feature.abilities.cooldown.AbilityCooldown;
 import dev.revere.alley.feature.division.Division;
 import dev.revere.alley.feature.division.tier.DivisionTier;
 import dev.revere.alley.feature.leaderboard.enums.EnumLeaderboardType;
@@ -48,6 +49,9 @@ public class Profile {
     private EnumLeaderboardType leaderboardType;
     private EnumQueueType queueType;
 
+    private AbilityCooldown partneritem, combo, effectdisabler, guardianangel, ninjastar, pocketbard, scrambler,
+            strength, swapperaxe, timewarp, switcher, tankingot, cookie, fakelogger, rocket, antitrapper, luckyingot;
+
     private AbstractFFAMatch ffaMatch;
     private AbstractMatch match;
     private Party party;
@@ -69,6 +73,23 @@ public class Profile {
         this.name = Bukkit.getOfflinePlayer(this.uuid).getName();
         this.leaderboardType = EnumLeaderboardType.RANKED;
         this.queueType = EnumQueueType.UNRANKED;
+
+        this.partneritem = new AbilityCooldown();
+        this.antitrapper = new AbilityCooldown();
+        this.luckyingot = new AbilityCooldown();
+        this.combo = new AbilityCooldown();
+        this.cookie = new AbilityCooldown();
+        this.effectdisabler = new AbilityCooldown();
+        this.guardianangel = new AbilityCooldown();
+        this.ninjastar = new AbilityCooldown();
+        this.pocketbard = new AbilityCooldown();
+        this.rocket = new AbilityCooldown();
+        this.scrambler = new AbilityCooldown();
+        this.strength = new AbilityCooldown();
+        this.swapperaxe = new AbilityCooldown();
+        this.switcher = new AbilityCooldown();
+        this.tankingot = new AbilityCooldown();
+        this.timewarp = new AbilityCooldown();
     }
 
     /**

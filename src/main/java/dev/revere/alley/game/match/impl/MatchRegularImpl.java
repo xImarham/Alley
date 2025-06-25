@@ -437,6 +437,7 @@ public class MatchRegularImpl extends AbstractMatch {
         MatchGamePlayerImpl gamePlayer = this.getFromAllGamePlayers(player);
         if (gamePlayer != null) {
             gamePlayer.setDisconnected(true);
+            gamePlayer.setEliminated(true);
             if (!gamePlayer.isDead()) {
                 this.handleDeath(player);
             }

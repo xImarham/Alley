@@ -83,7 +83,7 @@ public class CurrentMatchesMenu extends PaginatedMenu {
             return new ItemBuilder(match.getKit().getIcon()).name("&6&l" + match.getParticipants().get(0).getPlayer().getUsername() + " &7vs &6&l" + match.getParticipants().get(1).getPlayer().getUsername()).durability(match.getKit().getDurability()).hideMeta()
                     .lore(
                             " &f● &6Arena: &f" + match.getArena().getName(),
-                            " &f● &6Kit: &f" + match.getKit().getName(),
+                            " &f● &6Kit: &f" + match.getKit().getDisplayName(),
                             " &f● &6Queue: &f" + (match.getQueue() == null ? "None" : match.getQueue().getQueueType()),
                             " ",
                             "&aClick to spectate!"

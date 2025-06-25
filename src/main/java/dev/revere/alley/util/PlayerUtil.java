@@ -1,9 +1,7 @@
 package dev.revere.alley.util;
 
 import lombok.experimental.UtilityClass;
-import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
-import org.bukkit.OfflinePlayer;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -45,6 +43,13 @@ public class PlayerUtil {
         if (closeInventory) {
             player.closeInventory();
         }
+    }
+
+    public static void decrement(Player player) {
+        ItemStack itemStack = player.getItemInHand();
+        if (itemStack.getAmount() <= 1) player.setItemInHand(new ItemStack(Material.AIR, 1));
+        else itemStack.setAmount(itemStack.getAmount() - 1);
+        player.updateInventory();
     }
 
     /**

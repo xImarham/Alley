@@ -3,7 +3,6 @@ package dev.revere.alley.game.match;
 import dev.revere.alley.Alley;
 import dev.revere.alley.base.arena.AbstractArena;
 import dev.revere.alley.base.arena.impl.StandAloneArena;
-import dev.revere.alley.base.hotbar.enums.EnumHotbarType;
 import dev.revere.alley.base.kit.Kit;
 import dev.revere.alley.base.kit.setting.impl.mode.*;
 import dev.revere.alley.base.queue.Queue;
@@ -307,7 +306,7 @@ public abstract class AbstractMatch {
      * @return True if the kit is elimination-based, false otherwise.
      */
     private boolean hasEliminationBasedKit(Kit kit) {
-        return kit.isSettingEnabled(KitSettingBedImpl.class) || kit.isSettingEnabled(KitSettingLivesImpl.class);
+        return kit.isSettingEnabled(KitSettingBedImpl.class) || kit.isSettingEnabled(KitSettingCheckpointImpl.class) || kit.isSettingEnabled(KitSettingLivesImpl.class);
     }
 
     /**
@@ -430,7 +429,7 @@ public abstract class AbstractMatch {
             return;
         }
 
-        this.teleportAndClearSpawn(player, this.arena.getCenter());
+        ListenerUtil.teleportAndClearSpawn(player, this.arena.getCenter());
         player.spigot().setCollidesWithEntities(false);
         player.setAllowFlight(true);
         player.setFlying(true);
@@ -483,7 +482,7 @@ public abstract class AbstractMatch {
         }
 
         Location spawnLocation = this.arena.getCenter();
-        this.teleportAndClearSpawn(player, spawnLocation);
+        ListenerUtil.teleportAndClearSpawn(player, spawnLocation);
 
         new MatchRespawnRunnable(player, this, 3).runTaskTimer(this.plugin, 0L, 20L);
     }
@@ -908,16 +907,6 @@ public abstract class AbstractMatch {
             String message = CC.translate(prefix + "&6" + participant.getPlayer().getUsername() + " &avs &6" + opponent.getPlayer().getUsername());
             this.sendMessage(message);
         }
-    }
-
-    public void teleportAndClearSpawn(Player player, Location spawnLocation) {
-        for (int i = 0; i <= 2; i++) {
-            Block block = spawnLocation.clone().add(0, i, 0).getBlock();
-            if (block.getType() != Material.AIR) {
-                block.setType(Material.AIR);
-            }
-        }
-        player.teleport(spawnLocation);
     }
 
     private void updatePlayerProfileForMatch(Player player) {

@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -28,6 +29,11 @@ public class GamePlayer {
 
     private List<UUID> players;
 
+    // These fields are all for game logic
+    private Location checkpoint;
+    private int checkpointCount;
+    private final List<Location> checkpoints;
+
     /**
      * Constructor for the GamePlayer class.
      *
@@ -38,6 +44,10 @@ public class GamePlayer {
         this.uuid = uuid;
         this.username = username;
         this.players = new ArrayList<>();
+
+        this.checkpoints = new ArrayList<>();
+        this.checkpointCount = 0;
+        this.checkpoint = null;
     }
 
     /**

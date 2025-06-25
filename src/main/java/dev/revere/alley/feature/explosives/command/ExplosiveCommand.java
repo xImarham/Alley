@@ -56,7 +56,7 @@ public class ExplosiveCommand extends BaseCommand {
             case "fuse":
                 explosiveService.setTntFuseTicks((int) value);
                 break;
-            case "explosion-range":
+            case "explosion":
                 explosiveService.setExplosionRange(value);
             default:
                 sendHelpMessage(sender);
@@ -72,7 +72,7 @@ public class ExplosiveCommand extends BaseCommand {
         List<String> helpMessage = Arrays.asList(
                 "",
                 "&6&lExplosive Commands Help:",
-                " &f● &6/explosive explosion-range <value> &8- &7Set range of explosion blocks removal.",
+                " &f● &6/explosive explosion <value> &8- &7Set range of explosion blocks removal.",
                 " &f● &6/explosive range <value> &8- &7Set explosion range that affects players.",
                 " &f● &6/explosive horizontal <value> &8- &7Set horizontal knockback.",
                 " &f● &6/explosive vertical <value> &8- &7Set vertical knockback.",

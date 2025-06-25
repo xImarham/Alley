@@ -112,7 +112,7 @@ public class MatchBedImpl extends MatchRegularImpl {
         PlayerUtil.reset(player, true);
 
         Location spawnLocation = this.getParticipants().get(0).containsPlayer(player.getUniqueId()) ? this.getArena().getPos1() : this.getArena().getPos2();
-        this.teleportAndClearSpawn(player, spawnLocation);
+        ListenerUtil.teleportAndClearSpawn(player, spawnLocation);
 
         this.giveLoadout(player, this.getKit());
         this.applyWoolAndArmorColor(player);

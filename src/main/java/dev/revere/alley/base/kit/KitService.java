@@ -256,7 +256,7 @@ public class KitService {
      * @param icon      The icon of the kit.
      */
     public void createKit(String kitName, ItemStack[] inventory, ItemStack[] armor, Material icon) {
-        FileConfiguration config = this.plugin.getConfigService().getKitsConfig();
+        FileConfiguration config = this.plugin.getConfigService().getSettingsConfig();
         String defaultKey = "kit.default-values";
 
         Kit kit = new Kit(

@@ -3,25 +3,18 @@ package dev.revere.alley.game.match;
 import dev.revere.alley.Alley;
 import dev.revere.alley.base.arena.AbstractArena;
 import dev.revere.alley.base.kit.Kit;
-import dev.revere.alley.base.kit.setting.impl.mode.KitSettingBedImpl;
-import dev.revere.alley.base.kit.setting.impl.mode.KitSettingLivesImpl;
-import dev.revere.alley.base.kit.setting.impl.mode.KitSettingRoundsImpl;
-import dev.revere.alley.base.kit.setting.impl.mode.KitSettingStickFightImpl;
+import dev.revere.alley.base.kit.setting.impl.mode.*;
 import dev.revere.alley.base.queue.Queue;
-import dev.revere.alley.game.match.impl.MatchBedImpl;
-import dev.revere.alley.game.match.impl.MatchLivesImpl;
-import dev.revere.alley.game.match.impl.MatchRegularImpl;
-import dev.revere.alley.game.match.impl.MatchRoundsImpl;
+import dev.revere.alley.game.match.impl.*;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.profile.Profile;
-import dev.revere.alley.profile.enums.EnumProfileState;
 import dev.revere.alley.tool.logger.Logger;
 import lombok.Getter;
-import org.bukkit.Bukkit;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * @author Remi
@@ -40,7 +33,7 @@ public class MatchService {
      */
     public MatchService(Alley plugin) {
         this.plugin = plugin;
-        this.matches = new ArrayList<>();
+        this.matches = new CopyOnWriteArrayList<>();
     }
 
     /**
@@ -73,6 +66,8 @@ public class MatchService {
             match = new MatchRoundsImpl(matchingQueue, kit, arena, isRanked, participantA, participantB, 5);
         } else if (kit.isSettingEnabled(KitSettingBedImpl.class)) {
             match = new MatchBedImpl(matchingQueue, kit, arena, isRanked, participantA, participantB);
+        } else if (kit.isSettingEnabled(KitSettingCheckpointImpl.class)) {
+            match = new MatchCheckpointImpl(matchingQueue, kit, arena, isRanked, participantA, participantB);
         } else {
             match = new MatchRegularImpl(matchingQueue, kit, arena, isRanked, participantA, participantB);
         }

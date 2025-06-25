@@ -161,7 +161,7 @@ public class Queue {
             }
         }
 
-        player.sendMessage(CC.translate("&aYou've joined the &6" + queueProfile.getQueue().getKit().getName() + " &aqueue."));
+        player.sendMessage(CC.translate("&aYou've joined the &6" + queueProfile.getQueue().getKit().getDisplayName() + " &aqueue."));
 
         this.plugin.getHotbarService().applyHotbarItems(player);
     }

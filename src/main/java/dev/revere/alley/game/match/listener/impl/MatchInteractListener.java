@@ -1,28 +1,21 @@
 package dev.revere.alley.game.match.listener.impl;
 
 import dev.revere.alley.Alley;
-import dev.revere.alley.base.cooldown.Cooldown;
-import dev.revere.alley.base.cooldown.CooldownRepository;
-import dev.revere.alley.base.cooldown.enums.EnumCooldownType;
-import dev.revere.alley.base.kit.setting.impl.mode.KitSettingLivesImpl;
-import dev.revere.alley.base.kit.setting.impl.mode.KitSettingParkourImpl;
-import dev.revere.alley.game.match.AbstractMatch;
-import dev.revere.alley.game.match.enums.EnumMatchState;
+import dev.revere.alley.base.kit.setting.impl.mode.KitSettingCheckpointImpl;
+import dev.revere.alley.game.match.impl.MatchCheckpointImpl;
+import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
+import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
-import dev.revere.alley.util.InventoryUtil;
+import dev.revere.alley.tool.reflection.impl.TitleReflectionService;
 import dev.revere.alley.util.ListenerUtil;
-import dev.revere.alley.util.chat.CC;
-import org.bukkit.Material;
-import org.bukkit.entity.EnderPearl;
+import org.bukkit.Location;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-
-import java.util.Optional;
 
 /**
  * @author Emmy
@@ -47,20 +40,57 @@ public class MatchInteractListener implements Listener {
         Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
 
         if (profile.getState() != EnumProfileState.PLAYING) return;
-        if (!profile.getMatch().getKit().isSettingEnabled(KitSettingParkourImpl.class)) return;
+        if (!profile.getMatch().getKit().isSettingEnabled(KitSettingCheckpointImpl.class)) return;
 
         if (event.getAction() != Action.PHYSICAL) {
             return;
         }
 
-        if (ListenerUtil.notSteppingOnPlate(event)) return;
+        Block block = event.getClickedBlock();
 
-        AbstractMatch match = profile.getMatch();
-        match.getParticipants().forEach(participant -> {
-            Player participantPlayer = participant.getPlayer().getPlayer();
-            if (participantPlayer != null && !participantPlayer.getUniqueId().equals(player.getUniqueId())) {
-                match.handleDeath(participantPlayer);
+        if (ListenerUtil.notSteppingOnPlate(block)) return;
+
+        MatchCheckpointImpl matchCheckpoint = (MatchCheckpointImpl) profile.getMatch();
+        MatchGamePlayerImpl matchGamePlayer = matchCheckpoint.getGamePlayer(player);
+        if (matchGamePlayer == null) return;
+        if (ListenerUtil.checkSteppingOnIronPressurePlate(block)) {
+            Location checkpointLocation = player.getLocation();
+
+            matchGamePlayer.setCheckpoint(checkpointLocation);
+
+            boolean isNewCheckpoint = matchGamePlayer.getCheckpoints().stream()
+                    .noneMatch(location -> location.getX() == checkpointLocation.getX() &&
+                            location.getY() == checkpointLocation.getY() &&
+                            location.getZ() == checkpointLocation.getZ());
+
+            if (isNewCheckpoint) {
+                matchGamePlayer.getCheckpoints().add(checkpointLocation);
+                matchGamePlayer.setCheckpointCount(matchGamePlayer.getCheckpointCount() + 1);
+
+                this.plugin.getReflectionRepository().getReflectionService(TitleReflectionService.class).sendTitle(
+                        player,
+                        "&aCHECKPOINT!",
+                        "&7(" + player.getLocation().getBlockX() + ", " + player.getLocation().getBlockY() + ", " + player.getLocation().getBlockZ() + ")",
+                        2, 10, 2
+                );
             }
-        });
+
+            return;
+        }
+
+        if (ListenerUtil.checkSteppingOnGoldPressurePlate(block)) {
+            GameParticipant<MatchGamePlayerImpl> opponent = matchCheckpoint.getParticipantA().containsPlayer(player.getUniqueId())
+                    ? matchCheckpoint.getParticipantB()
+                    : matchCheckpoint.getParticipantA();
+
+            opponent.setLostCheckpoint(true);
+            opponent.getPlayers().stream()
+                    .findAny()
+                    .ifPresent(gamePlayer -> {
+                        if (gamePlayer.getPlayer() != null) {
+                            matchCheckpoint.handleDeath(gamePlayer.getPlayer());
+                        }
+                    });
+        }
     }
 }

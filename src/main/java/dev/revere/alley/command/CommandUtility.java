@@ -17,6 +17,7 @@ import dev.revere.alley.command.impl.other.gamemode.CreativeCommand;
 import dev.revere.alley.command.impl.other.gamemode.SpectatorCommand;
 import dev.revere.alley.command.impl.other.gamemode.SurvivalCommand;
 import dev.revere.alley.command.impl.other.troll.*;
+import dev.revere.alley.feature.abilities.command.AbilityCommand;
 import dev.revere.alley.feature.cosmetic.command.CosmeticCommand;
 import dev.revere.alley.feature.division.command.DivisionCommand;
 import dev.revere.alley.feature.emoji.command.EmojiCommand;
@@ -106,6 +107,8 @@ public class CommandUtility {
             new CooldownResetCommand();
 
             new ViewErrorCommand();
+
+            new AbilityCommand();
 
             new ChatCommand();
             new DayCommand();

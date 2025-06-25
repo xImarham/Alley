@@ -49,7 +49,7 @@ public class QueueProfile {
         this.ticks++;
 
         if (player != null) {
-            String message = "&6&l" + this.queue.getQueueType() + " " + this.queue.getKit().getName() + " &7┃ &f" + this.getFormattedElapsedTime();
+            String message = "&6" + this.queue.getQueueType() + " " + this.queue.getKit().getDisplayName() + " &7┃ &f" + this.getFormattedElapsedTime();
             Alley.getInstance().getReflectionRepository().getReflectionService(ActionBarReflectionService.class).sendMessage(player, message);
         }
 
@@ -61,7 +61,7 @@ public class QueueProfile {
             if (player != null) {
                 Arrays.asList(
                         "",
-                        "&6&l" + this.queue.getKit().getName(),
+                        "&6&l" + this.queue.getKit().getDisplayName(),
                         " &f● &6Ping Range: &fN/A",
                         "   &7Searching for match...",
                         ""
@@ -81,7 +81,7 @@ public class QueueProfile {
             if (player != null) {
                 Arrays.asList(
                         "",
-                        "&6&l" + this.queue.getKit().getName() + " &6&l" + Symbol.RANKED_STAR + "Ranked",
+                        "&6&l" + this.queue.getKit().getDisplayName() + " &6&l" + Symbol.RANKED_STAR + "Ranked",
                         " &f● &6ELO Range: &f" + this.getMinimumElo() + " &7&l" + Symbol.ARROW_R + "&f " + this.getMaximumElo(),
                         " &f● &6Ping Range: &fN/A",
                         "   " + (this.range == this.MAX_RANGE ? "&c&lRANGE LIMIT REACHED..." : "&7Searching for match..."),

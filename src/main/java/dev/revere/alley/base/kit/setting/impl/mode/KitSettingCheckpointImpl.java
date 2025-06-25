@@ -8,6 +8,6 @@ import dev.revere.alley.base.kit.setting.annotation.KitSettingData;
  * @project Alley
  * @date 27/08/2024 - 19:10
  */
-@KitSettingData(name = "Parkour", description = "This is the parkour kit type", enabled = false)
-public class KitSettingParkourImpl extends KitSetting {
+@KitSettingData(name = "Checkpoint", description = "This is the checkpoint kit type", enabled = false)
+public class KitSettingCheckpointImpl extends KitSetting {
 }

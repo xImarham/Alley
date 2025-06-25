@@ -75,7 +75,7 @@ public class MatchBlockListener implements Listener {
 
                 if (match.getKit().isSettingEnabled(KitSettingBuildImpl.class) && match.getKit().isSettingEnabled(KitSettingRaidingImpl.class)) {
                     if (participant.getPlayer().getData().getRole() == EnumBaseRaiderRole.TRAPPER) {
-                        event.setCancelled(false);
+                        // event.setCancelled(false);
                         match.addBlockToBrokenBlocksMap(event.getBlock().getState(), event.getBlock().getLocation());
                         return;
                     } else {
@@ -192,7 +192,7 @@ public class MatchBlockListener implements Listener {
                 if (match.getKit().isSettingEnabled(KitSettingRaidingImpl.class) && match.getKit().isSettingEnabled(KitSettingBuildImpl.class)) {
                     GameParticipant<MatchGamePlayerImpl> participant = match.getParticipant(player);
                     if (participant.getPlayer().getData().getRole() == EnumBaseRaiderRole.TRAPPER) {
-                        event.setCancelled(false);
+                        // event.setCancelled(false);
                         match.addBlockToPlacedBlocksMap(event.getBlock().getState(), event.getBlock().getLocation());
                     } else {
                         event.setCancelled(true);
@@ -252,6 +252,9 @@ public class MatchBlockListener implements Listener {
 
                 GameParticipant<MatchGamePlayerImpl> participant = profile.getMatch().getParticipant(player);
                 if (participant.getPlayer().getData().getRole() == EnumBaseRaiderRole.RAIDER && ListenerUtil.isDoorOrGate(block.getType())) {
+                    if (event.getPlayer().isSneaking() && event.getItem().getType() == Material.ENDER_PEARL && event.getAction() == Action.RIGHT_CLICK_BLOCK && event.getClickedBlock().getType().name().contains("FENCE")) {
+                        return;
+                    }
                     event.setCancelled(true);
                     player.sendMessage(CC.translate("&cYou cannot open doors or gates as a raider!"));
                 }

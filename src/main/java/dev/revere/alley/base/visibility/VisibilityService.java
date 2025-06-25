@@ -117,12 +117,17 @@ public class VisibilityService {
      * @param viewerProfile The profile of the viewer.
      */
     private void handlePlayingCase(Player viewer, Player target, Profile viewerProfile, Profile targetProfile) {
-        if (viewerProfile.getMatch() == null || targetProfile.getMatch() == null) {
+        if (viewerProfile.getMatch() == null) {
             viewer.hidePlayer(target);
             return;
         }
 
         if (targetProfile.getState() == EnumProfileState.SPECTATING) {
+            viewer.hidePlayer(target);
+            return;
+        }
+
+        if (targetProfile.getMatch() == null || !viewerProfile.getMatch().equals(targetProfile.getMatch())) {
             viewer.hidePlayer(target);
             return;
         }

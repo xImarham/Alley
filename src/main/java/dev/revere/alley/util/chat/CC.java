@@ -3,6 +3,8 @@ package dev.revere.alley.util.chat;
 import dev.revere.alley.Alley;
 import lombok.experimental.UtilityClass;
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,5 +68,13 @@ public class CC {
         }
 
         return list;
+    }
+
+    public static void sender(CommandSender sender, String in) {
+        sender.sendMessage(translate(in));
+    }
+
+    public static void message(Player player, String in) {
+        player.sendMessage(translate(in));
     }
 }

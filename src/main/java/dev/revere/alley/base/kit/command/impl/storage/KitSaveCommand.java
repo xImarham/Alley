@@ -34,6 +34,6 @@ public class KitSaveCommand extends BaseCommand {
         }
 
         kitService.saveKit(kit);
-        player.sendMessage(CC.translate(KitLocale.KIT_SAVED.getMessage().replace("{kit-name}", kit.getName())));
+        player.sendMessage(CC.translate(KitLocale.KIT_SAVED.getMessage().replace("{kit-name}", kit.getDisplayName())));
     }
 }

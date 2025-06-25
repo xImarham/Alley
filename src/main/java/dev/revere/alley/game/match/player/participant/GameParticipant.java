@@ -19,6 +19,8 @@ public class GameParticipant<T extends GamePlayer> {
     // This is the leader of the participant
     private T player;
 
+    // These fields are all for game logic
+    private boolean lostCheckpoint;
     private boolean bedBroken;
     private int teamHits;
 
