@@ -48,10 +48,7 @@ import dev.revere.alley.game.ffa.listener.FFAListener;
 import dev.revere.alley.game.ffa.listener.impl.FFACuboidListener;
 import dev.revere.alley.game.match.MatchService;
 import dev.revere.alley.game.match.listener.MatchListener;
-import dev.revere.alley.game.match.listener.impl.MatchBlockListener;
-import dev.revere.alley.game.match.listener.impl.MatchDamageListener;
-import dev.revere.alley.game.match.listener.impl.MatchDisconnectListener;
-import dev.revere.alley.game.match.listener.impl.MatchInteractListener;
+import dev.revere.alley.game.match.listener.impl.*;
 import dev.revere.alley.game.match.snapshot.SnapshotRepository;
 import dev.revere.alley.game.party.PartyService;
 import dev.revere.alley.game.party.listener.PartyListener;
@@ -262,6 +259,7 @@ public class Alley extends JavaPlugin {
                 new PartyListener(),
                 new MatchListener(this),
                 new MatchInteractListener(this),
+                new MatchPearlListener(this),
                 new MatchDisconnectListener(this),
                 new MatchDamageListener(this),
                 new MatchBlockListener(this),
