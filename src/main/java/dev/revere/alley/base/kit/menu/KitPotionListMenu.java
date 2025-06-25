@@ -5,6 +5,7 @@ import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.api.menu.pagination.PaginatedMenu;
 import dev.revere.alley.base.kit.Kit;
 import dev.revere.alley.tool.item.ItemBuilder;
+import dev.revere.alley.util.chat.CC;
 import lombok.AllArgsConstructor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -78,7 +79,8 @@ public class KitPotionListMenu extends PaginatedMenu {
 
             this.kit.getPotionEffects().remove(this.potionEffect);
             Alley.getInstance().getKitService().saveKit(this.kit);
-            player.sendMessage("&aYou have removed the potion effect: &b" + this.potionEffect.getType().getName() + "&a from the kit: &b" + this.kit.getDisplayName() + "&a.");
+            player.sendMessage(CC.translate("&cYou have removed the potion effect: &b" + this.potionEffect.getType().getName() + "&c from the kit: &b" + this.kit.getDisplayName() + "&c."));
+            new KitPotionListMenu(this.kit).openMenu(player);
         }
     }
 }
