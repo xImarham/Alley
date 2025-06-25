@@ -33,7 +33,7 @@ public class LayoutMenu extends Menu {
         int slot = 10;
 
         for (Queue queue : this.plugin.getQueueService().getQueues()) {
-            if (!queue.isRanked() && queue.getKit().getCategory() == this.kitCategory && queue.getKit().isEditable()) {
+            if (!queue.isRanked() && !queue.isDuos() && queue.getKit().getCategory() == this.kitCategory && queue.getKit().isEditable()) {
                 slot = this.skipIfSlotCrossingBorder(slot);
                 buttons.put(slot++, new LayoutButton(queue.getKit()));
             }
@@ -49,7 +49,6 @@ public class LayoutMenu extends Menu {
 
         return buttons;
     }
-
 
     @Override
     public int getSize() {
