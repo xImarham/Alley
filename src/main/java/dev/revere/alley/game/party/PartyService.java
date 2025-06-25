@@ -328,6 +328,12 @@ public class PartyService {
             return;
         }
 
+        Party yourParty = this.getPartyByLeader(player);
+        if (yourParty != null) {
+            player.sendMessage(CC.translate("&cYou are already in a party."));
+            return;
+        }
+
         if (party.getLeader() == player) {
             player.sendMessage(CC.translate("&cYou cannot join your own party."));
             return;
