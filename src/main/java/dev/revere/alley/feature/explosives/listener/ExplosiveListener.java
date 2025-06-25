@@ -5,7 +5,6 @@ import dev.revere.alley.base.cooldown.Cooldown;
 import dev.revere.alley.base.cooldown.CooldownRepository;
 import dev.revere.alley.base.cooldown.enums.EnumCooldownType;
 import dev.revere.alley.base.kit.setting.impl.mechanic.KitSettingExplosiveImpl;
-import dev.revere.alley.base.kit.setting.impl.mode.KitSettingBedImpl;
 import dev.revere.alley.feature.explosives.ExplosiveService;
 import dev.revere.alley.game.match.AbstractMatch;
 import dev.revere.alley.profile.Profile;
@@ -151,7 +150,11 @@ public class ExplosiveListener implements Listener {
         if (!(event.getEntity() instanceof Fireball) || !(event.getEntity().getShooter() instanceof Player)) return;
 
         Fireball fireball = (Fireball) event.getEntity();
-        fireball.getWorld().createExplosion(fireball.getLocation(), 0F, false);
+        Location explosionLocation = fireball.getLocation();
+
+        pushNearbyTnt(explosionLocation, fireball);
+
+        handleFireballExplosion(explosionLocation);
         applyPlayerKnockback(fireball, fireball.getLocation());
     }
 
@@ -188,35 +191,125 @@ public class ExplosiveListener implements Listener {
 
     /**
      * Applies configured knockback to all players within range of an explosion.
+     * The knockback strength is scaled based on the player's distance from the explosion center.
      *
      * @param source            The entity causing the explosion (e.g., Fireball, TNTPrimed).
      * @param explosionLocation The center location of the explosion.
      */
     private void applyPlayerKnockback(Entity source, Location explosionLocation) {
-        double range = this.plugin.getExplosiveService().getRange();
-        double horizontal = this.plugin.getExplosiveService().getHorizontal();
-        double vertical = this.plugin.getExplosiveService().getVertical();
+        ExplosiveService explosiveService = this.plugin.getExplosiveService();
+        double maxRange = explosiveService.getRange();
+        double maxHorizontal = explosiveService.getHorizontal();
+        double maxVertical = explosiveService.getVertical();
 
-        if (source instanceof TNTPrimed) {
-            range += 2;
-        }
+        source.getNearbyEntities(maxRange, maxRange, maxRange).forEach(entity -> {
+            if (!(entity instanceof Player)) {
+                return;
+            }
 
-        source.getNearbyEntities(range, range, range).forEach(entity -> {
-            if (entity instanceof Player) {
-                Player player = (Player) entity;
+            Player player = (Player) entity;
+            Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
+            if (profile == null || profile.getState() != EnumProfileState.PLAYING) {
+                return;
+            }
 
-                Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
-                if (profile == null || profile.getState() != EnumProfileState.PLAYING) return;
+            double distance = player.getLocation().distance(explosionLocation);
 
-                Vector knockback = player.getLocation().toVector().subtract(explosionLocation.toVector()).normalize();
-                if (knockback.lengthSquared() == 0) {
-                    knockback.setY(1);
+            if (distance > maxRange) {
+                return;
+            }
+
+            double falloff = (maxRange > 0) ? (1.0 - (distance / maxRange)) : 1.0;
+
+            double scaledHorizontal = maxHorizontal * falloff;
+            double scaledVertical = maxVertical * falloff;
+
+            Vector knockbackDirection = player.getLocation().toVector().subtract(explosionLocation.toVector()).normalize();
+
+            if (knockbackDirection.lengthSquared() == 0) {
+                knockbackDirection.setY(1);
+            }
+
+            Vector finalVelocity = knockbackDirection.multiply(scaledHorizontal);
+            finalVelocity.setY(scaledVertical);
+
+            player.setVelocity(finalVelocity);
+        });
+    }
+
+    /**
+     * Pushes nearby primed TNTs away from a fireball's explosion.
+     * The force of the push is inversely proportional to the distance from the explosion.
+     *
+     * @param explosionLocation The location of the fireball's explosion.
+     */
+    private void pushNearbyTnt(Location explosionLocation, Entity source) {
+        double maxPushStrength = 1;
+        double pushRadius = 6.0;
+
+        for (Entity entity : explosionLocation.getWorld().getNearbyEntities(explosionLocation, pushRadius, pushRadius, pushRadius)) {
+            if (entity.getUniqueId().equals(source.getUniqueId())) {
+                continue;
+            }
+
+            if (entity instanceof TNTPrimed && entity.hasMetadata(PRACTICE_TNT_METADATA)) {
+                TNTPrimed tnt = (TNTPrimed) entity;
+
+                double distance = tnt.getLocation().distance(explosionLocation);
+
+                if (distance < 0.01) {
+                    continue;
                 }
 
-                knockback.multiply(horizontal).setY(vertical);
-                player.setVelocity(knockback);
+                double pushForce = maxPushStrength * (1 - (distance / pushRadius));
+
+                if (pushForce <= 0) {
+                    continue;
+                }
+
+                Vector pushDirection = tnt.getLocation().toVector().subtract(explosionLocation.toVector()).normalize();
+
+                Vector finalVelocity = tnt.getVelocity().add(pushDirection.multiply(pushForce));
+                tnt.setVelocity(finalVelocity);
             }
-        });
+        }
+    }
+
+    /**
+     * Handles the logic for a fireball explosion.
+     * <p>
+     * This explosion operates in a spherical radius of 3 blocks and specifically
+     * targets and destroys only WOOL blocks. It also creates a cosmetic explosion
+     * for sound and particle effects.
+     *
+     * @param explosionLocation The central Location where the fireball explosion occurs.
+     */
+    private void handleFireballExplosion(Location explosionLocation) {
+        ExplosiveService explosiveService = this.plugin.getExplosiveService();
+        double range = explosiveService.getExplosionRange();
+
+        List<Block> blocksToBreak = new ArrayList<>();
+        int radius = (int) Math.ceil(range);
+
+        for (int x = -radius; x <= radius; x++) {
+            for (int y = -radius; y <= radius; y++) {
+                for (int z = -radius; z <= radius; z++) {
+                    Location blockLoc = explosionLocation.clone().add(x, y, z);
+                    if (blockLoc.distance(explosionLocation) <= radius) {
+                        Block block = blockLoc.getBlock();
+                        if (block.getType() == Material.WOOL) {
+                            blocksToBreak.add(block);
+                        }
+                    }
+                }
+            }
+        }
+
+        for (Block block : blocksToBreak) {
+            block.setType(Material.AIR);
+        }
+
+        explosionLocation.getWorld().createExplosion(explosionLocation, 0F, false);
     }
 
     /**
@@ -227,11 +320,12 @@ public class ExplosiveListener implements Listener {
      * purely cosmetic (zero-power) explosion for sounds and particle effects
      * and applies knockback to nearby players.
      *
-     * @param tnt The TNTPrimed entity that is exploding. This is used as a reference for applying player knockback.
+     * @param tnt               The TNTPrimed entity that is exploding. This is used as a reference for applying player knockback.
      * @param explosionLocation The central Location where the explosion occurs.
      */
     private void handleCustomTntExplosion(TNTPrimed tnt, Location explosionLocation) {
-        double range = this.plugin.getExplosiveService().getRange();
+        ExplosiveService explosiveService = this.plugin.getExplosiveService();
+        double range = explosiveService.getExplosionRange();
 
         List<Block> blocksToBreak = new ArrayList<>();
         int radius = (int) Math.ceil(range);
@@ -257,6 +351,8 @@ public class ExplosiveListener implements Listener {
         }
 
         explosionLocation.getWorld().createExplosion(explosionLocation, 0F, false);
+
+        pushNearbyTnt(explosionLocation, tnt);
 
         applyPlayerKnockback(tnt, explosionLocation);
     }

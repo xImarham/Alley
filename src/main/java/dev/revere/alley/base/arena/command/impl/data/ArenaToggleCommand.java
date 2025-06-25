@@ -36,7 +36,7 @@ public class ArenaToggleCommand extends BaseCommand {
         String[] args = command.getArgs();
 
         if (args.length < 1) {
-            player.sendMessage(CC.translate("&6Usage: &e/arena toggle &b<arenaName>"));
+            player.sendMessage(CC.translate("&6Usage: &e/arena toggle &6<arenaName>"));
             return;
         }
 
@@ -63,6 +63,6 @@ public class ArenaToggleCommand extends BaseCommand {
 
         this.plugin.getArenaService().getArenaByName(arenaName).setEnabled(!this.plugin.getArenaService().getArenaByName(arenaName).isEnabled());
         this.plugin.getArenaService().saveArena(this.plugin.getArenaService().getArenaByName(arenaName));
-        player.sendMessage(CC.translate("&aArena &b" + arenaName + "&a has been " + (this.plugin.getArenaService().getArenaByName(arenaName).isEnabled() ? "enabled" : "disabled") + "&a!"));
+        player.sendMessage(CC.translate("&aArena &6" + arenaName + "&a has been " + (this.plugin.getArenaService().getArenaByName(arenaName).isEnabled() ? "enabled" : "disabled") + "&a!"));
     }
 }

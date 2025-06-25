@@ -20,7 +20,7 @@ public class FFASetSafeZoneCommand extends BaseCommand {
         String[] args = command.getArgs();
 
         if (args.length < 2) {
-            player.sendMessage(CC.translate("&6Usage: &e/ffa setsafezone &b<arenaName> <pos1/pos2>"));
+            player.sendMessage(CC.translate("&6Usage: &e/ffa setsafezone &6<arenaName> <pos1/pos2>"));
             return;
         }
 
@@ -44,10 +44,10 @@ public class FFASetSafeZoneCommand extends BaseCommand {
 
         if (spawnType.equalsIgnoreCase("pos1")) {
             this.plugin.getArenaService().getArenaByName(arenaName).setMaximum(player.getLocation());
-            player.sendMessage(CC.translate("&aSafe Zone position 1 has been set for arena &b" + arenaName + "&a!"));
+            player.sendMessage(CC.translate("&aSafe Zone position 1 has been set for arena &6" + arenaName + "&a!"));
         } else {
             this.plugin.getArenaService().getArenaByName(arenaName).setMinimum(player.getLocation());
-            player.sendMessage(CC.translate("&aSafe Zone position 2 has been set for arena &b" + arenaName + "&a!"));
+            player.sendMessage(CC.translate("&aSafe Zone position 2 has been set for arena &6" + arenaName + "&a!"));
         }
 
         this.plugin.getArenaService().saveArena(this.plugin.getArenaService().getArenaByName(arenaName));

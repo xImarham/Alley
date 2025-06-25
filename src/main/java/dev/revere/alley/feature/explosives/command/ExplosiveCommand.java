@@ -56,6 +56,8 @@ public class ExplosiveCommand extends BaseCommand {
             case "fuse":
                 explosiveService.setTntFuseTicks((int) value);
                 break;
+            case "explosion-range":
+                explosiveService.setExplosionRange(value);
             default:
                 sendHelpMessage(sender);
                 return;
@@ -63,18 +65,19 @@ public class ExplosiveCommand extends BaseCommand {
 
         explosiveService.save();
 
-        sender.sendMessage(CC.translate("&aSuccessfully set the explosive " + settingName + " value to &b" + value + "&a."));
+        sender.sendMessage(CC.translate("&aSuccessfully set the explosive " + settingName + " value to &6" + value + "&a."));
     }
 
     private void sendHelpMessage(CommandSender sender) {
         List<String> helpMessage = Arrays.asList(
                 "",
-                "&b&lExplosive Commands Help:",
-                " &f● &b/explosive range <value> &8- &7Set explosion range that affects players.",
-                " &f● &b/explosive horizontal <value> &8- &7Set horizontal knockback.",
-                " &f● &b/explosive vertical <value> &8- &7Set vertical knockback.",
-                " &f● &b/explosive speed <value> &8- &7Set fireball launch speed.",
-                " &f● &b/explosive fuse <value> &8- &7Set TNT fuse ticks.",
+                "&6&lExplosive Commands Help:",
+                " &f● &6/explosive explosion-range <value> &8- &7Set range of explosion blocks removal.",
+                " &f● &6/explosive range <value> &8- &7Set explosion range that affects players.",
+                " &f● &6/explosive horizontal <value> &8- &7Set horizontal knockback.",
+                " &f● &6/explosive vertical <value> &8- &7Set vertical knockback.",
+                " &f● &6/explosive speed <value> &8- &7Set fireball launch speed.",
+                " &f● &6/explosive fuse <value> &8- &7Set TNT fuse ticks.",
                 ""
         );
 

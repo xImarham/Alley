@@ -117,7 +117,7 @@ public class Logger {
             runnable.run();
             long end = System.currentTimeMillis();
 
-            consoleSender.sendMessage(CC.translate(CC.PREFIX + "&fSuccessfully initialized the &b" + taskName + " &fin &b" + (end - start) + "ms&f."));
+            consoleSender.sendMessage(CC.translate(CC.PREFIX + "&fSuccessfully initialized the &6" + taskName + " &fin &6" + (end - start) + "ms&f."));
         } catch (Exception exception) {
             logException("Failed to run the " + taskName + " task", exception);
         }
@@ -135,7 +135,7 @@ public class Logger {
             runnable.run();
             long end = System.currentTimeMillis();
 
-            consoleSender.sendMessage(CC.translate(CC.PREFIX + "&fSuccessfully ran the &b" + runnableTaskName + " &fin &b" + (end - start) + "ms&f."));
+            consoleSender.sendMessage(CC.translate(CC.PREFIX + "&fSuccessfully ran the &6" + runnableTaskName + " &fin &6" + (end - start) + "ms&f."));
         } catch (Exception exception) {
             logException("Failed to run the " + runnableTaskName + " task", exception);
         }
@@ -152,6 +152,6 @@ public class Logger {
         long start = System.currentTimeMillis();
         runnable.run();
         long runtime = System.currentTimeMillis() - start;
-        consoleSender.sendMessage(CC.translate(CC.PREFIX + "&fSuccessfully " + action + "&f the &b" + task + " &fin &b" + runtime + "ms&f."));
+        consoleSender.sendMessage(CC.translate(CC.PREFIX + "&fSuccessfully " + action + "&f the &6" + task + " &fin &6" + runtime + "ms&f."));
     }
 }

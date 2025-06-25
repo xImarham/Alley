@@ -118,7 +118,7 @@ public class MatchRunnable extends BukkitRunnable {
         this.match.getParticipants().forEach(gameParticipant -> gameParticipant.getPlayers().forEach(matchGamePlayer -> {
             Alley.getInstance().getReflectionRepository().getReflectionService(TitleReflectionService.class).sendTitle(
                     matchGamePlayer.getPlayer(),
-                    "&b&lMatch started",
+                    "&6&lMatch started",
                     "&fGood Luck!",
                     15, 20, 2
             );

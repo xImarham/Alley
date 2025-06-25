@@ -18,7 +18,7 @@ public class LoreHelper {
      * @param value The boolean value to represent.
      */
     public String enabledOrDisabled(boolean value) {
-        String returnValue = value ? "&bEnabled" : "&cDisabled";
+        String returnValue = value ? "&6Enabled" : "&cDisabled";
         return ChatColor.translateAlternateColorCodes('&', "&f&l┃ " + returnValue);
     }
 
@@ -28,7 +28,7 @@ public class LoreHelper {
      * @param value The boolean value to represent.
      */
     public String shownOrHidden(boolean value) {
-        String returnValue = value ? "&bShown" : "&cHidden";
+        String returnValue = value ? "&6Shown" : "&cHidden";
         return ChatColor.translateAlternateColorCodes('&', "&f&l┃ " + returnValue);
     }
 
@@ -39,7 +39,7 @@ public class LoreHelper {
      */
     public String status(boolean value) {
         String returnValue = value ? "&aEnabled" : "&cDisabled";
-        return ChatColor.translateAlternateColorCodes('&', "&f● &bStatus: &f" + returnValue);
+        return ChatColor.translateAlternateColorCodes('&', "&f● &6Status: &f" + returnValue);
     }
 
     /**

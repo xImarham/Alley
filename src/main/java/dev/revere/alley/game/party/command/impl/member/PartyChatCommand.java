@@ -30,10 +30,10 @@ public class PartyChatCommand extends BaseCommand {
         if (args.length == 0) {
             if (profile.getProfileData().getSettingData().getChatChannel().equals(EnumChatChannel.PARTY.toString())) {
                 profile.getProfileData().getSettingData().setChatChannel(EnumChatChannel.GLOBAL.toString());
-                player.sendMessage(CC.translate("&aSet your chat channel to &bglobal&a."));
+                player.sendMessage(CC.translate("&aSet your chat channel to &6global&a."));
             } else {
                 profile.getProfileData().getSettingData().setChatChannel(EnumChatChannel.PARTY.toString());
-                player.sendMessage(CC.translate("&aSet your chat channel to &bparty&a."));
+                player.sendMessage(CC.translate("&aSet your chat channel to &6party&a."));
             }
             return;
         }

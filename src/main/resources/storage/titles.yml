@@ -1,28 +1,28 @@
 titles:
   NoDebuff:
-    prefix: '&b&lNODEBUFF GRANDMASTER'
+    prefix: '&6&lNODEBUFF GRANDMASTER'
     required: Grandmaster
   Classic:
-    prefix: '&b&lCLASSIC GRANDMASTER'
+    prefix: '&6&lCLASSIC GRANDMASTER'
     required: Grandmaster
   Boxing:
-    prefix: '&b&lBOXING GRANDMASTER'
+    prefix: '&6&lBOXING GRANDMASTER'
     required: Grandmaster
   Sumo:
-    prefix: '&b&lSUMO GRANDMASTER'
+    prefix: '&6&lSUMO GRANDMASTER'
     required: Grandmaster
   Spleef:
-    prefix: '&b&lSPLEEF GRANDMASTER'
+    prefix: '&6&lSPLEEF GRANDMASTER'
     required: Grandmaster
   Parkour:
-    prefix: '&b&lPARKOUR GRANDMASTER'
+    prefix: '&6&lPARKOUR GRANDMASTER'
     required: Grandmaster
   BattleRush:
-    prefix: '&b&lBATTLERUSH GRANDMASTER'
+    prefix: '&6&lBATTLERUSH GRANDMASTER'
     required: Grandmaster
   PearlFight:
-    prefix: '&b&lPEARLFIGHT GRANDMASTER'
+    prefix: '&6&lPEARLFIGHT GRANDMASTER'
     required: Grandmaster
   StickFight:
-    prefix: '&b&lSTICKFIGHT GRANDMASTER'
+    prefix: '&6&lSTICKFIGHT GRANDMASTER'
     required: Grandmaster

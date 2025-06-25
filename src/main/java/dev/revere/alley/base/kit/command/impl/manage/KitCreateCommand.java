@@ -25,7 +25,7 @@ public class KitCreateCommand extends BaseCommand {
         String[] args = command.getArgs();
 
         if (args.length < 1) {
-            player.sendMessage(CC.translate("&6Usage: &e/kit create &b<kitName>"));
+            player.sendMessage(CC.translate("&6Usage: &e/kit create &6<kitName>"));
             return;
         }
 

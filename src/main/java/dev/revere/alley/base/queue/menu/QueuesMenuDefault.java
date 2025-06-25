@@ -40,7 +40,7 @@ public class QueuesMenuDefault extends Menu {
      */
     @Override
     public String getTitle(Player player) {
-        return "&b&lSolo Unranked Queues";
+        return "&6&lSolo Unranked Queues";
     }
 
     /**
@@ -55,29 +55,29 @@ public class QueuesMenuDefault extends Menu {
 
         QueueService queueService = this.plugin.getQueueService();
 
-        buttons.put(11, new QueuesButtonDefault("&b&lSolos", Material.DIAMOND_SWORD, 0, Arrays.asList(
+        buttons.put(11, new QueuesButtonDefault("&6&lSolos", Material.DIAMOND_SWORD, 0, Arrays.asList(
                 "&7Casual 1v1s with",
                 "&7no loss penalty.",
                 "",
-                "&bPlayers: &f" + queueService.getPlayerCountOfGameType("Unranked"),
+                "&6Players: &f" + queueService.getPlayerCountOfGameType("Unranked"),
                 "",
                 "&aClick to play!"
         )));
 
-        buttons.put(13, new QueuesButtonDefault("&b&lBots", Material.GOLD_SWORD, 0, Arrays.asList(
+        buttons.put(13, new QueuesButtonDefault("&6&lBots", Material.GOLD_SWORD, 0, Arrays.asList(
                 "&7Practice against bots",
                 "&7to improve your skills.",
                 "",
-                "&bPlayers: &f" + queueService.getPlayerCountOfGameType("Bots"),
+                "&6Players: &f" + queueService.getPlayerCountOfGameType("Bots"),
                 "",
                 "&aClick to play!"
         )));
 
-        buttons.put(15, new QueuesButtonDefault("&b&lFFA", Material.GOLD_AXE, 0, Arrays.asList(
+        buttons.put(15, new QueuesButtonDefault("&6&lFFA", Material.GOLD_AXE, 0, Arrays.asList(
                 "&7Free for all with",
                 "&7infinity respawns.",
                 "",
-                "&bPlayers: &f" + queueService.getPlayerCountOfGameType("FFA"),
+                "&6Players: &f" + queueService.getPlayerCountOfGameType("FFA"),
                 "",
                 "&aClick to play!"
         )));

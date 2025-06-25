@@ -36,7 +36,7 @@ public class CosmeticButton extends Button {
         }
 
         return new ItemBuilder(cosmetic.getIcon())
-                .name("&b&l" + cosmetic.getName())
+                .name("&6&l" + cosmetic.getName())
                 .lore("", "&f" + cosmetic.getDescription(), "", lore)
                 .hideMeta()
                 .build();
@@ -66,6 +66,6 @@ public class CosmeticButton extends Button {
         cosmeticData.setSelected(cosmetic);
 
         this.playSuccess(player);
-        player.sendMessage(CC.translate("&aYou have selected the &b" + cosmetic.getName() + " &acosmetic."));
+        player.sendMessage(CC.translate("&aYou have selected the &6" + cosmetic.getName() + " &acosmetic."));
     }
 }

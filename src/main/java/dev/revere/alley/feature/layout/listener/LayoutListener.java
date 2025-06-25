@@ -47,7 +47,7 @@ public class LayoutListener implements Listener {
             for (LayoutData layout : layoutList) {
                 if (ChatColor.stripColor(layout.getDisplayName()).equalsIgnoreCase(clickedName)) {
                     player.getInventory().setContents(layout.getItems());
-                    player.sendMessage(CC.translate("&aYou have selected the layout &b" + layout.getDisplayName() + "&a."));
+                    player.sendMessage(CC.translate("&aYou have selected the layout &6" + layout.getDisplayName() + "&a."));
                     event.setCancelled(true);
                     return;
                 }

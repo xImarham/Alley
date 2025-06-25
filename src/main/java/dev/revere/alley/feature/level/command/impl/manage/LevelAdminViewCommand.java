@@ -23,7 +23,7 @@ public class LevelAdminViewCommand extends BaseCommand {
         String[] args = command.getArgs();
 
         if (args.length < 1) {
-            sender.sendMessage(CC.translate("&6Usage: &e/leveladmin view &b<levelName>"));
+            sender.sendMessage(CC.translate("&6Usage: &e/leveladmin view &6<levelName>"));
             return;
         }
 
@@ -37,13 +37,13 @@ public class LevelAdminViewCommand extends BaseCommand {
 
         Arrays.asList(
                 "",
-                "&b&lLevel Information:",
-                " &f● &bName: &e" + level.getName(),
-                " &f● &bDisplay Name: &e" + level.getDisplayName(),
-                " &f● &bMinimum Elo: &e" + level.getMinElo(),
-                " &f● &bMaximum Elo: &e" + level.getMaxElo(),
-                " &f● &bMaterial: &e" + level.getMaterial().name(),
-                " &f● &bDurability: &e" + level.getDurability(),
+                "&6&lLevel Information:",
+                " &f● &6Name: &e" + level.getName(),
+                " &f● &6Display Name: &e" + level.getDisplayName(),
+                " &f● &6Minimum Elo: &e" + level.getMinElo(),
+                " &f● &6Maximum Elo: &e" + level.getMaxElo(),
+                " &f● &6Material: &e" + level.getMaterial().name(),
+                " &f● &6Durability: &e" + level.getDurability(),
                 ""
         ).forEach(line -> sender.sendMessage(CC.translate(line)));
     }

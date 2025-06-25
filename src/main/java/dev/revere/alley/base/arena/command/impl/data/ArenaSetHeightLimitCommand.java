@@ -23,7 +23,7 @@ public class ArenaSetHeightLimitCommand extends BaseCommand {
         String[] args = command.getArgs();
 
         if (args.length < 2) {
-            player.sendMessage(CC.translate("&6Usage: &e/arena setheightlimit &b<arenaName> <heightLimit>"));
+            player.sendMessage(CC.translate("&6Usage: &e/arena setheightlimit &6<arenaName> <heightLimit>"));
             return;
         }
 
@@ -53,6 +53,6 @@ public class ArenaSetHeightLimitCommand extends BaseCommand {
 
         ((StandAloneArena) arena).setHeightLimit(heightLimit);
         arenaService.saveArena(arena);
-        player.sendMessage(CC.translate("&aHeight limit for arena &b" + arena.getName() + "&a has been set to &b" + heightLimit + "&a!"));
+        player.sendMessage(CC.translate("&aHeight limit for arena &6" + arena.getName() + "&a has been set to &6" + heightLimit + "&a!"));
     }
 }

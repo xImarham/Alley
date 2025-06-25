@@ -25,7 +25,7 @@ public class QueueForceCommand extends BaseCommand {
         String[] args = command.getArgs();
 
         if (args.length != 3) {
-            player.sendMessage(CC.translate("&6Usage: &e/queue force &b<player> <kit> <ranked>"));
+            player.sendMessage(CC.translate("&6Usage: &e/queue force &6<player> <kit> <ranked>"));
             player.sendMessage(CC.translate("&7Example: /queue force hmRemi Boxing true"));
             return;
         }
@@ -52,10 +52,10 @@ public class QueueForceCommand extends BaseCommand {
                 PlayerUtil.reset(target, false);
                 SoundUtil.playBanHammer(target);
                 this.plugin.getHotbarService().applyHotbarItems(target);
-                player.sendMessage(CC.translate("&aYou've added &b" + target.getName() + " &ato the &b" + queue.getQueueType() + " &aqueue."));
+                player.sendMessage(CC.translate("&aYou've added &6" + target.getName() + " &ato the &6" + queue.getQueueType() + " &aqueue."));
 
                 if (ranked && profile.getProfileData().isRankedBanned()) {
-                    player.sendMessage(CC.translate("&cKeep in mind that &b" + target.getName() + " &cis currently banned from ranked queues!"));
+                    player.sendMessage(CC.translate("&cKeep in mind that &6" + target.getName() + " &cis currently banned from ranked queues!"));
                 }
 
                 return;

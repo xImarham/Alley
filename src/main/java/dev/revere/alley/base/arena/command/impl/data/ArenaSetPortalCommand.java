@@ -23,7 +23,7 @@ public class ArenaSetPortalCommand extends BaseCommand {
         String[] args = command.getArgs();
 
         if (args.length < 2) {
-            player.sendMessage(CC.translate("&6Usage: &e/arena setportal &b<name> <red/blue>"));
+            player.sendMessage(CC.translate("&6Usage: &e/arena setportal &6<name> <red/blue>"));
             return;
         }
 

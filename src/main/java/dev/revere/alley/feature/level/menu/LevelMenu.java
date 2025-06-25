@@ -22,7 +22,7 @@ public class LevelMenu extends PaginatedMenu {
 
     @Override
     public String getPrePaginatedTitle(Player player) {
-        return "&b&lLevels";
+        return "&6&lLevels";
     }
 
     @Override

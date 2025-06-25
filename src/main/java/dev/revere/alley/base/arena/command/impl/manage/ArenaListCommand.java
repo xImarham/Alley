@@ -19,16 +19,16 @@ public class ArenaListCommand extends BaseCommand {
         Player player = command.getPlayer();
 
         player.sendMessage("");
-        player.sendMessage(CC.translate("     &b&lArena List &f(" + this.plugin.getArenaService().getArenas().size() + "&f)"));
+        player.sendMessage(CC.translate("     &6&lArena List &f(" + this.plugin.getArenaService().getArenas().size() + "&f)"));
         if (this.plugin.getArenaService().getArenas().isEmpty()) {
             player.sendMessage(CC.translate("      &f● &cNo Arenas available."));
         }
 
         this.plugin.getArenaService().getArenas().stream().filter(arena -> arena.getType() != EnumArenaType.FFA).forEach(arena ->
-                player.sendMessage(CC.translate("      &f● &b" + arena.getName() + " &7(" + arena.getType().name() + ")" + (arena.isEnabled() ? " &aEnabled" : " &cDisabled"))))
+                player.sendMessage(CC.translate("      &f● &6" + arena.getName() + " &7(" + arena.getType().name() + ")" + (arena.isEnabled() ? " &aEnabled" : " &cDisabled"))))
         ;
         this.plugin.getArenaService().getArenas().stream().filter(arena -> arena.getType() == EnumArenaType.FFA).forEach(arena ->
-                player.sendMessage(CC.translate("      &f● &b" + arena.getName() + " &7(" + arena.getType().name() + ")")))
+                player.sendMessage(CC.translate("      &f● &6" + arena.getName() + " &7(" + arena.getType().name() + ")")))
         ;
 
         player.sendMessage("");

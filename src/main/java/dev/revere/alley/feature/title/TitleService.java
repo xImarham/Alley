@@ -102,6 +102,6 @@ public class TitleService {
     private String getPrefixBasedOnHighestDivision(Kit kit) {
         Division highestDivision = this.plugin.getDivisionService().getHighestDivision();
 
-        return "&b&l" + kit.getName().toUpperCase() + " " + highestDivision.getName().toUpperCase();
+        return "&6&l" + kit.getName().toUpperCase() + " " + highestDivision.getName().toUpperCase();
     }
 }

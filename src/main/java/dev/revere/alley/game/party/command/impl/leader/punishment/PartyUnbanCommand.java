@@ -19,7 +19,7 @@ public class PartyUnbanCommand extends BaseCommand {
         String[] args = command.getArgs();
 
         if (args.length < 1) {
-            player.sendMessage(CC.translate("&6Usage: &e/party unban &b<player>"));
+            player.sendMessage(CC.translate("&6Usage: &e/party unban &6<player>"));
             return;
         }
 

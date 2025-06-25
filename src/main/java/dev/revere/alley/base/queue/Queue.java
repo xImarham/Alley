@@ -153,7 +153,7 @@ public class Queue {
                             this.plugin.getHotbarService().applyHotbarItems(player);
                             Player memberPlayer = Bukkit.getPlayer(memberId);
                             if (memberPlayer != null) {
-                                memberPlayer.sendMessage(CC.translate("&fYour party leader has joined the &b" + queueProfile.getQueue().getKit().getDisplayName() + " &fqueue."));
+                                memberPlayer.sendMessage(CC.translate("&fYour party leader has joined the &6" + queueProfile.getQueue().getKit().getDisplayName() + " &fqueue."));
                             }
                         }
                     }
@@ -161,7 +161,7 @@ public class Queue {
             }
         }
 
-        player.sendMessage(CC.translate("&aYou've joined the &b" + queueProfile.getQueue().getKit().getName() + " &aqueue."));
+        player.sendMessage(CC.translate("&aYou've joined the &6" + queueProfile.getQueue().getKit().getName() + " &aqueue."));
 
         this.plugin.getHotbarService().applyHotbarItems(player);
     }

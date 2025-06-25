@@ -20,7 +20,7 @@ public class CC {
 
     static {
         MENU_BAR = translate("&7&m------------------------");
-        PREFIX = translate("&f[&b" + Alley.getInstance().getDescription().getName() + "&f] &r");
+        PREFIX = translate("&f[&6" + Alley.getInstance().getDescription().getName() + "&f] &r");
         ERROR_PREFIX = translate("&c[&4" + Alley.getInstance().getDescription().getName() + "&c] &r");
     }
 

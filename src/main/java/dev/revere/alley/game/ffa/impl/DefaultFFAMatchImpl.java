@@ -169,7 +169,7 @@ public class DefaultFFAMatchImpl extends AbstractFFAMatch {
         this.plugin.getReflectionRepository().getReflectionService(ActionBarReflectionService.class).sendDeathMessage(killer, player);
         this.plugin.getCombatService().resetCombatLog(player);
 
-        this.getPlayers().forEach(ffaPlayer -> ffaPlayer.getPlayer().sendMessage(CC.translate("&b" + player.getName() + " &ahas been killed by &b" + killer.getName() + "&a.")));
+        this.getPlayers().forEach(ffaPlayer -> ffaPlayer.getPlayer().sendMessage(CC.translate("&6" + player.getName() + " &ahas been killed by &6" + killer.getName() + "&a.")));
         this.handleRespawn(player);
     }
 }

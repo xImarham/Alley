@@ -50,8 +50,8 @@ public class ClickableUtil {
      * @param displayBoth    whether to always show both buttons or not (keepInPosition won't affect this, it will be ignored)
      */
     public void sendPageNavigation(Player player, int page, int totalPages, String command, boolean keepInPosition, boolean displayBoth) {
-        TextComponent nextPage = createComponent(page == totalPages ? "&a&m[Next Page]" : "&a[Next Page]", command + " " + (page + 1), page == totalPages ? "&cYou are already on the last page." : "&7Click to view page &b" + (page + 1) + "&7.");
-        TextComponent previousPage = createComponent(page == 1 ? "&c&m[Previous Page]" : "&c[Previous Page]", command + " " + (page - 1), page == 1 ? "&cYou are already on the first page." : "&7Click to view page &b" + (page - 1) + "&7.");
+        TextComponent nextPage = createComponent(page == totalPages ? "&a&m[Next Page]" : "&a[Next Page]", command + " " + (page + 1), page == totalPages ? "&cYou are already on the last page." : "&7Click to view page &6" + (page + 1) + "&7.");
+        TextComponent previousPage = createComponent(page == 1 ? "&c&m[Previous Page]" : "&c[Previous Page]", command + " " + (page - 1), page == 1 ? "&cYou are already on the first page." : "&7Click to view page &6" + (page - 1) + "&7.");
 
         if (displayBoth) {
             TextComponent component = new TextComponent("");

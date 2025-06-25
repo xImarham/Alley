@@ -58,7 +58,7 @@ public class CoreAdapter {
             }
         }
 
-        Logger.log("Adapting to &b" + selectedCore.getType().getPluginName() + " Core &fby &b" + selectedCore.getType().getPluginAuthor() + "&f.");
+        Logger.log("Adapting to &6" + selectedCore.getType().getPluginName() + " Core &fby &6" + selectedCore.getType().getPluginAuthor() + "&f.");
         return selectedCore;
     }
 }

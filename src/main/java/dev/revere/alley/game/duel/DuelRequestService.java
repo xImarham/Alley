@@ -89,7 +89,7 @@ public class DuelRequestService {
         DuelRequest duelRequest = new DuelRequest(sender, finalTarget, kit, finalArena, isPartyDuel);
         this.addDuelRequest(duelRequest);
 
-        sender.sendMessage(CC.translate("&aYou have successfully sent a " + (isPartyDuel ? "party " : "") + "duel request to &b" + finalTarget.getName() + "&a."));
+        sender.sendMessage(CC.translate("&aYou have successfully sent a " + (isPartyDuel ? "party " : "") + "duel request to &6" + finalTarget.getName() + "&a."));
         sendInvite(sender, finalTarget, kit, finalArena, isPartyDuel);
     }
 
@@ -154,16 +154,16 @@ public class DuelRequestService {
      * @param arena      the arena
      */
     private void sendInvite(Player sender, Player target, Kit kit, AbstractArena arena, boolean isParty) {
-        String title = isParty ? "&b&lParty Duel Request" : "&b&lDuel Request";
+        String title = isParty ? "&6&lParty Duel Request" : "&6&lDuel Request";
         TextComponent fromComponent = new TextComponent();
         if (isParty) {
             Party senderParty = this.plugin.getProfileService().getProfile(sender.getUniqueId()).getParty();
             int partySize = (senderParty != null) ? senderParty.getMembers().size() : 1;
 
-            fromComponent.setText(CC.translate(String.format("&f&l ● &fFrom: &b%s's Party (&a%d&b)", sender.getName(), partySize)));
+            fromComponent.setText(CC.translate(String.format("&f&l ● &fFrom: &6%s's Party (&a%d&6)", sender.getName(), partySize)));
 
             StringBuilder hoverText = new StringBuilder();
-            hoverText.append(CC.translate("&b&lParticipants:\n"));
+            hoverText.append(CC.translate("&6&lParticipants:\n"));
 
             if (senderParty != null) {
                 List<UUID> members = new ArrayList<>(senderParty.getMembers());
@@ -172,7 +172,7 @@ public class DuelRequestService {
 
                 for (int i = 0; i < displayCount; i++) {
                     OfflinePlayer member = Bukkit.getOfflinePlayer(members.get(i));
-                    hoverText.append("&b").append(member.getName());
+                    hoverText.append("&6").append(member.getName());
 
                     if (i < displayCount - 1) {
                         hoverText.append("&f, ");
@@ -188,11 +188,11 @@ public class DuelRequestService {
             fromComponent.setHoverEvent(hoverEvent);
 
         } else {
-            fromComponent.setText(CC.translate("&f&l ● &fFrom: &b" + sender.getName()));
+            fromComponent.setText(CC.translate("&f&l ● &fFrom: &6" + sender.getName()));
         }
 
-        TextComponent arenaComponent = new TextComponent(CC.translate("&f&l ● &fArena: &b" + arena.getDisplayName()));
-        TextComponent kitComponent = new TextComponent(CC.translate("&f&l ● &fKit: &b" + kit.getName()));
+        TextComponent arenaComponent = new TextComponent(CC.translate("&f&l ● &fArena: &6" + arena.getDisplayName()));
+        TextComponent kitComponent = new TextComponent(CC.translate("&f&l ● &fKit: &6" + kit.getName()));
 
         TextComponent acceptComponent = getClickable(sender);
 
@@ -375,7 +375,7 @@ public class DuelRequestService {
         return ClickableUtil.createComponent(
                 " &a(Click To Accept)",
                 "/accept " + sender.getName(),
-                "&aClick to accept &b" + sender.getName() + "&a's duel request."
+                "&aClick to accept &6" + sender.getName() + "&a's duel request."
         );
     }
 }

@@ -64,7 +64,7 @@ public class LevelService {
      * @param maxElo Maximum Elo rating for this level.
      */
     public void createLevel(String name, int minElo, int maxElo) {
-        LevelData level = new LevelData(name, "&b" + name, Material.DIAMOND_SWORD, 0, minElo, maxElo);
+        LevelData level = new LevelData(name, "&6" + name, Material.DIAMOND_SWORD, 0, minElo, maxElo);
         this.levels.add(level);
         this.saveLevel(level);
     }

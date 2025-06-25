@@ -20,6 +20,7 @@ import java.io.File;
 public class ExplosiveService {
     protected final Alley plugin;
 
+    private double explosionRange;
     private double horizontal;
     private double vertical;
     private double range;
@@ -54,6 +55,7 @@ public class ExplosiveService {
         this.range = settingsConfig.getDouble("explosive.values.range");
         this.speed = settingsConfig.getDouble("explosive.values.speed");
         this.tntFuseTicks = settingsConfig.getInt("explosive.values.tnt-fuse-ticks");
+        this.explosionRange = settingsConfig.getInt("explosive.values.explosion-range");
     }
 
     public void save() {
@@ -66,6 +68,7 @@ public class ExplosiveService {
         settingsConfig.set("explosive.values.range", this.range);
         settingsConfig.set("explosive.values.speed", this.speed);
         settingsConfig.set("explosive.values.tnt-fuse-ticks", this.tntFuseTicks);
+        settingsConfig.set("explosive.values.explosion-range", this.explosionRange);
 
         configService.saveConfig(settingsFile, settingsConfig);
     }

@@ -25,7 +25,7 @@ public class KitSetCategoryCommand extends BaseCommand {
         String[] args = command.getArgs();
 
         if (command.length() < 2) {
-            sender.sendMessage(CC.translate("&6Usage: &e/kit description &b<kitName> <description>"));
+            sender.sendMessage(CC.translate("&6Usage: &e/kit description &6<kitName> <description>"));
             return;
         }
 

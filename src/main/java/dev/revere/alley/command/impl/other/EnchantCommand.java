@@ -51,6 +51,6 @@ public class EnchantCommand extends BaseCommand {
         String displayName = itemInHand.getItemMeta().getDisplayName() == null ? itemInHand.getType().name() : itemInHand.getItemMeta().getDisplayName();
 
         itemInHand.addUnsafeEnchantment(enchantment, level);
-        player.sendMessage(CC.translate("&aSuccessfully enchanted the &b" + displayName + " &aitem with &b" + enchantment.getName() + " &alevel &b" + level + "&a!"));
+        player.sendMessage(CC.translate("&aSuccessfully enchanted the &6" + displayName + " &aitem with &6" + enchantment.getName() + " &alevel &6" + level + "&a!"));
     }
 }

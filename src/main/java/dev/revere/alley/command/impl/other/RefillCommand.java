@@ -27,6 +27,6 @@ public class RefillCommand extends BaseCommand {
             }
         });
 
-        player.sendMessage(CC.translate("&aYou've refilled &byour inventory &awith &bhealth &apotions."));
+        player.sendMessage(CC.translate("&aYou've refilled &6your inventory &awith &6health &apotions."));
     }
 }

@@ -43,7 +43,7 @@ public class QueuesMenuModern extends Menu {
     @Override
     public String getTitle(Player player) {
         Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
-        return "&b&l" + profile.getQueueType().getMenuTitle();
+        return "&6&l" + profile.getQueueType().getMenuTitle();
     }
 
     /**
@@ -59,29 +59,29 @@ public class QueuesMenuModern extends Menu {
         QueueService queueService = this.plugin.getQueueService();
         Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
 
-        buttons.put(2, new QueuesButtonModern("&b&lUnranked", Material.DIAMOND_SWORD, 0, Arrays.asList(
+        buttons.put(2, new QueuesButtonModern("&6&lUnranked", Material.DIAMOND_SWORD, 0, Arrays.asList(
                 "&7Casual 1v1s with",
                 "&7no loss penalty.",
                 "",
-                "&bPlayers: &f" + queueService.getPlayerCountOfGameType("Unranked Solo"),
+                "&6Players: &f" + queueService.getPlayerCountOfGameType("Unranked Solo"),
                 "",
                 this.getLore(profile, EnumQueueType.UNRANKED)
         )));
 
-        buttons.put(4, new QueuesButtonModern("&b&lUnranked Duos", Material.GOLD_SWORD, 0, Arrays.asList(
+        buttons.put(4, new QueuesButtonModern("&6&lUnranked Duos", Material.GOLD_SWORD, 0, Arrays.asList(
                 "&7Casual 2v2s with",
                 "&7no penalty loss",
                 "",
-                "&bPlayers: &f" + queueService.getPlayerCountOfGameType("Duos"),
+                "&6Players: &f" + queueService.getPlayerCountOfGameType("Duos"),
                 "",
                 this.getLore(profile, EnumQueueType.DUOS)
         )));
 
-        buttons.put(6, new QueuesButtonModern("&b&lFFA", Material.GOLD_AXE, 0, Arrays.asList(
+        buttons.put(6, new QueuesButtonModern("&6&lFFA", Material.GOLD_AXE, 0, Arrays.asList(
                 "&7Free for all with",
                 "&7infinity respawns.",
                 "",
-                "&bPlayers: &f" + queueService.getPlayerCountOfGameType("FFA"),
+                "&6Players: &f" + queueService.getPlayerCountOfGameType("FFA"),
                 "",
                 this.getLore(profile, EnumQueueType.FFA)
         )));

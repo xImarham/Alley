@@ -23,7 +23,7 @@ public class FFAJoinCommand extends BaseCommand {
         String[] args = command.getArgs();
 
         if (args.length != 1) {
-            player.sendMessage(CC.translate("&6Usage: &e/ffa join &b<kit>"));
+            player.sendMessage(CC.translate("&6Usage: &e/ffa join &6<kit>"));
             return;
         }
 

@@ -53,10 +53,10 @@ public class MongoService {
 
             this.mongoClient = MongoClients.create(settings);
             this.mongoDatabase = this.mongoClient.getDatabase(this.databaseName);
-            Bukkit.getConsoleSender().sendMessage(CC.translate("&f[&bAlley&f] &fSuccessfully connected to MongoDB."));
+            Bukkit.getConsoleSender().sendMessage(CC.translate("&f[&6Alley&f] &fSuccessfully connected to MongoDB."));
         } catch (Exception e) {
             FileConfiguration config = this.plugin.getConfigService().getDatabaseConfig();
-            Bukkit.getConsoleSender().sendMessage(CC.translate("&f[&bAlley&f] &cFailed to connect to MongoDB. &7(Connection String: " + config.getString("mongo.uri") + ", Database: " + config.getString("mongo.database") + ")"));
+            Bukkit.getConsoleSender().sendMessage(CC.translate("&f[&6Alley&f] &cFailed to connect to MongoDB. &7(Connection String: " + config.getString("mongo.uri") + ", Database: " + config.getString("mongo.database") + ")"));
             System.exit(2);
         }
     }

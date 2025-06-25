@@ -27,12 +27,12 @@ public class PageButton extends Button {
         if (this.offset > 0) {
             if (MenuUtil.hasNext(player, offset, this.menu)) {
                 return new ItemBuilder(Material.MELON)
-                        .name("&b&lNext Page &7" + (this.menu.getPage() + "/" + this.menu.getPages(player)))
+                        .name("&6&lNext Page &7" + (this.menu.getPage() + "/" + this.menu.getPages(player)))
                         .lore(
                                 "&7Right-Click:",
                                 " &7▶ View all",
                                 "",
-                                "&bClick to view!"
+                                "&6Click to view!"
                         )
                         .hideMeta()
                         .build();

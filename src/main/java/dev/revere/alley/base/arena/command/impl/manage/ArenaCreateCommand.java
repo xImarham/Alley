@@ -30,7 +30,7 @@ public class ArenaCreateCommand extends BaseCommand {
         String[] args = command.getArgs();
 
         if (args.length < 2) {
-            player.sendMessage(CC.translate("&6Usage: &e/arena create &b<arenaName> <type>"));
+            player.sendMessage(CC.translate("&6Usage: &e/arena create &6<arenaName> <type>"));
             return;
         }
 
@@ -74,7 +74,7 @@ public class ArenaCreateCommand extends BaseCommand {
         arena.setDisplayName(Objects.requireNonNull(getDefaultDisplayName(arenaType)).replace("{arena-name}", arenaName));
 
         arena.createArena();
-        player.sendMessage(CC.translate("&aSuccessfully created a new arena named &b" + arenaName + "&a with type &b" + arenaType.name() + "&a!"));
+        player.sendMessage(CC.translate("&aSuccessfully created a new arena named &6" + arenaName + "&a with type &6" + arenaType.name() + "&a!"));
     }
 
     /**

@@ -48,12 +48,12 @@ public class ShopCategoryButton extends Button {
         List<String> lore = new ArrayList<>();
         lore.add(String.format("&7%s", description));
         lore.add("");
-        lore.add(String.format("&fUnlocked: &b%d/%d &7(%d%%)", ownedCount, totalCount, percentage));
+        lore.add(String.format("&fUnlocked: &6%d/%d &7(%d%%)", ownedCount, totalCount, percentage));
         lore.add("");
         lore.add("&aClick to browse!");
 
         return new ItemBuilder(this.icon)
-                .name("&b&l" + friendlyName + "s")
+                .name("&6&l" + friendlyName + "s")
                 .lore(lore)
                 .hideMeta()
                 .build();

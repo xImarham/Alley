@@ -21,7 +21,7 @@ public class KitToggleFFACommand extends BaseCommand {
         String[] args = command.getArgs();
 
         if (args.length < 2) {
-            player.sendMessage(CC.translate("&6Usage: &e/kit toggleffa &b<kitName> <true/false>"));
+            player.sendMessage(CC.translate("&6Usage: &e/kit toggleffa &6<kitName> <true/false>"));
             return;
         }
 
@@ -43,7 +43,7 @@ public class KitToggleFFACommand extends BaseCommand {
         kit.setFfaEnabled(ffaEnabled);
         kitService.saveKit(kit);
         this.plugin.getFfaService().reloadFFAKits();
-        player.sendMessage(CC.translate("&aFFA mode has been " + (ffaEnabled ? "&aenabled" : "&cdisabled") + " for kit &b" + kit.getName() + "&a!"));
+        player.sendMessage(CC.translate("&aFFA mode has been " + (ffaEnabled ? "&aenabled" : "&cdisabled") + " for kit &6" + kit.getName() + "&a!"));
         player.sendMessage(CC.translate("&7Additionally, all FFA matches have been reloaded."));
     }
 }

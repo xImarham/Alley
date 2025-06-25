@@ -24,7 +24,7 @@ public class PartyEventSplitArenaSelectorMenu extends Menu {
 
     @Override
     public String getTitle(Player player) {
-        return "&b&lSelect an arena";
+        return "&6&lSelect an arena";
     }
 
     @Override

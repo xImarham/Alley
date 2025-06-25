@@ -17,7 +17,7 @@ import java.util.Map;
 public class MatchHistorySelectKitMenu extends Menu {
     @Override
     public String getTitle(Player player) {
-        return "&b&lMatch History &f- &7Select Kit";
+        return "&6&lMatch History &f- &7Select Kit";
     }
 
     @Override

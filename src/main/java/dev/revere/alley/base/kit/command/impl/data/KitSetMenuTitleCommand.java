@@ -24,7 +24,7 @@ public class KitSetMenuTitleCommand extends BaseCommand {
         String[] args = command.getArgs();
 
         if (args.length < 2) {
-            sender.sendMessage(CC.translate("&6Usage: &e/kit setmenutitle &b<kitName> <title>"));
+            sender.sendMessage(CC.translate("&6Usage: &e/kit setmenutitle &6<kitName> <title>"));
             return;
         }
 

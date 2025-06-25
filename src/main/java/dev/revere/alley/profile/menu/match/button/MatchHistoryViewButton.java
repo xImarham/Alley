@@ -39,13 +39,13 @@ public class MatchHistoryViewButton extends Button {
             String loserName = Bukkit.getOfflinePlayer(opponentUUID).getName();
 
             return new ItemBuilder(Material.SKULL_ITEM)
-                    .name("&b&l" + winnerName + " &7vs &c&l" + loserName)
+                    .name("&6&l" + winnerName + " &7vs &c&l" + loserName)
                     .lore(
                             "&fWinner: &a" + winnerName + " &7(You)",
                             "&fLoser: &c" + loserName,
                             "",
-                            "&fKit: &b" + matchDataSolo.getKit(),
-                            "&fArena: &b" + matchDataSolo.getArena()
+                            "&fKit: &6" + matchDataSolo.getKit(),
+                            "&fArena: &6" + matchDataSolo.getArena()
                     )
                     .setSkull(loserName)
                     .hideMeta()

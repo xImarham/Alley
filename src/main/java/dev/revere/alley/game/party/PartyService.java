@@ -126,7 +126,7 @@ public class PartyService {
 
         Arrays.asList(
                 "",
-                "&b&lParty Created &a" + Symbol.TICK,
+                "&6&lParty Created &a" + Symbol.TICK,
                 " &7Type /p for help.",
                 ""
         ).forEach(line -> player.sendMessage(CC.translate(line)));
@@ -170,7 +170,7 @@ public class PartyService {
         }
 
         party.getMembers().forEach(member -> this.setupProfile(Bukkit.getPlayer(member), false));
-        party.notifyParty("&b&lParty &7&l" + Symbol.ARROW_R + " &b" + leader.getName() + " &cdisbanded the party.");
+        party.notifyParty("&6&lParty &7&l" + Symbol.ARROW_R + " &6" + leader.getName() + " &cdisbanded the party.");
         this.parties.remove(party);
 
         Cooldown cooldown = this.plugin.getCooldownRepository().getCooldown(leader.getUniqueId(), EnumCooldownType.PARTY_ANNOUNCE_COOLDOWN);
@@ -311,8 +311,8 @@ public class PartyService {
         }
 
         party.getBannedPlayers().remove(target.getUniqueId());
-        party.notifyParty(CC.translate("&b" + target.getName() + " &ahas been unbanned from the party and is now able to join again."));
-        target.sendMessage(CC.translate("&aYou have been unbanned from &b" + party.getLeader().getName() + "'s &aparty."));
+        party.notifyParty(CC.translate("&6" + target.getName() + " &ahas been unbanned from the party and is now able to join again."));
+        target.sendMessage(CC.translate("&aYou have been unbanned from &6" + party.getLeader().getName() + "'s &aparty."));
     }
 
     /**
@@ -345,7 +345,7 @@ public class PartyService {
         }
 
         if (party.getBannedPlayers().contains(player.getUniqueId())) {
-            player.sendMessage(CC.translate("&cYou are banned from &b" + leader.getName() + "&c's party."));
+            player.sendMessage(CC.translate("&cYou are banned from &6" + leader.getName() + "&c's party."));
             return;
         }
 
@@ -419,9 +419,9 @@ public class PartyService {
         this.partyRequests.add(request);
 
         target.sendMessage("");
-        target.sendMessage(CC.translate("&b&lParty Invitation"));
-        target.sendMessage(CC.translate("&f&l ● &fFrom: &b" + sender.getName()));
-        target.sendMessage(CC.translate("&f&l ● &fPlayers: &b" + party.getMembers().size() + "&f/&b30")); //TODO: Implement party size limit with permissions ect...
+        target.sendMessage(CC.translate("&6&lParty Invitation"));
+        target.sendMessage(CC.translate("&f&l ● &fFrom: &6" + sender.getName()));
+        target.sendMessage(CC.translate("&f&l ● &fPlayers: &6" + party.getMembers().size() + "&f/&630")); //TODO: Implement party size limit with permissions ect...
         target.spigot().sendMessage(this.getClickable(sender));
         target.sendMessage("");
     }
@@ -474,7 +474,7 @@ public class PartyService {
     public void announceParty(Party party) {
         Bukkit.getOnlinePlayers().forEach(player -> {
             player.sendMessage("");
-            player.sendMessage(CC.translate("&b&l" + party.getLeader().getName() + " &a&lis inviting you to join &b&ltheir &a&lparty!"));
+            player.sendMessage(CC.translate("&6&l" + party.getLeader().getName() + " &a&lis inviting you to join &6&ltheir &a&lparty!"));
             player.spigot().sendMessage(this.getClickable(party.getLeader()));
             player.sendMessage("");
         });
@@ -490,7 +490,7 @@ public class PartyService {
         return ClickableUtil.createComponent(
                 " &a(Click to accept)",
                 "/party accept " + sender.getName(),
-                "&aClick to accept &b" + sender.getName() + "&a's party invitation."
+                "&aClick to accept &6" + sender.getName() + "&a's party invitation."
         );
     }
 }

@@ -36,7 +36,7 @@ public class ArenaSetCenterCommand extends BaseCommand {
         String[] args = command.getArgs();
 
         if (args.length < 1) {
-            player.sendMessage(CC.translate("&6Usage: &e/arena setcenter &b<arenaName>"));
+            player.sendMessage(CC.translate("&6Usage: &e/arena setcenter &6<arenaName>"));
             return;
         }
 
@@ -48,6 +48,6 @@ public class ArenaSetCenterCommand extends BaseCommand {
 
         this.plugin.getArenaService().getArenaByName(arenaName).setCenter(player.getLocation());
         this.plugin.getArenaService().saveArena(this.plugin.getArenaService().getArenaByName(arenaName));
-        player.sendMessage(CC.translate("&aCenter has been set for arena &b" + arenaName + "&a!"));
+        player.sendMessage(CC.translate("&aCenter has been set for arena &6" + arenaName + "&a!"));
     }
 }

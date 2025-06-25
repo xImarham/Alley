@@ -18,7 +18,7 @@ import java.util.Map;
 public class ShopMenu extends Menu {
     @Override
     public String getTitle(Player player) {
-        return "&b&lShop Menu";
+        return "&6&lShop Menu";
     }
 
     @Override

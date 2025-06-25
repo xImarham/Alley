@@ -41,8 +41,8 @@ public class LevelButton extends Button {
                         "",
                         "&c&lLOCKED",
                         "",
-                        "&fUnlock with &b" + requiredElo + " &fmore Elo!",
-                        "&fCurrent Elo: &b" + this.profile.getProfileData().getElo()
+                        "&fUnlock with &6" + requiredElo + " &fmore Elo!",
+                        "&fCurrent Elo: &6" + this.profile.getProfileData().getElo()
                 )
                 .durability(14)
                 .hideMeta()

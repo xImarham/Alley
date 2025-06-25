@@ -21,7 +21,7 @@ public class LayoutRenameButton extends Button {
     @Override
     public ItemStack getButtonItem(Player player) {
         return new ItemBuilder(Material.NAME_TAG)
-                .name("&b&lRename Layout")
+                .name("&6&lRename Layout")
                 .lore(
                         "&7Change the display",
                         "&7name of the layout.",

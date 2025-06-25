@@ -22,7 +22,7 @@ public class KitSetEditableCommand extends BaseCommand {
         String[] args = command.getArgs();
 
         if (args.length < 1) {
-            sender.sendMessage(CC.translate("&6Usage: &e/kit seteditable &b<name> <true/false>"));
+            sender.sendMessage(CC.translate("&6Usage: &e/kit seteditable &6<name> <true/false>"));
             return;
         }
 
@@ -44,6 +44,6 @@ public class KitSetEditableCommand extends BaseCommand {
 
         kit.setEditable(editable);
         kitService.saveKit(kit);
-        sender.sendMessage(CC.translate("&aSuccessfully set the kit named &b" + kit.getDisplayName() + " &ato editable: &b" + editable + "&a."));
+        sender.sendMessage(CC.translate("&aSuccessfully set the kit named &6" + kit.getDisplayName() + " &ato editable: &6" + editable + "&a."));
     }
 }

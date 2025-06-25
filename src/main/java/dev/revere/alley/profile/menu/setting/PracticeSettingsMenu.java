@@ -21,7 +21,7 @@ public class PracticeSettingsMenu extends Menu {
 
     @Override
     public String getTitle(Player player) {
-        return "&b&lPractice Settings";
+        return "&6&lPractice Settings";
     }
 
     @Override

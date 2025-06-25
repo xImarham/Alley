@@ -147,8 +147,8 @@ public class ProfileData {
     private void sendLevelUpMessage(Profile profile, String newLevel) {
         Arrays.asList(
                 "",
-                "&b&lNEW LEVEL &f| &a&lCONGRATULATIONS!",
-                " &fYou have reached &b" + newLevel + " &fin the global ranking system.",
+                "&6&lNEW LEVEL &f| &a&lCONGRATULATIONS!",
+                " &fYou have reached &6" + newLevel + " &fin the global ranking system.",
                 ""
         ).forEach(line -> Bukkit.getPlayer(profile.getUuid()).sendMessage(CC.translate(line)));
     }

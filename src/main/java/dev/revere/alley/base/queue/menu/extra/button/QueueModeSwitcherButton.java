@@ -25,7 +25,7 @@ public class QueueModeSwitcherButton extends Button {
     @Override
     public ItemStack getButtonItem(Player player) {
         return new ItemBuilder(Material.ARROW)
-                .name("&b&l" + this.kitCategory.getName() + " Modes")
+                .name("&6&l" + this.kitCategory.getName() + " Modes")
                 .lore(
                         ("&f" + this.kitCategory.getDescription()),
                         "",

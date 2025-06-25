@@ -23,7 +23,7 @@ public class LevelAdminSetDisplayNameCommand extends BaseCommand {
         String[] args = command.getArgs();
 
         if (args.length < 2) {
-            sender.sendMessage(CC.translate("&6Usage: &e/leveladmin setdisplayname &b<levelName> <displayName>"));
+            sender.sendMessage(CC.translate("&6Usage: &e/leveladmin setdisplayname &6<levelName> <displayName>"));
             return;
         }
 
@@ -38,6 +38,6 @@ public class LevelAdminSetDisplayNameCommand extends BaseCommand {
         String displayName = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
         level.setDisplayName(displayName);
         levelService.saveLevel(level);
-        sender.sendMessage(CC.translate("&aDisplay name for level &b" + levelName + " &aset to &b" + displayName + "&a!"));
+        sender.sendMessage(CC.translate("&aDisplay name for level &6" + levelName + " &aset to &6" + displayName + "&a!"));
     }
 }

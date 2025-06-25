@@ -26,7 +26,7 @@ public class ResetStatsCommand extends BaseCommand {
         String[] args = command.getArgs();
 
         if (args.length < 1) {
-            player.sendMessage(CC.translate("&6Usage: &e/resetstats &b<player>"));
+            player.sendMessage(CC.translate("&6Usage: &e/resetstats &6<player>"));
             return;
         }
 

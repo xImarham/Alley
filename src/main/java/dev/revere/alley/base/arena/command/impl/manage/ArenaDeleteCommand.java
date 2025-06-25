@@ -35,7 +35,7 @@ public class ArenaDeleteCommand extends BaseCommand {
         String[] args = command.getArgs();
 
         if (args.length < 1) {
-            player.sendMessage(CC.translate("&6Usage: &e/arena delete &b<arenaName>"));
+            player.sendMessage(CC.translate("&6Usage: &e/arena delete &6<arenaName>"));
             return;
         }
 
@@ -45,7 +45,7 @@ public class ArenaDeleteCommand extends BaseCommand {
             return;
         }
 
-        player.sendMessage(CC.translate("&aArena &b" + arenaName + "&a has been deleted!"));
+        player.sendMessage(CC.translate("&aArena &6" + arenaName + "&a has been deleted!"));
         this.plugin.getArenaService().deleteArena(this.plugin.getArenaService().getArenaByName(arenaName));
     }
 }

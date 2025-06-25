@@ -19,7 +19,7 @@ public class HeartAttackCommand extends BaseCommand {
         String[] args = command.getArgs();
 
         if (args.length < 1) {
-            player.sendMessage(CC.translate("&6Usage: &e/heartattack &b<player>"));
+            player.sendMessage(CC.translate("&6Usage: &e/heartattack &6<player>"));
             return;
         }
 
@@ -31,6 +31,6 @@ public class HeartAttackCommand extends BaseCommand {
         }
 
         target.setHealth(0.5D);
-        player.sendMessage(CC.translate("&fYou've given &b" + target.getName() + " &fa heart attack."));
+        player.sendMessage(CC.translate("&fYou've given &6" + target.getName() + " &fa heart attack."));
     }
 }

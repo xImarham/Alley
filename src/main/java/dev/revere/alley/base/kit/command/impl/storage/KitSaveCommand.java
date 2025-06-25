@@ -22,7 +22,7 @@ public class KitSaveCommand extends BaseCommand {
         String[] args = command.getArgs();
 
         if (command.length() < 1) {
-            player.sendMessage(CC.translate("&6Usage: &e/kit save &b<kitName>"));
+            player.sendMessage(CC.translate("&6Usage: &e/kit save &6<kitName>"));
             return;
         }
 

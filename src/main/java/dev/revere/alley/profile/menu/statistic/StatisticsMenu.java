@@ -30,7 +30,7 @@ public class StatisticsMenu extends Menu {
 
     @Override
     public String getTitle(Player player) {
-        return this.target == player ? "&b&lYour Stats" : "&b&l" + this.target.getName() + "'s Stats";
+        return this.target == player ? "&6&lYour Stats" : "&6&l" + this.target.getName() + "'s Stats";
     }
 
     @Override
@@ -75,44 +75,44 @@ public class StatisticsMenu extends Menu {
             ProfileFFAData profileFFAData = this.profile.getProfileData().getFfaData().get(this.kit.getName());
 
             List<String> lore = new ArrayList<>(Arrays.asList(
-                    "&b&lUnranked &6⭐" + profileUnrankedKitData.getDivision().getName() + " " + profileUnrankedKitData.getTier().getName(),
-                    "&f● &bWins: &f" + profileUnrankedKitData.getWins(),
-                    //"&f● &bLosses: &f" + profileUnrankedKitData.getLosses(),
+                    "&6&lUnranked &6⭐" + profileUnrankedKitData.getDivision().getName() + " " + profileUnrankedKitData.getTier().getName(),
+                    "&f● &6Wins: &f" + profileUnrankedKitData.getWins(),
+                    //"&f● &6Losses: &f" + profileUnrankedKitData.getLosses(),
                     "",
-                    "&f● &bWin Streak: " + "&fN/A",
-                    "    &bBest: " + "&fN/A" + " &7(N/A Daily)"
+                    "&f● &6Win Streak: " + "&fN/A",
+                    "    &6Best: " + "&fN/A" + " &7(N/A Daily)"
             ));
 
             if (this.profile.hasParticipatedInRanked()) {
                 lore.addAll(Arrays.asList(
                         "",
-                        "&b&lRanked",
-                        "&f● &bWins: &f" + profileRankedKitData.getWins(),
-                        //"&f● &bLosses: &f" + profileRankedKitData.getLosses(),
-                        "&f● &bElo: &f" + profileRankedKitData.getElo()
+                        "&6&lRanked",
+                        "&f● &6Wins: &f" + profileRankedKitData.getWins(),
+                        //"&f● &6Losses: &f" + profileRankedKitData.getLosses(),
+                        "&f● &6Elo: &f" + profileRankedKitData.getElo()
                 ));
             }
 
             if (this.profile.hasParticipatedInTournament()) {
                 lore.addAll(Arrays.asList(
                         "",
-                        "&b&lTournament",
-                        "&f● &bWins: &f" + "N/A",
-                        "&f● &bLosses: &f" + "N/A"
+                        "&6&lTournament",
+                        "&f● &6Wins: &f" + "N/A",
+                        "&f● &6Losses: &f" + "N/A"
                 ));
             }
 
             if (this.kit.isFfaEnabled() && this.profile.hasParticipatedInFFA()) {
                 lore.addAll(Arrays.asList(
                         "",
-                        "&b&lFFA",
-                        "&f● &bKills: &f" + profileFFAData.getKills() + " &7(" + profileFFAData.getKillDeathRatio() + ")",
-                        "&f● &bDeaths: &f" + profileFFAData.getDeaths()
+                        "&6&lFFA",
+                        "&f● &6Kills: &f" + profileFFAData.getKills() + " &7(" + profileFFAData.getKillDeathRatio() + ")",
+                        "&f● &6Deaths: &f" + profileFFAData.getDeaths()
                 ));
             }
 
             return new ItemBuilder(this.kit.getIcon())
-                    .name("&b&l" + this.kit.getDisplayName())
+                    .name("&6&l" + this.kit.getDisplayName())
                     .durability(this.kit.getDurability())
                     .lore(lore)
                     .hideMeta()

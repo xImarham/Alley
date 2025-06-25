@@ -192,7 +192,7 @@ public class MatchRegularImpl extends AbstractMatch {
     private void sendVictory(Player player) {
         this.plugin.getReflectionRepository().getReflectionService(TitleReflectionService.class).sendTitle(
                 player,
-                "&bVictory!",
+                "&6Victory!",
                 "&fYou have won the match!",
                 2, 20, 2
         );
@@ -332,17 +332,17 @@ public class MatchRegularImpl extends AbstractMatch {
         
         String progressLine;
         if (wins == currentTier.getRequiredWins()) {
-            progressLine = " &b&l● &fUNLOCKED &b" + currentDivision.getName() + " " + currentTier.getName() + "&f!";
+            progressLine = " &6&l● &fUNLOCKED &6" + currentDivision.getName() + " " + currentTier.getName() + "&f!";
         } else {
-            progressLine = " &b&l● &fUnlock &b" + nextRank + " &fwith " + requiredWinsToUnlock + " more " + winOrWins + "!";
+            progressLine = " &6&l● &fUnlock &6" + nextRank + " &fwith " + requiredWinsToUnlock + " more " + winOrWins + "!";
         }
 
         Arrays.asList(
-                "&b&lProgress",
+                "&6&lProgress",
                 progressLine,
                 "  &7(" + progressBar + "&7) " + progressPercent,
-                " &b&l● &fDaily Streak: &b" + "N/A" + " &f(Best: " + "N/A" + ")",
-                " &b&l● &fWin Streak: &b" + "N/A" + " &f(Best: " + "N/A" + ")",
+                " &6&l● &fDaily Streak: &6" + "N/A" + " &f(Best: " + "N/A" + ")",
+                " &6&l● &fWin Streak: &6" + "N/A" + " &f(Best: " + "N/A" + ")",
                 ""
         ).forEach(line -> winner.sendMessage(CC.translate(line)));
     }

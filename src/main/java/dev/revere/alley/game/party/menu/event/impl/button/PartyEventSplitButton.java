@@ -36,7 +36,7 @@ public class PartyEventSplitButton extends Button {
 
     @Override
     public ItemStack getButtonItem(Player player) {
-        return new ItemBuilder(this.kit.getIcon()).name("&b&l" + this.kit.getName()).durability(this.kit.getDurability()).hideMeta()
+        return new ItemBuilder(this.kit.getIcon()).name("&6&l" + this.kit.getName()).durability(this.kit.getDurability()).hideMeta()
                 .lore(
                         "&7" + this.kit.getDescription(),
                         "",

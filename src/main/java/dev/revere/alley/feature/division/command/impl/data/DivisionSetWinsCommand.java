@@ -41,7 +41,7 @@ public class DivisionSetWinsCommand extends BaseCommand {
         String[] args = command.getArgs();
 
         if (args.length < 3) {
-            player.sendMessage(CC.translate("&6Usage: &e/division setwins &b<name> <tier> <wins>"));
+            player.sendMessage(CC.translate("&6Usage: &e/division setwins &6<name> <tier> <wins>"));
             return;
         }
 

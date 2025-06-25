@@ -20,12 +20,12 @@ public class DivisionListCommand extends BaseCommand {
         DivisionService divisionService = this.plugin.getDivisionService();
 
         player.sendMessage("");
-        player.sendMessage(CC.translate("     &b&lDivision List &f(" + divisionService.getDivisions().size() + "&f)"));
+        player.sendMessage(CC.translate("     &6&lDivision List &f(" + divisionService.getDivisions().size() + "&f)"));
         if (divisionService.getDivisions().isEmpty()) {
             player.sendMessage(CC.translate("      &f● &cNo Divisions available."));
         }
         divisionService.getDivisions()
-                .forEach(division -> player.sendMessage(CC.translate("      &f● &b" + division.getDisplayName() + " &f(" + division.getTiers().get(0).getRequiredWins() + " wins)")));
+                .forEach(division -> player.sendMessage(CC.translate("      &f● &6" + division.getDisplayName() + " &f(" + division.getTiers().get(0).getRequiredWins() + " wins)")));
         player.sendMessage("");
 
     }

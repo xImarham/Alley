@@ -22,7 +22,7 @@ public class AcceptCommand extends BaseCommand {
         String[] args = command.getArgs();
 
         if (args.length < 1) {
-            player.sendMessage(CC.translate("&6Usage: &e/accept &b<player>"));
+            player.sendMessage(CC.translate("&6Usage: &e/accept &6<player>"));
             return;
         }
 

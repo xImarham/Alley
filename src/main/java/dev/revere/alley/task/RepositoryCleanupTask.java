@@ -92,8 +92,8 @@ public class RepositoryCleanupTask extends BukkitRunnable {
      */
     private void notifyPartyRequestIndividuals(List<PartyRequest> partyRequests) {
         partyRequests.forEach(partyRequest -> {
-            partyRequest.getSender().sendMessage(CC.translate("&cYour party request to &b" + partyRequest.getSender().getName() + " &chas expired."));
-            partyRequest.getTarget().sendMessage(CC.translate("&cThe party request from &b" + partyRequest.getTarget().getName() + " &chas expired."));
+            partyRequest.getSender().sendMessage(CC.translate("&cYour party request to &6" + partyRequest.getSender().getName() + " &chas expired."));
+            partyRequest.getTarget().sendMessage(CC.translate("&cThe party request from &6" + partyRequest.getTarget().getName() + " &chas expired."));
         });
     }
 }

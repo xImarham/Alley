@@ -28,7 +28,7 @@ public class DuelKitSelectorMenu extends Menu {
 
     @Override
     public String getTitle(Player player) {
-        return "&b&lDuel " + this.targetPlayer.getName();
+        return "&6&lDuel " + this.targetPlayer.getName();
     }
 
     @Override
@@ -51,7 +51,7 @@ public class DuelKitSelectorMenu extends Menu {
 
         @Override
         public ItemStack getButtonItem(Player player) {
-            return new ItemBuilder(this.kit.getIcon()).name(this.kit.getDisplayName() == null ? "&b&l" + this.kit.getName() : this.kit.getDisplayName()).durability(this.kit.getDurability()).hideMeta()
+            return new ItemBuilder(this.kit.getIcon()).name(this.kit.getDisplayName() == null ? "&6&l" + this.kit.getName() : this.kit.getDisplayName()).durability(this.kit.getDurability()).hideMeta()
                     .lore(
                             "&7" + this.kit.getDescription(),
                             "",

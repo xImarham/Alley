@@ -18,7 +18,7 @@ import java.util.Map;
 public class DuelOtherPartyMenu extends PaginatedMenu {
     @Override
     public String getPrePaginatedTitle(Player player) {
-        return "&b&lDuel other parties";
+        return "&6&lDuel other parties";
     }
 
     @Override

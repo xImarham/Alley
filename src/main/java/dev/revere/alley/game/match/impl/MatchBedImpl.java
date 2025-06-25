@@ -162,7 +162,7 @@ public class MatchBedImpl extends MatchRegularImpl {
 
             subMessage = color + breaker.getName() + " &7has destroyed the bed of " + opponentTeamName + "&7!";
         } else {
-            subMessage = " &c" + breaker.getName() + " &7has destroyed the bed of &b" + opponent.getPlayer().getUsername() + "&7!";
+            subMessage = " &c" + breaker.getName() + " &7has destroyed the bed of &6" + opponent.getPlayer().getUsername() + "&7!";
         }
         return subMessage;
     }

@@ -29,7 +29,7 @@ public class EmojiCommand extends BaseCommand {
 
         Arrays.asList(
                 "",
-                "&b&lEmoji Help",
+                "&6&lEmoji Help",
                 " &7To use an emoji, simply type the identifier in chat.",
                 " &7For example, if you want to use the &f" + EnumEmojiType.HEART.getFormat() + " &7emoji, type &f" + EnumEmojiType.HEART.getIdentifier() + "&7 in chat.",
                 ""

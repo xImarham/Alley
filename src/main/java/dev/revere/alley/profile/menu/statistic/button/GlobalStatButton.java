@@ -26,21 +26,21 @@ public class GlobalStatButton extends Button {
     public ItemStack getButtonItem(Player player) {
         Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
         return new ItemBuilder(Material.NETHER_STAR)
-                .name("&b&lGlobal")
+                .name("&6&lGlobal")
                 .lore(
                         "",
-                        "&b&lUnranked",
-                        "&f● &bWins: &f" + profile.getProfileData().getUnrankedWins(),
-                        "&f● &bLosses: &f" + profile.getProfileData().getUnrankedLosses(),
+                        "&6&lUnranked",
+                        "&f● &6Wins: &f" + profile.getProfileData().getUnrankedWins(),
+                        "&f● &6Losses: &f" + profile.getProfileData().getUnrankedLosses(),
                         "",
-                        "&b&lRanked",
-                        "&f● &bWins: &f" + profile.getProfileData().getRankedWins(),
-                        "&f● &bLosses: &f" + profile.getProfileData().getRankedLosses(),
-                        "&f● &bElo: &f" + profile.getProfileData().getElo(),
+                        "&6&lRanked",
+                        "&f● &6Wins: &f" + profile.getProfileData().getRankedWins(),
+                        "&f● &6Losses: &f" + profile.getProfileData().getRankedLosses(),
+                        "&f● &6Elo: &f" + profile.getProfileData().getElo(),
                         "",
-                        "&b&lFFA",
-                        "&f● &bKills: &f" + profile.getProfileData().getFfaData().values().stream().mapToInt(ProfileFFAData::getKills).sum(),
-                        "&f● &bDeaths: &f" + profile.getProfileData().getFfaData().values().stream().mapToInt(ProfileFFAData::getDeaths).sum(),
+                        "&6&lFFA",
+                        "&f● &6Kills: &f" + profile.getProfileData().getFfaData().values().stream().mapToInt(ProfileFFAData::getKills).sum(),
+                        "&f● &6Deaths: &f" + profile.getProfileData().getFfaData().values().stream().mapToInt(ProfileFFAData::getDeaths).sum(),
                         ""
 
                 )

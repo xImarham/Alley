@@ -56,7 +56,7 @@ public class DuelArenaSelectorMenu extends Menu {
 
         @Override
         public ItemStack getButtonItem(Player player) {
-            return new ItemBuilder(Material.PAPER).name("&b" + arena.getName()).durability(0).hideMeta()
+            return new ItemBuilder(Material.PAPER).name("&6" + arena.getName()).durability(0).hideMeta()
                     .lore(
                             "",
                             "&7Click to send a duel request to " + targetPlayer.getName() + " in the " + arena.getName() + " arena.",

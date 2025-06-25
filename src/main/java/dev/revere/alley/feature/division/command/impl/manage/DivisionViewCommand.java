@@ -23,7 +23,7 @@ public class DivisionViewCommand extends BaseCommand {
         String[] args = command.getArgs();
 
         if (args.length < 1) {
-            player.sendMessage(CC.translate("&6Usage: &e/division view &b<name>"));
+            player.sendMessage(CC.translate("&6Usage: &e/division view &6<name>"));
             return;
         }
 
@@ -36,11 +36,11 @@ public class DivisionViewCommand extends BaseCommand {
 
         Arrays.asList(
                 "",
-                "&b&lDivision &f(" + division.getDisplayName() + ")",
-                " &f● &bName: &f" + division.getDisplayName(),
-                " &f● &bTiers: &f" + division.getTiers().size(),
-                " &f● &bDescription: &f" + division.getDescription(),
-                " &f● &bRequired Wins: &f" + division.getTiers().get(0).getRequiredWins(),
+                "&6&lDivision &f(" + division.getDisplayName() + ")",
+                " &f● &6Name: &f" + division.getDisplayName(),
+                " &f● &6Tiers: &f" + division.getTiers().size(),
+                " &f● &6Description: &f" + division.getDescription(),
+                " &f● &6Required Wins: &f" + division.getTiers().get(0).getRequiredWins(),
                 ""
         ).forEach(line -> player.sendMessage(CC.translate(line)));
     }

@@ -22,7 +22,7 @@ public class FFAMenu extends Menu {
 
     @Override
     public String getTitle(Player player) {
-        return "&b&lSelect a FFA Queue";
+        return "&6&lSelect a FFA Queue";
     }
 
     @Override

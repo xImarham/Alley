@@ -26,7 +26,7 @@ public class LayoutButton extends Button {
     @Override
     public ItemStack getButtonItem(Player player) {
         return new ItemBuilder(this.kit.getIcon())
-                .name("&b&l" + this.kit.getName())
+                .name("&6&l" + this.kit.getName())
                 .durability(this.kit.getDurability())
                 .lore(
                         "&7Shift-Click:",

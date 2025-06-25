@@ -58,13 +58,13 @@ public class RankedButton extends Button {
         }
 
         Collections.addAll(lore,
-                "&fPlaying: &b" + this.queue.getQueueFightCount(),
-                "&fQueueing: &b" + this.queue.getProfiles().size(),
+                "&fPlaying: &6" + this.queue.getQueueFightCount(),
+                "&fQueueing: &6" + this.queue.getProfiles().size(),
                 "",
-                "&f&lYour ELO: &b" + this.plugin.getProfileService().getProfile(player.getUniqueId()).getProfileData().getRankedKitData().get(kit.getName()).getElo(),
-                " &f1. &bNULL &f- &bN/A",
-                " &f2. &bNULL &f- &bN/A",
-                " &f3. &bNULL &f- &bN/A",
+                "&f&lYour ELO: &6" + this.plugin.getProfileService().getProfile(player.getUniqueId()).getProfileData().getRankedKitData().get(kit.getName()).getElo(),
+                " &f1. &6NULL &f- &6N/A",
+                " &f2. &6NULL &f- &6N/A",
+                " &f3. &6NULL &f- &6N/A",
                 "",
                 "&aClick to play!"
         );
@@ -85,7 +85,7 @@ public class RankedButton extends Button {
                     "",
                     "&c&lRANKED BAN",
                     "&cYou are currently banned from ranked queues.",
-                    "&7You may appeal at &b&ndiscord.gg/alley-practice&7.",
+                    "&7You may appeal at &6&ndiscord.gg/alley-practice&7.",
                     ""
             ).forEach(line -> player.sendMessage(CC.translate(line)));
             return;

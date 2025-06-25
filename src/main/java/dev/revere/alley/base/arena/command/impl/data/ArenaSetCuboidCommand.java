@@ -37,7 +37,7 @@ public class ArenaSetCuboidCommand extends BaseCommand {
         String[] args = command.getArgs();
 
         if (args.length < 1) {
-            player.sendMessage(CC.translate("&6Usage: &e/arena setcuboid &b<arenaName>"));
+            player.sendMessage(CC.translate("&6Usage: &e/arena setcuboid &6<arenaName>"));
             return;
         }
 
@@ -60,7 +60,7 @@ public class ArenaSetCuboidCommand extends BaseCommand {
 
         this.plugin.getArenaService().getArenaByName(arenaName).setMinimum(arenaSelection.getMinimum());
         this.plugin.getArenaService().getArenaByName(arenaName).setMaximum(arenaSelection.getMaximum());
-        player.sendMessage(CC.translate("&aCuboid has been set for arena &b" + arenaName + "&a!"));
+        player.sendMessage(CC.translate("&aCuboid has been set for arena &6" + arenaName + "&a!"));
 
         this.plugin.getArenaService().saveArena(this.plugin.getArenaService().getArenaByName(arenaName));
     }

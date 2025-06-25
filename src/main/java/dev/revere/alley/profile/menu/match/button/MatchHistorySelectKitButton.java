@@ -34,9 +34,9 @@ public class MatchHistorySelectKitButton extends Button {
                 .count();
 
         return new ItemBuilder(this.kit.getIcon())
-                .name("&b&l" + this.kit.getName())
+                .name("&6&l" + this.kit.getName())
                 .lore(
-                        "&fMatches stored for this kit: &b" + count,
+                        "&fMatches stored for this kit: &6" + count,
                         "",
                         "&aClick to view!"
                 )

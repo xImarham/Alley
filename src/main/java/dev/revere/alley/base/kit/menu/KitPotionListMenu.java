@@ -28,7 +28,7 @@ public class KitPotionListMenu extends PaginatedMenu {
 
     @Override
     public String getPrePaginatedTitle(Player player) {
-        return "&b&lPotions for " + this.kit.getDisplayName();
+        return "&6&lPotions for " + this.kit.getDisplayName();
     }
 
     @Override
@@ -62,10 +62,10 @@ public class KitPotionListMenu extends PaginatedMenu {
         @Override
         public ItemStack getButtonItem(Player player) {
             return new ItemBuilder(Material.POTION)
-                    .name("&b" + this.potionEffect.getType().getName())
+                    .name("&6" + this.potionEffect.getType().getName())
                     .lore(
-                            "&7Duration: &b" + this.potionEffect.getDuration() / 20 + " seconds",
-                            "&7Amplifier: &b" + this.potionEffect.getAmplifier(),
+                            "&7Duration: &6" + this.potionEffect.getDuration() / 20 + " seconds",
+                            "&7Amplifier: &6" + this.potionEffect.getAmplifier(),
                             "",
                             "&7Click to remove this potion effect."
                     )
@@ -79,7 +79,7 @@ public class KitPotionListMenu extends PaginatedMenu {
 
             this.kit.getPotionEffects().remove(this.potionEffect);
             Alley.getInstance().getKitService().saveKit(this.kit);
-            player.sendMessage(CC.translate("&cYou have removed the potion effect: &b" + this.potionEffect.getType().getName() + "&c from the kit: &b" + this.kit.getDisplayName() + "&c."));
+            player.sendMessage(CC.translate("&cYou have removed the potion effect: &6" + this.potionEffect.getType().getName() + "&c from the kit: &6" + this.kit.getDisplayName() + "&c."));
             new KitPotionListMenu(this.kit).openMenu(player);
         }
     }

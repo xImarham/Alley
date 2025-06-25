@@ -23,7 +23,7 @@ public class RankedUnbanCommand extends BaseCommand {
         String[] args = command.getArgs();
 
         if (args.length < 1) {
-            player.sendMessage(CC.translate("&6Usage: &e/ranked unban &b<player>"));
+            player.sendMessage(CC.translate("&6Usage: &e/ranked unban &6<player>"));
             return;
         }
 

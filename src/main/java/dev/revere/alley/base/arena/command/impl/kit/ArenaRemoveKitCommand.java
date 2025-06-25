@@ -35,7 +35,7 @@ public class ArenaRemoveKitCommand extends BaseCommand {
         String[] args = command.getArgs();
 
         if (args.length < 2) {
-            player.sendMessage(CC.translate("&6Usage: &e/arena removekit &b<arenaName> <kitName>"));
+            player.sendMessage(CC.translate("&6Usage: &e/arena removekit &6<arenaName> <kitName>"));
             return;
         }
 
@@ -57,7 +57,7 @@ public class ArenaRemoveKitCommand extends BaseCommand {
             return;
         }
 
-        player.sendMessage(CC.translate("&aKit &b" + kitName + "&a has been removed from arena &b" + arenaName + "&a!"));
+        player.sendMessage(CC.translate("&aKit &6" + kitName + "&a has been removed from arena &6" + arenaName + "&a!"));
         this.plugin.getArenaService().getArenaByName(arenaName).getKits().remove(kitName);
         this.plugin.getArenaService().saveArena(this.plugin.getArenaService().getArenaByName(arenaName));
     }

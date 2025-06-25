@@ -28,7 +28,7 @@ public class BotButton extends Button {
                 .lore(
                         "&7Click to fight a bot!",
                         "",
-                        "&7Kit: &b" + kit.getName(),
+                        "&7Kit: &6" + kit.getName(),
                         "",
                         "&7Click to start the fight!"
                 )

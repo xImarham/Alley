@@ -39,7 +39,7 @@ public class LayoutEditorMenu extends Menu {
 
     @Override
     public String getTitle(Player player) {
-        return "&b&lEditing " + this.layout.getDisplayName();
+        return "&6&lEditing " + this.layout.getDisplayName();
     }
 
     @Override

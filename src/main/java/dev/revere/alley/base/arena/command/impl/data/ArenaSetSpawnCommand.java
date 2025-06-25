@@ -36,7 +36,7 @@ public class ArenaSetSpawnCommand extends BaseCommand {
         String[] args = command.getArgs();
 
         if (args.length < 2) {
-            player.sendMessage(CC.translate("&6Usage: &e/arena setspawn &b<arenaName> <blue/red/ffa>"));
+            player.sendMessage(CC.translate("&6Usage: &e/arena setspawn &6<arenaName> <blue/red/ffa>"));
             return;
         }
 
@@ -60,7 +60,7 @@ public class ArenaSetSpawnCommand extends BaseCommand {
                     return;
                 }
                 this.plugin.getArenaService().getArenaByName(arenaName).setPos1(player.getLocation());
-                player.sendMessage(CC.translate("&aBlue Spawn Position has been set for arena &b" + arenaName + "&a!"));
+                player.sendMessage(CC.translate("&aBlue Spawn Position has been set for arena &6" + arenaName + "&a!"));
                 break;
             case "ffa":
                 if (this.plugin.getArenaService().getArenaByName(arenaName).getType() != EnumArenaType.FFA) {
@@ -68,7 +68,7 @@ public class ArenaSetSpawnCommand extends BaseCommand {
                     return;
                 }
                 this.plugin.getArenaService().getArenaByName(arenaName).setPos1(player.getLocation());
-                player.sendMessage(CC.translate("&aSpawn Position has been set for arena &b" + arenaName + "&a!"));
+                player.sendMessage(CC.translate("&aSpawn Position has been set for arena &6" + arenaName + "&a!"));
                 break;
             default:
                 if (this.plugin.getArenaService().getArenaByName(arenaName).getType() == EnumArenaType.FFA) {
@@ -76,7 +76,7 @@ public class ArenaSetSpawnCommand extends BaseCommand {
                     return;
                 }
                 this.plugin.getArenaService().getArenaByName(arenaName).setPos2(player.getLocation());
-                player.sendMessage(CC.translate("&aRed Spawn Position has been set for arena &b" + arenaName + "&a!"));
+                player.sendMessage(CC.translate("&aRed Spawn Position has been set for arena &6" + arenaName + "&a!"));
                 break;
         }
 

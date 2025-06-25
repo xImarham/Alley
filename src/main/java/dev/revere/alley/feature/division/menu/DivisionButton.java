@@ -25,14 +25,14 @@ public class DivisionButton extends Button {
     public ItemStack getButtonItem(Player player) {
         return new ItemBuilder(this.division.getIcon())
                 .durability(this.division.getDurability())
-                .name("&b&l" + this.division.getDisplayName() + " Division")
+                .name("&6&l" + this.division.getDisplayName() + " Division")
                 .lore(
-                        "&f&l● &bTiers: &f" + this.division.getTiers().size(),
+                        "&f&l● &6Tiers: &f" + this.division.getTiers().size(),
                         "  &7▶ (" + this.division.getTiers().get(0).getRequiredWins() + " - " + this.division.getTotalWins() + " Wins)",
                         "",
                         " &fFor each kit, you will have",
                         " &fa division based on your",
-                        " &bUnranked &fwins.",
+                        " &6Unranked &fwins.",
                         "",
                         "&aClick to see your titles."
                 )

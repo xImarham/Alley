@@ -23,7 +23,7 @@ public class KitSetupFFACommand extends BaseCommand {
         String[] args = command.getArgs();
 
         if (args.length < 4) {
-            player.sendMessage(CC.translate("&6Usage: &e/kit setfupfa &b<kitName> <arenaName> <maxPlayers> <menu-slot>"));
+            player.sendMessage(CC.translate("&6Usage: &e/kit setfupfa &6<kitName> <arenaName> <maxPlayers> <menu-slot>"));
             return;
         }
 
@@ -77,6 +77,6 @@ public class KitSetupFFACommand extends BaseCommand {
         this.plugin.getFfaService().createFFAMatch(arena, kit, maxPlayers);
         kitService.saveKit(kit);
         this.plugin.getProfileService().loadProfiles();
-        player.sendMessage(CC.translate("&aFFA match has been created with the kit &b" + kit.getName() + "&a!"));
+        player.sendMessage(CC.translate("&aFFA match has been created with the kit &6" + kit.getName() + "&a!"));
     }
 }

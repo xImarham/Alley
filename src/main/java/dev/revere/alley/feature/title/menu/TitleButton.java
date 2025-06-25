@@ -33,7 +33,7 @@ public class TitleButton extends Button {
 
         if (!this.profile.getProfileData().getUnlockedTitles().contains(this.title.getKit().getName())) {
             return new ItemBuilder(Material.STAINED_GLASS_PANE)
-                    .name("&b&l" + this.title.getKit().getName())
+                    .name("&6&l" + this.title.getKit().getName())
                     .lore(
                             this.progress()
                     )
@@ -43,7 +43,7 @@ public class TitleButton extends Button {
         }
 
         return new ItemBuilder(this.title.getKit().getIcon())
-                .name("&b&l" + this.title.getKit().getName())
+                .name("&6&l" + this.title.getKit().getName())
                 .lore(
                         "",
                         "&a&lUNLOCKED",
@@ -70,7 +70,7 @@ public class TitleButton extends Button {
         }
 
         this.profile.getProfileData().setSelectedTitle(this.title.getKit().getName());
-        player.sendMessage(CC.translate("&aYou have selected the &b" + this.title.getKit().getName() + " &atitle."));
+        player.sendMessage(CC.translate("&aYou have selected the &6" + this.title.getKit().getName() + " &atitle."));
     }
 
     /**
@@ -107,7 +107,7 @@ public class TitleButton extends Button {
                 "",
                 "&c&lLOCKED",
                 "",
-                "&fUnlock &b" + nextRank + " &fwith " + requiredWinsToUnlock + " more " + winOrWins + ".",
+                "&fUnlock &6" + nextRank + " &fwith " + requiredWinsToUnlock + " more " + winOrWins + ".",
                 "&f" + progressBar + " &7" + progressPercent,
                 "",
                 "&fRequires &c&l" + this.title.getRequiredDivision().getName().toUpperCase() + " &fdivision."

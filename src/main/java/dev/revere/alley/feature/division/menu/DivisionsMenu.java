@@ -17,7 +17,7 @@ import java.util.Map;
 public class DivisionsMenu extends Menu {
     @Override
     public String getTitle(Player player) {
-        return "&b&lDivisions";
+        return "&6&lDivisions";
     }
 
     @Override

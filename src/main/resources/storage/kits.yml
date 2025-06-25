@@ -3,7 +3,7 @@ kits:
     display-name: 'No Debuff'
     description: ''
     disclaimer: '&7NoDebuff kit disclaimer.'
-    menu-title: "&b&lNo Debuff"
+    menu-title: "&6&lNo Debuff"
     enabled: true
     editable: true
     category: NORMAL
@@ -50,7 +50,7 @@ kits:
     display-name: 'Boxing'
     description: 1st to 100 hits!
     disclaimer: '&7Boxing kit disclaimer.'
-    menu-title: "&b&lBoxing"
+    menu-title: "&6&lBoxing"
     enabled: true
     editable: true
     category: NORMAL
@@ -98,7 +98,7 @@ kits:
     display-name: 'Battle Rush'
     description: ''
     disclaimer: '&7BattleRush kit disclaimer.'
-    menu-title: "&b&lBattle Rush"
+    menu-title: "&6&lBattle Rush"
     enabled: true
     editable: true
     category: NORMAL
@@ -145,7 +145,7 @@ kits:
     display-name: 'Stick Fight'
     description: ''
     disclaimer: '&7StickFight kit disclaimer.'
-    menu-title: "&b&lStick Fight"
+    menu-title: "&6&lStick Fight"
     enabled: true
     editable: true
     category: NORMAL
@@ -192,7 +192,7 @@ kits:
     display-name: 'Pearl Fight'
     description: ''
     disclaimer: '&7PearlFight kit disclaimer.'
-    menu-title: "&b&lPearl Fight"
+    menu-title: "&6&lPearl Fight"
     enabled: true
     editable: true
     category: NORMAL
@@ -236,10 +236,10 @@ kits:
       Explosive: false
     potion-effects: []
   Spleef:
-    display-name: '&bSpleef'
+    display-name: '&6Spleef'
     description: '&7Spleef kit description.'
     disclaimer: '&7Spleef kit disclaimer.'
-    menu-title: "&b&lSpleef"
+    menu-title: "&6&lSpleef"
     enabled: true
     editable: true
     category: EXTRA
@@ -286,7 +286,7 @@ kits:
     display-name: 'Classic'
     description: ''
     disclaimer: '&7Classic kit disclaimer.'
-    menu-title: "&b&lClassic"
+    menu-title: "&6&lClassic"
     enabled: true
     editable: true
     category: NORMAL
@@ -333,7 +333,7 @@ kits:
     display-name: 'Top Fight'
     description: ''
     disclaimer: '&7TopFight kit disclaimer.'
-    menu-title: "&b&lTop Fight"
+    menu-title: "&6&lTop Fight"
     enabled: true
     editable: true
     category: NORMAL
@@ -380,7 +380,7 @@ kits:
     display-name: 'Bed Fight'
     description: ''
     disclaimer: '&7bedfight kit disclaimer.'
-    menu-title: "&b&lBed Fight"
+    menu-title: "&6&lBed Fight"
     enabled: true
     editable: true
     category: NORMAL
@@ -427,7 +427,7 @@ kits:
     display-name: 'Gapple'
     description: ''
     disclaimer: '&7Gapple kit disclaimer.'
-    menu-title: "&b&lGapple"
+    menu-title: "&6&lGapple"
     enabled: true
     editable: true
     category: NORMAL
@@ -474,7 +474,7 @@ kits:
     display-name: 'Sumo'
     description: ''
     disclaimer: '&7sumo kit disclaimer.'
-    menu-title: "&b&lSumo"
+    menu-title: "&6&lSumo"
     enabled: true
     editable: false
     category: NORMAL
@@ -521,7 +521,7 @@ kits:
     display-name: 'Fireball Fight'
     description: ''
     disclaimer: '&7FireballFight kit disclaimer.'
-    menu-title: "&b&lFireball Fight &c&lNEW!"
+    menu-title: "&6&lFireball Fight &c&lNEW!"
     enabled: true
     editable: true
     category: NORMAL
@@ -568,7 +568,7 @@ kits:
     display-name: 'Base Raiding &c&lNEW!'
     description: '&7Trapping and Raiding!'
     disclaimer: '&7BaseRaiding kit disclaimer.'
-    menu-title: "&b&lBase Raiding &c&lNEW!"
+    menu-title: "&6&lBase Raiding &c&lNEW!"
     enabled: true
     editable: true
     category: NORMAL
@@ -615,7 +615,7 @@ kits:
       raider: BaseRaider
       trapper: BaseTrapper
   BaseRaider:
-    display-name: '&bBaseRaider'
+    display-name: '&6BaseRaider'
     description: '&7BaseRaider kit description.'
     disclaimer: '&7BaseRaider kit disclaimer.'
     menu-title: "&7"
@@ -660,7 +660,7 @@ kits:
       Explosive: false
     potion-effects: []
   BaseTrapper:
-    display-name: '&bBaseTrapper'
+    display-name: '&6BaseTrapper'
     description: '&7BaseTrapper kit description.'
     disclaimer: '&7BaseTrapper kit disclaimer.'
     menu-title: "&7"
@@ -708,7 +708,7 @@ kits:
     display-name: 'Build UHC'
     description: ''
     disclaimer: '&7BuildUhc kit disclaimer.'
-    menu-title: "&b&lBuild UHC"
+    menu-title: "&6&lBuild UHC"
     enabled: true
     editable: true
     category: NORMAL

@@ -40,21 +40,21 @@ arena:
   # When creating an arena, the following display-name for each
   # arena type will be set. {arena} represents the arena name.
   default-display-name:
-    shared: "&b{arena-name}"
-    standalone: "&b{arena-name}"
-    ffa: "&b{arena-name}"
+    shared: "&6{arena-name}"
+    standalone: "&6{arena-name}"
+    ffa: "&6{arena-name}"
 
 kit:
   # The default name and description that's going to be set when creating a kit.
   default-values:
-    display-name: "&b{kit-name}"
+    display-name: "&6{kit-name}"
     description: "&7{kit-name} kit description."
     disclaimer: "&7{kit-name} kit disclaimer."
     menu-title: "&7{kit-name} menu title."
 
 profanity-filter:
   add-default-words: false # Alley has a built-in list of rude and toxic words, set this to true if you want them to apply (The list below will be used in addition to the built-in list).
-  staff-notification-format: "&3[S] &f(&bAlley: &fProfanity Detected) &c{player}&f: &7{message}"
+  staff-notification-format: "&6[S] &f(&6Alley: &fProfanity Detected) &c{player}&f: &7{message}"
   filtered-words:
     - "shit"
     - "fuck"

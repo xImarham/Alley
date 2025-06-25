@@ -54,11 +54,11 @@ public class LeaderboardKitButton extends Button {
                                             rankNumber = "&8&l✫3";
                                             break;
                                         default:
-                                            rankNumber = "&b" + currentRank + ".";
+                                            rankNumber = "&6" + currentRank + ".";
                                             break;
                                     }
 
-                                    return rankNumber + " &f" + data.getName() + " &b- " + data.getElo();
+                                    return rankNumber + " &f" + data.getName() + " &6- " + data.getElo();
                                 })
                                 .collect(Collectors.toList()))
                         .build();

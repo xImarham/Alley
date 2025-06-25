@@ -36,7 +36,7 @@ public class ArenaAddKitCommand extends BaseCommand {
         String[] args = command.getArgs();
 
         if (args.length < 2) {
-            player.sendMessage(CC.translate("&6Usage: &e/arena addkit &b<arenaName> <kitName>"));
+            player.sendMessage(CC.translate("&6Usage: &e/arena addkit &6<arenaName> <kitName>"));
             return;
         }
 
@@ -63,7 +63,7 @@ public class ArenaAddKitCommand extends BaseCommand {
             return;
         }
 
-        player.sendMessage(CC.translate("&aKit &b" + kitName + "&a has been added to arena &b" + arenaName + "&a!"));
+        player.sendMessage(CC.translate("&aKit &6" + kitName + "&a has been added to arena &6" + arenaName + "&a!"));
         this.plugin.getArenaService().getArenaByName(arenaName).getKits().add(this.plugin.getKitService().getKit(kitName).getName());
         this.plugin.getArenaService().saveArena(this.plugin.getArenaService().getArenaByName(arenaName));
     }

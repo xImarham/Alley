@@ -440,7 +440,7 @@ public abstract class AbstractMatch {
         }
 
         Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
-        this.notifyAll("&b" + profile.getNameColor() + player.getName() + " &fis now spectating the match.");
+        this.notifyAll("&6" + profile.getNameColor() + player.getName() + " &fis now spectating the match.");
     }
 
     /**
@@ -463,7 +463,7 @@ public abstract class AbstractMatch {
         this.spectators.remove(player.getUniqueId());
 
         if (notify) {
-            this.notifyAll("&b" + profile.getNameColor() + player.getName() + " &fis no longer spectating the match.");
+            this.notifyAll("&6" + profile.getNameColor() + player.getName() + " &fis no longer spectating the match.");
         }
     }
 
@@ -560,8 +560,8 @@ public abstract class AbstractMatch {
                 .skip(3)
                 .forEach(player -> remainingSpectators.add(player.getEntityId()));
 
-        this.sendMessage("&b&lSpectators: &f" + String.join(", ", firstThreeSpectatorNames) +
-                (remainingSpectators.isEmpty() ? "" : " &7(and &b" + remainingSpectators.size() + " &7more...)"));
+        this.sendMessage("&6&lSpectators: &f" + String.join(", ", firstThreeSpectatorNames) +
+                (remainingSpectators.isEmpty() ? "" : " &7(and &6" + remainingSpectators.size() + " &7more...)"));
 
         this.spectators.forEach(uuid -> {
             Player player = this.plugin.getServer().getPlayer(uuid);
@@ -890,7 +890,7 @@ public abstract class AbstractMatch {
 
 
     private void sendPlayerVersusPlayerMessage() {
-        String prefix = CC.translate("&7[&bMatch&7] &r");
+        String prefix = CC.translate("&7[&6Match&7] &r");
 
         if (this.isTeamMatch()) {
             GameParticipant<MatchGamePlayerImpl> participantA = this.getParticipants().get(0);
@@ -899,13 +899,13 @@ public abstract class AbstractMatch {
             int teamSizeA = participantA.getPlayerSize();
             int teamSizeB = participantB.getPlayerSize();
 
-            String message = CC.translate(prefix + "&b" + participantA.getPlayer().getUsername() + "'s Team &7(&a" + teamSizeA + "&7) &avs &b" + participantB.getPlayer().getUsername() + "'s Team &7(&a" + teamSizeB + "&7)");
+            String message = CC.translate(prefix + "&6" + participantA.getPlayer().getUsername() + "'s Team &7(&a" + teamSizeA + "&7) &avs &6" + participantB.getPlayer().getUsername() + "'s Team &7(&a" + teamSizeB + "&7)");
             this.sendMessage(message);
         } else {
             GameParticipant<MatchGamePlayerImpl> participant = this.getParticipants().get(0);
             GameParticipant<MatchGamePlayerImpl> opponent = this.getParticipants().get(1);
 
-            String message = CC.translate(prefix + "&b" + participant.getPlayer().getUsername() + " &avs &b" + opponent.getPlayer().getUsername());
+            String message = CC.translate(prefix + "&6" + participant.getPlayer().getUsername() + " &avs &6" + opponent.getPlayer().getUsername());
             this.sendMessage(message);
         }
     }

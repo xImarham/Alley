@@ -22,7 +22,7 @@ public class FFAAddCommand extends BaseCommand {
         String[] args = command.getArgs();
 
         if (args.length < 2) {
-            player.sendMessage(CC.translate("&6Usage: &e/ffa add &b<player> <kit>"));
+            player.sendMessage(CC.translate("&6Usage: &e/ffa add &6<player> <kit>"));
             return;
         }
 

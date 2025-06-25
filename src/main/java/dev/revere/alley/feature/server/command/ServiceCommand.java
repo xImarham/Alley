@@ -29,9 +29,9 @@ public class ServiceCommand extends BaseCommand {
 
         Arrays.asList(
                 "",
-                "&b&lService Commands",
-                " &f● &b/service menu &7| &fOpens the service menu.",
-                " &f● &b/service allowqueue &8<&7true/false&8> &7| &fAllow/disallow queueing.",
+                "&6&lService Commands",
+                " &f● &6/service menu &7| &fOpens the service menu.",
+                " &f● &6/service allowqueue &8<&7true/false&8> &7| &fAllow/disallow queueing.",
                 ""
         ).forEach(line -> player.sendMessage(CC.translate(line)));
     }

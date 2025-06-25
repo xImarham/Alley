@@ -24,8 +24,8 @@ public class AlleyCoreCommand extends BaseCommand {
 
         Arrays.asList(
                 "",
-                "&b&lCore Hook Information",
-                " &f&l● &bPlugin: &f" + core.getType().getPluginName() + " &7made by &f" + core.getType().getPluginAuthor(),
+                "&6&lCore Hook Information",
+                " &f&l● &6Plugin: &f" + core.getType().getPluginName() + " &7made by &f" + core.getType().getPluginAuthor(),
                 ""
         ).forEach(line -> sender.sendMessage(CC.translate(line)));
 

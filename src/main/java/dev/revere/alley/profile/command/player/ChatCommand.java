@@ -21,14 +21,14 @@ public class ChatCommand extends BaseCommand {
         String[] args = command.getArgs();
 
         if (args.length < 1) {
-            player.sendMessage(CC.translate("&6Usage: &e/chat &b<chat-channel>"));
+            player.sendMessage(CC.translate("&6Usage: &e/chat &6<chat-channel>"));
             player.sendMessage(CC.translate("&cAvailable chat channels: " + EnumChatChannel.getChatChannelsSorted()));
             return;
         }
 
         Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
         if (EnumChatChannel.getExactChatChannel(args[0], true) == null) {
-            player.sendMessage(CC.translate("&cThe chat channel &b" + args[0] + " &cdoes not exist."));
+            player.sendMessage(CC.translate("&cThe chat channel &6" + args[0] + " &cdoes not exist."));
             return;
         }
 
@@ -38,6 +38,6 @@ public class ChatCommand extends BaseCommand {
         }
 
         profile.getProfileData().getSettingData().setChatChannel(EnumChatChannel.getExactChatChannel(args[0], true));
-        player.sendMessage(CC.translate("&aSet your chat channel to &b" + args[0] + "&a."));
+        player.sendMessage(CC.translate("&aSet your chat channel to &6" + args[0] + "&a."));
     }
 }

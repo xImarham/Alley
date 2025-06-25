@@ -23,7 +23,7 @@ public class LayoutMenu extends Menu {
 
     @Override
     public String getTitle(Player player) {
-        return "&b&lLayout Editor";
+        return "&6&lLayout Editor";
     }
 
     @Override

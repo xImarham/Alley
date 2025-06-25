@@ -21,7 +21,7 @@ public class LevelAdminCreateCommand extends BaseCommand {
         String[] args = command.getArgs();
 
         if (args.length < 3) {
-            sender.sendMessage(CC.translate("&6Usage: &e/leveladmin create &b<levelName> <minElo> <maxElo>"));
+            sender.sendMessage(CC.translate("&6Usage: &e/leveladmin create &6<levelName> <minElo> <maxElo>"));
             return;
         }
 
@@ -55,6 +55,6 @@ public class LevelAdminCreateCommand extends BaseCommand {
         }
 
         levelService.createLevel(levelName, minElo, maxElo);
-        sender.sendMessage(CC.translate("&aLevel &b" + levelName + " &acreated successfully with min Elo &b" + minElo + " &aand max Elo &b" + maxElo + "&a!"));
+        sender.sendMessage(CC.translate("&aLevel &6" + levelName + " &acreated successfully with min Elo &6" + minElo + " &aand max Elo &6" + maxElo + "&a!"));
     }
 }

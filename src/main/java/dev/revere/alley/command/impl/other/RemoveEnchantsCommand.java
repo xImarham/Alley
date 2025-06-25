@@ -33,6 +33,6 @@ public class RemoveEnchantsCommand extends BaseCommand {
             player.getInventory().getItemInHand().removeEnchantment(enchant);
         });
 
-        player.sendMessage(CC.translate("&aSuccessfully removed all enchantments from the &b" + player.getInventory().getItemInHand().getType().name() + " &aitem."));
+        player.sendMessage(CC.translate("&aSuccessfully removed all enchantments from the &6" + player.getInventory().getItemInHand().getType().name() + " &aitem."));
     }
 }
