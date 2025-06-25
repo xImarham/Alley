@@ -126,7 +126,6 @@ public class MatchRoundsImpl extends MatchRegularImpl {
                 this.setScorer(lastAttacker.getName());
             }
 
-
             if (this.participantA.containsPlayer(player.getUniqueId())) {
                 participant = this.participantA;
             } else {
@@ -141,8 +140,10 @@ public class MatchRoundsImpl extends MatchRegularImpl {
                         .orElse(null);
 
                 if (gamePlayer != null) {
-                    gamePlayer.getData().incrementDeaths();
-                    gamePlayer.setDead(true);
+                    team.getPlayers().forEach(matchGamePlayer -> {
+                        matchGamePlayer.getData().incrementDeaths();
+                        matchGamePlayer.setDead(true);
+                    });
                     this.handleRoundEnd();
                 }
             } else {
@@ -237,7 +238,7 @@ public class MatchRoundsImpl extends MatchRegularImpl {
             Player player = this.plugin.getServer().getPlayer(uuid.getUuid());
             this.plugin.getReflectionRepository().getReflectionService(TitleReflectionService.class).sendTitle(
                     player,
-                    teamWinnerColor.toString() + winner.getPlayer().getUsername() + " &fhas scored!",
+                    teamWinnerColor.toString() + scorer + " &fhas scored!",
                     "&f" + winner.getPlayer().getData().getScore() + " &7/&f " + this.rounds,
                     2, 20, 2
             );

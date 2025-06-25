@@ -324,6 +324,7 @@ public class KitService {
         config.set(key + ".display-name", kit.getDisplayName());
         config.set(key + ".description", kit.getDescription());
         config.set(key + ".disclaimer", kit.getDisclaimer());
+        config.set(key + ".menu-title", kit.getMenuTitle());
         config.set(key + ".enabled", kit.isEnabled());
         config.set(key + ".editable", kit.isEditable());
         config.set(key + ".category", kit.getCategory().name());
