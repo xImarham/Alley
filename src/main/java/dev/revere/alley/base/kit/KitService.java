@@ -148,7 +148,7 @@ public class KitService {
         this.plugin.getKitSettingService().getSettings().forEach(setting -> {
             if (kit.getKitSettings().stream().noneMatch(kitSetting -> kitSetting.getName().equals(setting.getName()))) {
                 kit.addKitSetting(setting);
-                Logger.log("&cAdded missing kit setting to" + kit.getName() + ": " + setting.getName());
+                Logger.log("&cAdded missing kit setting to &4" + kit.getName() + ": &c" + setting.getName());
                 this.saveKitSettings(config, key, kit);
             }
         });
