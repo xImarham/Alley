@@ -8,8 +8,6 @@ import lombok.AllArgsConstructor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.UUID;
-
 /**
  * @author Emmy
  * @project Alley
@@ -17,13 +15,11 @@ import java.util.UUID;
  */
 @AllArgsConstructor
 public class InventorySnapshotArmorButton extends Button {
-    private final UUID target;
+    private final Snapshot snapshot;
     private int armorPart;
 
     @Override
     public ItemStack getButtonItem(Player player) {
-        Snapshot snapshot = Alley.getInstance().getSnapshotRepository().getSnapshot(target);
-        return new ItemBuilder(snapshot.getArmor()[armorPart])
-                .build();
+        return new ItemBuilder(this.snapshot.getArmor()[this.armorPart]).build();
     }
 }

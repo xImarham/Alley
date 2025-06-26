@@ -15,6 +15,8 @@ import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
+import java.util.UUID;
+
 /**
  * @author Emmy
  * @project Alley
@@ -22,7 +24,7 @@ import org.bukkit.entity.Player;
  */
 @UtilityClass
 public class MatchUtility {
-    protected final Alley plugin = Alley.getInstance();
+    private final Alley plugin = Alley.getInstance();
 
     /**
      * Check if a location is beyond the bounds of an arena excluding specific conditions.
@@ -65,20 +67,22 @@ public class MatchUtility {
     }
 
     /**
-     * Sends the match result message.
+     * Sends a match result message to all participants and spectators.
      *
-     * @param match      The match.
-     * @param winnerName The name of the winner.
-     * @param loserName  The name of the loser.
+     * @param match         The match.
+     * @param winnerName    The name of the winning team.
+     * @param loserName     The name of the losing team.
+     * @param winnerUuid    The UUID of the winning team.
+     * @param loserUuid     The UUID of the losing team.
      */
-    public void sendMatchResult(AbstractMatch match, String winnerName, String loserName) {
+    public void sendMatchResult(AbstractMatch match, String winnerName, String loserName, UUID winnerUuid, UUID loserUuid) {
         FileConfiguration config = plugin.getConfigService().getMessagesConfig();
 
         String path = "match.ended.match-result.regular.";
 
-        String winnerCommand = config.getString(path + "winner.command").replace("{winner}", winnerName);
+        String winnerCommand = config.getString(path + "winner.command").replace("{winner}", String.valueOf(winnerUuid));
         String winnerHover = config.getString(path + "winner.hover").replace("{winner}", winnerName);
-        String loserCommand = config.getString(path + "loser.command").replace("{loser}", loserName);
+        String loserCommand = config.getString(path + "loser.command").replace("{loser}", String.valueOf(loserUuid));
         String loserHover = config.getString(path + "loser.hover").replace("{loser}", loserName);
 
         for (String line : plugin.getConfigService().getMessagesConfig().getStringList(path + "format")) {

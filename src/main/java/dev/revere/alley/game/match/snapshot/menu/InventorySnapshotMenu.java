@@ -1,21 +1,18 @@
 package dev.revere.alley.game.match.snapshot.menu;
 
-import dev.revere.alley.Alley;
 import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.api.menu.Menu;
+import dev.revere.alley.game.match.snapshot.Snapshot;
 import dev.revere.alley.game.match.snapshot.menu.button.InventorySnapshotArmorButton;
 import dev.revere.alley.game.match.snapshot.menu.button.ViewOpponentButton;
 import dev.revere.alley.tool.item.ItemBuilder;
-import dev.revere.alley.util.chat.CC;
 import lombok.AllArgsConstructor;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 /**
  * @author Emmy
@@ -24,28 +21,28 @@ import java.util.UUID;
  */
 @AllArgsConstructor
 public class InventorySnapshotMenu extends Menu {
-    private final UUID target;
+    private final Snapshot snapshot;
 
     @Override
     public String getTitle(Player player) {
-        return CC.translate("&6&l" + Bukkit.getOfflinePlayer(target).getName() + "'s Inventory");
+        return "&6&l" + this.snapshot.getUsername() + "'s Inventory";
     }
 
     @Override
     public Map<Integer, Button> getButtons(Player player) {
         Map<Integer, Button> buttons = new HashMap<>();
 
-        ItemStack[] inventory = Alley.getInstance().getSnapshotRepository().getSnapshot(target).getInventory();
+        ItemStack[] inventory = this.snapshot.getInventory();
         for (int i = 0; i < inventory.length; i++) {
             ItemStack item = inventory[i];
             buttons.put(i, new SnapshotButton(item));
         }
 
-        buttons.put(53, new ViewOpponentButton(Alley.getInstance().getSnapshotRepository().getSnapshot(target).getOpponent()));
-        buttons.put(36, new InventorySnapshotArmorButton(target, 0));
-        buttons.put(37, new InventorySnapshotArmorButton(target, 1));
-        buttons.put(38, new InventorySnapshotArmorButton(target, 2));
-        buttons.put(39, new InventorySnapshotArmorButton(target, 3));
+        buttons.put(53, new ViewOpponentButton(this.snapshot));
+        buttons.put(36, new InventorySnapshotArmorButton(this.snapshot, 0));
+        buttons.put(37, new InventorySnapshotArmorButton(this.snapshot, 1));
+        buttons.put(38, new InventorySnapshotArmorButton(this.snapshot, 2));
+        buttons.put(39, new InventorySnapshotArmorButton(this.snapshot, 3));
 
         return buttons;
     }

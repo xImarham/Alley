@@ -1,17 +1,15 @@
 package dev.revere.alley.game.match.snapshot.menu.button;
 
+import dev.revere.alley.Alley;
 import dev.revere.alley.api.menu.Button;
-import dev.revere.alley.game.match.snapshot.menu.InventorySnapshotMenu;
+import dev.revere.alley.game.match.snapshot.Snapshot;
 import dev.revere.alley.tool.item.ItemBuilder;
 import dev.revere.alley.util.chat.CC;
 import lombok.AllArgsConstructor;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
-
-import java.util.UUID;
 
 /**
  * @author Emmy
@@ -20,13 +18,23 @@ import java.util.UUID;
  */
 @AllArgsConstructor
 public class ViewOpponentButton extends Button {
-    private final UUID opponent;
+    private final Snapshot snapshot;
 
     @Override
     public ItemStack getButtonItem(Player player) {
+        Snapshot opponentSnapshot = Alley.getInstance().getSnapshotRepository().getSnapshot(this.snapshot.getOpponent());
+        if (opponentSnapshot == null) {
+            return new ItemBuilder(Material.BARRIER)
+                    .name(CC.translate("&cOpponent Not Found"))
+                    .lore("&7The opponent's snapshot could not be found.")
+                    .hideMeta()
+                    .build();
+        }
+
         return new ItemBuilder(Material.PAPER)
                 .name(CC.translate("&6View Opponent"))
-                .lore("&7Click to view &6" + Bukkit.getOfflinePlayer(opponent).getName() + "'s &7inventory.")
+                .lore("&7Click to view &6" + opponentSnapshot.getUsername() + "'s &7inventory.")
+                .hideMeta()
                 .build();
     }
 
@@ -34,6 +42,6 @@ public class ViewOpponentButton extends Button {
     public void clicked(Player player, ClickType clickType) {
         if (clickType != ClickType.LEFT) return;
 
-        new InventorySnapshotMenu(opponent).openMenu(player);
+        player.performCommand("inventory " + this.snapshot.getOpponent());
     }
 }

@@ -3,8 +3,10 @@ package dev.revere.alley.game.match.snapshot.command;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
+import dev.revere.alley.game.match.snapshot.Snapshot;
 import dev.revere.alley.game.match.snapshot.SnapshotRepository;
 import dev.revere.alley.game.match.snapshot.menu.InventorySnapshotMenu;
+import dev.revere.alley.util.PlayerUtil;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -24,22 +26,18 @@ public class InventoryCommand extends BaseCommand {
         String[] args = command.getArgs();
 
         if (command.length() < 1) {
-            player.sendMessage(CC.translate("&cUsage: /inventory (player)"));
+            player.sendMessage(CC.translate("&cUsage: /inventory (uuid)"));
             return;
         }
 
-        UUID uuid = Bukkit.getOfflinePlayer(args[0]).getUniqueId();
-        if (uuid == null) {
-            player.sendMessage(CC.translate("&cThat player is invalid."));
-            return;
+        String uuid = args[0];
+        Snapshot snapshot;
+        try {
+            snapshot = this.plugin.getSnapshotRepository().getSnapshot(UUID.fromString(uuid));
+        } catch (Exception exception) {
+            snapshot = this.plugin.getSnapshotRepository().getSnapshot(uuid);
         }
 
-        SnapshotRepository snapshotRepository = this.plugin.getSnapshotRepository();
-        if (snapshotRepository.getSnapshot(uuid) == null) {
-            player.sendMessage(CC.translate("&cYou cannot view that player's inventory any longer."));
-            return;
-        }
-
-        new InventorySnapshotMenu(uuid).openMenu(player);
+        new InventorySnapshotMenu(snapshot).openMenu(player);
     }
 }

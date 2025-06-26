@@ -6,7 +6,9 @@ import lombok.Setter;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 /**
  * @author Remi
@@ -17,15 +19,24 @@ import java.util.UUID;
 @Setter
 public class Snapshot {
     private final String username;
+
     private final UUID uuid;
+    private UUID opponent;
 
     private double health;
     private int foodLevel;
 
-    private UUID opponent;
-
     private final ItemStack[] armor;
     private final ItemStack[] inventory;
+
+    private final List<String> potionEffects;
+
+    private int potionsThrown;
+    private int potionsMissed;
+    private int longestCombo;
+    private int totalHits;
+
+    private long createdAt;
 
     /**
      * Constructor for the Snapshot class.
@@ -40,5 +51,24 @@ public class Snapshot {
         this.foodLevel = player.getFoodLevel();
         this.armor = InventoryUtil.cloneItemStackArray(player.getInventory().getArmorContents());
         this.inventory = InventoryUtil.cloneItemStackArray(player.getInventory().getContents());
+        this.potionEffects = player.getActivePotionEffects().stream()
+                .map(effect -> effect.getType().getName() + " " + effect.getAmplifier())
+                .collect(Collectors.toList());
+        this.createdAt = System.currentTimeMillis();
+    }
+
+    /**
+     * Get the accuracy of potion throws as a percentage.
+     *
+     * @return the potion accuracy percentage
+     */
+    public double getPotionAccuracy() {
+        if (this.potionsMissed == 0) {
+            return 100.0;
+        } else if (this.potionsThrown == this.potionsMissed) {
+            return 50.0;
+        }
+
+        return Math.round(100.0D - (((double) this.potionsMissed / (double) this.potionsThrown) * 100.0D));
     }
 }

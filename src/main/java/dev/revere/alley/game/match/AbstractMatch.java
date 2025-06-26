@@ -13,10 +13,12 @@ import dev.revere.alley.feature.layout.data.LayoutData;
 import dev.revere.alley.game.match.enums.EnumMatchState;
 import dev.revere.alley.game.match.impl.MatchRoundsImpl;
 import dev.revere.alley.game.match.player.GamePlayer;
+import dev.revere.alley.game.match.player.data.MatchGamePlayerData;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.game.match.runnable.MatchRunnable;
 import dev.revere.alley.game.match.runnable.other.MatchRespawnRunnable;
+import dev.revere.alley.game.match.snapshot.Snapshot;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
 import dev.revere.alley.tool.logger.Logger;
@@ -186,6 +188,12 @@ public abstract class AbstractMatch {
                 });
     }
 
+    /**
+     * Method to finalize a player after the match ends.
+     * This method resets the player's state, updates their profile for the lobby,
+     *
+     * @param player The player to finalize.
+     */
     private void finalizePlayer(Player player) {
         this.resetPlayerState(player);
         updatePlayerProfileForLobby(player);
@@ -249,7 +257,7 @@ public abstract class AbstractMatch {
 
         Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
         Player killer = this.plugin.getCombatService().getLastAttacker(player);
-        handleDeathMessages(player, killer, profile);
+        this.handleDeathMessages(player, killer, profile);
 
         player.setVelocity(new Vector());
 
@@ -275,9 +283,16 @@ public abstract class AbstractMatch {
             }
         }
 
-        handleSpectator(player, profile, participant);
+        this.handleSpectator(player, profile, participant);
     }
 
+    /**
+     * Handles the player becoming a spectator based on the match state and kit settings.
+     *
+     * @param player      The player to handle.
+     * @param profile     The profile of the player.
+     * @param participant The participant of the match.
+     */
     private void handleSpectator(Player player, Profile profile, GameParticipant<MatchGamePlayerImpl> participant) {
         Kit matchKit = profile.getMatch().getKit();
 
@@ -300,7 +315,7 @@ public abstract class AbstractMatch {
     }
 
     private boolean shouldBecomeSpectatorForNonRoundKit(GameParticipant<MatchGamePlayerImpl> participant, Kit matchKit) {
-        return !participant.isAllDead() && !this.isRoundBasedKit(matchKit) && !hasEliminationBasedKit(matchKit);
+        return !participant.isAllDead() && !this.isRoundBasedKit(matchKit) && !this.hasEliminationBasedKit(matchKit);
     }
 
     /**
@@ -339,6 +354,13 @@ public abstract class AbstractMatch {
         this.processKillerActions(player, killer, profile);
     }
 
+    /**
+     * Processes the actions of the killer when a player is killed.
+     *
+     * @param player  the player that died.
+     * @param killer  the player that killed the victim.
+     * @param profile the profile of the player that died.
+     */
     private void processKillerActions(Player player, Player killer, Profile profile) {
         GameParticipant<MatchGamePlayerImpl> killerParticipant = getParticipant(killer);
         if (killerParticipant == null) {
@@ -415,6 +437,25 @@ public abstract class AbstractMatch {
      */
     public void handleRoundEnd() {
         this.endTime = System.currentTimeMillis();
+
+        this.handleSnapshots();
+    }
+
+    private void handleSnapshots() {
+        this.getParticipants().forEach(gameParticipant -> {
+            gameParticipant.getPlayers().forEach(gamePlayer -> {
+                Player player = this.plugin.getServer().getPlayer(gamePlayer.getUuid());
+                Snapshot snapshot = new Snapshot(player, gamePlayer.isDead());
+
+                snapshot.setOpponent(this.getOpponent(player).getPlayer().getUuid());
+                snapshot.setLongestCombo(gamePlayer.getData().getLongestCombo());
+                snapshot.setTotalHits(gamePlayer.getData().getHits());
+
+                //potions later
+
+                this.plugin.getSnapshotRepository().addSnapshot(snapshot);
+            });
+        });
     }
 
     /**
@@ -623,6 +664,12 @@ public abstract class AbstractMatch {
                 .orElse(null);
     }
 
+    /**
+     * Gets a game player from all game players in the match.
+     *
+     * @param player The player to get the game player of.
+     * @return The game player of the player, or null if not found.
+     */
     public MatchGamePlayerImpl getFromAllGamePlayers(Player player) {
         return this.getParticipants().stream()
                 .map(GameParticipant::getAllPlayers)

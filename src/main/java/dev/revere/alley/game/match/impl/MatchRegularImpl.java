@@ -29,7 +29,10 @@ import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.util.visual.ProgressBarUtil;
 import lombok.Getter;
 import lombok.Setter;
-import org.bukkit.*;
+import org.bukkit.ChatColor;
+import org.bukkit.Color;
+import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.PlayerDeathEvent;
@@ -172,7 +175,16 @@ public class MatchRegularImpl extends AbstractMatch {
         if (this.isTeamMatch()) {
             MatchUtility.sendConjoinedMatchResult(this, this.winner, this.loser);
         } else {
-            MatchUtility.sendMatchResult(this, this.winner.getPlayer().getPlayer().getName(), this.loser.getPlayer().getPlayer().getName());
+            MatchGamePlayerImpl winnerPlayer = this.winner.getPlayer();
+            MatchGamePlayerImpl loserPlayer = this.loser.getPlayer();
+
+            MatchUtility.sendMatchResult(
+                    this,
+                    winnerPlayer.getUsername(),
+                    loserPlayer.getUsername(),
+                    winnerPlayer.getUuid(),
+                    loserPlayer.getUuid()
+            );
         }
 
         if (!this.getSpectators().isEmpty()) {
@@ -339,7 +351,7 @@ public class MatchRegularImpl extends AbstractMatch {
         String progressPercent = nextTierWins > 0 ? Math.round((float) wins / nextTierWins * 100) + "%" : "100%";
         int requiredWinsToUnlock = nextTierWins - wins; // 40 - 10 (first tier of bronze 1)
         String winOrWins = requiredWinsToUnlock == 1 ? "win" : "wins";
-        
+
         String progressLine;
         if (wins == currentTier.getRequiredWins()) {
             progressLine = " &6&l● &fUNLOCKED &6" + currentDivision.getName() + " " + currentTier.getName() + "&f!";
