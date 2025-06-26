@@ -183,10 +183,22 @@ public class MatchBlockListener implements Listener {
                 if (match.getState() == EnumMatchState.ENDING_MATCH) event.setCancelled(true);
                 if (match.getState() == EnumMatchState.RESTARTING_ROUND) event.setCancelled(true);
 
-                if ((match.getArena() instanceof StandAloneArena) && blockY > ((StandAloneArena) profile.getMatch().getArena()).getHeightLimit()) {
-                    player.sendMessage(CC.translate("&cYou cannot place blocks above the height limit!"));
-                    event.setCancelled(true);
-                    return;
+                if (match.getArena() instanceof StandAloneArena) {
+                    StandAloneArena arena = (StandAloneArena) match.getArena();
+                    Location blockLocation = event.getBlock().getLocation();
+
+                    if (blockLocation.getBlockY() > arena.getHeightLimit()) {
+                        player.sendMessage(CC.translate("&cYou cannot place blocks above the height limit!"));
+                        event.setCancelled(true);
+                        return;
+                    }
+
+                    if ((arena.getTeam1Portal() != null && blockLocation.distance(arena.getTeam1Portal()) <= arena.getPortalRadius()) ||
+                            (arena.getTeam2Portal() != null && blockLocation.distance(arena.getTeam2Portal()) <= arena.getPortalRadius())) {
+                        player.sendMessage(CC.translate("&cYou cannot build near a portal!"));
+                        event.setCancelled(true);
+                        return;
+                    }
                 }
 
                 if (match.getKit().isSettingEnabled(KitSettingRaidingImpl.class) && match.getKit().isSettingEnabled(KitSettingBuildImpl.class)) {

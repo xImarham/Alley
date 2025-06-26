@@ -31,6 +31,7 @@ public class ArenaCommand extends BaseCommand {
      */
     public ArenaCommand() {
         new ArenaSetHeightLimitCommand();
+        new ArenaSetVoidLevelCommand();
         new ArenaSetPortalCommand();
         new ArenaSetCenterCommand();
         new ArenaCreateCommand();
@@ -72,6 +73,8 @@ public class ArenaCommand extends BaseCommand {
             completion.add("saveall");
             completion.add("setsafezone");
             completion.add("setdisplayname");
+            completion.add("setheightlimit");
+            completion.add("setvoidlevel");
         }
 
         return completion;
@@ -133,6 +136,7 @@ public class ArenaCommand extends BaseCommand {
             {
                     " &f● &6/arena setportal &8(&7arenaName&8) &8<&71/2&8> &7| Set portal positions for battlerush",
                     " &f● &6/arena setheightlimit &8(&7arenaName&8) &7| Set height limit for standalone arenas",
+                    " &f● &6/arena setvoidlevel &8(&7arenaName&8) &7| Set void level for standalone arenas",
             }
     };
 }

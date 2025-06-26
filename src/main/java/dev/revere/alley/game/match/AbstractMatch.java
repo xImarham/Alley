@@ -240,7 +240,7 @@ public abstract class AbstractMatch {
 
         GameParticipant<MatchGamePlayerImpl> participant = this.getParticipant(player);
         MatchGamePlayerImpl gamePlayer = this.getFromAllGamePlayers(player);
-        if (participant.isAllEliminated()) {
+        if (participant.isAllEliminated() && !gamePlayer.isDisconnected()) {
             return;
         }
 
@@ -637,6 +637,24 @@ public abstract class AbstractMatch {
     public GameParticipant<MatchGamePlayerImpl> getParticipant(Player player) {
         return this.getParticipants().stream()
                 .filter(gameParticipant -> gameParticipant.containsPlayer(player.getUniqueId()))
+                .findFirst()
+                .orElse(null);
+    }
+
+    /**
+     * Gets the opposing participant in a two-sided match.
+     *
+     * @param player The player object of a player on one side.
+     * @return The opposing GameParticipant, or null if it cannot be determined.
+     */
+    public GameParticipant<MatchGamePlayerImpl> getOpponent(Player player) {
+        GameParticipant<MatchGamePlayerImpl> participant = this.getParticipant(player);
+        if (participant == null) {
+            return null;
+        }
+
+        return this.getParticipants().stream()
+                .filter(p -> !p.equals(participant))
                 .findFirst()
                 .orElse(null);
     }

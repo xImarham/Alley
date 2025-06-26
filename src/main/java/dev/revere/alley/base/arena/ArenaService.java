@@ -94,13 +94,17 @@ public class ArenaService {
                     );
                     break;
                 case STANDALONE:
+                    int heightLimit = config.getInt(name + ".height-limit", 7);
+                    int voidLevel = config.getInt(name + ".void-level", 70);
+
                     arena = new StandAloneArena(
                             arenaName,
                             minimum,
                             maximum,
                             Serializer.deserializeLocation(config.getString(name + ".team-one-portal")),
                             Serializer.deserializeLocation(config.getString(name + ".team-two-portal")),
-                            config.getInt(name + ".height-limit")
+                            heightLimit,
+                            voidLevel
                     );
                     break;
                 case FFA:

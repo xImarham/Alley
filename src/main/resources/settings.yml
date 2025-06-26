@@ -10,9 +10,6 @@ spawn:
   join-location: world:0.5:73.0:0.5:90.0:0.0
 
 game:
-  # In kits with lives setting enabled, this is the void (y) level where the player will die/lose a point.
-  # [!] Must be within the cuboid of the arena.
-  death-y-level: 85
   # The amount of lives each player will have in a lives match.
   lives: 3
   # The radius of the portal in blocks.

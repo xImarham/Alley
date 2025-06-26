@@ -36,11 +36,6 @@ public class KitSetInvCommand extends BaseCommand {
             return;
         }
 
-        if (player.getGameMode() == GameMode.CREATIVE) {
-            player.sendMessage(CC.translate(KitLocale.KIT_CANNOT_SET_IN_CREATIVE.getMessage()));
-            return;
-        }
-
         ItemStack[] inventory = InventoryUtil.cloneItemStackArray(player.getInventory().getContents());
         ItemStack[] armor = InventoryUtil.cloneItemStackArray(player.getInventory().getArmorContents());
 

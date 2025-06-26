@@ -21,10 +21,8 @@ import dev.revere.alley.profile.data.ProfileData;
 import dev.revere.alley.tool.elo.EloCalculator;
 import dev.revere.alley.tool.elo.result.EloResult;
 import dev.revere.alley.tool.elo.result.OldEloResult;
-import dev.revere.alley.tool.item.ItemBuilder;
 import dev.revere.alley.tool.logger.Logger;
 import dev.revere.alley.tool.reflection.impl.TitleReflectionService;
-import dev.revere.alley.util.ListenerUtil;
 import dev.revere.alley.util.PlayerUtil;
 import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.util.visual.ProgressBarUtil;
@@ -35,13 +33,12 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * @author Remi
@@ -81,7 +78,7 @@ public class MatchRegularImpl extends AbstractMatch {
     @Override
     public void setupPlayer(Player player) {
         super.setupPlayer(player);
-        this.applyWoolAndArmorColor(player);
+        this.applyColorKit(player);
 
         Location spawnLocation = this.participantA.containsPlayer(player.getUniqueId()) ? getArena().getPos1() : getArena().getPos2();
         player.teleport(spawnLocation);
@@ -111,13 +108,14 @@ public class MatchRegularImpl extends AbstractMatch {
      *
      * @param player The player to apply the wool color to.
      */
-    public void applyWoolAndArmorColor(Player player) {
+    public void applyColorKit(Player player) {
         GameParticipant<MatchGamePlayerImpl> participant = this.getParticipant(player);
         if (participant == null) {
             return;
         }
 
-        int woolColor = (participant == this.participantA) ? 11 : 14;
+        final int blockDataValue = (participant == this.participantA) ? 11 : 14;
+        final Color color = (blockDataValue == 11) ? Color.fromRGB(0, 102, 255) : Color.fromRGB(255, 0, 0);
 
         participant.getPlayers().forEach(gamePlayer -> {
             Player teamPlayer = gamePlayer.getPlayer();
@@ -125,14 +123,20 @@ public class MatchRegularImpl extends AbstractMatch {
                 return;
             }
 
-            teamPlayer.getInventory().all(Material.WOOL).forEach((key, value) ->
-                    teamPlayer.getInventory().setItem(key, new ItemBuilder(Material.WOOL).durability(woolColor).amount(64).build())
-            );
+            PlayerInventory inventory = teamPlayer.getInventory();
 
-            Color color = (woolColor == 11) ? Color.fromRGB(0, 102, 255) : Color.fromRGB(255, 0, 0);
+            for (int i = 0; i < 36; i++) {
+                ItemStack item = inventory.getItem(i);
+
+                if (item != null && (item.getType() == Material.WOOL || item.getType() == Material.STAINED_CLAY)) {
+                    item.setDurability((short) blockDataValue);
+                    inventory.setItem(i, item);
+                }
+            }
 
             for (int i = 36; i <= 39; i++) {
-                ItemStack item = teamPlayer.getInventory().getItem(i);
+                ItemStack item = inventory.getItem(i);
+
                 if (item != null && item.getType().toString().contains("LEATHER_")) {
                     LeatherArmorMeta meta = (LeatherArmorMeta) item.getItemMeta();
                     meta.setColor(color);

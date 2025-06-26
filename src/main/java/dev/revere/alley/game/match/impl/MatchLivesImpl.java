@@ -8,10 +8,8 @@ import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.util.PlayerUtil;
 import lombok.Getter;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import org.bukkit.event.entity.PlayerDeathEvent;
 
 /**
  * @author Emmy
@@ -94,6 +92,6 @@ public class MatchLivesImpl extends MatchRegularImpl {
         player.teleport(spawnLocation);
 
         this.giveLoadout(player, this.getKit());
-        this.applyWoolAndArmorColor(player);
+        this.applyColorKit(player);
     }
 }

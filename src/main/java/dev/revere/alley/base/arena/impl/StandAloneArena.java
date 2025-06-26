@@ -40,6 +40,7 @@ public class StandAloneArena extends AbstractArena {
 
     private int portalRadius;
     private int heightLimit;
+    private int voidLevel;
 
     /**
      * Constructor for the StandAloneArena class.
@@ -48,16 +49,17 @@ public class StandAloneArena extends AbstractArena {
      * @param minimum The minimum location of the arena.
      * @param maximum The maximum location of the arena.
      */
-    public StandAloneArena(String name, Location minimum, Location maximum, Location team1Portal, Location team2Portal, int heightLimit) {
+    public StandAloneArena(String name, Location minimum, Location maximum, Location team1Portal, Location team2Portal, int heightLimit, int voidLevel) {
         super(name, minimum, maximum);
 
         if (team1Portal != null) this.team1Portal = team1Portal;
         if (team2Portal != null) this.team2Portal = team2Portal;
         this.portalRadius = this.plugin.getConfigService().getSettingsConfig().getInt("game.portal-radius");
         this.heightLimit = heightLimit;
+        this.voidLevel = voidLevel;
     }
 
-    public StandAloneArena(String originalArenaName, int copyId, Location minimum, Location maximum, Location team1Portal, Location team2Portal, int heightLimit) {
+    public StandAloneArena(String originalArenaName, int copyId, Location minimum, Location maximum, Location team1Portal, Location team2Portal, int heightLimit, int voidLevel) {
         super(originalArenaName + "-copy-" + copyId, minimum, maximum);
         this.originalArenaName = originalArenaName;
         this.copyId = copyId;
@@ -68,6 +70,7 @@ public class StandAloneArena extends AbstractArena {
         if (team2Portal != null) this.team2Portal = team2Portal;
         this.portalRadius = this.plugin.getConfigService().getSettingsConfig().getInt("game.portal-radius");
         this.heightLimit = heightLimit;
+        this.voidLevel = voidLevel;
     }
 
     @Override
@@ -105,6 +108,7 @@ public class StandAloneArena extends AbstractArena {
             config.set(name + ".team-two-portal", Serializer.serializeLocation(this.team2Portal));
 
         config.set(name + ".height-limit", this.heightLimit);
+        config.set(name + ".void-level", this.voidLevel);
 
         this.plugin.getConfigService().saveConfig(this.plugin.getConfigService().getConfigFile("storage/arenas.yml"), config);
 
@@ -227,7 +231,7 @@ public class StandAloneArena extends AbstractArena {
 
         StandAloneArena copiedArena = new StandAloneArena(
                 this.getName(), copyId, newMin, newMax,
-                newTeam1Portal, newTeam2Portal, this.heightLimit
+                newTeam1Portal, newTeam2Portal, this.heightLimit, this.voidLevel
         );
 
         copiedArena.setEnabled(true);

@@ -1,10 +1,13 @@
 package dev.revere.alley.provider.scoreboard.impl.match.impl.type;
 
 import dev.revere.alley.Alley;
+import dev.revere.alley.game.match.impl.MatchLivesImpl;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.profile.Profile;
+import dev.revere.alley.provider.scoreboard.impl.match.AbstractMatchScoreboard;
 import dev.revere.alley.provider.scoreboard.impl.match.IMatchScoreboard;
+import dev.revere.alley.provider.scoreboard.impl.match.annotation.ScoreboardData;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.entity.Player;
 
@@ -12,38 +15,43 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author Emmy
+ * @author Remi
  * @project Alley
- * @since 30/04/2025
+ * @since 26/06/2025
  */
-public class MatchScoreboardLivesImpl implements IMatchScoreboard {
-    protected final Alley plugin;
+@ScoreboardData(match = MatchLivesImpl.class)
+public class MatchScoreboardLivesImpl extends AbstractMatchScoreboard {
 
-    /**
-     * Constructor for the MatchScoreboardLivesImpl class.
-     *
-     * @param plugin The Alley plugin instance.
-     */
     public MatchScoreboardLivesImpl(Alley plugin) {
-        this.plugin = plugin;
+        super(plugin);
     }
 
     @Override
-    public List<String> getLines(Profile profile, Player player, GameParticipant<MatchGamePlayerImpl> you, GameParticipant<MatchGamePlayerImpl> opponent) {
-        List<String> scoreboardLines = new ArrayList<>();
+    protected String getSoloConfigPath() {
+        return "scoreboard.lines.playing.solo.lives-match";
+    }
 
-        for (String line : this.plugin.getConfigService().getScoreboardConfig().getStringList("scoreboard.lines.playing.solo.lives-match")) {
-            scoreboardLines.add(CC.translate(line)
-                    .replaceAll("\\{opponent}", this.getColoredName(this.plugin.getProfileService().getProfile(opponent.getPlayer().getUuid())))
-                    .replaceAll("\\{opponent-ping}", String.valueOf(this.getPing(opponent.getPlayer().getPlayer())))
-                    .replaceAll("\\{player-ping}", String.valueOf(this.getPing(player)))
-                    .replaceAll("\\{player-lives}", String.valueOf(profile.getMatch().getGamePlayer(player).getData().getLives()))
-                    .replaceAll("\\{opponent-lives}", String.valueOf(profile.getMatch().getGamePlayer(opponent.getPlayer().getPlayer()).getData().getLives()))
-                    .replaceAll("\\{duration}", profile.getMatch().getDuration())
-                    .replaceAll("\\{arena}", profile.getMatch().getArena().getDisplayName() == null ? "&c&lNULL" : profile.getMatch().getArena().getDisplayName())
-                    .replaceAll("\\{kit}", profile.getMatch().getKit().getDisplayName()));
-        }
+    @Override
+    protected String getTeamConfigPath() {
+        return "scoreboard.lines.playing.team.lives-match";
+    }
 
-        return scoreboardLines;
+    @Override
+    protected String replacePlaceholders(String line, Profile profile, Player player, GameParticipant<MatchGamePlayerImpl> you, GameParticipant<MatchGamePlayerImpl> opponent) {
+        String baseLine = super.replacePlaceholders(line, profile, player, you, opponent);
+
+        int yourTeamLives = you.getPlayers().stream()
+                .mapToInt(p -> p.getData().getLives())
+                .sum();
+
+        int opponentTeamLives = opponent.getPlayers().stream()
+                .mapToInt(p -> p.getData().getLives())
+                .sum();
+
+        return baseLine
+                .replace("{player-lives}", String.valueOf(you.getPlayer().getData().getLives()))
+                .replace("{opponent-lives}", String.valueOf(opponent.getPlayer().getData().getLives()))
+                .replace("{your-team-lives}", String.valueOf(yourTeamLives))
+                .replace("{opponent-team-lives}", String.valueOf(opponentTeamLives));
     }
 }

@@ -2,10 +2,13 @@ package dev.revere.alley.provider.scoreboard.impl.match;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.game.match.AbstractMatch;
+import dev.revere.alley.game.match.enums.EnumMatchState;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.provider.scoreboard.IScoreboard;
+import dev.revere.alley.provider.scoreboard.impl.match.impl.state.MatchScoreboardEndingImpl;
+import dev.revere.alley.provider.scoreboard.impl.match.impl.state.MatchScoreboardStartingImpl;
 import org.bukkit.entity.Player;
 
 import java.util.Collections;
@@ -17,17 +20,21 @@ import java.util.List;
  * @since 30/04/2025
  */
 public class MatchScoreboard implements IScoreboard {
-    protected final Alley plugin;
-    protected final MatchScoreboardFactory matchScoreboardFactory;
+    private final MatchScoreboardRegistry registry;
+
+    private final MatchScoreboardStartingImpl matchScoreboardStarting;
+    private final MatchScoreboardEndingImpl matchScoreboardEnding;
 
     /**
      * Constructor for the MatchScoreboard class.
+     * It instantiates the registry, which automatically discovers all providers.
      *
      * @param plugin The Alley plugin instance.
      */
     public MatchScoreboard(Alley plugin) {
-        this.plugin = plugin;
-        this.matchScoreboardFactory = new MatchScoreboardFactory(plugin);
+        this.registry = new MatchScoreboardRegistry(plugin);
+        this.matchScoreboardStarting = new MatchScoreboardStartingImpl(plugin);
+        this.matchScoreboardEnding = new MatchScoreboardEndingImpl(plugin);
     }
 
     @Override
@@ -38,19 +45,25 @@ public class MatchScoreboard implements IScoreboard {
     @Override
     public List<String> getLines(Profile profile, Player player) {
         AbstractMatch match = profile.getMatch();
-        List<GameParticipant<MatchGamePlayerImpl>> participants = match.getParticipants();
 
-        GameParticipant<MatchGamePlayerImpl> you = participants.stream()
-                .filter(p -> p.containsPlayer(profile.getUuid()))
-                .findFirst().orElse(null);
+        GameParticipant<MatchGamePlayerImpl> you = match.getParticipant(player);
+        GameParticipant<MatchGamePlayerImpl> opponent = match.getOpponent(player);
+        if (you == null || opponent == null) {
+            return Collections.emptyList();
+        }
 
-        GameParticipant<MatchGamePlayerImpl> opponent = participants.stream()
-                .filter(p -> !p.containsPlayer(profile.getUuid()))
-                .findFirst().orElse(null);
+        if (match.getState() == EnumMatchState.STARTING) {
+            return matchScoreboardStarting.getLines(profile, player, you, opponent);
+        }
+        if (match.getState() == EnumMatchState.ENDING_MATCH) {
+            return matchScoreboardEnding.getLines(profile, player, you, opponent);
+        }
 
+        IMatchScoreboard scoreboardImpl = registry.getScoreboard(match);
+        if (scoreboardImpl == null) {
+            return Collections.emptyList();
+        }
 
-        if (you == null || opponent == null) return Collections.emptyList();
-
-        return this.matchScoreboardFactory.getMatchType(profile).getLines(profile, player, you, opponent);
+        return scoreboardImpl.getLines(profile, player, you, opponent);
     }
 }

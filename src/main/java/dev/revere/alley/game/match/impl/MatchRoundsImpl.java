@@ -184,7 +184,7 @@ public class MatchRoundsImpl extends MatchRegularImpl {
         ListenerUtil.teleportAndClearSpawn(player, spawnLocation);
 
         this.giveLoadout(player, this.getKit());
-        this.applyWoolAndArmorColor(player);
+        this.applyColorKit(player);
     }
 
     @Override

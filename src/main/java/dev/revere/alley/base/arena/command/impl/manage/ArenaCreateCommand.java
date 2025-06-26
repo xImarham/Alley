@@ -62,7 +62,7 @@ public class ArenaCreateCommand extends BaseCommand {
                 arena = new SharedArena(arenaName, arenaSelection.getMinimum(), arenaSelection.getMaximum());
                 break;
             case STANDALONE:
-                arena = new StandAloneArena(arenaName, arenaSelection.getMinimum(), arenaSelection.getMaximum(), null, null, 100);
+                arena = new StandAloneArena(arenaName, arenaSelection.getMinimum(), arenaSelection.getMaximum(), null, null, 7, 70);
                 break;
             case FFA:
                 arena = new FreeForAllArena(arenaName, arenaSelection.getMinimum(), arenaSelection.getMaximum());

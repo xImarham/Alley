@@ -15,15 +15,15 @@ import org.bukkit.entity.Player;
  * @project Alley
  * @since 06/03/2025
  */
-public class ArenaSetHeightLimitCommand extends BaseCommand {
-    @CommandData(name = "arena.setheightlimit", aliases = {"arena.limit", "arena.height"}, isAdminOnly = true)
+public class ArenaSetVoidLevelCommand extends BaseCommand {
+    @CommandData(name = "arena.setvoidlevel", aliases = "arena.void", isAdminOnly = true)
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
         String[] args = command.getArgs();
 
         if (args.length < 2) {
-            player.sendMessage(CC.translate("&6Usage: &e/arena setheightlimit &6<arenaName> <heightLimit>"));
+            player.sendMessage(CC.translate("&6Usage: &e/arena setvoidlevel &6<arenaName> <voidLevel>"));
             return;
         }
 
@@ -35,24 +35,24 @@ public class ArenaSetHeightLimitCommand extends BaseCommand {
         }
 
         if (arena.getType() != EnumArenaType.STANDALONE) {
-            player.sendMessage(CC.translate("&cYou can only set the height limit for standalone arenas!"));
+            player.sendMessage(CC.translate("&cYou can only set the void level for standalone arenas!"));
             return;
         }
 
-        int heightLimit;
+        int voidLevel;
         try {
-            heightLimit = Integer.parseInt(args[1]);
-            if (heightLimit < 0 || heightLimit > 256) {
-                player.sendMessage(CC.translate("&cHeight limit must be between 0 and 256!"));
+            voidLevel = Integer.parseInt(args[1]);
+            if (voidLevel < 0 || voidLevel > 256) {
+                player.sendMessage(CC.translate("&cVoid level must be between 0 and 256!"));
                 return;
             }
         } catch (NumberFormatException e) {
-            player.sendMessage(CC.translate("&cInvalid height limit! Please enter a valid number."));
+            player.sendMessage(CC.translate("&cInvalid void level! Please enter a valid number."));
             return;
         }
 
-        ((StandAloneArena) arena).setHeightLimit(heightLimit);
+        ((StandAloneArena) arena).setVoidLevel(voidLevel);
         arenaService.saveArena(arena);
-        player.sendMessage(CC.translate("&aHeight limit for arena &6" + arena.getName() + "&a has been set to &6" + heightLimit + "&a!"));
+        player.sendMessage(CC.translate("&aVoid level for arena &6" + arena.getName() + "&a has been set to &6" + voidLevel + "&a!"));
     }
 }

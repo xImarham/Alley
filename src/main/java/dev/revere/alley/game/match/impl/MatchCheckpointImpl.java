@@ -77,6 +77,6 @@ public class MatchCheckpointImpl extends MatchRegularImpl {
         player.teleport(checkpoint);
 
         this.giveLoadout(player, this.getKit());
-        this.applyWoolAndArmorColor(player);
+        this.applyColorKit(player);
     }
 }

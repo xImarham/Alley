@@ -322,6 +322,11 @@ public class PartyService {
      * @param leader The leader of the party.
      */
     public void joinParty(Player player, Player leader) {
+        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
+        if (profile.getState() != EnumProfileState.LOBBY) {
+            player.sendMessage(CC.translate("&cYou must be in lobby to join a party."));
+            return;
+        }
         Party party = this.getPartyByLeader(leader);
         if (party == null) {
             player.sendMessage(CC.translate("&cThis party does not exist."));

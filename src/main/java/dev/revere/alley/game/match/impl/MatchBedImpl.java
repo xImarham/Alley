@@ -9,7 +9,6 @@ import dev.revere.alley.game.match.player.participant.TeamGameParticipant;
 import dev.revere.alley.util.ListenerUtil;
 import dev.revere.alley.util.PlayerUtil;
 import lombok.Getter;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -115,7 +114,7 @@ public class MatchBedImpl extends MatchRegularImpl {
         ListenerUtil.teleportAndClearSpawn(player, spawnLocation);
 
         this.giveLoadout(player, this.getKit());
-        this.applyWoolAndArmorColor(player);
+        this.applyColorKit(player);
     }
 
     /**
@@ -162,7 +161,7 @@ public class MatchBedImpl extends MatchRegularImpl {
 
             subMessage = color + breaker.getName() + " &7has destroyed the bed of " + opponentTeamName + "&7!";
         } else {
-            subMessage = " &c" + breaker.getName() + " &7has destroyed the bed of &6" + opponent.getPlayer().getUsername() + "&7!";
+            subMessage = " &c" + breaker.getName() + " &7has destroyed the bed of &9" + opponent.getPlayer().getUsername() + "&7!";
         }
         return subMessage;
     }
