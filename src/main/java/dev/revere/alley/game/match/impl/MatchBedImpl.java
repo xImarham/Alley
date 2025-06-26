@@ -58,19 +58,6 @@ public class MatchBedImpl extends MatchRegularImpl {
     }
 
     @Override
-    public void handleDeath(Player player) {
-        GameParticipant<MatchGamePlayerImpl> participant = this.participantA.containsPlayer(player.getUniqueId())
-                ? this.participantA
-                : this.participantB;
-
-        super.handleDeath(player);
-
-        if (!participant.isBedBroken()) {
-            this.startRespawnProcess(player);
-        }
-    }
-
-    @Override
     public void handleParticipant(Player player, MatchGamePlayerImpl gamePlayer) {
         GameParticipant<MatchGamePlayerImpl> gameParticipant = this.getParticipantA().containsPlayer(player.getUniqueId())
                 ? this.getParticipantA()

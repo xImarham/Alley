@@ -2,6 +2,7 @@ package dev.revere.alley.game.match.impl;
 
 import dev.revere.alley.base.arena.AbstractArena;
 import dev.revere.alley.base.kit.Kit;
+import dev.revere.alley.base.kit.setting.impl.mode.KitSettingRespawnTimerImpl;
 import dev.revere.alley.base.queue.Queue;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
@@ -45,25 +46,6 @@ public class MatchCheckpointImpl extends MatchRegularImpl {
     }
 
     @Override
-    public void handleDeath(Player player) {
-        super.handleDeath(player);
-
-        player.setGameMode(GameMode.SPECTATOR);
-        player.setAllowFlight(true);
-        player.setFlying(true);
-
-        MatchGamePlayerImpl gamePlayer = this.getGamePlayer(player);
-        if (gamePlayer != null) {
-            gamePlayer.setDead(false);
-        }
-
-        Location spawnLocation = this.getArena().getCenter();
-        ListenerUtil.teleportAndClearSpawn(player, spawnLocation);
-
-        new MatchRespawnRunnable(player, this, 1).runTaskTimer(this.plugin, 0L, 20L);
-    }
-
-    @Override
     public void handleRespawn(Player player) {
         PlayerUtil.reset(player, true);
 
@@ -74,7 +56,7 @@ public class MatchCheckpointImpl extends MatchRegularImpl {
             checkpoint = this.participantA.containsPlayer(player.getUniqueId()) ? getArena().getPos1() : getArena().getPos2();
         }
 
-        player.teleport(checkpoint);
+        ListenerUtil.teleportAndClearSpawn(player, checkpoint);
 
         this.giveLoadout(player, this.getKit());
         this.applyColorKit(player);

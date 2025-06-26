@@ -67,10 +67,6 @@ public class MatchLivesImpl extends MatchRegularImpl {
 
         this.reduceLife(data);
         super.handleDeath(player);
-
-        if (data.getLives() > 0) {
-            this.startRespawnProcess(player);
-        }
     }
 
     @Override

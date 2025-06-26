@@ -2,6 +2,7 @@ package dev.revere.alley.game.match.impl;
 
 import dev.revere.alley.base.arena.AbstractArena;
 import dev.revere.alley.base.kit.Kit;
+import dev.revere.alley.base.kit.setting.impl.mode.KitSettingBridgesImpl;
 import dev.revere.alley.base.kit.setting.impl.mode.KitSettingStickFightImpl;
 import dev.revere.alley.base.queue.Queue;
 import dev.revere.alley.game.match.enums.EnumMatchState;
@@ -91,7 +92,9 @@ public class MatchRoundsImpl extends MatchRegularImpl {
             if (this.canEndMatch()) {
                 super.handleRoundEnd();
             } else {
-                this.removePlacedBlocks();
+                if (!getKit().isSettingEnabled(KitSettingBridgesImpl.class)) {
+                    this.removePlacedBlocks();
+                }
                 this.setState(EnumMatchState.ENDING_ROUND);
 
                 this.getParticipants().forEach(participant -> participant.getPlayers().forEach(playerParticipant -> {
@@ -156,7 +159,6 @@ public class MatchRoundsImpl extends MatchRegularImpl {
         }
 
         super.handleDeath(player);
-        this.startRespawnProcess(player);
     }
 
     @Override
@@ -169,12 +171,6 @@ public class MatchRoundsImpl extends MatchRegularImpl {
             opponent.getPlayer().setEliminated(true);
         }
     }
-
-    @Override
-    protected boolean shouldHandleRegularRespawn(Player player) {
-        return false;
-    }
-
 
     @Override
     public void handleRespawn(Player player) {

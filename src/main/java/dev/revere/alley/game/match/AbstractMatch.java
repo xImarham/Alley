@@ -266,8 +266,12 @@ public abstract class AbstractMatch {
             }
             this.runnable.setStage(4);
         } else {
-            if (this.shouldHandleRegularRespawn(player)) {
-                this.handleRespawn(player);
+            if (!gamePlayer.isEliminated()) {
+                if (this.shouldHandleRegularRespawn(player)) {
+                    this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> this.handleRespawn(player), 1L);
+                } else {
+                    this.startRespawnProcess(player);
+                }
             }
         }
 

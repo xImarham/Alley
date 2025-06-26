@@ -3,6 +3,7 @@ package dev.revere.alley.game.match.impl;
 import dev.revere.alley.base.arena.AbstractArena;
 import dev.revere.alley.base.kit.Kit;
 import dev.revere.alley.base.kit.setting.impl.mode.KitSettingRaidingImpl;
+import dev.revere.alley.base.kit.setting.impl.mode.KitSettingRespawnTimerImpl;
 import dev.revere.alley.base.queue.Queue;
 import dev.revere.alley.feature.division.Division;
 import dev.revere.alley.feature.division.tier.DivisionTier;
@@ -147,6 +148,11 @@ public class MatchRegularImpl extends AbstractMatch {
 
             teamPlayer.updateInventory();
         });
+    }
+
+    @Override
+    protected boolean shouldHandleRegularRespawn(Player player) {
+        return !this.getKit().isSettingEnabled(KitSettingRespawnTimerImpl.class);
     }
 
     @Override
