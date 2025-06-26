@@ -10,6 +10,10 @@ spawn:
   join-location: world:0.5:73.0:0.5:90.0:0.0
 
 game:
+  blocked-commands: # Commands that will be blocked in-game, players won't be able to execute them.
+    - "kill"
+    - "gamemode"
+    - "troll"
   # The amount of lives each player will have in a lives match.
   lives: 3
   # The radius of the portal in blocks.

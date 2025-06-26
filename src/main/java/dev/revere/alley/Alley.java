@@ -265,6 +265,7 @@ public class Alley extends JavaPlugin {
                 new MatchPearlListener(this),
                 new MatchDisconnectListener(this),
                 new MatchDamageListener(this),
+                new MatchChatListener(this),
                 new MatchBlockListener(this),
                 new ArenaListener(),
                 new MenuListener(this),

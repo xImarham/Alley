@@ -11,6 +11,7 @@ import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.tool.logger.Logger;
 import lombok.Getter;
+import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +27,8 @@ public class MatchService {
     protected final Alley plugin;
     private final List<AbstractMatch> matches;
 
+    private final List<String> blockedCommands;
+
     /**
      * Constructor for the MatchService class.
      *
@@ -34,6 +37,8 @@ public class MatchService {
     public MatchService(Alley plugin) {
         this.plugin = plugin;
         this.matches = new CopyOnWriteArrayList<>();
+        this.blockedCommands = new ArrayList<>();
+        this.loadBlockedCommands();
     }
 
     /**
@@ -83,5 +88,17 @@ public class MatchService {
         }
 
         Logger.log(this.matches.size() + " matches have been ended.");
+    }
+
+    private void loadBlockedCommands() {
+        FileConfiguration config = this.plugin.getConfigService().getSettingsConfig();
+
+        List<String> configBlockedCommands = config.getStringList("game.blocked-commands");
+        if (configBlockedCommands.isEmpty()) {
+            Logger.log("No blocked commands found in the configuration. Please check your settings.yml file.");
+            return;
+        }
+
+        this.blockedCommands.addAll(configBlockedCommands);
     }
 }
