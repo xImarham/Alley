@@ -44,6 +44,8 @@ public class KitSetEditableCommand extends BaseCommand {
 
         kit.setEditable(editable);
         kitService.saveKit(kit);
-        sender.sendMessage(CC.translate("&aSuccessfully set the kit named &6" + kit.getDisplayName() + " &ato editable: &6" + editable + "&a."));
+        sender.sendMessage(CC.translate(KitLocale.KIT_SET_EDITABLE.getMessage()
+                .replace("{kit-name}", kit.getName())
+                .replace("{editable}", String.valueOf(editable))));
     }
 }

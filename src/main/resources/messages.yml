@@ -37,6 +37,7 @@ kit:
     menu-title-set: "&aSuccessfully set the menu title of the &6{kit-name} &akit: &r{title}"
     icon-set: "&aSuccessfully set the icon of the &6{kit-name} &akit to &6{icon}&a!"
     set-category: "&aSuccessfully set the category of the &6{kit-name} &akit to &6{category}&a!"
+    set-editable: "&aSuccessfully set the editable status of the &6{kit-name} &akit to &6{editable}&a!"
     potion-effects-set: "&aSuccessfully set the potion effects of the &6{kit-name} &akit!"
     potion-effects-cleared: "&aSuccessfully cleared the potion effects of the &6{kit-name} &akit!"
   manage:

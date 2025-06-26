@@ -31,6 +31,7 @@ public enum KitLocale implements ILocale {
     KIT_ICON_SET("messages.yml", "kit.data.icon-set"),
     KIT_SET_CATEGORY("messages.yml", "kit.data.set-category"),
     KIT_MENU_TITLE_SET("messages.yml", "kit.data.menu-title-set"),
+    KIT_SET_EDITABLE("messages.yml", "kit.data.set-editable"),
 
     KIT_POTION_EFFECTS_SET("messages.yml", "kit.data.potion-effects-set"),
     KIT_POTION_EFFECTS_CLEARED("messages.yml", "kit.data.potion-effects-cleared"),

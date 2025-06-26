@@ -69,7 +69,6 @@ public class KitSetupFFACommand extends BaseCommand {
         /* TODO: Verify which settings are enabled for the kit to prevent conflicting settings, 
             such as setting Boxing as FFA. Afterwards too, if (/kit setsetting) */
 
-
         kit.setFfaEnabled(true);
         kit.setFfaSlot(menuSlot);
         kit.setFfaArenaName(arena.getName());
