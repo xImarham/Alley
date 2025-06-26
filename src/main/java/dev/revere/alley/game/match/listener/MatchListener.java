@@ -1,6 +1,7 @@
 package dev.revere.alley.game.match.listener;
 
 import dev.revere.alley.Alley;
+import dev.revere.alley.api.menu.Menu;
 import dev.revere.alley.base.arena.enums.EnumArenaType;
 import dev.revere.alley.base.arena.impl.StandAloneArena;
 import dev.revere.alley.base.kit.Kit;
@@ -152,7 +153,9 @@ public class MatchListener implements Listener {
 
         Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
         if (profile.getState() == EnumProfileState.SPECTATING) {
-            event.setCancelled(true);
+            if (!Menu.currentlyOpenedMenus.containsKey(player.getName())) {
+                event.setCancelled(true);
+            }
         }
     }
 

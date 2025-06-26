@@ -3,3 +3,25 @@ queues-menu:
 
 layout-menu:
   type: DEFAULT
+
+menus:
+  spectator-teleport:
+    title: "&6&lSpectator Menu"
+    buttons:
+      match-info-button:
+        slot: 4
+        glass-durability: 15
+        name: "&6&lMatch Info"
+        lore:
+          - " &f● &6Kit: &f{kit}"
+          - " &f● &6Arena: &f{arena}"
+          - " &f● &6Players: &f{players}"
+      spectator-teleport-button:
+        name: "{player-color}{username}"
+        lore:
+          - " &f● &6Ping: &f{ping}ms"
+          - " &f● &6Team: &f{team}"
+          - " &f● &6ELO: &f{elo}"
+          - ""
+          - "&6&lLEFT-CLICK &fto teleport to this player."
+          - "&6&lRIGHT-CLICK &fto view their statistics."

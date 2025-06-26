@@ -1,6 +1,8 @@
 package dev.revere.alley.tool.reflection.utility;
 
 import org.bukkit.Bukkit;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
+import org.bukkit.entity.Player;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -615,5 +617,15 @@ public final class ReflectionUtility {
         } catch (ClassNotFoundException exception) {
             throw new RuntimeException(exception);
         }
+    }
+
+    /**
+     * Gets the ping of a player.
+     *
+     * @param player The player to get the ping of.
+     * @return The ping of the player in milliseconds.
+     */
+    public static int getPing(Player player) {
+        return ((CraftPlayer) player).getHandle().ping;
     }
 }

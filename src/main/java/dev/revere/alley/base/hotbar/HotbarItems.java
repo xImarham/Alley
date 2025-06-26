@@ -40,6 +40,7 @@ public enum HotbarItems {
     TIPS("&6Tip Of The Day &7(Right Click)", Material.PAPER, 0, 1, "tip", EnumHotbarType.QUEUE),
     LEAVE_QUEUE("&cLeave Queue &7(Right Click)", Material.REDSTONE, 0, 8, "leavequeue", EnumHotbarType.QUEUE),
 
+    TELEPORT_MENU("&6Teleport Menu &7(Right Click)", Material.COMPASS, 0, 0, "viewplayers", EnumHotbarType.SPECTATOR),
     STOP_WATCHING("&cStop Watching &7(Right Click)", Material.REDSTONE, 0, 8, "leavespectator", EnumHotbarType.SPECTATOR),
 
     TOURNAMENT_LEAVE("&cLeave Tournament &7(Right Click)", Material.REDSTONE, 0, 8, "tournament leave", EnumHotbarType.TOURNAMENT),
