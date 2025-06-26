@@ -84,13 +84,10 @@ public class MatchInteractListener implements Listener {
                     : matchCheckpoint.getParticipantA();
 
             opponent.setLostCheckpoint(true);
-            opponent.getPlayers().stream()
-                    .findAny()
-                    .ifPresent(gamePlayer -> {
-                        if (gamePlayer.getPlayer() != null) {
-                            matchCheckpoint.handleDeath(gamePlayer.getPlayer());
-                        }
-                    });
+            opponent.getPlayers().forEach(gamePlayer -> gamePlayer.setDead(true));
+            opponent.getPlayers().stream().findAny().ifPresent(gamePlayer -> {
+                matchCheckpoint.handleDeath(gamePlayer.getPlayer());
+            });
         }
     }
 }

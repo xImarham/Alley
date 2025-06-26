@@ -40,7 +40,7 @@ public class MatchCheckpointImpl extends MatchRegularImpl {
 
     @Override
     public boolean canEndRound() {
-        return (this.participantA.isLostCheckpoint() || this.participantB.isLostCheckpoint())
+        return ((this.participantA.isLostCheckpoint() && this.participantA.isAllDead()) || (this.participantB.isLostCheckpoint() && this.participantB.isAllDead()))
                 || (this.participantA.getAllPlayers().stream().allMatch(MatchGamePlayerImpl::isDisconnected)
                 || this.participantB.getAllPlayers().stream().allMatch(MatchGamePlayerImpl::isDisconnected));
     }
@@ -56,7 +56,7 @@ public class MatchCheckpointImpl extends MatchRegularImpl {
             checkpoint = this.participantA.containsPlayer(player.getUniqueId()) ? getArena().getPos1() : getArena().getPos2();
         }
 
-        ListenerUtil.teleportAndClearSpawn(player, checkpoint);
+        player.teleport(checkpoint);
 
         this.giveLoadout(player, this.getKit());
         this.applyColorKit(player);
