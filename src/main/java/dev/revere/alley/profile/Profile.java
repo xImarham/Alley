@@ -73,6 +73,7 @@ public class Profile {
         this.name = Bukkit.getOfflinePlayer(this.uuid).getName();
         this.leaderboardType = EnumLeaderboardType.RANKED;
         this.queueType = EnumQueueType.UNRANKED;
+        this.nameColor = ChatColor.WHITE;
 
         this.partneritem = new AbilityCooldown();
         this.antitrapper = new AbilityCooldown();
