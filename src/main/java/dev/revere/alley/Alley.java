@@ -59,6 +59,7 @@ import dev.revere.alley.provider.expansion.AlleyPlaceholderExpansion;
 import dev.revere.alley.provider.scoreboard.ScoreboardVisualizer;
 import dev.revere.alley.provider.tablist.task.TablistUpdateTask;
 import dev.revere.alley.task.ArrowRemovalTask;
+import dev.revere.alley.task.MatchPearlCooldownTask;
 import dev.revere.alley.task.RepositoryCleanupTask;
 import dev.revere.alley.tool.animation.AnimationRepository;
 import dev.revere.alley.tool.elo.EloCalculator;
@@ -284,6 +285,7 @@ public class Alley extends JavaPlugin {
         final Map<String, Runnable> tasks = new LinkedHashMap<>();
 
         tasks.put(RepositoryCleanupTask.class.getSimpleName(), () -> new RepositoryCleanupTask(this).runTaskTimer(this, 0L, 40L));
+        tasks.put(MatchPearlCooldownTask.class.getSimpleName(), () -> new MatchPearlCooldownTask().runTaskTimer(this, 2L, 2L));
         tasks.put(ArrowRemovalTask.class.getSimpleName(), () -> new ArrowRemovalTask().runTaskTimer(this, 20L, 20L));
 
         if (this.configService.getTabListConfig().getBoolean("tablist.enabled")) {

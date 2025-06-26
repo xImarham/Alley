@@ -4,6 +4,8 @@ import dev.revere.alley.Alley;
 import dev.revere.alley.base.combat.CombatService;
 import dev.revere.alley.game.duel.DuelRequest;
 import dev.revere.alley.game.duel.DuelRequestService;
+import dev.revere.alley.game.match.snapshot.Snapshot;
+import dev.revere.alley.game.match.snapshot.SnapshotRepository;
 import dev.revere.alley.game.party.PartyRequest;
 import dev.revere.alley.game.party.PartyService;
 import dev.revere.alley.util.chat.CC;
@@ -56,6 +58,9 @@ public class RepositoryCleanupTask extends BukkitRunnable {
             }
             this.notifyDuelRequestIndividuals(expiredRequests);
         }
+
+        SnapshotRepository snapshotRepository = this.plugin.getSnapshotRepository();
+        snapshotRepository.getSnapshots().entrySet().removeIf(entry -> System.currentTimeMillis() - entry.getValue().getCreatedAt() >= 60_000);
 
         PartyService partyService = this.plugin.getPartyService();
         if (!partyService.getParties().isEmpty()) {
