@@ -3,6 +3,7 @@ package dev.revere.alley.provider.scoreboard.impl.match;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.profile.Profile;
+import org.bukkit.ChatColor;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
@@ -32,7 +33,14 @@ public interface IMatchScoreboard {
      * @return The formatted player name with color.
      */
     default String getColoredName(Profile profile) {
-        return profile.getNameColor() + profile.getName();
+        ChatColor nameColor = profile.getNameColor();
+        String name = profile.getName();
+
+        if (nameColor != null) {
+            return nameColor + name;
+        } else {
+            return ChatColor.WHITE + name;
+        }
     }
 
     /**
