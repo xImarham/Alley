@@ -8,6 +8,6 @@ import dev.revere.alley.base.kit.setting.annotation.KitSettingData;
  * @project Alley
  * @since 27/06/2025
  */
-@KitSettingData(name = "HealthBar", description = "Shows the health bar of your opponent above their head.", enabled = true)
+@KitSettingData(name = "HealthBar", description = "Shows the health bar of your opponent in action bar.", enabled = true)
 public class KitSettingHealthBarImpl extends KitSetting {
 }
