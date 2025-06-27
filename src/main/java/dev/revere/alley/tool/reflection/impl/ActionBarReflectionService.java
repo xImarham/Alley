@@ -5,6 +5,7 @@ import dev.revere.alley.profile.Profile;
 import dev.revere.alley.tool.logger.Logger;
 import dev.revere.alley.tool.reflection.IReflection;
 import dev.revere.alley.util.chat.CC;
+import dev.revere.alley.util.chat.Symbol;
 import net.minecraft.server.v1_8_R3.IChatBaseComponent;
 import net.minecraft.server.v1_8_R3.PacketPlayOutChat;
 import org.bukkit.ChatColor;
@@ -94,7 +95,7 @@ public class ActionBarReflectionService implements IReflection {
         FileConfiguration config = this.plugin.getConfigService().getVisualsConfig();
         String path = "game.health-bar";
 
-        String symbol = config.getString(path + ".symbol.appearance", "❤");
+        String symbol = config.getString(path + ".symbol.appearance", Symbol.HEART);
         String fullColor = config.getString(path + ".symbol.color.full", "&a&l");
         String emptyColor = config.getString(path + ".symbol.color.empty", "&7&l");
 

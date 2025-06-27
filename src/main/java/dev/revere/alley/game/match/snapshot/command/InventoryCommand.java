@@ -4,11 +4,8 @@ import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.game.match.snapshot.Snapshot;
-import dev.revere.alley.game.match.snapshot.SnapshotRepository;
-import dev.revere.alley.game.match.snapshot.menu.InventorySnapshotMenu;
-import dev.revere.alley.util.PlayerUtil;
+import dev.revere.alley.game.match.snapshot.menu.SnapshotMenu;
 import dev.revere.alley.util.chat.CC;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
@@ -38,6 +35,11 @@ public class InventoryCommand extends BaseCommand {
             snapshot = this.plugin.getSnapshotRepository().getSnapshot(uuid);
         }
 
-        new InventorySnapshotMenu(snapshot).openMenu(player);
+        if (snapshot == null) {
+            player.sendMessage(CC.translate("&cThis Inventory has expired."));
+            return;
+        }
+
+        new SnapshotMenu(snapshot).openMenu(player);
     }
 }

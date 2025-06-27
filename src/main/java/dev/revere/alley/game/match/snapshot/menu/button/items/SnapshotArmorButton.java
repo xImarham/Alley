@@ -1,6 +1,5 @@
-package dev.revere.alley.game.match.snapshot.menu.button;
+package dev.revere.alley.game.match.snapshot.menu.button.items;
 
-import dev.revere.alley.Alley;
 import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.game.match.snapshot.Snapshot;
 import dev.revere.alley.tool.item.ItemBuilder;
@@ -14,7 +13,7 @@ import org.bukkit.inventory.ItemStack;
  * @date 07/10/2024
  */
 @AllArgsConstructor
-public class InventorySnapshotArmorButton extends Button {
+public class SnapshotArmorButton extends Button {
     private final Snapshot snapshot;
     private int armorPart;
 

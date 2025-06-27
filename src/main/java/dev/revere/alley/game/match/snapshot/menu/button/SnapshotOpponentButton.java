@@ -17,7 +17,7 @@ import org.bukkit.inventory.ItemStack;
  * @date 07/10/2024
  */
 @AllArgsConstructor
-public class ViewOpponentButton extends Button {
+public class SnapshotOpponentButton extends Button {
     private final Snapshot snapshot;
 
     @Override

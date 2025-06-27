@@ -20,6 +20,10 @@ public class MatchGamePlayerData {
     private int score;
     private int kills;
     private int deaths;
+
+    private int missedPotions;
+    private int thrownPotions;
+
     private EnumBaseRaiderRole role;
 
     public MatchGamePlayerData() {
@@ -56,5 +60,13 @@ public class MatchGamePlayerData {
 
     public void incrementDeaths() {
         this.deaths++;
+    }
+
+    public void incrementMissedPotions() {
+        this.missedPotions++;
+    }
+
+    public void incrementThrownPotions() {
+        this.thrownPotions++;
     }
 }

@@ -3,6 +3,7 @@ package dev.revere.alley.game.match.snapshot;
 import dev.revere.alley.util.InventoryUtil;
 import lombok.Getter;
 import lombok.Setter;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -31,8 +32,8 @@ public class Snapshot {
 
     private final List<String> potionEffects;
 
-    private int potionsThrown;
-    private int potionsMissed;
+    private int thrownPotions;
+    private int missedPotions;
     private int longestCombo;
     private int totalHits;
 
@@ -54,6 +55,10 @@ public class Snapshot {
         this.potionEffects = player.getActivePotionEffects().stream()
                 .map(effect -> effect.getType().getName() + " " + effect.getAmplifier())
                 .collect(Collectors.toList());
+        this.thrownPotions = 0;
+        this.missedPotions = 0;
+        this.longestCombo = 0;
+        this.totalHits = 0;
         this.createdAt = System.currentTimeMillis();
     }
 
@@ -63,12 +68,27 @@ public class Snapshot {
      * @return the potion accuracy percentage
      */
     public double getPotionAccuracy() {
-        if (this.potionsMissed == 0) {
+        if (this.missedPotions == 0) {
             return 100.0;
-        } else if (this.potionsThrown == this.potionsMissed) {
+        } else if (this.thrownPotions == this.missedPotions) {
             return 50.0;
         }
 
-        return Math.round(100.0D - (((double) this.potionsMissed / (double) this.potionsThrown) * 100.0D));
+        return Math.round(100.0D - (((double) this.missedPotions / (double) this.thrownPotions) * 100.0D));
+    }
+
+    /**
+     * Get the amount of potions in the player's inventory.
+     *
+     * @return the amount of potions in the inventory
+     */
+    public int getAmountOfPotionsInInventory() {
+        int amount = 0;
+        for (ItemStack item : this.inventory) {
+            if (item != null && item.getType() == new ItemStack(Material.POTION, 0, (byte) 16421).getType()) {
+                amount += item.getAmount();
+            }
+        }
+        return amount;
     }
 }

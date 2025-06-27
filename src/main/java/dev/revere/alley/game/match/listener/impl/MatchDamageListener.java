@@ -173,7 +173,7 @@ public class MatchDamageListener implements Listener {
                     finalHealth = Math.max(0, finalHealth);
 
                     if (finalHealth > 0) {
-                        attacker.sendMessage(CC.translate(this.plugin.getCoreAdapter().getCore().getPlayerColor(damaged) + damaged.getName() + " &7&l" + Symbol.ARROW_R + " &6" + String.format("%.1f", finalHealth) + " &c❤"));
+                        attacker.sendMessage(CC.translate(this.plugin.getCoreAdapter().getCore().getPlayerColor(damaged) + damaged.getName() + " &7&l" + Symbol.ARROW_R + " &6" + String.format("%.1f", finalHealth) + " &c" + Symbol.HEART));
                     }
                 }
 
