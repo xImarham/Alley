@@ -271,7 +271,6 @@ public abstract class AbstractMatch {
         }
 
         this.handleParticipant(player, gamePlayer);
-        this.notifySpectators(player.getName() + " has died");
 
         Player killer = this.plugin.getCombatService().getLastAttacker(player);
         Profile victimProfile = this.plugin.getProfileService().getProfile(player.getUniqueId());
@@ -294,6 +293,18 @@ public abstract class AbstractMatch {
             }
             this.runnable.setStage(4);
         } else {
+            if (handleSpectator(player, victimProfile, participant)) {
+                if (killer != null) {
+                    this.handleDeathEffects(player, killer);
+                }
+
+                this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> {
+                    player.spigot().respawn();
+                    this.addSpectator(player);
+                }, 2L);
+                return;
+            }
+
             if (!gamePlayer.isEliminated()) {
                 if (this.shouldHandleRegularRespawn(player)) {
                     this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> this.handleRespawn(player), 1L);
@@ -302,7 +313,6 @@ public abstract class AbstractMatch {
                 }
             }
         }
-        this.handleSpectator(player, victimProfile, participant);
     }
 
     /**
@@ -312,17 +322,15 @@ public abstract class AbstractMatch {
      * @param profile     The profile of the player.
      * @param participant The participant of the match.
      */
-    private void handleSpectator(Player player, Profile profile, GameParticipant<MatchGamePlayerImpl> participant) {
+    private boolean handleSpectator(Player player, Profile profile, GameParticipant<MatchGamePlayerImpl> participant) {
         Kit matchKit = profile.getMatch().getKit();
 
         MatchGamePlayerImpl gamePlayer = this.getFromAllGamePlayers(player);
         if (gamePlayer.isDisconnected()) {
-            return;
+            return false;
         }
 
-        if (this.shouldBecomeSpectatorForEliminationKit(participant, matchKit, player) || shouldBecomeSpectatorForNonRoundKit(participant, matchKit)) {
-            profile.getMatch().addSpectator(player);
-        }
+        return this.shouldBecomeSpectatorForEliminationKit(participant, matchKit, player) || shouldBecomeSpectatorForNonRoundKit(participant, matchKit);
     }
 
     private boolean shouldBecomeSpectatorForEliminationKit(GameParticipant<MatchGamePlayerImpl> participant, Kit matchKit, Player player) {
@@ -393,7 +401,7 @@ public abstract class AbstractMatch {
 
     private void handleDefaultDeathMessages(Player victim, Player killer, Profile victimProfile) {
         if (killer == null) {
-            this.notifyParticipants("&c" + victimProfile.getNameColor() + victim.getName() + " &fdied.");
+            this.notifyAll("&c" + victimProfile.getNameColor() + victim.getName() + " &fdied.");
         } else {
             processKillerActions(victim, killer, victimProfile);
         }
@@ -408,7 +416,7 @@ public abstract class AbstractMatch {
                 .getReflectionService(ActionBarReflectionService.class)
                 .sendDeathMessage(killer, victim);
 
-        this.notifyParticipants("&c" + victimProfile.getNameColor() + victim.getName() + " &fwas slain by &c" + killerProfile.getNameColor() + killer.getName() + "&f.");
+        this.notifyAll("&c" + victimProfile.getNameColor() + victim.getName() + " &fwas slain by &c" + killerProfile.getNameColor() + killer.getName() + "&f.");
     }
 
     private void processKillerStatActions(Player killer) {
@@ -519,10 +527,10 @@ public abstract class AbstractMatch {
             return;
         }
 
-        ListenerUtil.teleportAndClearSpawn(player, this.arena.getCenter());
-        player.spigot().setCollidesWithEntities(false);
         player.setAllowFlight(true);
         player.setFlying(true);
+
+        ListenerUtil.teleportAndClearSpawn(player, this.arena.getCenter());
 
         if (this.getGamePlayer(player) == null) {
             this.spectators.add(player.getUniqueId());
@@ -1041,5 +1049,7 @@ public abstract class AbstractMatch {
         Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
         profile.setState(EnumProfileState.SPECTATING);
         profile.setMatch(this);
+
+        PlayerUtil.reset(player, false);
     }
 }
