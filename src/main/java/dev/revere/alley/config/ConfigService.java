@@ -23,10 +23,10 @@ public class ConfigService {
     private final FileConfiguration settingsConfig, messagesConfig,
             databaseConfig, kitsConfig, arenasConfig,
             scoreboardConfig, tabListConfig, divisionsConfig,
-            menusConfig, titlesConfig, levelsConfig, pearlConfig, abilityConfig;
+            menusConfig, titlesConfig, levelsConfig, pearlConfig, abilityConfig, visualsConfig;
 
     private final String[] configFileNames = {
-            "settings.yml", "messages.yml", "menus.yml", "pearls.yml", "abilities.yml",
+            "settings.yml", "messages.yml", "menus.yml", "pearls.yml", "abilities.yml", "visuals.yml",
             "database/database.yml",
             "storage/kits.yml", "storage/arenas.yml", "storage/divisions.yml", "storage/titles.yml", "storage/levels.yml",
             "providers/scoreboard.yml", "providers/tablist.yml"
@@ -40,19 +40,23 @@ public class ConfigService {
             this.loadConfig(fileName);
         }
 
+        this.menusConfig = this.getConfig("menus.yml");
         this.pearlConfig = this.getConfig("pearls.yml");
         this.abilityConfig = this.getConfig("abilities.yml");
+        this.visualsConfig = this.getConfig("visuals.yml");
         this.settingsConfig = this.getConfig("settings.yml");
         this.messagesConfig = this.getConfig("messages.yml");
+
         this.databaseConfig = this.getConfig("database/database.yml");
+
         this.kitsConfig = this.getConfig("storage/kits.yml");
         this.arenasConfig = this.getConfig("storage/arenas.yml");
-        this.scoreboardConfig = this.getConfig("providers/scoreboard.yml");
-        this.tabListConfig = this.getConfig("providers/tablist.yml");
-        this.divisionsConfig = this.getConfig("storage/divisions.yml");
-        this.menusConfig = this.getConfig("menus.yml");
         this.titlesConfig = this.getConfig("storage/titles.yml");
         this.levelsConfig = this.getConfig("storage/levels.yml");
+        this.divisionsConfig = this.getConfig("storage/divisions.yml");
+
+        this.tabListConfig = this.getConfig("providers/tablist.yml");
+        this.scoreboardConfig = this.getConfig("providers/scoreboard.yml");
     }
 
     /**

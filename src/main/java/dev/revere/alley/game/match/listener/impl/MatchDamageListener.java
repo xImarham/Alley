@@ -2,16 +2,18 @@ package dev.revere.alley.game.match.listener.impl;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.base.kit.Kit;
-import dev.revere.alley.base.kit.setting.impl.mechanic.KitSettingBowShotIndicatorImpl;
+import dev.revere.alley.base.kit.setting.impl.visual.KitSettingBowShotIndicatorImpl;
 import dev.revere.alley.base.kit.setting.impl.mechanic.KitSettingNoDamageImpl;
 import dev.revere.alley.base.kit.setting.impl.mechanic.KitSettingNoFallDamageImpl;
 import dev.revere.alley.base.kit.setting.impl.mode.*;
+import dev.revere.alley.base.kit.setting.impl.visual.KitSettingHealthBarImpl;
 import dev.revere.alley.game.match.AbstractMatch;
 import dev.revere.alley.game.match.enums.EnumMatchState;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
+import dev.revere.alley.tool.reflection.impl.ActionBarReflectionService;
 import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.util.chat.Symbol;
 import org.bukkit.entity.Arrow;
@@ -23,8 +25,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
-
-import java.util.List;
 
 /**
  * @author Emmy
@@ -208,7 +208,13 @@ public class MatchDamageListener implements Listener {
             if (profile.getState() == EnumProfileState.PLAYING) {
                 Player player = (Player) event.getEntity();
                 Player attacker = (Player) event.getDamager();
-                Alley.getInstance().getCombatService().setLastAttacker(player, attacker);
+
+                this.plugin.getCombatService().setLastAttacker(player, attacker);
+
+                if (profile.getMatch().getKit().isSettingEnabled(KitSettingHealthBarImpl.class)) {
+                    this.plugin.getReflectionRepository().getReflectionService(ActionBarReflectionService.class)
+                            .visualizeTargetHealth(attacker, player);
+                }
             }
         }
     }

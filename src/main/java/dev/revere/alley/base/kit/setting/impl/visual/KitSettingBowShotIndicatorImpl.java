@@ -1,4 +1,4 @@
-package dev.revere.alley.base.kit.setting.impl.mechanic;
+package dev.revere.alley.base.kit.setting.impl.visual;
 
 import dev.revere.alley.base.kit.setting.KitSetting;
 import dev.revere.alley.base.kit.setting.annotation.KitSettingData;
