@@ -302,8 +302,7 @@ public abstract class AbstractMatch {
                 }
             }
         }
-
-        this.handleSpectator(player, victimProfile, participant);
+        this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> this.handleSpectator(player, victimProfile, participant), 1L);
     }
 
     /**
@@ -525,7 +524,7 @@ public abstract class AbstractMatch {
         player.setAllowFlight(true);
         player.setFlying(true);
 
-        if (this.getParticipant(player) == null) {
+        if (this.getGamePlayer(player) == null) {
             this.spectators.add(player.getUniqueId());
         }
 

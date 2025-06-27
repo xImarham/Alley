@@ -2,10 +2,12 @@ package dev.revere.alley.game.match.listener.impl;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.base.kit.Kit;
-import dev.revere.alley.base.kit.setting.impl.visual.KitSettingBowShotIndicatorImpl;
 import dev.revere.alley.base.kit.setting.impl.mechanic.KitSettingNoDamageImpl;
 import dev.revere.alley.base.kit.setting.impl.mechanic.KitSettingNoFallDamageImpl;
-import dev.revere.alley.base.kit.setting.impl.mode.*;
+import dev.revere.alley.base.kit.setting.impl.mode.KitSettingBoxingImpl;
+import dev.revere.alley.base.kit.setting.impl.mode.KitSettingSpleefImpl;
+import dev.revere.alley.base.kit.setting.impl.mode.KitSettingSumoImpl;
+import dev.revere.alley.base.kit.setting.impl.visual.KitSettingBowShotIndicatorImpl;
 import dev.revere.alley.base.kit.setting.impl.visual.KitSettingHealthBarImpl;
 import dev.revere.alley.game.match.AbstractMatch;
 import dev.revere.alley.game.match.enums.EnumMatchState;
@@ -17,7 +19,6 @@ import dev.revere.alley.tool.reflection.impl.ActionBarReflectionService;
 import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.util.chat.Symbol;
 import org.bukkit.entity.Arrow;
-import org.bukkit.entity.EnderPearl;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
@@ -58,6 +59,13 @@ public class MatchDamageListener implements Listener {
                 event.setCancelled(true);
             }
 
+            if (event.getCause() == EntityDamageEvent.DamageCause.FALL
+                    && (matchKit.isSettingEnabled(KitSettingBoxingImpl.class)
+                    || matchKit.isSettingEnabled(KitSettingSumoImpl.class)
+                    || matchKit.isSettingEnabled(KitSettingSpleefImpl.class))) {
+                event.setCancelled(true);
+            }
+
             if (profile.getMatch().getState() != EnumMatchState.RUNNING) {
                 event.setCancelled(true);
                 return;
@@ -80,38 +88,20 @@ public class MatchDamageListener implements Listener {
     }
 
     @EventHandler
-    private void handlePearlDamage(EntityDamageByEntityEvent event) {
-        if (event.getDamager() instanceof EnderPearl) {
-            EnderPearl enderPearl = (EnderPearl) event.getDamager();
-            if (enderPearl.getShooter() instanceof Player) {
-                Player player = (Player) enderPearl.getShooter();
-                Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
-                if (profile.getState() == EnumProfileState.PLAYING) {
-                    Kit matchKit = profile.getMatch().getKit();
-                    if (matchKit.isSettingEnabled(KitSettingBoxingImpl.class)
-                            || matchKit.isSettingEnabled(KitSettingSumoImpl.class)
-                            || matchKit.isSettingEnabled(KitSettingSpleefImpl.class)
-                            || matchKit.isSettingEnabled(KitSettingNoDamageImpl.class)
-                            || matchKit.isSettingEnabled(KitSettingLivesImpl.class)
-                            || matchKit.isSettingEnabled(KitSettingRoundsImpl.class)
-                            || matchKit.isSettingEnabled(KitSettingStickFightImpl.class)) {
-                        event.setCancelled(true);
-                    }
-                }
-            }
-        }
-    }
-
-    @EventHandler
     private void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
+        if (!(event.getEntity() instanceof Player)) {
+            return;
+        }
+
+        Player damaged = (Player) event.getEntity();
         Player attacker;
 
         if (event.getDamager() instanceof Player) {
             attacker = (Player) event.getDamager();
-
         } else if (event.getDamager() instanceof Projectile) {
-            if (((Projectile) event.getDamager()).getShooter() instanceof Player) {
-                attacker = (Player) ((Projectile) event.getDamager()).getShooter();
+            Projectile projectile = (Projectile) event.getDamager();
+            if (projectile.getShooter() instanceof Player) {
+                attacker = (Player) projectile.getShooter();
             } else {
                 return;
             }
@@ -119,77 +109,74 @@ public class MatchDamageListener implements Listener {
             return;
         }
 
-        if (attacker != null && event.getEntity() instanceof Player) {
-            Player damaged = (Player) event.getEntity();
-            Profile damagedprofile = this.plugin.getProfileService().getProfile(damaged.getUniqueId());
-            Profile attackerProfile = this.plugin.getProfileService().getProfile(attacker.getUniqueId());
+        Profile damagedProfile = this.plugin.getProfileService().getProfile(damaged.getUniqueId());
+        Profile attackerProfile = this.plugin.getProfileService().getProfile(attacker.getUniqueId());
 
-            if (damagedprofile.getState() == EnumProfileState.SPECTATING) {
+        if (damagedProfile.getState() == EnumProfileState.SPECTATING || attackerProfile.getState() == EnumProfileState.SPECTATING) {
+            event.setCancelled(true);
+            return;
+        }
+
+        if (damagedProfile.getState() == EnumProfileState.PLAYING && attackerProfile.getState() == EnumProfileState.PLAYING) {
+            AbstractMatch match = damagedProfile.getMatch();
+            if (match == null || attackerProfile.getMatch() != match) {
                 event.setCancelled(true);
                 return;
             }
 
-            if (attackerProfile.getState() == EnumProfileState.SPECTATING) {
+            if (match.getState() != EnumMatchState.RUNNING) {
                 event.setCancelled(true);
                 return;
             }
 
-            if (damagedprofile.getState() == EnumProfileState.PLAYING) {
-                AbstractMatch match = attackerProfile.getMatch();
-                if (match == null) {
-                    return;
-                }
+            if (match.getGamePlayer(damaged).isDead() || match.getGamePlayer(attacker).isDead()) {
+                event.setCancelled(true);
+                return;
+            }
 
-                if (damagedprofile.getMatch().getState() != EnumMatchState.RUNNING) {
-                    event.setCancelled(true);
-                    return;
-                }
+            if (match.getGamePlayer(attacker).isDead()) {
+                event.setCancelled(true);
+                return;
+            }
 
-                if (match.getGamePlayer(damaged).isDead()) {
-                    event.setCancelled(true);
-                    return;
-                }
+            if (!attacker.getUniqueId().equals(damaged.getUniqueId()) && match.isInSameTeam(attacker, damaged)) {
+                event.setCancelled(true);
+                return;
+            }
 
-                if (match.getGamePlayer(attacker).isDead()) {
-                    event.setCancelled(true);
-                    return;
-                }
-
-                if (match.isInSameTeam(attacker, damaged)) {
-                    event.setCancelled(true);
-                    return;
-                }
-
+            if (!attacker.getUniqueId().equals(damaged.getUniqueId())) {
                 attackerProfile.getMatch().getGamePlayer(attacker).getData().handleAttack();
-                damagedprofile.getMatch().getGamePlayer(damaged).getData().resetCombo();
+                damagedProfile.getMatch().getGamePlayer(damaged).getData().resetCombo();
 
                 GameParticipant<MatchGamePlayerImpl> participant = match.getParticipant(attacker);
                 GameParticipant<MatchGamePlayerImpl> opponent = match.getParticipant(damaged);
 
-                participant.setTeamHits(participant.getTeamHits() + 1);
+                if (participant != null && opponent != null) {
+                    participant.setTeamHits(participant.getTeamHits() + 1);
 
-                if (match.getKit().isSettingEnabled(KitSettingBowShotIndicatorImpl.class) && event.getDamager() instanceof Arrow) {
-                    double finalHealth = damaged.getHealth() - event.getFinalDamage();
-                    finalHealth = Math.max(0, finalHealth);
+                    if (match.getKit().isSettingEnabled(KitSettingBowShotIndicatorImpl.class) && event.getDamager() instanceof Arrow) {
+                        double finalHealth = damaged.getHealth() - event.getFinalDamage();
+                        finalHealth = Math.max(0, finalHealth);
 
-                    if (finalHealth > 0) {
-                        attacker.sendMessage(CC.translate(this.plugin.getCoreAdapter().getCore().getPlayerColor(damaged) + damaged.getName() + " &7&l" + Symbol.ARROW_R + " &6" + String.format("%.1f", finalHealth) + " &c" + Symbol.HEART));
+                        if (finalHealth > 0) {
+                            attacker.sendMessage(CC.translate(this.plugin.getCoreAdapter().getCore().getPlayerColor(damaged) + damaged.getName() + " &7&l" + Symbol.ARROW_R + " &6" + String.format("%.1f", finalHealth) + " &c" + Symbol.HEART));
+                        }
                     }
-                }
 
-                if (match.getKit().isSettingEnabled(KitSettingBoxingImpl.class)) {
-                    int lowestPlayerCount = match.getParticipants().stream()
-                            .mapToInt(p -> p.getPlayers().size())
-                            .filter(size -> size > 0)
-                            .min()
-                            .orElse(1);
+                    if (match.getKit().isSettingEnabled(KitSettingBoxingImpl.class)) {
+                        int lowestPlayerCount = match.getParticipants().stream()
+                                .mapToInt(p -> p.getPlayers().size())
+                                .filter(size -> size > 0)
+                                .min()
+                                .orElse(1);
 
-                    int requiredHits = lowestPlayerCount * 100;
+                        int requiredHits = lowestPlayerCount * 100;
 
-                    if (participant.getTeamHits() >= requiredHits) {
-                        opponent.getPlayers().forEach(matchGamePlayer -> {
-                            match.handleDeath(matchGamePlayer.getPlayer(), EntityDamageEvent.DamageCause.ENTITY_ATTACK);
-                        });
+                        if (participant.getTeamHits() >= requiredHits) {
+                            opponent.getPlayers().forEach(matchGamePlayer -> {
+                                match.handleDeath(matchGamePlayer.getPlayer(), EntityDamageEvent.DamageCause.ENTITY_ATTACK);
+                            });
+                        }
                     }
                 }
             }

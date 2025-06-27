@@ -4,6 +4,7 @@ import dev.revere.alley.Alley;
 import dev.revere.alley.base.arena.impl.StandAloneArena;
 import dev.revere.alley.base.kit.setting.impl.mechanic.KitSettingBuildImpl;
 import dev.revere.alley.base.kit.setting.impl.mode.KitSettingBedImpl;
+import dev.revere.alley.base.kit.setting.impl.mode.KitSettingBridgesImpl;
 import dev.revere.alley.base.kit.setting.impl.mode.KitSettingRaidingImpl;
 import dev.revere.alley.base.kit.setting.impl.mode.KitSettingSpleefImpl;
 import dev.revere.alley.game.match.AbstractMatch;
@@ -85,6 +86,8 @@ public class MatchBlockListener implements Listener {
                 }
 
                 if (match.getKit().isSettingEnabled(KitSettingBuildImpl.class)) {
+                    Block block = event.getBlock();
+
                     if (match.getKit().isSettingEnabled(KitSettingBedImpl.class)) {
                         MatchBedImpl matchBed = (MatchBedImpl) profile.getMatch();
                         if (matchBed == null) {
@@ -92,7 +95,6 @@ public class MatchBlockListener implements Listener {
                             return;
                         }
 
-                        Block block = event.getBlock();
                         if (!ListenerUtil.isBedFightProtectedBlock(block.getType())) {
                             if (!matchBed.isNearBed(block)) {
                                 event.setCancelled(true);
@@ -130,6 +132,11 @@ public class MatchBlockListener implements Listener {
                         opponent.setBedBroken(true);
                         matchBed.alertBedDestruction(player, opponent);
                         return;
+                    } else if (match.getKit().isSettingEnabled(KitSettingBridgesImpl.class)) {
+                        if (block.getType() == Material.STAINED_CLAY) {
+                            match.addBlockToBrokenBlocksMap(block.getState(), block.getLocation());
+                            return;
+                        }
                     }
 
                     BlockState blockState = event.getBlock().getState();

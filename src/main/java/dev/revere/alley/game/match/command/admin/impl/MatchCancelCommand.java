@@ -3,6 +3,8 @@ package dev.revere.alley.game.match.command.admin.impl;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
+import dev.revere.alley.game.match.enums.EnumMatchState;
+import dev.revere.alley.game.match.impl.MatchRegularImpl;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
 import dev.revere.alley.util.chat.CC;
@@ -38,7 +40,10 @@ public class MatchCancelCommand extends BaseCommand {
             return;
         }
 
-        profile.getMatch().endMatch();
+        profile.getMatch().handleRoundEnd();
+        profile.getMatch().setState(EnumMatchState.ENDING_MATCH);
+        profile.getMatch().getRunnable().setStage(4);
+
         player.sendMessage(CC.translate("&aYou have ended the match for &6" + target.getName() + "&a."));
     }
 }

@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 /**
@@ -58,6 +59,24 @@ public class PartyListener implements Listener {
             profile.getParty().notifyParty(partyMessage);
             event.setCancelled(true);
         }
+    }
+
+    @EventHandler
+    private void onPlayerKick(PlayerKickEvent event) {
+        Player player = event.getPlayer();
+        Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
+
+        Party party = profile.getParty();
+        if (party == null) {
+            return;
+        }
+
+        if (party.getLeader() == player) {
+            Alley.getInstance().getPartyService().disbandParty(player);
+            return;
+        }
+
+        Alley.getInstance().getPartyService().leaveParty(player);
     }
 
     @EventHandler
