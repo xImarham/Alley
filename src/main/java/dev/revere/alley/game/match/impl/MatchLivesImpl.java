@@ -10,6 +10,7 @@ import dev.revere.alley.util.PlayerUtil;
 import lombok.Getter;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityDamageEvent;
 
 /**
  * @author Emmy
@@ -62,11 +63,11 @@ public class MatchLivesImpl extends MatchRegularImpl {
     }
 
     @Override
-    public void handleDeath(Player player) {
+    public void handleDeath(Player player, EntityDamageEvent.DamageCause cause) {
         MatchGamePlayerData data = this.getGamePlayer(player).getData();
 
         this.reduceLife(data);
-        super.handleDeath(player);
+        super.handleDeath(player, cause);
     }
 
     @Override

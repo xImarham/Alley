@@ -168,6 +168,7 @@ public class MongoUtility {
     private Document convertProfileCosmeticData(ProfileCosmeticData cosmeticData) {
         Document cosmeticDocument = new Document();
         cosmeticDocument.put("selectedKillEffect", cosmeticData.getSelectedKillEffect());
+        cosmeticDocument.put("selectedKillMessage", cosmeticData.getSelectedKillMessage());
         cosmeticDocument.put("selectedSoundEffect", cosmeticData.getSelectedSoundEffect());
         cosmeticDocument.put("selectedProjectileTrail", cosmeticData.getSelectedProjectileTrail());
         return cosmeticDocument;
@@ -359,6 +360,7 @@ public class MongoUtility {
     private ProfileCosmeticData parseProfileCosmeticData(Document cosmeticDocument) {
         ProfileCosmeticData cosmeticData = new ProfileCosmeticData();
         cosmeticData.setSelectedKillEffect(cosmeticDocument.getString("selectedKillEffect"));
+        cosmeticData.setSelectedKillMessage(cosmeticDocument.getString("selectedKillMessage"));
         cosmeticData.setSelectedSoundEffect(cosmeticDocument.getString("selectedSoundEffect"));
         cosmeticData.setSelectedProjectileTrail(cosmeticDocument.getString("selectedProjectileTrail"));
         return cosmeticData;

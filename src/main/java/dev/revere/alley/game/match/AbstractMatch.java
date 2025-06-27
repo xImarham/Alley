@@ -8,6 +8,7 @@ import dev.revere.alley.base.kit.setting.impl.mode.*;
 import dev.revere.alley.base.queue.Queue;
 import dev.revere.alley.feature.cosmetic.AbstractCosmetic;
 import dev.revere.alley.feature.cosmetic.EnumCosmeticType;
+import dev.revere.alley.feature.cosmetic.impl.killmessage.AbstractKillMessagePack;
 import dev.revere.alley.feature.cosmetic.repository.BaseCosmeticRepository;
 import dev.revere.alley.feature.layout.data.LayoutData;
 import dev.revere.alley.game.match.enums.EnumMatchState;
@@ -37,6 +38,7 @@ import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.util.Vector;
 
@@ -120,6 +122,7 @@ public abstract class AbstractMatch {
         this.runnable = new MatchRunnable(this);
         this.runnable.runTaskTimer(this.plugin, 0L, 20L);
         this.getParticipants().forEach(this::initializeParticipant);
+        this.updateParticipantNametags();
         this.startTime = System.currentTimeMillis();
     }
 
@@ -128,6 +131,7 @@ public abstract class AbstractMatch {
         deleteArenaCopyIfStandalone();
 
         this.getParticipants().forEach(this::finalizeParticipant);
+        this.updateParticipantNametags();
 
         this.plugin.getMatchService().getMatches().remove(this);
         this.runnable.cancel();
@@ -154,6 +158,20 @@ public abstract class AbstractMatch {
             StandAloneArena standAloneArena = (StandAloneArena) this.arena;
             standAloneArena.deleteCopiedArena();
         }
+    }
+
+    /**
+     * Helper method to trigger a nametag update for all participants in the match.
+     */
+    private void updateParticipantNametags() {
+        getParticipants().forEach(participant -> {
+            List<MatchGamePlayerImpl> playersToUpdate = participant.getAllPlayers();
+
+            playersToUpdate.stream()
+                    .map(gamePlayer -> plugin.getServer().getPlayer(gamePlayer.getUuid()))
+                    .filter(Objects::nonNull)
+                    .forEach(player -> plugin.getNametagService().updatePlayerState(player));
+        });
     }
 
     /**
@@ -241,7 +259,7 @@ public abstract class AbstractMatch {
      *
      * @param player The player that died.
      */
-    public void handleDeath(Player player) {
+    public void handleDeath(Player player, EntityDamageEvent.DamageCause cause) {
         if (!(this.state == EnumMatchState.STARTING || this.state == EnumMatchState.RUNNING)) {
             return;
         }
@@ -255,9 +273,11 @@ public abstract class AbstractMatch {
         this.handleParticipant(player, gamePlayer);
         this.notifySpectators(player.getName() + " has died");
 
-        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
         Player killer = this.plugin.getCombatService().getLastAttacker(player);
-        this.handleDeathMessages(player, killer, profile);
+        Profile victimProfile = this.plugin.getProfileService().getProfile(player.getUniqueId());
+        Profile killerProfile = (killer != null) ? this.plugin.getProfileService().getProfile(killer.getUniqueId()) : null;
+
+        this.handleDeathMessages(player, killer, victimProfile, killerProfile, cause);
 
         player.setVelocity(new Vector());
 
@@ -283,7 +303,7 @@ public abstract class AbstractMatch {
             }
         }
 
-        this.handleSpectator(player, profile, participant);
+        this.handleSpectator(player, victimProfile, participant);
     }
 
     /**
@@ -338,44 +358,65 @@ public abstract class AbstractMatch {
         return kit.isSettingEnabled(KitSettingStickFightImpl.class) || kit.isSettingEnabled(KitSettingRoundsImpl.class);
     }
 
-    /**
-     * Handles the death messages for a player.
-     *
-     * @param player  The player that died.
-     * @param killer  The player that killed the player.
-     * @param profile The profile of the player that died.
-     */
-    private void handleDeathMessages(Player player, Player killer, Profile profile) {
-        if (killer == null) {
-            this.notifyParticipants("&c" + profile.getNameColor() + player.getName() + " &fdied.");
+    private void handleDeathMessages(Player victim, Player killer, Profile victimProfile, Profile killerProfile, EntityDamageEvent.DamageCause cause) {
+        if (killer == null || killerProfile == null) {
+            handleDefaultDeathMessages(victim, null, victimProfile);
             return;
         }
 
-        this.processKillerActions(player, killer, profile);
+        String selectedPackName = killerProfile.getProfileData().getCosmeticData().getSelected(EnumCosmeticType.KILL_MESSAGE);
+
+        if (selectedPackName == null || selectedPackName.equalsIgnoreCase("None")) {
+            handleDefaultDeathMessages(victim, killer, victimProfile);
+            return;
+        }
+
+        BaseCosmeticRepository<?> repository = this.plugin.getCosmeticRepository().getRepository(EnumCosmeticType.KILL_MESSAGE);
+        AbstractKillMessagePack pack = (AbstractKillMessagePack) repository.getCosmetic(selectedPackName);
+
+        if (pack == null) {
+            handleDefaultDeathMessages(victim, killer, victimProfile);
+            return;
+        }
+
+        String messageTemplate = pack.getRandomMessage(cause);
+
+        if (messageTemplate != null) {
+            String finalMessage = messageTemplate.replace("{victim}", victimProfile.getNameColor() + victim.getName() + "&f");
+            finalMessage = finalMessage.replace("{killer}", killerProfile.getNameColor() + killer.getName() + "&f");
+
+            this.notifyAll(CC.translate(finalMessage));
+            processKillerStatActions(killer);
+        } else {
+            handleDefaultDeathMessages(victim, killer, victimProfile);
+        }
     }
 
-    /**
-     * Processes the actions of the killer when a player is killed.
-     *
-     * @param player  the player that died.
-     * @param killer  the player that killed the victim.
-     * @param profile the profile of the player that died.
-     */
-    private void processKillerActions(Player player, Player killer, Profile profile) {
-        GameParticipant<MatchGamePlayerImpl> killerParticipant = getParticipant(killer);
-        if (killerParticipant == null) {
-            this.notifyParticipants("&c" + profile.getNameColor() + player.getName() + " &fwas slain by an unknown player.");
-            return;
+    private void handleDefaultDeathMessages(Player victim, Player killer, Profile victimProfile) {
+        if (killer == null) {
+            this.notifyParticipants("&c" + victimProfile.getNameColor() + victim.getName() + " &fdied.");
+        } else {
+            processKillerActions(victim, killer, victimProfile);
         }
-        killerParticipant.getPlayer().getData().incrementKills();
+    }
+
+    private void processKillerActions(Player victim, Player killer, Profile victimProfile) {
+        processKillerStatActions(killer);
 
         Profile killerProfile = this.plugin.getProfileService().getProfile(killer.getUniqueId());
 
         this.plugin.getReflectionRepository()
                 .getReflectionService(ActionBarReflectionService.class)
-                .sendDeathMessage(killer, player);
+                .sendDeathMessage(killer, victim);
 
-        this.notifyParticipants("&c" + profile.getNameColor() + player.getName() + " &fwas slain by &c" + killerProfile.getNameColor() + killer.getName() + "&f.");
+        this.notifyParticipants("&c" + victimProfile.getNameColor() + victim.getName() + " &fwas slain by &c" + killerProfile.getNameColor() + killer.getName() + "&f.");
+    }
+
+    private void processKillerStatActions(Player killer) {
+        GameParticipant<MatchGamePlayerImpl> killerParticipant = getParticipant(killer);
+        if (killerParticipant != null) {
+            killerParticipant.getPlayer().getData().incrementKills();
+        }
     }
 
     /**
@@ -470,6 +511,7 @@ public abstract class AbstractMatch {
     public void addSpectator(Player player) {
         this.setupSpectatorProfile(player);
 
+        this.plugin.getNametagService().updatePlayerState(player);
         this.plugin.getVisibilityService().updateVisibility(player);
         this.plugin.getHotbarService().applyHotbarItems(player);
 
@@ -501,6 +543,7 @@ public abstract class AbstractMatch {
         profile.setState(EnumProfileState.LOBBY);
         profile.setMatch(null);
 
+        this.plugin.getNametagService().updatePlayerState(player);
         this.plugin.getVisibilityService().updateVisibility(player);
 
         player.setAllowFlight(false);

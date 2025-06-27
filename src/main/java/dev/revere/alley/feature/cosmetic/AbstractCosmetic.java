@@ -6,6 +6,9 @@ import lombok.Data;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
+import java.util.Collections;
+import java.util.List;
+
 /**
  * @author Remi
  * @project Alley
@@ -45,6 +48,16 @@ public abstract class AbstractCosmetic implements ICosmetic {
     @Override
     public String getPermission() {
         return String.format("alley.cosmetic.%s.%s", this.type.getPermissionKey(), this.permission);
+    }
+
+    /**
+     * Gets the description lore for display in a menu.
+     * Subclasses can override this to provide custom lore.
+     *
+     * @return A list of strings representing the description part of an item's lore.
+     */
+    public List<String> getDisplayLore() {
+        return Collections.singletonList("&7" + this.getDescription());
     }
 
     /**

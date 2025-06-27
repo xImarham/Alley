@@ -135,6 +135,7 @@ public class ProfileListener implements Listener {
         profile.setFfaMatch(null);
 
         profile.setNameColor(this.plugin.getCoreAdapter().getCore().getPlayerColor(player));
+        this.plugin.getLogger().info("[NametagDebug] SETTING " + player.getName() + "'s color in profile to: " + profile.getNameColor().name());
         profile.getProfileData().getSettingData().setTimeBasedOnProfileSetting(player);
         profile.getProfileData().getPlayTimeData().setLastLogin(System.currentTimeMillis());
         profile.getProfileData().determineLevel();

@@ -35,6 +35,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
@@ -461,7 +462,7 @@ public class MatchRegularImpl extends AbstractMatch {
             gamePlayer.setDisconnected(true);
             gamePlayer.setEliminated(true);
             if (!gamePlayer.isDead()) {
-                this.handleDeath(player);
+                this.handleDeath(player, EntityDamageEvent.DamageCause.CUSTOM);
             }
         }
     }

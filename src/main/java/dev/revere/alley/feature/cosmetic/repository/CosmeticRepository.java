@@ -2,6 +2,7 @@ package dev.revere.alley.feature.cosmetic.repository;
 
 import dev.revere.alley.feature.cosmetic.EnumCosmeticType;
 import dev.revere.alley.feature.cosmetic.impl.killeffect.KillEffectRepository;
+import dev.revere.alley.feature.cosmetic.impl.killmessage.KillMessageRepository;
 import dev.revere.alley.feature.cosmetic.impl.projectiletrail.ProjectileTrailRepository;
 import dev.revere.alley.feature.cosmetic.impl.soundeffect.SoundEffectRepository;
 import lombok.Getter;
@@ -24,6 +25,7 @@ public class CosmeticRepository {
         this.register(new KillEffectRepository());
         this.register(new SoundEffectRepository());
         this.register(new ProjectileTrailRepository());
+        this.register(new KillMessageRepository());
     }
 
     /**

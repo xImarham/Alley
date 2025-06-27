@@ -15,6 +15,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 /**
@@ -86,7 +87,7 @@ public class MatchInteractListener implements Listener {
             opponent.setLostCheckpoint(true);
             opponent.getPlayers().forEach(gamePlayer -> gamePlayer.setDead(true));
             opponent.getPlayers().stream().findAny().ifPresent(gamePlayer -> {
-                matchCheckpoint.handleDeath(gamePlayer.getPlayer());
+                matchCheckpoint.handleDeath(gamePlayer.getPlayer(), EntityDamageEvent.DamageCause.CUSTOM);
             });
         }
     }

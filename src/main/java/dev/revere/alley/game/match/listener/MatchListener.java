@@ -28,6 +28,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -91,11 +92,11 @@ public class MatchListener implements Listener {
 
                     if (match.getKit().isSettingEnabled(KitSettingStickFightImpl.class)) {
                         MatchRoundsImpl roundsMatch = (MatchRoundsImpl) match;
-                        roundsMatch.handleDeath(player);
+                        roundsMatch.handleDeath(player, EntityDamageEvent.DamageCause.VOID);
                         return;
                     }
 
-                    profile.getMatch().handleDeath(player);
+                    profile.getMatch().handleDeath(player, EntityDamageEvent.DamageCause.VOID);
                 }
             }
         }
@@ -143,7 +144,8 @@ public class MatchListener implements Listener {
 
         this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> player.spigot().respawn(), 1L);
 
-        profile.getMatch().handleDeath(player);
+        EntityDamageEvent.DamageCause cause = player.getLastDamageCause() != null ? player.getLastDamageCause().getCause() : EntityDamageEvent.DamageCause.CUSTOM;
+        profile.getMatch().handleDeath(player, cause);
     }
 
     @EventHandler

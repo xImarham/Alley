@@ -188,7 +188,7 @@ public class MatchDamageListener implements Listener {
 
                     if (participant.getTeamHits() >= requiredHits) {
                         opponent.getPlayers().forEach(matchGamePlayer -> {
-                            match.handleDeath(matchGamePlayer.getPlayer());
+                            match.handleDeath(matchGamePlayer.getPlayer(), EntityDamageEvent.DamageCause.ENTITY_ATTACK);
                         });
                     }
                 }

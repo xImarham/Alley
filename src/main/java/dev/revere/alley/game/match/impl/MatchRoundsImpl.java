@@ -18,6 +18,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.util.Vector;
 
 /**
@@ -109,7 +110,7 @@ public class MatchRoundsImpl extends MatchRegularImpl {
     }
 
     @Override
-    public void handleDeath(Player player) {
+    public void handleDeath(Player player, EntityDamageEvent.DamageCause cause) {
         GameParticipant<MatchGamePlayerImpl> participant = this.participantA.containsPlayer(player.getUniqueId())
                 ? this.participantA
                 : this.participantB;
@@ -158,7 +159,7 @@ public class MatchRoundsImpl extends MatchRegularImpl {
             return;
         }
 
-        super.handleDeath(player);
+        super.handleDeath(player, cause);
     }
 
     @Override

@@ -13,7 +13,10 @@ import lombok.RequiredArgsConstructor;
 public enum EnumCosmeticType {
     KILL_EFFECT("killeffect", "Display a fancy effect upon killing a player."),
     SOUND_EFFECT("soundeffect", "Play a custom sound when you get a kill."),
-    PROJECTILE_TRAIL("projectiletrail", "Leave a nice particle trail on your projectiles.");
+    PROJECTILE_TRAIL("projectiletrail", "Leave a nice particle trail on your projectiles."),
+    KILL_MESSAGE("killmessage", "&7Broadcast custom messages when you die.")
+
+    ;
 
     private final String permissionKey;
     private final String description;

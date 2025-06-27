@@ -118,10 +118,13 @@ public class MatchBlockListener implements Listener {
                                 ? matchBed.getParticipantB()
                                 : matchBed.getParticipantA();
 
+                        event.setCancelled(true);
+
                         if (opponent == null) {
-                            event.setCancelled(true);
                             return;
                         }
+
+                        block.setType(Material.AIR);
 
                         match.addBlockToBrokenBlocksMap(block.getState(), block.getLocation());
                         opponent.setBedBroken(true);

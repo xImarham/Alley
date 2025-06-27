@@ -5,6 +5,8 @@ import dev.revere.alley.tool.logger.Logger;
 import lombok.Getter;
 import org.reflections.Reflections;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,12 +34,18 @@ public class ReflectionRepository {
     private void registerReflectionServices() {
         Reflections reflections = this.plugin.getPluginConstant().getReflections();
         for (Class<? extends IReflection> clazz : reflections.getSubTypesOf(IReflection.class)) {
+            if (clazz.isInterface() || Modifier.isAbstract(clazz.getModifiers())) {
+                continue;
+            }
+
             try {
                 IReflection instance;
                 try {
                     instance = clazz.getDeclaredConstructor(Alley.class).newInstance(this.plugin);
                 } catch (NoSuchMethodException e) {
-                    instance = clazz.getDeclaredConstructor().newInstance();
+                    Constructor<? extends IReflection> constructor = clazz.getDeclaredConstructor();
+                    constructor.setAccessible(true);
+                    instance = constructor.newInstance();
                 }
 
                 this.reflectionServices.add(instance);

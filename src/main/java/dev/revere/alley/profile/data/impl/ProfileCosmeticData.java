@@ -18,11 +18,13 @@ public class ProfileCosmeticData {
     private String selectedKillEffect;
     private String selectedSoundEffect;
     private String selectedProjectileTrail;
+    private String selectedKillMessage;
 
     public ProfileCosmeticData() {
         this.selectedKillEffect = "None";
         this.selectedSoundEffect = "None";
         this.selectedProjectileTrail = "None";
+        this.selectedKillMessage = "None";
     }
 
     /**
@@ -43,6 +45,9 @@ public class ProfileCosmeticData {
             case PROJECTILE_TRAIL:
                 this.selectedProjectileTrail = cosmetic.getName();
                 break;
+            case KILL_MESSAGE:
+                this.selectedKillMessage = cosmetic.getName();
+                break;
         }
     }
 
@@ -60,6 +65,8 @@ public class ProfileCosmeticData {
                 return this.selectedSoundEffect;
             case PROJECTILE_TRAIL:
                 return this.selectedProjectileTrail;
+            case KILL_MESSAGE:
+                return this.selectedKillMessage;
             default:
                 return "None";
         }

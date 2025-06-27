@@ -18,6 +18,7 @@ import dev.revere.alley.base.hotbar.listener.HotbarListener;
 import dev.revere.alley.base.kit.KitService;
 import dev.revere.alley.base.kit.service.BaseRaidingService;
 import dev.revere.alley.base.kit.setting.KitSettingService;
+import dev.revere.alley.base.nametag.NametagService;
 import dev.revere.alley.base.queue.QueueService;
 import dev.revere.alley.base.queue.listener.QueueListener;
 import dev.revere.alley.base.spawn.SpawnService;
@@ -137,6 +138,7 @@ public class Alley extends JavaPlugin {
     private BaseRaidingService baseRaidingService;
     private ArenaSchematicService arenaSchematicService;
     private AbilityService abilityService;
+    private NametagService nametagService;
 
     private boolean loaded;
 
@@ -242,6 +244,7 @@ public class Alley extends JavaPlugin {
         services.put(VisibilityService.class.getSimpleName(), () -> this.visibilityService = new VisibilityService(this));
         services.put(ExplosiveService.class.getSimpleName(), () -> this.explosiveService = new ExplosiveService(this));
         services.put(AbilityService.class.getSimpleName(), () -> this.abilityService = new AbilityService());
+        services.put(NametagService.class.getSimpleName(), () -> this.nametagService = new NametagService(this));
 
         services.forEach(Logger::logTime);
     }

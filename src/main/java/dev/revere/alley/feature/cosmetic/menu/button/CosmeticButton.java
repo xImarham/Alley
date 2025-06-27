@@ -12,6 +12,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author Remi
  * @project Alley
@@ -28,16 +31,19 @@ public class CosmeticButton extends Button {
         boolean isSelected = profile.getProfileData().getCosmeticData().isSelected(cosmetic);
         boolean hasPermission = player.hasPermission(cosmetic.getPermission());
 
-        String lore;
+        List<String> lore = new ArrayList<>(cosmetic.getDisplayLore());
+
+        lore.add("");
+
         if (hasPermission) {
-            lore = isSelected ? "&eThis cosmetic is currently selected." : "&aClick to select this cosmetic.";
+            lore.add(isSelected ? "&eThis cosmetic is currently selected." : "&aClick to select this cosmetic.");
         } else {
-            lore = "&cYou do not own this cosmetic.";
+            lore.add("&cYou do not own this cosmetic.");
         }
 
         return new ItemBuilder(cosmetic.getIcon())
                 .name("&6&l" + cosmetic.getName())
-                .lore("", "&f" + cosmetic.getDescription(), "", lore)
+                .lore(lore)
                 .hideMeta()
                 .build();
     }

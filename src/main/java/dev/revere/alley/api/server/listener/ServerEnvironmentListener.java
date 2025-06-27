@@ -1,12 +1,16 @@
 package dev.revere.alley.api.server.listener;
 
+import dev.revere.alley.Alley;
+import dev.revere.alley.profile.Profile;
 import org.bukkit.Difficulty;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.*;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.ExplosionPrimeEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.weather.WeatherChangeEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
 import org.bukkit.event.world.WorldLoadEvent;
@@ -70,6 +74,15 @@ public class ServerEnvironmentListener implements Listener {
     public void onBlockPhysics(BlockPhysicsEvent event) {
         if (event.getChangedType() == Material.GRASS && event.getBlock().getType() == Material.DIRT) {
             event.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void onWorldTeleport(PlayerTeleportEvent event) {
+        if (event.getFrom().getWorld() != event.getTo().getWorld()) {
+            Player player = event.getPlayer();
+            Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
+            profile.getProfileData().getSettingData().setTimeBasedOnProfileSetting(player);
         }
     }
 }

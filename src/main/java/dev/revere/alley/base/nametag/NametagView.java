@@ -1,0 +1,34 @@
+package dev.revere.alley.base.nametag;
+
+import lombok.Getter;
+
+import java.util.Objects;
+
+/**
+ * @author Remi
+ * @project alley-practice
+ * @date 27/06/2025
+ */
+@Getter
+public final class NametagView {
+    private final String prefix;
+    private final String suffix;
+
+    public NametagView(String prefix, String suffix) {
+        this.prefix = prefix;
+        this.suffix = suffix;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        NametagView that = (NametagView) o;
+        return Objects.equals(prefix, that.prefix) && Objects.equals(suffix, that.suffix);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(prefix, suffix);
+    }
+}
