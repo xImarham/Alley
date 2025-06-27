@@ -2,6 +2,7 @@ package dev.revere.alley.game.match.impl;
 
 import dev.revere.alley.base.arena.AbstractArena;
 import dev.revere.alley.base.kit.Kit;
+import dev.revere.alley.base.kit.setting.impl.mechanic.KitSettingDropItemsImpl;
 import dev.revere.alley.base.kit.setting.impl.mode.KitSettingRaidingImpl;
 import dev.revere.alley.base.kit.setting.impl.mode.KitSettingRespawnTimerImpl;
 import dev.revere.alley.base.queue.Queue;
@@ -24,6 +25,7 @@ import dev.revere.alley.tool.elo.result.EloResult;
 import dev.revere.alley.tool.elo.result.OldEloResult;
 import dev.revere.alley.tool.logger.Logger;
 import dev.revere.alley.tool.reflection.impl.TitleReflectionService;
+import dev.revere.alley.util.ListenerUtil;
 import dev.revere.alley.util.PlayerUtil;
 import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.util.visual.ProgressBarUtil;
@@ -448,7 +450,11 @@ public class MatchRegularImpl extends AbstractMatch {
 
     @Override
     public void handleDeathItemDrop(Player player, PlayerDeathEvent event) {
-        event.getDrops().clear();
+        if (this.getKit().isSettingEnabled(KitSettingDropItemsImpl.class)) {
+            ListenerUtil.clearDroppedItemsOnDeath(event, player);
+        } else {
+            event.getDrops().clear();
+        }
     }
 
     @Override
@@ -477,13 +483,19 @@ public class MatchRegularImpl extends AbstractMatch {
             return;
         }
 
+        Kit parentKit = this.getKit();
+        if (parentKit == null) {
+            Logger.logError("&cCould not determine the parent kit for the raiding match.");
+            return;
+        }
+
         EnumBaseRaiderRole role = getParticipantA().containsPlayer(player.getUniqueId())
                 ? EnumBaseRaiderRole.TRAPPER
                 : EnumBaseRaiderRole.RAIDER;
-        Kit kitToGive = this.plugin.getBaseRaidingService().getRaidingKitByRole(role);
 
+        Kit kitToGive = this.plugin.getBaseRaidingService().getRaidingKitByRole(parentKit, role);
         if (kitToGive == null) {
-            Logger.log("&cNo kit found for role: " + role.name() + " in base raiding match.");
+            Logger.log("&cNo kit found for role: " + role.name() + " linked to parent kit.");
             return;
         }
 

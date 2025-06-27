@@ -1,7 +1,6 @@
 package dev.revere.alley.profile.listener;
 
 import dev.revere.alley.Alley;
-import dev.revere.alley.base.hotbar.enums.EnumHotbarType;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.ProfileService;
 import dev.revere.alley.profile.enums.EnumProfileState;
@@ -103,16 +102,18 @@ public class ProfileListener implements Listener {
     private void onPlayerInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
         Profile profile = this.profileService.getProfile(player.getUniqueId());
-        if (profile.getState() == EnumProfileState.LOBBY) {
+        if (profile.getState() == EnumProfileState.LOBBY
+                || profile.getState() == EnumProfileState.FFA
+                || profile.getState() == EnumProfileState.EDITING
+                || profile.getState() == EnumProfileState.SPECTATING) {
             if (player.getGameMode() == GameMode.CREATIVE) return;
             event.setCancelled(true);
-        }
 
-        Block block = event.getClickedBlock();
-        if (block != null && block.getState() instanceof InventoryHolder) {
-            if (block.getType() == Material.CHEST || block.getType() == Material.DISPENSER ||
-                    block.getType() == Material.FURNACE || block.getType() == Material.BREWING_STAND) {
-                event.setCancelled(true);
+            Block block = event.getClickedBlock();
+            if (block != null && block.getState() instanceof InventoryHolder) {
+                if (block.getType() == Material.CHEST || block.getType() == Material.DISPENSER || block.getType() == Material.FURNACE || block.getType() == Material.BREWING_STAND) {
+                    event.setCancelled(true);
+                }
             }
         }
     }

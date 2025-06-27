@@ -1,13 +1,10 @@
 package dev.revere.alley.base.kit;
 
 import dev.revere.alley.Alley;
-import dev.revere.alley.base.kit.data.BaseRaidingKitData;
 import dev.revere.alley.base.kit.enums.EnumKitCategory;
 import dev.revere.alley.base.kit.setting.KitSetting;
-import dev.revere.alley.base.kit.setting.impl.mode.KitSettingRaidingImpl;
 import dev.revere.alley.base.kit.setting.impl.mode.KitSettingRankedImpl;
 import dev.revere.alley.base.queue.Queue;
-import dev.revere.alley.game.match.player.enums.EnumBaseRaiderRole;
 import dev.revere.alley.tool.logger.Logger;
 import dev.revere.alley.tool.serializer.Serializer;
 import lombok.Getter;

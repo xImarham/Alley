@@ -8,7 +8,6 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -125,14 +124,14 @@ public class ListenerUtil {
      * @param material The material to check.
      * @return true if the material is a door or gate, false otherwise.
      */
-    public boolean isDoorOrGate(Material material) {
-        return doors.contains(material);
+    public boolean isInteractiveBlock(Material material) {
+        return interactiveBlocks.contains(material);
     }
 
     /**
      * List of door and gate materials.
      */
-    private final List<Material> doors = Arrays.asList(
+    private final List<Material> interactiveBlocks = Arrays.asList(
             Material.WOODEN_DOOR,
             Material.SPRUCE_DOOR,
             Material.BIRCH_DOOR,
@@ -148,7 +147,14 @@ public class ListenerUtil {
             Material.DARK_OAK_FENCE_GATE,
 
             Material.TRAP_DOOR,
-            Material.IRON_TRAPDOOR
+            Material.IRON_TRAPDOOR,
+
+            Material.CHEST,
+            Material.ENDER_CHEST,
+            Material.TRAPPED_CHEST,
+
+            Material.HOPPER,
+            Material.HOPPER_MINECART
     );
 
     /**

@@ -66,6 +66,7 @@ public class MatchRunnable extends BukkitRunnable {
                     this.playSoundStarted();
                 } else {
                     this.match.sendMessage(CC.translate("&a" + this.stage + "..."));
+                    this.sendTitleStarting();
                     this.playSoundStarting();
                 }
                 break;
@@ -129,8 +130,8 @@ public class MatchRunnable extends BukkitRunnable {
         this.match.getParticipants().forEach(gameParticipant -> gameParticipant.getPlayers().forEach(matchGamePlayer -> {
             Alley.getInstance().getReflectionRepository().getReflectionService(TitleReflectionService.class).sendTitle(
                     matchGamePlayer.getPlayer(),
-                    "&a&l" + this.stage,
-                    "",
+                    "&6&lMatch",
+                    "&fStarts in &6" + this.stage + "s",
                     2, 10, 2
             );
         }));

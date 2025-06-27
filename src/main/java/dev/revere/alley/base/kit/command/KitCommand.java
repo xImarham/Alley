@@ -14,6 +14,7 @@ import dev.revere.alley.base.kit.command.impl.manage.*;
 import dev.revere.alley.base.kit.command.impl.manage.ffa.KitSetFfaSlotCommand;
 import dev.revere.alley.base.kit.command.impl.manage.ffa.KitSetupFFACommand;
 import dev.revere.alley.base.kit.command.impl.manage.ffa.KitToggleFFACommand;
+import dev.revere.alley.base.kit.command.impl.manage.raiding.KitRemoveRaidingRoleKitCommand;
 import dev.revere.alley.base.kit.command.impl.manage.raiding.KitSetRaidingRoleKitCommand;
 import dev.revere.alley.base.kit.command.impl.settings.KitSetSettingCommand;
 import dev.revere.alley.base.kit.command.impl.settings.KitSettingsCommand;
@@ -62,6 +63,7 @@ public class KitCommand extends BaseCommand {
         new KitClearPotionsCommand();
         new KitRemovePotionCommand();
         new KitSetRaidingRoleKitCommand();
+        new KitRemoveRaidingRoleKitCommand();
         new KitSetMenuTitleCommand();
     }
 
@@ -74,7 +76,8 @@ public class KitCommand extends BaseCommand {
                     "list", "create", "delete", "toggle", "view", "settings", "viewsettings",
                     "setsetting", "setcategory", "setdescription", "setdisclaimer", "setdisplayname",
                     "seteditable", "seticon", "setinv", "getinv", "addpotion", "clearpotions", "removepotion",
-                    "setupffa", "toggleffa", "setffaslot", "saveall", "save", "setraidingrolekit", "setmenutitle"
+                    "setupffa", "toggleffa", "setffaslot", "saveall", "save", "setraidingrolekit",
+                    "removeraidingrolekit", "setmenutitle"
             ));
         }
 
@@ -152,6 +155,7 @@ public class KitCommand extends BaseCommand {
             },
             {
                     " &f● &6/kit setraidingrolekit &8(&7kitName&8) &8(&7role&8) &8(&7roleKitName&8) &7| Set raiding role kit",
+                    " &f● &6/kit removeraidingrolekit &8(&7kitName&8) &8(&7role&8) &8(&7roleKitName&8) &7| Remove raiding role kit",
             },
             {
                     " &f● &6/kit saveall &7| Save all kits",

@@ -302,7 +302,7 @@ public abstract class AbstractMatch {
                 }
             }
         }
-        this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> this.handleSpectator(player, victimProfile, participant), 1L);
+        this.handleSpectator(player, victimProfile, participant);
     }
 
     /**
@@ -965,7 +965,7 @@ public abstract class AbstractMatch {
                     for (int y = pos1.getBlockY(); y <= pos2.getBlockY(); y++) {
                         Location location = new Location(pos1.getWorld(), x, y, z);
                         Block block = location.getBlock();
-                        if (ListenerUtil.isDoorOrGate(block.getType())) {
+                        if (ListenerUtil.isInteractiveBlock(block.getType())) {
                             BlockState originalState = block.getState();
                             if (originalState.getType() == Material.AIR) {
                                 continue;
@@ -1041,6 +1041,5 @@ public abstract class AbstractMatch {
         Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
         profile.setState(EnumProfileState.SPECTATING);
         profile.setMatch(this);
-        this.plugin.getVisibilityService().updateVisibility(player);
     }
 }

@@ -103,21 +103,21 @@ public class BaseRaidingService {
         this.plugin.getKitService().saveKit(parentKit);
     }
 
-    public void removeRaidingKitMapping(EnumBaseRaiderRole role) {
-        for (Map.Entry<String, Map<EnumBaseRaiderRole, Kit>> entry : this.raidingKitMappings.entrySet()) {
-            Map<EnumBaseRaiderRole, Kit> roleKits = entry.getValue();
-            if (roleKits.containsKey(role)) {
-                roleKits.remove(role);
-                if (roleKits.isEmpty()) {
-                    this.raidingKitMappings.remove(entry.getKey());
-                }
-            }
-        }
+    public void removeRaidingKitMapping(Kit parentKit, EnumBaseRaiderRole role) {
+        Map<EnumBaseRaiderRole, Kit> roleKits = this.raidingKitMappings.get(parentKit.getName());
 
-        FileConfiguration config = this.plugin.getConfigService().getKitsConfig();
-        for (String kitName : this.raidingKitMappings.keySet()) {
-            String key = "kits." + kitName + ".raiding-role-kits." + role.name().toLowerCase();
+        if (roleKits != null && roleKits.containsKey(role)) {
+            roleKits.remove(role);
+
+            if (roleKits.isEmpty()) {
+                this.raidingKitMappings.remove(parentKit.getName());
+            }
+
+            FileConfiguration config = this.plugin.getConfigService().getKitsConfig();
+            String key = "kits." + parentKit.getName() + ".raiding-role-kits." + role.name().toLowerCase();
             config.set(key, null);
+
+            this.plugin.getKitService().saveKit(parentKit);
         }
     }
 

@@ -110,7 +110,7 @@ public class MatchListener implements Listener {
             }
         }
 
-        if (profile.getState() == EnumProfileState.SPECTATING || profile.getState() == EnumProfileState.PLAYING) {
+        if (profile.getState() == EnumProfileState.PLAYING) {
             if (profile.getMatch() == null) {
                 return;
             }

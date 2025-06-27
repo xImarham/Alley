@@ -18,6 +18,7 @@ import dev.revere.alley.profile.enums.EnumProfileState;
 import dev.revere.alley.util.ListenerUtil;
 import dev.revere.alley.util.RayTracerUtil;
 import dev.revere.alley.util.chat.CC;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -31,6 +32,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
@@ -260,7 +262,6 @@ public class MatchBlockListener implements Listener {
 
         if (profile.getState() != EnumProfileState.PLAYING) return;
         if (profile.getMatch() == null) return;
-        if (profile.getMatch().getState() != EnumMatchState.RUNNING) return;
         if (profile.getMatch().getKit().isSettingEnabled(KitSettingRaidingImpl.class)) {
             Block block = event.getClickedBlock();
             if (block == null || block.getType() == Material.AIR) return;
@@ -268,17 +269,16 @@ public class MatchBlockListener implements Listener {
             Action action = event.getAction();
             if (action == Action.RIGHT_CLICK_BLOCK) {
                 if (block.getType() == Material.SIGN || block.getType() == Material.SIGN_POST || block.getType() == Material.WALL_SIGN) {
-                    BlockState state = block.getState();
-                    this.tpUpIfSignInteractionPresent(event, state, profile, player);
+                    return;
                 }
 
                 GameParticipant<MatchGamePlayerImpl> participant = profile.getMatch().getParticipant(player);
-                if (participant.getPlayer().getData().getRole() == EnumBaseRaiderRole.RAIDER && ListenerUtil.isDoorOrGate(block.getType())) {
+                if (participant.getPlayer().getData().getRole() == EnumBaseRaiderRole.RAIDER && ListenerUtil.isInteractiveBlock(block.getType())) {
                     if (event.getPlayer().isSneaking() && event.getItem().getType() == Material.ENDER_PEARL && event.getAction() == Action.RIGHT_CLICK_BLOCK && event.getClickedBlock().getType().name().contains("FENCE")) {
                         return;
                     }
                     event.setCancelled(true);
-                    player.sendMessage(CC.translate("&cYou cannot open doors or gates as a raider!"));
+                    player.sendMessage(CC.translate("&cYou cannot interact as a raider!"));
                 }
             }
         } else {
@@ -286,38 +286,171 @@ public class MatchBlockListener implements Listener {
                 return;
             }
 
-            if (ListenerUtil.isDoorOrGate(event.getClickedBlock().getType())) {
+            if (ListenerUtil.isInteractiveBlock(event.getClickedBlock().getType())) {
                 event.setCancelled(true);
-                player.sendMessage(CC.translate("&cYou cannot open doors or gates during a match!"));
+                player.sendMessage(CC.translate("&cYou cannot interact during a match!"));
             }
         }
     }
 
-    /**
-     * Teleports the player up if a sign with the "[elevator]" in its first line is present.
-     *
-     * @param event   The PlayerInteractEvent
-     * @param state   The BlockState of the clicked block
-     * @param profile The Profile of the player
-     * @param player  The Player who interacted with the block
-     */
-    private void tpUpIfSignInteractionPresent(PlayerInteractEvent event, BlockState state, Profile profile, Player player) {
-        if (state instanceof Sign) {
-            Sign sign = (Sign) state;
-            String[] lines = sign.getLines();
-            if (lines.length > 0 && lines[0].equalsIgnoreCase("[elevator]")) {
-                Location pos1 = profile.getMatch().getArena().getPos1();
-                Location tpLocation = pos1.clone();
-                for (int y = tpLocation.getBlockY() + 1; y < tpLocation.getWorld().getMaxHeight(); y++) {
-                    if (tpLocation.getWorld().getBlockAt(tpLocation.getBlockX(), y, tpLocation.getBlockZ()).getType() == Material.AIR) {
-                        tpLocation.setY(y);
-                        player.teleport(tpLocation);
-                        break;
-                    }
-                }
+    @EventHandler
+    public void onSign(SignChangeEvent event) {
+        String[] lines = event.getLines();
 
-                event.setCancelled(true);
+        int elevatorLineIndex = findElevatorLine(lines);
+        if (elevatorLineIndex == -1 || elevatorLineIndex >= 3) {
+            return;
+        }
+
+        String direction = lines[elevatorLineIndex + 1];
+        if (!isValidDirection(direction)) {
+            breakSignAndNotifyPlayer(event);
+            return;
+        }
+
+        createElevatorSign(event, direction);
+    }
+
+    @EventHandler
+    public void onSignInteract(PlayerInteractEvent event) {
+        Block clickedBlock = event.getClickedBlock();
+        if (clickedBlock == null || !isSignBlock(clickedBlock)) {
+            return;
+        }
+
+        if (event.getAction() != Action.RIGHT_CLICK_BLOCK) {
+            return;
+        }
+
+        Sign sign = (Sign) clickedBlock.getState();
+        if (!isElevatorSign(sign)) {
+            return;
+        }
+
+        String direction = sign.getLine(2);
+        Player player = event.getPlayer();
+
+        if (direction.equalsIgnoreCase("Up")) {
+            teleportUp(player, clickedBlock.getLocation());
+        } else if (direction.equalsIgnoreCase("Down")) {
+            teleportDown(player, clickedBlock.getLocation());
+        }
+    }
+
+    private int findElevatorLine(String[] lines) {
+        for (int i = 0; i < lines.length; i++) {
+            if (lines[i].equalsIgnoreCase("[Elevator]")) {
+                return i;
             }
         }
+        return -1;
+    }
+
+    private boolean isValidDirection(String direction) {
+        return direction != null &&
+                (direction.equalsIgnoreCase("Up") || direction.equalsIgnoreCase("Down"));
+    }
+
+    private void breakSignAndNotifyPlayer(SignChangeEvent event) {
+        event.getBlock().breakNaturally();
+        event.getPlayer().sendMessage(CC.translate("&cInvalid direction."));
+    }
+
+    private void createElevatorSign(SignChangeEvent event, String direction) {
+        event.setLine(0, "");
+        event.setLine(1, ChatColor.translateAlternateColorCodes('&', "&c[Elevator]"));
+        event.setLine(2, ChatColor.translateAlternateColorCodes('&', direction));
+        event.setLine(3, "");
+    }
+
+    private boolean isSignBlock(Block block) {
+        Material type = block.getType();
+        return type == Material.WALL_SIGN || type == Material.SIGN_POST;
+    }
+
+    private boolean isElevatorSign(Sign sign) {
+        return sign.getLine(1).equalsIgnoreCase(ChatColor.RED + "[Elevator]");
+    }
+
+    private void teleportUp(Player player, Location signLocation) {
+        Location searchLocation = signLocation.clone().add(0.0, 1.0, 0.0);
+
+        while (searchLocation.getY() < 254.0) {
+            if (searchLocation.getBlock().getType() != Material.AIR) {
+                Location safeSpot = findSafeSpotAbove(searchLocation);
+                if (safeSpot != null) {
+                    teleportPlayerToLocation(player, safeSpot);
+                    return;
+                }
+            }
+            searchLocation.add(0.0, 1.0, 0.0);
+        }
+
+        player.sendMessage(CC.translate("&cCould not teleport."));
+    }
+
+    private void teleportDown(Player player, Location signLocation) {
+        Location searchLocation = signLocation.clone().subtract(0.0, 1.0, 0.0);
+
+        while (searchLocation.getY() > 2.0) {
+            if (searchLocation.getBlock().getType() != Material.AIR) {
+                Location safeSpot = findSafeSpotBelow(searchLocation);
+                if (safeSpot != null) {
+                    teleportPlayerToLocation(player, safeSpot);
+                    return;
+                }
+            }
+            searchLocation.subtract(0.0, 1.0, 0.0);
+        }
+
+        player.sendMessage(CC.translate("&cCould not teleport."));
+    }
+
+    private Location findSafeSpotAbove(Location startLocation) {
+        Location checkLocation = startLocation.clone();
+
+        while (checkLocation.getY() < 254) {
+            Location aboveLocation = checkLocation.clone().add(0.0, 1.0, 0.0);
+
+            if (checkLocation.getBlock().getType() == Material.AIR &&
+                    aboveLocation.getBlock().getType() == Material.AIR) {
+                return checkLocation;
+            }
+
+            checkLocation.add(0.0, 1.0, 0.0);
+        }
+
+        return null;
+    }
+
+    private Location findSafeSpotBelow(Location startLocation) {
+        Location checkLocation = startLocation.clone();
+
+        while (checkLocation.getY() > 2.0) {
+            Location belowLocation = checkLocation.clone().subtract(0.0, 1.0, 0.0);
+
+            if (checkLocation.getBlock().getType() == Material.AIR &&
+                    belowLocation.getBlock().getType() == Material.AIR) {
+                return checkLocation;
+            }
+
+            checkLocation.subtract(0.0, 1.0, 0.0);
+        }
+
+        return null;
+    }
+
+    private void teleportPlayerToLocation(Player player, Location targetLocation) {
+        Location playerLocation = player.getLocation();
+        Location teleportLocation = new Location(
+                targetLocation.getWorld(),
+                targetLocation.getX() + 0.5,
+                targetLocation.getY(),
+                targetLocation.getZ() + 0.5,
+                playerLocation.getYaw(),
+                playerLocation.getPitch()
+        );
+
+        player.teleport(teleportLocation);
     }
 }
