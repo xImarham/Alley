@@ -8,6 +8,7 @@ import dev.revere.alley.base.kit.setting.impl.mode.KitSettingRespawnTimerImpl;
 import dev.revere.alley.base.queue.Queue;
 import dev.revere.alley.feature.division.Division;
 import dev.revere.alley.feature.division.tier.DivisionTier;
+import dev.revere.alley.feature.layout.data.LayoutData;
 import dev.revere.alley.game.match.AbstractMatch;
 import dev.revere.alley.game.match.data.AbstractMatchData;
 import dev.revere.alley.game.match.data.impl.MatchDataSoloImpl;
@@ -502,8 +503,18 @@ public class MatchRegularImpl extends AbstractMatch {
         MatchGamePlayerData data = this.getGamePlayer(player).getData();
         data.setRole(role);
 
+        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
+        LayoutData layout = profile.getProfileData().getLayoutData().getLayouts().get(kitToGive.getName()).get(0);
+
+        //TODO: after implementing multiple layouts, we need to give the books here, if multiple layouts are present in profile.
+
+        if (layout != null) {
+            player.getInventory().setContents(layout.getItems());
+        } else {
+            player.getInventory().setContents(kitToGive.getItems());
+        }
+
         player.getInventory().setArmorContents(kitToGive.getArmor());
-        player.getInventory().setContents(kitToGive.getItems());
         player.updateInventory();
     }
 }
