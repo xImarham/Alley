@@ -72,7 +72,7 @@ public class HotbarListener implements Listener {
                             case CURRENT_MATCHES:
                                 new CurrentMatchesMenu().openMenu(player);
                                 break;
-                            case KIT_EDITOR:
+                            case LAYOUT_EDITOR:
                                 break;
                             case LEADERBOARD:
                                 new LeaderboardMenu().openMenu(player);
