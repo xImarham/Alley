@@ -3,8 +3,10 @@ package dev.revere.alley.feature.layout.menu.button;
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.base.kit.Kit;
+import dev.revere.alley.base.kit.setting.impl.mode.KitSettingRaidingImpl;
 import dev.revere.alley.feature.layout.data.LayoutData;
 import dev.revere.alley.feature.layout.menu.LayoutEditorMenu;
+import dev.revere.alley.feature.layout.menu.role.LayoutSelectRoleKitMenu;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.tool.item.ItemBuilder;
 import dev.revere.alley.util.chat.CC;
@@ -47,6 +49,11 @@ public class LayoutButton extends Button {
             // similar to how MinemenClub works, where you can Shift-Click to select your saved/stored layouts.
             // Why? Because people love minemenclub, so we do it the same way.
             LayoutData layout = profile.getProfileData().getLayoutData().getLayouts().get(this.kit.getName()).get(0);
+            if (this.kit.isSettingEnabled(KitSettingRaidingImpl.class)) {
+                new LayoutSelectRoleKitMenu(this.kit).openMenu(player);
+                return;
+            }
+
             new LayoutEditorMenu(this.kit, layout).openMenu(player);
             return;
         }
