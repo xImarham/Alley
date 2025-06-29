@@ -51,7 +51,7 @@ kit:
     display-name: "&6{kit-name}"
     description: ""
     disclaimer: "&7{kit-name} kit disclaimer."
-    menu-title: "&6{kit-name}."
+    menu-title: "&6&l{kit-name}"
 
 profanity-filter:
   add-default-words: false # Alley has a built-in list of rude and toxic words, set this to true if you want them to apply (The list below will be used in addition to the built-in list).
