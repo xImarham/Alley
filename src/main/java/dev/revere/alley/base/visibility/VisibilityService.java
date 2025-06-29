@@ -155,6 +155,12 @@ public class VisibilityService {
      * @param viewerProfile The profile of the viewer.
      */
     private void handleSpectatingCase(Player viewer, Player target, Profile viewerProfile) {
+        Profile targetProfile = this.plugin.getProfileService().getProfile(target.getUniqueId());
+        if (targetProfile.getState() == EnumProfileState.SPECTATING) {
+            viewer.showPlayer(target);
+            return;
+        }
+
         if (viewerProfile.getMatch() == null) {
             viewer.hidePlayer(target);
             return;
