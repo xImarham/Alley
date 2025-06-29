@@ -44,6 +44,7 @@ public class Kit {
 
     private EnumKitCategory category;
 
+    private String knockbackProfile;
     private List<PotionEffect> potionEffects;
     private final List<KitSetting> kitSettings;
 
@@ -89,6 +90,7 @@ public class Kit {
 
         this.kitSettings = new ArrayList<>();
         this.potionEffects = new ArrayList<>();
+        this.knockbackProfile = "";
     }
 
     /**

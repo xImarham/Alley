@@ -140,20 +140,10 @@ public class PartyService {
     public void disbandParty(Player leader) {
         Profile profile = this.plugin.getProfileService().getProfile(leader.getUniqueId());
 
-        if (profile.getState() != EnumProfileState.LOBBY) {
-            leader.sendMessage(CC.translate("&cYou must be at spawn in order to execute this command :v"));
-            return;
-        }
-
         Party party = this.getPartyByLeader(leader);
 
         if (party == null) {
             leader.sendMessage(CC.translate(PartyLocale.NOT_IN_PARTY.getMessage()));
-            return;
-        }
-
-        if (profile.getMatch() != null) {
-            leader.sendMessage(CC.translate("&cYou cannot disband your party while in a match."));
             return;
         }
 
@@ -168,8 +158,9 @@ public class PartyService {
                 this.handlePartyMemberLeave(Bukkit.getPlayer(memberId));
             }
         }
-
-        party.getMembers().forEach(member -> this.setupProfile(Bukkit.getPlayer(member), false));
+        if (profile.getMatch() != null) {
+            party.getMembers().forEach(member -> this.setupProfile(Bukkit.getPlayer(member), false));
+        }
         party.notifyParty("&6&lParty &7&l" + Symbol.ARROW_R + " &6" + leader.getName() + " &cdisbanded the party.");
         this.parties.remove(party);
 
@@ -381,7 +372,6 @@ public class PartyService {
         if (join && (profile.getState() == EnumProfileState.LOBBY || profile.getState() == EnumProfileState.WAITING)) {
             hotbarService.applyHotbarItems(player, EnumHotbarType.PARTY);
         } else {
-            profile.setState(EnumProfileState.LOBBY);
             hotbarService.applyHotbarItems(player, EnumHotbarType.LOBBY);
         }
 

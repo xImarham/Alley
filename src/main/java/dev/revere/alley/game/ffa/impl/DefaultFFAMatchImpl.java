@@ -2,7 +2,6 @@ package dev.revere.alley.game.ffa.impl;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.base.arena.AbstractArena;
-import dev.revere.alley.base.hotbar.enums.EnumHotbarType;
 import dev.revere.alley.base.kit.Kit;
 import dev.revere.alley.game.ffa.AbstractFFAMatch;
 import dev.revere.alley.game.ffa.enums.EnumFFAState;
@@ -105,6 +104,7 @@ public class DefaultFFAMatchImpl extends AbstractFFAMatch {
         profile.setFfaMatch(this);
 
         this.plugin.getVisibilityService().updateVisibility(player);
+        this.plugin.getKnockbackAdapter().getKnockbackType().applyKnockback(player.getPlayer(), getKit().getKnockbackProfile());
 
         PlayerUtil.reset(player, true);
 

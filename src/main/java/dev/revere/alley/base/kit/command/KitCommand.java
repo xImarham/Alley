@@ -65,6 +65,7 @@ public class KitCommand extends BaseCommand {
         new KitSetRaidingRoleKitCommand();
         new KitRemoveRaidingRoleKitCommand();
         new KitSetMenuTitleCommand();
+        new KitSetProfileCommand();
     }
 
     @SuppressWarnings("unused")

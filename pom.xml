@@ -104,6 +104,14 @@
 
     <dependencies>
         <dependency>
+            <groupId>dev.revere.spigot</groupId>
+            <artifactId>ZoneSpigot</artifactId>
+            <version>1.0.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/libs/zonespigot-api-1.8.8-R0.1-SNAPSHOT.jar</systemPath>
+        </dependency>
+
+        <dependency>
             <groupId>io.github.classgraph</groupId>
             <artifactId>classgraph</artifactId>
             <version>4.8.165</version>

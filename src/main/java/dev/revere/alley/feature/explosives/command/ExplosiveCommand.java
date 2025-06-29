@@ -58,6 +58,7 @@ public class ExplosiveCommand extends BaseCommand {
                 break;
             case "explosion":
                 explosiveService.setExplosionRange(value);
+                break;
             default:
                 sendHelpMessage(sender);
                 return;

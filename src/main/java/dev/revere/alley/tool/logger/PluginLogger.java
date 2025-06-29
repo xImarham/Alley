@@ -38,6 +38,7 @@ public class PluginLogger {
                 "    " + secondary + "Description: " + color + pluginConstant.getDescription(),
                 "",
                 "    " + secondary + "Hooked Core: " + color + plugin.getCoreAdapter().getCore().getType().getPluginName(),
+                "    " + secondary + "Hooked Knockback: " + color + plugin.getKnockbackAdapter().getKnockbackType().getType().getSpigotName(),
                 "",
                 "    " + secondary + "Kits " + color + plugin.getKitService().getKits().size(),
                 "    " + secondary + "FFA Kits: " + color + plugin.getFfaService().getFfaKits().size(),

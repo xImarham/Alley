@@ -185,6 +185,7 @@ public abstract class AbstractMatch {
             if (player != null) {
                 this.updatePlayerProfileForMatch(player);
                 this.plugin.getVisibilityService().updateVisibility(player);
+                this.plugin.getKnockbackAdapter().getKnockbackType().applyKnockback(player, getKit().getKnockbackProfile());
                 this.setupPlayer(player);
             }
         });
@@ -264,6 +265,11 @@ public abstract class AbstractMatch {
             return;
         }
 
+        this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> {
+            player.spigot().respawn();
+            PlayerUtil.reset(player, false);
+        }, 1L);
+
         GameParticipant<MatchGamePlayerImpl> participant = this.getParticipant(player);
         MatchGamePlayerImpl gamePlayer = this.getFromAllGamePlayers(player);
         if (participant.isAllEliminated() && !gamePlayer.isDisconnected()) {
@@ -292,26 +298,26 @@ public abstract class AbstractMatch {
                 this.state = EnumMatchState.ENDING_MATCH;
             }
             this.runnable.setStage(4);
-        } else {
-            if (handleSpectator(player, victimProfile, participant)) {
-                if (killer != null) {
-                    this.handleDeathEffects(player, killer);
-                }
+            return;
+        }
 
-                this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> {
-                    player.spigot().respawn();
-                    this.addSpectator(player);
-                }, 2L);
-                return;
+        if (handleSpectator(player, victimProfile, participant)) {
+            if (killer != null) {
+                this.handleDeathEffects(player, killer);
             }
 
-            if (!gamePlayer.isEliminated()) {
-                if (this.shouldHandleRegularRespawn(player)) {
-                    this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> this.handleRespawn(player), 1L);
-                } else {
-                    this.startRespawnProcess(player);
-                }
-            }
+            this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> {
+                this.addSpectator(player);
+            }, 10L);
+            return;
+        }
+
+        if (gamePlayer.isEliminated()) {
+            return;
+        }
+
+        if (!this.shouldHandleRegularRespawn(player)) {
+            this.startRespawnProcess(player);
         }
     }
 
@@ -493,10 +499,11 @@ public abstract class AbstractMatch {
         this.getParticipants().forEach(gameParticipant -> {
             gameParticipant.getPlayers().forEach(gamePlayer -> {
                 Player player = this.plugin.getServer().getPlayer(gamePlayer.getUuid());
+                if (player == null) return;
+
                 Snapshot snapshot = new Snapshot(player, gamePlayer.isDead());
 
                 MatchGamePlayerData data = gamePlayer.getData();
-
                 snapshot.setOpponent(this.getOpponent(player).getPlayer().getUuid());
                 snapshot.setLongestCombo(data.getLongestCombo());
                 snapshot.setTotalHits(data.getHits());

@@ -160,9 +160,6 @@ public class MatchUtility {
             playerComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
                     new ComponentBuilder(CC.translate("&eClick to view " + playerName + "'s inventory")).create()));
 
-            if (player.isDisconnected()) {
-                return;
-            }
             sendCombinedSpigotMessage(match, playerComponent);
         }
 
@@ -177,9 +174,6 @@ public class MatchUtility {
             playerComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
                     new ComponentBuilder(CC.translate("&eClick to view " + playerName + "'s inventory")).create()));
 
-            if (player.isDisconnected()) {
-                return;
-            }
             sendCombinedSpigotMessage(match, playerComponent);
         }
 

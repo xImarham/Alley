@@ -36,6 +36,7 @@ import dev.revere.alley.feature.emoji.EmojiRepository;
 import dev.revere.alley.feature.emoji.listener.EmojiListener;
 import dev.revere.alley.feature.filter.FilterService;
 import dev.revere.alley.feature.explosives.ExplosiveService;
+import dev.revere.alley.feature.knockback.KnockbackAdapter;
 import dev.revere.alley.feature.layout.LayoutService;
 import dev.revere.alley.feature.layout.listener.LayoutListener;
 import dev.revere.alley.feature.leaderboard.LeaderboardService;
@@ -67,6 +68,7 @@ import dev.revere.alley.tool.elo.EloCalculator;
 import dev.revere.alley.tool.logger.Logger;
 import dev.revere.alley.tool.logger.PluginLogger;
 import dev.revere.alley.tool.reflection.ReflectionRepository;
+import dev.revere.spigot.knockback.KnockbackAPI;
 import lombok.Getter;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -76,7 +78,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.util.*;
 
 /**
- * Alley – A modern, modular Practice PvP core built from the ground up for Minecraft 1.8.
+ * Alley – A modern, modular Practice PvP knockback built from the ground up for Minecraft 1.8.
  * <p>
  * Developed by Revere Inc., Alley focuses on clean, professional, and readable code,
  * making it easy for developers to jump into practice PvP development with minimal friction.
@@ -103,6 +105,7 @@ public class Alley extends JavaPlugin {
     private Assemble assemble;
     private CommandFramework commandFramework;
     private CoreAdapter coreAdapter;
+    private KnockbackAdapter knockbackAdapter;
     private CosmeticRepository cosmeticRepository;
     private ProfileService profileService;
     private DivisionService divisionService;
@@ -206,6 +209,7 @@ public class Alley extends JavaPlugin {
         services.put(ConfigService.class.getSimpleName(), () -> this.configService = new ConfigService());
         services.put(MongoService.class.getSimpleName(), () -> this.mongoService = new MongoService(this));
         services.put(CommandFramework.class.getSimpleName(), () -> this.commandFramework = new CommandFramework(this));
+        services.put(KnockbackAdapter.class.getSimpleName(), () -> this.knockbackAdapter = new KnockbackAdapter(this));
         services.put(CoreAdapter.class.getSimpleName(), () -> this.coreAdapter = new CoreAdapter(this));
         services.put(QueueService.class.getSimpleName(), () -> this.queueService = new QueueService(this));
         services.put(KitSettingService.class.getSimpleName(), () -> this.kitSettingService = new KitSettingService(this));

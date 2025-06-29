@@ -36,7 +36,7 @@ public class InventoryCommand extends BaseCommand {
         }
 
         if (snapshot == null) {
-            player.sendMessage(CC.translate("&cThis Inventory has expired."));
+            player.sendMessage(CC.translate("&cThis inventory has expired."));
             return;
         }
 

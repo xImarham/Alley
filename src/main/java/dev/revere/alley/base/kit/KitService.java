@@ -68,6 +68,7 @@ public class KitService {
 
             kit.setEnabled(config.getBoolean(key + ".enabled"));
             kit.setEditable(config.getBoolean(key + ".editable"));
+            kit.setKnockbackProfile(config.getString(key + ".knockback-profile"));
 
             this.setupFFA(kit, config, key);
             this.loadKitSettings(config, key, kit);
@@ -333,6 +334,7 @@ public class KitService {
         config.set(key + ".ffa.max-players", kit.getMaxFfaPlayers());
         config.set(key + ".items", Serializer.serializeItemStack(kit.getItems()));
         config.set(key + ".armor", Serializer.serializeItemStack(kit.getArmor()));
+        config.set(key + ".knockback-profile", kit.getKnockbackProfile());
         config.set(key + ".editor-items", Serializer.serializeItemStack(kit.getEditorItems()));
     }
 }
