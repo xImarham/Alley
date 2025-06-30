@@ -494,7 +494,7 @@ public abstract class AbstractMatch {
                 Player player = this.plugin.getServer().getPlayer(gamePlayer.getUuid());
                 if (player == null) return;
 
-                Snapshot snapshot = new Snapshot(player, gamePlayer.isDead());
+                Snapshot snapshot = new Snapshot(player, !gamePlayer.isDead());
 
                 MatchGamePlayerData data = gamePlayer.getData();
                 snapshot.setOpponent(this.getOpponent(player).getPlayer().getUuid());

@@ -1,9 +1,3 @@
-kit:
-  default-values:
-    display-name: '{kit-name}'
-    description: ''
-    disclaimer: '&6{kit-name} kit disclaimer.'
-    menu-title: '&6{kit-name}'
 kits:
   BaseRaiding:
     display-name: 'Base Raiding'

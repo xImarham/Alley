@@ -85,7 +85,7 @@ public class Snapshot {
     public int getAmountOfPotionsInInventory() {
         int amount = 0;
         for (ItemStack item : this.inventory) {
-            if (item != null && item.getType() == new ItemStack(Material.POTION, 0, (byte) 16421).getType()) {
+            if (item != null && item.getType() == Material.POTION && item.getDurability() == 16421) {
                 amount += item.getAmount();
             }
         }
