@@ -2,13 +2,10 @@ package dev.revere.alley.game.duel.menu;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.menu.Button;
-import dev.revere.alley.api.menu.Menu;
+import dev.revere.alley.api.menu.pagination.PaginatedMenu;
 import dev.revere.alley.base.arena.AbstractArena;
-import dev.revere.alley.base.arena.impl.StandAloneArena;
 import dev.revere.alley.base.kit.Kit;
-import dev.revere.alley.profile.Profile;
 import dev.revere.alley.tool.item.ItemBuilder;
-import dev.revere.alley.util.chat.CC;
 import lombok.AllArgsConstructor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -24,28 +21,42 @@ import java.util.Map;
  * @date 17/10/2024 - 22:13
  */
 @AllArgsConstructor
-public class DuelArenaSelectorMenu extends Menu {
+public class DuelArenaSelectorMenu extends PaginatedMenu {
     private Player targetPlayer;
     private Kit kit;
 
     @Override
-    public String getTitle(Player player) {
-        return "Select an arena.";
+    public String getPrePaginatedTitle(Player player) {
+        return "&6&lSelect an arena";
     }
 
     @Override
-    public Map<Integer, Button> getButtons(Player player) {
+    public Map<Integer, Button> getGlobalButtons(Player player) {
+        Map<Integer, Button> buttons = new HashMap<>();
+
+        this.addGlassHeader(buttons, 15);
+
+        return buttons;
+    }
+
+    @Override
+    public Map<Integer, Button> getAllPagesButtons(Player player) {
         Map<Integer, Button> buttons = new HashMap<>();
 
         int slot = 0;
 
-        for (AbstractArena arena : Alley.getInstance().getArenaService().getArenas()) {
-            if (arena.getKits().contains(kit.getName()) && arena.isEnabled()) {
-                buttons.put(slot++, new DuelArenaSelectorButton(targetPlayer, kit, arena));
+        for (AbstractArena arena : this.plugin.getArenaService().getArenas()) {
+            if (arena.getKits().contains(this.kit.getName()) && arena.isEnabled()) {
+                buttons.put(slot++, new DuelArenaSelectorButton(this.targetPlayer, this.kit, arena));
             }
         }
 
         return buttons;
+    }
+
+    @Override
+    public int getSize() {
+        return 9 * 6;
     }
 
     @AllArgsConstructor
@@ -56,20 +67,24 @@ public class DuelArenaSelectorMenu extends Menu {
 
         @Override
         public ItemStack getButtonItem(Player player) {
-            return new ItemBuilder(Material.PAPER).name("&6" + arena.getName()).durability(0).hideMeta()
+            return new ItemBuilder(Material.PAPER)
+                    .name("&6&l" + this.arena.getName())
                     .lore(
+                            " &f● &6Target: &f" + this.targetPlayer.getName(),
+                            " &f● &6Kit: &f" + this.kit.getDisplayName(),
                             "",
-                            "&7Click to send a duel request to " + targetPlayer.getName() + " in the " + arena.getName() + " arena.",
-                            ""
+                            "&aClick to send request!"
                     )
-                    .hideMeta().build();
+                    .durability(0)
+                    .hideMeta()
+                    .build();
         }
 
         @Override
         public void clicked(Player player, ClickType clickType) {
             player.closeInventory();
 
-            Alley.getInstance().getDuelRequestService().createAndSendRequest(player, targetPlayer, kit, arena);
+            Alley.getInstance().getDuelRequestService().createAndSendRequest(player, this.targetPlayer, this.kit, this.arena);
         }
     }
 }

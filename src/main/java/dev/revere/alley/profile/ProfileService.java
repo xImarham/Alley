@@ -2,8 +2,10 @@ package dev.revere.alley.profile;
 
 import com.mongodb.client.MongoCollection;
 import dev.revere.alley.Alley;
+import dev.revere.alley.base.kit.Kit;
 import dev.revere.alley.database.profile.IProfile;
 import dev.revere.alley.database.profile.impl.MongoProfileImpl;
+import dev.revere.alley.feature.layout.data.LayoutData;
 import dev.revere.alley.profile.data.ProfileData;
 import dev.revere.alley.util.chat.CC;
 import lombok.Getter;
@@ -14,6 +16,7 @@ import org.bukkit.entity.Player;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -111,5 +114,28 @@ public class ProfileService {
                     ""
             ).forEach(line -> targetPlayer.getPlayer().sendMessage(CC.translate(line)));
         }
+    }
+
+    /**
+     * Resets the layout for a specific kit.
+     *
+     * @param kit The kit to reset the layout for.
+     */
+    public void resetLayoutForKit(Kit kit) {
+        this.profiles.values().forEach(profile -> {
+            List<LayoutData> layouts = profile.getProfileData().getLayoutData().getLayouts().get(kit.getName());
+            layouts.forEach(
+                    layout -> layout.setItems(kit.getItems())
+            );
+
+            profile.getProfileData().getLayoutData().getLayouts().put(kit.getName(), layouts);
+        });
+
+        Arrays.asList(
+                "",
+                "&c&lLAYOUT RESET",
+                "&cSuccessfully reset layout for kit: " + kit.getName() + ".",
+                ""
+        ).forEach(line -> Bukkit.broadcastMessage(CC.translate(line)));
     }
 }

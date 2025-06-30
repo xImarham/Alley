@@ -15,8 +15,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.Collections;
-
 /**
  * @author Emmy
  * @project Alley
@@ -30,10 +28,15 @@ public class PartyEventSplitArenaSelectorButton extends Button {
 
     @Override
     public ItemStack getButtonItem(Player player) {
-        return new ItemBuilder(Material.PAPER).name("&6" + arena.getName()).durability(0).hideMeta()
-                .lore(Collections.singletonList(
-                        "&7Click to select this arena."
-                ))
+        return new ItemBuilder(Material.PAPER)
+                .name("&6&l" + this.arena.getName())
+                .lore(
+                        " &f● &6Kit: &f" + this.kit.getDisplayName(),
+                        "",
+                        "&aClick to select!"
+                )
+                .durability(0)
+                .hideMeta()
                 .build();
     }
 

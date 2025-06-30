@@ -2,7 +2,7 @@ package dev.revere.alley.game.party.menu.duel.button;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.menu.Button;
-import dev.revere.alley.game.duel.menu.DuelKitSelectorMenu;
+import dev.revere.alley.game.duel.menu.DuelRequestMenu;
 import dev.revere.alley.game.party.Party;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.tool.item.ItemBuilder;
@@ -96,6 +96,6 @@ public class DuelOtherPartyButton extends Button {
         }
 
         player.closeInventory();
-        new DuelKitSelectorMenu(targetLeader).openMenu(player);
+        new DuelRequestMenu(targetLeader).openMenu(player);
     }
 }

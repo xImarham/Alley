@@ -5,24 +5,14 @@ import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.base.arena.AbstractArena;
 import dev.revere.alley.base.kit.Kit;
 import dev.revere.alley.config.locale.impl.PartyLocale;
-import dev.revere.alley.game.match.AbstractMatch;
-import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
-import dev.revere.alley.game.match.player.participant.GameParticipant;
-import dev.revere.alley.game.match.player.participant.TeamGameParticipant;
 import dev.revere.alley.game.party.Party;
-import dev.revere.alley.game.party.PartyService;
 import dev.revere.alley.game.party.menu.event.impl.PartyEventSplitArenaSelectorMenu;
 import dev.revere.alley.tool.item.ItemBuilder;
 import dev.revere.alley.util.chat.CC;
 import lombok.AllArgsConstructor;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @author Emmy
@@ -36,13 +26,15 @@ public class PartyEventSplitButton extends Button {
 
     @Override
     public ItemStack getButtonItem(Player player) {
-        return new ItemBuilder(this.kit.getIcon()).name("&6&l" + this.kit.getDisplayName()).durability(this.kit.getDurability()).hideMeta()
+        return new ItemBuilder(this.kit.getIcon())
+                .name("&6&l" + this.kit.getDisplayName())
                 .lore(
-                        "&7" + this.kit.getDescription(),
                         "",
-                        "&aClick to select this kit."
+                        "&aClick to select!"
                 )
-                .hideMeta().build();
+                .durability(this.kit.getDurability())
+                .hideMeta()
+                .build();
     }
 
     @Override

@@ -3,7 +3,7 @@ package dev.revere.alley.game.party.menu.event.impl;
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.api.menu.Menu;
-import dev.revere.alley.base.kit.Kit;
+import dev.revere.alley.base.queue.Queue;
 import dev.revere.alley.game.party.menu.event.impl.button.PartyEventSplitButton;
 import org.bukkit.entity.Player;
 
@@ -20,18 +20,20 @@ public class PartyEventSplitMenu extends Menu {
 
     @Override
     public String getTitle(Player player) {
-        return "&c&lStill in development";
+        return "&6&lSelect a kit";
     }
 
     @Override
     public Map<Integer, Button> getButtons(Player player) {
         final Map<Integer, Button> buttons = new HashMap<>();
 
-        this.plugin.getKitService().getKits()
-                .stream()
-                .filter(Kit::isEnabled)
-                .forEach(kit -> buttons.put(buttons.size(), new PartyEventSplitButton(kit)))
-        ;
+        int slot = 10;
+        for (Queue queue : this.plugin.getQueueService().getQueues()) {
+            if (!queue.isRanked() && !queue.isDuos() && queue.getKit().isEnabled()) {
+                slot = this.skipIfSlotCrossingBorder(slot);
+                buttons.put(slot++, new PartyEventSplitButton(queue.getKit()));
+            }
+        }
 
         this.addGlass(buttons, 15);
 
@@ -40,6 +42,6 @@ public class PartyEventSplitMenu extends Menu {
 
     @Override
     public int getSize() {
-        return 3 * 9;
+        return 9 * 6;
     }
 }

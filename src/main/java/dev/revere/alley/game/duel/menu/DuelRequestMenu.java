@@ -4,10 +4,8 @@ import dev.revere.alley.Alley;
 import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.api.menu.Menu;
 import dev.revere.alley.base.kit.Kit;
-import dev.revere.alley.base.kit.setting.impl.mode.KitSettingRankedImpl;
-import dev.revere.alley.profile.Profile;
+import dev.revere.alley.base.queue.Queue;
 import dev.revere.alley.tool.item.ItemBuilder;
-import dev.revere.alley.util.chat.CC;
 import lombok.AllArgsConstructor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
@@ -22,7 +20,7 @@ import java.util.Map;
  * @date 17/10/2024 - 20:11
  */
 @AllArgsConstructor
-public class DuelKitSelectorMenu extends Menu {
+public class DuelRequestMenu extends Menu {
     protected final Alley plugin = Alley.getInstance();
     private final Player targetPlayer;
 
@@ -35,12 +33,22 @@ public class DuelKitSelectorMenu extends Menu {
     public Map<Integer, Button> getButtons(Player player) {
         Map<Integer, Button> buttons = new HashMap<>();
 
-        this.plugin.getKitService().getKits().stream()
-                .filter(Kit::isEnabled)
-                .filter(kit -> kit.isSettingEnabled(KitSettingRankedImpl.class))
-                .forEach(kit -> buttons.put(buttons.size(), new DuelButton(this.targetPlayer, kit)));
+        int slot = 10;
+        for (Queue queue : this.plugin.getQueueService().getQueues()) {
+            if (!queue.isRanked() && !queue.isDuos() && queue.getKit().isEnabled()) {
+                slot = this.skipIfSlotCrossingBorder(slot);
+                buttons.put(slot++, new DuelButton(this.targetPlayer, queue.getKit()));
+            }
+        }
+
+        this.addGlass(buttons, 15);
 
         return buttons;
+    }
+
+    @Override
+    public int getSize() {
+        return 9 * 6;
     }
 
     @AllArgsConstructor
@@ -51,13 +59,15 @@ public class DuelKitSelectorMenu extends Menu {
 
         @Override
         public ItemStack getButtonItem(Player player) {
-            return new ItemBuilder(this.kit.getIcon()).name(this.kit.getMenuTitle()).durability(this.kit.getDurability()).hideMeta()
+            return new ItemBuilder(this.kit.getIcon())
+                    .name(this.kit.getMenuTitle())
                     .lore(
-                            "&7" + this.kit.getDescription(),
                             "",
-                            "&aClick to send a duel request to " + this.targetPlayer.getName() + "!"
+                            "&aClick to select!"
                     )
-                    .hideMeta().build();
+                    .durability(this.kit.getDurability())
+                    .hideMeta()
+                    .build();
         }
 
         @Override
