@@ -66,6 +66,7 @@ public class KitCommand extends BaseCommand {
         new KitRemoveRaidingRoleKitCommand();
         new KitSetMenuTitleCommand();
         new KitSetProfileCommand();
+        new KitResetLayoutsCommand();
     }
 
     @SuppressWarnings("unused")
@@ -78,7 +79,7 @@ public class KitCommand extends BaseCommand {
                     "setsetting", "setcategory", "setdescription", "setdisclaimer", "setdisplayname",
                     "seteditable", "seticon", "setinv", "getinv", "addpotion", "clearpotions", "removepotion",
                     "setupffa", "toggleffa", "setffaslot", "saveall", "save", "setraidingrolekit",
-                    "removeraidingrolekit", "setmenutitle"
+                    "removeraidingrolekit", "setmenutitle", "setprofile", "resetlayouts"
             ));
         }
 
@@ -138,6 +139,7 @@ public class KitCommand extends BaseCommand {
                     " &f● &6/kit setdisplayname &8(&7kitName&8) &8(&7displayname&8) &7| Set display-name of a kit",
                     " &f● &6/kit setmenutitle &8(&7kitName&8) &8(&7title&8) &7| Set menu title of a kit",
                     " &f● &6/kit seteditable &8(&7kitName&8) &8(&7true/false&8) &7| Set if a kit is editable",
+                    " &f● &6/kit setprofile &8(&7kitName&8) &8(&7profileName&8) &7| Set kb profile of a kit",
                     " &f● &6/kit seticon &8(&7kitName&8) &7| Set icon of a kit",
             },
             {
@@ -159,6 +161,7 @@ public class KitCommand extends BaseCommand {
                     " &f● &6/kit removeraidingrolekit &8(&7kitName&8) &8(&7role&8) &8(&7roleKitName&8) &7| Remove raiding role kit",
             },
             {
+                    " &f● &6/kit resetlayouts &8(&7kitName&8) &7| Reset all profile layouts",
                     " &f● &6/kit saveall &7| Save all kits",
                     " &f● &6/kit save &8(&7kitName&8) &7| Save a kit",
             }
