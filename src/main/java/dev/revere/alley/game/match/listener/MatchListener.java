@@ -21,6 +21,7 @@ import dev.revere.alley.game.match.utility.MatchUtility;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
 import dev.revere.alley.util.ListenerUtil;
+import dev.revere.alley.util.PlayerUtil;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -89,6 +90,7 @@ public class MatchListener implements Listener {
                     if (player.getGameMode() == GameMode.SPECTATOR) return;
                     if (player.getGameMode() == GameMode.CREATIVE) return;
                     if (match.getArena().getType() != EnumArenaType.STANDALONE) return;
+                    if (profile.getState() != EnumProfileState.PLAYING) return;
 
                     if (match.getKit().isSettingEnabled(KitSettingStickFightImpl.class)) {
                         MatchRoundsImpl roundsMatch = (MatchRoundsImpl) match;
@@ -141,6 +143,9 @@ public class MatchListener implements Listener {
         event.setDeathMessage(null);
 
         profile.getMatch().handleDeathItemDrop(player, event);
+
+
+        this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> player.spigot().respawn(), 1L);
 
         EntityDamageEvent.DamageCause cause = player.getLastDamageCause() != null ? player.getLastDamageCause().getCause() : EntityDamageEvent.DamageCause.CUSTOM;
         profile.getMatch().handleDeath(player, cause);

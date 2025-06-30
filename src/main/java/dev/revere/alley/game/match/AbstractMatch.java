@@ -265,11 +265,6 @@ public abstract class AbstractMatch {
             return;
         }
 
-        this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> {
-            player.spigot().respawn();
-            PlayerUtil.reset(player, false);
-        }, 1L);
-
         GameParticipant<MatchGamePlayerImpl> participant = this.getParticipant(player);
         MatchGamePlayerImpl gamePlayer = this.getFromAllGamePlayers(player);
         if (participant.isAllEliminated() && !gamePlayer.isDisconnected()) {
@@ -305,10 +300,8 @@ public abstract class AbstractMatch {
             if (killer != null) {
                 this.handleDeathEffects(player, killer);
             }
-
-            this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> {
-                this.addSpectator(player);
-            }, 10L);
+            this.setupSpectatorProfile(player);
+            this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> this.addSpectator(player),1L);
             return;
         }
 
@@ -523,7 +516,9 @@ public abstract class AbstractMatch {
      * @param player The player to add.
      */
     public void addSpectator(Player player) {
-        this.setupSpectatorProfile(player);
+        if (this.getGamePlayer(player) == null) {
+            this.setupSpectatorProfile(player);
+        }
 
         this.plugin.getNametagService().updatePlayerState(player);
         this.plugin.getVisibilityService().updateVisibility(player);
