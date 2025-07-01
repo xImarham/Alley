@@ -517,7 +517,13 @@ public abstract class AbstractMatch {
      */
     public void addSpectator(Player player) {
         if (this.getGamePlayer(player) == null) {
+            if (this.getState() == EnumMatchState.ENDING_MATCH) {
+                player.sendMessage(CC.translate("&cThis match has already ended."));
+                return;
+            }
+
             this.setupSpectatorProfile(player);
+            this.spectators.add(player.getUniqueId());
         }
 
         this.plugin.getNametagService().updatePlayerState(player);
@@ -533,10 +539,6 @@ public abstract class AbstractMatch {
         player.setFlying(true);
 
         ListenerUtil.teleportAndClearSpawn(player, this.arena.getCenter());
-
-        if (this.getGamePlayer(player) == null) {
-            this.spectators.add(player.getUniqueId());
-        }
 
         Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
         this.notifyAll("&6" + profile.getNameColor() + player.getName() + " &fis now spectating the match.");

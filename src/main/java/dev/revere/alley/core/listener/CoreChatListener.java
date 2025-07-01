@@ -46,9 +46,13 @@ public class CoreChatListener implements Listener {
         for (Player recipient : event.getRecipients()) {
             Profile profile = this.plugin.getProfileService().getProfile(recipient.getUniqueId());
             if (profile.getProfileData().getSettingData().isProfanityFilterEnabled()) {
-                recipient.sendMessage(censoredFormat);
+                if (!event.isCancelled()) {
+                    recipient.sendMessage(censoredFormat);
+                }
             } else {
-                recipient.sendMessage(format);
+                if (!event.isCancelled()) {
+                    recipient.sendMessage(format);
+                }
             }
         }
 

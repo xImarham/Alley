@@ -29,11 +29,13 @@ public class PartyListener implements Listener {
             event.setCancelled(true);
             if (profile.getParty() == null) {
                 event.getPlayer().sendMessage(CC.translate("&cYou're not in a party."));
+                event.setCancelled(true);
                 return;
             }
 
             if (!profile.getProfileData().getSettingData().isPartyMessagesEnabled()) {
                 event.getPlayer().sendMessage(CC.translate("&cYou have party messages disabled."));
+                event.setCancelled(true);
                 return;
             }
 
@@ -46,12 +48,13 @@ public class PartyListener implements Listener {
         if (event.getMessage().startsWith("#") || event.getMessage().startsWith("!")) {
             if (profile.getParty() == null) {
                 event.getPlayer().sendMessage(CC.translate("&cYou're not in a party."));
+                event.setCancelled(true);
                 return;
             }
 
-            event.setCancelled(true);
             if (!profile.getProfileData().getSettingData().isPartyMessagesEnabled()) {
                 event.getPlayer().sendMessage(CC.translate("&cYou have party messages disabled."));
+                event.setCancelled(true);
                 return;
             }
 
