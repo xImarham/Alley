@@ -19,27 +19,36 @@ import org.bukkit.event.player.PlayerQuitEvent;
  * @date 5/25/2024
  */
 public class PartyListener implements Listener {
+    protected final Alley plugin;
+    
+    /**
+     * Constructor for the PartyListener class.
+     *
+     * @param plugin The Alley plugin instance.
+     */
+    public PartyListener(Alley plugin) {
+        this.plugin = plugin;
+    }
 
     @EventHandler
     private void onAsyncPlayerChatEvent(AsyncPlayerChatEvent event) {
-        Profile profile = Alley.getInstance().getProfileService().getProfile(event.getPlayer().getUniqueId());
-        PartyService partyService = Alley.getInstance().getPartyService();
+        Player player = event.getPlayer();
+        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
+        PartyService partyService = this.plugin.getPartyService();
 
         if (profile.getProfileData().getSettingData().getChatChannel().equalsIgnoreCase(EnumChatChannel.PARTY.toString())) {
             event.setCancelled(true);
             if (profile.getParty() == null) {
-                event.getPlayer().sendMessage(CC.translate("&cYou're not in a party."));
-                event.setCancelled(true);
+                player.sendMessage(CC.translate("&cYou're not in a party."));
                 return;
             }
 
             if (!profile.getProfileData().getSettingData().isPartyMessagesEnabled()) {
-                event.getPlayer().sendMessage(CC.translate("&cYou have party messages disabled."));
-                event.setCancelled(true);
+                player.sendMessage(CC.translate("&cYou have party messages disabled."));
                 return;
             }
 
-            String partyMessage = partyService.getChatFormat().replace("{player}", event.getPlayer().getName()).replace("{message}", event.getMessage());
+            String partyMessage = partyService.getChatFormat().replace("{player}", player.getName()).replace("{message}", event.getMessage());
             profile.getParty().notifyParty(partyMessage);
             event.setCancelled(true);
             return;
@@ -47,18 +56,17 @@ public class PartyListener implements Listener {
 
         if (event.getMessage().startsWith("#") || event.getMessage().startsWith("!")) {
             if (profile.getParty() == null) {
-                event.getPlayer().sendMessage(CC.translate("&cYou're not in a party."));
-                event.setCancelled(true);
+                player.sendMessage(CC.translate("&cYou're not in a party."));
                 return;
             }
 
+            event.setCancelled(true);
             if (!profile.getProfileData().getSettingData().isPartyMessagesEnabled()) {
-                event.getPlayer().sendMessage(CC.translate("&cYou have party messages disabled."));
-                event.setCancelled(true);
+                player.sendMessage(CC.translate("&cYou have party messages disabled."));
                 return;
             }
 
-            String partyMessage = partyService.getChatFormat().replace("{player}", event.getPlayer().getName()).replace("{message}", event.getMessage().substring(1));
+            String partyMessage = partyService.getChatFormat().replace("{player}", player.getName()).replace("{message}", event.getMessage().substring(1));
             profile.getParty().notifyParty(partyMessage);
             event.setCancelled(true);
         }
@@ -67,7 +75,7 @@ public class PartyListener implements Listener {
     @EventHandler
     private void onPlayerKick(PlayerKickEvent event) {
         Player player = event.getPlayer();
-        Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
+        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
 
         Party party = profile.getParty();
         if (party == null) {
@@ -75,17 +83,17 @@ public class PartyListener implements Listener {
         }
 
         if (party.getLeader() == player) {
-            Alley.getInstance().getPartyService().disbandParty(player);
+            this.plugin.getPartyService().disbandParty(player);
             return;
         }
 
-        Alley.getInstance().getPartyService().leaveParty(player);
+        this.plugin.getPartyService().leaveParty(player);
     }
 
     @EventHandler
     private void onPlayerQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
-        Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
+        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
 
         Party party = profile.getParty();
         if (party == null) {
@@ -93,10 +101,10 @@ public class PartyListener implements Listener {
         }
 
         if (party.getLeader() == player) {
-            Alley.getInstance().getPartyService().disbandParty(player);
+            this.plugin.getPartyService().disbandParty(player);
             return;
         }
 
-        Alley.getInstance().getPartyService().leaveParty(player);
+        this.plugin.getPartyService().leaveParty(player);
     }
 }

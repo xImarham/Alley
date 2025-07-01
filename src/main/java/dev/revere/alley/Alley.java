@@ -34,8 +34,8 @@ import dev.revere.alley.feature.cosmetic.repository.CosmeticRepository;
 import dev.revere.alley.feature.division.DivisionService;
 import dev.revere.alley.feature.emoji.EmojiRepository;
 import dev.revere.alley.feature.emoji.listener.EmojiListener;
-import dev.revere.alley.feature.filter.FilterService;
 import dev.revere.alley.feature.explosives.ExplosiveService;
+import dev.revere.alley.feature.filter.FilterService;
 import dev.revere.alley.feature.knockback.KnockbackAdapter;
 import dev.revere.alley.feature.layout.LayoutService;
 import dev.revere.alley.feature.layout.listener.LayoutListener;
@@ -68,7 +68,6 @@ import dev.revere.alley.tool.elo.EloCalculator;
 import dev.revere.alley.tool.logger.Logger;
 import dev.revere.alley.tool.logger.PluginLogger;
 import dev.revere.alley.tool.reflection.ReflectionRepository;
-import dev.revere.spigot.knockback.KnockbackAPI;
 import lombok.Getter;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -267,7 +266,7 @@ public class Alley extends JavaPlugin {
         Arrays.asList(
                 new ProfileListener(this),
                 new HotbarListener(this),
-                new PartyListener(),
+                new PartyListener(this),
                 new MatchListener(this),
                 new MatchInteractListener(this),
                 new MatchPearlListener(this),
