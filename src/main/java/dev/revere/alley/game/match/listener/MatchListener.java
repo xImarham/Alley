@@ -144,7 +144,6 @@ public class MatchListener implements Listener {
 
         profile.getMatch().handleDeathItemDrop(player, event);
 
-
         this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> player.spigot().respawn(), 1L);
 
         EntityDamageEvent.DamageCause cause = player.getLastDamageCause() != null ? player.getLastDamageCause().getCause() : EntityDamageEvent.DamageCause.CUSTOM;

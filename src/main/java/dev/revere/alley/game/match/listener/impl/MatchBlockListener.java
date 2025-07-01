@@ -256,6 +256,19 @@ public class MatchBlockListener implements Listener {
     }
 
     @EventHandler
+    private void onPlayerInteract(PlayerInteractEvent event) {
+        Player player = event.getPlayer();
+        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
+
+        if (profile.getState() == EnumProfileState.SPECTATING) {
+            Block block = event.getClickedBlock();
+            if (block == null || block.getType() == Material.AIR) return;
+
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler
     private void onDoorOpen(PlayerInteractEvent event) {
         Player player = event.getPlayer();
         Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
