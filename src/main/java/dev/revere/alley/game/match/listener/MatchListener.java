@@ -185,6 +185,15 @@ public class MatchListener implements Listener {
     }
 
     @EventHandler
+    private void onPlayerPickupItem(PlayerPickupItemEvent event) {
+        Player player = event.getPlayer();
+        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
+        if (profile.getState() == EnumProfileState.SPECTATING) {
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler
     private void onPlayerItemConsume(PlayerItemConsumeEvent event) {
         Player player = event.getPlayer();
         Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
