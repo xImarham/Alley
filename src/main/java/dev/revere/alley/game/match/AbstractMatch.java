@@ -489,27 +489,25 @@ public abstract class AbstractMatch {
     }
 
     private void handleSnapshots() {
-        this.getParticipants().forEach(gameParticipant -> {
-            gameParticipant.getPlayers().forEach(gamePlayer -> {
-                Player player = this.plugin.getServer().getPlayer(gamePlayer.getUuid());
-                if (player == null) return;
+        this.getParticipants().forEach(gameParticipant -> gameParticipant.getPlayers().forEach(gamePlayer -> {
+            Player player = this.plugin.getServer().getPlayer(gamePlayer.getUuid());
+            if (player == null) return;
 
-                Snapshot snapshot = new Snapshot(player, !gamePlayer.isDead());
+            Snapshot snapshot = new Snapshot(player, !gamePlayer.isDead());
 
-                MatchGamePlayerData data = gamePlayer.getData();
-                snapshot.setOpponent(this.getOpponent(player).getPlayer().getUuid());
-                snapshot.setLongestCombo(data.getLongestCombo());
-                snapshot.setTotalHits(data.getHits());
-                snapshot.setThrownPotions(data.getThrownPotions());
-                snapshot.setMissedPotions(data.getMissedPotions());
-                snapshot.setCriticalHits(data.getCriticalHits());
-                snapshot.setBlockedHits(data.getBlockedHits());
-                snapshot.setWTaps(data.getWTaps());
+            MatchGamePlayerData data = gamePlayer.getData();
+            snapshot.setOpponent(this.getOpponent(player).getPlayer().getUuid());
+            snapshot.setLongestCombo(data.getLongestCombo());
+            snapshot.setTotalHits(data.getHits());
+            snapshot.setThrownPotions(data.getThrownPotions());
+            snapshot.setMissedPotions(data.getMissedPotions());
+            snapshot.setCriticalHits(data.getCriticalHits());
+            snapshot.setBlockedHits(data.getBlockedHits());
+            snapshot.setWTaps(data.getWTaps());
 
-                this.plugin.getSnapshotRepository().addSnapshot(snapshot);
-                this.plugin.getSnapshotDataService().clearData(player.getUniqueId());
-            });
-        });
+            this.plugin.getSnapshotRepository().addSnapshot(snapshot);
+            this.plugin.getSnapshotDataService().clearData(player.getUniqueId());
+        }));
     }
 
     /**
