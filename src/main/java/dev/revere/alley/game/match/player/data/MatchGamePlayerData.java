@@ -13,16 +13,22 @@ import lombok.Setter;
 @Getter
 @Setter
 public class MatchGamePlayerData {
-    private int longestCombo;
-    private int combo;
-    private int hits;
     private int lives;
     private int score;
     private int kills;
     private int deaths;
 
+    private int longestCombo;
+    private int combo;
+
+    private int hits;
+    private int criticalHits;
+    private int blockedHits;
+
     private int missedPotions;
     private int thrownPotions;
+
+    private int wTaps;
 
     private EnumBaseRaiderRole role;
 
@@ -68,5 +74,17 @@ public class MatchGamePlayerData {
 
     public void incrementThrownPotions() {
         this.thrownPotions++;
+    }
+
+    public void incrementCriticalHits() {
+        this.criticalHits++;
+    }
+
+    public void incrementBlockedHits() {
+        this.blockedHits++;
+    }
+
+    public void incrementWTaps() {
+        this.wTaps++;
     }
 }

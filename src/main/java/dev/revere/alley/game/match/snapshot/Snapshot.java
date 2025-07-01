@@ -34,8 +34,14 @@ public class Snapshot {
 
     private int thrownPotions;
     private int missedPotions;
+
     private int longestCombo;
+
     private int totalHits;
+    private int criticalHits;
+    private int blockedHits;
+
+    private int wTaps;
 
     private long createdAt;
 
@@ -48,17 +54,27 @@ public class Snapshot {
     public Snapshot(Player player, boolean alive) {
         this.uuid = player.getUniqueId();
         this.username = player.getName();
+
         this.health = alive ? Math.round(player.getHealth() / 2) : 0;
         this.foodLevel = player.getFoodLevel();
+
         this.armor = InventoryUtil.cloneItemStackArray(player.getInventory().getArmorContents());
         this.inventory = InventoryUtil.cloneItemStackArray(player.getInventory().getContents());
         this.potionEffects = player.getActivePotionEffects().stream()
                 .map(effect -> effect.getType().getName() + " " + effect.getAmplifier())
                 .collect(Collectors.toList());
+
         this.thrownPotions = 0;
         this.missedPotions = 0;
+
         this.longestCombo = 0;
+
         this.totalHits = 0;
+        this.criticalHits = 0;
+        this.blockedHits = 0;
+
+        this.wTaps = 0;
+
         this.createdAt = System.currentTimeMillis();
     }
 

@@ -20,6 +20,7 @@ public class SnapshotDataButton extends Button {
     private final List<String> lore;
     private final Material material;
     private final int durability;
+    private final int amount;
 
     @Override
     public ItemStack getButtonItem(Player player) {
@@ -28,6 +29,7 @@ public class SnapshotDataButton extends Button {
                 .lore(this.lore)
                 .durability(this.durability)
                 .hideMeta()
+                .amount(this.amount)
                 .build();
     }
 }

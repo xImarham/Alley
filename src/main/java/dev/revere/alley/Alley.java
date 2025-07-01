@@ -53,6 +53,8 @@ import dev.revere.alley.game.match.MatchService;
 import dev.revere.alley.game.match.listener.MatchListener;
 import dev.revere.alley.game.match.listener.impl.*;
 import dev.revere.alley.game.match.snapshot.SnapshotRepository;
+import dev.revere.alley.game.match.snapshot.SnapshotDataService;
+import dev.revere.alley.game.match.snapshot.listener.SnapshotListener;
 import dev.revere.alley.game.party.PartyService;
 import dev.revere.alley.game.party.listener.PartyListener;
 import dev.revere.alley.profile.ProfileService;
@@ -141,6 +143,7 @@ public class Alley extends JavaPlugin {
     private ArenaSchematicService arenaSchematicService;
     private AbilityService abilityService;
     private NametagService nametagService;
+    private SnapshotDataService snapshotDataService;
 
     private boolean loaded;
 
@@ -248,6 +251,7 @@ public class Alley extends JavaPlugin {
         services.put(ExplosiveService.class.getSimpleName(), () -> this.explosiveService = new ExplosiveService(this));
         services.put(AbilityService.class.getSimpleName(), () -> this.abilityService = new AbilityService());
         services.put(NametagService.class.getSimpleName(), () -> this.nametagService = new NametagService(this));
+        services.put(SnapshotDataService.class.getSimpleName(), () -> this.snapshotDataService = new SnapshotDataService(this));
 
         services.forEach(Logger::logTime);
     }
@@ -274,7 +278,6 @@ public class Alley extends JavaPlugin {
                 new MatchDamageListener(this),
                 new MatchChatListener(this),
                 new MatchBlockListener(this),
-                new MatchPotionListener(this),
                 new ArenaListener(),
                 new MenuListener(this),
                 new SpawnListener(this),
@@ -284,7 +287,8 @@ public class Alley extends JavaPlugin {
                 new CombatListener(this),
                 new QueueListener(this),
                 new CoreChatListener(this),
-                new LayoutListener(this)
+                new LayoutListener(this),
+                new SnapshotListener(this)
         ).forEach(listener -> getServer().getPluginManager().registerEvents(listener, this));
     }
 

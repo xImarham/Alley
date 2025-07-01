@@ -1,9 +1,10 @@
-package dev.revere.alley.game.match.listener.impl;
+package dev.revere.alley.game.match.snapshot.listener;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.game.match.AbstractMatch;
 import dev.revere.alley.game.match.enums.EnumMatchState;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
+import dev.revere.alley.game.match.snapshot.SnapshotDataService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
 import org.bukkit.entity.Player;
@@ -11,25 +12,29 @@ import org.bukkit.entity.ThrownPotion;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PotionSplashEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 
+import java.util.UUID;
+
 /**
  * @author Emmy
- * @project Alley
- * @since 27/06/2025
+ * @project alley-practice
+ * @since 01/07/2025
  */
-public class MatchPotionListener implements Listener {
+public class SnapshotListener implements Listener {
     protected final Alley plugin;
 
     /**
-     * Constructor for the MatchPotionListener class.
+     * Constructor for the SnapshotListener class.
      *
      * @param plugin The Alley instance
      */
-    public MatchPotionListener(Alley plugin) {
+    public SnapshotListener(Alley plugin) {
         this.plugin = plugin;
     }
+
 
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     private void onPotionSplashEvent(PotionSplashEvent event) {
@@ -77,5 +82,49 @@ public class MatchPotionListener implements Listener {
 
         MatchGamePlayerImpl gamePlayer = match.getGamePlayer(shooter);
         gamePlayer.getData().incrementThrownPotions();
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    private void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
+        if (!(event.getDamager() instanceof Player) || !(event.getEntity() instanceof Player)) {
+            return;
+        }
+
+        Player attacker = (Player) event.getDamager();
+        Player defender = (Player) event.getEntity();
+
+        Profile attackerProfile = this.plugin.getProfileService().getProfile(attacker.getUniqueId());
+        Profile defenderProfile = this.plugin.getProfileService().getProfile(defender.getUniqueId());
+
+        if (attackerProfile.getState() != EnumProfileState.PLAYING ||
+                defenderProfile.getState() != EnumProfileState.PLAYING) {
+            return;
+        }
+
+        AbstractMatch match = attackerProfile.getMatch();
+        if (match == null || match != defenderProfile.getMatch() || match.getState() != EnumMatchState.RUNNING) {
+            return;
+        }
+
+        MatchGamePlayerImpl attackerGamePlayer = match.getGamePlayer(attacker);
+        MatchGamePlayerImpl defenderGamePlayer = match.getGamePlayer(defender);
+
+        boolean isCritical = !attacker.isOnGround() && attacker.getFallDistance() > 0;
+        if (isCritical) {
+            attackerGamePlayer.getData().incrementCriticalHits();
+        }
+
+        boolean isBlocked = defender.isBlocking();
+        if (isBlocked) {
+            defenderGamePlayer.getData().incrementBlockedHits();
+        }
+
+        UUID attackerId = attacker.getUniqueId();
+
+        SnapshotDataService snapshotDataService = this.plugin.getSnapshotDataService();
+        if (snapshotDataService.isWTap(attackerId)) {
+            attackerGamePlayer.getData().incrementWTaps();
+            snapshotDataService.resetSprint(attackerId);
+        }
     }
 }

@@ -502,10 +502,12 @@ public abstract class AbstractMatch {
                 snapshot.setTotalHits(data.getHits());
                 snapshot.setThrownPotions(data.getThrownPotions());
                 snapshot.setMissedPotions(data.getMissedPotions());
-
-                //potions later
+                snapshot.setCriticalHits(data.getCriticalHits());
+                snapshot.setBlockedHits(data.getBlockedHits());
+                snapshot.setWTaps(data.getWTaps());
 
                 this.plugin.getSnapshotRepository().addSnapshot(snapshot);
+                this.plugin.getSnapshotDataService().clearData(player.getUniqueId());
             });
         });
     }

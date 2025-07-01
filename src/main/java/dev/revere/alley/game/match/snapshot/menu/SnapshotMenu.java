@@ -48,7 +48,7 @@ public class SnapshotMenu extends Menu {
         this.getArmorContents(config, path, buttons);
         this.getHitsDataButton(buttons, config, path);
         this.getPotionsDataButton(buttons, config, path);
-        this.getPotionsDataButton(config, path, buttons);
+        this.getPotionEffectsDataButton(config, path, buttons);
         this.getFoodLevelDataButton(buttons, config, path);
         this.getHealthDataButton(buttons, config, path);
 
@@ -98,14 +98,15 @@ public class SnapshotMenu extends Menu {
                 config.getString(path + ".hits.name").replace("{hits}", String.valueOf(this.snapshot.getTotalHits())),
 
                 config.getStringList(path + ".hits.lore").stream().map(line -> line
-                        .replaceAll("\\{critical_hits}", "N/A")
-                        .replaceAll("\\{blocked_hits}", "N/A")
+                        .replaceAll("\\{critical_hits}", String.valueOf(this.snapshot.getCriticalHits()))
+                        .replaceAll("\\{blocked_hits}", String.valueOf(this.snapshot.getBlockedHits()))
                         .replaceAll("\\{longest_combo}", String.valueOf(this.snapshot.getLongestCombo()))
-                        .replaceAll("\\{w_taps}", "N/A")
+                        .replaceAll("\\{w_taps}", String.valueOf(this.snapshot.getWTaps()))
                 ).collect(Collectors.toList()),
 
                 Material.getMaterial(config.getString(path + ".hits.item", "DIAMOND_SWORD")),
-                config.getInt(path + ".hits.durability", 0)
+                config.getInt(path + ".hits.durability", 0),
+                1
         ));
     }
 
@@ -130,7 +131,8 @@ public class SnapshotMenu extends Menu {
                 ).collect(Collectors.toList()),
 
                 Material.getMaterial(config.getString(path + ".potions.item", "POTION")),
-                config.getInt(path + ".potions.durability", 16421)
+                config.getInt(path + ".potions.durability", 16421),
+                this.snapshot.getAmountOfPotionsInInventory()
         ));
     }
 
@@ -141,7 +143,7 @@ public class SnapshotMenu extends Menu {
      * @param path    The path in the configuration file where the button settings are located.
      * @param buttons The map of buttons to add the potions data button to.
      */
-    private void getPotionsDataButton(FileConfiguration config, String path, Map<Integer, Button> buttons) {
+    private void getPotionEffectsDataButton(FileConfiguration config, String path, Map<Integer, Button> buttons) {
         List<String> effectsLore = new ArrayList<>();
         if (this.snapshot.getPotionEffects().isEmpty()) {
             effectsLore.addAll(config.getStringList(path + ".potion_effects.empty-lore"));
@@ -157,7 +159,8 @@ public class SnapshotMenu extends Menu {
                 config.getString(path + ".potion_effects.name"),
                 effectsLore,
                 Material.getMaterial(config.getString(path + ".potion_effects.item", "BREWING_STAND_ITEM")),
-                config.getInt(path + ".potion_effects.durability", 0)
+                config.getInt(path + ".potion_effects.durability", 0),
+                1
         ));
     }
 
@@ -178,7 +181,8 @@ public class SnapshotMenu extends Menu {
                 ).collect(Collectors.toList()),
 
                 Material.getMaterial(config.getString(path + ".food.item", "COOKED_BEEF")),
-                config.getInt(path + ".food.durability", 0)
+                config.getInt(path + ".food.durability", 0),
+                1
         ));
     }
 
@@ -200,7 +204,8 @@ public class SnapshotMenu extends Menu {
                 ).collect(Collectors.toList()),
 
                 Material.getMaterial(config.getString(path + ".health.item", "GOLDEN_APPLE")),
-                config.getInt(path + ".health.durability", 0)
+                config.getInt(path + ".health.durability", 0),
+                1
         ));
     }
 }
