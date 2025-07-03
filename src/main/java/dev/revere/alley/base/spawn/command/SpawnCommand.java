@@ -1,8 +1,13 @@
 package dev.revere.alley.base.spawn.command;
 
+import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
+import dev.revere.alley.base.hotbar.IHotbarService;
+import dev.revere.alley.base.spawn.ISpawnService;
+import dev.revere.alley.config.IConfigService;
+import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
 import dev.revere.alley.util.PlayerUtil;
@@ -19,15 +24,16 @@ public class SpawnCommand extends BaseCommand {
     @CommandData(name = "spawn", isAdminOnly = true)
     public void onCommand(CommandArgs args) {
         Player player = args.getPlayer();
-        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+        Profile profile = profileService.getProfile(player.getUniqueId());
         if (profile.getState() == EnumProfileState.FFA || profile.getState() == EnumProfileState.PLAYING) {
             player.sendMessage(CC.translate("&cYou cannot teleport to spawn while in this state."));
             return;
         }
 
         PlayerUtil.reset(player, false);
-        this.plugin.getSpawnService().teleportToSpawn(player);
-        this.plugin.getHotbarService().applyHotbarItems(player);
-        player.sendMessage(CC.translate(this.plugin.getConfigService().getMessagesConfig().getString("spawn.teleported")));
+        Alley.getInstance().getService(ISpawnService.class).teleportToSpawn(player);
+        Alley.getInstance().getService(IHotbarService.class).applyHotbarItems(player);
+        player.sendMessage(CC.translate(Alley.getInstance().getService(IConfigService.class).getMessagesConfig().getString("spawn.teleported")));
     }
 }

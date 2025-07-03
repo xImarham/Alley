@@ -4,7 +4,9 @@ import dev.revere.alley.Alley;
 import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.api.menu.pagination.PaginatedMenu;
 import dev.revere.alley.base.arena.AbstractArena;
+import dev.revere.alley.base.arena.IArenaService;
 import dev.revere.alley.base.kit.Kit;
+import dev.revere.alley.game.duel.IDuelRequestService;
 import dev.revere.alley.tool.item.ItemBuilder;
 import lombok.AllArgsConstructor;
 import org.bukkit.Material;
@@ -45,7 +47,7 @@ public class DuelArenaSelectorMenu extends PaginatedMenu {
 
         int slot = 0;
 
-        for (AbstractArena arena : this.plugin.getArenaService().getArenas()) {
+        for (AbstractArena arena : Alley.getInstance().getService(IArenaService.class).getArenas()) {
             if (arena.getKits().contains(this.kit.getName()) && arena.isEnabled()) {
                 buttons.put(slot++, new DuelArenaSelectorButton(this.targetPlayer, this.kit, arena));
             }
@@ -84,7 +86,7 @@ public class DuelArenaSelectorMenu extends PaginatedMenu {
         public void clicked(Player player, ClickType clickType) {
             player.closeInventory();
 
-            Alley.getInstance().getDuelRequestService().createAndSendRequest(player, this.targetPlayer, this.kit, this.arena);
+            Alley.getInstance().getService(IDuelRequestService.class).createAndSendRequest(player, this.targetPlayer, this.kit, this.arena);
         }
     }
 }

@@ -1,14 +1,17 @@
 package dev.revere.alley.base.arena.command.impl.manage;
 
+import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.base.arena.AbstractArena;
+import dev.revere.alley.base.arena.IArenaService;
 import dev.revere.alley.base.arena.enums.EnumArenaType;
 import dev.revere.alley.base.arena.impl.FreeForAllArena;
 import dev.revere.alley.base.arena.impl.SharedArena;
 import dev.revere.alley.base.arena.impl.StandAloneArena;
 import dev.revere.alley.base.arena.selection.ArenaSelection;
+import dev.revere.alley.config.IConfigService;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -45,7 +48,7 @@ public class ArenaCreateCommand extends BaseCommand {
             return;
         }
 
-        if (this.plugin.getArenaService().getArenaByName(arenaName) != null) {
+        if (Alley.getInstance().getService(IArenaService.class).getArenaByName(arenaName) != null) {
             player.sendMessage(CC.translate("&cAn arena with that name already exists!"));
             return;
         }
@@ -84,7 +87,7 @@ public class ArenaCreateCommand extends BaseCommand {
      * @return The default display name.
      */
     private String getDefaultDisplayName(EnumArenaType arenaType) {
-        FileConfiguration config = this.plugin.getConfigService().getSettingsConfig();
+        FileConfiguration config = Alley.getInstance().getService(IConfigService.class).getSettingsConfig();
 
         switch (arenaType) {
             case SHARED:

@@ -2,9 +2,11 @@ package dev.revere.alley.feature.cosmetic.menu.button;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.menu.Button;
+import dev.revere.alley.base.queue.IQueueService;
 import dev.revere.alley.feature.cosmetic.EnumCosmeticType;
 import dev.revere.alley.feature.cosmetic.menu.CosmeticTypeMenu;
 import dev.revere.alley.feature.cosmetic.repository.BaseCosmeticRepository;
+import dev.revere.alley.feature.cosmetic.repository.ICosmeticRepository;
 import dev.revere.alley.tool.item.ItemBuilder;
 import dev.revere.alley.util.StringUtil;
 import lombok.RequiredArgsConstructor;
@@ -34,7 +36,7 @@ public class CosmeticCategoryButton extends Button {
         int totalCount = 0;
         int ownedCount = 0;
 
-        BaseCosmeticRepository<?> repository = Alley.getInstance().getCosmeticRepository().getRepository(cosmeticType);
+        BaseCosmeticRepository<?> repository = Alley.getInstance().getService(ICosmeticRepository.class).getRepository(cosmeticType);
         if (repository != null) {
             totalCount = repository.getCosmetics().size();
             ownedCount = (int) repository.getCosmetics().stream()

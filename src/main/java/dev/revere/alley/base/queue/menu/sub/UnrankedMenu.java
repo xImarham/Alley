@@ -5,11 +5,13 @@ import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.api.menu.Menu;
 import dev.revere.alley.api.menu.impl.BackButton;
 import dev.revere.alley.base.kit.enums.EnumKitCategory;
+import dev.revere.alley.base.queue.IQueueService;
 import dev.revere.alley.base.queue.Queue;
 import dev.revere.alley.base.queue.enums.EnumQueueType;
 import dev.revere.alley.base.queue.menu.QueuesMenuDefault;
 import dev.revere.alley.base.queue.menu.button.UnrankedButton;
 import dev.revere.alley.base.queue.menu.extra.button.QueueModeSwitcherButton;
+import dev.revere.alley.feature.abilities.IAbilityService;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
@@ -34,7 +36,7 @@ public class UnrankedMenu extends Menu {
         buttons.put(0, new BackButton(new QueuesMenuDefault()));
 
         int slot = 10;
-        for (Queue queue : Alley.getInstance().getQueueService().getQueues()) {
+        for (Queue queue : Alley.getInstance().getService(IQueueService.class).getQueues()) {
             if (!queue.isRanked() && queue.getKit().getCategory() == EnumKitCategory.NORMAL) {
                 slot = this.skipIfSlotCrossingBorder(slot);
                 buttons.put(slot++, new UnrankedButton(queue));

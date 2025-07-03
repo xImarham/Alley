@@ -1,12 +1,15 @@
 package dev.revere.alley.base.arena.command.impl.manage;
 
+import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.base.arena.ArenaService;
+import dev.revere.alley.base.arena.IArenaService;
 import dev.revere.alley.base.arena.impl.StandAloneArena;
 import dev.revere.alley.game.match.AbstractMatch;
 import dev.revere.alley.game.match.MatchService;
+import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
 import org.bukkit.entity.Player;
 
@@ -25,10 +28,11 @@ public class ArenaTestCommand extends BaseCommand {
         player.sendMessage("World: " + player.getWorld());
         player.sendMessage("Location: " + player.getLocation());
 
-        ArenaService arenaService = this.plugin.getArenaService();
+        IArenaService arenaService = Alley.getInstance().getService(IArenaService.class);
         player.sendMessage("Copied arenas: " + arenaService.getTemporaryArenas().size());
 
-        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+        Profile profile = profileService.getProfile(player.getUniqueId());
         AbstractMatch match = profile.getMatch();
         if (match != null) {
             player.sendMessage("Match Arena: " + match.getArena());

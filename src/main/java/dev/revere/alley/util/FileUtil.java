@@ -25,7 +25,7 @@ public class FileUtil {
     public void deleteWorldFolder(File worldFolder) {
         try {
             deleteDirectory(worldFolder);
-            Logger.log("Successfully deleted world folder: " + worldFolder.getAbsolutePath());
+            Logger.info("Successfully deleted world folder: " + worldFolder.getAbsolutePath());
         } catch (Exception e) {
             Logger.logException("Failed to delete world folder", e);
 
@@ -63,14 +63,14 @@ public class FileUtil {
                     deleteDirectory(file);
                 } else {
                     if (!file.delete()) {
-                        Logger.logError("Failed to delete file: " + file.getAbsolutePath());
+                        Logger.error("Failed to delete file: " + file.getAbsolutePath());
                     }
                 }
             }
         }
 
         if (!directory.delete()) {
-            Logger.logError("Failed to delete directory: " + directory.getAbsolutePath());
+            Logger.error("Failed to delete directory: " + directory.getAbsolutePath());
         }
     }
 

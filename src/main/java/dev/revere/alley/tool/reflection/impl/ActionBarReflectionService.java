@@ -1,6 +1,8 @@
 package dev.revere.alley.tool.reflection.impl;
 
 import dev.revere.alley.Alley;
+import dev.revere.alley.config.IConfigService;
+import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.tool.logger.Logger;
 import dev.revere.alley.tool.reflection.IReflection;
@@ -81,7 +83,7 @@ public class ActionBarReflectionService implements IReflection {
      * @param victim The player who died.
      */
     public void sendDeathMessage(Player killer, Player victim) {
-        Profile victimProfile = this.plugin.getProfileService().getProfile(victim.getUniqueId());
+        Profile victimProfile = Alley.getInstance().getService(IProfileService.class).getProfile(victim.getUniqueId());
         this.sendMessage(killer, "&c&lKILL! &f" + victimProfile.getNameColor() + victim.getName(), 3);
     }
 
@@ -92,7 +94,7 @@ public class ActionBarReflectionService implements IReflection {
      * @param target The player whose health will be visualized.
      */
     public void visualizeTargetHealth(Player player, Player target) {
-        FileConfiguration config = this.plugin.getConfigService().getVisualsConfig();
+        FileConfiguration config = Alley.getInstance().getService(IConfigService.class).getVisualsConfig();
         String path = "game.health-bar";
 
         String symbol = config.getString(path + ".symbol.appearance", Symbol.HEART);
@@ -114,7 +116,7 @@ public class ActionBarReflectionService implements IReflection {
             }
         }
 
-        ChatColor nameColor = this.plugin.getProfileService().getProfile(target.getUniqueId()).getNameColor();
+        ChatColor nameColor = Alley.getInstance().getService(IProfileService.class).getProfile(target.getUniqueId()).getNameColor();
 
         String template = config.getString(path + ".message-format", "&6{name-color}{target} &f{health-bar}");
         String message = CC.translate(

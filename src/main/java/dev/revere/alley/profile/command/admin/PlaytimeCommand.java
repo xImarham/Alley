@@ -1,8 +1,10 @@
 package dev.revere.alley.profile.command.admin;
 
+import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
+import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.data.impl.ProfilePlayTimeData;
 import dev.revere.alley.tool.date.DateFormatter;
@@ -39,7 +41,7 @@ public class PlaytimeCommand extends BaseCommand {
             return;
         }
 
-        Profile targetProfile = this.plugin.getProfileService().getProfile(targetPlayer.getUniqueId());
+        Profile targetProfile = Alley.getInstance().getService(IProfileService.class).getProfile(targetPlayer.getUniqueId());
         if (targetProfile == null) {
             sender.sendMessage(CC.translate("&cThe player profile could not be found."));
             return;

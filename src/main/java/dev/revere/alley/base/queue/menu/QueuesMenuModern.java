@@ -3,8 +3,10 @@ package dev.revere.alley.base.queue.menu;
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.api.menu.Menu;
+import dev.revere.alley.base.kit.IKitService;
 import dev.revere.alley.base.kit.Kit;
 import dev.revere.alley.base.kit.enums.EnumKitCategory;
+import dev.revere.alley.base.queue.IQueueService;
 import dev.revere.alley.base.queue.Queue;
 import dev.revere.alley.base.queue.QueueService;
 import dev.revere.alley.base.queue.enums.EnumQueueType;
@@ -12,7 +14,9 @@ import dev.revere.alley.base.queue.menu.button.BotButton;
 import dev.revere.alley.base.queue.menu.button.UnrankedButton;
 import dev.revere.alley.base.queue.menu.extra.button.QueueModeSwitcherButton;
 import dev.revere.alley.game.ffa.AbstractFFAMatch;
+import dev.revere.alley.game.ffa.IFFAService;
 import dev.revere.alley.game.ffa.menu.FFAButton;
+import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.tool.item.ItemBuilder;
 import dev.revere.alley.tool.visual.LoreHelper;
@@ -42,7 +46,8 @@ public class QueuesMenuModern extends Menu {
      */
     @Override
     public String getTitle(Player player) {
-        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+        Profile profile = profileService.getProfile(player.getUniqueId());
         return "&6&l" + profile.getQueueType().getMenuTitle();
     }
 
@@ -56,8 +61,9 @@ public class QueuesMenuModern extends Menu {
     public Map<Integer, Button> getButtons(Player player) {
         Map<Integer, Button> buttons = new HashMap<>();
 
-        QueueService queueService = this.plugin.getQueueService();
-        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
+        IQueueService queueService = Alley.getInstance().getService(IQueueService.class);
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+        Profile profile = profileService.getProfile(player.getUniqueId());
 
         buttons.put(2, new QueuesButtonModern("&6&lUnranked", Material.DIAMOND_SWORD, 0, Arrays.asList(
                 "&7Casual 1v1s with",
@@ -89,7 +95,7 @@ public class QueuesMenuModern extends Menu {
         int slot = 10;
         switch (profile.getQueueType()) {
             case UNRANKED:
-                for (Queue queue : this.plugin.getQueueService().getQueues()) {
+                for (Queue queue : Alley.getInstance().getService(IQueueService.class).getQueues()) {
                     if (!queue.isRanked() && !queue.isDuos() && queue.getKit().getCategory() == EnumKitCategory.NORMAL) {
                         slot = this.skipIfSlotCrossingBorder(slot);
                         buttons.put(slot++, new UnrankedButton(queue));
@@ -100,14 +106,14 @@ public class QueuesMenuModern extends Menu {
 
                 break;
             case BOTS:
-                for (Kit kit : this.plugin.getKitService().getKits()) {
+                for (Kit kit : Alley.getInstance().getService(IKitService.class).getKits()) {
                     slot = this.skipIfSlotCrossingBorder(slot);
                     buttons.put(slot++, new BotButton(kit));
                 }
 
                 break;
             case DUOS:
-                for (Queue queue : this.plugin.getQueueService().getQueues()) {
+                for (Queue queue : Alley.getInstance().getService(IQueueService.class).getQueues()) {
                     if (!queue.isRanked() && queue.isDuos() && queue.getKit().getCategory() == EnumKitCategory.NORMAL) {
                         slot = this.skipIfSlotCrossingBorder(slot);
                         buttons.put(slot++, new UnrankedButton(queue));
@@ -118,7 +124,7 @@ public class QueuesMenuModern extends Menu {
 
                 break;
             case FFA:
-                for (AbstractFFAMatch match : this.plugin.getFfaService().getMatches()) {
+                for (AbstractFFAMatch match : Alley.getInstance().getService(IFFAService.class).getMatches()) {
                     buttons.put(match.getKit().getFfaSlot(), new FFAButton(match));
                 }
 
@@ -156,7 +162,7 @@ public class QueuesMenuModern extends Menu {
         public void clicked(Player player, int slot, ClickType clickType, int hotbarSlot) {
             if (clickType != ClickType.LEFT) return;
 
-            Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
+            Profile profile = Alley.getInstance().getService(IProfileService.class).getProfile(player.getUniqueId());
             switch (this.material) {
                 case DIAMOND_SWORD:
                     profile.setQueueType(EnumQueueType.UNRANKED);

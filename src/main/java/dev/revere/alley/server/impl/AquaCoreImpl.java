@@ -1,8 +1,9 @@
-package dev.revere.alley.core.impl;
+package dev.revere.alley.server.impl;
 
 import dev.revere.alley.Alley;
-import dev.revere.alley.core.ICore;
-import dev.revere.alley.core.enums.EnumCoreType;
+import dev.revere.alley.profile.IProfileService;
+import dev.revere.alley.server.ICore;
+import dev.revere.alley.server.enums.EnumCoreType;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.util.chat.CC;
 import me.activated.core.plugin.AquaCoreAPI;
@@ -66,12 +67,13 @@ public class AquaCoreImpl implements ICore {
 
     @Override
     public String getChatFormat(Player player, String eventMessage, String separator) {
-        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+        Profile profile = profileService.getProfile(player.getUniqueId());
         String prefix = CC.translate(this.getRankPrefix(player));
         String suffix = CC.translate(this.getRankSuffix(player));
         ChatColor nameColor = profile.getNameColor() != null ? profile.getNameColor() : this.getPlayerColor(player);
 
-        String selectedTitle = CC.translate(this.plugin.getProfileService().getProfile(player.getUniqueId()).getProfileData().getSelectedTitle());
+        String selectedTitle = CC.translate(Alley.getInstance().getService(IProfileService.class).getProfile(player.getUniqueId()).getProfileData().getSelectedTitle());
 
         if (player.hasPermission("alley.chat.color")) {
             eventMessage = CC.translate(eventMessage);

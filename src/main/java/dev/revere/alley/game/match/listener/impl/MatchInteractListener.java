@@ -5,8 +5,10 @@ import dev.revere.alley.base.kit.setting.impl.mode.KitSettingCheckpointImpl;
 import dev.revere.alley.game.match.impl.MatchCheckpointImpl;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
+import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
+import dev.revere.alley.tool.reflection.IReflectionRepository;
 import dev.revere.alley.tool.reflection.impl.TitleReflectionService;
 import dev.revere.alley.util.ListenerUtil;
 import org.bukkit.Location;
@@ -24,21 +26,11 @@ import org.bukkit.event.player.PlayerInteractEvent;
  * @since 08/02/2025
  */
 public class MatchInteractListener implements Listener {
-    protected final Alley plugin;
-
-    /**
-     * Constructor for the MatchInteractListener class.
-     *
-     * @param plugin The Alley instance
-     */
-    public MatchInteractListener(Alley plugin) {
-        this.plugin = plugin;
-    }
-
     @EventHandler
     private void handleParkourInteraction(PlayerInteractEvent event) {
         Player player = event.getPlayer();
-        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+        Profile profile = profileService.getProfile(player.getUniqueId());
 
         if (profile.getState() != EnumProfileState.PLAYING) return;
         if (!profile.getMatch().getKit().isSettingEnabled(KitSettingCheckpointImpl.class)) return;
@@ -68,7 +60,7 @@ public class MatchInteractListener implements Listener {
                 matchGamePlayer.getCheckpoints().add(checkpointLocation);
                 matchGamePlayer.setCheckpointCount(matchGamePlayer.getCheckpointCount() + 1);
 
-                this.plugin.getReflectionRepository().getReflectionService(TitleReflectionService.class).sendTitle(
+                Alley.getInstance().getService(IReflectionRepository.class).getReflectionService(TitleReflectionService.class).sendTitle(
                         player,
                         "&aCHECKPOINT!",
                         "&7(" + player.getLocation().getBlockX() + ", " + player.getLocation().getBlockY() + ", " + player.getLocation().getBlockZ() + ")",
@@ -87,7 +79,7 @@ public class MatchInteractListener implements Listener {
             opponent.setLostCheckpoint(true);
             opponent.getPlayers().forEach(gamePlayer -> gamePlayer.setDead(true));
             opponent.getPlayers().stream().findAny().ifPresent(gamePlayer -> {
-                matchCheckpoint.handleDeath(gamePlayer.getPlayer(), EntityDamageEvent.DamageCause.CUSTOM);
+                matchCheckpoint.handleDeath(gamePlayer.getTeamPlayer(), EntityDamageEvent.DamageCause.CUSTOM);
             });
         }
     }

@@ -1,4 +1,4 @@
-package dev.revere.alley.core.enums;
+package dev.revere.alley.server.enums;
 
 import lombok.Getter;
 

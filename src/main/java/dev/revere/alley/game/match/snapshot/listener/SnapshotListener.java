@@ -4,7 +4,9 @@ import dev.revere.alley.Alley;
 import dev.revere.alley.game.match.AbstractMatch;
 import dev.revere.alley.game.match.enums.EnumMatchState;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
+import dev.revere.alley.game.match.snapshot.ISnapshotDataService;
 import dev.revere.alley.game.match.snapshot.SnapshotDataService;
+import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
 import org.bukkit.entity.Player;
@@ -24,18 +26,6 @@ import java.util.UUID;
  * @since 01/07/2025
  */
 public class SnapshotListener implements Listener {
-    protected final Alley plugin;
-
-    /**
-     * Constructor for the SnapshotListener class.
-     *
-     * @param plugin The Alley instance
-     */
-    public SnapshotListener(Alley plugin) {
-        this.plugin = plugin;
-    }
-
-
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     private void onPotionSplashEvent(PotionSplashEvent event) {
         if (!(event.getPotion().getShooter() instanceof Player)) {
@@ -43,7 +33,7 @@ public class SnapshotListener implements Listener {
         }
 
         Player shooter = (Player) event.getPotion().getShooter();
-        Profile profile = this.plugin.getProfileService().getProfile(shooter.getUniqueId());
+        Profile profile = Alley.getInstance().getService(IProfileService.class).getProfile(shooter.getUniqueId());
 
         EnumProfileState profileState = profile.getState();
         if (profileState != EnumProfileState.PLAYING) {
@@ -69,7 +59,7 @@ public class SnapshotListener implements Listener {
         }
 
         Player shooter = (Player) event.getEntity().getShooter();
-        Profile profile = this.plugin.getProfileService().getProfile(shooter.getUniqueId());
+        Profile profile = Alley.getInstance().getService(IProfileService.class).getProfile(shooter.getUniqueId());
 
         if (profile.getState() != EnumProfileState.PLAYING) {
             return;
@@ -93,8 +83,8 @@ public class SnapshotListener implements Listener {
         Player attacker = (Player) event.getDamager();
         Player defender = (Player) event.getEntity();
 
-        Profile attackerProfile = this.plugin.getProfileService().getProfile(attacker.getUniqueId());
-        Profile defenderProfile = this.plugin.getProfileService().getProfile(defender.getUniqueId());
+        Profile attackerProfile = Alley.getInstance().getService(IProfileService.class).getProfile(attacker.getUniqueId());
+        Profile defenderProfile = Alley.getInstance().getService(IProfileService.class).getProfile(defender.getUniqueId());
 
         if (attackerProfile.getState() != EnumProfileState.PLAYING ||
                 defenderProfile.getState() != EnumProfileState.PLAYING) {
@@ -121,7 +111,7 @@ public class SnapshotListener implements Listener {
 
         UUID attackerId = attacker.getUniqueId();
 
-        SnapshotDataService snapshotDataService = this.plugin.getSnapshotDataService();
+        ISnapshotDataService snapshotDataService = Alley.getInstance().getService(ISnapshotDataService.class);
         if (snapshotDataService.isWTap(attackerId)) {
             attackerGamePlayer.getData().incrementWTaps();
             snapshotDataService.resetSprint(attackerId);

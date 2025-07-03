@@ -1,13 +1,18 @@
 package dev.revere.alley.feature.leaderboard;
 
 import dev.revere.alley.Alley;
+import dev.revere.alley.base.kit.IKitService;
 import dev.revere.alley.base.kit.Kit;
+import dev.revere.alley.core.AlleyContext;
+import dev.revere.alley.core.annotation.Service;
 import dev.revere.alley.feature.leaderboard.data.LeaderboardPlayerData;
 import dev.revere.alley.feature.leaderboard.enums.EnumLeaderboardType;
 import dev.revere.alley.feature.leaderboard.record.LeaderboardRecord;
+import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.ProfileService;
 import dev.revere.alley.profile.data.impl.ProfileRankedKitData;
+import dev.revere.alley.tool.logger.Logger;
 import lombok.Getter;
 
 import java.util.*;
@@ -18,29 +23,36 @@ import java.util.*;
  * @since 03/03/2025
  */
 @Getter
-public class LeaderboardService {
+@Service(provides = ILeaderboardService.class, priority = 280)
+public class LeaderboardService implements ILeaderboardService {
+    private final IProfileService profileService;
+    private final IKitService kitService;
 
-    //TODO: this is just a test, it is gonna be fixed/recoded.
-
-    protected final Alley plugin;
-    private final Map<Kit, List<LeaderboardRecord>> leaderboardEntries;
+    private final Map<Kit, List<LeaderboardRecord>> leaderboardEntries = new HashMap<>();
 
     /**
-     * Constructor for the LeaderboardService class.
-     *
-     * @param plugin The Alley plugin instance.
+     * Constructor for DI.
      */
-    public LeaderboardService(Alley plugin) {
-        this.plugin = plugin;
-        this.leaderboardEntries = new HashMap<>();
-        this.initializeLeaderboards();
+    public LeaderboardService(IProfileService profileService, IKitService kitService) {
+        this.profileService = profileService;
+        this.kitService = kitService;
     }
 
-    private void initializeLeaderboards() {
-        ProfileService profileService = this.plugin.getProfileService();
-        Collection<Profile> profiles = profileService.getProfiles().values();
+    @Override
+    public void initialize(AlleyContext context) {
+        this.recalculateLeaderboards();
+    }
 
-        for (Kit kit : this.plugin.getKitService().getKits()) {
+    @Override
+    public void recalculateLeaderboards() {
+        this.leaderboardEntries.clear();
+        Collection<Profile> profiles = this.profileService.getProfiles().values();
+        if (profiles.isEmpty()) {
+            Logger.warn("LeaderboardService: No profiles found to calculate leaderboards.");
+            return;
+        }
+
+        for (Kit kit : this.kitService.getKits()) {
             this.leaderboardEntries.put(kit, new ArrayList<>());
 
             for (EnumLeaderboardType type : EnumLeaderboardType.values()) {
@@ -62,21 +74,16 @@ public class LeaderboardService {
                 this.leaderboardEntries.get(kit).add(new LeaderboardRecord(type, playerDataList));
             }
         }
+        Logger.info("Calculated leaderboards for " + this.leaderboardEntries.size() + " kits.");
     }
 
-    /**
-     * Gets the leaderboard entries for a specific kit and type.
-     *
-     * @param kit  The kit to get leaderboard entries for.
-     * @param type The leaderboard type.
-     * @return A list of LeaderboardPlayerData sorted accordingly.
-     */
+    @Override
     public List<LeaderboardPlayerData> getLeaderboardEntries(Kit kit, EnumLeaderboardType type) {
-        return this.leaderboardEntries.getOrDefault(kit, new ArrayList<>())
+        return this.leaderboardEntries.getOrDefault(kit, Collections.emptyList())
                 .stream()
                 .filter(record -> record.getType() == type)
                 .findFirst()
                 .map(LeaderboardRecord::getParticipants)
-                .orElse(new ArrayList<>());
+                .orElse(Collections.emptyList());
     }
 }

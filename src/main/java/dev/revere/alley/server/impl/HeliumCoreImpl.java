@@ -1,7 +1,7 @@
-package dev.revere.alley.core.impl;
+package dev.revere.alley.server.impl;
 
-import dev.revere.alley.core.ICore;
-import dev.revere.alley.core.enums.EnumCoreType;
+import dev.revere.alley.server.ICore;
+import dev.revere.alley.server.enums.EnumCoreType;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import services.plasma.helium.api.HeliumAPI;

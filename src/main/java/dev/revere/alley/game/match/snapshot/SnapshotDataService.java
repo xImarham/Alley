@@ -7,35 +7,50 @@ import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.wrappers.EnumWrappers;
 import dev.revere.alley.Alley;
+import dev.revere.alley.core.AlleyContext;
+import dev.revere.alley.core.annotation.Service;
+import dev.revere.alley.tool.logger.Logger;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author Emmy
  * @project alley-practice
  * @since 01/07/2025
  */
-public class SnapshotDataService {
-    private final Map<UUID, Long> lastSprintStart;
-    private final Map<UUID, Boolean> isSprinting;
-
+@Service(provides = ISnapshotDataService.class, priority = 400)
+public class SnapshotDataService implements ISnapshotDataService {
     private final Alley plugin;
 
+    private final Map<UUID, Long> lastSprintStart = new ConcurrentHashMap<>();
+    private final Map<UUID, Boolean> isSprinting = new ConcurrentHashMap<>();
+    private PacketAdapter packetAdapter;
+
     /**
-     * Constructor for the SnapshotDataService class.
-     *
-     * @param plugin The Alley instance
+     * Constructor for DI.
      */
     public SnapshotDataService(Alley plugin) {
         this.plugin = plugin;
+    }
 
-        this.lastSprintStart = new HashMap<>();
-        this.isSprinting = new HashMap<>();
-
+    @Override
+    public void initialize(AlleyContext context) {
+        if (Bukkit.getPluginManager().getPlugin("ProtocolLib") == null) {
+            Logger.warn("ProtocolLib not found, W-Tap detection will be disabled.");
+            return;
+        }
         this.registerSprintListener();
+    }
+
+    @Override
+    public void shutdown(AlleyContext context) {
+        if (this.packetAdapter != null) {
+            ProtocolLibrary.getProtocolManager().removePacketListener(this.packetAdapter);
+        }
     }
 
     private void registerSprintListener() {
@@ -65,12 +80,7 @@ public class SnapshotDataService {
         });
     }
 
-    /**
-     * Checks if the player is in a W-Tap state.
-     *
-     * @param uuid The UUID of the player
-     * @return true if the player is in a W-Tap state, false otherwise
-     */
+    @Override
     public boolean isWTap(UUID uuid) {
         Long sprintStart = this.lastSprintStart.get(uuid);
         boolean sprinting = this.isSprinting.getOrDefault(uuid, false);
@@ -78,20 +88,12 @@ public class SnapshotDataService {
         return sprintStart != null && !sprinting && (System.currentTimeMillis() - sprintStart) <= 300;
     }
 
-    /**
-     * Resets the sprint state for a player.
-     *
-     * @param uuid The UUID of the player to reset sprint state for.
-     */
+    @Override
     public void resetSprint(UUID uuid) {
         this.isSprinting.put(uuid, true);
     }
 
-    /**
-     * Removes the sprint state for a player.
-     *
-     * @param uuid The UUID of the player to remove sprint state for.
-     */
+    @Override
     public void clearData(UUID uuid) {
         this.lastSprintStart.remove(uuid);
         this.isSprinting.remove(uuid);

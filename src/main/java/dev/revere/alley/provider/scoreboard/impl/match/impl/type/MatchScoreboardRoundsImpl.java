@@ -6,16 +6,11 @@ import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.provider.scoreboard.impl.match.AbstractMatchScoreboard;
-import dev.revere.alley.provider.scoreboard.impl.match.IMatchScoreboard;
 import dev.revere.alley.provider.scoreboard.impl.match.annotation.ScoreboardData;
 import dev.revere.alley.util.TimeUtil;
-import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.util.visual.ScoreboardUtil;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author Remi
@@ -45,8 +40,8 @@ public class MatchScoreboardRoundsImpl extends AbstractMatchScoreboard {
 
         return baseLine
                 .replace("{time-left}", getFormattedTime(profile))
-                .replace("{goals}", ScoreboardUtil.visualizeGoals(roundsMatch.getParticipantA().getPlayer().getData().getScore(), 3))
-                .replace("{opponent-goals}", ScoreboardUtil.visualizeGoals(roundsMatch.getParticipantB().getPlayer().getData().getScore(), 3))
+                .replace("{goals}", ScoreboardUtil.visualizeGoals(roundsMatch.getParticipantA().getLeader().getData().getScore(), 3))
+                .replace("{opponent-goals}", ScoreboardUtil.visualizeGoals(roundsMatch.getParticipantB().getLeader().getData().getScore(), 3))
                 .replace("{kills}", String.valueOf(profile.getMatch().getGamePlayer(player).getData().getKills()))
                 .replace("{current-round}", String.valueOf(roundsMatch.getCurrentRound()))
                 .replace("{color}", String.valueOf(roundsMatch.getTeamAColor()))

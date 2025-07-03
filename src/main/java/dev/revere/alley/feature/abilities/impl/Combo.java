@@ -4,8 +4,11 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import dev.revere.alley.Alley;
 import dev.revere.alley.feature.abilities.AbstractAbility;
+import dev.revere.alley.feature.abilities.IAbilityService;
 import dev.revere.alley.feature.abilities.utils.DurationFormatter;
+import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
+import dev.revere.alley.profile.enums.EnumGlobalCooldown;
 import dev.revere.alley.util.PlayerUtil;
 import dev.revere.alley.util.TaskUtil;
 import dev.revere.alley.util.chat.CC;
@@ -27,7 +30,6 @@ import java.util.UUID;
 @Getter
 @Setter
 public class Combo extends AbstractAbility {
-    private final Alley plugin = Alley.getInstance();
     private final Set<UUID> COMBO = Sets.newHashSet();
     private final Map<UUID, Integer> HITS = Maps.newHashMap();
 
@@ -43,32 +45,36 @@ public class Combo extends AbstractAbility {
             event.setCancelled(true);
 
             Player player = event.getPlayer();
-            dev.revere.alley.profile.Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
-            
-            if (profile.getCombo().onCooldown(player)) {
-                player.sendMessage(CC.translate("&fYou are on &6&lCombo &7cooldown for &4" + DurationFormatter.getRemaining(profile.getCombo().getRemainingMillis(player), true, true)));
+
+            IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+            IAbilityService abilityService = Alley.getInstance().getService(IAbilityService.class);
+
+            Profile profile = profileService.getProfile(player.getUniqueId());
+
+            if (profile.getCooldown(Combo.class).onCooldown(player)) {
+                player.sendMessage(CC.translate("&fYou are on &6&lCombo &7cooldown for &4" + DurationFormatter.getRemaining(profile.getCooldown(Combo.class).getRemainingMillis(player), true, true)));
                 player.updateInventory();
                 return;
             }
 
-            if(profile.getPartneritem().onCooldown(player)){
-                player.sendMessage(CC.translate("&fYou are on &6&lPartner Item &fcooldown for &6" + DurationFormatter.getRemaining(profile.getPartneritem().getRemainingMillis(player), true, true)));
+            if(profile.getGlobalCooldown(EnumGlobalCooldown.PARTNER_ITEM).onCooldown(player)){
+                player.sendMessage(CC.translate("&fYou are on &6&lPartner Item &fcooldown for &6" + DurationFormatter.getRemaining(profile.getGlobalCooldown(EnumGlobalCooldown.PARTNER_ITEM).getRemainingMillis(player), true, true)));
                 player.updateInventory();
                 return;
             }
 
             PlayerUtil.decrement(player);
 
-            profile.getCombo().applyCooldown(player, 60 * 1000);
-            profile.getPartneritem().applyCooldown(player,  10 * 1000);
+            profile.getCooldown(Combo.class).applyCooldown(player, 60 * 1000);
+            profile.getGlobalCooldown(EnumGlobalCooldown.PARTNER_ITEM).applyCooldown(player,  10 * 1000);
 
             this.giveComboEffects(player);
 
             COMBO.add(player.getUniqueId());
             HITS.put(player.getUniqueId(), 0);
 
-            plugin.getAbilityService().cooldownExpired(player, this.getName(), this.getAbility());
-            plugin.getAbilityService().playerMessage(player, this.getAbility());
+            abilityService.sendCooldownExpiredMessage(player, this.getName(), this.getAbility());
+            abilityService.sendPlayerMessage(player, this.getAbility());
         }
     }
 
@@ -102,17 +108,16 @@ public class Combo extends AbstractAbility {
     public void checkCooldown(PlayerInteractEvent event) {
         Player player = event.getPlayer();
         Action action = event.getAction();
-        Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
-        if (action.equals(Action.LEFT_CLICK_AIR) || action.equals(Action.LEFT_CLICK_BLOCK)) {
-            if (!isAbility(player.getItemInHand())) {
-                return;
-            }
-            if (isAbility(player.getItemInHand())) {
-                if (this.hasCooldown(player)) {
-                    player.sendMessage(CC.translate("&fYou are on cooldown for &4" + DurationFormatter.getRemaining(profile.getCombo().getRemainingMillis(player), true)));
-                    event.setCancelled(true);
-                    player.updateInventory();
-                }
+        if (action == Action.LEFT_CLICK_AIR || action == Action.LEFT_CLICK_BLOCK) {
+            if (!isAbility(player.getItemInHand())) return;
+
+            IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+            Profile profile = profileService.getProfile(player.getUniqueId());
+
+            if (profile.getCooldown(Combo.class).onCooldown(player)) {
+                player.sendMessage(CC.translate("&fYou are on cooldown for &4" + DurationFormatter.getRemaining(profile.getCooldown(Combo.class).getRemainingMillis(player), true)));
+                event.setCancelled(true);
+                player.updateInventory();
             }
         }
     }

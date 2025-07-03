@@ -5,6 +5,12 @@ import dev.revere.alley.api.assemble.enums.EnumAssembleStyle;
 import dev.revere.alley.api.assemble.events.AssembleBoardCreateEvent;
 import dev.revere.alley.api.assemble.interfaces.IAssembleAdapter;
 import dev.revere.alley.api.assemble.listener.AssembleListener;
+import dev.revere.alley.config.IConfigService;
+import dev.revere.alley.core.AlleyContext;
+import dev.revere.alley.core.annotation.Service;
+import dev.revere.alley.profile.IProfileService;
+import dev.revere.alley.provider.scoreboard.ScoreboardVisualizer;
+import dev.revere.alley.tool.animation.IAnimationRepository;
 import dev.revere.alley.tool.logger.Logger;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,87 +19,61 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 
+import java.util.Collections;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Getter
 @Setter
-public class Assemble {
-    private final ChatColor[] chatColorCache = ChatColor.values();
+@Service(provides = IAssembleService.class, priority = 320)
+public class Assemble implements IAssembleService {
+    private final Alley plugin;
+    private final IAnimationRepository animationRepository;
+    private final IProfileService profileService;
+    private final IConfigService configService;
 
-    private Map<UUID, AssembleBoard> boards;
+    private final Map<UUID, AssembleBoard> boards = new ConcurrentHashMap<>();
+    private final ChatColor[] chatColorCache = ChatColor.values();
 
     private IAssembleAdapter adapter;
     private AssembleThread thread;
     private AssembleListener listeners;
-    private EnumAssembleStyle assembleStyle;
-
-    protected final Alley plugin;
+    private EnumAssembleStyle assembleStyle = EnumAssembleStyle.MODERN;
 
     private boolean hook;
-    private boolean debugMode;
-    private boolean callEvents;
+    private boolean debugMode = true;
+    private boolean callEvents = true;
+    private long ticks = 2;
 
-    private long ticks;
-
-
-    /**
-     * Constructor for the Assemble class.
-     *
-     * @param alley   The plugin instance of Alley.
-     * @param adapter The adapter instance.
-     */
-    public Assemble(Alley alley, IAssembleAdapter adapter) {
-        if (alley == null) {
-            throw new RuntimeException("Assemble can not be instantiated without a plugin instance!");
-        }
-
-        this.plugin = alley;
-        this.adapter = adapter;
-        this.assembleStyle = EnumAssembleStyle.MODERN;
-        this.boards = new ConcurrentHashMap<>();
-        this.ticks = 2;
-
-        this.hook = false;
-        this.debugMode = true;
-        this.callEvents = true;
-
-        this.setup();
+    public Assemble(Alley plugin, IAnimationRepository animationRepository, IProfileService profileService, IConfigService configService) {
+        this.plugin = plugin;
+        this.animationRepository = animationRepository;
+        this.profileService = profileService;
+        this.configService = configService;
     }
 
-    public void setup() {
+    @Override
+    public void initialize(AlleyContext context) {
+        this.adapter = new ScoreboardVisualizer(animationRepository, profileService, configService);
+
         this.listeners = new AssembleListener(this);
         this.plugin.getServer().getPluginManager().registerEvents(this.listeners, this.plugin);
 
-        if (this.thread != null) {
-            this.thread.interrupt();
-            this.thread = null;
-        }
-
-        for (Player player : this.getPlugin().getServer().getOnlinePlayers()) {
-
-            if (this.isCallEvents()) {
+        for (Player player : this.plugin.getServer().getOnlinePlayers()) {
+            if (this.callEvents) {
                 AssembleBoardCreateEvent createEvent = new AssembleBoardCreateEvent(player);
-
                 Bukkit.getPluginManager().callEvent(createEvent);
-                if (createEvent.isCancelled()) {
-                    continue;
-                }
+                if (createEvent.isCancelled()) continue;
             }
-
             this.boards.putIfAbsent(player.getUniqueId(), new AssembleBoard(player, this));
         }
 
         this.thread = new AssembleThread(this);
     }
 
-    /**
-     * Interrupts the Assemble thread and removes all boards from players.
-     *
-     * @param onDisable whether the server is stopping.
-     */
-    public void interruptAndClose(boolean onDisable) {
+    @Override
+    public void shutdown(AlleyContext context) {
         if (this.thread != null) {
             this.thread.interrupt();
             this.thread = null;
@@ -106,17 +86,16 @@ public class Assemble {
 
         for (UUID uuid : this.boards.keySet()) {
             Player player = Bukkit.getPlayer(uuid);
-
-            if (player == null || !player.isOnline()) {
-                continue;
+            if (player != null && player.isOnline()) {
+                player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
             }
-
-            this.boards.remove(uuid);
-            player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
         }
+        this.boards.clear();
+        Logger.info("Assemble scoreboard has been shut down.");
+    }
 
-        if (onDisable) {
-            Logger.log("&cAssemble has been interrupted and closed due to server stop.");
-        }
+    @Override
+    public Map<UUID, AssembleBoard> getBoards() {
+        return Collections.unmodifiableMap(this.boards);
     }
 }

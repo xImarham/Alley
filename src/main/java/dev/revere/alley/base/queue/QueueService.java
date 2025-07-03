@@ -2,15 +2,19 @@ package dev.revere.alley.base.queue;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.menu.Menu;
+import dev.revere.alley.base.kit.IKitService;
 import dev.revere.alley.base.kit.setting.impl.mode.KitSettingRankedImpl;
 import dev.revere.alley.base.queue.menu.QueuesMenuDefault;
 import dev.revere.alley.base.queue.menu.QueuesMenuModern;
 import dev.revere.alley.base.queue.runnable.QueueRunnable;
+import dev.revere.alley.config.IConfigService;
+import dev.revere.alley.core.AlleyContext;
+import dev.revere.alley.core.annotation.Service;
+import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
 import dev.revere.alley.tool.logger.Logger;
 import lombok.Getter;
-import lombok.Setter;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.ArrayList;
@@ -22,26 +26,43 @@ import java.util.List;
  * @date 5/21/2024
  */
 @Getter
-@Setter
-public class QueueService {
-    protected final Alley plugin;
-    private final List<Queue> queues;
-    private Menu queueMenu;
+@Service(provides = IQueueService.class, priority = 70)
+public class QueueService implements IQueueService {
+    private final IConfigService configService;
+    private final IKitService kitService;
+    private final IProfileService profileService;
 
-    /**
-     * Constructor for the QueueService class.
-     *
-     * @param plugin the plugin instance
-     */
-    public QueueService(Alley plugin) {
-        this.plugin = plugin;
-        this.queues = new ArrayList<>();
-        this.initialize();
-        this.queueMenu = this.determineMenu();
+    private final List<Queue> queues = new ArrayList<>();
+    private Menu queueMenu;
+    private QueueRunnable queueRunnable;
+
+    public QueueService(IConfigService configService, IKitService kitService, IProfileService profileService) {
+        this.configService = configService;
+        this.kitService = kitService;
+        this.profileService = profileService;
     }
 
-    public void initialize() {
-        this.plugin.getServer().getScheduler().runTaskTimer(this.plugin, new QueueRunnable(), 10L, 10L);
+    @Override
+    public void initialize(AlleyContext context) {
+        this.queueMenu = determineMenu();
+        this.reloadQueues();
+
+        this.queueRunnable = new QueueRunnable();
+        context.getPlugin().getServer().getScheduler().runTaskTimer(Alley.getInstance(), this.queueRunnable, 20L, 20L);
+    }
+
+    @Override
+    public void reloadQueues() {
+        this.queues.clear();
+        this.kitService.getKits().forEach(kit -> {
+            if (!kit.isEnabled()) return;
+            // The service now creates and owns the Queue objects.
+            this.queues.add(new Queue(kit, false, false));
+            this.queues.add(new Queue(kit, false, true));
+            if (kit.isSettingEnabled(KitSettingRankedImpl.class)) {
+                this.queues.add(new Queue(kit, true, false));
+            }
+        });
     }
 
     /**
@@ -50,31 +71,21 @@ public class QueueService {
      * @return the appropriate menu instance
      */
     private Menu determineMenu() {
-        FileConfiguration config = this.plugin.getConfigService().getMenusConfig();
-        String menuType = config.getString("queues-menu.type");
+        FileConfiguration config = this.configService.getMenusConfig();
+        String menuType = config.getString("queues-menu.type", "DEFAULT");
 
-        switch (menuType) {
+        switch (menuType.toUpperCase()) {
             case "MODERN":
                 return new QueuesMenuModern();
             case "DEFAULT":
+            default:
+                if (!menuType.equalsIgnoreCase("DEFAULT")) {
+                    Logger.warn("Invalid queues menu type '" + menuType + "'. Defaulting to DEFAULT.");
+                }
                 return new QueuesMenuDefault();
         }
-
-        Logger.log("Invalid menu type specified in config.yml. Defaulting to QueuesMenuDefault.");
-        return new QueuesMenuDefault();
     }
 
-    public void reloadQueues() {
-        this.queues.clear();
-        this.plugin.getKitService().getKits().forEach(kit -> {
-            if (!kit.isEnabled()) return;
-            new Queue(kit, false, false);
-            new Queue(kit, false, true);
-            if (kit.isSettingEnabled(KitSettingRankedImpl.class)) {
-                new Queue(kit, true, false);
-            }
-        });
-    }
 
     /**
      * Get the player count of a specific game type
@@ -89,7 +100,7 @@ public class QueueService {
             return 0;
         }
 
-        return (int) this.plugin.getProfileService().getProfiles().values().stream()
+        return (int) this.profileService.getProfiles().values().stream()
                 .filter(profile -> profile.getState().equals(stateForQueue))
                 .filter(profile -> this.isMatchForQueue(profile, queue))
                 .count();

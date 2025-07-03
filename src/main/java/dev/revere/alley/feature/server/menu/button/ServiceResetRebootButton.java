@@ -2,6 +2,7 @@ package dev.revere.alley.feature.server.menu.button;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.menu.Button;
+import dev.revere.alley.feature.server.IServerService;
 import dev.revere.alley.tool.item.ItemBuilder;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.Bukkit;
@@ -42,7 +43,7 @@ public class ServiceResetRebootButton extends Button {
             return;
         }
 
-        Alley.getInstance().getServerService().setAllowQueueing(true);
+        Alley.getInstance().getService(IServerService.class).setQueueingAllowed(true);
         Arrays.asList(
                 "",
                 "&a&lQUEUEING IS NO LONGER DISABLED!",

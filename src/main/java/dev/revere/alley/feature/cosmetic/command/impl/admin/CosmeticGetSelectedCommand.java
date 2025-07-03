@@ -1,9 +1,11 @@
 package dev.revere.alley.feature.cosmetic.command.impl.admin;
 
+import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.feature.cosmetic.EnumCosmeticType;
+import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.data.impl.ProfileCosmeticData;
 import dev.revere.alley.util.StringUtil;
@@ -34,7 +36,7 @@ public class CosmeticGetSelectedCommand extends BaseCommand {
             return;
         }
 
-        Profile profile = this.plugin.getProfileService().getProfile(target.getUniqueId());
+        Profile profile = Alley.getInstance().getService(IProfileService.class).getProfile(target.getUniqueId());
         player.sendMessage(CC.translate("     &6&lSelected Cosmetics for " + target.getName()));
 
         ProfileCosmeticData cosmeticData = profile.getProfileData().getCosmeticData();

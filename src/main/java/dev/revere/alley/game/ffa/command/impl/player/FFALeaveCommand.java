@@ -1,9 +1,12 @@
 package dev.revere.alley.game.ffa.command.impl.player;
 
+import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.base.combat.CombatService;
+import dev.revere.alley.base.combat.ICombatService;
+import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.entity.Player;
@@ -18,14 +21,15 @@ public class FFALeaveCommand extends BaseCommand {
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
-        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+        Profile profile = profileService.getProfile(player.getUniqueId());
 
         if (profile.getFfaMatch() == null) {
             player.sendMessage(CC.translate("&cYou are not in a FFA match."));
             return;
         }
 
-        CombatService combatService = this.plugin.getCombatService();
+        ICombatService combatService = Alley.getInstance().getService(ICombatService.class);
         if (combatService.isPlayerInCombat(player.getUniqueId())) {
             profile.getFfaMatch().handleCombatLog(player, combatService.getLastAttacker(player));
         }

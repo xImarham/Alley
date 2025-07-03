@@ -3,18 +3,23 @@ package dev.revere.alley.game.match;
 import dev.revere.alley.Alley;
 import dev.revere.alley.base.arena.AbstractArena;
 import dev.revere.alley.base.kit.Kit;
+import dev.revere.alley.base.kit.setting.KitSetting;
 import dev.revere.alley.base.kit.setting.impl.mode.*;
+import dev.revere.alley.base.queue.IQueueService;
 import dev.revere.alley.base.queue.Queue;
+import dev.revere.alley.config.IConfigService;
+import dev.revere.alley.core.AlleyContext;
+import dev.revere.alley.core.annotation.Service;
 import dev.revere.alley.game.match.impl.*;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
+import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.tool.logger.Logger;
 import lombok.Getter;
 import org.bukkit.configuration.file.FileConfiguration;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
@@ -23,79 +28,117 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * @date 5/21/2024
  */
 @Getter
-public class MatchService {
-    protected final Alley plugin;
-    private final List<AbstractMatch> matches;
+@Service(provides = IMatchService.class, priority = 220)
+public class MatchService implements IMatchService {
+    @FunctionalInterface
+    private interface MatchFactory {
+        AbstractMatch create(Queue queue, Kit kit, AbstractArena arena, boolean isRanked, GameParticipant<MatchGamePlayerImpl> pA, GameParticipant<MatchGamePlayerImpl> pB);
+    }
 
-    private final List<String> blockedCommands;
+    private final IProfileService profileService;
+    private final IQueueService queueService;
+    private final IConfigService configService;
+
+    private final List<AbstractMatch> matches = new CopyOnWriteArrayList<>();
+    private final List<String> blockedCommands = new ArrayList<>();
+    private final Map<Class<? extends KitSetting>, MatchFactory> matchFactoryRegistry = new LinkedHashMap<>();
 
     /**
-     * Constructor for the MatchService class.
-     *
-     * @param plugin The Alley plugin instance.
+     * Constructor for DI.
      */
-    public MatchService(Alley plugin) {
-        this.plugin = plugin;
-        this.matches = new CopyOnWriteArrayList<>();
-        this.blockedCommands = new ArrayList<>();
+    public MatchService(IProfileService profileService, IQueueService queueService, IConfigService configService) {
+        this.profileService = profileService;
+        this.queueService = queueService;
+        this.configService = configService;
+    }
+
+    @Override
+    public void initialize(AlleyContext context) {
+        this.registerMatchFactories();
         this.loadBlockedCommands();
     }
 
+    @Override
+    public void shutdown(AlleyContext context) {
+        if (this.matches.isEmpty()) {
+            return;
+        }
+        Logger.info("Ending " + this.matches.size() + " active matches due to server shutdown...");
+        new ArrayList<>(this.matches).forEach(AbstractMatch::endMatch);
+        this.matches.clear();
+    }
+
+    @Override
+    public List<AbstractMatch> getMatches() {
+        return Collections.unmodifiableList(matches);
+    }
+
+    @Override
+    public void addMatch(AbstractMatch match) {
+        if (match != null) {
+            this.matches.add(match);
+        }
+    }
+
+    @Override
+    public void removeMatch(AbstractMatch match) {
+        this.matches.remove(match);
+    }
+
     /**
-     * Creates a match with the given parameters.
-     *
-     * @param kit          The kit to be used in the match.
-     * @param arena        The arena where the match will take place.
-     * @param participantA The first participant in the match.
-     * @param participantB The second participant in the match.
+     * Registers all known match types and their creation logic.
+     * To add a new gamemode, you only need to add a single line here.
      */
+    private void registerMatchFactories() {
+        matchFactoryRegistry.put(KitSettingBedImpl.class, MatchBedImpl::new);
+        matchFactoryRegistry.put(KitSettingLivesImpl.class, MatchLivesImpl::new);
+        matchFactoryRegistry.put(KitSettingCheckpointImpl.class, MatchCheckpointImpl::new);
+        matchFactoryRegistry.put(KitSettingStickFightImpl.class, (q, k, ar, r, pA, pB) -> new MatchRoundsImpl(q, k, ar, r, pA, pB, 5));
+        matchFactoryRegistry.put(KitSettingRoundsImpl.class, (q, k, ar, r, pA, pB) -> new MatchRoundsImpl(q, k, ar, r, pA, pB, 3));
+    }
+
+    @Override
     public void createAndStartMatch(Kit kit, AbstractArena arena, GameParticipant<MatchGamePlayerImpl> participantA, GameParticipant<MatchGamePlayerImpl> participantB, boolean teamMatch, boolean affectStatistics, boolean isRanked) {
-        Profile profileA = this.plugin.getProfileService().getProfile(participantA.getPlayers().get(0).getUuid());
-        Profile profileB = this.plugin.getProfileService().getProfile(participantB.getPlayers().get(0).getUuid());
+        Profile profileA = this.profileService.getProfile(participantA.getPlayers().get(0).getUuid());
+        Profile profileB = this.profileService.getProfile(participantB.getPlayers().get(0).getUuid());
         if (profileA.getMatch() != null || profileB.getMatch() != null) {
             return;
         }
 
-        Queue matchingQueue = this.plugin.getQueueService().getQueues().stream()
+        Queue matchingQueue = this.queueService.getQueues().stream()
                 .filter(queue -> queue.getKit().equals(kit))
                 .findFirst()
                 .orElse(null);
 
-        AbstractMatch match;
+        MatchFactory factory = null;
+        for (Map.Entry<Class<? extends KitSetting>, MatchFactory> entry : matchFactoryRegistry.entrySet()) {
+            if (kit.isSettingEnabled(entry.getKey())) {
+                factory = entry.getValue();
+                break;
+            }
+        }
 
-        if (kit.isSettingEnabled(KitSettingLivesImpl.class)) {
-            match = new MatchLivesImpl(matchingQueue, kit, arena, isRanked, participantA, participantB);
-        } else if (kit.isSettingEnabled(KitSettingRoundsImpl.class)) {
-            match = new MatchRoundsImpl(matchingQueue, kit, arena, isRanked, participantA, participantB, 3);
-        } else if (kit.isSettingEnabled(KitSettingStickFightImpl.class)) {
-            match = new MatchRoundsImpl(matchingQueue, kit, arena, isRanked, participantA, participantB, 5);
-        } else if (kit.isSettingEnabled(KitSettingBedImpl.class)) {
-            match = new MatchBedImpl(matchingQueue, kit, arena, isRanked, participantA, participantB);
-        } else if (kit.isSettingEnabled(KitSettingCheckpointImpl.class)) {
-            match = new MatchCheckpointImpl(matchingQueue, kit, arena, isRanked, participantA, participantB);
+        AbstractMatch match;
+        if (factory != null) {
+            match = factory.create(matchingQueue, kit, arena, isRanked, participantA, participantB);
         } else {
             match = new MatchRegularImpl(matchingQueue, kit, arena, isRanked, participantA, participantB);
         }
 
         match.setTeamMatch(teamMatch);
         match.setAffectStatistics(affectStatistics);
+
+        this.addMatch(match);
+
         match.startMatch();
     }
 
-    public void endPresentMatches() {
-        if (this.matches.isEmpty()) {
-            return;
-        }
-
-        Logger.log(this.matches.size() + " matches have been ended.");
-    }
-
     private void loadBlockedCommands() {
-        FileConfiguration config = this.plugin.getConfigService().getSettingsConfig();
+        FileConfiguration config = this.configService.getSettingsConfig();
 
         List<String> configBlockedCommands = config.getStringList("game.blocked-commands");
         if (configBlockedCommands.isEmpty()) {
-            Logger.log("No blocked commands found in the configuration. Please check your settings.yml file.");
+            Logger.info("No blocked commands found in the configuration. Please check your settings.yml file.");
             return;
         }
 

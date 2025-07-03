@@ -3,6 +3,7 @@ package dev.revere.alley.base.queue.menu.button;
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.base.arena.AbstractArena;
+import dev.revere.alley.base.arena.IArenaService;
 import dev.revere.alley.base.kit.Kit;
 import dev.revere.alley.tool.item.ItemBuilder;
 import dev.revere.alley.util.chat.CC;
@@ -37,7 +38,7 @@ public class BotButton extends Button {
 
     @Override
     public void clicked(Player player, ClickType clickType) {
-        AbstractArena arena = Alley.getInstance().getArenaService().getRandomStandAloneArena();
+        AbstractArena arena = Alley.getInstance().getService(IArenaService.class).getRandomStandAloneArena();
         if (arena == null) {
             player.sendMessage("No arena available.");
             return;

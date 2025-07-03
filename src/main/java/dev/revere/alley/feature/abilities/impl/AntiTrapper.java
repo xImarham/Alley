@@ -2,8 +2,11 @@ package dev.revere.alley.feature.abilities.impl;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.feature.abilities.AbstractAbility;
+import dev.revere.alley.feature.abilities.IAbilityService;
 import dev.revere.alley.feature.abilities.utils.DurationFormatter;
+import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
+import dev.revere.alley.profile.enums.EnumGlobalCooldown;
 import dev.revere.alley.util.PlayerUtil;
 import dev.revere.alley.util.TimeUtil;
 import dev.revere.alley.util.chat.CC;
@@ -46,20 +49,24 @@ public class AntiTrapper extends AbstractAbility {
         if (event.getEntity() instanceof Player && event.getDamager() instanceof Player) {
             Player damager = (Player) event.getDamager();
             Player victim = (Player) event.getEntity();
-            Profile profile = this.plugin.getProfileService().getProfile(damager.getUniqueId());
+
+            IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+            IAbilityService abilityService = Alley.getInstance().getService(IAbilityService.class);
+
+            Profile profile = profileService.getProfile(damager.getUniqueId());
 
             if (!isAbility(damager.getItemInHand())) {
                 return;
             }
             if (isAbility(damager.getItemInHand())) {
-                if (profile.getAntitrapper().onCooldown(damager)) {
-                    damager.sendMessage(CC.translate("&fYou are on &6&lAntiTrapper &7cooldown for &4" + DurationFormatter.getRemaining(profile.getAntitrapper().getRemainingMillis(damager), true, true)));
+                if (profile.getCooldown(AntiTrapper.class).onCooldown(damager)) {
+                    damager.sendMessage(CC.translate("&fYou are on &6&lAntiTrapper &7cooldown for &4" + DurationFormatter.getRemaining(profile.getCooldown(AntiTrapper.class).getRemainingMillis(damager), true, true)));
                     damager.updateInventory();
                     return;
                 }
 
-                if (profile.getPartneritem().onCooldown(damager)) {
-                    damager.sendMessage(CC.translate("&fYou are on &6&lPartner Item &fcooldown for &6" + DurationFormatter.getRemaining(profile.getPartneritem().getRemainingMillis(damager), true, true)));
+                if (profile.getGlobalCooldown(EnumGlobalCooldown.PARTNER_ITEM).onCooldown(damager)) {
+                    damager.sendMessage(CC.translate("&fYou are on &6&lPartner Item &fcooldown for &6" + DurationFormatter.getRemaining(profile.getGlobalCooldown(EnumGlobalCooldown.PARTNER_ITEM).getRemainingMillis(damager), true, true)));
                     damager.updateInventory();
                     return;
                 }
@@ -69,14 +76,14 @@ public class AntiTrapper extends AbstractAbility {
                     count = 0;
 
                     // Apply cooldown on third hit
-                    profile.getAntitrapper().applyCooldown(damager, 60 * 1000);
-                    profile.getPartneritem().applyCooldown(damager,  10 * 1000);
+                    profile.getCooldown(AntiTrapper.class).applyCooldown(damager, 60 * 1000);
+                    profile.getGlobalCooldown(EnumGlobalCooldown.PARTNER_ITEM).applyCooldown(damager,  10 * 1000);
 
                     // Apply cooldown on victim to prevent interaction
                     AntiTrapper.cooldownvic.put(victim.getName(), System.currentTimeMillis() + (15 * 1000));
 
-                    plugin.getAbilityService().playerMessage(damager, this.getAbility());
-                    plugin.getAbilityService().targetMessage(victim, damager, this.getAbility());
+                    abilityService.sendPlayerMessage(damager, this.getAbility());
+                    abilityService.sendTargetMessage(victim, damager, this.getAbility());
 
                     PlayerUtil.decrement(damager);
                 }
@@ -88,14 +95,14 @@ public class AntiTrapper extends AbstractAbility {
     public void onInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
         Action action = event.getAction();
-        Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
+        Profile profile = Alley.getInstance().getService(IProfileService.class).getProfile(player.getUniqueId());
         if (action.equals(Action.LEFT_CLICK_AIR) || action.equals(Action.LEFT_CLICK_BLOCK)) {
             if (!isAbility(player.getItemInHand())) {
                 return;
             }
             if (isAbility(player.getItemInHand())) {
                 if (this.hasCooldown(player)) {
-                    player.sendMessage(CC.translate("&fYou are on cooldown for &4" + DurationFormatter.getRemaining(profile.getAntitrapper().getRemainingMillis(player), true)));
+                    player.sendMessage(CC.translate("&fYou are on cooldown for &4" + DurationFormatter.getRemaining(profile.getCooldown(AntiTrapper.class).getRemainingMillis(player), true)));
                     event.setCancelled(true);
                     player.updateInventory();
                 }

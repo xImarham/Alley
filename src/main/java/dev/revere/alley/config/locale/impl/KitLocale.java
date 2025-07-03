@@ -1,6 +1,7 @@
 package dev.revere.alley.config.locale.impl;
 
 import dev.revere.alley.Alley;
+import dev.revere.alley.config.IConfigService;
 import dev.revere.alley.config.locale.ILocale;
 import dev.revere.alley.util.chat.CC;
 import lombok.Getter;
@@ -67,6 +68,6 @@ public enum KitLocale implements ILocale {
      */
     @Override
     public String getMessage() {
-        return CC.translate(Alley.getInstance().getConfigService().getConfig(this.configName).getString(this.configString));
+        return CC.translate(Alley.getInstance().getService(IConfigService.class).getConfig(this.configName).getString(this.configString));
     }
 }

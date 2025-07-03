@@ -1,8 +1,10 @@
 package dev.revere.alley.game.ffa.command.impl;
 
+import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
+import dev.revere.alley.base.arena.IArenaService;
 import dev.revere.alley.base.arena.enums.EnumArenaType;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.entity.Player;
@@ -27,12 +29,12 @@ public class FFASetSafeZoneCommand extends BaseCommand {
         String arenaName = args[0];
         String spawnType = args[1];
 
-        if (this.plugin.getArenaService().getArenaByName(arenaName) == null) {
+        if (Alley.getInstance().getService(IArenaService.class).getArenaByName(arenaName) == null) {
             player.sendMessage(CC.translate("&cAn arena with that name does not exist!"));
             return;
         }
 
-        if (this.plugin.getArenaService().getArenaByName(arenaName).getType() != EnumArenaType.FFA) {
+        if (Alley.getInstance().getService(IArenaService.class).getArenaByName(arenaName).getType() != EnumArenaType.FFA) {
             player.sendMessage(CC.translate("&cYou can only set the safezone for Free-For-All arenas!"));
             return;
         }
@@ -43,13 +45,13 @@ public class FFASetSafeZoneCommand extends BaseCommand {
         }
 
         if (spawnType.equalsIgnoreCase("pos1")) {
-            this.plugin.getArenaService().getArenaByName(arenaName).setMaximum(player.getLocation());
+            Alley.getInstance().getService(IArenaService.class).getArenaByName(arenaName).setMaximum(player.getLocation());
             player.sendMessage(CC.translate("&aSafe Zone position 1 has been set for arena &6" + arenaName + "&a!"));
         } else {
-            this.plugin.getArenaService().getArenaByName(arenaName).setMinimum(player.getLocation());
+            Alley.getInstance().getService(IArenaService.class).getArenaByName(arenaName).setMinimum(player.getLocation());
             player.sendMessage(CC.translate("&aSafe Zone position 2 has been set for arena &6" + arenaName + "&a!"));
         }
 
-        this.plugin.getArenaService().saveArena(this.plugin.getArenaService().getArenaByName(arenaName));
+        Alley.getInstance().getService(IArenaService.class).saveArena(Alley.getInstance().getService(IArenaService.class).getArenaByName(arenaName));
     }
 }

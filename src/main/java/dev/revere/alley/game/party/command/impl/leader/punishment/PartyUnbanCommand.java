@@ -1,8 +1,10 @@
 package dev.revere.alley.game.party.command.impl.leader.punishment;
 
+import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
+import dev.revere.alley.game.party.IPartyService;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.entity.Player;
 
@@ -34,6 +36,6 @@ public class PartyUnbanCommand extends BaseCommand {
             return;
         }
 
-        this.plugin.getPartyService().unbanMember(player, target);
+        Alley.getInstance().getService(IPartyService.class).unbanMember(player, target);
     }
 }

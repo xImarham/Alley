@@ -3,6 +3,7 @@ package dev.revere.alley.feature.cosmetic.menu.button;
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.feature.cosmetic.AbstractCosmetic;
+import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.data.impl.ProfileCosmeticData;
 import dev.revere.alley.tool.item.ItemBuilder;
@@ -27,7 +28,8 @@ public class CosmeticButton extends Button {
 
     @Override
     public ItemStack getButtonItem(Player player) {
-        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+        Profile profile = profileService.getProfile(player.getUniqueId());
         boolean isSelected = profile.getProfileData().getCosmeticData().isSelected(cosmetic);
         boolean hasPermission = player.hasPermission(cosmetic.getPermission());
 
@@ -54,7 +56,8 @@ public class CosmeticButton extends Button {
             return;
         }
 
-        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+        Profile profile = profileService.getProfile(player.getUniqueId());
         ProfileCosmeticData cosmeticData = profile.getProfileData().getCosmeticData();
 
         if (cosmeticData.isSelected(cosmetic)) {

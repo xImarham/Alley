@@ -30,7 +30,7 @@ public class AssembleThread extends Thread {
                 tick();
                 sleep(this.assemble.getTicks() * 50);
             } catch (Exception exception) {
-                Logger.logError("There was an error in the Assemble Thread.");
+                Logger.error("There was an error in the Assemble Thread.");
                 exception.printStackTrace();
             }
         }

@@ -5,8 +5,10 @@ import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.base.arena.AbstractArena;
 import dev.revere.alley.base.kit.Kit;
 import dev.revere.alley.config.locale.impl.PartyLocale;
+import dev.revere.alley.game.party.IPartyService;
 import dev.revere.alley.game.party.Party;
 import dev.revere.alley.game.party.PartyService;
+import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.tool.item.ItemBuilder;
 import dev.revere.alley.util.chat.CC;
 import lombok.AllArgsConstructor;
@@ -44,14 +46,14 @@ public class PartyEventSplitArenaSelectorButton extends Button {
     public void clicked(Player player, ClickType clickType) {
         if (clickType != ClickType.LEFT) return;
 
-        Party party = this.plugin.getProfileService().getProfile(player.getUniqueId()).getParty();
+        Party party = Alley.getInstance().getService(IProfileService.class).getProfile(player.getUniqueId()).getParty();
         if (party == null) {
             player.closeInventory();
             player.sendMessage(CC.translate(PartyLocale.NOT_IN_PARTY.getMessage()));
             return;
         }
 
-        PartyService partyService = this.plugin.getPartyService();
+        IPartyService partyService = Alley.getInstance().getService(IPartyService.class);
         partyService.startMatch(this.kit, this.arena, party);
     }
 }

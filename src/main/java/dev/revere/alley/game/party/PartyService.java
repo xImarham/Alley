@@ -1,27 +1,35 @@
 package dev.revere.alley.game.party;
 
-import dev.revere.alley.Alley;
 import dev.revere.alley.base.arena.AbstractArena;
+import dev.revere.alley.base.arena.IArenaService;
 import dev.revere.alley.base.cooldown.Cooldown;
+import dev.revere.alley.base.cooldown.ICooldownRepository;
 import dev.revere.alley.base.cooldown.enums.EnumCooldownType;
-import dev.revere.alley.base.hotbar.HotbarService;
+import dev.revere.alley.base.hotbar.IHotbarService;
 import dev.revere.alley.base.hotbar.enums.EnumHotbarType;
 import dev.revere.alley.base.kit.Kit;
 import dev.revere.alley.base.queue.Queue;
 import dev.revere.alley.base.queue.QueueProfile;
+import dev.revere.alley.base.visibility.IVisibilityService;
+import dev.revere.alley.config.IConfigService;
 import dev.revere.alley.config.locale.impl.PartyLocale;
+import dev.revere.alley.core.AlleyContext;
+import dev.revere.alley.core.annotation.Service;
+import dev.revere.alley.game.match.IMatchService;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.game.match.player.participant.TeamGameParticipant;
+import dev.revere.alley.game.party.listener.PartyListener;
+import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
+import dev.revere.alley.tool.reflection.IReflectionRepository;
 import dev.revere.alley.tool.reflection.impl.TitleReflectionService;
 import dev.revere.alley.util.SoundUtil;
 import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.util.chat.ClickableUtil;
 import dev.revere.alley.util.chat.Symbol;
 import lombok.Getter;
-import lombok.Setter;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
@@ -36,32 +44,44 @@ import java.util.stream.Collectors;
  * @date 16/11/2024 - 22:57
  */
 @Getter
-@Setter
-public class PartyService {
-    protected final Alley plugin;
-    private final List<Party> parties;
-    private final List<PartyRequest> partyRequests;
+@Service(provides = IPartyService.class, priority = 230)
+public class PartyService implements IPartyService {
+    private final IConfigService configService;
+    private final IProfileService profileService;
+    private final IHotbarService hotbarService;
+    private final IReflectionRepository reflectionRepository;
+    private final ICooldownRepository cooldownRepository;
+    private final IVisibilityService visibilityService;
+    private final IMatchService matchService;
+    private final IArenaService arenaService;
+
+    private final List<Party> parties = new ArrayList<>();
+    private final List<PartyRequest> partyRequests = new ArrayList<>();
     private String chatFormat;
 
-    /**
-     * Constructor for the PartyService class.
-     *
-     * @param plugin The Alley plugin instance.
-     */
-    public PartyService(Alley plugin) {
-        this.plugin = plugin;
-        this.parties = new ArrayList<>();
-        this.partyRequests = new ArrayList<>();
-        this.chatFormat = plugin.getConfigService().getMessagesConfig().getString("party.chat-format");
+    public PartyService(IConfigService configService, IProfileService profileService, IHotbarService hotbarService, IReflectionRepository reflectionRepository, ICooldownRepository cooldownRepository, IVisibilityService visibilityService, IMatchService matchService, IArenaService arenaService) {
+        this.configService = configService;
+        this.profileService = profileService;
+        this.hotbarService = hotbarService;
+        this.reflectionRepository = reflectionRepository;
+        this.cooldownRepository = cooldownRepository;
+        this.visibilityService = visibilityService;
+        this.matchService = matchService;
+        this.arenaService = arenaService;
     }
 
-    /**
-     * Starts a match with the given kit, arena, and party.
-     *
-     * @param kit   The kit to be used in the match.
-     * @param arena The arena where the match will take place.
-     * @param party The party that will participate in the match.
-     */
+    @Override
+    public void initialize(AlleyContext context) {
+        this.chatFormat = configService.getMessagesConfig().getString("party.chat-format");
+        context.getPlugin().getServer().getPluginManager().registerEvents(new PartyListener(), context.getPlugin());
+    }
+
+    @Override
+    public List<Party> getParties() {
+        return Collections.unmodifiableList(this.parties);
+    }
+
+    @Override
     public void startMatch(Kit kit, AbstractArena arena, Party party) {
         List<Player> allPartyPlayers = party.getMembers().stream()
                 .map(Bukkit::getPlayer)
@@ -94,28 +114,26 @@ public class PartyService {
             }
         }
 
-        this.plugin.getMatchService().createAndStartMatch(
-                kit, this.plugin.getArenaService().selectArenaWithPotentialTemporaryCopy(arena), participantA, participantB, true, false, false
+        this.matchService.createAndStartMatch(
+                kit, this.arenaService.selectArenaWithPotentialTemporaryCopy(arena), participantA, participantB, true, false, false
         );
     }
 
-    /**
-     * Method to create a new party.
-     *
-     * @param player The leader of the party.
-     */
+    @Override
     public void createParty(Player player) {
-        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
+        Profile profile = this.profileService.getProfile(player.getUniqueId());
         if (profile.getState() != EnumProfileState.LOBBY) {
             player.sendMessage(CC.translate("&cYou cannot create a party in this state."));
             return;
         }
 
         Party party = new Party(player);
-        profile.setParty(party);
-        this.plugin.getHotbarService().applyHotbarItems(player);
+        this.parties.add(party);
 
-        this.plugin.getReflectionRepository().getReflectionService(TitleReflectionService.class).sendTitle(
+        profile.setParty(party);
+        this.hotbarService.applyHotbarItems(player);
+
+        this.reflectionRepository.getReflectionService(TitleReflectionService.class).sendTitle(
                 player,
                 "&a&l" + Symbol.CROSSED_SWORDS + " Party Created",
                 "&7Type /p for help.",
@@ -132,13 +150,9 @@ public class PartyService {
         ).forEach(line -> player.sendMessage(CC.translate(line)));
     }
 
-    /**
-     * Disbands the party.
-     *
-     * @param leader The leader of the party.
-     */
+    @Override
     public void disbandParty(Player leader) {
-        Profile profile = this.plugin.getProfileService().getProfile(leader.getUniqueId());
+        Profile profile = this.profileService.getProfile(leader.getUniqueId());
 
         Party party = this.getPartyByLeader(leader);
 
@@ -153,7 +167,7 @@ public class PartyService {
         }
 
         for (UUID memberId : new ArrayList<>(party.getMembers())) {
-            Profile memberProfile = plugin.getProfileService().getProfile(memberId);
+            Profile memberProfile = profileService.getProfile(memberId);
             if (memberProfile != null && memberProfile.getQueueProfile() != null && memberProfile.getState().equals(EnumProfileState.WAITING)) {
                 this.handlePartyMemberLeave(Bukkit.getPlayer(memberId));
             }
@@ -164,7 +178,7 @@ public class PartyService {
         party.notifyParty("&6&lParty &7&l" + Symbol.ARROW_R + " &6" + leader.getName() + " &cdisbanded the party.");
         this.parties.remove(party);
 
-        Cooldown cooldown = this.plugin.getCooldownRepository().getCooldown(leader.getUniqueId(), EnumCooldownType.PARTY_ANNOUNCE_COOLDOWN);
+        Cooldown cooldown = this.cooldownRepository.getCooldown(leader.getUniqueId(), EnumCooldownType.PARTY_ANNOUNCE_COOLDOWN);
         if (cooldown != null && cooldown.isActive()) {
             cooldown.resetCooldown();
         }
@@ -173,7 +187,7 @@ public class PartyService {
             this.setupProfile(leader, false);
         }
 
-        this.plugin.getReflectionRepository().getReflectionService(TitleReflectionService.class).sendTitle(
+        this.reflectionRepository.getReflectionService(TitleReflectionService.class).sendTitle(
                 leader,
                 "&c&l✖ Party Disbanded",
                 "&7You've removed your party.",
@@ -183,11 +197,7 @@ public class PartyService {
         SoundUtil.playBanHammer(leader);
     }
 
-    /**
-     * Removes a member from the party.
-     *
-     * @param player The member to remove.
-     */
+    @Override
     public void leaveParty(Player player) {
         Party party = this.getPartyByMember(player.getUniqueId());
         if (party == null) {
@@ -204,51 +214,7 @@ public class PartyService {
         this.handlePartyMemberLeave(player);
     }
 
-    /**
-     * Handles a player leaving a party, specifically notifying the QueueService if they were queuing.
-     * This method should be called whenever a party member disconnects or leaves their party.
-     *
-     * @param player The player who left the party (or disconnected).
-     */
-    public void handlePartyMemberLeave(Player player) {
-        if (player == null) return;
-
-        Profile profile = plugin.getProfileService().getProfile(player.getUniqueId());
-        if (profile == null || profile.getQueueProfile() == null || profile.getMatch() != null) {
-            return;
-        }
-
-        QueueProfile associatedQueueProfile = profile.getQueueProfile();
-        Queue queue = associatedQueueProfile.getQueue();
-
-        if (queue.isDuos()) {
-            Player leader = Bukkit.getPlayer(associatedQueueProfile.getUuid());
-            if (leader != null && leader.isOnline()) {
-                Party party = getPartyByLeader(leader);
-                if (party == null || party.getMembers().size() < 2) {
-                    leader.sendMessage(CC.translate("&eA party member has left/disconnected. You are now queuing solo for duos."));
-                } else {
-                    leader.sendMessage(CC.translate("&eA party member has left/disconnected. Your party size is now " + party.getMembers().size() + "."));
-                    if (party.getMembers().size() < 2 && leader.isOnline()) {
-                        leader.sendMessage(CC.translate("&eYou are now queuing solo for duos, awaiting a random teammate."));
-                    }
-                }
-            } else {
-                queue.removePlayer(associatedQueueProfile);
-            }
-        } else {
-            queue.removePlayer(associatedQueueProfile);
-        }
-
-        profile.setQueueProfile(null);
-    }
-
-    /**
-     * Kicks a member from the party.
-     *
-     * @param leader The leader of the party.
-     * @param member The member to kick.
-     */
+    @Override
     public void kickMember(Player leader, Player member) {
         Party party = this.getPartyByLeader(leader);
         if (party == null) return;
@@ -257,12 +223,7 @@ public class PartyService {
         this.setupProfile(member, false);
     }
 
-    /**
-     * Bans a member from the party.
-     *
-     * @param leader The leader of the party.
-     * @param target The member to ban.
-     */
+    @Override
     public void banMember(Player leader, Player target) {
         Party party = this.getPartyByLeader(leader);
         if (party == null) {
@@ -283,12 +244,7 @@ public class PartyService {
         target.sendMessage(CC.translate("&cYou have been banned from the party."));
     }
 
-    /**
-     * Unbans a member from the party.
-     *
-     * @param leader The leader of the party.
-     * @param target The member to unban.
-     */
+    @Override
     public void unbanMember(Player leader, Player target) {
         Party party = this.getPartyByLeader(leader);
         if (party == null) {
@@ -306,14 +262,9 @@ public class PartyService {
         target.sendMessage(CC.translate("&aYou have been unbanned from &6" + party.getLeader().getName() + "'s &aparty."));
     }
 
-    /**
-     * Joins a party.
-     *
-     * @param player The player to join the party.
-     * @param leader The leader of the party.
-     */
+    @Override
     public void joinParty(Player player, Player leader) {
-        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
+        Profile profile = this.profileService.getProfile(player.getUniqueId());
         if (profile.getState() != EnumProfileState.LOBBY) {
             player.sendMessage(CC.translate("&cYou must be in lobby to join a party."));
             return;
@@ -353,6 +304,24 @@ public class PartyService {
         this.setupProfile(player, true);
     }
 
+    @Override
+    public PartyRequest getRequest(Player player) {
+        return this.partyRequests.stream()
+                .filter(request -> request.getTarget().equals(player))
+                .findFirst()
+                .orElse(null);
+    }
+
+    @Override
+    public void removeRequest(PartyRequest request) {
+        this.partyRequests.remove(request);
+    }
+
+    @Override
+    public String getChatFormat() {
+        return chatFormat;
+    }
+
     /**
      * Sets up the profile of a player.
      *
@@ -360,8 +329,7 @@ public class PartyService {
      * @param join   Whether the player is joining a party.
      */
     private void setupProfile(Player player, boolean join) {
-        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
-        HotbarService hotbarService = this.plugin.getHotbarService();
+        Profile profile = this.profileService.getProfile(player.getUniqueId());
 
         profile.setParty(join ? this.getPartyByMember(player.getUniqueId()) : null);
 
@@ -375,38 +343,10 @@ public class PartyService {
             hotbarService.applyHotbarItems(player, EnumHotbarType.LOBBY);
         }
 
-        this.plugin.getVisibilityService().updateVisibility(player);
+        this.visibilityService.updateVisibility(player);
     }
 
-    /**
-     * Gets a party request for a specific player.
-     *
-     * @param player The player to get the request for.
-     * @return The party request for the player.
-     */
-    public PartyRequest getRequest(Player player) {
-        return this.partyRequests.stream()
-                .filter(request -> request.getTarget().equals(player))
-                .findFirst()
-                .orElse(null);
-    }
-
-    /**
-     * Removes a party request from the repository.
-     *
-     * @param request The party request to remove.
-     */
-    public void removeRequest(PartyRequest request) {
-        this.partyRequests.remove(request);
-    }
-
-    /**
-     * Creates a new party request and send a message to the target.
-     *
-     * @param party  The party to send the invite to.
-     * @param sender The player sending the invite.
-     * @param target The player receiving the invite.
-     */
+    @Override
     public void sendInvite(Party party, Player sender, Player target) {
         if (party == null) return;
 
@@ -421,12 +361,7 @@ public class PartyService {
         target.sendMessage("");
     }
 
-    /**
-     * Gets the party of a leader.
-     *
-     * @param player The leader of the party.
-     * @return The party of the leader.
-     */
+    @Override
     public Party getPartyByLeader(Player player) {
         return this.parties.stream()
                 .filter(party -> party.getLeader().equals(player))
@@ -434,12 +369,7 @@ public class PartyService {
                 .orElse(null);
     }
 
-    /**
-     * Gets the party of a member.
-     *
-     * @param uuid The member's UUID.
-     * @return The party of the member.
-     */
+    @Override
     public Party getPartyByMember(UUID uuid) {
         return this.parties.stream()
                 .filter(party -> party.getMembers().contains(uuid))
@@ -447,12 +377,7 @@ public class PartyService {
                 .orElse(null);
     }
 
-    /**
-     * Gets the party of a player, either as a leader or a member.
-     *
-     * @param player The player to check.
-     * @return The party the player is in, or null if the player is not in any party.
-     */
+    @Override
     public Party getParty(Player player) {
         Party party = getPartyByLeader(player);
         if (party != null) {
@@ -461,11 +386,7 @@ public class PartyService {
         return getPartyByMember(player.getUniqueId());
     }
 
-    /**
-     * Announces a party to all online players.
-     *
-     * @param party The party to announce.
-     */
+    @Override
     public void announceParty(Party party) {
         Bukkit.getOnlinePlayers().forEach(player -> {
             player.sendMessage("");
@@ -473,6 +394,45 @@ public class PartyService {
             player.spigot().sendMessage(this.getClickable(party.getLeader()));
             player.sendMessage("");
         });
+    }
+
+    /**
+     * Handles a player leaving a party, specifically notifying the QueueService if they were queuing.
+     * This method should be called whenever a party member disconnects or leaves their party.
+     *
+     * @param player The player who left the party (or disconnected).
+     */
+    public void handlePartyMemberLeave(Player player) {
+        if (player == null) return;
+
+        Profile profile = profileService.getProfile(player.getUniqueId());
+        if (profile == null || profile.getQueueProfile() == null || profile.getMatch() != null) {
+            return;
+        }
+
+        QueueProfile associatedQueueProfile = profile.getQueueProfile();
+        Queue queue = associatedQueueProfile.getQueue();
+
+        if (queue.isDuos()) {
+            Player leader = Bukkit.getPlayer(associatedQueueProfile.getUuid());
+            if (leader != null && leader.isOnline()) {
+                Party party = getPartyByLeader(leader);
+                if (party == null || party.getMembers().size() < 2) {
+                    leader.sendMessage(CC.translate("&eA party member has left/disconnected. You are now queuing solo for duos."));
+                } else {
+                    leader.sendMessage(CC.translate("&eA party member has left/disconnected. Your party size is now " + party.getMembers().size() + "."));
+                    if (party.getMembers().size() < 2 && leader.isOnline()) {
+                        leader.sendMessage(CC.translate("&eYou are now queuing solo for duos, awaiting a random teammate."));
+                    }
+                }
+            } else {
+                queue.removePlayer(associatedQueueProfile);
+            }
+        } else {
+            queue.removePlayer(associatedQueueProfile);
+        }
+
+        profile.setQueueProfile(null);
     }
 
     /**

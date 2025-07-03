@@ -2,11 +2,16 @@ package dev.revere.alley.base.arena.impl;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.base.arena.AbstractArena;
+import dev.revere.alley.base.arena.IArenaService;
 import dev.revere.alley.base.arena.enums.EnumArenaType;
+import dev.revere.alley.base.arena.schematic.IArenaSchematicService;
+import dev.revere.alley.base.visibility.IVisibilityService;
+import dev.revere.alley.config.IConfigService;
 import dev.revere.alley.game.match.impl.MatchBedImpl;
 import dev.revere.alley.game.match.impl.MatchRoundsImpl;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
+import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.tool.serializer.Serializer;
 import lombok.Getter;
@@ -54,7 +59,7 @@ public class StandAloneArena extends AbstractArena {
 
         if (team1Portal != null) this.team1Portal = team1Portal;
         if (team2Portal != null) this.team2Portal = team2Portal;
-        this.portalRadius = this.plugin.getConfigService().getSettingsConfig().getInt("game.portal-radius");
+        this.portalRadius = Alley.getInstance().getService(IConfigService.class).getSettingsConfig().getInt("game.portal-radius");
         this.heightLimit = heightLimit;
         this.voidLevel = voidLevel;
     }
@@ -68,7 +73,7 @@ public class StandAloneArena extends AbstractArena {
 
         if (team1Portal != null) this.team1Portal = team1Portal;
         if (team2Portal != null) this.team2Portal = team2Portal;
-        this.portalRadius = this.plugin.getConfigService().getSettingsConfig().getInt("game.portal-radius");
+        this.portalRadius = Alley.getInstance().getService(IConfigService.class).getSettingsConfig().getInt("game.portal-radius");
         this.heightLimit = heightLimit;
         this.voidLevel = voidLevel;
     }
@@ -81,7 +86,7 @@ public class StandAloneArena extends AbstractArena {
     @Override
     public void createArena() {
         if (!this.isTemporaryCopy) {
-            this.plugin.getArenaService().getArenas().add(this);
+            Alley.getInstance().getService(IArenaService.class).getArenas().add(this);
             this.saveArena();
         }
     }
@@ -89,7 +94,7 @@ public class StandAloneArena extends AbstractArena {
     @Override
     public void saveArena() {
         String name = "arenas." + this.getName();
-        FileConfiguration config = this.plugin.getConfigService().getArenasConfig();
+        FileConfiguration config = Alley.getInstance().getService(IConfigService.class).getArenasConfig();
 
         config.set(name, null);
         config.set(name + ".type", this.getType().name());
@@ -110,9 +115,9 @@ public class StandAloneArena extends AbstractArena {
         config.set(name + ".height-limit", this.heightLimit);
         config.set(name + ".void-level", this.voidLevel);
 
-        this.plugin.getConfigService().saveConfig(this.plugin.getConfigService().getConfigFile("storage/arenas.yml"), config);
+        Alley.getInstance().getService(IConfigService.class).saveConfig(Alley.getInstance().getService(IConfigService.class).getConfigFile("storage/arenas.yml"), config);
 
-        this.plugin.getArenaSchematicService().updateSchematic(this);
+        Alley.getInstance().getService(IArenaSchematicService.class).updateSchematic(this);
     }
 
     @Override
@@ -121,11 +126,11 @@ public class StandAloneArena extends AbstractArena {
             this.deleteCopiedArena();
             return;
         }
-        FileConfiguration config = this.plugin.getConfigService().getArenasConfig();
+        FileConfiguration config = Alley.getInstance().getService(IConfigService.class).getArenasConfig();
         config.set("arenas." + this.getName(), null);
 
-        this.plugin.getArenaService().getArenas().remove(this);
-        this.plugin.getConfigService().saveConfig(this.plugin.getConfigService().getConfigFile("storage/arenas.yml"), config);
+        Alley.getInstance().getService(IArenaService.class).getArenas().remove(this);
+        Alley.getInstance().getService(IConfigService.class).saveConfig(Alley.getInstance().getService(IConfigService.class).getConfigFile("storage/arenas.yml"), config);
     }
 
     public void deleteCopiedArena() {
@@ -133,11 +138,7 @@ public class StandAloneArena extends AbstractArena {
             return;
         }
 
-        plugin.getArenaSchematicService().delete(this);
-        /*faweArenaManager.deleteCopiedArena(this.getMinimum(), this.getMaximum(), () -> {
-            this.active = false;
-            this.plugin.getArenaService().removeTemporaryArena(this);
-        });*/
+        Alley.getInstance().getService(IArenaSchematicService.class).delete(this);
     }
 
     public void verifyArenaExists() {
@@ -291,8 +292,8 @@ public class StandAloneArena extends AbstractArena {
     public boolean isEnemyBed(Block block, GameParticipant<MatchGamePlayerImpl> breakerParticipant) {
         Location bedLocation = block.getLocation();
 
-        UUID breakerUUID = breakerParticipant.getPlayer().getUuid();
-        Profile profile = this.plugin.getProfileService().getProfile(breakerUUID);
+        UUID breakerUUID = breakerParticipant.getLeader().getUuid();
+        Profile profile = Alley.getInstance().getService(IProfileService.class).getProfile(breakerUUID);
 
         Location spawnA = this.getPos1();
         Location spawnB = this.getPos2();

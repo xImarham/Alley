@@ -1,9 +1,12 @@
 package dev.revere.alley.provider.scoreboard.impl;
 
 import dev.revere.alley.Alley;
+import dev.revere.alley.config.IConfigService;
+import dev.revere.alley.feature.level.ILevelService;
 import dev.revere.alley.game.match.impl.MatchRegularImpl;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
+import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.provider.scoreboard.IScoreboard;
 import dev.revere.alley.util.chat.CC;
@@ -19,19 +22,10 @@ import java.util.List;
  * @since 30/04/2025
  */
 public class SpectatorScoreboard implements IScoreboard {
-    protected final Alley plugin;
-
-    /**
-     * Constructor for the SpectatorScoreboard class.
-     *
-     * @param plugin The Alley plugin instance.
-     */
-    public SpectatorScoreboard(Alley plugin) {
-        this.plugin = plugin;
-    }
-
     @Override
     public List<String> getLines(Profile profile) {
+        IConfigService configService = Alley.getInstance().getService(IConfigService.class);
+
         List<String> scoreboardLines = new ArrayList<>();
 
         GameParticipant<MatchGamePlayerImpl> participantA = getParticipantSafely(profile.getMatch().getParticipants(), 0);
@@ -43,7 +37,7 @@ public class SpectatorScoreboard implements IScoreboard {
         String pingB = getPingSafely(participantB);
 
         if (profile.getMatch() instanceof MatchRegularImpl) {
-            for (String line : this.plugin.getConfigService().getScoreboardConfig().getStringList("scoreboard.lines.spectating.regular-match")) {
+            for (String line : configService.getScoreboardConfig().getStringList("scoreboard.lines.spectating.regular-match")) {
                 scoreboardLines.add(CC.translate(line)
                         .replaceAll("\\{playerA}", playerAName)
                         .replaceAll("\\{playerB}", playerBName)
@@ -56,7 +50,7 @@ public class SpectatorScoreboard implements IScoreboard {
                         .replaceAll("\\{kit}", profile.getMatch().getKit().getDisplayName()));
             }
         } else if (profile.getFfaMatch() != null) {
-            for (String line : this.plugin.getConfigService().getScoreboardConfig().getStringList("scoreboard.lines.spectating.ffa")) {
+            for (String line : configService.getScoreboardConfig().getStringList("scoreboard.lines.spectating.ffa")) {
                 scoreboardLines.add(CC.translate(line)
                         .replaceAll("\\{arena}", profile.getFfaMatch().getArena().getDisplayName() == null ? "&c&lNULL" : profile.getFfaMatch().getArena().getDisplayName())
                         .replaceAll("\\{kit}", profile.getFfaMatch().getKit().getDisplayName()));
@@ -119,7 +113,7 @@ public class SpectatorScoreboard implements IScoreboard {
         }
 
         if (!participant.getPlayers().isEmpty()) {
-            Player player = participant.getPlayers().get(0).getPlayer();
+            Player player = participant.getPlayers().get(0).getTeamPlayer();
             if (player != null) {
                 return String.valueOf(this.getPing(player));
             }

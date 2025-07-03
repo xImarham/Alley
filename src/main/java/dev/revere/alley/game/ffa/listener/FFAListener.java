@@ -2,10 +2,14 @@ package dev.revere.alley.game.ffa.listener;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.base.combat.CombatService;
+import dev.revere.alley.base.combat.ICombatService;
 import dev.revere.alley.base.cooldown.Cooldown;
 import dev.revere.alley.base.cooldown.CooldownRepository;
+import dev.revere.alley.base.cooldown.ICooldownRepository;
 import dev.revere.alley.base.cooldown.enums.EnumCooldownType;
 import dev.revere.alley.game.ffa.cuboid.FFASpawnService;
+import dev.revere.alley.game.ffa.cuboid.IFFASpawnService;
+import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
 import dev.revere.alley.util.InventoryUtil;
@@ -38,17 +42,6 @@ import java.util.Optional;
  * @date 25/05/2024 - 14:24
  */
 public class FFAListener implements Listener {
-    protected final Alley plugin;
-
-    /**
-     * Constructor for the FFAListener class.
-     *
-     * @param plugin The Alley instance
-     */
-    public FFAListener(Alley plugin) {
-        this.plugin = plugin;
-    }
-
     /**
      * Accesses the profile of a player.
      *
@@ -56,7 +49,7 @@ public class FFAListener implements Listener {
      * @return The profile
      */
     private Profile accessProfile(Player player) {
-        return this.plugin.getProfileService().getProfile(player.getUniqueId());
+        return Alley.getInstance().getService(IProfileService.class).getProfile(player.getUniqueId());
     }
 
     @EventHandler
@@ -77,14 +70,15 @@ public class FFAListener implements Listener {
     @EventHandler
     private void onPlayerItemConsume(PlayerItemConsumeEvent event) {
         Player player = event.getPlayer();
-        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+        Profile profile = profileService.getProfile(player.getUniqueId());
         if (profile.getState() != EnumProfileState.FFA) {
             return;
         }
 
         ItemStack item = event.getItem();
         if (item.getType() == Material.POTION) {
-            this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> {
+            Alley.getInstance().getServer().getScheduler().runTaskLater(Alley.getInstance(), () -> {
                 player.getInventory().removeItem(new ItemStack(Material.GLASS_BOTTLE, 1));
                 player.updateInventory();
             }, 1L);
@@ -100,10 +94,10 @@ public class FFAListener implements Listener {
 
         ListenerUtil.clearDroppedItemsOnDeath(event, player);
 
-        Player killer = this.plugin.getCombatService().getLastAttacker(player);
+        Player killer = Alley.getInstance().getService(ICombatService.class).getLastAttacker(player);
 
-        this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> player.spigot().respawn(), 1L);
-        Bukkit.getScheduler().runTaskLater(this.plugin, () -> profile.getFfaMatch().handleDeath(player, killer), 1L);
+        Alley.getInstance().getServer().getScheduler().runTaskLater(Alley.getInstance(), () -> player.spigot().respawn(), 1L);
+        Bukkit.getScheduler().runTaskLater(Alley.getInstance(), () -> profile.getFfaMatch().handleDeath(player, killer), 1L);
     }
 
     @EventHandler
@@ -112,7 +106,7 @@ public class FFAListener implements Listener {
         Profile profile = this.accessProfile(player);
         if (profile.getState() != EnumProfileState.FFA) return;
 
-        CombatService combatService = this.plugin.getCombatService();
+        ICombatService combatService = Alley.getInstance().getService(ICombatService.class);
         if (combatService.isPlayerInCombat(player.getUniqueId())) {
             profile.getFfaMatch().handleCombatLog(player, combatService.getLastAttacker(player));
         }
@@ -126,7 +120,7 @@ public class FFAListener implements Listener {
         Profile profile = this.accessProfile(player);
         if (profile.getState() != EnumProfileState.FFA) return;
 
-        CombatService combatService = this.plugin.getCombatService();
+        ICombatService combatService = Alley.getInstance().getService(ICombatService.class);
         if (combatService.isPlayerInCombat(player.getUniqueId())) {
             profile.getFfaMatch().handleCombatLog(player, combatService.getLastAttacker(player));
         }
@@ -150,9 +144,7 @@ public class FFAListener implements Listener {
         Profile profile = accessProfile(player);
         if (profile.getState() != EnumProfileState.FFA) return;
 
-        this.plugin.getCombatService().setLastAttacker(player, attacker);
-
-        CombatService combatService = this.plugin.getCombatService();
+        ICombatService combatService = Alley.getInstance().getService(ICombatService.class);
         combatService.setLastAttacker(player, attacker);
     }
 
@@ -180,9 +172,9 @@ public class FFAListener implements Listener {
             return;
         }
 
-        FFASpawnService ffaSpawnService = this.plugin.getFfaSpawnService();
+        IFFASpawnService ffaSpawnService = Alley.getInstance().getService(IFFASpawnService.class);
         if ((ffaSpawnService.getCuboid().isIn(victim) && ffaSpawnService.getCuboid().isIn(attacker)) || (!ffaSpawnService.getCuboid().isIn(victim) && ffaSpawnService.getCuboid().isIn(attacker)) || (ffaSpawnService.getCuboid().isIn(victim) && !ffaSpawnService.getCuboid().isIn(attacker))) {
-            CombatService combatService = this.plugin.getCombatService();
+            ICombatService combatService = Alley.getInstance().getService(ICombatService.class);
             if (combatService.isPlayerInCombat(victim.getUniqueId()) && combatService.isPlayerInCombat(attacker.getUniqueId())) {
                 return;
             }
@@ -229,11 +221,12 @@ public class FFAListener implements Listener {
         if (!(event.getEntity().getShooter() instanceof Player)) return;
 
         Player player = (Player) event.getEntity().getShooter();
-        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+        Profile profile = profileService.getProfile(player.getUniqueId());
 
         if (profile.getState() != EnumProfileState.FFA) return;
 
-        if (this.plugin.getFfaSpawnService().getCuboid().isIn(player)) {
+        if (Alley.getInstance().getService(IFFASpawnService.class).getCuboid().isIn(player)) {
             event.setCancelled(true);
             InventoryUtil.giveItem(player, Material.ENDER_PEARL, 1);
             player.updateInventory();
@@ -241,7 +234,7 @@ public class FFAListener implements Listener {
             return;
         }
 
-        CooldownRepository cooldownRepository = this.plugin.getCooldownRepository();
+        ICooldownRepository cooldownRepository = Alley.getInstance().getService(ICooldownRepository.class);
         Optional<Cooldown> optionalCooldown = Optional.ofNullable(cooldownRepository.getCooldown(player.getUniqueId(), EnumCooldownType.ENDER_PEARL));
 
         if (optionalCooldown.isPresent() && optionalCooldown.get().isActive()) {

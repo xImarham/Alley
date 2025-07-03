@@ -1,11 +1,13 @@
 package dev.revere.alley.feature.division.command.impl.data;
 
+import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.annotation.CompleterData;
 import dev.revere.alley.feature.division.Division;
 import dev.revere.alley.feature.division.DivisionService;
+import dev.revere.alley.feature.division.IDivisionService;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.entity.Player;
 
@@ -23,9 +25,9 @@ public class DivisionSetWinsCommand extends BaseCommand {
     public List<String> DivisionSetWinsCompleter(CommandArgs command) {
         List<String> completion = new ArrayList<>();
         if (command.getArgs().length == 1 && command.getPlayer().hasPermission("alley.admin")) {
-            this.plugin.getDivisionService().getDivisions().forEach(division -> completion.add(division.getName()));
+            Alley.getInstance().getService(IDivisionService.class).getDivisions().forEach(division -> completion.add(division.getName()));
         } else if (command.getArgs().length == 2 && command.getPlayer().hasPermission("alley.admin")) {
-            Division division = this.plugin.getDivisionService().getDivision(command.getArgs()[0]);
+            Division division = Alley.getInstance().getService(IDivisionService.class).getDivision(command.getArgs()[0]);
             if (division != null) {
                 division.getTiers().forEach(tier -> completion.add(tier.getName()));
             }
@@ -45,7 +47,7 @@ public class DivisionSetWinsCommand extends BaseCommand {
             return;
         }
 
-        DivisionService divisionService = this.plugin.getDivisionService();
+        IDivisionService divisionService = Alley.getInstance().getService(IDivisionService.class);
         Division division = divisionService.getDivision(args[0]);
         if (division == null) {
             player.sendMessage(CC.translate("&cA division with that name does not exist."));

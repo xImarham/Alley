@@ -6,13 +6,8 @@ import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.provider.scoreboard.impl.match.AbstractMatchScoreboard;
-import dev.revere.alley.provider.scoreboard.impl.match.IMatchScoreboard;
 import dev.revere.alley.provider.scoreboard.impl.match.annotation.ScoreboardData;
-import dev.revere.alley.util.chat.CC;
 import org.bukkit.entity.Player;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author Remi
@@ -49,8 +44,8 @@ public class MatchScoreboardLivesImpl extends AbstractMatchScoreboard {
                 .sum();
 
         return baseLine
-                .replace("{player-lives}", String.valueOf(you.getPlayer().getData().getLives()))
-                .replace("{opponent-lives}", String.valueOf(opponent.getPlayer().getData().getLives()))
+                .replace("{player-lives}", String.valueOf(you.getLeader().getData().getLives()))
+                .replace("{opponent-lives}", String.valueOf(opponent.getLeader().getData().getLives()))
                 .replace("{your-team-lives}", String.valueOf(yourTeamLives))
                 .replace("{opponent-team-lives}", String.valueOf(opponentTeamLives));
     }

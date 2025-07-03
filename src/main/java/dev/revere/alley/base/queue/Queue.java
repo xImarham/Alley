@@ -1,9 +1,13 @@
 package dev.revere.alley.base.queue;
 
 import dev.revere.alley.Alley;
+import dev.revere.alley.base.hotbar.IHotbarService;
 import dev.revere.alley.base.hotbar.enums.EnumHotbarType;
 import dev.revere.alley.base.kit.Kit;
+import dev.revere.alley.game.match.IMatchService;
+import dev.revere.alley.game.party.IPartyService;
 import dev.revere.alley.game.party.Party;
+import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
 import dev.revere.alley.util.chat.CC;
@@ -23,13 +27,11 @@ import java.util.UUID;
 @Getter
 @Setter
 public class Queue {
-    protected final Alley plugin = Alley.getInstance();
-
-    private final LinkedList<QueueProfile> profiles;
     private final Kit kit;
     private final boolean ranked;
-    private final long maxQueueTime;
     private final boolean duos;
+    private final LinkedList<QueueProfile> profiles = new LinkedList<>();
+    private final long maxQueueTime = 300000L; // 5 minutes
 
     /**
      * Constructor for the Queue class.
@@ -37,12 +39,9 @@ public class Queue {
      * @param kit The kit associated with the queue.
      */
     public Queue(Kit kit, boolean ranked, boolean duos) {
-        this.profiles = new LinkedList<>();
         this.kit = kit;
         this.ranked = ranked;
         this.duos = duos;
-        this.maxQueueTime = 300000L; // 5 minutes
-        this.plugin.getQueueService().getQueues().add(this);
     }
 
     /**
@@ -51,7 +50,10 @@ public class Queue {
      * @return The amount of people playing that queue.
      */
     public int getQueueFightCount() {
-        return this.plugin.getMatchService().getMatches().stream().filter(match -> match.getQueue().equals(this)).toArray().length;
+        IMatchService matchService = Alley.getInstance().getService(IMatchService.class);
+        return (int) matchService.getMatches().stream()
+                .filter(match -> match.getQueue() != null && match.getQueue().equals(this))
+                .count();
     }
 
     /**
@@ -69,14 +71,18 @@ public class Queue {
      * @param player The player to add.
      */
     public void addPlayer(Player player, int elo) {
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+        IPartyService partyService = Alley.getInstance().getService(IPartyService.class);
+        IHotbarService hotbarService = Alley.getInstance().getService(IHotbarService.class);
+
         UUID uuid = player.getUniqueId();
 
-        Profile profile = this.plugin.getProfileService().getProfile(uuid);
-        Party party = this.plugin.getPartyService().getParty(player);
+        Profile profile = profileService.getProfile(uuid);
+        Party party = partyService.getParty(player);
 
         if (this.isDuos() && party != null) {
             for (UUID memberId : party.getMembers()) {
-                Profile memberProfile = this.plugin.getProfileService().getProfile(memberId);
+                Profile memberProfile = profileService.getProfile(memberId);
                 if (memberProfile != null && memberProfile.getQueueProfile() != null) {
                     player.sendMessage(CC.translate("&cSomeone in your party is already in a queue."));
                     return;
@@ -111,7 +117,7 @@ public class Queue {
                         return;
                     }
 
-                    Profile memberProfile = this.plugin.getProfileService().getProfile(memberId);
+                    Profile memberProfile = profileService.getProfile(memberId);
                     if (memberProfile.getState() != EnumProfileState.LOBBY) {
                         player.sendMessage(CC.translate("&cAll party members must be in the lobby to queue."));
                         return;
@@ -146,11 +152,11 @@ public class Queue {
             for (UUID memberId : party.getMembers()) {
                 if (!memberId.equals(uuid)) {
                     {
-                        Profile memberProfile = this.plugin.getProfileService().getProfile(memberId);
+                        Profile memberProfile = profileService.getProfile(memberId);
                         if (memberProfile != null) {
                             memberProfile.setQueueProfile(queueProfile);
                             memberProfile.setState(EnumProfileState.WAITING);
-                            this.plugin.getHotbarService().applyHotbarItems(player);
+                            hotbarService.applyHotbarItems(player);
                             Player memberPlayer = Bukkit.getPlayer(memberId);
                             if (memberPlayer != null) {
                                 memberPlayer.sendMessage(CC.translate("&fYour party leader has joined the &6" + queueProfile.getQueue().getKit().getDisplayName() + " &fqueue."));
@@ -163,7 +169,7 @@ public class Queue {
 
         player.sendMessage(CC.translate("&aYou've joined the &6" + queueProfile.getQueue().getKit().getDisplayName() + " &aqueue."));
 
-        this.plugin.getHotbarService().applyHotbarItems(player);
+        hotbarService.applyHotbarItems(player);
     }
 
     /**
@@ -172,20 +178,24 @@ public class Queue {
      * @param queueProfile The queue profile to remove.
      */
     public void removePlayer(QueueProfile queueProfile) {
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+        IPartyService partyService = Alley.getInstance().getService(IPartyService.class);
+        IHotbarService hotbarService = Alley.getInstance().getService(IHotbarService.class);
+
         UUID playerToRemoveUUID = queueProfile.getUuid();
-        Profile playerToRemoveProfile = this.plugin.getProfileService().getProfile(playerToRemoveUUID);
+        Profile playerToRemoveProfile = profileService.getProfile(playerToRemoveUUID);
         Player playerToRemove = Bukkit.getPlayer(playerToRemoveUUID);
 
-        Party party = this.plugin.getPartyService().getParty(playerToRemove);
+        Party party = partyService.getParty(playerToRemove);
         if (this.isDuos() && party != null && party.getLeader().getUniqueId().equals(playerToRemove.getUniqueId())) {
             for (UUID memberId : party.getMembers()) {
-                Profile memberProfile = this.plugin.getProfileService().getProfile(memberId);
+                Profile memberProfile = profileService.getProfile(memberId);
                 if (memberProfile != null && memberProfile.getQueueProfile() != null) {
                     memberProfile.setQueueProfile(null);
                     memberProfile.setState(EnumProfileState.LOBBY);
                     Player memberPlayer = Bukkit.getPlayer(memberId);
                     if (memberPlayer != null) {
-                        this.plugin.getHotbarService().applyHotbarItems(memberPlayer);
+                        hotbarService.applyHotbarItems(memberPlayer);
                         memberPlayer.sendMessage(CC.translate("&cYour party has left the queue."));
                     }
                 }
@@ -200,7 +210,7 @@ public class Queue {
             }
 
             if (playerToRemove != null) {
-                this.plugin.getHotbarService().applyHotbarItems(playerToRemove);
+                hotbarService.applyHotbarItems(playerToRemove);
                 playerToRemove.sendMessage(CC.translate("&cYou've left the queue."));
             }
         }
@@ -213,15 +223,18 @@ public class Queue {
      * @return The profile object.
      */
     public Profile getProfile(UUID uuid) {
-        return this.plugin.getProfileService().getProfile(uuid);
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+        return profileService.getProfile(uuid);
     }
 
     public int getTotalPlayerCount() {
+        IPartyService partyService = Alley.getInstance().getService(IPartyService.class);
+
         int count = 0;
         for (QueueProfile queueProfile : this.profiles) {
             Player leader = Bukkit.getPlayer(queueProfile.getUuid());
             if (leader != null) {
-                Party party = this.plugin.getPartyService().getParty(leader);
+                Party party = partyService.getParty(leader);
                 if (party != null && party.getMembers().size() > 1) {
                     count += party.getMembers().size();
                 } else {

@@ -1,6 +1,9 @@
 package dev.revere.alley.tool.animation;
 
 import dev.revere.alley.Alley;
+import dev.revere.alley.api.constant.IPluginConstant;
+import dev.revere.alley.core.AlleyContext;
+import dev.revere.alley.core.annotation.Service;
 import dev.revere.alley.tool.animation.enums.EnumAnimationType;
 import dev.revere.alley.tool.animation.type.config.TextAnimation;
 import dev.revere.alley.tool.animation.type.internal.AbstractAnimation;
@@ -9,6 +12,7 @@ import lombok.Getter;
 import org.reflections.Reflections;
 
 import java.lang.reflect.Modifier;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -22,29 +26,53 @@ import java.util.stream.Collectors;
  * @since 03/04/2025
  */
 @Getter
-public class AnimationRepository {
-    protected final Alley plugin;
+@Service(provides = IAnimationRepository.class, priority = 310)
+public class AnimationRepository implements IAnimationRepository {
+    private final IPluginConstant pluginConstant;
 
-    private final Set<AbstractAnimation> internalAnimations;
-    private final Set<TextAnimation> configAnimations;
-
-    private final Reflections reflections;
+    private final Set<AbstractAnimation> internalAnimations = new HashSet<>();
+    private final Set<TextAnimation> configAnimations = new HashSet<>();
 
     /**
-     * Constructor for the AnimationRepository class.
-     *
-     * @param plugin The Alley plugin instance.
+     * Constructor for DI.
      */
-    public AnimationRepository(Alley plugin) {
-        this.plugin = plugin;
+    public AnimationRepository(IPluginConstant pluginConstant) {
+        this.pluginConstant = pluginConstant;
+    }
 
-        this.internalAnimations = new HashSet<>();
-        this.configAnimations = new HashSet<>();
+    @Override
+    public void initialize(AlleyContext context) {
+        Reflections reflections = this.pluginConstant.getReflections();
+        if (reflections == null) {
+            Logger.error("AnimationRepository cannot initialize: Reflections object is null.");
+            return;
+        }
 
-        this.reflections = plugin.getPluginConstant().getReflections();
+        this.registerAnimations(reflections, AbstractAnimation.class, this.internalAnimations);
+        this.registerAnimations(reflections, TextAnimation.class, this.configAnimations);
 
-        this.registerAnimations(AbstractAnimation.class, this.internalAnimations);
-        this.registerAnimations(TextAnimation.class, this.configAnimations);
+        Logger.info("Registered " + (this.internalAnimations.size() + this.configAnimations.size()) + " total animations.");
+    }
+
+    @Override
+    public <T> T getAnimation(Class<T> clazz, EnumAnimationType type) {
+        Set<?> sourceSet = (type == EnumAnimationType.INTERNAL) ? this.internalAnimations : this.configAnimations;
+
+        return sourceSet.stream()
+                .filter(clazz::isInstance)
+                .map(clazz::cast)
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("No animation found for class: " + clazz.getName() + " with type: " + type));
+    }
+
+    @Override
+    public Set<AbstractAnimation> getInternalAnimations() {
+        return Collections.unmodifiableSet(this.internalAnimations);
+    }
+
+    @Override
+    public Set<TextAnimation> getConfigAnimations() {
+        return Collections.unmodifiableSet(this.configAnimations);
     }
 
     /**
@@ -54,10 +82,9 @@ public class AnimationRepository {
      * @param superClass The base class of animations to register.
      * @param targetSet  The collection where instances should be stored.
      */
-    private <T> void registerAnimations(Class<T> superClass, Set<T> targetSet) {
-        Set<Class<? extends T>> classes = this.reflections.getSubTypesOf(superClass)
-                .stream()
-                .filter(clazz -> !Modifier.isAbstract(clazz.getModifiers()))
+    private <T> void registerAnimations(Reflections reflections, Class<T> superClass, Set<T> targetSet) {
+        Set<Class<? extends T>> classes = reflections.getSubTypesOf(superClass).stream()
+                .filter(clazz -> !Modifier.isAbstract(clazz.getModifiers()) && !clazz.isInterface())
                 .collect(Collectors.toSet());
 
         for (Class<? extends T> clazz : classes) {
@@ -65,38 +92,8 @@ public class AnimationRepository {
                 T instance = clazz.getDeclaredConstructor().newInstance();
                 targetSet.add(instance);
             } catch (Exception e) {
-                Logger.logException(String.format("Failed to instantiate animation: %s", clazz.getName()), e);
+                Logger.logException("Failed to instantiate animation: " + clazz.getName(), e);
             }
         }
-    }
-
-    /**
-     * Retrieves an animation instance of the specified class from either internal or config animators.
-     *
-     * @param clazz The class of the animator to retrieve.
-     * @param type  The type of animator to search for (INTERNAL or CONFIG).
-     * @param <T>   The type of the animator.
-     * @return The requested animator.
-     * @throws IllegalArgumentException if the animator is not found.
-     */
-    public <T> T getAnimation(Class<T> clazz, EnumAnimationType type) {
-        Set<?> targetSet;
-
-        switch (type) {
-            case INTERNAL:
-                targetSet = this.internalAnimations;
-                break;
-            case CONFIG:
-                targetSet = this.configAnimations;
-                break;
-            default:
-                throw new IllegalArgumentException("Invalid animation type: " + type);
-        }
-
-        return targetSet.stream()
-                .filter(clazz::isInstance)
-                .map(clazz::cast)
-                .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("No animator found for class: " + clazz.getName()));
     }
 }

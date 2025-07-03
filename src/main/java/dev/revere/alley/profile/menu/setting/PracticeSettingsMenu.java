@@ -3,6 +3,7 @@ package dev.revere.alley.profile.menu.setting;
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.api.menu.Menu;
+import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.data.impl.ProfileSettingData;
 import dev.revere.alley.profile.menu.setting.button.PracticeSettingsButton;
@@ -27,7 +28,7 @@ public class PracticeSettingsMenu extends Menu {
     @Override
     public Map<Integer, Button> getButtons(Player player) {
         Map<Integer, Button> buttons = new HashMap<>();
-        Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
+        Profile profile = Alley.getInstance().getService(IProfileService.class).getProfile(player.getUniqueId());
         ProfileSettingData settings = profile.getProfileData().getSettingData();
 
         for (EnumPracticeSettingType type : EnumPracticeSettingType.values()) {

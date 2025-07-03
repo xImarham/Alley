@@ -6,6 +6,8 @@ import dev.revere.alley.api.menu.Menu;
 import dev.revere.alley.api.menu.impl.BackButton;
 import dev.revere.alley.base.queue.menu.QueuesMenuDefault;
 import dev.revere.alley.game.ffa.AbstractFFAMatch;
+import dev.revere.alley.game.ffa.IFFAService;
+import dev.revere.alley.profile.progress.IProgressService;
 import lombok.AllArgsConstructor;
 import org.bukkit.entity.Player;
 
@@ -31,7 +33,7 @@ public class FFAMenu extends Menu {
 
         buttons.put(0, new BackButton(new QueuesMenuDefault()));
 
-        for (AbstractFFAMatch match : Alley.getInstance().getFfaService().getMatches()) {
+        for (AbstractFFAMatch match : Alley.getInstance().getService(IFFAService.class).getMatches()) {
             buttons.put(match.getKit().getFfaSlot(), new FFAButton(match));
         }
 

@@ -2,10 +2,13 @@ package dev.revere.alley.base.queue.menu.button;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.menu.Button;
+import dev.revere.alley.base.hotbar.IHotbarService;
 import dev.revere.alley.base.hotbar.enums.EnumHotbarType;
 import dev.revere.alley.base.kit.Kit;
 import dev.revere.alley.base.queue.Queue;
+import dev.revere.alley.feature.server.IServerService;
 import dev.revere.alley.game.party.PartyService;
+import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.tool.item.ItemBuilder;
 import dev.revere.alley.util.PlayerUtil;
@@ -61,7 +64,7 @@ public class RankedButton extends Button {
                 "&fPlaying: &6" + this.queue.getQueueFightCount(),
                 "&fQueueing: &6" + this.queue.getProfiles().size(),
                 "",
-                "&f&lYour ELO: &6" + this.plugin.getProfileService().getProfile(player.getUniqueId()).getProfileData().getRankedKitData().get(kit.getName()).getElo(),
+                "&f&lYour ELO: &6" + Alley.getInstance().getService(IProfileService.class).getProfile(player.getUniqueId()).getProfileData().getRankedKitData().get(kit.getName()).getElo(),
                 " &f1. &6NULL &f- &6N/A",
                 " &f2. &6NULL &f- &6N/A",
                 " &f3. &6NULL &f- &6N/A",
@@ -76,9 +79,10 @@ public class RankedButton extends Button {
     public void clicked(Player player, int slot, ClickType clickType, int hotbarSlot) {
         if (clickType != ClickType.LEFT) return;
 
-        if (this.plugin.getServerService().isQueueingEnabled(player)) return;
+        if (Alley.getInstance().getService(IServerService.class).isQueueingAllowed()) return;
 
-        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+        Profile profile = profileService.getProfile(player.getUniqueId());
         if (profile.getProfileData().isRankedBanned()) {
             player.closeInventory();
             Arrays.asList(
@@ -95,6 +99,6 @@ public class RankedButton extends Button {
         PlayerUtil.reset(player, false);
         player.closeInventory();
         this.playNeutral(player);
-        this.plugin.getHotbarService().applyHotbarItems(player);
+        Alley.getInstance().getService(IHotbarService.class).applyHotbarItems(player);
     }
 }

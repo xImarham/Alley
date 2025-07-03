@@ -1,9 +1,12 @@
 package dev.revere.alley.game.party.command.impl.member;
 
+import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.config.locale.impl.PartyLocale;
+import dev.revere.alley.game.party.IPartyService;
+import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumChatChannel;
 import dev.revere.alley.util.chat.CC;
@@ -24,7 +27,8 @@ public class PartyChatCommand extends BaseCommand {
         Player player = command.getPlayer();
         String[] args = command.getArgs();
 
-        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+        Profile profile = profileService.getProfile(player.getUniqueId());
         String message = Arrays.stream(args).map(argument -> argument + " ").collect(Collectors.joining());
 
         if (args.length == 0) {
@@ -48,7 +52,7 @@ public class PartyChatCommand extends BaseCommand {
             return;
         }
 
-        String partyMessage = this.plugin.getPartyService().getChatFormat().replace("{player}", player.getName()).replace("{message}", message);
+        String partyMessage = Alley.getInstance().getService(IPartyService.class).getChatFormat().replace("{player}", player.getName()).replace("{message}", message);
         profile.getParty().notifyParty(partyMessage);
     }
 }

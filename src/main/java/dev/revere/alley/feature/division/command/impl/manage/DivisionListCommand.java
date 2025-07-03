@@ -1,9 +1,11 @@
 package dev.revere.alley.feature.division.command.impl.manage;
 
+import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.feature.division.DivisionService;
+import dev.revere.alley.feature.division.IDivisionService;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.entity.Player;
 
@@ -17,7 +19,7 @@ public class DivisionListCommand extends BaseCommand {
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
-        DivisionService divisionService = this.plugin.getDivisionService();
+        IDivisionService divisionService = Alley.getInstance().getService(IDivisionService.class);
 
         player.sendMessage("");
         player.sendMessage(CC.translate("     &6&lDivision List &f(" + divisionService.getDivisions().size() + "&f)"));

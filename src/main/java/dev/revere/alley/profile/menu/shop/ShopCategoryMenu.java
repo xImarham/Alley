@@ -6,6 +6,7 @@ import dev.revere.alley.api.menu.Menu;
 import dev.revere.alley.api.menu.impl.BackButton;
 import dev.revere.alley.feature.cosmetic.EnumCosmeticType;
 import dev.revere.alley.feature.cosmetic.repository.BaseCosmeticRepository;
+import dev.revere.alley.feature.cosmetic.repository.ICosmeticRepository;
 import dev.revere.alley.profile.menu.shop.button.ShopItemButton;
 import dev.revere.alley.util.StringUtil;
 import lombok.RequiredArgsConstructor;
@@ -34,7 +35,7 @@ public class ShopCategoryMenu extends Menu {
         Map<Integer, Button> buttons = new HashMap<>();
         buttons.put(0, new BackButton(new ShopMenu()));
 
-        BaseCosmeticRepository<?> repository = Alley.getInstance().getCosmeticRepository().getRepository(cosmeticType);
+        BaseCosmeticRepository<?> repository = Alley.getInstance().getService(ICosmeticRepository.class).getRepository(cosmeticType);
         if (repository != null) {
             repository.getCosmetics().stream()
                     .filter(cosmetic -> cosmetic.getIcon() != null && cosmetic.getPrice() > 0)

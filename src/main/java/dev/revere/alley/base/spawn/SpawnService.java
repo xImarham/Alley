@@ -1,8 +1,12 @@
 package dev.revere.alley.base.spawn;
 
 import dev.revere.alley.config.ConfigService;
+import dev.revere.alley.config.IConfigService;
+import dev.revere.alley.core.AlleyContext;
+import dev.revere.alley.core.annotation.Service;
 import dev.revere.alley.tool.logger.Logger;
 import dev.revere.alley.tool.serializer.Serializer;
+import dev.revere.alley.util.chat.CC;
 import lombok.Getter;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -14,17 +18,20 @@ import org.bukkit.entity.Player;
  * @date 17/05/2024 - 17:47
  */
 @Getter
-public class SpawnService {
-    protected final ConfigService configService;
+@Service(provides = ISpawnService.class, priority = 240)
+public class SpawnService implements ISpawnService {
+    private final IConfigService configService;
     private Location location;
 
     /**
-     * Constructor for the SpawnService class.
-     *
-     * @param configService The config service.
+     * Constructor for DI.
      */
-    public SpawnService(ConfigService configService) {
+    public SpawnService(IConfigService configService) {
         this.configService = configService;
+    }
+
+    @Override
+    public void initialize(AlleyContext context) {
         this.loadSpawnLocation();
     }
 
@@ -32,38 +39,33 @@ public class SpawnService {
         FileConfiguration config = this.configService.getSettingsConfig();
         Location location = Serializer.deserializeLocation(config.getString("spawn.join-location"));
         if (location == null) {
-            Logger.logError("Spawn location is null.");
+            Logger.error("Spawn location is null.");
             return;
         }
 
         this.location = new Location(location.getWorld(), location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
     }
 
-    /**
-     * Update or set the spawn location and save it in the settings.yml file
-     *
-     * @param location the location to set
-     */
+    @Override
     public void updateSpawnLocation(Location location) {
-        FileConfiguration config = this.configService.getSettingsConfig();
-        config.set("spawn.join-location", Serializer.serializeLocation(location));
+        if (location == null) return;
 
         this.location = location;
+
+        FileConfiguration config = this.configService.getSettingsConfig();
+        config.set("spawn.join-location", Serializer.serializeLocation(location));
         this.configService.saveConfig(this.configService.getConfigFile("settings.yml"), config);
     }
 
-    /**
-     * Teleport the player to the spawn location
-     *
-     * @param player the player to teleport
-     */
+    @Override
     public void teleportToSpawn(Player player) {
-        Location spawnLocation = this.location;
-        if (spawnLocation != null) {
-            player.teleport(spawnLocation);
-        } else {
-            Logger.logError("Spawn location is null.");
+        if (this.location == null) {
+            Logger.error("Cannot teleport " + player.getName() + " to spawn: Spawn location is not set.");
+            player.sendMessage(CC.translate("&cThe server spawn is not set. Please notify an administrator."));
+            return;
         }
+
+        player.teleport(this.location);
 
         if (player.hasPermission("alley.donator.fly")) {
             player.setAllowFlight(true);

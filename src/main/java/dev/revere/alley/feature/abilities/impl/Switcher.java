@@ -2,8 +2,11 @@ package dev.revere.alley.feature.abilities.impl;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.feature.abilities.AbstractAbility;
+import dev.revere.alley.feature.abilities.IAbilityService;
 import dev.revere.alley.feature.abilities.utils.DurationFormatter;
+import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
+import dev.revere.alley.profile.enums.EnumGlobalCooldown;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.Location;
 import org.bukkit.entity.Egg;
@@ -40,27 +43,31 @@ public class Switcher extends AbstractAbility {
 
         if (event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
             Player shooter = event.getPlayer();
-            Profile profile = this.plugin.getProfileService().getProfile(shooter.getUniqueId());
 
-            if (profile.getSwitcher().onCooldown(shooter)) {
-                shooter.sendMessage(CC.translate("&fYou are on &6&lSwitcher &7cooldown for &4" + DurationFormatter.getRemaining(profile.getSwitcher().getRemainingMillis(shooter), true, true)));
+            IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+            IAbilityService abilityService = Alley.getInstance().getService(IAbilityService.class);
+
+            Profile profile = profileService.getProfile(shooter.getUniqueId());
+
+            if (profile.getCooldown(Switcher.class).onCooldown(shooter)) {
+                shooter.sendMessage(CC.translate("&fYou are on &6&lSwitcher &7cooldown for &4" + DurationFormatter.getRemaining(profile.getCooldown(Switcher.class).getRemainingMillis(shooter), true, true)));
                 shooter.updateInventory();
                 event.setCancelled(true);
                 return;
             }
 
-            if(profile.getPartneritem().onCooldown(shooter)){
-                shooter.sendMessage(CC.translate("&fYou are on &6&lPartner Item &fcooldown for &6" + DurationFormatter.getRemaining(profile.getPartneritem().getRemainingMillis(shooter), true, true)));
+            if(profile.getGlobalCooldown(EnumGlobalCooldown.PARTNER_ITEM).onCooldown(shooter)){
+                shooter.sendMessage(CC.translate("&fYou are on &6&lPartner Item &fcooldown for &6" + DurationFormatter.getRemaining(profile.getGlobalCooldown(EnumGlobalCooldown.PARTNER_ITEM).getRemainingMillis(shooter), true, true)));
                 shooter.updateInventory();
                 event.setCancelled(true);
                 return;
             }
 
-            profile.getSwitcher().applyCooldown(shooter, 8 * 1000);
-            profile.getPartneritem().applyCooldown(shooter,  10 * 1000);
+            profile.getCooldown(Switcher.class).applyCooldown(shooter, 8 * 1000);
+            profile.getGlobalCooldown(EnumGlobalCooldown.PARTNER_ITEM).applyCooldown(shooter,  10 * 1000);
 
-            plugin.getAbilityService().cooldownExpired(shooter, this.getName(), this.getAbility());
-            plugin.getAbilityService().playerMessage(shooter, this.getAbility());
+            abilityService.sendCooldownExpiredMessage(shooter, this.getName(), this.getAbility());
+            abilityService.sendPlayerMessage(shooter, this.getAbility());
         }
     }
 
@@ -68,14 +75,14 @@ public class Switcher extends AbstractAbility {
     public void checkCooldown(PlayerInteractEvent event) {
         Player player = event.getPlayer();
         Action action = event.getAction();
-        Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
+        Profile profile = Alley.getInstance().getService(IProfileService.class).getProfile(player.getUniqueId());
         if (action.equals(Action.LEFT_CLICK_AIR) || action.equals(Action.LEFT_CLICK_BLOCK)) {
             if (!isAbility(player.getItemInHand())) {
                 return;
             }
             if (isAbility(player.getItemInHand())) {
                 if (this.hasCooldown(player)) {
-                    player.sendMessage(CC.translate("&fYou are on cooldown for &4" + DurationFormatter.getRemaining(profile.getSwitcher().getRemainingMillis(player), true)));
+                    player.sendMessage(CC.translate("&fYou are on cooldown for &4" + DurationFormatter.getRemaining(profile.getCooldown(Switcher.class).getRemainingMillis(player), true)));
                     event.setCancelled(true);
                     player.updateInventory();
                 }
@@ -98,7 +105,7 @@ public class Switcher extends AbstractAbility {
                 player.teleport(shooterLocation);
                 shooter.teleport(playerLocation);
 
-                this.plugin.getAbilityService().targetMessage(player, shooter, this.getAbility());
+                Alley.getInstance().getService(IAbilityService.class).sendTargetMessage(player, shooter, this.getAbility());
             }
             else if (projectile instanceof Snowball && projectile.hasMetadata(this.getAbility())) {
                 Player player = (Player) event.getEntity();
@@ -110,7 +117,7 @@ public class Switcher extends AbstractAbility {
                 player.teleport(shooterLocation);
                 shooter.teleport(playerLocation);
 
-                this.plugin.getAbilityService().targetMessage(player, shooter, this.getAbility());
+                Alley.getInstance().getService(IAbilityService.class).sendTargetMessage(player, shooter, this.getAbility());
             }
         }
     }

@@ -31,13 +31,13 @@ public class ZoneKnockbackImpl implements IKnockback {
         boolean profileExists = profiles.stream().anyMatch(p -> p.equalsIgnoreCase(profile));
 
         if (!profileExists) {
-            Logger.logError("Attempted to apply a knockback profile that does not exist");
+            Logger.error("Attempted to apply a knockback profile that does not exist");
             return;
         }
 
         boolean success = KnockbackAPI.setPlayerProfile(player.getUniqueId(), profile);
         if (!success) {
-            Logger.logError("Failed to apply the " + profile + " knockback profile for " + player.getName());
+            Logger.error("Failed to apply the " + profile + " knockback profile for " + player.getName());
         }
     }
 }

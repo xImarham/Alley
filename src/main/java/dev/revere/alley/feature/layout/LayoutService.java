@@ -3,16 +3,22 @@ package dev.revere.alley.feature.layout;
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.menu.Menu;
 import dev.revere.alley.base.kit.enums.EnumKitCategory;
+import dev.revere.alley.config.IConfigService;
+import dev.revere.alley.core.AlleyContext;
+import dev.revere.alley.core.annotation.Service;
 import dev.revere.alley.feature.layout.data.LayoutData;
 import dev.revere.alley.feature.layout.menu.LayoutMenu;
+import dev.revere.alley.profile.IProfileService;
+import dev.revere.alley.profile.Profile;
 import dev.revere.alley.tool.item.ItemBuilder;
 import dev.revere.alley.tool.logger.Logger;
 import lombok.Getter;
-import lombok.Setter;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+
+import java.util.List;
 
 /**
  * @author Emmy
@@ -20,43 +26,43 @@ import org.bukkit.inventory.ItemStack;
  * @since 03/05/2025
  */
 @Getter
-@Setter
-public class LayoutService {
-    protected final Alley plugin;
-    private final Menu layoutMenu;
+@Service(provides = ILayoutService.class, priority = 350)
+public class LayoutService implements ILayoutService {
+    private final IConfigService configService;
+    private final IProfileService profileService;
+
+    private Menu layoutMenu;
 
     /**
-     * Constructor for the LayoutService class.
-     *
-     * @param plugin The Alley plugin instance.
+     * Constructor for DI.
      */
-    public LayoutService(Alley plugin) {
-        this.plugin = plugin;
+    public LayoutService(IConfigService configService, IProfileService profileService) {
+        this.configService = configService;
+        this.profileService = profileService;
+    }
+
+    @Override
+    public void initialize(AlleyContext context) {
         this.layoutMenu = this.determineMenu();
     }
 
     private Menu determineMenu() {
-        FileConfiguration config = this.plugin.getConfigService().getMenusConfig();
-        String menuType = config.getString("layout-menu.type");
+        FileConfiguration config = this.configService.getMenusConfig();
+        String menuType = config.getString("layout-menu.type", "DEFAULT");
 
         switch (menuType) {
             case "MODERN":
-                Logger.logError("Modern layout menu is not implemented yet. Defaulting to classic layout menu.");
+                Logger.error("Modern layout menu is not implemented yet. Defaulting to classic layout menu.");
                 return new LayoutMenu(EnumKitCategory.NORMAL);
             case "DEFAULT":
                 return new LayoutMenu(EnumKitCategory.NORMAL);
         }
 
-        Logger.logError("Invalid layout menu type specified in config.yml. Defaulting to modern layout menu.");
+        Logger.error("Invalid layout menu type specified in config.yml. Defaulting to modern layout menu.");
         return new LayoutMenu(EnumKitCategory.NORMAL);
     }
 
-    /**
-     * Method to initiate a book item representing a layout.
-     *
-     * @param layout The layout record.
-     * @return The ItemStack representing the layout book.
-     */
+    @Override
     public ItemStack getLayoutBook(LayoutData layout) {
         return new ItemBuilder(Material.BOOK)
                 .name(layout.getDisplayName())
@@ -64,15 +70,14 @@ public class LayoutService {
                 .hideMeta().build();
     }
 
-    /**
-     * Method to give the player the layout books for a specific kit.
-     *
-     * @param player  The player to give the books to.
-     * @param kitName The name of the kit.
-     */
+    @Override
     public void giveBooks(Player player, String kitName) {
-        this.plugin.getProfileService().getProfile(player.getUniqueId()).getProfileData().getLayoutData().getLayouts().get(kitName).forEach(layout ->
-                player.getInventory().addItem(this.getLayoutBook(layout))
-        );
+        Profile profile = this.profileService.getProfile(player.getUniqueId());
+        if (profile == null) return;
+
+        List<LayoutData> layouts = profile.getProfileData().getLayoutData().getLayouts().get(kitName);
+        if (layouts == null) return;
+
+        layouts.forEach(layout -> player.getInventory().addItem(this.getLayoutBook(layout)));
     }
 }

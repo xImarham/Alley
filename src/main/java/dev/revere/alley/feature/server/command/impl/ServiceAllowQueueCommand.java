@@ -1,8 +1,11 @@
 package dev.revere.alley.feature.server.command.impl;
 
+import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
+import dev.revere.alley.feature.abilities.AbilityService;
+import dev.revere.alley.feature.server.IServerService;
 import dev.revere.alley.feature.server.ServerService;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.entity.Player;
@@ -32,9 +35,9 @@ public class ServiceAllowQueueCommand extends BaseCommand {
             return;
         }
 
-        ServerService serverService = this.plugin.getServerService();
-        serverService.removePlayersFromQueue(player, this.plugin);
-        serverService.setAllowQueueing(allowQueue);
+        IServerService serverService = Alley.getInstance().getService(IServerService.class);
+        serverService.clearAllQueues(player);
+        serverService.setQueueingAllowed(allowQueue);
         player.sendMessage(CC.translate("&aYou've " + (allowQueue ? "&aenabled" : "&cdisabled") + " queueing."));
     }
 }

@@ -1,8 +1,10 @@
 package dev.revere.alley.base.kit.command.impl.manage;
 
+import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
+import dev.revere.alley.base.kit.IKitService;
 import dev.revere.alley.base.kit.Kit;
 import dev.revere.alley.base.kit.KitService;
 import dev.revere.alley.util.chat.CC;
@@ -25,7 +27,7 @@ public class KitSetProfileCommand extends BaseCommand {
             return;
         }
 
-        KitService kitService = this.plugin.getKitService();
+        IKitService kitService = Alley.getInstance().getService(IKitService.class);
         Kit kit = kitService.getKit(args[0]);
         if (kit == null) {
             player.sendMessage(CC.translate("&cA kit with that name does not exist!"));

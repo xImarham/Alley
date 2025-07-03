@@ -1,9 +1,13 @@
 package dev.revere.alley.game.duel.command;
 
+import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
+import dev.revere.alley.base.arena.IArenaService;
+import dev.revere.alley.feature.server.IServerService;
 import dev.revere.alley.game.duel.menu.DuelRequestsMenu;
+import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.entity.Player;
 
@@ -18,12 +22,12 @@ public class DuelRequestsCommand extends BaseCommand {
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
 
-        if (this.plugin.getProfileService().getProfile(player.getUniqueId()).getMatch() != null) {
+        if (Alley.getInstance().getService(IProfileService.class).getProfile(player.getUniqueId()).getMatch() != null) {
             player.sendMessage(CC.translate("&cYou are already in a match."));
             return;
         }
 
-        if (this.plugin.getServerService().isQueueingEnabled(player)) {
+        if (Alley.getInstance().getService(IServerService.class).isQueueingAllowed()) {
             return;
         }
 

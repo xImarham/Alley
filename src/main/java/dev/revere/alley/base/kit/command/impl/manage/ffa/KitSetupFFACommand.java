@@ -1,12 +1,17 @@
 package dev.revere.alley.base.kit.command.impl.manage.ffa;
 
+import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.base.arena.AbstractArena;
+import dev.revere.alley.base.arena.IArenaService;
 import dev.revere.alley.base.arena.enums.EnumArenaType;
+import dev.revere.alley.base.kit.IKitService;
 import dev.revere.alley.base.kit.Kit;
 import dev.revere.alley.base.kit.KitService;
+import dev.revere.alley.game.ffa.IFFAService;
+import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.entity.Player;
 
@@ -27,7 +32,7 @@ public class KitSetupFFACommand extends BaseCommand {
             return;
         }
 
-        KitService kitService = this.plugin.getKitService();
+        IKitService kitService = Alley.getInstance().getService(IKitService.class);
         Kit kit = kitService.getKit(args[0]);
         if (kit == null) {
             player.sendMessage(CC.translate("&cA kit with that name does not exist!"));
@@ -39,7 +44,7 @@ public class KitSetupFFACommand extends BaseCommand {
             return;
         }
 
-        AbstractArena arena = this.plugin.getArenaService().getArenaByName(args[1]);
+        AbstractArena arena = Alley.getInstance().getService(IArenaService.class).getArenaByName(args[1]);
         if (arena == null) {
             player.sendMessage(CC.translate("&cAn arena with that name does not exist!"));
             return;
@@ -73,9 +78,9 @@ public class KitSetupFFACommand extends BaseCommand {
         kit.setFfaSlot(menuSlot);
         kit.setFfaArenaName(arena.getName());
         kit.setMaxFfaPlayers(maxPlayers);
-        this.plugin.getFfaService().createFFAMatch(arena, kit, maxPlayers);
+        Alley.getInstance().getService(IFFAService.class).createFFAMatch(arena, kit, maxPlayers);
         kitService.saveKit(kit);
-        this.plugin.getProfileService().loadProfiles();
+        Alley.getInstance().getService(IProfileService.class).loadProfiles();
         player.sendMessage(CC.translate("&aFFA match has been created with the kit &6" + kit.getName() + "&a!"));
     }
 }

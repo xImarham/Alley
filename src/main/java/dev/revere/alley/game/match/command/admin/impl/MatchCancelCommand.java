@@ -1,10 +1,12 @@
 package dev.revere.alley.game.match.command.admin.impl;
 
+import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.game.match.enums.EnumMatchState;
 import dev.revere.alley.game.match.impl.MatchRegularImpl;
+import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
 import dev.revere.alley.util.chat.CC;
@@ -33,7 +35,7 @@ public class MatchCancelCommand extends BaseCommand {
             return;
         }
 
-        Profile profile = this.plugin.getProfileService().getProfile(target.getUniqueId());
+        Profile profile = Alley.getInstance().getService(IProfileService.class).getProfile(target.getUniqueId());
 
         if (profile.getState() != EnumProfileState.PLAYING || profile.getMatch() == null) {
             player.sendMessage(CC.translate("&cThat player is not in a match."));

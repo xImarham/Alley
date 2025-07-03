@@ -1,9 +1,11 @@
 package dev.revere.alley.feature.explosives.command;
 
+import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.feature.explosives.ExplosiveService;
+import dev.revere.alley.feature.explosives.IExplosiveService;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.command.CommandSender;
 
@@ -38,7 +40,7 @@ public class ExplosiveCommand extends BaseCommand {
             return;
         }
 
-        ExplosiveService explosiveService = this.plugin.getExplosiveService();
+        IExplosiveService explosiveService = Alley.getInstance().getService(IExplosiveService.class);
 
         switch (settingName) {
             case "horizontal":

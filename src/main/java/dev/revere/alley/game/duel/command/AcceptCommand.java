@@ -1,9 +1,11 @@
 package dev.revere.alley.game.duel.command;
 
+import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.game.duel.DuelRequest;
+import dev.revere.alley.game.duel.IDuelRequestService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
 import dev.revere.alley.util.chat.CC;
@@ -32,13 +34,15 @@ public class AcceptCommand extends BaseCommand {
             return;
         }
 
-        DuelRequest duelRequest = this.plugin.getDuelRequestService().getDuelRequest(player, target);
+        IDuelRequestService duelRequestService = Alley.getInstance().getService(IDuelRequestService.class);
+
+        DuelRequest duelRequest = duelRequestService.getDuelRequest(player, target);
         if (duelRequest == null) {
             player.sendMessage(CC.translate("&cYou do not have a pending duel request from that player."));
             return;
         }
 
-        this.plugin.getDuelRequestService().acceptPendingRequest(duelRequest);
+        duelRequestService.acceptPendingRequest(duelRequest);
         player.sendMessage(CC.translate("&aYou have accepted the duel request from " + target.getName() + "."));
     }
 }

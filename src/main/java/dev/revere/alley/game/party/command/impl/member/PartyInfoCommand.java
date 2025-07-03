@@ -1,9 +1,12 @@
 package dev.revere.alley.game.party.command.impl.member;
 
+import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
+import dev.revere.alley.config.IConfigService;
 import dev.revere.alley.config.locale.impl.PartyLocale;
+import dev.revere.alley.game.party.IPartyService;
 import dev.revere.alley.game.party.Party;
 import dev.revere.alley.game.party.PartyService;
 import dev.revere.alley.util.chat.CC;
@@ -26,7 +29,7 @@ public class PartyInfoCommand extends BaseCommand {
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
 
-        PartyService partyService = this.plugin.getPartyService();
+        IPartyService partyService = Alley.getInstance().getService(IPartyService.class);
         Party party = partyService.getPartyByMember(player.getUniqueId());
 
         if (party == null) {
@@ -43,7 +46,7 @@ public class PartyInfoCommand extends BaseCommand {
                 .map(Player::getName)
                 .collect(Collectors.joining(", "));
 
-        FileConfiguration config = this.plugin.getConfigService().getMessagesConfig();
+        FileConfiguration config = Alley.getInstance().getService(IConfigService.class).getMessagesConfig();
         List<String> info = config.getStringList("party.info-command.text");
         String noMembersFormat = CC.translate(config.getString("party.info-command.no-members-format"));
 

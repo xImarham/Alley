@@ -1,8 +1,12 @@
 package dev.revere.alley.base.kit.service;
 
 import dev.revere.alley.Alley;
+import dev.revere.alley.base.kit.IKitService;
 import dev.revere.alley.base.kit.Kit;
 import dev.revere.alley.base.kit.setting.impl.mode.KitSettingRaidingImpl;
+import dev.revere.alley.config.IConfigService;
+import dev.revere.alley.core.AlleyContext;
+import dev.revere.alley.core.annotation.Service;
 import dev.revere.alley.game.match.player.enums.EnumBaseRaiderRole;
 import dev.revere.alley.tool.logger.Logger;
 import lombok.Getter;
@@ -18,54 +22,45 @@ import java.util.Map;
  * @date 20/06/2025
  */
 @Getter
-public class BaseRaidingService {
-    protected final Alley plugin;
-    private final Map<String, Map<EnumBaseRaiderRole, Kit>> raidingKitMappings;
+@Service(provides = IBaseRaidingService.class, priority = 100)
+public class BaseRaidingService implements IBaseRaidingService {
+    private final IKitService kitService;
+    private final IConfigService configService;
+
+    private final Map<String, Map<EnumBaseRaiderRole, Kit>> raidingKitMappings = new HashMap<>();
 
     /**
-     * Constructor for the BaseRaidingService class.
-     *
-     * @param plugin The Alley plugin instance.
+     * Constructor for DI.
      */
-    public BaseRaidingService(Alley plugin) {
-        this.plugin = plugin;
-        this.raidingKitMappings = new HashMap<>();
+    public BaseRaidingService(IKitService kitService, IConfigService configService) {
+        this.kitService = kitService;
+        this.configService = configService;
+    }
+
+    @Override
+    public void initialize(AlleyContext context) {
         this.loadRaidingKitMappings();
     }
 
-    /**
-     * Load raiding kit mappings from the configuration file.
-     * This method reads the "kits" section of the configuration and populates the raidingKitMappings map.
-     */
     public void loadRaidingKitMappings() {
-        FileConfiguration config = this.plugin.getConfigService().getKitsConfig();
+        this.raidingKitMappings.clear();
+        FileConfiguration config = this.configService.getKitsConfig();
         ConfigurationSection kitsSection = config.getConfigurationSection("kits");
         if (kitsSection == null) {
-            Logger.logError("No raiding kits found in the configuration.");
+            Logger.warn("Could not find 'kits' section in kits.yml for RaidingService.");
             return;
         }
 
-        for (String kitName : kitsSection.getKeys(false)) {
-            String key = "kits." + kitName;
-            Kit kit = this.plugin.getKitService().getKit(kitName);
-
-            if (kit != null && kit.isSettingEnabled(KitSettingRaidingImpl.class)) {
-               this.loadRaidingKitMapping(kit, config, key);
+        for (Kit kit : this.kitService.getKits()) {
+            if (kit.isSettingEnabled(KitSettingRaidingImpl.class)) {
+                String key = "kits." + kit.getName();
+                this.loadRaidingKitMapping(kit, config, key);
             }
         }
     }
-
-    /**
-     * Load raiding kit mappings from the configuration for a specific parent kit.
-     *
-     * @param parentKit the parent kit to load raiding kits for
-     * @param config    the configuration file containing the raiding kit mappings
-     * @param key       the key in the configuration where raiding kits are defined
-     */
     private void loadRaidingKitMapping(Kit parentKit, FileConfiguration config, String key) {
         ConfigurationSection raidingSection = config.getConfigurationSection(key + ".raiding-role-kits");
         if (raidingSection == null) {
-            Logger.logError("No raiding role kits found for kit: " + parentKit.getName());
             return;
         }
 
@@ -74,17 +69,17 @@ public class BaseRaidingService {
             try {
                 EnumBaseRaiderRole role = EnumBaseRaiderRole.valueOf(roleName.toUpperCase());
                 String roleKitName = raidingSection.getString(roleName);
-                Kit roleKit = this.plugin.getKitService().getKit(roleKitName);
+
+                Kit roleKit = this.kitService.getKit(roleKitName);
 
                 if (roleKit != null) {
                     roleKits.put(role, roleKit);
                     roleKit.setEnabled(false);
                 } else {
-                    Logger.logError("Raiding kit for role " + role + " not found: " + roleKitName);
+                    Logger.error("Raiding sub-kit for role " + role + " not found: " + roleKitName);
                 }
-            }
-            catch (IllegalArgumentException e) {
-                Logger.logError("Invalid raiding role: " + roleName + " in kit: " + parentKit.getName());
+            } catch (IllegalArgumentException e) {
+                Logger.error("Invalid raiding role: '" + roleName + "' in parent kit: " + parentKit.getName());
             }
         }
 
@@ -93,82 +88,58 @@ public class BaseRaidingService {
         }
     }
 
+    @Override
     public void setRaidingKitMapping(Kit parentKit, EnumBaseRaiderRole role, Kit roleKit) {
         this.raidingKitMappings.computeIfAbsent(parentKit.getName(), k -> new HashMap<>()).put(role, roleKit);
 
-        FileConfiguration config = this.plugin.getConfigService().getKitsConfig();
+        FileConfiguration config = this.configService.getKitsConfig();
         String key = "kits." + parentKit.getName() + ".raiding-role-kits." + role.name().toLowerCase();
         config.set(key, roleKit.getName());
 
-        this.plugin.getKitService().saveKit(parentKit);
+        this.kitService.saveKit(parentKit);
     }
 
+    @Override
     public void removeRaidingKitMapping(Kit parentKit, EnumBaseRaiderRole role) {
         Map<EnumBaseRaiderRole, Kit> roleKits = this.raidingKitMappings.get(parentKit.getName());
-
-        if (roleKits != null && roleKits.containsKey(role)) {
-            roleKits.remove(role);
-
-            if (roleKits.isEmpty()) {
-                this.raidingKitMappings.remove(parentKit.getName());
-            }
-
-            FileConfiguration config = this.plugin.getConfigService().getKitsConfig();
-            String key = "kits." + parentKit.getName() + ".raiding-role-kits." + role.name().toLowerCase();
-            config.set(key, null);
-
-            this.plugin.getKitService().saveKit(parentKit);
-        }
-    }
-
-    /**
-     * Get the raiding kit for a specific role.
-     *
-     * @param role the raider role
-     * @return the raiding kit for the specified role, or null if not found
-     */
-    public Kit getRaidingKitByRole(EnumBaseRaiderRole role) {
-        Kit primaryKit = this.getRaidingKit();
-        if (primaryKit == null) {
-            return null;
+        if (roleKits == null || !roleKits.containsKey(role)) {
+            return;
         }
 
-        return this.getRaidingKitByRole(primaryKit, role);
+        roleKits.remove(role);
+        if (roleKits.isEmpty()) {
+            this.raidingKitMappings.remove(parentKit.getName());
+        }
+
+        FileConfiguration config = this.configService.getKitsConfig();
+        String key = "kits." + parentKit.getName() + ".raiding-role-kits." + role.name().toLowerCase();
+        config.set(key, null);
+
+        this.kitService.saveKit(parentKit);
     }
 
-    /**
-     * Get the raiding kit for a specific role within a parent kit.
-     *
-     * @param parentKit the parent kit
-     * @param role      the raider role
-     * @return the raiding kit for the specified role, or null if not found
-     */
+    @Override
     public Kit getRaidingKitByRole(Kit parentKit, EnumBaseRaiderRole role) {
-        Map<EnumBaseRaiderRole, Kit> roleKits = this.raidingKitMappings.get(parentKit.getName());
-        if (roleKits == null) {
-            return null;
-        }
-        return roleKits.get(role);
+        return this.raidingKitMappings.getOrDefault(parentKit.getName(), new HashMap<>()).get(role);
     }
 
-    /**
-     * Get the raiding kit for the first kit that has a raiding kit mapping.
-     *
-     * @return the first raiding kit found, or null if none exist
-     */
+    @Override
     public Kit getRaidingKit() {
-        return this.plugin.getKitService().getKits().stream()
+        return this.kitService.getKits().stream()
                 .filter(kit -> kit.isSettingEnabled(KitSettingRaidingImpl.class))
                 .findFirst()
                 .orElse(null);
     }
 
-    /**
-     * Check if the given kit has a raiding kit mapping.
-     *
-     * @param kit the kit to check
-     * @return true if the kit has a raiding kit mapping, false otherwise
-     */
+    public Kit getRaidingKitByRole(EnumBaseRaiderRole role) {
+        Kit primaryKit = this.getRaidingKit();
+        if (primaryKit == null) {
+            return null;
+        }
+        return this.getRaidingKitByRole(primaryKit, role);
+    }
+
+    @Override
     public boolean hasRaidingKit(Kit kit) {
         return this.raidingKitMappings.containsKey(kit.getName());
     }

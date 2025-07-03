@@ -1,9 +1,11 @@
 package dev.revere.alley.game.party.command.impl.member;
 
+import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.config.locale.impl.PartyLocale;
+import dev.revere.alley.game.party.IPartyService;
 import dev.revere.alley.game.party.Party;
 import dev.revere.alley.game.party.PartyRequest;
 import dev.revere.alley.game.party.PartyService;
@@ -36,7 +38,7 @@ public class PartyAcceptCommand extends BaseCommand {
             return;
         }
 
-        PartyService partyService = this.plugin.getPartyService();
+        IPartyService partyService = Alley.getInstance().getService(IPartyService.class);
 
         Party party = partyService.getPartyByLeader(target);
         if (party == null) {

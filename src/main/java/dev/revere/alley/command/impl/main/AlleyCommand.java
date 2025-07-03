@@ -2,8 +2,10 @@ package dev.revere.alley.command.impl.main;
 
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
+import dev.revere.alley.api.command.annotation.CommandContainer;
 import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.annotation.CompleterData;
+import dev.revere.alley.api.constant.IPluginConstant;
 import dev.revere.alley.command.impl.main.impl.AlleyCoreCommand;
 import dev.revere.alley.command.impl.main.impl.AlleyDebugCommand;
 import dev.revere.alley.command.impl.main.impl.AlleyReloadCommand;
@@ -19,21 +21,15 @@ import java.util.List;
  * @project Alley
  * @date 19/04/2024 - 17:39
  */
+@CommandContainer
 public class AlleyCommand extends BaseCommand {
-
-    public AlleyCommand() {
-        new AlleyCoreCommand();
-        new AlleyDebugCommand();
-        new AlleyReloadCommand();
-    }
-
     @SuppressWarnings("unused")
     @CompleterData(name = "alley")
     public List<String> alleyCompleter(CommandArgs command) {
         List<String> completion = new ArrayList<>();
         if (command.getArgs().length == 1 && command.getPlayer().hasPermission("alley.admin")) {
             completion.addAll(Arrays.asList(
-                    "reload", "debug", "core"
+                    "reload", "debug", "server"
             ));
         }
 
@@ -56,12 +52,12 @@ public class AlleyCommand extends BaseCommand {
                 ""
         ).forEach(line -> sender.sendMessage(CC.translate(line)));
 
-        if (sender.hasPermission(this.plugin.getPluginConstant().getAdminPermissionPrefix())) {
+        if (sender.hasPermission(this.plugin.getService(IPluginConstant.class).getAdminPermissionPrefix())) {
             Arrays.asList(
                     "     &6&lAdmin Help",
                     "      &f┃ /alley reload &7- &6Reloads the plugin.",
                     "      &f┃ /alley debug &7- &6Database Debugging.",
-                    "      &f┃ /alley core &7- &6Core Hook Info.",
+                    "      &f┃ /alley server &7- &6Core Hook Info.",
                     ""
             ).forEach(line -> sender.sendMessage(CC.translate(line)));
         }

@@ -4,6 +4,7 @@ import dev.revere.alley.Alley;
 import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.game.duel.menu.DuelRequestMenu;
 import dev.revere.alley.game.party.Party;
+import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.tool.item.ItemBuilder;
 import dev.revere.alley.util.chat.CC;
@@ -71,7 +72,8 @@ public class DuelOtherPartyButton extends Button {
     public void clicked(Player player, ClickType clickType) {
         if (clickType != ClickType.LEFT) return;
 
-        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+        Profile profile = profileService.getProfile(player.getUniqueId());
         Party playerParty = profile.getParty();
 
         if (playerParty == null) {

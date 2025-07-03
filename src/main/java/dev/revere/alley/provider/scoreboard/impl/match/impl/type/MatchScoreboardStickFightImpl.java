@@ -7,14 +7,9 @@ import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.provider.scoreboard.impl.match.AbstractMatchScoreboard;
-import dev.revere.alley.provider.scoreboard.impl.match.IMatchScoreboard;
 import dev.revere.alley.provider.scoreboard.impl.match.annotation.ScoreboardData;
-import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.util.visual.ScoreboardUtil;
 import org.bukkit.entity.Player;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author Remi
@@ -43,8 +38,8 @@ public class MatchScoreboardStickFightImpl extends AbstractMatchScoreboard {
         MatchRoundsImpl roundsMatch = (MatchRoundsImpl) profile.getMatch();
 
         return baseLine
-                .replace("{goals}", ScoreboardUtil.visualizeGoals(roundsMatch.getParticipantA().getPlayer().getData().getScore(), 5))
-                .replace("{opponent-goals}", ScoreboardUtil.visualizeGoals(roundsMatch.getParticipantB().getPlayer().getData().getScore(), 5))
+                .replace("{goals}", ScoreboardUtil.visualizeGoals(roundsMatch.getParticipantA().getLeader().getData().getScore(), 5))
+                .replace("{opponent-goals}", ScoreboardUtil.visualizeGoals(roundsMatch.getParticipantB().getLeader().getData().getScore(), 5))
                 .replace("{current-round}", String.valueOf(roundsMatch.getCurrentRound()))
                 .replace("{color}", String.valueOf(roundsMatch.getTeamAColor()))
                 .replace("{opponent-color}", String.valueOf(roundsMatch.getTeamBColor()));

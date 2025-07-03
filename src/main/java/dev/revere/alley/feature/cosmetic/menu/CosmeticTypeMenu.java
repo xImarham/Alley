@@ -7,6 +7,7 @@ import dev.revere.alley.api.menu.impl.BackButton;
 import dev.revere.alley.feature.cosmetic.EnumCosmeticType;
 import dev.revere.alley.feature.cosmetic.menu.button.CosmeticButton;
 import dev.revere.alley.feature.cosmetic.repository.BaseCosmeticRepository;
+import dev.revere.alley.feature.cosmetic.repository.ICosmeticRepository;
 import dev.revere.alley.util.StringUtil;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.entity.Player;
@@ -35,7 +36,7 @@ public class CosmeticTypeMenu extends Menu {
         final Map<Integer, Button> buttons = new HashMap<>();
         buttons.put(0, new BackButton(new CosmeticsMenu()));
 
-        BaseCosmeticRepository<?> repository = Alley.getInstance().getCosmeticRepository().getRepository(this.cosmeticType);
+        BaseCosmeticRepository<?> repository = Alley.getInstance().getService(ICosmeticRepository.class).getRepository(this.cosmeticType);
         if (repository != null) {
             repository.getCosmetics().stream()
                     .filter(cosmetic -> cosmetic.getIcon() != null)

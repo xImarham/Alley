@@ -3,6 +3,7 @@ package dev.revere.alley.profile.menu.reset;
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.api.menu.Menu;
+import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.tool.item.ItemBuilder;
 import lombok.AllArgsConstructor;
 import org.bukkit.Bukkit;
@@ -74,7 +75,7 @@ public class ResetConfirmMenu extends Menu {
         public void clicked(Player player, int slot, ClickType clickType, int hotbarButton) {
             if (clickType != ClickType.LEFT) return;
 
-            Alley.getInstance().getProfileService().resetStats(player, this.uuid);
+            Alley.getInstance().getService(IProfileService.class).resetStats(player, this.uuid);
             player.closeInventory();
         }
     }

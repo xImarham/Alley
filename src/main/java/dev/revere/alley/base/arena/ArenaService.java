@@ -5,7 +5,13 @@ import dev.revere.alley.base.arena.enums.EnumArenaType;
 import dev.revere.alley.base.arena.impl.FreeForAllArena;
 import dev.revere.alley.base.arena.impl.SharedArena;
 import dev.revere.alley.base.arena.impl.StandAloneArena;
+import dev.revere.alley.base.arena.schematic.IArenaSchematicService;
+import dev.revere.alley.base.kit.IKitService;
 import dev.revere.alley.base.kit.Kit;
+import dev.revere.alley.config.IConfigService;
+import dev.revere.alley.core.AlleyContext;
+import dev.revere.alley.core.annotation.Service;
+import dev.revere.alley.core.lifecycle.IService;
 import dev.revere.alley.tool.logger.Logger;
 import dev.revere.alley.tool.serializer.Serializer;
 import dev.revere.alley.util.FileUtil;
@@ -20,6 +26,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -31,32 +38,62 @@ import java.util.stream.Collectors;
  * @date 20/05/2024 - 16:54
  */
 @Getter
-public class ArenaService {
-    protected final Alley plugin;
-    private final List<AbstractArena> arenas;
-    private final List<StandAloneArena> temporaryArenas;
+@Service(provides = IArenaService.class, priority = 110)
+public class ArenaService implements IArenaService {
+    private final Alley plugin;
+    private final IConfigService configService;
+    private final IKitService kitService;
+    private final IArenaSchematicService arenaSchematicService;
+
+    private final List<AbstractArena> arenas = new ArrayList<>();
+    private final List<StandAloneArena> temporaryArenas = new ArrayList<>();
+    private final AtomicInteger copyIdCounter = new AtomicInteger(0);
+
     private World temporaryWorld;
     private Location nextCopyLocation;
     private final int arenaSpacing = 1500;
-    private final AtomicInteger copyIdCounter;
 
-    /**
-     * Constructor for the ArenaService class.
-     *
-     * @param plugin The Alley plugin instance.
-     */
-    public ArenaService(Alley plugin) {
+    public ArenaService(Alley plugin, IConfigService configService, IKitService kitService, IArenaSchematicService arenaSchematicService) {
         this.plugin = plugin;
-        this.arenas = new ArrayList<>();
-        this.temporaryArenas = new ArrayList<>();
-        this.copyIdCounter = new AtomicInteger(0);
+        this.configService = configService;
+        this.kitService = kitService;
+        this.arenaSchematicService = arenaSchematicService;
+    }
+
+    @Override
+    public void initialize(AlleyContext context) {
         this.loadArenas();
-        initializeTemporaryWorld();
+        this.initializeTemporaryWorld();
+        Logger.info("Loaded " + this.arenas.size() + " persistent arenas and initialized temporary world.");
+    }
+
+    @Override
+    public void shutdown(AlleyContext context) {
+        cleanupTemporaryArenas();
+
+        if (temporaryWorld != null) {
+            String worldName = temporaryWorld.getName();
+
+            temporaryWorld.getPlayers().forEach(player ->
+                    player.teleport(Bukkit.getServer().getWorlds().get(0).getSpawnLocation())
+            );
+
+            if (Bukkit.unloadWorld(temporaryWorld, false)) {
+                Logger.info("Successfully unloaded temporary world: " + worldName);
+                File worldFolder = new File(Bukkit.getWorldContainer(), worldName);
+                if (worldFolder.exists()) {
+                    FileUtil.deleteWorldFolder(worldFolder);
+                    Logger.info("Deleted temporary world folder: " + worldName);
+                }
+            } else {
+                Logger.error("Failed to unload temporary world: " + worldName);
+            }
+            temporaryWorld = null;
+        }
     }
 
     private void initializeTemporaryWorld() {
         String worldName = "temporary_arena_world";
-
         cleanupExistingWorld(worldName);
 
         WorldCreator creator = new WorldCreator(worldName);
@@ -70,7 +107,7 @@ public class ArenaService {
      * Method to load all arenas from the arenas.yml file.
      */
     public void loadArenas() {
-        FileConfiguration config = this.plugin.getConfigService().getArenasConfig();
+        FileConfiguration config = configService.getArenasConfig();
 
         ConfigurationSection arenasConfig = config.getConfigurationSection("arenas");
         if (arenasConfig == null) {
@@ -120,7 +157,7 @@ public class ArenaService {
 
             if (config.contains(name + ".kits")) {
                 for (String kitName : config.getStringList(name + ".kits")) {
-                    if (this.plugin.getKitService().getKit(kitName) != null) {
+                    if (kitService.getKit(kitName) != null) {
                         arena.getKits().add(kitName);
                     }
                 }
@@ -150,6 +187,7 @@ public class ArenaService {
         }
     }
 
+    @Override
     public StandAloneArena createTemporaryArenaCopy(StandAloneArena originalArena) {
         if (originalArena.isTemporaryCopy()) {
             throw new IllegalArgumentException("Cannot create a temporary copy of a temporary arena.");
@@ -174,7 +212,7 @@ public class ArenaService {
         StandAloneArena copiedArena = originalArena.createCopy(temporaryWorld, copyLocation, copyId);
         copiedArena.setHeightLimit(copiedArena.getPos1().getBlockY() + copiedArena.getHeightLimit());
 
-        this.plugin.getArenaSchematicService().paste(copyLocation, this.plugin.getArenaSchematicService().getSchematicFile(originalArena.getName()));
+        this.arenaSchematicService.paste(copyLocation, this.arenaSchematicService.getSchematicFile(originalArena.getName()));
 
         temporaryArenas.add(copiedArena);
 
@@ -209,32 +247,6 @@ public class ArenaService {
         temporaryArenas.clear();
     }
 
-    public void shutdown() {
-        cleanupTemporaryArenas();
-
-        if (temporaryWorld != null) {
-            String worldName = temporaryWorld.getName();
-
-            temporaryWorld.getPlayers().forEach(player ->
-                    player.teleport(Bukkit.getServer().getWorlds().get(0).getSpawnLocation())
-            );
-
-            boolean unloaded = Bukkit.unloadWorld(temporaryWorld, false);
-            if (unloaded) {
-                Logger.log("Successfully unloaded temporary world: " + worldName);
-            } else {
-                Logger.logError("Failed to unload temporary world: " + worldName);
-            }
-
-            temporaryWorld = null;
-
-            File worldFolder = new File(Bukkit.getWorldContainer(), worldName);
-            if (worldFolder.exists()) {
-                FileUtil.deleteWorldFolder(worldFolder);
-            }
-        }
-    }
-
     /**
      * Cleans up an existing world by unloading it and deleting its corresponding folder.
      * This includes teleporting any players in the world back to the spawn location of the
@@ -251,7 +263,7 @@ public class ArenaService {
 
             boolean unloaded = this.plugin.getServer().unloadWorld(existingWorld, false);
             if (!unloaded) {
-                Logger.logError("Failed to unload world: " + worldName);
+                Logger.error("Failed to unload world: " + worldName);
             }
         }
 
@@ -261,40 +273,27 @@ public class ArenaService {
         }
     }
 
-    /**
-     * Save an arena
-     *
-     * @param arena the arena to save
-     */
+    @Override
+    public List<AbstractArena> getArenas() {
+        return Collections.unmodifiableList(arenas);
+    }
+
+    @Override
+    public List<StandAloneArena> getTemporaryArenas() {
+        return Collections.unmodifiableList(temporaryArenas);
+    }
+
+    @Override
     public void saveArena(AbstractArena arena) {
         arena.saveArena();
     }
 
-    /**
-     * Delete an arena
-     *
-     * @param arena the arena to delete
-     */
+    @Override
     public void deleteArena(AbstractArena arena) {
         arena.deleteArena();
     }
 
-    /**
-     * Get an arena by its name
-     *
-     * @param name the name of the arena
-     * @return the arena
-     */
-    public AbstractArena getArenaByName(String name) {
-        return this.arenas.stream().filter(arena -> arena.getName().equalsIgnoreCase(name)).findFirst().orElse(null);
-    }
-
-    /**
-     * Get a random arena by its kit
-     *
-     * @param kit the kit
-     * @return the arena
-     */
+    @Override
     public AbstractArena getRandomArena(Kit kit) {
         List<AbstractArena> availableArenas = this.arenas.stream()
                 .filter(arena -> arena.getKits().contains(kit.getName()))
@@ -312,6 +311,12 @@ public class ArenaService {
         return selectedArena;
     }
 
+    @Override
+    public AbstractArena getArenaByName(String name) {
+        return this.arenas.stream().filter(arena -> arena.getName().equalsIgnoreCase(name)).findFirst().orElse(null);
+    }
+
+    @Override
     public AbstractArena selectArenaWithPotentialTemporaryCopy(AbstractArena arena) {
         if (arena instanceof StandAloneArena) {
             return createTemporaryArenaCopy((StandAloneArena) arena);
@@ -324,6 +329,7 @@ public class ArenaService {
      *
      * @return the arena
      */
+    @Override
     public AbstractArena getRandomStandAloneArena() {
         List<AbstractArena> availableArenas = this.arenas.stream()
                 .filter(arena -> arena.getType() == EnumArenaType.STANDALONE)

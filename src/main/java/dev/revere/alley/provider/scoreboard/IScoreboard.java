@@ -2,6 +2,7 @@ package dev.revere.alley.provider.scoreboard;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.profile.Profile;
+import dev.revere.alley.tool.animation.IAnimationRepository;
 import dev.revere.alley.tool.animation.enums.EnumAnimationType;
 import dev.revere.alley.tool.animation.type.internal.impl.DotAnimationImpl;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
@@ -38,7 +39,7 @@ public interface IScoreboard {
      * @return The dot animation.
      */
     default DotAnimationImpl getDotAnimation() {
-        return Alley.getInstance().getAnimationRepository().getAnimation(DotAnimationImpl.class, EnumAnimationType.INTERNAL);
+        return Alley.getInstance().getService(IAnimationRepository.class).getAnimation(DotAnimationImpl.class, EnumAnimationType.INTERNAL);
     }
 
     /**

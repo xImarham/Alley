@@ -1,11 +1,12 @@
 package dev.revere.alley.base.visibility;
 
 import dev.revere.alley.Alley;
+import dev.revere.alley.core.annotation.Service;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
+import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
 import dev.revere.alley.tool.logger.Logger;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 /**
@@ -13,33 +14,28 @@ import org.bukkit.entity.Player;
  * @project Alley
  * @since 06/06/2025
  */
-public class VisibilityService {
-    protected final Alley plugin;
+@Service(provides = IVisibilityService.class, priority = 360)
+public class VisibilityService implements IVisibilityService {
+    private final Alley plugin;
+    private final IProfileService profileService;
 
     /**
-     * Constructor for the VisibilityService class.
-     *
-     * @param plugin The Alley plugin instance.
+     * Constructor for DI.
      */
-    public VisibilityService(Alley plugin) {
+    public VisibilityService(Alley plugin, IProfileService profileService) {
         this.plugin = plugin;
+        this.profileService = profileService;
     }
 
-    /**
-     * Updates the visibility of a player based on their profile state.
-     * When a player's state changes, we need to update visibility bidirectionally:
-     * 1. How all other players see this player
-     * 2. How this player sees all other players
-     *
-     * @param player The player whose visibility is to be updated.
-     */
+    @Override
     public void updateVisibility(Player player) {
-        this.plugin.getServer().getOnlinePlayers().stream()
-                .filter(otherPlayer -> !otherPlayer.equals(player))
-                .forEach(otherPlayer -> {
-                    this.handleVisibility(otherPlayer, player);
-                    this.handleVisibility(player, otherPlayer);
-                });
+        if (player == null || !player.isOnline()) return;
+
+        for (Player otherPlayer : this.plugin.getServer().getOnlinePlayers()) {
+            if (player.equals(otherPlayer)) continue;
+            handleVisibility(player, otherPlayer);
+            handleVisibility(otherPlayer, player);
+        }
     }
 
     /**
@@ -49,16 +45,15 @@ public class VisibilityService {
      * @param target The target player to hide.
      */
     public void handleVisibility(Player viewer, Player target) {
-        if (target == null || viewer == null || target.equals(viewer)) {
-            Logger.logError("Something went wrong while hiding player. Either no players are online or target is null.");
+        if (viewer == null || target == null || !viewer.isOnline() || !target.isOnline()) {
             return;
         }
 
-        Profile viewerProfile = this.plugin.getProfileService().getProfile(viewer.getUniqueId());
-        Profile targetProfile = this.plugin.getProfileService().getProfile(target.getUniqueId());
+        Profile viewerProfile = this.profileService.getProfile(viewer.getUniqueId());
+        Profile targetProfile = this.profileService.getProfile(target.getUniqueId());
 
         if (viewerProfile == null || targetProfile == null) {
-            Logger.logError("Could not retrieve profile for viewer or target player.");
+            Logger.error("Could not retrieve profile for viewer or target player.");
             return;
         }
 
@@ -79,6 +74,9 @@ public class VisibilityService {
             case SPECTATING:
                 this.handleSpectatingCase(viewer, target, viewerProfile);
                 break;
+            default:
+                viewer.showPlayer(target);
+                break;
         }
     }
 
@@ -90,12 +88,15 @@ public class VisibilityService {
      * @param targetProfileState the profile state of the target player.
      */
     private void handleLobbyAndQueueState(Player viewer, Player target, EnumProfileState targetProfileState) {
-        if (targetProfileState == EnumProfileState.LOBBY
-                || targetProfileState == EnumProfileState.EDITING
-                || targetProfileState == EnumProfileState.WAITING) {
-            viewer.showPlayer(target);
-        } else {
-            viewer.hidePlayer(target);
+        switch (targetProfileState) {
+            case LOBBY:
+            case WAITING:
+            case EDITING:
+                viewer.showPlayer(target);
+                break;
+            default:
+                viewer.hidePlayer(target);
+                break;
         }
 
         //TODO: further logic once we implement /tpv command (TogglePlayerVisibility)
@@ -155,7 +156,7 @@ public class VisibilityService {
      * @param viewerProfile The profile of the viewer.
      */
     private void handleSpectatingCase(Player viewer, Player target, Profile viewerProfile) {
-        Profile targetProfile = this.plugin.getProfileService().getProfile(target.getUniqueId());
+        Profile targetProfile = this.profileService.getProfile(target.getUniqueId());
         if (targetProfile.getState() == EnumProfileState.SPECTATING) {
             viewer.showPlayer(target);
             return;

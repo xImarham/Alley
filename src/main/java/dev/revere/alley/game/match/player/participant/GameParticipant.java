@@ -17,7 +17,7 @@ import java.util.UUID;
 @Setter
 public class GameParticipant<T extends GamePlayer> {
     // This is the leader of the participant
-    private T player;
+    private T leader;
 
     // These fields are all for game logic
     private boolean lostCheckpoint;
@@ -27,10 +27,10 @@ public class GameParticipant<T extends GamePlayer> {
     /**
      * Constructor for the GameParticipant class.
      *
-     * @param player The player.
+     * @param leader The player.
      */
-    public GameParticipant(T player) {
-        this.player = player;
+    public GameParticipant(T leader) {
+        this.leader = leader;
     }
 
     /**
@@ -39,7 +39,7 @@ public class GameParticipant<T extends GamePlayer> {
      * @return The player associated with the participant.
      */
     public List<T> getPlayers() {
-        return this.player.isDisconnected() ? Collections.emptyList() : Collections.singletonList(this.player);
+        return this.leader.isDisconnected() ? Collections.emptyList() : Collections.singletonList(this.leader);
     }
 
     /**
@@ -48,7 +48,7 @@ public class GameParticipant<T extends GamePlayer> {
      * @return The player associated with the participant.
      */
     public List<T> getAllPlayers() {
-        return Collections.singletonList(this.player);
+        return Collections.singletonList(this.leader);
     }
 
     /**
@@ -57,7 +57,7 @@ public class GameParticipant<T extends GamePlayer> {
      * @return The player associated with the participant.
      */
     public int getPlayerSize() {
-        return this.player.isDead() ? 0 : 1;
+        return this.leader.isDead() ? 0 : 1;
     }
 
     /**
@@ -66,7 +66,7 @@ public class GameParticipant<T extends GamePlayer> {
      * @return The amount of players that are alive.
      */
     public int getAlivePlayerSize() {
-        return this.player.isDead() ? 0 : 1;
+        return this.leader.isDead() ? 0 : 1;
     }
 
     /**
@@ -75,7 +75,7 @@ public class GameParticipant<T extends GamePlayer> {
      * @return The conjoined names of the players in the participant.
      */
     public String getConjoinedNames() {
-        return this.player.getUsername();
+        return this.leader.getUsername();
     }
 
 
@@ -85,7 +85,7 @@ public class GameParticipant<T extends GamePlayer> {
      * @param player the player to add.
      */
     public void addPlayer(T player) {
-        this.player = player;
+        this.leader = player;
     }
 
     /**
@@ -94,8 +94,8 @@ public class GameParticipant<T extends GamePlayer> {
      * @param player The player to remove.
      */
     public void removePlayer(T player) {
-       if (this.player != null && this.player.getUuid().equals(player.getUuid())) {
-            this.player = null;
+       if (this.leader != null && this.leader.getUuid().equals(player.getUuid())) {
+            this.leader = null;
         }
     }
 
@@ -105,7 +105,7 @@ public class GameParticipant<T extends GamePlayer> {
      * @return True if all the players are dead.
      */
     public boolean isAllDead() {
-        return this.player.isDead();
+        return this.leader.isDead();
     }
 
     /**
@@ -114,7 +114,7 @@ public class GameParticipant<T extends GamePlayer> {
      * @return True if all the players are eliminated.
      */
     public boolean isAllEliminated() {
-        return this.player.isEliminated();
+        return this.leader.isEliminated();
     }
 
     /**
@@ -124,6 +124,6 @@ public class GameParticipant<T extends GamePlayer> {
      * @return True if the participant contains the player.
      */
     public boolean containsPlayer(UUID uuid) {
-        return this.player.getUuid().equals(uuid);
+        return this.leader.getUuid().equals(uuid);
     }
 }

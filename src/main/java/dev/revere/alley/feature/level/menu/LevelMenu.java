@@ -3,6 +3,7 @@ package dev.revere.alley.feature.level.menu;
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.api.menu.pagination.PaginatedMenu;
+import dev.revere.alley.feature.level.ILevelService;
 import dev.revere.alley.feature.level.data.LevelData;
 import dev.revere.alley.profile.Profile;
 import lombok.AllArgsConstructor;
@@ -40,7 +41,7 @@ public class LevelMenu extends PaginatedMenu {
 
         int slot = 0;
 
-        for (LevelData level : Alley.getInstance().getLevelService().getLevels()) {
+        for (LevelData level : Alley.getInstance().getService(ILevelService.class).getLevels()) {
             slot = this.validateSlot(slot);
             buttons.put(slot++, new LevelButton(this.profile, level));
         }

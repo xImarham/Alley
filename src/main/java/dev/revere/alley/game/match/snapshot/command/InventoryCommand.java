@@ -1,8 +1,10 @@
 package dev.revere.alley.game.match.snapshot.command;
 
+import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
+import dev.revere.alley.game.match.snapshot.ISnapshotRepository;
 import dev.revere.alley.game.match.snapshot.Snapshot;
 import dev.revere.alley.game.match.snapshot.menu.SnapshotMenu;
 import dev.revere.alley.util.chat.CC;
@@ -29,10 +31,12 @@ public class InventoryCommand extends BaseCommand {
 
         String uuid = args[0];
         Snapshot snapshot;
+        ISnapshotRepository snapshotRepository = Alley.getInstance().getService(ISnapshotRepository.class);
+
         try {
-            snapshot = this.plugin.getSnapshotRepository().getSnapshot(UUID.fromString(uuid));
+            snapshot = snapshotRepository.getSnapshot(UUID.fromString(uuid));
         } catch (Exception exception) {
-            snapshot = this.plugin.getSnapshotRepository().getSnapshot(uuid);
+            snapshot = snapshotRepository.getSnapshot(uuid);
         }
 
         if (snapshot == null) {

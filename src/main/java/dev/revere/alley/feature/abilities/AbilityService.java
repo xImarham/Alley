@@ -1,8 +1,11 @@
 package dev.revere.alley.feature.abilities;
 
-import dev.revere.alley.Alley;
-import dev.revere.alley.feature.abilities.impl.*;
+import dev.revere.alley.api.constant.IPluginConstant;
+import dev.revere.alley.config.IConfigService;
+import dev.revere.alley.core.AlleyContext;
+import dev.revere.alley.core.annotation.Service;
 import dev.revere.alley.tool.item.ItemBuilder;
+import dev.revere.alley.tool.logger.Logger;
 import dev.revere.alley.util.TaskUtil;
 import dev.revere.alley.util.chat.CC;
 import lombok.Getter;
@@ -10,132 +13,146 @@ import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.reflections.Reflections;
 
+import java.lang.reflect.Modifier;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 @Getter
-public class AbilityService {
+@Service(provides = IAbilityService.class, priority = 380)
+public class AbilityService implements IAbilityService {
+    private final IConfigService configService;
+    private final IPluginConstant pluginConstant;
 
-    private final GuardianAngel guardianAngel;
+    private final Set<AbstractAbility> abilities = new HashSet<>();
 
-    private final Combo combo;
-    private final EffectDisabler effectDisabler;
-    private final NinjaStar ninjaStar;
-    private final PocketBard pocketBard;
-    private final AntiTrapper antitrapper;
+    public AbilityService(IConfigService configService, IPluginConstant pluginConstant) {
+        this.configService = configService;
+        this.pluginConstant = pluginConstant;
+    }
 
-    private final Scrambler scrambler;
-    private final Strength strength;
-    private final SwapperAxe swapperAxe;
-    private final Switcher switcher;
-
-    private final TankIngot tankIngot;
-    private final Cookie cookie;
-    private final Rocket rocket;
-    private final TimeWarp timeWarp;
-    private final LuckyIngot luckyIngot;
-
-    public AbilityService() {
-        this.guardianAngel = new GuardianAngel();
-        this.combo = new Combo();
-        this.antitrapper = new AntiTrapper();
-        this.effectDisabler = new EffectDisabler();
-        this.ninjaStar = new NinjaStar();
-        this.pocketBard = new PocketBard();
-        this.scrambler = new Scrambler();
-        this.strength = new Strength();
-        this.swapperAxe = new SwapperAxe();
-        this.switcher = new Switcher();
-        this.tankIngot = new TankIngot();
-        this.rocket = new Rocket();
-        this.cookie = new Cookie();
-        this.timeWarp = new TimeWarp();
-        this.luckyIngot = new LuckyIngot();
+    @Override
+    public void initialize(AlleyContext context) {
+        this.registerAbilities();
 
         AbstractAbility.getAbilities().forEach(AbstractAbility::register);
     }
 
-    public ItemStack getAbility(String ability, int amount) {
-        return new ItemBuilder(getMaterial(ability))
+    private void registerAbilities() {
+        Reflections reflections = this.pluginConstant.getReflections();
+
+        for (Class<? extends AbstractAbility> clazz : reflections.getSubTypesOf(AbstractAbility.class)) {
+            if (clazz.isInterface() || Modifier.isAbstract(clazz.getModifiers())) {
+                continue;
+            }
+            try {
+                AbstractAbility instance = clazz.getDeclaredConstructor().newInstance();
+                this.abilities.add(instance);
+            } catch (Exception e) {
+                Logger.logException("Failed to instantiate ability: " + clazz.getName(), e);
+            }
+        }
+    }
+
+    @Override
+    public <T extends AbstractAbility> T getAbility(Class<T> abilityClass) {
+        return this.abilities.stream()
+                .filter(abilityClass::isInstance)
+                .map(abilityClass::cast)
+                .findFirst()
+                .orElse(null);
+    }
+
+    @Override
+    public ItemStack getAbilityItem(String abilityKey, int amount) {
+        return new ItemBuilder(getMaterial(abilityKey))
                 .amount(amount)
-                .durability(getData(ability))
-                .name(getDisplayName(ability))
-                .lore(getDescription(ability))
+                .durability(getData(abilityKey))
+                .name(getDisplayName(abilityKey))
+                .lore(getDescription(abilityKey))
                 .build();
     }
 
-    public String getDisplayName(String ability) {
-        return Alley.getInstance().getConfigService().getAbilityConfig().getString( ability + ".ICON.DISPLAYNAME");
+    @Override
+    public String getDisplayName(String abilityKey) {
+        return configService.getAbilityConfig().getString(abilityKey + ".ICON.DISPLAYNAME");
     }
 
-    public List<String> getDescription(String ability) {
-        return Alley.getInstance().getConfigService().getAbilityConfig().getStringList( ability + ".ICON.DESCRIPTION");
+    @Override
+    public List<String> getDescription(String abilityKey) {
+        return configService.getAbilityConfig().getStringList(abilityKey + ".ICON.DESCRIPTION");
     }
 
     public Material getMaterial(String ability) {
-        return Material.valueOf(Alley.getInstance().getConfigService().getAbilityConfig().getString(ability + ".ICON.MATERIAL"));
+        return Material.valueOf(configService.getAbilityConfig().getString(ability + ".ICON.MATERIAL"));
     }
 
     public int getData(String ability) {
-        return Alley.getInstance().getConfigService().getAbilityConfig().getInt(ability + ".ICON.DATA");
+        return configService.getAbilityConfig().getInt(ability + ".ICON.DATA");
     }
 
     public int getCooldown(String ability) {
-        return Alley.getInstance().getConfigService().getAbilityConfig().getInt(ability + ".COOLDOWN");
+        return configService.getAbilityConfig().getInt(ability + ".COOLDOWN");
     }
 
-    public Set<String> getAbilities() {
-        return Alley.getInstance().getConfigService().getAbilityConfig().getConfigurationSection("").getKeys(false);
+    @Override
+    public Set<String> getAbilityKeys() {
+        return configService.getAbilityConfig().getConfigurationSection("").getKeys(false);
     }
 
+    @Override
     public void giveAbility(CommandSender sender, Player player, String key, String abilityName, int amount) {
-        player.getInventory().addItem(this.getAbility(key, amount));
+        player.getInventory().addItem(this.getAbilityItem(key, amount));
         if (player == sender) {
-            player.sendMessage(CC.translate(Alley.getInstance().getConfigService().getAbilityConfig().getString("RECEIVED_ABILITY")
+            player.sendMessage(CC.translate(configService.getAbilityConfig().getString("RECEIVED_ABILITY")
                     .replace("%ABILITY%", abilityName)
                     .replace("%AMOUNT%", String.valueOf(amount))));
-        }
-        else {
-            player.sendMessage(CC.translate(Alley.getInstance().getConfigService().getAbilityConfig().getString("RECEIVED_ABILITY")
+        } else {
+            player.sendMessage(CC.translate(configService.getAbilityConfig().getString("RECEIVED_ABILITY")
                     .replace("%ABILITY%", abilityName)
                     .replace("%AMOUNT%", String.valueOf(amount))));
-            sender.sendMessage(CC.translate(Alley.getInstance().getConfigService().getAbilityConfig().getString("GIVE_ABILITY")
+            sender.sendMessage(CC.translate(configService.getAbilityConfig().getString("GIVE_ABILITY")
                     .replace("%ABILITY%", abilityName)
                     .replace("%AMOUNT%", String.valueOf(amount))
                     .replace("%PLAYER%", player.getName())));
         }
     }
-    public void playerMessage(Player player, String ability) {
-        String displayName = getDisplayName(ability);
-        String cooldown = String.valueOf(getCooldown(ability));
 
-        Alley.getInstance().getConfigService().getAbilityConfig().getStringList(ability + ".MESSAGE.PLAYER").forEach(
+    @Override
+    public void sendPlayerMessage(Player player, String abilityKey) {
+        String displayName = getDisplayName(abilityKey);
+        String cooldown = String.valueOf(getCooldown(abilityKey));
+
+        configService.getAbilityConfig().getStringList(abilityKey + ".MESSAGE.PLAYER").forEach(
                 message -> CC.message(player, message
                         .replace("%ABILITY%", displayName)
                         .replace("%COOLDOWN%", cooldown)));
     }
 
-    public void targetMessage(Player target, Player player, String ability) {
-        String displayName = getDisplayName(ability);
+    @Override
+    public void sendTargetMessage(Player target, Player player, String abilityKey) {
+        String displayName = getDisplayName(abilityKey);
 
-        Alley.getInstance().getConfigService().getAbilityConfig().getStringList(ability + ".MESSAGE.TARGET").forEach(
+        configService.getAbilityConfig().getStringList(abilityKey + ".MESSAGE.TARGET").forEach(
                 message -> CC.message(target, message
                         .replace("%ABILITY%", displayName)
                         .replace("%PLAYER%", player.getName())
                         .replace("%TARGET%", target.getName())));
     }
 
-    public void cooldown(Player player, String abilityName, String cooldown) {
-        CC.message(player, Alley.getInstance().getConfigService().getAbilityConfig().getString("STILL_ON_COOLDOWN")
+    @Override
+    public void sendCooldownMessage(Player player, String abilityName, String cooldown) {
+        CC.message(player, configService.getAbilityConfig().getString("STILL_ON_COOLDOWN")
                 .replace("%ABILITY%", abilityName)
                 .replace("%COOLDOWN%", cooldown));
     }
 
-
-    public void cooldownExpired(Player player, String abilityName, String ability) {
+    @Override
+    public void sendCooldownExpiredMessage(Player player, String abilityName, String ability) {
         TaskUtil.runLaterAsync(() ->
-                CC.message(player, Alley.getInstance().getConfigService().getAbilityConfig().getString("COOLDOWN_EXPIRED")
+                CC.message(player, configService.getAbilityConfig().getString("COOLDOWN_EXPIRED")
                         .replace("%ABILITY%", abilityName)), getCooldown(ability) * 20L);
     }
 }

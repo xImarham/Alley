@@ -7,6 +7,7 @@ import dev.revere.alley.base.kit.setting.impl.mode.KitSettingRaidingImpl;
 import dev.revere.alley.feature.layout.data.LayoutData;
 import dev.revere.alley.feature.layout.menu.LayoutEditorMenu;
 import dev.revere.alley.feature.layout.menu.role.LayoutSelectRoleKitMenu;
+import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.tool.item.ItemBuilder;
 import dev.revere.alley.util.chat.CC;
@@ -42,7 +43,7 @@ public class LayoutButton extends Button {
 
     @Override
     public void clicked(Player player, ClickType clickType) {
-        Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
+        Profile profile = Alley.getInstance().getService(IProfileService.class).getProfile(player.getUniqueId());
 
         if (clickType == ClickType.LEFT) {
             // This will be changed to open the selected layout within the editor button,

@@ -1,9 +1,11 @@
 package dev.revere.alley.base.arena.command.impl.manage;
 
+import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.annotation.CompleterData;
+import dev.revere.alley.base.arena.IArenaService;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.entity.Player;
 
@@ -20,9 +22,11 @@ public class ArenaDeleteCommand extends BaseCommand {
     @CompleterData(name = "arena.delete")
     public List<String> arenaDeleteCompleter(CommandArgs command) {
         List<String> completion = new ArrayList<>();
+        IArenaService arenaService = Alley.getInstance().getService(IArenaService.class);
+
 
         if (command.getArgs().length == 1 && command.getPlayer().hasPermission("alley.admin")) {
-            this.plugin.getArenaService().getArenas().forEach(arena -> completion.add(arena.getName()));
+            arenaService.getArenas().forEach(arena -> completion.add(arena.getName()));
         }
 
         return completion;
@@ -33,6 +37,8 @@ public class ArenaDeleteCommand extends BaseCommand {
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
         String[] args = command.getArgs();
+        
+        IArenaService arenaService = Alley.getInstance().getService(IArenaService.class);
 
         if (args.length < 1) {
             player.sendMessage(CC.translate("&6Usage: &e/arena delete &6<arenaName>"));
@@ -40,12 +46,12 @@ public class ArenaDeleteCommand extends BaseCommand {
         }
 
         String arenaName = args[0];
-        if (this.plugin.getArenaService().getArenaByName(arenaName) == null) {
+        if (arenaService.getArenaByName(arenaName) == null) {
             player.sendMessage(CC.translate("&cAn arena with that name does not exist!"));
             return;
         }
 
         player.sendMessage(CC.translate("&aArena &6" + arenaName + "&a has been deleted!"));
-        this.plugin.getArenaService().deleteArena(this.plugin.getArenaService().getArenaByName(arenaName));
+        arenaService.deleteArena(arenaService.getArenaByName(arenaName));
     }
 }

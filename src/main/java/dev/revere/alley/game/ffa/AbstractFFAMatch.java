@@ -3,9 +3,14 @@ package dev.revere.alley.game.ffa;
 import dev.revere.alley.Alley;
 import dev.revere.alley.base.arena.AbstractArena;
 import dev.revere.alley.base.combat.CombatService;
+import dev.revere.alley.base.combat.ICombatService;
+import dev.revere.alley.base.hotbar.IHotbarService;
 import dev.revere.alley.base.hotbar.enums.EnumHotbarType;
 import dev.revere.alley.base.kit.Kit;
+import dev.revere.alley.base.spawn.ISpawnService;
+import dev.revere.alley.base.visibility.IVisibilityService;
 import dev.revere.alley.game.ffa.player.GameFFAPlayer;
+import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.ProfileService;
 import dev.revere.alley.profile.enums.EnumProfileState;
@@ -72,7 +77,10 @@ public abstract class AbstractFFAMatch {
      * @param player The player who wants to spectate the match.
      */
     public void addSpectator(Player player) {
-        ProfileService profileService = this.plugin.getProfileService();
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+        IVisibilityService visibilityService = Alley.getInstance().getService(IVisibilityService.class);
+        IHotbarService hotbarService = Alley.getInstance().getService(IHotbarService.class);
+
         Profile profile = profileService.getProfile(player.getUniqueId());
 
         if (this.arena.getCenter() == null) {
@@ -84,8 +92,8 @@ public abstract class AbstractFFAMatch {
             profile.setState(EnumProfileState.SPECTATING);
             profile.setFfaMatch(this);
 
-            this.plugin.getVisibilityService().updateVisibility(player);
-            this.plugin.getHotbarService().applyHotbarItems(player);
+            visibilityService.updateVisibility(player);
+            hotbarService.applyHotbarItems(player);
         }
 
         player.teleport(this.arena.getCenter());
@@ -102,22 +110,25 @@ public abstract class AbstractFFAMatch {
      * @param player The player to remove from the spectator list.
      */
     public void removeSpectator(Player player) {
-        ProfileService profileService = this.plugin.getProfileService();
-        Profile profile = profileService.getProfile(player.getUniqueId());
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+        IVisibilityService visibilityService = Alley.getInstance().getService(IVisibilityService.class);
+        IHotbarService hotbarService = Alley.getInstance().getService(IHotbarService.class);
+        ISpawnService spawnService = Alley.getInstance().getService(ISpawnService.class);
 
+        Profile profile = profileService.getProfile(player.getUniqueId());
         if (profile.getState() == EnumProfileState.SPECTATING) {
             profile.setState(EnumProfileState.LOBBY);
             profile.setFfaMatch(null);
 
-            this.plugin.getVisibilityService().updateVisibility(player);
-            this.plugin.getHotbarService().applyHotbarItems(player);
+            visibilityService.updateVisibility(player);
+            hotbarService.applyHotbarItems(player);
         }
 
         player.spigot().setCollidesWithEntities(true);
         player.setAllowFlight(false);
         player.setFlying(false);
 
-        this.plugin.getSpawnService().teleportToSpawn(player);
+        spawnService.teleportToSpawn(player);
 
         this.spectators.remove(player.getUniqueId());
     }
@@ -142,7 +153,9 @@ public abstract class AbstractFFAMatch {
      * @param killer The killer
      */
     public void handleCombatLog(Player player, Player killer) {
-        ProfileService profileService = this.plugin.getProfileService();
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+        ICombatService combatService = Alley.getInstance().getService(ICombatService.class);
+
         Profile profile = profileService.getProfile(player.getUniqueId());
         Profile killerProfile = profileService.getProfile(killer.getUniqueId());
 
@@ -151,7 +164,6 @@ public abstract class AbstractFFAMatch {
 
         this.getPlayers().forEach(ffaPlayer -> ffaPlayer.getPlayer().sendMessage(CC.translate("&7(Combat Log) &c" + player.getName() + " has been killed by " + killer.getName() + ".")));
 
-        CombatService combatService = this.plugin.getCombatService();
         combatService.resetCombatLog(player);
     }
 }

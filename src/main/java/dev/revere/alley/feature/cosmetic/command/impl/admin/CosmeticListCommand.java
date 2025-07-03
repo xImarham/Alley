@@ -1,11 +1,14 @@
 package dev.revere.alley.feature.cosmetic.command.impl.admin;
 
+import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.feature.cosmetic.EnumCosmeticType;
 import dev.revere.alley.feature.cosmetic.interfaces.ICosmetic;
 import dev.revere.alley.feature.cosmetic.repository.BaseCosmeticRepository;
+import dev.revere.alley.feature.cosmetic.repository.ICosmeticRepository;
+import dev.revere.alley.profile.progress.IProgressService;
 import dev.revere.alley.util.StringUtil;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.entity.Player;
@@ -23,7 +26,7 @@ public class CosmeticListCommand extends BaseCommand {
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
-        Map<EnumCosmeticType, BaseCosmeticRepository<?>> repositories = this.plugin.getCosmeticRepository().getRepositories();
+        Map<EnumCosmeticType, BaseCosmeticRepository<?>> repositories = Alley.getInstance().getService(ICosmeticRepository.class).getRepositories();
 
         player.sendMessage("");
 

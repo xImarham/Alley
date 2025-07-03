@@ -4,6 +4,7 @@ import dev.revere.alley.Alley;
 import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.feature.division.Division;
 import dev.revere.alley.feature.title.menu.TitleMenu;
+import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.tool.item.ItemBuilder;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -44,6 +45,6 @@ public class DivisionButton extends Button {
     public void clicked(Player player, ClickType clickType) {
         if (clickType != ClickType.LEFT) return;
 
-        new TitleMenu(Alley.getInstance().getProfileService().getProfile(player.getUniqueId())).openMenu(player);
+        new TitleMenu(Alley.getInstance().getService(IProfileService.class).getProfile(player.getUniqueId())).openMenu(player);
     }
 }

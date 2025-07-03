@@ -1,8 +1,10 @@
 package dev.revere.alley.base.kit.command.impl.data.potion;
 
+import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
+import dev.revere.alley.base.kit.IKitService;
 import dev.revere.alley.base.kit.Kit;
 import dev.revere.alley.base.kit.KitService;
 import dev.revere.alley.base.kit.menu.KitPotionListMenu;
@@ -28,7 +30,7 @@ public class KitRemovePotionCommand extends BaseCommand {
         }
 
         String kitName = args[0];
-        KitService kitService = this.plugin.getKitService();
+        IKitService kitService = Alley.getInstance().getService(IKitService.class);
         Kit kit = kitService.getKit(kitName);
         if (kit == null) {
             player.sendMessage(CC.translate(KitLocale.KIT_NOT_FOUND.getMessage()).replace("{kit}", kitName));

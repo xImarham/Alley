@@ -2,12 +2,19 @@ package dev.revere.alley.game.ffa.impl;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.base.arena.AbstractArena;
+import dev.revere.alley.base.combat.ICombatService;
+import dev.revere.alley.base.hotbar.IHotbarService;
 import dev.revere.alley.base.kit.Kit;
+import dev.revere.alley.base.spawn.ISpawnService;
+import dev.revere.alley.base.visibility.IVisibilityService;
+import dev.revere.alley.feature.knockback.IKnockbackAdapter;
 import dev.revere.alley.game.ffa.AbstractFFAMatch;
 import dev.revere.alley.game.ffa.enums.EnumFFAState;
 import dev.revere.alley.game.ffa.player.GameFFAPlayer;
+import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
+import dev.revere.alley.tool.reflection.IReflectionRepository;
 import dev.revere.alley.tool.reflection.impl.ActionBarReflectionService;
 import dev.revere.alley.util.PlayerUtil;
 import dev.revere.alley.util.chat.CC;
@@ -78,15 +85,16 @@ public class DefaultFFAMatchImpl extends AbstractFFAMatch {
 
         player.sendMessage(CC.translate("&aYou have left the FFA match."));
 
-        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+        Profile profile = profileService.getProfile(player.getUniqueId());
         profile.setState(EnumProfileState.LOBBY);
         profile.setFfaMatch(null);
 
-        this.plugin.getVisibilityService().updateVisibility(player);
+        Alley.getInstance().getService(IVisibilityService.class).updateVisibility(player);
 
         PlayerUtil.reset(player, false);
-        this.plugin.getSpawnService().teleportToSpawn(player);
-        this.plugin.getHotbarService().applyHotbarItems(player);
+        Alley.getInstance().getService(ISpawnService.class).teleportToSpawn(player);
+        Alley.getInstance().getService(IHotbarService.class).applyHotbarItems(player);
     }
 
     /**
@@ -99,12 +107,13 @@ public class DefaultFFAMatchImpl extends AbstractFFAMatch {
         GameFFAPlayer gameFFAPlayer = this.getGameFFAPlayer(player);
         gameFFAPlayer.setState(EnumFFAState.SPAWN);
 
-        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+        Profile profile = profileService.getProfile(player.getUniqueId());
         profile.setState(EnumProfileState.FFA);
         profile.setFfaMatch(this);
 
-        this.plugin.getVisibilityService().updateVisibility(player);
-        this.plugin.getKnockbackAdapter().getKnockbackType().applyKnockback(player.getPlayer(), getKit().getKnockbackProfile());
+        Alley.getInstance().getService(IVisibilityService.class).updateVisibility(player);
+        Alley.getInstance().getService(IKnockbackAdapter.class).getKnockbackImplementation().applyKnockback(player.getPlayer(), getKit().getKnockbackProfile());
 
         PlayerUtil.reset(player, true);
 
@@ -122,7 +131,8 @@ public class DefaultFFAMatchImpl extends AbstractFFAMatch {
      * @param player The player
      */
     public void handleRespawn(Player player) {
-        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+        Profile profile = profileService.getProfile(player.getUniqueId());
         profile.setState(EnumProfileState.FFA);
         profile.setFfaMatch(this);
 
@@ -151,23 +161,25 @@ public class DefaultFFAMatchImpl extends AbstractFFAMatch {
     @Override
     public void handleDeath(Player player, Player killer) {
         if (killer == null) {
-            Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
+            IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+        Profile profile = profileService.getProfile(player.getUniqueId());
             profile.getProfileData().getFfaData().get(this.getKit().getName()).incrementDeaths();
             this.getPlayers().forEach(ffaPlayer -> ffaPlayer.getPlayer().sendMessage(CC.translate("&c" + player.getName() + " has died.")));
             this.handleRespawn(player);
             return;
         }
 
-        Profile killerProfile = this.plugin.getProfileService().getProfile(killer.getUniqueId());
+        Profile killerProfile = Alley.getInstance().getService(IProfileService.class).getProfile(killer.getUniqueId());
         if (killerProfile.getProfileData().getFfaData().get(getKit().getName()) != null) {
             killerProfile.getProfileData().getFfaData().get(getKit().getName()).incrementKills();
         }
 
-        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+        Profile profile = profileService.getProfile(player.getUniqueId());
         profile.getProfileData().getFfaData().get(getKit().getName()).incrementDeaths();
 
-        this.plugin.getReflectionRepository().getReflectionService(ActionBarReflectionService.class).sendDeathMessage(killer, player);
-        this.plugin.getCombatService().resetCombatLog(player);
+        Alley.getInstance().getService(IReflectionRepository.class).getReflectionService(ActionBarReflectionService.class).sendDeathMessage(killer, player);
+        Alley.getInstance().getService(ICombatService.class).resetCombatLog(player);
 
         this.getPlayers().forEach(ffaPlayer -> ffaPlayer.getPlayer().sendMessage(CC.translate("&6" + player.getName() + " &ahas been killed by &6" + killer.getName() + "&a.")));
         this.handleRespawn(player);

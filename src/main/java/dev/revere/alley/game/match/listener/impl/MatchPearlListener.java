@@ -3,10 +3,13 @@ package dev.revere.alley.game.match.listener.impl;
 import dev.revere.alley.Alley;
 import dev.revere.alley.base.cooldown.Cooldown;
 import dev.revere.alley.base.cooldown.CooldownRepository;
+import dev.revere.alley.base.cooldown.ICooldownRepository;
 import dev.revere.alley.base.cooldown.enums.EnumCooldownType;
 import dev.revere.alley.base.kit.setting.impl.mode.KitSettingLivesImpl;
 import dev.revere.alley.base.kit.setting.impl.mode.KitSettingRaidingImpl;
+import dev.revere.alley.config.IConfigService;
 import dev.revere.alley.game.match.enums.EnumMatchState;
+import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
 import dev.revere.alley.util.InventoryUtil;
@@ -33,17 +36,6 @@ import org.bukkit.metadata.FixedMetadataValue;
 import java.util.Optional;
 
 public class MatchPearlListener implements Listener {
-    protected final Alley plugin;
-
-    /**
-     * Constructor for the MatchPearlListener class.
-     *
-     * @param plugin The Alley instance
-     */
-    public MatchPearlListener(Alley plugin) {
-        this.plugin = plugin;
-    }
-
     @EventHandler
     public void onPearlLaunch(ProjectileLaunchEvent event) {
         if (!(event.getEntity() instanceof EnderPearl) || !(event.getEntity().getShooter() instanceof Player)) {
@@ -53,7 +45,8 @@ public class MatchPearlListener implements Listener {
         EnderPearl enderPearl = (EnderPearl) event.getEntity();
         Player player = (Player) enderPearl.getShooter();
 
-        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+        Profile profile = profileService.getProfile(player.getUniqueId());
 
         if (!isValidGameState(player, event)) {
             return;
@@ -114,7 +107,8 @@ public class MatchPearlListener implements Listener {
     }
 
     private boolean isValidGameState(Player player, ProjectileLaunchEvent event) {
-        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+        Profile profile = profileService.getProfile(player.getUniqueId());
 
         if (profile.getState() != EnumProfileState.PLAYING) {
             return false;
@@ -133,7 +127,7 @@ public class MatchPearlListener implements Listener {
     }
 
     private boolean hasPearlCooldown(Player player, ProjectileLaunchEvent event) {
-        CooldownRepository cooldownRepository = this.plugin.getCooldownRepository();
+        ICooldownRepository cooldownRepository = Alley.getInstance().getService(ICooldownRepository.class);
         Optional<Cooldown> optionalCooldown = Optional.ofNullable(
                 cooldownRepository.getCooldown(player.getUniqueId(), EnumCooldownType.ENDER_PEARL)
         );
@@ -366,17 +360,17 @@ public class MatchPearlListener implements Listener {
 
         // Set "tali" metadata for air block pearls
         if (shouldSetTaliMetadata(block, blockAbove, direction)) {
-            pearl.setMetadata("tali", new FixedMetadataValue(this.plugin, true));
+            pearl.setMetadata("tali", new FixedMetadataValue(Alley.getInstance(), true));
         }
 
         // Set "cpearl" metadata for various block types
         if (shouldSetCpearlMetadata(block, direction)) {
-            pearl.setMetadata("cpearl", new FixedMetadataValue(this.plugin, true));
+            pearl.setMetadata("cpearl", new FixedMetadataValue(Alley.getInstance(), true));
         }
 
         // Set metadata for slabs and stairs
         if (shouldSetSlabStairMetadata(block)) {
-            pearl.setMetadata("tali", new FixedMetadataValue(this.plugin, true));
+            pearl.setMetadata("tali", new FixedMetadataValue(Alley.getInstance(), true));
         }
     }
 
@@ -695,7 +689,7 @@ public class MatchPearlListener implements Listener {
     }
 
     private void applyCooldown(Player player) {
-        CooldownRepository cooldownRepository = this.plugin.getCooldownRepository();
+        ICooldownRepository cooldownRepository = Alley.getInstance().getService(ICooldownRepository.class);
         Optional<Cooldown> optionalCooldown = Optional.ofNullable(
                 cooldownRepository.getCooldown(player.getUniqueId(), EnumCooldownType.ENDER_PEARL)
         );
@@ -711,6 +705,6 @@ public class MatchPearlListener implements Listener {
     }
 
     private ConfigurationSection getConfig() {
-        return this.plugin.getConfigService().getPearlConfig();
+        return Alley.getInstance().getService(IConfigService.class).getPearlConfig();
     }
 }

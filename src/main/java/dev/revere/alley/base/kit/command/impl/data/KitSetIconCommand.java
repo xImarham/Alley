@@ -1,8 +1,10 @@
 package dev.revere.alley.base.kit.command.impl.data;
 
+import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
+import dev.revere.alley.base.kit.IKitService;
 import dev.revere.alley.base.kit.Kit;
 import dev.revere.alley.base.kit.KitService;
 import dev.revere.alley.config.locale.impl.KitLocale;
@@ -26,7 +28,7 @@ public class KitSetIconCommand extends BaseCommand {
             return;
         }
 
-        KitService kitService = this.plugin.getKitService();
+        IKitService kitService = Alley.getInstance().getService(IKitService.class);
         Kit kit = kitService.getKit(args[0]);
         if (kit == null) {
             player.sendMessage(CC.translate(KitLocale.KIT_NOT_FOUND.getMessage()));
@@ -35,7 +37,7 @@ public class KitSetIconCommand extends BaseCommand {
 
         kit.setIcon(player.getItemInHand().getType());
         kit.setDurability(player.getItemInHand().getDurability());
-        this.plugin.getKitService().saveKit(kit);
+        kitService.saveKit(kit);
         player.sendMessage(CC.translate(KitLocale.KIT_ICON_SET.getMessage()).replace("{kit-name}", kit.getName()).replace("{icon}", player.getItemInHand().getType().name().toUpperCase() + ":" + player.getItemInHand().getDurability()));
     }
 }

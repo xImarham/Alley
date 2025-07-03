@@ -2,6 +2,7 @@ package dev.revere.alley.profile.menu.statistic.button;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.menu.Button;
+import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.data.impl.ProfileFFAData;
 import dev.revere.alley.tool.item.ItemBuilder;
@@ -24,7 +25,7 @@ public class GlobalStatButton extends Button {
      */
     @Override
     public ItemStack getButtonItem(Player player) {
-        Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
+        Profile profile = Alley.getInstance().getService(IProfileService.class).getProfile(player.getUniqueId());
         return new ItemBuilder(Material.NETHER_STAR)
                 .name("&6&lGlobal")
                 .lore(

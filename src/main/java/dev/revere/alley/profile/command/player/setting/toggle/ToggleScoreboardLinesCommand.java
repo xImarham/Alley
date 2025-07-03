@@ -1,9 +1,11 @@
 package dev.revere.alley.profile.command.player.setting.toggle;
 
+import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.config.locale.impl.ProfileLocale;
+import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.entity.Player;
@@ -19,7 +21,8 @@ public class ToggleScoreboardLinesCommand extends BaseCommand {
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
 
-        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+        Profile profile = profileService.getProfile(player.getUniqueId());
         profile.getProfileData().getSettingData().setShowScoreboardLines(!profile.getProfileData().getSettingData().isShowScoreboardLines());
 
         player.sendMessage(CC.translate(ProfileLocale.TOGGLED_SCOREBOARD_LINES.getMessage().replace("{status}", profile.getProfileData().getSettingData().isShowScoreboardLines() ? "&aenabled" : "&cdisabled")));

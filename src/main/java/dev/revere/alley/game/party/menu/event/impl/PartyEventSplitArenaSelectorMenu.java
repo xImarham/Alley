@@ -4,6 +4,7 @@ import dev.revere.alley.Alley;
 import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.api.menu.pagination.PaginatedMenu;
 import dev.revere.alley.base.arena.AbstractArena;
+import dev.revere.alley.base.arena.IArenaService;
 import dev.revere.alley.base.kit.Kit;
 import dev.revere.alley.game.party.menu.event.impl.button.PartyEventSplitArenaSelectorButton;
 import lombok.AllArgsConstructor;
@@ -39,7 +40,7 @@ public class PartyEventSplitArenaSelectorMenu extends PaginatedMenu {
     public Map<Integer, Button> getAllPagesButtons(Player player) {
         Map<Integer, Button> buttons = new HashMap<>();
 
-        for (AbstractArena arena : Alley.getInstance().getArenaService().getArenas()) {
+        for (AbstractArena arena : Alley.getInstance().getService(IArenaService.class).getArenas()) {
             if (arena.getKits().contains(kit.getName()) && arena.isEnabled()) {
                 buttons.put(buttons.size(), new PartyEventSplitArenaSelectorButton(kit, arena));
             }

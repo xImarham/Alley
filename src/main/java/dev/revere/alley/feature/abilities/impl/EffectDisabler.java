@@ -3,8 +3,11 @@ package dev.revere.alley.feature.abilities.impl;
 import com.google.common.collect.Maps;
 import dev.revere.alley.Alley;
 import dev.revere.alley.feature.abilities.AbstractAbility;
+import dev.revere.alley.feature.abilities.IAbilityService;
 import dev.revere.alley.feature.abilities.utils.DurationFormatter;
+import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
+import dev.revere.alley.profile.enums.EnumGlobalCooldown;
 import dev.revere.alley.util.PlayerUtil;
 import dev.revere.alley.util.chat.CC;
 import lombok.Getter;
@@ -35,20 +38,24 @@ public class EffectDisabler extends AbstractAbility {
         if (event.getEntity() instanceof Player && event.getDamager() instanceof Player) {
             Player damager = (Player) event.getDamager();
             Player victim = (Player) event.getEntity();
-            Profile profile = Alley.getInstance().getProfileService().getProfile(damager.getUniqueId());
-            
+
+            IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+            IAbilityService abilityService = Alley.getInstance().getService(IAbilityService.class);
+
+            Profile profile = profileService.getProfile(damager.getUniqueId());
+
             if (!isAbility(damager.getItemInHand())) return;
 
             if (isBard(victim) || isArcher(victim) || isRogue(victim) || isMiner(victim)) return;
             
-            if (profile.getEffectdisabler().onCooldown(damager)) {
-                damager.sendMessage(CC.translate("&fYou are on &6&lEffect Disabler &7cooldown for &4" + DurationFormatter.getRemaining(profile.getEffectdisabler().getRemainingMillis(damager), true, true)));
+            if (profile.getCooldown(EffectDisabler.class).onCooldown(damager)) {
+                damager.sendMessage(CC.translate("&fYou are on &6&lEffect Disabler &7cooldown for &4" + DurationFormatter.getRemaining(profile.getCooldown(EffectDisabler.class).getRemainingMillis(damager), true, true)));
                 damager.updateInventory();
                 return;
             }
 
-            if(profile.getPartneritem().onCooldown(damager)){
-                damager.sendMessage(CC.translate("&fYou are on &6&lPartner Item &fcooldown for &6" + DurationFormatter.getRemaining(profile.getPartneritem().getRemainingMillis(damager), true, true)));
+            if(profile.getGlobalCooldown(EnumGlobalCooldown.PARTNER_ITEM).onCooldown(damager)){
+                damager.sendMessage(CC.translate("&fYou are on &6&lPartner Item &fcooldown for &6" + DurationFormatter.getRemaining(profile.getGlobalCooldown(EnumGlobalCooldown.PARTNER_ITEM).getRemainingMillis(damager), true, true)));
                 damager.updateInventory();
                 return;
             }
@@ -63,16 +70,16 @@ public class EffectDisabler extends AbstractAbility {
 
             PlayerUtil.decrement(damager);
 
-            profile.getEffectdisabler().applyCooldown(damager, 60 * 1000);
-            profile.getPartneritem().applyCooldown(damager,  10 * 1000);
+            profile.getCooldown(EffectDisabler.class).applyCooldown(damager, 60 * 1000);
+            profile.getGlobalCooldown(EnumGlobalCooldown.PARTNER_ITEM).applyCooldown(damager,  10 * 1000);
 
             HITS.remove(victim.getUniqueId());
 
             victim.getActivePotionEffects().forEach(potionEffect -> victim.removePotionEffect(potionEffect.getType()));
 
-            plugin.getAbilityService().cooldownExpired(damager, this.getName(), this.getAbility());
-            plugin.getAbilityService().playerMessage(damager, this.getAbility());
-            plugin.getAbilityService().targetMessage(victim, damager, this.getAbility());
+            abilityService.sendCooldownExpiredMessage(damager, this.getName(), this.getAbility());
+            abilityService.sendPlayerMessage(damager, this.getAbility());
+            abilityService.sendTargetMessage(victim, damager, this.getAbility());
         }
     }
 
@@ -87,7 +94,7 @@ public class EffectDisabler extends AbstractAbility {
 
             if (this.hasCooldown(player)) {
                 event.setCancelled(true);
-                plugin.getAbilityService().cooldown(player, this.getName(), this.getCooldown(player));
+                Alley.getInstance().getService(IAbilityService.class).sendCooldownMessage(player, this.getName(), this.getCooldown(player));
                 player.updateInventory();
             }
         }
@@ -97,14 +104,14 @@ public class EffectDisabler extends AbstractAbility {
     public void checkCooldown(PlayerInteractEvent event) {
         Player player = event.getPlayer();
         Action action = event.getAction();
-        Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
+        Profile profile = Alley.getInstance().getService(IProfileService.class).getProfile(player.getUniqueId());
         if (action.equals(Action.LEFT_CLICK_AIR) || action.equals(Action.LEFT_CLICK_BLOCK)) {
             if (!isAbility(player.getItemInHand())) {
                 return;
             }
             if (isAbility(player.getItemInHand())) {
                 if (this.hasCooldown(player)) {
-                    player.sendMessage(CC.translate("&fYou are on cooldown for &4" + DurationFormatter.getRemaining(profile.getEffectdisabler().getRemainingMillis(player), true)));
+                    player.sendMessage(CC.translate("&fYou are on cooldown for &4" + DurationFormatter.getRemaining(profile.getCooldown(EffectDisabler.class).getRemainingMillis(player), true)));
                     event.setCancelled(true);
                     player.updateInventory();
                 }

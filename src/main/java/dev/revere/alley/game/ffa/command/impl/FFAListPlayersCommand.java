@@ -1,9 +1,11 @@
 package dev.revere.alley.game.ffa.command.impl;
 
+import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.game.ffa.AbstractFFAMatch;
+import dev.revere.alley.game.ffa.IFFAService;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.entity.Player;
 
@@ -25,7 +27,7 @@ public class FFAListPlayersCommand extends BaseCommand {
         }
 
         String kitName = args[0];
-        AbstractFFAMatch match = this.plugin.getFfaService().getFFAMatch(kitName);
+        AbstractFFAMatch match = Alley.getInstance().getService(IFFAService.class).getFFAMatch(kitName);
         if (match == null) {
             player.sendMessage(CC.translate("&cThere is no FFA match with the name " + kitName + "."));
             return;

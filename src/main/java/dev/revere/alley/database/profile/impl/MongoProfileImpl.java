@@ -4,8 +4,10 @@ import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.ReplaceOptions;
 import com.mongodb.client.model.UpdateOptions;
 import dev.revere.alley.Alley;
+import dev.revere.alley.database.IMongoService;
 import dev.revere.alley.database.profile.IProfile;
 import dev.revere.alley.database.util.MongoUtility;
+import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.tool.date.DateFormatter;
 import dev.revere.alley.tool.date.enums.EnumDateFormat;
@@ -19,17 +21,6 @@ import java.util.UUID;
  * @date 5/22/2024
  */
 public class MongoProfileImpl implements IProfile {
-    protected final Alley plugin;
-
-    /**
-     * Constructor for the MongoProfileImpl class.
-     *
-     * @param plugin The Alley plugin instance.
-     */
-    public MongoProfileImpl(Alley plugin) {
-        this.plugin = plugin;
-    }
-
     /**
      * Saves a profile to the database.
      *
@@ -38,7 +29,8 @@ public class MongoProfileImpl implements IProfile {
     @Override
     public void saveProfile(Profile profile) {
         Document document = MongoUtility.toDocument(profile);
-        this.plugin.getProfileService().getCollection()
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+        profileService.getCollection()
                 .replaceOne(Filters.eq("uuid", profile.getUuid().toString()), document, new ReplaceOptions().upsert(true));
     }
 
@@ -50,9 +42,11 @@ public class MongoProfileImpl implements IProfile {
     @Override
     public void loadProfile(Profile profile) {
         if (profile.getUuid() == null) return;
-        if (this.plugin.getProfileService().getCollection() == null) return;
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
 
-        Document document = this.plugin.getProfileService().getCollection().find(Filters.eq("uuid", profile.getUuid().toString())).first();
+        if (profileService.getCollection() == null) return;
+
+        Document document = profileService.getCollection().find(Filters.eq("uuid", profile.getUuid().toString())).first();
         if (document == null) {
             this.saveProfile(profile);
             return;
@@ -77,7 +71,8 @@ public class MongoProfileImpl implements IProfile {
         archiveDocument.put("archived_at", dateFormatter.getDateFormat().format(dateFormatter.getDate()));
         archiveDocument.put("data", MongoUtility.toDocument(profile));
 
-        this.plugin.getMongoService().getMongoDatabase().getCollection("profile_archives").updateOne(
+        IMongoService mongoService = Alley.getInstance().getService(IMongoService.class);
+        mongoService.getMongoDatabase().getCollection("profile_archives").updateOne(
                 new Document("uuid", profile.getUuid().toString()),
                 new Document("$push", new Document("archives", archiveDocument)),
                 new UpdateOptions().upsert(true)

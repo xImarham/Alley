@@ -1,10 +1,15 @@
 package dev.revere.alley.base.kit.command.impl.manage;
 
+import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
+import dev.revere.alley.base.arena.schematic.IArenaSchematicService;
+import dev.revere.alley.base.kit.IKitService;
 import dev.revere.alley.base.kit.KitService;
 import dev.revere.alley.config.locale.impl.KitLocale;
+import dev.revere.alley.profile.IProfileService;
+import dev.revere.alley.tool.reflection.IReflectionRepository;
 import dev.revere.alley.tool.reflection.impl.ActionBarReflectionService;
 import dev.revere.alley.util.InventoryUtil;
 import dev.revere.alley.util.chat.CC;
@@ -30,7 +35,7 @@ public class KitCreateCommand extends BaseCommand {
         }
 
         String kitName = args[0];
-        KitService kitService = this.plugin.getKitService();
+        IKitService kitService = Alley.getInstance().getService(IKitService.class);
         if (kitService.getKit(kitName) != null) {
             player.sendMessage(CC.translate(KitLocale.KIT_ALREADY_EXISTS.getMessage()));
             return;
@@ -45,8 +50,8 @@ public class KitCreateCommand extends BaseCommand {
         }
 
         kitService.createKit(kitName, inventory, armor, icon);
-        this.plugin.getProfileService().loadProfiles(); // to update the kits in the database
-        this.plugin.getReflectionRepository().getReflectionService(ActionBarReflectionService.class).sendMessage(player, KitLocale.KIT_CREATED.getMessage().replace("{kit-name}", kitName), 5);
+        Alley.getInstance().getService(IProfileService.class).loadProfiles(); // to update the kits in the database
+        Alley.getInstance().getService(IReflectionRepository.class).getReflectionService(ActionBarReflectionService.class).sendMessage(player, KitLocale.KIT_CREATED.getMessage().replace("{kit-name}", kitName), 5);
 
         player.sendMessage(CC.translate(KitLocale.KIT_CREATED.getMessage().replace("{kit-name}", kitName)));
         player.sendMessage("");

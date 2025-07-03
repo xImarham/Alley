@@ -2,6 +2,7 @@ package dev.revere.alley.database.util;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.feature.division.Division;
+import dev.revere.alley.feature.division.IDivisionService;
 import dev.revere.alley.feature.division.tier.DivisionTier;
 import dev.revere.alley.feature.layout.data.LayoutData;
 import dev.revere.alley.profile.Profile;
@@ -254,7 +255,7 @@ public class MongoUtility {
             ProfileUnrankedKitData kit = new ProfileUnrankedKitData();
 
             String storedDivision = kitEntry.getString("division");
-            Division division = Alley.getInstance().getDivisionService().getDivision(storedDivision);
+            Division division = Alley.getInstance().getService(IDivisionService.class).getDivision(storedDivision);
             kit.setDivision(division.getName());
 
             String storedTier = kitEntry.getString("tier");

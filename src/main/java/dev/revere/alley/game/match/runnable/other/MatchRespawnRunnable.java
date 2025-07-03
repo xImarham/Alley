@@ -3,6 +3,7 @@ package dev.revere.alley.game.match.runnable.other;
 import dev.revere.alley.Alley;
 import dev.revere.alley.game.match.AbstractMatch;
 import dev.revere.alley.game.match.enums.EnumMatchState;
+import dev.revere.alley.tool.reflection.IReflectionRepository;
 import dev.revere.alley.tool.reflection.impl.TitleReflectionService;
 import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.util.chat.Symbol;
@@ -45,7 +46,7 @@ public class MatchRespawnRunnable extends BukkitRunnable {
             return;
         }
 
-        Alley.getInstance().getReflectionRepository().getReflectionService(TitleReflectionService.class).sendTitle(
+        Alley.getInstance().getService(IReflectionRepository.class).getReflectionService(TitleReflectionService.class).sendTitle(
                 player,
                 "&6&lRespawn",
                 "&fRespawning in &6" + this.count + "s",

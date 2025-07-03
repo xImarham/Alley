@@ -1,11 +1,13 @@
-package dev.revere.alley.core;
+package dev.revere.alley.server;
 
 import dev.revere.alley.Alley;
-import dev.revere.alley.core.enums.EnumCoreType;
-import dev.revere.alley.core.impl.AquaCoreImpl;
-import dev.revere.alley.core.impl.DefaultCoreImpl;
-import dev.revere.alley.core.impl.HeliumCoreImpl;
-import dev.revere.alley.core.impl.PhoenixCoreImpl;
+import dev.revere.alley.core.AlleyContext;
+import dev.revere.alley.core.annotation.Service;
+import dev.revere.alley.server.enums.EnumCoreType;
+import dev.revere.alley.server.impl.AquaCoreImpl;
+import dev.revere.alley.server.impl.DefaultCoreImpl;
+import dev.revere.alley.server.impl.HeliumCoreImpl;
+import dev.revere.alley.server.impl.PhoenixCoreImpl;
 import dev.revere.alley.tool.logger.Logger;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,25 +21,37 @@ import xyz.refinedev.phoenix.SharedAPI;
  * @since 26/04/2025
  */
 @Getter
-@Setter
-public class CoreAdapter {
-    protected final Alley plugin;
-    private final ICore core;
+@Service(provides = ICoreAdapter.class, priority = 60)
+public class CoreAdapter implements ICoreAdapter {
+
+    private final Alley plugin;
+    private ICore core;
 
     /**
-     * Constructor for the CoreAdapter class.
-     *
-     * @param plugin The Alley plugin instance.
+     * Constructor for DI. Receives the main plugin instance.
      */
     public CoreAdapter(Alley plugin) {
         this.plugin = plugin;
+    }
+
+    @Override
+    public void initialize(AlleyContext context) {
         this.core = this.determineCore();
+        Logger.info("Adapting to &6" + core.getType().getPluginName() + " Core &fby &6" + core.getType().getPluginAuthor() + "&f.");
+    }
+
+    @Override
+    public ICore getCore() {
+        if (this.core == null) {
+            throw new IllegalStateException("CoreAdapter has not been initialized yet.");
+        }
+        return this.core;
     }
 
     /**
-     * Determines the core implementation to use based on the enabled plugins.
+     * Determines the server implementation to use based on the enabled plugins.
      *
-     * @return The selected core implementation.
+     * @return The selected server implementation.
      */
     private ICore determineCore() {
         ICore selectedCore = new DefaultCoreImpl(this.plugin);
@@ -53,12 +67,11 @@ public class CoreAdapter {
                         break;
                     case HELIUM:
                         selectedCore = new HeliumCoreImpl(HeliumAPI.INSTANCE);
+                        break;
                 }
                 break;
             }
         }
-
-        Logger.log("Adapting to &6" + selectedCore.getType().getPluginName() + " Core &fby &6" + selectedCore.getType().getPluginAuthor() + "&f.");
         return selectedCore;
     }
 }

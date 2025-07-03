@@ -17,7 +17,6 @@ import org.bukkit.inventory.ItemStack;
  * @date 5/20/2024
  */
 public class ArenaListener implements Listener {
-
     @EventHandler(priority = EventPriority.LOW)
     private void onPlayerInteractEvent(PlayerInteractEvent event) {
         if (event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_BLOCK) {

@@ -35,8 +35,8 @@ public class WebhookListener implements Listener {
         String cleanedMessage = ChatColor.stripColor(CC.translate(originalMessage));
         String discordMessage = /*"[" + formattedTime + "] */"**" + playerName + "**: " + cleanedMessage;
 
-        this.plugin.getServer().getScheduler().runTaskAsynchronously(this.plugin, () ->
+        /* this.plugin.getServer().getScheduler().runTaskAsynchronously(this.plugin, () ->
                 this.plugin.getDiscordBridge().getWebhookService().sendMessage(discordMessage)
-        );
+        ); */
     }
 }

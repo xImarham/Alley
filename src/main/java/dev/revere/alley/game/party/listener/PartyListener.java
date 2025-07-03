@@ -1,8 +1,10 @@
 package dev.revere.alley.game.party.listener;
 
 import dev.revere.alley.Alley;
+import dev.revere.alley.game.party.IPartyService;
 import dev.revere.alley.game.party.Party;
 import dev.revere.alley.game.party.PartyService;
+import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumChatChannel;
 import dev.revere.alley.util.chat.CC;
@@ -19,22 +21,14 @@ import org.bukkit.event.player.PlayerQuitEvent;
  * @date 5/25/2024
  */
 public class PartyListener implements Listener {
-    protected final Alley plugin;
-    
-    /**
-     * Constructor for the PartyListener class.
-     *
-     * @param plugin the Alley plugin instance
-     */
-    public PartyListener(Alley plugin) {
-        this.plugin = plugin;
-    }
-
     @EventHandler
     private void onAsyncPlayerChatEvent(AsyncPlayerChatEvent event) {
         Player player = event.getPlayer();
-        Profile profile = this.plugin.getProfileService().getProfile(event.getPlayer().getUniqueId());
-        PartyService partyService = this.plugin.getPartyService();
+
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+        IPartyService partyService = Alley.getInstance().getService(IPartyService.class);
+
+        Profile profile = profileService.getProfile(event.getPlayer().getUniqueId());
 
         if (profile.getProfileData().getSettingData().getChatChannel().equalsIgnoreCase(EnumChatChannel.PARTY.toString())) {
             event.setCancelled(true);
@@ -78,7 +72,8 @@ public class PartyListener implements Listener {
     @EventHandler
     private void onPlayerKick(PlayerKickEvent event) {
         Player player = event.getPlayer();
-        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+        Profile profile = profileService.getProfile(player.getUniqueId());
 
         Party party = profile.getParty();
         if (party == null) {
@@ -86,17 +81,18 @@ public class PartyListener implements Listener {
         }
 
         if (party.getLeader() == player) {
-            this.plugin.getPartyService().disbandParty(player);
+            Alley.getInstance().getService(IPartyService.class).disbandParty(player);
             return;
         }
 
-        this.plugin.getPartyService().leaveParty(player);
+        Alley.getInstance().getService(IPartyService.class).leaveParty(player);
     }
 
     @EventHandler
     private void onPlayerQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
-        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+        Profile profile = profileService.getProfile(player.getUniqueId());
 
         Party party = profile.getParty();
         if (party == null) {
@@ -104,10 +100,10 @@ public class PartyListener implements Listener {
         }
 
         if (party.getLeader() == player) {
-            this.plugin.getPartyService().disbandParty(player);
+            Alley.getInstance().getService(IPartyService.class).disbandParty(player);
             return;
         }
 
-        this.plugin.getPartyService().leaveParty(player);
+        Alley.getInstance().getService(IPartyService.class).leaveParty(player);
     }
 }

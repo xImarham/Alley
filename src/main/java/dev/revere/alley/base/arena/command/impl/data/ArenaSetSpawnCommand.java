@@ -1,9 +1,11 @@
 package dev.revere.alley.base.arena.command.impl.data;
 
+import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.annotation.CompleterData;
+import dev.revere.alley.base.arena.IArenaService;
 import dev.revere.alley.base.arena.enums.EnumArenaType;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.entity.Player;
@@ -23,7 +25,7 @@ public class ArenaSetSpawnCommand extends BaseCommand {
         List<String> completion = new ArrayList<>();
 
         if (command.getArgs().length == 1 && command.getPlayer().hasPermission("alley.admin")) {
-            this.plugin.getArenaService().getArenas().forEach(arena -> completion.add(arena.getName()));
+            Alley.getInstance().getService(IArenaService.class).getArenas().forEach(arena -> completion.add(arena.getName()));
         }
 
         return completion;
@@ -43,7 +45,7 @@ public class ArenaSetSpawnCommand extends BaseCommand {
         String arenaName = args[0];
         String spawnType = args[1];
 
-        if (this.plugin.getArenaService().getArenaByName(arenaName) == null) {
+        if (Alley.getInstance().getService(IArenaService.class).getArenaByName(arenaName) == null) {
             player.sendMessage(CC.translate("&cAn arena with that name does not exist!"));
             return;
         }
@@ -55,31 +57,31 @@ public class ArenaSetSpawnCommand extends BaseCommand {
 
         switch (spawnType.toLowerCase()) {
             case "blue":
-                if (this.plugin.getArenaService().getArenaByName(arenaName).getType() == EnumArenaType.FFA) {
+                if (Alley.getInstance().getService(IArenaService.class).getArenaByName(arenaName).getType() == EnumArenaType.FFA) {
                     player.sendMessage(CC.translate("&cFFA Arenas do not need a spawn position!"));
                     return;
                 }
-                this.plugin.getArenaService().getArenaByName(arenaName).setPos1(player.getLocation());
+                Alley.getInstance().getService(IArenaService.class).getArenaByName(arenaName).setPos1(player.getLocation());
                 player.sendMessage(CC.translate("&aBlue Spawn Position has been set for arena &6" + arenaName + "&a!"));
                 break;
             case "ffa":
-                if (this.plugin.getArenaService().getArenaByName(arenaName).getType() != EnumArenaType.FFA) {
+                if (Alley.getInstance().getService(IArenaService.class).getArenaByName(arenaName).getType() != EnumArenaType.FFA) {
                     player.sendMessage(CC.translate("&cThis arena is not an FFA arena!"));
                     return;
                 }
-                this.plugin.getArenaService().getArenaByName(arenaName).setPos1(player.getLocation());
+                Alley.getInstance().getService(IArenaService.class).getArenaByName(arenaName).setPos1(player.getLocation());
                 player.sendMessage(CC.translate("&aSpawn Position has been set for arena &6" + arenaName + "&a!"));
                 break;
             default:
-                if (this.plugin.getArenaService().getArenaByName(arenaName).getType() == EnumArenaType.FFA) {
+                if (Alley.getInstance().getService(IArenaService.class).getArenaByName(arenaName).getType() == EnumArenaType.FFA) {
                     player.sendMessage(CC.translate("&cFFA Arenas do not need a spawn position!"));
                     return;
                 }
-                this.plugin.getArenaService().getArenaByName(arenaName).setPos2(player.getLocation());
+                Alley.getInstance().getService(IArenaService.class).getArenaByName(arenaName).setPos2(player.getLocation());
                 player.sendMessage(CC.translate("&aRed Spawn Position has been set for arena &6" + arenaName + "&a!"));
                 break;
         }
 
-        this.plugin.getArenaService().saveArena(this.plugin.getArenaService().getArenaByName(arenaName));
+        Alley.getInstance().getService(IArenaService.class).saveArena(Alley.getInstance().getService(IArenaService.class).getArenaByName(arenaName));
     }
 }

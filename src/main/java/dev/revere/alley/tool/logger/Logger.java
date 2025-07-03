@@ -1,6 +1,8 @@
 package dev.revere.alley.tool.logger;
 
 import dev.revere.alley.Alley;
+import dev.revere.alley.api.constant.IPluginConstant;
+import dev.revere.alley.feature.abilities.IAbilityService;
 import dev.revere.alley.util.chat.CC;
 import lombok.experimental.UtilityClass;
 import org.bukkit.command.ConsoleCommandSender;
@@ -30,7 +32,7 @@ public class Logger {
      *
      * @param message the message to log
      */
-    public void log(String message) {
+    public void info(String message) {
         consoleSender.sendMessage(CC.translate(CC.PREFIX + message));
     }
 
@@ -39,8 +41,17 @@ public class Logger {
      *
      * @param message the error message to log
      */
-    public void logError(String message) {
+    public void error(String message) {
         consoleSender.sendMessage(CC.translate(CC.ERROR_PREFIX + "&c(ERROR) &8" + message));
+    }
+
+    /**
+     * Log a warning to the console.
+     *
+     * @param message the warning message to log
+     */
+    public void warn(String message) {
+        consoleSender.sendMessage(CC.translate(CC.WARNING_PREFIX + "&e(WARNING) &8" + message));
     }
 
     /**
@@ -90,7 +101,7 @@ public class Logger {
         String locationMessage = "&cError occurred at: Unknown location";
 
         for (StackTraceElement element : stackTrace) {
-            if (element.getClassName().startsWith(Alley.getInstance().getPluginConstant().getPackageDirectory())) {
+            if (element.getClassName().startsWith(Alley.getInstance().getService(IPluginConstant.class).getPackageDirectory())) {
                 locationMessage = "&cError occurred at: " + element.getClassName() + " (Line " + element.getLineNumber() + ")";
                 break;
             }

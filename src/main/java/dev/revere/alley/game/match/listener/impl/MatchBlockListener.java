@@ -13,6 +13,7 @@ import dev.revere.alley.game.match.impl.MatchBedImpl;
 import dev.revere.alley.game.match.player.enums.EnumBaseRaiderRole;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
+import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
 import dev.revere.alley.util.ListenerUtil;
@@ -45,21 +46,11 @@ import java.util.concurrent.ThreadLocalRandom;
  * @since 08/02/2025
  */
 public class MatchBlockListener implements Listener {
-    protected final Alley plugin;
-
-    /**
-     * Constructor for the MatchBlockListener class.
-     *
-     * @param plugin The Alley instance
-     */
-    public MatchBlockListener(Alley plugin) {
-        this.plugin = plugin;
-    }
-
     @EventHandler
     private void onBlockBreak(BlockBreakEvent event) {
         Player player = event.getPlayer();
-        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+        Profile profile = profileService.getProfile(player.getUniqueId());
 
         AbstractMatch match = profile.getMatch();
         if (match == null) {
@@ -77,7 +68,7 @@ public class MatchBlockListener implements Listener {
                 }
 
                 if (match.getKit().isSettingEnabled(KitSettingBuildImpl.class) && match.getKit().isSettingEnabled(KitSettingRaidingImpl.class)) {
-                    if (participant.getPlayer().getData().getRole() == EnumBaseRaiderRole.TRAPPER) {
+                    if (participant.getLeader().getData().getRole() == EnumBaseRaiderRole.TRAPPER) {
                         // event.setCancelled(false);
                         match.addBlockToBrokenBlocksMap(event.getBlock().getState(), event.getBlock().getLocation());
                         return;
@@ -181,7 +172,8 @@ public class MatchBlockListener implements Listener {
     @EventHandler
     private void onBlockPlace(BlockPlaceEvent event) {
         Player player = event.getPlayer();
-        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+        Profile profile = profileService.getProfile(player.getUniqueId());
         int blockY = event.getBlock().getLocation().getBlockY();
 
         AbstractMatch match = profile.getMatch();
@@ -215,7 +207,7 @@ public class MatchBlockListener implements Listener {
 
                 if (match.getKit().isSettingEnabled(KitSettingRaidingImpl.class) && match.getKit().isSettingEnabled(KitSettingBuildImpl.class)) {
                     GameParticipant<MatchGamePlayerImpl> participant = match.getParticipant(player);
-                    if (participant.getPlayer().getData().getRole() == EnumBaseRaiderRole.TRAPPER) {
+                    if (participant.getLeader().getData().getRole() == EnumBaseRaiderRole.TRAPPER) {
                         // event.setCancelled(false);
                         match.addBlockToPlacedBlocksMap(event.getBlock().getState(), event.getBlock().getLocation());
                     } else {
@@ -239,7 +231,8 @@ public class MatchBlockListener implements Listener {
     private void onProjectileHit(ProjectileHitEvent event) {
         if (event.getEntityType() == EntityType.SNOWBALL && event.getEntity().getShooter() instanceof Player) {
             Player player = (Player) event.getEntity().getShooter();
-            Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
+            IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+        Profile profile = profileService.getProfile(player.getUniqueId());
 
             if (profile.getState() != EnumProfileState.PLAYING) return;
             if (profile.getMatch().getState() != EnumMatchState.RUNNING) return;
@@ -258,7 +251,8 @@ public class MatchBlockListener implements Listener {
     @EventHandler
     private void onPlayerInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
-        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+        Profile profile = profileService.getProfile(player.getUniqueId());
 
         if (profile.getState() == EnumProfileState.SPECTATING) {
             Block block = event.getClickedBlock();
@@ -271,7 +265,8 @@ public class MatchBlockListener implements Listener {
     @EventHandler
     private void onDoorOpen(PlayerInteractEvent event) {
         Player player = event.getPlayer();
-        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+        Profile profile = profileService.getProfile(player.getUniqueId());
 
         if (profile.getState() != EnumProfileState.PLAYING) return;
         if (profile.getMatch() == null) return;
@@ -286,7 +281,7 @@ public class MatchBlockListener implements Listener {
                 }
 
                 GameParticipant<MatchGamePlayerImpl> participant = profile.getMatch().getParticipant(player);
-                if (participant.getPlayer().getData().getRole() == EnumBaseRaiderRole.RAIDER && ListenerUtil.isInteractiveBlock(block.getType())) {
+                if (participant.getLeader().getData().getRole() == EnumBaseRaiderRole.RAIDER && ListenerUtil.isInteractiveBlock(block.getType())) {
                     if (event.getPlayer().isSneaking() && event.getItem().getType() == Material.ENDER_PEARL && event.getAction() == Action.RIGHT_CLICK_BLOCK && event.getClickedBlock().getType().name().contains("FENCE")) {
                         return;
                     }

@@ -1,6 +1,8 @@
 package dev.revere.alley.base.nametag;
 
 import dev.revere.alley.Alley;
+import dev.revere.alley.core.AlleyContext;
+import dev.revere.alley.core.annotation.Service;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -20,15 +22,24 @@ import java.util.concurrent.ConcurrentHashMap;
  * @date 27/06/2025
  */
 @Getter
-public class NametagService implements Listener {
-    private final Map<UUID, NametagPerspective> playerPerspectives = new ConcurrentHashMap<>();
-    private final NametagRegistry nametagRegistry;
+@Service(provides = INametagService.class, priority = 390)
+public class NametagService implements INametagService, Listener {
     private final Alley plugin;
 
+    private final Map<UUID, NametagPerspective> playerPerspectives = new ConcurrentHashMap<>();
+    private final NametagRegistry nametagRegistry;
+
+    /**
+     * Constructor for DI.
+     */
     public NametagService(Alley plugin) {
         this.plugin = plugin;
         this.nametagRegistry = new NametagRegistry(this);
-        this.plugin.getServer().getPluginManager().registerEvents(this, plugin);
+    }
+
+    @Override
+    public void initialize(AlleyContext context) {
+        this.plugin.getServer().getPluginManager().registerEvents(this, this.plugin);
     }
 
     /**

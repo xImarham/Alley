@@ -1,6 +1,7 @@
 package dev.revere.alley.game.match.listener.impl;
 
 import dev.revere.alley.Alley;
+import dev.revere.alley.base.combat.ICombatService;
 import dev.revere.alley.base.kit.Kit;
 import dev.revere.alley.base.kit.setting.impl.mechanic.KitSettingNoDamageImpl;
 import dev.revere.alley.base.kit.setting.impl.mechanic.KitSettingNoFallDamageImpl;
@@ -13,8 +14,11 @@ import dev.revere.alley.game.match.AbstractMatch;
 import dev.revere.alley.game.match.enums.EnumMatchState;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
+import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
+import dev.revere.alley.server.ICoreAdapter;
+import dev.revere.alley.tool.reflection.IReflectionRepository;
 import dev.revere.alley.tool.reflection.impl.ActionBarReflectionService;
 import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.util.chat.Symbol;
@@ -33,22 +37,12 @@ import org.bukkit.event.entity.EntityDamageEvent;
  * @since 08/02/2025
  */
 public class MatchDamageListener implements Listener {
-    protected final Alley plugin;
-
-    /**
-     * Constructor for the MatchDamageListener class.
-     *
-     * @param plugin The Alley instance
-     */
-    public MatchDamageListener(Alley plugin) {
-        this.plugin = plugin;
-    }
-
     @EventHandler
     private void onEntityDamage(EntityDamageEvent event) {
         if (!(event.getEntity() instanceof Player)) return;
         Player player = (Player) event.getEntity();
-        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+        Profile profile = profileService.getProfile(player.getUniqueId());
 
         if (profile.getState() == EnumProfileState.SPECTATING) event.setCancelled(true);
         if (profile.getState() == EnumProfileState.PLAYING) {
@@ -109,8 +103,10 @@ public class MatchDamageListener implements Listener {
             return;
         }
 
-        Profile damagedProfile = this.plugin.getProfileService().getProfile(damaged.getUniqueId());
-        Profile attackerProfile = this.plugin.getProfileService().getProfile(attacker.getUniqueId());
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+
+        Profile damagedProfile = profileService.getProfile(damaged.getUniqueId());
+        Profile attackerProfile = profileService.getProfile(attacker.getUniqueId());
 
         if (damagedProfile.getState() == EnumProfileState.SPECTATING || attackerProfile.getState() == EnumProfileState.SPECTATING) {
             event.setCancelled(true);
@@ -159,7 +155,7 @@ public class MatchDamageListener implements Listener {
                         finalHealth = Math.max(0, finalHealth);
 
                         if (finalHealth > 0) {
-                            attacker.sendMessage(CC.translate(this.plugin.getCoreAdapter().getCore().getPlayerColor(damaged) + damaged.getName() + " &7&l" + Symbol.ARROW_R + " &6" + String.format("%.1f", finalHealth) + " &c" + Symbol.HEART));
+                            attacker.sendMessage(CC.translate(Alley.getInstance().getService(ICoreAdapter.class).getCore().getPlayerColor(damaged) + damaged.getName() + " &7&l" + Symbol.ARROW_R + " &6" + String.format("%.1f", finalHealth) + " &c" + Symbol.HEART));
                         }
                     }
 
@@ -174,7 +170,7 @@ public class MatchDamageListener implements Listener {
 
                         if (participant.getTeamHits() >= requiredHits) {
                             opponent.getPlayers().forEach(matchGamePlayer -> {
-                                match.handleDeath(matchGamePlayer.getPlayer(), EntityDamageEvent.DamageCause.ENTITY_ATTACK);
+                                match.handleDeath(matchGamePlayer.getTeamPlayer(), EntityDamageEvent.DamageCause.ENTITY_ATTACK);
                             });
                         }
                     }
@@ -186,7 +182,7 @@ public class MatchDamageListener implements Listener {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     private void onEntityDamageByEntityMonitor(EntityDamageByEntityEvent event) {
         if (event.getEntity() instanceof Player && event.getDamager() instanceof Player) {
-            Profile profile = this.plugin.getProfileService().getProfile(event.getEntity().getUniqueId());
+            Profile profile = Alley.getInstance().getService(IProfileService.class).getProfile(event.getEntity().getUniqueId());
             if (profile.getState() == EnumProfileState.SPECTATING) {
                 event.setCancelled(true);
                 return;
@@ -196,10 +192,10 @@ public class MatchDamageListener implements Listener {
                 Player player = (Player) event.getEntity();
                 Player attacker = (Player) event.getDamager();
 
-                this.plugin.getCombatService().setLastAttacker(player, attacker);
+                Alley.getInstance().getService(ICombatService.class).setLastAttacker(player, attacker);
 
                 if (profile.getMatch().getKit().isSettingEnabled(KitSettingHealthBarImpl.class)) {
-                    this.plugin.getReflectionRepository().getReflectionService(ActionBarReflectionService.class)
+                    Alley.getInstance().getService(IReflectionRepository.class).getReflectionService(ActionBarReflectionService.class)
                             .visualizeTargetHealth(attacker, player);
                 }
             }

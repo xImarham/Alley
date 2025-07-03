@@ -3,6 +3,7 @@ package dev.revere.alley.profile.data.impl;
 import dev.revere.alley.Alley;
 import dev.revere.alley.feature.division.Division;
 import dev.revere.alley.feature.division.DivisionService;
+import dev.revere.alley.feature.division.IDivisionService;
 import dev.revere.alley.feature.division.tier.DivisionTier;
 import lombok.Getter;
 import lombok.Setter;
@@ -38,7 +39,7 @@ public class ProfileUnrankedKitData {
     }
 
     public void determineDivision() {
-        DivisionService divisionService = Alley.getInstance().getDivisionService();
+        IDivisionService divisionService = Alley.getInstance().getService(IDivisionService.class);
         for (Division division : divisionService.getDivisions()) {
             for (DivisionTier tier : division.getTiers()) {
                 if (this.wins >= tier.getRequiredWins() && (this.division == null || !this.division.equals(division.getName()) || !Objects.equals(this.tier, tier.getName()))) {
@@ -55,7 +56,7 @@ public class ProfileUnrankedKitData {
      * @return The division.
      */
     public Division getDivision() {
-        DivisionService divisionService = Alley.getInstance().getDivisionService();
+        IDivisionService divisionService = Alley.getInstance().getService(IDivisionService.class);
         return divisionService.getDivision(this.division);
     }
 

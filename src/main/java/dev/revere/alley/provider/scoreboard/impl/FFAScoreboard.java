@@ -2,6 +2,11 @@ package dev.revere.alley.provider.scoreboard.impl;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.base.combat.CombatService;
+import dev.revere.alley.base.combat.ICombatService;
+import dev.revere.alley.config.IConfigService;
+import dev.revere.alley.feature.level.ILevelService;
+import dev.revere.alley.game.ffa.cuboid.IFFASpawnService;
+import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.provider.scoreboard.IScoreboard;
 import dev.revere.alley.util.chat.CC;
@@ -17,17 +22,6 @@ import java.util.List;
  * @since 30/04/2025
  */
 public class FFAScoreboard implements IScoreboard {
-    protected final Alley plugin;
-
-    /**
-     * Constructor for the FFAScoreboard class.
-     *
-     * @param plugin The Alley plugin instance.
-     */
-    public FFAScoreboard(Alley plugin) {
-        this.plugin = plugin;
-    }
-
     @Override
     public List<String> getLines(Profile profile) {
         return Collections.emptyList();
@@ -42,11 +36,14 @@ public class FFAScoreboard implements IScoreboard {
      */
     @Override
     public List<String> getLines(Profile profile, Player player) {
+        IFFASpawnService ffaSpawnService = Alley.getInstance().getService(IFFASpawnService.class);
+        IConfigService configService = Alley.getInstance().getService(IConfigService.class);
+        ICombatService combatService = Alley.getInstance().getService(ICombatService.class);
+
         List<String> scoreboardLines = new ArrayList<>();
 
-        CombatService combatService = this.plugin.getCombatService();
-        List<String> ffaLines = this.plugin.getConfigService().getScoreboardConfig().getStringList("scoreboard.lines.ffa");
-        List<String> combatTagLines = this.plugin.getConfigService().getScoreboardConfig().getStringList("ffa-combat-tag");
+        List<String> ffaLines = configService.getScoreboardConfig().getStringList("scoreboard.lines.ffa");
+        List<String> combatTagLines = configService.getScoreboardConfig().getStringList("ffa-combat-tag");
 
         for (String line : ffaLines) {
             if (line.contains("{player-combat}")) {
@@ -60,7 +57,7 @@ public class FFAScoreboard implements IScoreboard {
                 scoreboardLines.add(CC.translate(line)
                         .replaceAll("\\{kit}", profile.getFfaMatch().getKit().getDisplayName())
                         .replaceAll("\\{players}", String.valueOf(profile.getFfaMatch().getPlayers().size()))
-                        .replaceAll("\\{zone}", this.plugin.getFfaSpawnService().getCuboid().isIn(player) ? "Spawn" : "Warzone")
+                        .replaceAll("\\{zone}", ffaSpawnService.getCuboid().isIn(player) ? "Spawn" : "Warzone")
                         .replaceAll("\\{kills}", String.valueOf(profile.getProfileData().getFfaData().get(profile.getFfaMatch().getKit().getName()).getKills()))
                         .replaceAll("\\{deaths}", String.valueOf(profile.getProfileData().getFfaData().get(profile.getFfaMatch().getKit().getName()).getDeaths()))
                         .replaceAll("\\{ping}", String.valueOf(this.getPing(player))));

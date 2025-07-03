@@ -1,6 +1,7 @@
 package dev.revere.alley.base.spawn.listener;
 
 import dev.revere.alley.Alley;
+import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
 import org.bukkit.GameMode;
@@ -23,21 +24,11 @@ import org.bukkit.event.player.PlayerPickupItemEvent;
  * @date 25/05/2024 - 16:20
  */
 public class SpawnListener implements Listener {
-    protected final Alley plugin;
-
-    /**
-     * Constructor for the SpawnListener class.
-     *
-     * @param plugin The Alley instance
-     */
-    public SpawnListener(Alley plugin) {
-        this.plugin = plugin;
-    }
-
     @EventHandler
     public void onBlockPlace(BlockPlaceEvent event) {
         Player player = event.getPlayer();
-        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+        Profile profile = profileService.getProfile(player.getUniqueId());
 
         if (profile.getState().equals(EnumProfileState.LOBBY) || profile.getState().equals(EnumProfileState.EDITING) || profile.getState().equals(EnumProfileState.WAITING)) {
             if (player.getGameMode() == GameMode.CREATIVE) {
@@ -50,7 +41,8 @@ public class SpawnListener implements Listener {
     @EventHandler
     public void onItemDrop(PlayerDropItemEvent event) {
         Player player = event.getPlayer();
-        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+        Profile profile = profileService.getProfile(player.getUniqueId());
 
         if (player.getGameMode() == GameMode.SURVIVAL
                 && (profile.getState().equals(EnumProfileState.LOBBY)
@@ -63,7 +55,8 @@ public class SpawnListener implements Listener {
     @EventHandler
     public void onItemPickUp(PlayerPickupItemEvent event) {
         Player player = event.getPlayer();
-        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+        Profile profile = profileService.getProfile(player.getUniqueId());
 
         if (player.getGameMode() == GameMode.SURVIVAL
                 && (profile.getState().equals(EnumProfileState.LOBBY)
@@ -76,7 +69,8 @@ public class SpawnListener implements Listener {
     @EventHandler
     public void onBlockBreak(BlockBreakEvent event) {
         Player player = event.getPlayer();
-        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+        Profile profile = profileService.getProfile(player.getUniqueId());
         if (profile.getState().equals(EnumProfileState.LOBBY) || profile.getState().equals(EnumProfileState.EDITING) || profile.getState().equals(EnumProfileState.WAITING)) {
             if (player.getGameMode() == GameMode.CREATIVE) {
                 return;
@@ -89,7 +83,8 @@ public class SpawnListener implements Listener {
     private void onHunger(FoodLevelChangeEvent event) {
         if (event.getEntity() instanceof Player) {
             Player player = (Player) event.getEntity();
-            Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
+            IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+        Profile profile = profileService.getProfile(player.getUniqueId());
 
             if (profile.getState().equals(EnumProfileState.LOBBY)
                     || profile.getState().equals(EnumProfileState.EDITING)
@@ -103,7 +98,8 @@ public class SpawnListener implements Listener {
     public void onMoveItem(InventoryClickEvent event) {
         if (event.getWhoClicked() instanceof Player) {
             Player player = (Player) event.getWhoClicked();
-            Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
+            IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+        Profile profile = profileService.getProfile(player.getUniqueId());
 
             if (profile.getState() == EnumProfileState.EDITING) {
                 return;
@@ -125,7 +121,7 @@ public class SpawnListener implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onPlayerItemDamageEvent(PlayerItemDamageEvent event) {
-        Profile profile = this.plugin.getProfileService().getProfile(event.getPlayer().getUniqueId());
+        Profile profile = Alley.getInstance().getService(IProfileService.class).getProfile(event.getPlayer().getUniqueId());
 
         if (profile.getState().equals(EnumProfileState.LOBBY)
                 || profile.getState().equals(EnumProfileState.EDITING)
@@ -137,7 +133,8 @@ public class SpawnListener implements Listener {
     @EventHandler
     private void onHangingPlace(HangingPlaceEvent event) {
         Player player = event.getPlayer();
-        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+        Profile profile = profileService.getProfile(player.getUniqueId());
 
         if (profile.getState().equals(EnumProfileState.LOBBY) || profile.getState().equals(EnumProfileState.EDITING) || profile.getState().equals(EnumProfileState.WAITING)) {
             if (player.getGameMode() == GameMode.CREATIVE) {

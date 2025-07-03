@@ -1,12 +1,16 @@
 package dev.revere.alley.base.kit.command.impl.manage.raiding;
 
+import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
+import dev.revere.alley.base.kit.IKitService;
 import dev.revere.alley.base.kit.Kit;
 import dev.revere.alley.base.kit.KitService;
 import dev.revere.alley.base.kit.service.BaseRaidingService;
+import dev.revere.alley.base.kit.service.IBaseRaidingService;
 import dev.revere.alley.base.kit.setting.impl.mode.KitSettingRaidingImpl;
+import dev.revere.alley.feature.division.IDivisionService;
 import dev.revere.alley.game.match.player.enums.EnumBaseRaiderRole;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.command.CommandSender;
@@ -29,7 +33,7 @@ public class KitRemoveRaidingRoleKitCommand extends BaseCommand {
         }
 
         String kitName = args[0];
-        KitService kitService = this.plugin.getKitService();
+        IKitService kitService = Alley.getInstance().getService(IKitService.class);
         Kit kit = kitService.getKit(kitName);
         if (kit == null) {
             sender.sendMessage(CC.translate("&cThe &6" + kitName + " &ckit does not exist."));
@@ -62,7 +66,7 @@ public class KitRemoveRaidingRoleKitCommand extends BaseCommand {
             return;
         }
 
-        BaseRaidingService raidingService = this.plugin.getBaseRaidingService();
+        IBaseRaidingService raidingService = Alley.getInstance().getService(IBaseRaidingService.class);
 
         if (raidingService.getRaidingKitByRole(kit, role) == null) {
             sender.sendMessage(CC.translate("&cThe &6" + kit.getName() + " &ckit does not have a raiding kit mapped for the &6" + role.name() + " &crole."));

@@ -4,7 +4,9 @@ import dev.revere.alley.Alley;
 import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.api.menu.Menu;
 import dev.revere.alley.base.kit.Kit;
+import dev.revere.alley.base.queue.IQueueService;
 import dev.revere.alley.base.queue.Queue;
+import dev.revere.alley.game.duel.IDuelRequestService;
 import dev.revere.alley.tool.item.ItemBuilder;
 import lombok.AllArgsConstructor;
 import org.bukkit.entity.Player;
@@ -34,7 +36,7 @@ public class DuelRequestMenu extends Menu {
         Map<Integer, Button> buttons = new HashMap<>();
 
         int slot = 10;
-        for (Queue queue : this.plugin.getQueueService().getQueues()) {
+        for (Queue queue : Alley.getInstance().getService(IQueueService.class).getQueues()) {
             if (!queue.isRanked() && !queue.isDuos() && queue.getKit().isEnabled()) {
                 slot = this.skipIfSlotCrossingBorder(slot);
                 buttons.put(slot++, new DuelButton(this.targetPlayer, queue.getKit()));
@@ -81,7 +83,7 @@ public class DuelRequestMenu extends Menu {
 
             player.closeInventory();
 
-            this.plugin.getDuelRequestService().createAndSendRequest(player, this.targetPlayer, this.kit, null);
+            Alley.getInstance().getService(IDuelRequestService.class).createAndSendRequest(player, this.targetPlayer, this.kit, null);
         }
     }
 }

@@ -1,8 +1,10 @@
-package dev.revere.alley.core.impl;
+package dev.revere.alley.server.impl;
 
 import dev.revere.alley.Alley;
-import dev.revere.alley.core.ICore;
-import dev.revere.alley.core.enums.EnumCoreType;
+import dev.revere.alley.api.constant.IPluginConstant;
+import dev.revere.alley.profile.progress.IProgressService;
+import dev.revere.alley.server.ICore;
+import dev.revere.alley.server.enums.EnumCoreType;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -23,7 +25,7 @@ public class DefaultCoreImpl implements ICore {
      */
     public DefaultCoreImpl(Alley plugin) {
         this.plugin = plugin;
-        this.adminPermission = plugin.getPluginConstant().getAdminPermissionPrefix();
+        this.adminPermission = Alley.getInstance().getService(IPluginConstant.class).getAdminPermissionPrefix();
     }
 
     @Override

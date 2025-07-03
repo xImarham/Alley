@@ -1,14 +1,19 @@
 package dev.revere.alley.game.match.impl;
 
+import dev.revere.alley.Alley;
 import dev.revere.alley.base.arena.AbstractArena;
+import dev.revere.alley.base.combat.ICombatService;
 import dev.revere.alley.base.kit.Kit;
 import dev.revere.alley.base.kit.setting.impl.mode.KitSettingBridgesImpl;
 import dev.revere.alley.base.kit.setting.impl.mode.KitSettingStickFightImpl;
 import dev.revere.alley.base.queue.Queue;
+import dev.revere.alley.base.visibility.IVisibilityService;
+import dev.revere.alley.config.IConfigService;
 import dev.revere.alley.game.match.enums.EnumMatchState;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.game.match.player.participant.TeamGameParticipant;
+import dev.revere.alley.tool.reflection.IReflectionRepository;
 import dev.revere.alley.tool.reflection.impl.TitleReflectionService;
 import dev.revere.alley.util.ListenerUtil;
 import dev.revere.alley.util.PlayerUtil;
@@ -63,7 +68,7 @@ public class MatchRoundsImpl extends MatchRegularImpl {
     @Override
     public void handleRoundEnd() {
         this.winner = this.participantA.isAllDead() ? this.participantB : this.participantA;
-        this.winner.getPlayer().getData().incrementScore();
+        this.winner.getLeader().getData().incrementScore();
         this.loser = this.participantA.isAllDead() ? this.participantA : this.participantB;
         this.currentRound++;
 
@@ -82,7 +87,7 @@ public class MatchRoundsImpl extends MatchRegularImpl {
                 this.setState(EnumMatchState.ENDING_ROUND);
 
                 this.getParticipants().forEach(participant -> participant.getPlayers().forEach(playerParticipant -> {
-                    Player player1 = playerParticipant.getPlayer();
+                    Player player1 = playerParticipant.getTeamPlayer();
                     player1.setVelocity(new Vector(0, 0, 0));
                     playerParticipant.setDead(false);
 
@@ -99,7 +104,7 @@ public class MatchRoundsImpl extends MatchRegularImpl {
                 this.setState(EnumMatchState.ENDING_ROUND);
 
                 this.getParticipants().forEach(participant -> participant.getPlayers().forEach(playerParticipant -> {
-                    Player player = playerParticipant.getPlayer();
+                    Player player = playerParticipant.getTeamPlayer();
                     player.setVelocity(new Vector(0, 0, 0));
                     playerParticipant.setDead(false);
 
@@ -114,18 +119,18 @@ public class MatchRoundsImpl extends MatchRegularImpl {
         GameParticipant<MatchGamePlayerImpl> participant = this.participantA.containsPlayer(player.getUniqueId())
                 ? this.participantA
                 : this.participantB;
-        participant.getPlayer().getData().incrementDeaths();
+        participant.getLeader().getData().incrementDeaths();
 
         this.fallenPlayer = player;
 
         if (this.getKit().isSettingEnabled(KitSettingStickFightImpl.class)) {
-            Player lastAttacker = this.plugin.getCombatService().getLastAttacker(player);
+            Player lastAttacker = Alley.getInstance().getService(ICombatService.class).getLastAttacker(player);
             if (lastAttacker == null) {
                 GameParticipant<MatchGamePlayerImpl> opponent = this.participantA.containsPlayer(player.getUniqueId())
                         ? this.participantB
                         : this.participantA;
 
-                this.setScorer(opponent.getPlayer().getUsername());
+                this.setScorer(opponent.getLeader().getUsername());
             } else {
                 this.setScorer(lastAttacker.getName());
             }
@@ -151,7 +156,7 @@ public class MatchRoundsImpl extends MatchRegularImpl {
                     this.handleRoundEnd();
                 }
             } else {
-                MatchGamePlayerImpl gamePlayer = participant.getPlayer();
+                MatchGamePlayerImpl gamePlayer = participant.getLeader();
                 gamePlayer.getData().incrementDeaths();
                 gamePlayer.setDead(true);
                 this.handleRoundEnd();
@@ -167,9 +172,9 @@ public class MatchRoundsImpl extends MatchRegularImpl {
         GameParticipant<MatchGamePlayerImpl> participant = this.participantA.containsPlayer(player.getUniqueId())
                 ? this.participantA
                 : this.participantB;
-        if (participant.getPlayer().getData().getScore() == this.rounds) {
+        if (participant.getLeader().getData().getScore() == this.rounds) {
             GameParticipant<MatchGamePlayerImpl> opponent = participant == this.participantA ? this.participantB : this.participantA;
-            opponent.getPlayer().setEliminated(true);
+            opponent.getLeader().setEliminated(true);
         }
     }
 
@@ -186,7 +191,7 @@ public class MatchRoundsImpl extends MatchRegularImpl {
 
     @Override
     public boolean canStartRound() {
-        return this.participantA.getPlayer().getData().getScore() < this.rounds && this.participantB.getPlayer().getData().getScore() < this.rounds;
+        return this.participantA.getLeader().getData().getScore() < this.rounds && this.participantB.getLeader().getData().getScore() < this.rounds;
     }
 
     @Override
@@ -198,7 +203,7 @@ public class MatchRoundsImpl extends MatchRegularImpl {
 
     @Override
     public boolean canEndMatch() {
-        return (this.participantA.getPlayer().getData().getScore() == this.rounds || this.participantB.getPlayer().getData().getScore() == this.rounds)
+        return (this.participantA.getLeader().getData().getScore() == this.rounds || this.participantB.getLeader().getData().getScore() == this.rounds)
                 || (this.participantA.getAllPlayers().stream().allMatch(MatchGamePlayerImpl::isDisconnected)
                 || this.participantB.getAllPlayers().stream().allMatch(MatchGamePlayerImpl::isDisconnected));
     }
@@ -216,27 +221,27 @@ public class MatchRoundsImpl extends MatchRegularImpl {
 
         String configPath = this.isTeamMatch() ? "match.scored.format.team" : "match.scored.format.solo";
 
-        FileConfiguration config = this.plugin.getConfigService().getMessagesConfig();
+        FileConfiguration config = Alley.getInstance().getService(IConfigService.class).getMessagesConfig();
         if (config.getBoolean("match.scored.enabled")) {
             for (String message : config.getStringList(configPath)) {
                 this.notifyAll(message
                         .replace("{scorer}", scorer)
-                        .replace("{winner}", winner.getPlayer().getUsername())
+                        .replace("{winner}", winner.getLeader().getUsername())
                         .replace("{winner-color}", teamWinnerColor.toString())
-                        .replace("{winner-goals}", String.valueOf(winner.getPlayer().getData().getScore()))
-                        .replace("{loser}", loser.getPlayer().getUsername())
+                        .replace("{winner-goals}", String.valueOf(winner.getLeader().getData().getScore()))
+                        .replace("{loser}", loser.getLeader().getUsername())
                         .replace("{loser-color}", teamLoserColor.toString())
-                        .replace("{loser-goals}", String.valueOf(loser.getPlayer().getData().getScore()))
+                        .replace("{loser-goals}", String.valueOf(loser.getLeader().getData().getScore()))
                 );
             }
         }
 
         this.getParticipants().forEach(gameParticipant -> gameParticipant.getPlayers().forEach(uuid -> {
             Player player = this.plugin.getServer().getPlayer(uuid.getUuid());
-            this.plugin.getReflectionRepository().getReflectionService(TitleReflectionService.class).sendTitle(
+            Alley.getInstance().getService(IReflectionRepository.class).getReflectionService(TitleReflectionService.class).sendTitle(
                     player,
                     teamWinnerColor.toString() + scorer + " &fhas scored!",
-                    "&f" + winner.getPlayer().getData().getScore() + " &7/&f " + this.rounds,
+                    "&f" + winner.getLeader().getData().getScore() + " &7/&f " + this.rounds,
                     2, 20, 2
             );
         }));

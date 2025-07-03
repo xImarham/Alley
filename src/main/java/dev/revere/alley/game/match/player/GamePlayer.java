@@ -55,7 +55,7 @@ public class GamePlayer {
      *
      * @return The player associated with the GamePlayer.
      */
-    public Player getPlayer() {
+    public Player getTeamPlayer() {
         return Bukkit.getPlayer(uuid);
     }
 }

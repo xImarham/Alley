@@ -1,8 +1,11 @@
 package dev.revere.alley.game.match.listener.impl;
 
 import dev.revere.alley.Alley;
+import dev.revere.alley.api.constant.IPluginConstant;
 import dev.revere.alley.game.match.AbstractMatch;
+import dev.revere.alley.game.match.IMatchService;
 import dev.revere.alley.game.match.MatchService;
+import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.entity.Player;
@@ -16,30 +19,21 @@ import org.bukkit.event.player.PlayerCommandPreprocessEvent;
  * @since 26/06/2025
  */
 public class MatchChatListener implements Listener {
-    protected final Alley plugin;
-
-    /**
-     * Constructor for the MatchChatListener class.
-     *
-     * @param plugin The Alley plugin instance.
-     */
-    public MatchChatListener(Alley plugin) {
-        this.plugin = plugin;
-    }
-
     @EventHandler
     private void onCommandPreProcess(PlayerCommandPreprocessEvent event) {
         Player player = event.getPlayer();
 
-        if (player.hasPermission(this.plugin.getPluginConstant().getAdminPermissionPrefix() + ".bypass.command.restriction")) {
+        if (player.hasPermission(Alley.getInstance().getService(IPluginConstant.class).getAdminPermissionPrefix() + ".bypass.command.restriction")) {
             return;
         }
 
-        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+        IMatchService matchService = Alley.getInstance().getService(IMatchService.class);
+
+        Profile profile = profileService.getProfile(player.getUniqueId());
         AbstractMatch match = profile.getMatch();
         if (match == null) return;
 
-        MatchService matchService = this.plugin.getMatchService();
         String commandInput = event.getMessage().toLowerCase();
 
         for (String blockedCommand : matchService.getBlockedCommands()) {

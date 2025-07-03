@@ -1,13 +1,15 @@
 package dev.revere.alley.game.match.impl;
 
+import dev.revere.alley.Alley;
 import dev.revere.alley.base.arena.AbstractArena;
 import dev.revere.alley.base.kit.Kit;
+import dev.revere.alley.base.kit.service.BaseRaidingService;
+import dev.revere.alley.base.kit.service.IBaseRaidingService;
 import dev.revere.alley.base.kit.setting.impl.mechanic.KitSettingDropItemsImpl;
 import dev.revere.alley.base.kit.setting.impl.mode.KitSettingRaidingImpl;
 import dev.revere.alley.base.kit.setting.impl.mode.KitSettingRespawnTimerImpl;
 import dev.revere.alley.base.queue.Queue;
-import dev.revere.alley.feature.division.Division;
-import dev.revere.alley.feature.division.tier.DivisionTier;
+import dev.revere.alley.config.IConfigService;
 import dev.revere.alley.feature.layout.data.LayoutData;
 import dev.revere.alley.game.match.AbstractMatch;
 import dev.revere.alley.game.match.data.AbstractMatchData;
@@ -18,31 +20,31 @@ import dev.revere.alley.game.match.player.enums.EnumBaseRaiderRole;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.game.match.utility.MatchUtility;
+import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.ProfileService;
-import dev.revere.alley.profile.data.ProfileData;
+import dev.revere.alley.profile.progress.IProgressService;
+import dev.revere.alley.profile.progress.PlayerProgress;
+import dev.revere.alley.profile.progress.ProgressService;
 import dev.revere.alley.tool.elo.EloCalculator;
+import dev.revere.alley.tool.elo.IEloCalculator;
 import dev.revere.alley.tool.elo.result.EloResult;
 import dev.revere.alley.tool.elo.result.OldEloResult;
 import dev.revere.alley.tool.logger.Logger;
+import dev.revere.alley.tool.reflection.IReflectionRepository;
 import dev.revere.alley.tool.reflection.impl.TitleReflectionService;
+import dev.revere.alley.util.InventoryUtil;
 import dev.revere.alley.util.ListenerUtil;
 import dev.revere.alley.util.PlayerUtil;
 import dev.revere.alley.util.chat.CC;
-import dev.revere.alley.util.visual.ProgressBarUtil;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.ChatColor;
-import org.bukkit.Color;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
-import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
@@ -122,39 +124,14 @@ public class MatchRegularImpl extends AbstractMatch {
             return;
         }
 
-        final int blockDataValue = (participant == this.participantA) ? 11 : 14;
-        final Color color = (blockDataValue == 11) ? Color.fromRGB(0, 102, 255) : Color.fromRGB(255, 0, 0);
+        final InventoryUtil.TeamColor colorToApply = (participant == this.participantA)
+                ? InventoryUtil.TeamColor.BLUE
+                : InventoryUtil.TeamColor.RED;
 
-        participant.getPlayers().forEach(gamePlayer -> {
-            Player teamPlayer = gamePlayer.getPlayer();
-            if (teamPlayer == null || !teamPlayer.isOnline()) {
-                return;
-            }
-
-            PlayerInventory inventory = teamPlayer.getInventory();
-
-            for (int i = 0; i < 36; i++) {
-                ItemStack item = inventory.getItem(i);
-
-                if (item != null && (item.getType() == Material.WOOL || item.getType() == Material.STAINED_CLAY)) {
-                    item.setDurability((short) blockDataValue);
-                    inventory.setItem(i, item);
-                }
-            }
-
-            for (int i = 36; i <= 39; i++) {
-                ItemStack item = inventory.getItem(i);
-
-                if (item != null && item.getType().toString().contains("LEATHER_")) {
-                    LeatherArmorMeta meta = (LeatherArmorMeta) item.getItemMeta();
-                    meta.setColor(color);
-                    item.setItemMeta(meta);
-                    teamPlayer.getInventory().setItem(i, item);
-                }
-            }
-
-            teamPlayer.updateInventory();
-        });
+        participant.getPlayers().stream()
+                .map(MatchGamePlayerImpl::getTeamPlayer)
+                .filter(p -> p != null && p.isOnline())
+                .forEach(teamPlayer -> InventoryUtil.applyTeamColorToInventory(teamPlayer, colorToApply));
     }
 
     @Override
@@ -164,24 +141,35 @@ public class MatchRegularImpl extends AbstractMatch {
 
     @Override
     public void handleRoundEnd() {
-        this.winner = this.participantA.isAllDead() ? this.participantB : this.participantA;
-        this.loser = this.participantA.isAllDead() ? this.participantA : this.participantB;
-        this.loser.getPlayer().setEliminated(true);
+        final boolean teamADead = this.participantA.isAllEliminated();
+        final GameParticipant<MatchGamePlayerImpl> winner = teamADead ? this.participantB : this.participantA;
+        final GameParticipant<MatchGamePlayerImpl> loser = teamADead ? this.participantA : this.participantB;
 
-        this.winner.getPlayers().forEach(gamePlayer -> {
-            this.sendVictory(gamePlayer.getPlayer());
-        });
+        this.winner = winner;
+        this.loser = loser;
 
-        this.loser.getPlayers().forEach(gamePlayer -> {
-            this.sendDefeat(gamePlayer.getPlayer());
-        });
+        broadcastMatchOutcome(winner, loser);
+        processStatistics(winner, loser);
+
+        if (!this.getSpectators().isEmpty()) {
+            this.broadcastAndStopSpectating();
+        }
+
+        super.handleRoundEnd();
+    }
+
+    /**
+     * Handles all player-facing messages at the end of a match, including titles and results.
+     */
+    private void broadcastMatchOutcome(GameParticipant<MatchGamePlayerImpl> winner, GameParticipant<MatchGamePlayerImpl> loser) {
+        winner.getPlayers().forEach(gamePlayer -> sendVictory(gamePlayer.getTeamPlayer()));
+        loser.getPlayers().forEach(gamePlayer -> sendDefeat(gamePlayer.getTeamPlayer()));
 
         if (this.isTeamMatch()) {
-            MatchUtility.sendConjoinedMatchResult(this, this.winner, this.loser);
+            MatchUtility.sendConjoinedMatchResult(this, winner, loser);
         } else {
-            MatchGamePlayerImpl winnerPlayer = this.winner.getPlayer();
-            MatchGamePlayerImpl loserPlayer = this.loser.getPlayer();
-
+            MatchGamePlayerImpl winnerPlayer = winner.getLeader();
+            MatchGamePlayerImpl loserPlayer = loser.getLeader();
             MatchUtility.sendMatchResult(
                     this,
                     winnerPlayer.getUsername(),
@@ -190,24 +178,94 @@ public class MatchRegularImpl extends AbstractMatch {
                     loserPlayer.getUuid()
             );
         }
+    }
 
-        if (!this.getSpectators().isEmpty()) {
-            this.broadcastAndStopSpectating();
+    /**
+     * Processes all backend statistics if the match is configured to affect them.
+     */
+    private void processStatistics(GameParticipant<MatchGamePlayerImpl> winner, GameParticipant<MatchGamePlayerImpl> loser) {
+        if (!this.isAffectStatistics()) {
+            return;
         }
 
-        if (this.isAffectStatistics()) {
-            this.handleData(this.winner, this.loser, this.participantA, this.participantB);
+        handleMatchData(winner, loser);
 
-            ProfileData profileData = this.plugin.getProfileService().getProfile(this.winner.getPlayer().getUuid()).getProfileData();
-            Division currentDivision = profileData.getUnrankedKitData().get(this.getKit().getName()).getDivision();
-            DivisionTier currentTier = profileData.getUnrankedKitData().get(this.getKit().getName()).getTier();
+        if (!this.isRanked()) {
+            this.sendProgressToWinner(winner.getLeader().getTeamPlayer());
+        }
+    }
 
-            if (!this.isRanked()) {
-                this.sendProgressToWinner(this.winner.getPlayer().getPlayer(), currentDivision, currentTier);
-            }
+    /**
+     * Routes to the correct statistics handling method based on the match type.
+     *
+     * @param winner The winning participant.
+     * @param loser  The losing participant.
+     */
+    private void handleMatchData(GameParticipant<MatchGamePlayerImpl> winner, GameParticipant<MatchGamePlayerImpl> loser) {
+        if (this.isTeamMatch()) {
+            return;
         }
 
-        super.handleRoundEnd();
+        if (this.isRanked()) {
+            updateRankedStats(winner, loser);
+        } else {
+            updateUnrankedStats(winner, loser);
+        }
+    }
+
+    /**
+     * Updates player profiles and Elo for a ranked match.
+     */
+    private void updateRankedStats(GameParticipant<MatchGamePlayerImpl> winner, GameParticipant<MatchGamePlayerImpl> loser) {
+        OldEloResult result = this.getOldEloResult(winner, loser);
+        EloResult eloResult = this.getEloResult(result.getOldWinnerElo(), result.getOldLoserElo());
+
+        this.handleWinner(eloResult.getNewWinnerElo(), winner);
+        this.handleLoser(eloResult.getNewLoserElo(), loser);
+
+        this.sendEloResult(
+                winner.getLeader().getTeamPlayer().getName(),
+                loser.getLeader().getTeamPlayer().getName(),
+                result.getOldWinnerElo(),
+                result.getOldLoserElo(),
+                eloResult.getNewWinnerElo(),
+                eloResult.getNewLoserElo()
+        );
+    }
+
+    /**
+     * Updates player profiles with wins/losses for an unranked match.
+     */
+    private void updateUnrankedStats(GameParticipant<MatchGamePlayerImpl> winner, GameParticipant<MatchGamePlayerImpl> loser) {
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+
+        Profile winnerProfile = profileService.getProfile(winner.getLeader().getUuid());
+        winnerProfile.getProfileData().getUnrankedKitData().get(getKit().getName()).incrementWins();
+        winnerProfile.getProfileData().incrementUnrankedWins();
+        winnerProfile.getProfileData().determineTitles();
+        this.addMatchToHistory(winner, loser, winnerProfile);
+
+        Profile loserProfile = profileService.getProfile(loser.getLeader().getUuid());
+        loserProfile.getProfileData().getUnrankedKitData().get(getKit().getName()).incrementLosses();
+        loserProfile.getProfileData().incrementUnrankedLosses();
+        this.addMatchToHistory(loser, winner, loserProfile);
+    }
+
+    /**
+     * Creates a match data entry and adds it to a player's match history.
+     *
+     * @param self         The participant whose history is being updated.
+     * @param opponent     The opponent in the match.
+     * @param profileToAdd The profile to add the match data to.
+     */
+    private void addMatchToHistory(GameParticipant<MatchGamePlayerImpl> self, GameParticipant<MatchGamePlayerImpl> opponent, Profile profileToAdd) {
+        AbstractMatchData matchData = new MatchDataSoloImpl(
+                this.getKit().getName(),
+                this.getArena().getName(),
+                self.getLeader().getUuid(),
+                opponent.getLeader().getUuid()
+        );
+        profileToAdd.getProfileData().getPreviousMatches().add(matchData);
     }
 
     /**
@@ -216,7 +274,7 @@ public class MatchRegularImpl extends AbstractMatch {
      * @param player The player to send the title to.
      */
     private void sendVictory(Player player) {
-        this.plugin.getReflectionRepository().getReflectionService(TitleReflectionService.class).sendTitle(
+        Alley.getInstance().getService(IReflectionRepository.class).getReflectionService(TitleReflectionService.class).sendTitle(
                 player,
                 "&6Victory!",
                 "&fYou have won the match!",
@@ -230,65 +288,12 @@ public class MatchRegularImpl extends AbstractMatch {
      * @param player The player to send the title to.
      */
     private void sendDefeat(Player player) {
-        this.plugin.getReflectionRepository().getReflectionService(TitleReflectionService.class).sendTitle(
+        Alley.getInstance().getService(IReflectionRepository.class).getReflectionService(TitleReflectionService.class).sendTitle(
                 player,
                 "&cDefeat!",
                 "&fYou have lost the match!",
                 2, 20, 2
         );
-    }
-
-    /**
-     * Method to handle the data of the match such as elo changes and unranked stats.
-     *
-     * @param winner       The winner of the match.
-     * @param loser        The loser of the match.
-     * @param participantA The first participant.
-     * @param participantB The second participant.
-     */
-    public void handleData(GameParticipant<MatchGamePlayerImpl> winner, GameParticipant<MatchGamePlayerImpl> loser, GameParticipant<MatchGamePlayerImpl> participantA, GameParticipant<MatchGamePlayerImpl> participantB) {
-        if (!this.isTeamMatch()) {
-            if (this.isRanked()) {
-                OldEloResult result = this.getOldEloResult(winner, loser);
-                EloResult eloResult = this.getEloResult(result.getOldWinnerElo(), result.getOldLoserElo());
-
-                this.handleWinner(eloResult.getNewWinnerElo(), winner);
-                this.handleLoser(eloResult.getNewLoserElo(), loser);
-
-                this.sendEloResult(winner.getPlayer().getPlayer().getName(), loser.getPlayer().getPlayer().getName(), result.getOldWinnerElo(), result.getOldLoserElo(), eloResult.getNewWinnerElo(), eloResult.getNewLoserElo());
-            } else {
-                ProfileService profileService = this.plugin.getProfileService();
-
-                Profile winnerProfile = profileService.getProfile(winner.getPlayer().getUuid());
-                winnerProfile.getProfileData().getUnrankedKitData().get(getKit().getName()).incrementWins();
-                winnerProfile.getProfileData().incrementUnrankedWins();
-                winnerProfile.getProfileData().determineTitles();
-                this.createMatchDataForHistory(winner, loser, winnerProfile);
-
-                Profile loserProfile = profileService.getProfile(loser.getPlayer().getUuid());
-                loserProfile.getProfileData().getUnrankedKitData().get(getKit().getName()).incrementLosses();
-                loserProfile.getProfileData().incrementUnrankedLosses();
-                this.createMatchDataForHistory(loser, winner, loserProfile);
-            }
-        }
-    }
-
-    /**
-     * Creates match data for the history of the winner.
-     *
-     * @param winner       The winner of the match.
-     * @param loser        The loser of the match.
-     * @param profileToAdd The profile to add the match data to.
-     */
-    public void createMatchDataForHistory(GameParticipant<MatchGamePlayerImpl> winner, GameParticipant<MatchGamePlayerImpl> loser, Profile profileToAdd) {
-        AbstractMatchData matchData = new MatchDataSoloImpl(
-                this.getKit().getName(),
-                this.getArena().getName(),
-                winner.getPlayer().getUuid(),
-                loser.getPlayer().getUuid()
-        );
-
-        profileToAdd.getProfileData().getPreviousMatches().add(matchData);
     }
 
     /**
@@ -302,7 +307,7 @@ public class MatchRegularImpl extends AbstractMatch {
      * @param newEloLoser  The new elo of the loser.
      */
     public void sendEloResult(String winnerName, String loserName, int oldEloWinner, int oldEloLoser, int newEloWinner, int newEloLoser) {
-        FileConfiguration config = this.plugin.getConfigService().getMessagesConfig();
+        FileConfiguration config = Alley.getInstance().getService(IConfigService.class).getMessagesConfig();
 
         List<String> list = config.getStringList("match.ended.elo-changes.format");
         String winnerIndicatorColor = config.getString("match.ended.elo-changes.winner-indicator-color", "&a");
@@ -327,46 +332,32 @@ public class MatchRegularImpl extends AbstractMatch {
     }
 
     /**
-     * Sends the progress of the winner to the player.
+     * Sends the progress of the winner to the player using the ProgressService.
+     * The method no longer needs Division or Tier passed in.
      *
-     * @param winner          The winner of the match.
-     * @param currentDivision The current division of the winner.
-     * @param currentTier     The current tier of the winner.
+     * @param winner The winning player.
      */
-    public void sendProgressToWinner(Player winner, Division currentDivision, DivisionTier currentTier) {
-        Profile winnerProfile = this.plugin.getProfileService().getProfile(winner.getUniqueId());
-        ProfileData profileData = winnerProfile.getProfileData();
-        int wins = profileData.getUnrankedKitData().get(this.getKit().getName()).getWins();
+    public void sendProgressToWinner(Player winner) {
+        Profile winnerProfile = Alley.getInstance().getService(IProfileService.class).getProfile(winner.getUniqueId());
 
-        List<DivisionTier> tiers = currentDivision.getTiers(); //division 2
-        int tierIndex = tiers.indexOf(currentTier); // 0
-
-        int nextTierWins;
-        if (tierIndex < tiers.size() - 1) { // if there is a next tier
-            nextTierWins = tiers.get(tierIndex + 1).getRequiredWins(); // 40
-        } else if (winnerProfile.getNextDivision(this.getKit().getName()) != null) { // if division doesn't have a next tier, but there is a next division
-            nextTierWins = winnerProfile.getNextDivision(this.getKit().getName()).getTiers().get(0).getRequiredWins();
-        } else {
-            nextTierWins = currentTier.getRequiredWins();
-        }
-
-        String nextRank = winnerProfile.getNextDivisionAndTier(this.getKit().getName());
-        String progressBar = ProgressBarUtil.generate(wins, wins == currentTier.getRequiredWins() ? currentTier.getRequiredWins() : nextTierWins, 12, "■");
-        String progressPercent = nextTierWins > 0 ? Math.round((float) wins / nextTierWins * 100) + "%" : "100%";
-        int requiredWinsToUnlock = nextTierWins - wins; // 40 - 10 (first tier of bronze 1)
-        String winOrWins = requiredWinsToUnlock == 1 ? "win" : "wins";
+        PlayerProgress progress = Alley.getInstance().getService(IProgressService.class).calculateProgress(winnerProfile, this.getKit().getName());
 
         String progressLine;
-        if (wins == currentTier.getRequiredWins()) {
-            progressLine = " &6&l● &fUNLOCKED &6" + currentDivision.getName() + " " + currentTier.getName() + "&f!";
+
+        if (progress.isMaxRank() && progress.getCurrentWins() >= progress.getWinsForNextTier()) {
+            progressLine = " &6&l● &fCONGRATULATIONS! You have reached the maximum rank!";
         } else {
-            progressLine = " &6&l● &fUnlock &6" + nextRank + " &fwith " + requiredWinsToUnlock + " more " + winOrWins + "!";
+            progressLine = String.format(" &6&l● &fUnlock &6%s &fwith %d more %s!",
+                    progress.getNextRankName(),
+                    progress.getWinsRequired(),
+                    progress.getWinOrWins()
+            );
         }
 
         Arrays.asList(
                 "&6&lProgress",
                 progressLine,
-                "  &7(" + progressBar + "&7) " + progressPercent,
+                "  &7(" + progress.getProgressBar(12, "■") + "&7) " + progress.getProgressPercentage(),
                 " &6&l● &fDaily Streak: &6" + "N/A" + " &f(Best: " + "N/A" + ")",
                 " &6&l● &fWin Streak: &6" + "N/A" + " &f(Best: " + "N/A" + ")",
                 ""
@@ -379,8 +370,8 @@ public class MatchRegularImpl extends AbstractMatch {
      * @return The old elo result.
      */
     public @NotNull OldEloResult getOldEloResult(GameParticipant<MatchGamePlayerImpl> winner, GameParticipant<MatchGamePlayerImpl> loser) {
-        int oldWinnerElo = winner.getPlayer().getElo();
-        int oldLoserElo = loser.getPlayer().getElo();
+        int oldWinnerElo = winner.getLeader().getElo();
+        int oldLoserElo = loser.getLeader().getElo();
         return new OldEloResult(oldWinnerElo, oldLoserElo);
     }
 
@@ -392,7 +383,7 @@ public class MatchRegularImpl extends AbstractMatch {
      * @return The elo result.
      */
     public @NotNull EloResult getEloResult(int oldWinnerElo, int oldLoserElo) {
-        EloCalculator eloCalculator = this.plugin.getEloCalculator();
+        IEloCalculator eloCalculator = Alley.getInstance().getService(IEloCalculator.class);
         int newWinnerElo = eloCalculator.determineNewElo(oldWinnerElo, oldLoserElo, true);
         int newLoserElo = eloCalculator.determineNewElo(oldLoserElo, oldWinnerElo, false);
         return new EloResult(newWinnerElo, newLoserElo);
@@ -405,7 +396,7 @@ public class MatchRegularImpl extends AbstractMatch {
      * @param winner The winner of the match.
      */
     public void handleWinner(int elo, GameParticipant<MatchGamePlayerImpl> winner) {
-        Profile winnerProfile = this.plugin.getProfileService().getProfile(winner.getPlayer().getUuid());
+        Profile winnerProfile = Alley.getInstance().getService(IProfileService.class).getProfile(winner.getLeader().getUuid());
         winnerProfile.getProfileData().getRankedKitData().get(getKit().getName()).setElo(elo);
         winnerProfile.getProfileData().getRankedKitData().get(getKit().getName()).incrementWins();
         winnerProfile.getProfileData().incrementRankedWins();
@@ -419,7 +410,7 @@ public class MatchRegularImpl extends AbstractMatch {
      * @param loser The loser of the match.
      */
     public void handleLoser(int elo, GameParticipant<MatchGamePlayerImpl> loser) {
-        Profile loserProfile = this.plugin.getProfileService().getProfile(loser.getPlayer().getUuid());
+        Profile loserProfile = Alley.getInstance().getService(IProfileService.class).getProfile(loser.getLeader().getUuid());
         loserProfile.getProfileData().getRankedKitData().get(getKit().getName()).setElo(elo);
         loserProfile.getProfileData().getRankedKitData().get(getKit().getName()).incrementLosses();
         loserProfile.getProfileData().incrementRankedLosses();
@@ -486,7 +477,7 @@ public class MatchRegularImpl extends AbstractMatch {
 
         Kit parentKit = this.getKit();
         if (parentKit == null) {
-            Logger.logError("&cCould not determine the parent kit for the raiding match.");
+            Logger.error("&cCould not determine the parent kit for the raiding match.");
             return;
         }
 
@@ -494,16 +485,17 @@ public class MatchRegularImpl extends AbstractMatch {
                 ? EnumBaseRaiderRole.TRAPPER
                 : EnumBaseRaiderRole.RAIDER;
 
-        Kit kitToGive = this.plugin.getBaseRaidingService().getRaidingKitByRole(parentKit, role);
+        Kit kitToGive = Alley.getInstance().getService(IBaseRaidingService.class).getRaidingKitByRole(parentKit, role);
         if (kitToGive == null) {
-            Logger.log("&cNo kit found for role: " + role.name() + " linked to parent kit.");
+            Logger.info("&cNo kit found for role: " + role.name() + " linked to parent kit.");
             return;
         }
 
         MatchGamePlayerData data = this.getGamePlayer(player).getData();
         data.setRole(role);
 
-        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+        Profile profile = profileService.getProfile(player.getUniqueId());
         LayoutData layout = profile.getProfileData().getLayoutData().getLayouts().get(kitToGive.getName()).get(0);
 
         //TODO: after implementing multiple layouts, we need to give the books here, if multiple layouts are present in profile.

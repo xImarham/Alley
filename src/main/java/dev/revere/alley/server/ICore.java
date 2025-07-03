@@ -1,7 +1,8 @@
-package dev.revere.alley.core;
+package dev.revere.alley.server;
 
 import dev.revere.alley.Alley;
-import dev.revere.alley.core.enums.EnumCoreType;
+import dev.revere.alley.profile.IProfileService;
+import dev.revere.alley.server.enums.EnumCoreType;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.ChatColor;
@@ -14,7 +15,7 @@ import org.bukkit.entity.Player;
  */
 public interface ICore {
     /**
-     * Retrieves the plugin name of the core implementation.
+     * Retrieves the plugin name of the server implementation.
      *
      * @return The plugin name as a String.
      */
@@ -77,7 +78,7 @@ public interface ICore {
      * @return The formatted chat message as a String.
      */
     default String getChatFormat(Player player, String eventMessage, String separator) {
-        Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
+        Profile profile = Alley.getInstance().getService(IProfileService.class).getProfile(player.getUniqueId());
 
         String prefix = CC.translate(this.getRankPrefix(player));
         String suffix = CC.translate(this.getRankSuffix(player));

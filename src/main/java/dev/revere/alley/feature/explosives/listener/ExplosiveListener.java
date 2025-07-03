@@ -3,10 +3,13 @@ package dev.revere.alley.feature.explosives.listener;
 import dev.revere.alley.Alley;
 import dev.revere.alley.base.cooldown.Cooldown;
 import dev.revere.alley.base.cooldown.CooldownRepository;
+import dev.revere.alley.base.cooldown.ICooldownRepository;
 import dev.revere.alley.base.cooldown.enums.EnumCooldownType;
 import dev.revere.alley.base.kit.setting.impl.mechanic.KitSettingExplosiveImpl;
 import dev.revere.alley.feature.explosives.ExplosiveService;
+import dev.revere.alley.feature.explosives.IExplosiveService;
 import dev.revere.alley.game.match.AbstractMatch;
+import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
 import dev.revere.alley.util.chat.CC;
@@ -36,18 +39,7 @@ import java.util.Optional;
  * @since 24/06/2025
  */
 public class ExplosiveListener implements Listener {
-    protected final Alley plugin;
-
     private static final String PRACTICE_TNT_METADATA = "PRACTICE_TNT";
-
-    /**
-     * Constructor for the ExplosiveListener class.
-     *
-     * @param plugin the Alley plugin instance.
-     */
-    public ExplosiveListener(Alley plugin) {
-        this.plugin = plugin;
-    }
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
@@ -67,7 +59,7 @@ public class ExplosiveListener implements Listener {
     private void handleFireballUse(PlayerInteractEvent event) {
         Player player = event.getPlayer();
 
-        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
+        Profile profile = Alley.getInstance().getService(IProfileService.class).getProfile(player.getUniqueId());
         if (profile == null) return;
         if (profile.getState() != EnumProfileState.PLAYING) return;
 
@@ -83,7 +75,7 @@ public class ExplosiveListener implements Listener {
         event.setCancelled(true);
 
         EnumCooldownType cooldownType = EnumCooldownType.FIREBALL;
-        CooldownRepository cooldownRepository = this.plugin.getCooldownRepository();
+        ICooldownRepository cooldownRepository = Alley.getInstance().getService(ICooldownRepository.class);
         Optional<Cooldown> optionalCooldown = Optional.ofNullable(cooldownRepository.getCooldown(player.getUniqueId(), cooldownType));
         if (optionalCooldown.isPresent() && optionalCooldown.get().isActive()) {
             player.sendMessage(CC.translate("&cYou must wait " + optionalCooldown.get().remainingTimeInMinutes() + " &cbefore using another fireball."));
@@ -98,7 +90,7 @@ public class ExplosiveListener implements Listener {
 
         cooldown.resetCooldown();
 
-        ExplosiveService explosiveService = this.plugin.getExplosiveService();
+        IExplosiveService explosiveService = Alley.getInstance().getService(IExplosiveService.class);
         Fireball fireball = player.launchProjectile(Fireball.class);
         fireball.setIsIncendiary(false);
         fireball.setYield(2.0F);
@@ -120,7 +112,7 @@ public class ExplosiveListener implements Listener {
         Block clickedBlock = event.getClickedBlock();
         if (clickedBlock == null) return;
 
-        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
+        Profile profile = Alley.getInstance().getService(IProfileService.class).getProfile(player.getUniqueId());
         if (profile == null || profile.getState() != EnumProfileState.PLAYING) return;
 
         AbstractMatch match = profile.getMatch();
@@ -141,8 +133,8 @@ public class ExplosiveListener implements Listener {
         Location tntLocation = clickedBlock.getRelative(event.getBlockFace()).getLocation().add(0.5, 0.0, 0.5);
         TNTPrimed tnt = (TNTPrimed) tntLocation.getWorld().spawnEntity(tntLocation, EntityType.PRIMED_TNT);
 
-        tnt.setFuseTicks(this.plugin.getExplosiveService().getTntFuseTicks());
-        tnt.setMetadata(PRACTICE_TNT_METADATA, new FixedMetadataValue(plugin, true));
+        tnt.setFuseTicks(Alley.getInstance().getService(IExplosiveService.class).getTntFuseTicks());
+        tnt.setMetadata(PRACTICE_TNT_METADATA, new FixedMetadataValue(Alley.getInstance(), true));
     }
 
     @EventHandler
@@ -182,7 +174,7 @@ public class ExplosiveListener implements Listener {
         }
 
         Player player = (Player) event.getEntity();
-        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
+        Profile profile = Alley.getInstance().getService(IProfileService.class).getProfile(player.getUniqueId());
 
         if (profile != null && profile.getState() == EnumProfileState.PLAYING) {
             event.setDamage(0.0);
@@ -197,7 +189,7 @@ public class ExplosiveListener implements Listener {
      * @param explosionLocation The center location of the explosion.
      */
     private void applyPlayerKnockback(Entity source, Location explosionLocation) {
-        ExplosiveService explosiveService = this.plugin.getExplosiveService();
+        IExplosiveService explosiveService = Alley.getInstance().getService(IExplosiveService.class);
         double maxRange = explosiveService.getRange();
         double maxHorizontal = explosiveService.getHorizontal();
         double maxVertical = explosiveService.getVertical();
@@ -208,7 +200,7 @@ public class ExplosiveListener implements Listener {
             }
 
             Player player = (Player) entity;
-            Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
+            Profile profile = Alley.getInstance().getService(IProfileService.class).getProfile(player.getUniqueId());
             if (profile == null || profile.getState() != EnumProfileState.PLAYING) {
                 return;
             }
@@ -285,7 +277,7 @@ public class ExplosiveListener implements Listener {
      * @param explosionLocation The central Location where the fireball explosion occurs.
      */
     private void handleFireballExplosion(Location explosionLocation) {
-        ExplosiveService explosiveService = this.plugin.getExplosiveService();
+        IExplosiveService explosiveService = Alley.getInstance().getService(IExplosiveService.class);
         double range = explosiveService.getExplosionRange();
 
         List<Block> blocksToBreak = new ArrayList<>();
@@ -324,7 +316,7 @@ public class ExplosiveListener implements Listener {
      * @param explosionLocation The central Location where the explosion occurs.
      */
     private void handleCustomTntExplosion(TNTPrimed tnt, Location explosionLocation) {
-        ExplosiveService explosiveService = this.plugin.getExplosiveService();
+        IExplosiveService explosiveService = Alley.getInstance().getService(IExplosiveService.class);
         double range = explosiveService.getExplosionRange();
 
         List<Block> blocksToBreak = new ArrayList<>();

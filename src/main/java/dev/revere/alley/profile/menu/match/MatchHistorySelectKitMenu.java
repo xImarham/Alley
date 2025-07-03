@@ -3,6 +3,8 @@ package dev.revere.alley.profile.menu.match;
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.api.menu.Menu;
+import dev.revere.alley.base.kit.IKitService;
+import dev.revere.alley.base.visibility.IVisibilityService;
 import dev.revere.alley.profile.menu.match.button.MatchHistorySelectKitButton;
 import org.bukkit.entity.Player;
 
@@ -24,7 +26,7 @@ public class MatchHistorySelectKitMenu extends Menu {
     public Map<Integer, Button> getButtons(Player player) {
         Map<Integer, Button> buttons = new HashMap<>();
 
-        Alley.getInstance().getKitService().getKits().forEach(
+        Alley.getInstance().getService(IKitService.class).getKits().forEach(
                 kit -> buttons.put(buttons.size(), new MatchHistorySelectKitButton(kit))
         );
 

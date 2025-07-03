@@ -1,10 +1,13 @@
 package dev.revere.alley.feature.cosmetic.repository;
 
+import dev.revere.alley.core.AlleyContext;
+import dev.revere.alley.core.annotation.Service;
 import dev.revere.alley.feature.cosmetic.EnumCosmeticType;
 import dev.revere.alley.feature.cosmetic.impl.killeffect.KillEffectRepository;
 import dev.revere.alley.feature.cosmetic.impl.killmessage.KillMessageRepository;
 import dev.revere.alley.feature.cosmetic.impl.projectiletrail.ProjectileTrailRepository;
 import dev.revere.alley.feature.cosmetic.impl.soundeffect.SoundEffectRepository;
+import dev.revere.alley.tool.logger.Logger;
 import lombok.Getter;
 
 import java.util.EnumMap;
@@ -16,16 +19,18 @@ import java.util.Map;
  * @date 6/1/2024
  */
 @Getter
-public class CosmeticRepository {
-    private final Map<EnumCosmeticType, BaseCosmeticRepository<?>> repositories;
+@Service(provides = ICosmeticRepository.class, priority = 140)
+public class CosmeticRepository implements ICosmeticRepository {
+    private final Map<EnumCosmeticType, BaseCosmeticRepository<?>> repositories = new EnumMap<>(EnumCosmeticType.class);
 
-    public CosmeticRepository() {
-        this.repositories = new EnumMap<>(EnumCosmeticType.class);
-
+    @Override
+    public void initialize(AlleyContext context) {
         this.register(new KillEffectRepository());
         this.register(new SoundEffectRepository());
         this.register(new ProjectileTrailRepository());
         this.register(new KillMessageRepository());
+
+        Logger.info("Registered " + this.repositories.size() + " cosmetic repositories.");
     }
 
     /**
@@ -40,13 +45,17 @@ public class CosmeticRepository {
         }
     }
 
-    /**
-     * Gets a cosmetic repository by its CosmeticType.
-     *
-     * @param type The CosmeticType of the repository to retrieve.
-     * @return The repository instance, or null if not found.
-     */
+    @Override
     public BaseCosmeticRepository<?> getRepository(EnumCosmeticType type) {
         return this.repositories.get(type);
+    }
+
+    @Override
+    public <T extends BaseCosmeticRepository<?>> T getRepository(EnumCosmeticType type, Class<T> repositoryClass) {
+        BaseCosmeticRepository<?> repo = getRepository(type);
+        if (repositoryClass.isInstance(repo)) {
+            return repositoryClass.cast(repo);
+        }
+        return null;
     }
 }

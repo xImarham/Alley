@@ -1,8 +1,11 @@
 package dev.revere.alley.base.kit.setting;
 
 import dev.revere.alley.Alley;
+import dev.revere.alley.api.constant.IPluginConstant;
 import dev.revere.alley.base.kit.Kit;
 import dev.revere.alley.base.kit.setting.annotation.KitSettingData;
+import dev.revere.alley.core.AlleyContext;
+import dev.revere.alley.core.annotation.Service;
 import dev.revere.alley.tool.logger.Logger;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,84 +22,75 @@ import java.util.Map;
  * @date 5/21/2024
  */
 @Getter
-@Setter
-public class KitSettingService {
-    protected final Alley plugin;
-    private final List<KitSetting> settings;
-    private final Map<String, Class<? extends KitSetting>> settingClasses;
+@Service(provides = IKitSettingService.class, priority = 80)
+public class KitSettingService implements IKitSettingService {
+    private final IPluginConstant pluginConstant;
+
+    private final List<KitSetting> settings = new ArrayList<>();
+    private final Map<String, Class<? extends KitSetting>> settingClasses = new HashMap<>();
 
     /**
-     * Constructor for the KitSettingService class.
-     *
-     * @param plugin The Alley plugin instance.
+     * Constructor for DI.
      */
-    public KitSettingService(Alley plugin) {
-        this.plugin = plugin;
-        this.settings = new ArrayList<>();
-        this.settingClasses = new HashMap<>();
+    public KitSettingService(IPluginConstant pluginConstant) {
+        this.pluginConstant = pluginConstant;
+    }
+
+    @Override
+    public void initialize(AlleyContext context) {
         this.registerSettings();
     }
 
     private void registerSettings() {
-        Reflections reflections = this.plugin.getPluginConstant().getReflections();
+        Reflections reflections = this.pluginConstant.getReflections();
 
         for (Class<? extends KitSetting> clazz : reflections.getSubTypesOf(KitSetting.class)) {
-            KitSettingData annotation = clazz.getAnnotation(KitSettingData.class);
-            if (annotation != null) {
-                try {
-                    KitSetting instance = clazz.getDeclaredConstructor().newInstance();
-                    this.settings.add(instance);
-                    this.settingClasses.put(instance.getName(), clazz);
-                } catch (Exception exception) {
-                    Logger.logError("Failed to register setting class " + clazz.getSimpleName() + "!");
-                }
+            if (clazz.isInterface() || java.lang.reflect.Modifier.isAbstract(clazz.getModifiers()) || !clazz.isAnnotationPresent(KitSettingData.class)) {
+                continue;
+            }
+
+            try {
+                KitSetting instance = clazz.getDeclaredConstructor().newInstance();
+                this.settings.add(instance);
+                this.settingClasses.put(instance.getName(), clazz);
+            } catch (Exception exception) {
+                Logger.logException("Failed to register setting class " + clazz.getSimpleName() + "!", exception);
             }
         }
+        Logger.info("Registered " + this.settings.size() + " kit settings.");
     }
 
-    /**
-     * Method to create a new setting instance by its name.
-     *
-     * @param name The name of the setting.
-     * @return A new instance of the setting.
-     */
+    @Override
     public KitSetting createSettingByName(String name) {
         Class<? extends KitSetting> clazz = this.settingClasses.get(name);
         if (clazz != null) {
             try {
                 return clazz.getDeclaredConstructor().newInstance();
             } catch (Exception e) {
-                Logger.logError("Failed to create setting instance for " + name + "!");
+                Logger.logException("Failed to create setting instance for " + name + "!", e);
             }
         }
         return null;
     }
 
-    /**
-     * Method to get a setting by its name.
-     *
-     * @param name The name of the setting.
-     * @return The setting.
-     */
+    @Override
     public KitSetting getSettingByName(String name) {
-        return this.settings.stream().filter(setting -> setting.getName().equals(name)).findFirst().orElse(null);
+        return this.settings.stream()
+                .filter(setting -> setting.getName().equalsIgnoreCase(name))
+                .findFirst()
+                .orElse(null);
     }
 
-    /**
-     * Method to get a setting by its class.
-     *
-     * @param clazz The class of the setting.
-     * @return The setting.
-     */
-    public KitSetting getSettingByClass(Class<? extends KitSetting> clazz) {
-        return this.settings.stream().filter(setting -> setting.getClass().equals(clazz)).findFirst().orElse(null);
+    @Override
+    @SuppressWarnings("unchecked")
+    public <T extends KitSetting> T getSettingByClass(Class<T> clazz) {
+        return (T) this.settings.stream()
+                .filter(clazz::isInstance)
+                .findFirst()
+                .orElse(null);
     }
 
-    /**
-     * Method to apply all settings to a kit.
-     *
-     * @param kit The kit to apply the settings to.
-     */
+    @Override
     public void applyAllSettingsToKit(Kit kit) {
         for (KitSetting setting : this.settings) {
             kit.addKitSetting(setting);

@@ -2,6 +2,8 @@ package dev.revere.alley.feature.layout.menu.button.editor;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.menu.Button;
+import dev.revere.alley.feature.layout.ILayoutService;
+import dev.revere.alley.profile.progress.IProgressService;
 import dev.revere.alley.tool.item.ItemBuilder;
 import lombok.AllArgsConstructor;
 import org.bukkit.Material;
@@ -35,6 +37,6 @@ public class LayoutCancelButton extends Button {
     public void clicked(Player player, ClickType clickType) {
         if (clickType != ClickType.LEFT) return;
 
-        Alley.getInstance().getLayoutService().getLayoutMenu().openMenu(player);
+        Alley.getInstance().getService(ILayoutService.class).getLayoutMenu().openMenu(player);
     }
 }

@@ -1,8 +1,10 @@
 package dev.revere.alley.profile.command.player;
 
+import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
+import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumChatChannel;
 import dev.revere.alley.util.chat.CC;
@@ -26,7 +28,8 @@ public class ChatCommand extends BaseCommand {
             return;
         }
 
-        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+        Profile profile = profileService.getProfile(player.getUniqueId());
         if (EnumChatChannel.getExactChatChannel(args[0], true) == null) {
             player.sendMessage(CC.translate("&cThe chat channel &6" + args[0] + " &cdoes not exist."));
             return;

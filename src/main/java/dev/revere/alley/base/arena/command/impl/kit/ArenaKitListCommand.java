@@ -1,9 +1,11 @@
 package dev.revere.alley.base.arena.command.impl.kit;
 
+import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.annotation.CompleterData;
+import dev.revere.alley.base.arena.IArenaService;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.entity.Player;
 
@@ -22,7 +24,7 @@ public class ArenaKitListCommand extends BaseCommand {
         List<String> completion = new ArrayList<>();
 
         if (command.getArgs().length == 1 && command.getPlayer().hasPermission("alley.admin")) {
-            this.plugin.getArenaService().getArenas().forEach(arena -> completion.add(arena.getName()));
+            Alley.getInstance().getService(IArenaService.class).getArenas().forEach(arena -> completion.add(arena.getName()));
         }
 
         return completion;
@@ -40,17 +42,17 @@ public class ArenaKitListCommand extends BaseCommand {
         }
 
         String arenaName = args[0];
-        if (this.plugin.getArenaService().getArenaByName(arenaName) == null) {
+        if (Alley.getInstance().getService(IArenaService.class).getArenaByName(arenaName) == null) {
             player.sendMessage(CC.translate("&cAn arena with that name does not exist!"));
             return;
         }
 
         player.sendMessage("");
-        player.sendMessage(CC.translate("     &6&l" + arenaName + " Kit List &f(" + this.plugin.getArenaService().getArenaByName(arenaName).getKits().size() + "&f)"));
-        if (this.plugin.getArenaService().getArenaByName(arenaName).getKits().isEmpty()) {
+        player.sendMessage(CC.translate("     &6&l" + arenaName + " Kit List &f(" + Alley.getInstance().getService(IArenaService.class).getArenaByName(arenaName).getKits().size() + "&f)"));
+        if (Alley.getInstance().getService(IArenaService.class).getArenaByName(arenaName).getKits().isEmpty()) {
             player.sendMessage(CC.translate("      &f● &cNo Arena Kits available."));
         }
-        this.plugin.getArenaService().getArenaByName(arenaName).getKits().forEach(kit -> player.sendMessage(CC.translate("      &f● &6" + kit)));
+        Alley.getInstance().getService(IArenaService.class).getArenaByName(arenaName).getKits().forEach(kit -> player.sendMessage(CC.translate("      &f● &6" + kit)));
         player.sendMessage("");
     }
 }

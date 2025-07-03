@@ -1,12 +1,13 @@
 package dev.revere.alley.feature.knockback;
 
 import dev.revere.alley.Alley;
+import dev.revere.alley.core.AlleyContext;
+import dev.revere.alley.core.annotation.Service;
 import dev.revere.alley.feature.knockback.enums.EnumKnockbackType;
 import dev.revere.alley.feature.knockback.impl.DefaultKnockbackImpl;
 import dev.revere.alley.feature.knockback.impl.ZoneKnockbackImpl;
 import dev.revere.alley.tool.logger.Logger;
 import lombok.Getter;
-import lombok.Setter;
 
 /**
  * @author Emmy
@@ -14,41 +15,51 @@ import lombok.Setter;
  * @since 26/04/2025
  */
 @Getter
-@Setter
-public class KnockbackAdapter {
-    protected final Alley plugin;
-    private final IKnockback knockbackType;
+@Service(provides = IKnockbackAdapter.class, priority = 50)
+public class KnockbackAdapter implements IKnockbackAdapter {
+    private final Alley plugin;
+    private IKnockback knockbackImplementation;
 
     /**
-     * Constructor for the KnockbackAdapter class.
-     *
-     * @param plugin The Alley plugin instance.
+     * Constructor for DI. Receives the main plugin instance.
      */
     public KnockbackAdapter(Alley plugin) {
         this.plugin = plugin;
-        this.knockbackType = this.determineKnockback();
+    }
+
+    @Override
+    public void initialize(AlleyContext context) {
+        this.knockbackImplementation = this.determineKnockback();
+        Logger.info("Adapting to &6" + knockbackImplementation.getType().getSpigotName() + " &fby &6" + knockbackImplementation.getType().getSpigotAuthor() + "&f.");
+    }
+
+    @Override
+    public IKnockback getKnockbackImplementation() {
+        if (this.knockbackImplementation == null) {
+            throw new IllegalStateException("KnockbackAdapter has not been initialized yet.");
+        }
+        return this.knockbackImplementation;
     }
 
     /**
-     * Determines the knockback implementation to use based on the enabled plugins.
+     * Determines the knockback implementation to use based on the server's name.
      *
      * @return The selected knockback implementation.
      */
     private IKnockback determineKnockback() {
-        IKnockback selectedCore = new DefaultKnockbackImpl();
+        IKnockback selectedImplementation = new DefaultKnockbackImpl();
 
         for (EnumKnockbackType kbType : EnumKnockbackType.values()) {
             if (this.plugin.getServer().getName().equalsIgnoreCase(kbType.getSpigotName())) {
                 switch (kbType) {
                     case ZONE:
-                        selectedCore = new ZoneKnockbackImpl();
+                        selectedImplementation = new ZoneKnockbackImpl();
                         break;
                 }
                 break;
             }
         }
 
-        Logger.log("Adapting to &6" + selectedCore.getType().getSpigotName() + " &fby &6" + selectedCore.getType().getSpigotAuthor() + "&f.");
-        return selectedCore;
+        return selectedImplementation;
     }
 }

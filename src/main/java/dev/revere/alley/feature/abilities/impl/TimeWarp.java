@@ -4,8 +4,11 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import dev.revere.alley.Alley;
 import dev.revere.alley.feature.abilities.AbstractAbility;
+import dev.revere.alley.feature.abilities.IAbilityService;
 import dev.revere.alley.feature.abilities.utils.DurationFormatter;
+import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
+import dev.revere.alley.profile.enums.EnumGlobalCooldown;
 import dev.revere.alley.util.PlayerUtil;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.Bukkit;
@@ -48,14 +51,14 @@ public class TimeWarp extends AbstractAbility {
     public void checkCooldown(PlayerInteractEvent event) {
         Player player = event.getPlayer();
         Action action = event.getAction();
-        Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
+        Profile profile = Alley.getInstance().getService(IProfileService.class).getProfile(player.getUniqueId());
         if (action.equals(Action.LEFT_CLICK_AIR) || action.equals(Action.LEFT_CLICK_BLOCK)) {
             if (!isAbility(player.getItemInHand())) {
                 return;
             }
             if (isAbility(player.getItemInHand())) {
                 if (this.hasCooldown(player)) {
-                    player.sendMessage(CC.translate("&fYou are on cooldown for &4" + DurationFormatter.getRemaining(profile.getTimewarp().getRemainingMillis(player), true)));
+                    player.sendMessage(CC.translate("&fYou are on cooldown for &4" + DurationFormatter.getRemaining(profile.getCooldown(TimeWarp.class).getRemainingMillis(player), true)));
                     event.setCancelled(true);
                     player.updateInventory();
                 }
@@ -90,7 +93,11 @@ public class TimeWarp extends AbstractAbility {
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
-        Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
+
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+        IAbilityService abilityService = Alley.getInstance().getService(IAbilityService.class);
+
+        Profile profile = profileService.getProfile(player.getUniqueId());
 
         if (!event.getAction().name().contains("RIGHT_CLICK")) {
             return;
@@ -100,16 +107,16 @@ public class TimeWarp extends AbstractAbility {
             return;
         }
 
-        if (profile.getTimewarp().onCooldown(player)) {
+        if (profile.getCooldown(TimeWarp.class).onCooldown(player)) {
             event.setCancelled(true);
-            player.sendMessage(CC.translate("&fYou are on &6&lTime Warp &7cooldown for &4" + DurationFormatter.getRemaining(profile.getTimewarp().getRemainingMillis(player), true, true)));
+            player.sendMessage(CC.translate("&fYou are on &6&lTime Warp &7cooldown for &4" + DurationFormatter.getRemaining(profile.getCooldown(TimeWarp.class).getRemainingMillis(player), true, true)));
             player.updateInventory();
             event.setCancelled(true);
             return;
         }
 
-        if (profile.getPartneritem().onCooldown(player)) {
-            player.sendMessage(CC.translate("&fYou are on &6&lPartner Item &fcooldown for &6" + DurationFormatter.getRemaining(profile.getPartneritem().getRemainingMillis(player), true, true)));
+        if (profile.getGlobalCooldown(EnumGlobalCooldown.PARTNER_ITEM).onCooldown(player)) {
+            player.sendMessage(CC.translate("&fYou are on &6&lPartner Item &fcooldown for &6" + DurationFormatter.getRemaining(profile.getGlobalCooldown(EnumGlobalCooldown.PARTNER_ITEM).getRemainingMillis(player), true, true)));
             player.updateInventory();
             event.setCancelled(true);
             return;
@@ -124,8 +131,8 @@ public class TimeWarp extends AbstractAbility {
 
         PlayerUtil.decrement(player);
 
-        profile.getTimewarp().applyCooldown(player, 60 * 1000);
-        profile.getPartneritem().applyCooldown(player, 10 * 1000);
+        profile.getCooldown(TimeWarp.class).applyCooldown(player, 60 * 1000);
+        profile.getGlobalCooldown(EnumGlobalCooldown.PARTNER_ITEM).applyCooldown(player, 10 * 1000);
 
         player.sendMessage(CC.translate(
                 "&7You &a4ctivated &7a Time Warp, so you will be teleported to your last thrown enderpearl's location in &43 &7seconds!"));
@@ -138,7 +145,7 @@ public class TimeWarp extends AbstractAbility {
             this.lastPearl.remove(player.getUniqueId());
         }, 60L);
 
-        Alley.getInstance().getAbilityService().cooldownExpired(player, this.getName(), this.getAbility());
-        Alley.getInstance().getAbilityService().playerMessage(player, this.getAbility());
+        abilityService.sendCooldownExpiredMessage(player, this.getName(), this.getAbility());
+        abilityService.sendPlayerMessage(player, this.getAbility());
     }
 }

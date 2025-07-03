@@ -1,10 +1,13 @@
 package dev.revere.alley.command.impl.main.impl;
 
+import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
+import dev.revere.alley.api.command.annotation.CommandContainer;
 import dev.revere.alley.api.command.annotation.CommandData;
-import dev.revere.alley.core.ICore;
-import dev.revere.alley.core.enums.EnumCoreType;
+import dev.revere.alley.server.ICore;
+import dev.revere.alley.server.ICoreAdapter;
+import dev.revere.alley.server.enums.EnumCoreType;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.command.CommandSender;
 
@@ -15,12 +18,13 @@ import java.util.Arrays;
  * @project Alley
  * @since 26/04/2025
  */
+@CommandContainer
 public class AlleyCoreCommand extends BaseCommand {
-    @CommandData(name = "alley.core", isAdminOnly = true, inGameOnly = false)
+    @CommandData(name = "alley.server", isAdminOnly = true, inGameOnly = false)
     @Override
     public void onCommand(CommandArgs command) {
         CommandSender sender = command.getSender();
-        ICore core = this.plugin.getCoreAdapter().getCore();
+        ICore core = Alley.getInstance().getService(ICoreAdapter.class).getCore();
 
         Arrays.asList(
                 "",
@@ -30,7 +34,7 @@ public class AlleyCoreCommand extends BaseCommand {
         ).forEach(line -> sender.sendMessage(CC.translate(line)));
 
         if (core.getType() == EnumCoreType.DEFAULT) {
-            sender.sendMessage(CC.translate("&7Note: This is the default core implementation, as there was no core found to hook into."));
+            sender.sendMessage(CC.translate("&7Note: This is the default server implementation, as there was no server found to hook into."));
         }
     }
 }

@@ -1,13 +1,17 @@
 package dev.revere.alley.game.party.command.impl.donator;
 
+import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.base.cooldown.Cooldown;
 import dev.revere.alley.base.cooldown.CooldownRepository;
+import dev.revere.alley.base.cooldown.ICooldownRepository;
 import dev.revere.alley.base.cooldown.enums.EnumCooldownType;
 import dev.revere.alley.config.locale.impl.PartyLocale;
+import dev.revere.alley.game.party.IPartyService;
 import dev.revere.alley.game.party.enums.EnumPartyState;
+import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
 import dev.revere.alley.util.chat.CC;
@@ -25,7 +29,8 @@ public class PartyAnnounceCommand extends BaseCommand {
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
-        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+        Profile profile = profileService.getProfile(player.getUniqueId());
         if (profile.getParty() == null) {
             player.sendMessage(CC.translate(PartyLocale.NOT_IN_PARTY.getMessage()));
             return;
@@ -41,7 +46,7 @@ public class PartyAnnounceCommand extends BaseCommand {
             return;
         }
 
-        CooldownRepository cooldownRepository = this.plugin.getCooldownRepository();
+        ICooldownRepository cooldownRepository = Alley.getInstance().getService(ICooldownRepository.class);
         Optional<Cooldown> optionalCooldown = Optional.ofNullable(cooldownRepository.getCooldown(player.getUniqueId(), EnumCooldownType.PARTY_ANNOUNCE_COOLDOWN));
         if (optionalCooldown.isPresent() && optionalCooldown.get().isActive()) {
             player.sendMessage(CC.translate("&cYou must wait " + optionalCooldown.get().remainingTimeInMinutes() + " &cbefore announcing your party again."));
@@ -56,6 +61,6 @@ public class PartyAnnounceCommand extends BaseCommand {
 
         cooldown.resetCooldown();
 
-        this.plugin.getPartyService().announceParty(profile.getParty());
+        Alley.getInstance().getService(IPartyService.class).announceParty(profile.getParty());
     }
 }

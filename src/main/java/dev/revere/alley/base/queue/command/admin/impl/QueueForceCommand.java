@@ -1,11 +1,16 @@
 package dev.revere.alley.base.queue.command.admin.impl;
 
+import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
+import dev.revere.alley.base.hotbar.IHotbarService;
 import dev.revere.alley.base.hotbar.enums.EnumHotbarType;
+import dev.revere.alley.base.kit.IKitService;
 import dev.revere.alley.base.kit.Kit;
+import dev.revere.alley.base.queue.IQueueService;
 import dev.revere.alley.base.queue.Queue;
+import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.util.PlayerUtil;
 import dev.revere.alley.util.SoundUtil;
@@ -39,19 +44,19 @@ public class QueueForceCommand extends BaseCommand {
             return;
         }
 
-        Kit kit = this.plugin.getKitService().getKit(kitType);
+        Kit kit = Alley.getInstance().getService(IKitService.class).getKit(kitType);
         if (kit == null) {
             player.sendMessage(CC.translate("&cKit not found."));
             return;
         }
 
-        Profile profile = this.plugin.getProfileService().getProfile(target.getUniqueId());
-        for (Queue queue : this.plugin.getQueueService().getQueues()) {
+        Profile profile = Alley.getInstance().getService(IProfileService.class).getProfile(target.getUniqueId());
+        for (Queue queue : Alley.getInstance().getService(IQueueService.class).getQueues()) {
             if (queue.getKit().equals(kit) && queue.isRanked() == ranked) {
                 queue.addPlayer(target, queue.isRanked() ? profile.getProfileData().getRankedKitData().get(queue.getKit().getName()).getElo() : 0);
                 PlayerUtil.reset(target, false);
                 SoundUtil.playBanHammer(target);
-                this.plugin.getHotbarService().applyHotbarItems(target);
+                Alley.getInstance().getService(IHotbarService.class).applyHotbarItems(target);
                 player.sendMessage(CC.translate("&aYou've added &6" + target.getName() + " &ato the &6" + queue.getQueueType() + " &aqueue."));
 
                 if (ranked && profile.getProfileData().isRankedBanned()) {

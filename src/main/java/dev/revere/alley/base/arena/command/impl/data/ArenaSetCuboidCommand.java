@@ -1,9 +1,11 @@
 package dev.revere.alley.base.arena.command.impl.data;
 
+import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.annotation.CompleterData;
+import dev.revere.alley.base.arena.IArenaService;
 import dev.revere.alley.base.arena.enums.EnumArenaType;
 import dev.revere.alley.base.arena.selection.ArenaSelection;
 import dev.revere.alley.util.chat.CC;
@@ -24,7 +26,7 @@ public class ArenaSetCuboidCommand extends BaseCommand {
         List<String> completion = new ArrayList<>();
 
         if (command.getArgs().length == 1 && command.getPlayer().hasPermission("alley.admin")) {
-            this.plugin.getArenaService().getArenas().forEach(arena -> completion.add(arena.getName()));
+            Alley.getInstance().getService(IArenaService.class).getArenas().forEach(arena -> completion.add(arena.getName()));
         }
 
         return completion;
@@ -48,20 +50,20 @@ public class ArenaSetCuboidCommand extends BaseCommand {
         }
 
         String arenaName = args[0];
-        if (this.plugin.getArenaService().getArenaByName(arenaName) == null) {
+        if (Alley.getInstance().getService(IArenaService.class).getArenaByName(arenaName) == null) {
             player.sendMessage(CC.translate("&cAn arena with that name does not exist!"));
             return;
         }
 
-        if (this.plugin.getArenaService().getArenaByName(arenaName).getType() == EnumArenaType.FFA) {
+        if (Alley.getInstance().getService(IArenaService.class).getArenaByName(arenaName).getType() == EnumArenaType.FFA) {
             player.sendMessage(CC.translate("&cYou cannot set cuboids for Free-For-All arenas! You must use: &4/arena setsafezone pos1/pos2&c."));
             return;
         }
 
-        this.plugin.getArenaService().getArenaByName(arenaName).setMinimum(arenaSelection.getMinimum());
-        this.plugin.getArenaService().getArenaByName(arenaName).setMaximum(arenaSelection.getMaximum());
+        Alley.getInstance().getService(IArenaService.class).getArenaByName(arenaName).setMinimum(arenaSelection.getMinimum());
+        Alley.getInstance().getService(IArenaService.class).getArenaByName(arenaName).setMaximum(arenaSelection.getMaximum());
         player.sendMessage(CC.translate("&aCuboid has been set for arena &6" + arenaName + "&a!"));
 
-        this.plugin.getArenaService().saveArena(this.plugin.getArenaService().getArenaByName(arenaName));
+        Alley.getInstance().getService(IArenaService.class).saveArena(Alley.getInstance().getService(IArenaService.class).getArenaByName(arenaName));
     }
 }

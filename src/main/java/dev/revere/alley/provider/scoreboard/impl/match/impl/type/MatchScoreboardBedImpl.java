@@ -1,6 +1,7 @@
 package dev.revere.alley.provider.scoreboard.impl.match.impl.type;
 
 import dev.revere.alley.Alley;
+import dev.revere.alley.config.IConfigService;
 import dev.revere.alley.game.match.impl.MatchBedImpl;
 import dev.revere.alley.game.match.impl.MatchRegularImpl;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
@@ -51,6 +52,6 @@ public class MatchScoreboardBedImpl extends AbstractMatchScoreboard {
     private String getTeamDisplay(ChatColor teamColor) {
         if (teamColor == null) return "";
         String colorName = teamColor.name().toLowerCase();
-        return plugin.getConfigService().getScoreboardConfig().getString("scoreboard.team-displays." + colorName, "");
+        return Alley.getInstance().getService(IConfigService.class).getScoreboardConfig().getString("scoreboard.team-displays." + colorName, "");
     }
 }

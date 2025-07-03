@@ -1,9 +1,15 @@
 package dev.revere.alley.api.command;
 
 import dev.revere.alley.Alley;
+import dev.revere.alley.api.command.annotation.CommandContainer;
 import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.annotation.CompleterData;
+import dev.revere.alley.api.constant.IPluginConstant;
 import dev.revere.alley.api.constant.PluginConstant;
+import dev.revere.alley.config.IConfigService;
+import dev.revere.alley.core.AlleyContext;
+import dev.revere.alley.core.annotation.Service;
+import dev.revere.alley.tool.logger.Logger;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -14,6 +20,7 @@ import org.bukkit.help.HelpTopic;
 import org.bukkit.help.HelpTopicComparator;
 import org.bukkit.help.IndexHelpTopic;
 import org.bukkit.plugin.SimplePluginManager;
+import org.reflections.Reflections;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -21,39 +28,54 @@ import java.lang.reflect.Method;
 import java.util.*;
 import java.util.Map.Entry;
 
-public class CommandFramework implements CommandExecutor {
-
-    private final Map<String, Entry<Method, Object>> commandMap;
-    protected final Alley plugin;
+@Service(provides = ICommandFramework.class, priority = 40)
+public class CommandFramework implements ICommandFramework, CommandExecutor {
+    private final Map<String, Map.Entry<Method, Object>> commandMap = new HashMap<>();
     private CommandMap map;
 
-    /**
-     * Constructor for the CommandFramework class.
-     *
-     * @param plugin the plugin
-     */
-    public CommandFramework(Alley plugin) {
-        this.commandMap = new HashMap<>();
-        this.plugin = plugin;
-        this.initializeMap(plugin);
-    }
+    private final Alley plugin;
+    private final IPluginConstant pluginConstant;
+    private final IConfigService configService;
 
     /**
-     * Initializes the command map for the plugin manager.
-     *
-     * @param plugin the plugin
+     * Constructor for DI.
      */
-    private void initializeMap(Alley plugin) {
+    public CommandFramework(Alley plugin, IPluginConstant pluginConstant, IConfigService configService) {
+        this.plugin = plugin;
+        this.pluginConstant = pluginConstant;
+        this.configService = configService;
+    }
+
+    @Override
+    public void setup(AlleyContext context) {
         if (plugin.getServer().getPluginManager() instanceof SimplePluginManager) {
-            SimplePluginManager manager = (SimplePluginManager) plugin.getServer().getPluginManager();
             try {
+                SimplePluginManager manager = (SimplePluginManager) plugin.getServer().getPluginManager();
                 Field field = SimplePluginManager.class.getDeclaredField("commandMap");
                 field.setAccessible(true);
                 this.map = (CommandMap) field.get(manager);
-            } catch (IllegalArgumentException | SecurityException | NoSuchFieldException | IllegalAccessException e) {
-                Bukkit.getConsoleSender().sendMessage("Failed to register commands: " + e.getMessage());
+            } catch (ReflectiveOperationException e) {
+                throw new RuntimeException("Failed to initialize CommandFramework: Could not get CommandMap.", e);
             }
         }
+    }
+
+    @Override
+    public void initialize(AlleyContext context) {
+        Reflections reflections = pluginConstant.getReflections();
+        Set<Class<?>> commandContainers = reflections.getTypesAnnotatedWith(CommandContainer.class);
+
+        Logger.info("Registering " + commandContainers.size() + " command containers...");
+        for (Class<?> containerClass : commandContainers) {
+            try {
+                Object instance = containerClass.getDeclaredConstructor().newInstance();
+                registerCommands(instance);
+                Logger.info("  -> Registered commands from: " + containerClass.getSimpleName());
+            } catch (Exception e) {
+                Logger.logException("Failed to instantiate and register command container: " + containerClass.getSimpleName(), e);
+            }
+        }
+        registerHelp();
     }
 
     @Override
@@ -75,13 +97,12 @@ public class CommandFramework implements CommandExecutor {
                 Object methodObject = this.commandMap.get(cmdLabel).getValue();
                 CommandData commandData = method.getAnnotation(CommandData.class);
 
-                PluginConstant pluginConstant = this.plugin.getPluginConstant();
                 String noPermission = pluginConstant.getPermissionLackMessage();
-
                 if (commandData.isAdminOnly() && !sender.hasPermission(pluginConstant.getAdminPermissionPrefix())) {
                     sender.sendMessage(noPermission);
                     return true;
                 }
+
                 if (!commandData.permission().isEmpty() && (!sender.hasPermission(commandData.permission()))) {
                     sender.sendMessage(CC.translate(noPermission));
                     return true;
@@ -146,8 +167,8 @@ public class CommandFramework implements CommandExecutor {
                 help.add(topic);
             }
         }
-        IndexHelpTopic topic = new IndexHelpTopic(plugin.getPluginConstant().getName(), "All commands for " + plugin.getPluginConstant().getName(), null, help,
-                "Below is a list of all " + plugin.getPluginConstant().getName() + " commands:");
+        IndexHelpTopic topic = new IndexHelpTopic(pluginConstant.getName(), "All commands for " + pluginConstant.getName(), null, help,
+                "Below is a list of all " + pluginConstant.getName() + " commands:");
         Bukkit.getServer().getHelpMap().addTopic(topic);
     }
 
@@ -156,7 +177,7 @@ public class CommandFramework implements CommandExecutor {
             if (m.getAnnotation(CommandData.class) != null) {
                 CommandData commandData = m.getAnnotation(CommandData.class);
                 this.commandMap.remove(Objects.requireNonNull(commandData).name().toLowerCase());
-                this.commandMap.remove(this.plugin.getPluginConstant().getName() + ":" + commandData.name().toLowerCase());
+                this.commandMap.remove(pluginConstant.getName() + ":" + commandData.name().toLowerCase());
                 this.map.getCommand(commandData.name().toLowerCase()).unregister(map);
             }
         }
@@ -164,12 +185,12 @@ public class CommandFramework implements CommandExecutor {
 
     public void registerCommand(CommandData commandData, String label, Method m, Object obj) {
         this.commandMap.put(label.toLowerCase(), new AbstractMap.SimpleEntry<>(m, obj));
-        this.commandMap.put(this.plugin.getPluginConstant().getName() + ':' + label.toLowerCase(),
+        this.commandMap.put(pluginConstant.getName() + ':' + label.toLowerCase(),
                 new AbstractMap.SimpleEntry<>(m, obj));
         String cmdLabel = label.replace(".", ",").split(",")[0].toLowerCase();
         if (map.getCommand(cmdLabel) == null) {
             Command cmd = new BukkitCommand(cmdLabel, this, plugin);
-            map.register(plugin.getPluginConstant().getName(), cmd);
+            map.register(pluginConstant.getName(), cmd);
         }
         if (!commandData.description().equalsIgnoreCase("") && cmdLabel.equals(label)) {
             map.getCommand(cmdLabel).setDescription(commandData.description());
@@ -183,7 +204,7 @@ public class CommandFramework implements CommandExecutor {
         String cmdLabel = label.replace(".", ",").split(",")[0].toLowerCase();
         if (map.getCommand(cmdLabel) == null) {
             Command command = new BukkitCommand(cmdLabel, this, plugin);
-            map.register(plugin.getPluginConstant().getName(), command);
+            map.register(pluginConstant.getName(), command);
         }
         if (map.getCommand(cmdLabel) instanceof BukkitCommand) {
             BukkitCommand command = (BukkitCommand) map.getCommand(cmdLabel);
@@ -218,7 +239,7 @@ public class CommandFramework implements CommandExecutor {
         String label = args.getLabel();
         String[] parts = label.split(":");
 
-        if (args.getSender().hasPermission(this.plugin.getConfigService().getSettingsConfig().getString("command.syntax-bypass-perm"))) {
+        if (args.getSender().hasPermission(configService.getSettingsConfig().getString("command.syntax-bypass-perm"))) {
             if (parts.length > 1) {
                 String commandToExecute = parts[1];
 
@@ -237,7 +258,7 @@ public class CommandFramework implements CommandExecutor {
                 args.getSender().sendMessage(CC.translate("&cMissing arguments / Wrong format or Internal error."));
             }
         } else {
-            args.getSender().sendMessage(CC.translate(this.plugin.getConfigService().getSettingsConfig().getString("command.anti-syntax-message").replace("{argument}", args.getLabel())));
+            args.getSender().sendMessage(CC.translate(configService.getSettingsConfig().getString("command.anti-syntax-message").replace("{argument}", args.getLabel())));
         }
     }
 }

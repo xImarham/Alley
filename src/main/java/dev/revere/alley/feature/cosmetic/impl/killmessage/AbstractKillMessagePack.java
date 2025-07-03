@@ -1,6 +1,7 @@
 package dev.revere.alley.feature.cosmetic.impl.killmessage;
 
 import dev.revere.alley.Alley;
+import dev.revere.alley.config.IConfigService;
 import dev.revere.alley.feature.cosmetic.AbstractCosmetic;
 import dev.revere.alley.tool.logger.Logger;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -35,11 +36,11 @@ public abstract class AbstractKillMessagePack extends AbstractCosmetic {
         String fileName = getResourceFileName();
         String configPath = "cosmetics/messages/" + fileName;
 
-        FileConfiguration config = Alley.getInstance().getConfigService().getConfig(configPath);
+        FileConfiguration config = Alley.getInstance().getService(IConfigService.class).getConfig(configPath);
 
         if (config == null) {
-            Logger.logError("Could not load kill message config: " + configPath);
-            Logger.logError("Make sure the file is added to ConfigService.configFileNames array!");
+            Logger.error("Could not load kill message config: " + configPath);
+            Logger.error("Make sure the file is added to ConfigService.configFileNames array!");
             return;
         }
 
@@ -52,12 +53,12 @@ public abstract class AbstractKillMessagePack extends AbstractCosmetic {
                     if (key.equalsIgnoreCase("GENERIC")) {
                         this.messagesByCause.put(null, config.getStringList(key));
                     } else {
-                        Logger.logError("Unknown damage cause in " + fileName + ": " + key);
+                        Logger.error("Unknown damage cause in " + fileName + ": " + key);
                     }
                 }
             }
 
-            Logger.log("Loaded kill message pack: " + fileName);
+            Logger.info("Loaded kill message pack: " + fileName);
         } catch (Exception e) {
             Logger.logException("Failed to load kill message pack: " + fileName, e);
         }

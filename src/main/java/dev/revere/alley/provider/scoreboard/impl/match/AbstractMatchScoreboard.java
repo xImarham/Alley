@@ -1,9 +1,11 @@
 package dev.revere.alley.provider.scoreboard.impl.match;
 
 import dev.revere.alley.Alley;
+import dev.revere.alley.config.IConfigService;
 import dev.revere.alley.game.match.AbstractMatch;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
+import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.entity.Player;
@@ -43,7 +45,7 @@ public abstract class AbstractMatchScoreboard implements IMatchScoreboard {
         AbstractMatch match = profile.getMatch();
         String configPath = match.isTeamMatch() ? getTeamConfigPath() : getSoloConfigPath();
 
-        for (String line : plugin.getConfigService().getScoreboardConfig().getStringList(configPath)) {
+        for (String line : Alley.getInstance().getService(IConfigService.class).getScoreboardConfig().getStringList(configPath)) {
             scoreboardLines.add(replacePlaceholders(line, profile, player, you, opponent));
         }
 
@@ -64,12 +66,14 @@ public abstract class AbstractMatchScoreboard implements IMatchScoreboard {
     protected String replacePlaceholders(String line, Profile profile, Player player, GameParticipant<MatchGamePlayerImpl> you, GameParticipant<MatchGamePlayerImpl> opponent) {
         AbstractMatch match = profile.getMatch();
 
-        String opponentName = match.isTeamMatch() ? getColoredName(plugin.getProfileService().getProfile(opponent.getPlayer().getUuid())) + "' Team" : getColoredName(plugin.getProfileService().getProfile(opponent.getPlayer().getUuid()));
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+
+        String opponentName = match.isTeamMatch() ? getColoredName(profileService.getProfile(opponent.getLeader().getUuid())) + "' Team" : getColoredName(profileService.getProfile(opponent.getLeader().getUuid()));
 
         return CC.translate(line)
                 .replace("{opponent}", opponentName)
                 .replace("{player-ping}", String.valueOf(getPing(player)))
-                .replace("{opponent-ping}", String.valueOf(getPing(opponent.getPlayer().getPlayer())))
+                .replace("{opponent-ping}", String.valueOf(getPing(opponent.getLeader().getTeamPlayer())))
                 .replace("{duration}", match.getDuration())
                 .replace("{arena}", match.getArena().getDisplayName() == null ? "&c&lNULL" : match.getArena().getDisplayName())
                 .replace("{kit}", match.getKit().getDisplayName())

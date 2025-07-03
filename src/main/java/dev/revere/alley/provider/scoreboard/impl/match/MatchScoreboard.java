@@ -28,13 +28,13 @@ public class MatchScoreboard implements IScoreboard {
     /**
      * Constructor for the MatchScoreboard class.
      * It instantiates the registry, which automatically discovers all providers.
-     *
-     * @param plugin The Alley plugin instance.
      */
-    public MatchScoreboard(Alley plugin) {
-        this.registry = new MatchScoreboardRegistry(plugin);
-        this.matchScoreboardStarting = new MatchScoreboardStartingImpl(plugin);
-        this.matchScoreboardEnding = new MatchScoreboardEndingImpl(plugin);
+    public MatchScoreboard() {
+        this.registry = new MatchScoreboardRegistry();
+        this.registry.initialize();
+
+        this.matchScoreboardStarting = new MatchScoreboardStartingImpl();
+        this.matchScoreboardEnding = new MatchScoreboardEndingImpl();
     }
 
     @Override

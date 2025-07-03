@@ -2,12 +2,15 @@ package dev.revere.alley.base.hotbar.listener;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.base.hotbar.HotbarItem;
+import dev.revere.alley.base.hotbar.IHotbarService;
+import dev.revere.alley.base.queue.IQueueService;
 import dev.revere.alley.base.queue.enums.EnumQueueType;
 import dev.revere.alley.base.queue.menu.sub.RankedMenu;
 import dev.revere.alley.feature.leaderboard.menu.LeaderboardMenu;
 import dev.revere.alley.game.match.menu.CurrentMatchesMenu;
 import dev.revere.alley.game.party.menu.duel.DuelOtherPartyMenu;
 import dev.revere.alley.game.party.menu.event.PartyEventMenu;
+import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.entity.Player;
@@ -23,23 +26,16 @@ import org.bukkit.inventory.ItemStack;
  * @date 5/27/2024
  */
 public class HotbarListener implements Listener {
-    protected final Alley plugin;
-
-    /**
-     * Constructor for the HotbarListener class.
-     *
-     * @param plugin The Alley plugin instance.
-     */
-    public HotbarListener(Alley plugin) {
-        this.plugin = plugin;
-    }
-
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
         Action action = event.getAction();
         if ((action != Action.RIGHT_CLICK_AIR && action != Action.RIGHT_CLICK_BLOCK)) {
             return;
         }
+
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+        IHotbarService hotbarService = Alley.getInstance().getService(IHotbarService.class);
+        IQueueService queueService = Alley.getInstance().getService(IQueueService.class);
 
         Player player = event.getPlayer();
 
@@ -48,8 +44,8 @@ public class HotbarListener implements Listener {
             return;
         }
 
-        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
-        HotbarItem hotbarItem = this.plugin.getHotbarService().getItemByStack(item);
+        Profile profile = profileService.getProfile(player.getUniqueId());
+        HotbarItem hotbarItem = hotbarService.getItemByStack(item);
 
         if (hotbarItem != null) {
             String command = hotbarItem.getHotbarItems().getCommand();
@@ -60,11 +56,11 @@ public class HotbarListener implements Listener {
                     case LOBBY:
                         switch (hotbarItem.getHotbarItems()) {
                             case UNRANKED_QUEUES:
-                                this.plugin.getQueueService().getQueueMenu().openMenu(player);
+                                queueService.getQueueMenu().openMenu(player);
                                 break;
                             case DUO_UNRANKED_QUEUE:
                                 profile.setQueueType(EnumQueueType.DUOS);
-                                this.plugin.getQueueService().getQueueMenu().openMenu(player);
+                                queueService.getQueueMenu().openMenu(player);
                                 break;
                             case RANKED_QUEUES:
                                 new RankedMenu().openMenu(player);

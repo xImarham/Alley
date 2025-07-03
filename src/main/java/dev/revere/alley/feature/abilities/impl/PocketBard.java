@@ -2,8 +2,11 @@ package dev.revere.alley.feature.abilities.impl;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.feature.abilities.AbstractAbility;
+import dev.revere.alley.feature.abilities.IAbilityService;
 import dev.revere.alley.feature.abilities.utils.DurationFormatter;
+import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
+import dev.revere.alley.profile.enums.EnumGlobalCooldown;
 import dev.revere.alley.util.PlayerUtil;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.entity.Player;
@@ -30,29 +33,33 @@ public class PocketBard extends AbstractAbility {
             event.setCancelled(true);
 
             Player player = event.getPlayer();
-            Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
 
-            if (profile.getPocketbard().onCooldown(player)) {
-                player.sendMessage(CC.translate("&fYou are on &6&lPocket Bard &7cooldown for &4" + DurationFormatter.getRemaining(profile.getPocketbard().getRemainingMillis(player), true, true)));
+            IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+            IAbilityService abilityService = Alley.getInstance().getService(IAbilityService.class);
+
+            Profile profile = profileService.getProfile(player.getUniqueId());
+
+            if (profile.getCooldown(PocketBard.class).onCooldown(player)) {
+                player.sendMessage(CC.translate("&fYou are on &6&lPocket Bard &7cooldown for &4" + DurationFormatter.getRemaining(profile.getCooldown(PocketBard.class).getRemainingMillis(player), true, true)));
                 player.updateInventory();
                 return;
             }
 
-            if (profile.getPartneritem().onCooldown(player)) {
-                player.sendMessage(CC.translate("&fYou are on &6&lPartner Item &fcooldown for &6" + DurationFormatter.getRemaining(profile.getPartneritem().getRemainingMillis(player), true, true)));
+            if(profile.getGlobalCooldown(EnumGlobalCooldown.PARTNER_ITEM).onCooldown(player)){
+                player.sendMessage(CC.translate("&fYou are on &6&lPartner Item &fcooldown for &6" + DurationFormatter.getRemaining(profile.getCooldown(PocketBard.class).getRemainingMillis(player), true, true)));
                 player.updateInventory();
                 return;
             }
 
             PlayerUtil.decrement(player);
 
-            profile.getPocketbard().applyCooldown(player, 60 * 1000);
-            profile.getPartneritem().applyCooldown(player, 10 * 1000);
+            profile.getCooldown(PocketBard.class).applyCooldown(player, 60 * 1000);
+            profile.getGlobalCooldown(EnumGlobalCooldown.PARTNER_ITEM).applyCooldown(player,  10 * 1000);
 
             this.giveRandomEffect(player);
 
-            plugin.getAbilityService().cooldownExpired(player, this.getName(), this.getAbility());
-            plugin.getAbilityService().playerMessage(player, this.getAbility());
+            abilityService.sendCooldownExpiredMessage(player, this.getName(), this.getAbility());
+            abilityService.sendPlayerMessage(player, this.getAbility());
         }
     }
 
@@ -60,14 +67,14 @@ public class PocketBard extends AbstractAbility {
     public void checkCooldown(PlayerInteractEvent event) {
         Player player = event.getPlayer();
         Action action = event.getAction();
-        Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
+        Profile profile = Alley.getInstance().getService(IProfileService.class).getProfile(player.getUniqueId());
         if (action.equals(Action.LEFT_CLICK_AIR) || action.equals(Action.LEFT_CLICK_BLOCK)) {
             if (!isAbility(player.getItemInHand())) {
                 return;
             }
             if (isAbility(player.getItemInHand())) {
                 if (this.hasCooldown(player)) {
-                    player.sendMessage(CC.translate("&fYou are on cooldown for &4" + DurationFormatter.getRemaining(profile.getPocketbard().getRemainingMillis(player), true)));
+                    player.sendMessage(CC.translate("&fYou are on cooldown for &4" + DurationFormatter.getRemaining(profile.getCooldown(PocketBard.class).getRemainingMillis(player), true)));
                     event.setCancelled(true);
                     player.updateInventory();
                 }

@@ -1,11 +1,11 @@
 package dev.revere.alley.game.match.snapshot;
 
+import dev.revere.alley.core.annotation.Service;
 import lombok.Getter;
-import lombok.Setter;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author Remi
@@ -13,30 +13,28 @@ import java.util.UUID;
  * @date 5/26/2024
  */
 @Getter
-@Setter
-public class SnapshotRepository {
-    private final Map<UUID, Snapshot> snapshots;
+@Service(provides = ISnapshotRepository.class, priority = 210)
+public class SnapshotRepository implements ISnapshotRepository {
+    private final Map<UUID, Snapshot> snapshots = new ConcurrentHashMap<>();
 
-    public SnapshotRepository() {
-        this.snapshots = new HashMap<>();
+    @Override
+    public Map<UUID, Snapshot> getSnapshots() {
+        return snapshots;
     }
 
-    /**
-     * Get a snapshot by UUID.
-     *
-     * @param uuid the UUID of the snapshot
-     * @return the snapshot
-     */
+    @Override
+    public void addSnapshot(Snapshot snapshot) {
+        if (snapshot != null) {
+            this.snapshots.put(snapshot.getUuid(), snapshot);
+        }
+    }
+
+    @Override
     public Snapshot getSnapshot(UUID uuid) {
         return this.snapshots.get(uuid);
     }
 
-    /**
-     * Get a snapshot by username.
-     *
-     * @param username the username of the player
-     * @return the snapshot, or null if not found
-     */
+    @Override
     public Snapshot getSnapshot(String username) {
         return this.snapshots.values().stream()
                 .filter(snapshot -> snapshot.getUsername().equalsIgnoreCase(username))
@@ -44,20 +42,7 @@ public class SnapshotRepository {
                 .orElse(null);
     }
 
-    /**
-     * Add a snapshot to the repository.
-     *
-     * @param snapshot  the snapshot to add
-     */
-    public void addSnapshot(Snapshot snapshot) {
-        this.snapshots.put(snapshot.getUuid(), snapshot);
-    }
-
-    /**
-     * Remove a snapshot from the repository.
-     *
-     * @param uuid the UUID of the snapshot to remove
-     */
+    @Override
     public void removeSnapshot(UUID uuid) {
         this.snapshots.remove(uuid);
     }

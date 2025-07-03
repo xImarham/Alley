@@ -2,8 +2,12 @@ package dev.revere.alley.feature.explosives;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.config.ConfigService;
+import dev.revere.alley.config.IConfigService;
+import dev.revere.alley.core.AlleyContext;
+import dev.revere.alley.core.annotation.Service;
 import dev.revere.alley.feature.explosives.command.ExplosiveCommand;
 import dev.revere.alley.feature.explosives.listener.ExplosiveListener;
+import dev.revere.alley.tool.logger.Logger;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -15,32 +19,40 @@ import java.io.File;
  * @project Alley
  * @since 11/06/2025
  */
-@Getter
 @Setter
-public class ExplosiveService {
-    protected final Alley plugin;
+@Getter
+@Service(provides = IExplosiveService.class, priority = 370)
+public class ExplosiveService implements IExplosiveService {
+    private final Alley plugin;
+    private final IConfigService configService;
 
     private double explosionRange;
     private double horizontal;
     private double vertical;
     private double range;
     private double speed;
-
     private int tntFuseTicks;
+    private boolean enabled;
 
     /**
-     * Constructor for the FireballService class.
-     *
-     * @param plugin The Alley plugin instance.
+     * Constructor for DI.
      */
-    public ExplosiveService(Alley plugin) {
+    public ExplosiveService(Alley plugin, IConfigService configService) {
         this.plugin = plugin;
+        this.configService = configService;
+    }
 
-        FileConfiguration settingsConfig = this.plugin.getConfigService().getSettingsConfig();
-        if (settingsConfig.getBoolean("explosive.enabled")) {
+    @Override
+    public void initialize(AlleyContext context) {
+        FileConfiguration settingsConfig = this.configService.getSettingsConfig();
+        this.enabled = settingsConfig.getBoolean("explosive.enabled", false);
+
+        if (this.enabled) {
             this.assignValues(settingsConfig);
             this.registerListener();
-            new ExplosiveCommand();
+            Logger.info("Custom Explosives feature has been enabled.");
+        } else {
+            Logger.info("Custom Explosives feature is disabled in settings.yml.");
         }
     }
 
@@ -55,13 +67,14 @@ public class ExplosiveService {
         this.range = settingsConfig.getDouble("explosive.values.range");
         this.speed = settingsConfig.getDouble("explosive.values.speed");
         this.tntFuseTicks = settingsConfig.getInt("explosive.values.tnt-fuse-ticks");
-        this.explosionRange = settingsConfig.getInt("explosive.values.explosion-range");
+        this.explosionRange = settingsConfig.getDouble("explosive.values.explosion-range");
     }
 
+
+    @Override
     public void save() {
-        ConfigService configService = this.plugin.getConfigService();
-        FileConfiguration settingsConfig = configService.getSettingsConfig();
-        File settingsFile = configService.getConfigFile("settings.yml");
+        FileConfiguration settingsConfig = this.configService.getSettingsConfig();
+        File settingsFile = this.configService.getConfigFile("settings.yml");
 
         settingsConfig.set("explosive.values.horizontal", this.horizontal);
         settingsConfig.set("explosive.values.vertical", this.vertical);
@@ -70,10 +83,10 @@ public class ExplosiveService {
         settingsConfig.set("explosive.values.tnt-fuse-ticks", this.tntFuseTicks);
         settingsConfig.set("explosive.values.explosion-range", this.explosionRange);
 
-        configService.saveConfig(settingsFile, settingsConfig);
+        this.configService.saveConfig(settingsFile, settingsConfig);
     }
 
     private void registerListener() {
-        this.plugin.getServer().getPluginManager().registerEvents(new ExplosiveListener(this.plugin), this.plugin);
+        this.plugin.getServer().getPluginManager().registerEvents(new ExplosiveListener(), this.plugin);
     }
 }

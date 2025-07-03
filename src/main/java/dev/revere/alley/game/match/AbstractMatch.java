@@ -3,13 +3,21 @@ package dev.revere.alley.game.match;
 import dev.revere.alley.Alley;
 import dev.revere.alley.base.arena.AbstractArena;
 import dev.revere.alley.base.arena.impl.StandAloneArena;
+import dev.revere.alley.base.combat.ICombatService;
+import dev.revere.alley.base.hotbar.IHotbarService;
 import dev.revere.alley.base.kit.Kit;
 import dev.revere.alley.base.kit.setting.impl.mode.*;
+import dev.revere.alley.base.nametag.INametagService;
 import dev.revere.alley.base.queue.Queue;
+import dev.revere.alley.base.spawn.ISpawnService;
+import dev.revere.alley.base.visibility.IVisibilityService;
 import dev.revere.alley.feature.cosmetic.AbstractCosmetic;
 import dev.revere.alley.feature.cosmetic.EnumCosmeticType;
 import dev.revere.alley.feature.cosmetic.impl.killmessage.AbstractKillMessagePack;
 import dev.revere.alley.feature.cosmetic.repository.BaseCosmeticRepository;
+import dev.revere.alley.feature.cosmetic.repository.ICosmeticRepository;
+import dev.revere.alley.feature.knockback.IKnockbackAdapter;
+import dev.revere.alley.feature.layout.ILayoutService;
 import dev.revere.alley.feature.layout.data.LayoutData;
 import dev.revere.alley.game.match.enums.EnumMatchState;
 import dev.revere.alley.game.match.impl.MatchRoundsImpl;
@@ -19,10 +27,14 @@ import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.game.match.runnable.MatchRunnable;
 import dev.revere.alley.game.match.runnable.other.MatchRespawnRunnable;
+import dev.revere.alley.game.match.snapshot.ISnapshotDataService;
+import dev.revere.alley.game.match.snapshot.ISnapshotRepository;
 import dev.revere.alley.game.match.snapshot.Snapshot;
+import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
 import dev.revere.alley.tool.logger.Logger;
+import dev.revere.alley.tool.reflection.IReflectionRepository;
 import dev.revere.alley.tool.reflection.impl.ActionBarReflectionService;
 import dev.revere.alley.tool.reflection.impl.TitleReflectionService;
 import dev.revere.alley.util.ListenerUtil;
@@ -86,8 +98,6 @@ public abstract class AbstractMatch {
         this.kit = Objects.requireNonNull(kit, "Kit cannot be null");
         this.arena = Objects.requireNonNull(arena, "Arena cannot be null");
         this.ranked = ranked;
-
-        this.plugin.getMatchService().getMatches().add(this);
     }
 
     public abstract List<GameParticipant<MatchGamePlayerImpl>> getParticipants();
@@ -127,13 +137,12 @@ public abstract class AbstractMatch {
     }
 
     public void endMatch() {
-        // this.resetBlockChanges();
         deleteArenaCopyIfStandalone();
 
         this.getParticipants().forEach(this::finalizeParticipant);
         this.updateParticipantNametags();
 
-        this.plugin.getMatchService().getMatches().remove(this);
+        Alley.getInstance().getService(MatchService.class).removeMatch(this);
         this.runnable.cancel();
 
         this.deactivateArenaIfStandalone();
@@ -164,13 +173,15 @@ public abstract class AbstractMatch {
      * Helper method to trigger a nametag update for all participants in the match.
      */
     private void updateParticipantNametags() {
+        INametagService nametagService = Alley.getInstance().getService(INametagService.class);
+
         getParticipants().forEach(participant -> {
             List<MatchGamePlayerImpl> playersToUpdate = participant.getAllPlayers();
 
             playersToUpdate.stream()
                     .map(gamePlayer -> plugin.getServer().getPlayer(gamePlayer.getUuid()))
                     .filter(Objects::nonNull)
-                    .forEach(player -> plugin.getNametagService().updatePlayerState(player));
+                    .forEach(nametagService::updatePlayerState);
         });
     }
 
@@ -180,12 +191,15 @@ public abstract class AbstractMatch {
      * @param gameParticipant The game participant to initialize.
      */
     private void initializeParticipant(GameParticipant<MatchGamePlayerImpl> gameParticipant) {
+        IVisibilityService visibilityService = Alley.getInstance().getService(IVisibilityService.class);
+        IKnockbackAdapter knockbackAdapter = Alley.getInstance().getService(IKnockbackAdapter.class);
+
         gameParticipant.getPlayers().forEach(gamePlayer -> {
             Player player = this.plugin.getServer().getPlayer(gamePlayer.getUuid());
             if (player != null) {
                 this.updatePlayerProfileForMatch(player);
-                this.plugin.getVisibilityService().updateVisibility(player);
-                this.plugin.getKnockbackAdapter().getKnockbackType().applyKnockback(player, getKit().getKnockbackProfile());
+                visibilityService.updateVisibility(player);
+                knockbackAdapter.getKnockbackImplementation().applyKnockback(player, getKit().getKnockbackProfile());
                 this.setupPlayer(player);
             }
         });
@@ -214,9 +228,10 @@ public abstract class AbstractMatch {
      * @param player The player to finalize.
      */
     private void finalizePlayer(Player player) {
+        IVisibilityService visibilityService = Alley.getInstance().getService(IVisibilityService.class);
         this.resetPlayerState(player);
         updatePlayerProfileForLobby(player);
-        this.plugin.getVisibilityService().updateVisibility(player);
+        visibilityService.updateVisibility(player);
         this.teleportPlayerToSpawn(player);
     }
 
@@ -240,14 +255,17 @@ public abstract class AbstractMatch {
      * @param player The player to give the kit to.
      */
     public void giveLoadout(Player player, Kit kit) {
+        ILayoutService layoutService = Alley.getInstance().getService(ILayoutService.class);
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+
         player.getInventory().setArmorContents(kit.getArmor());
 
-        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
+        Profile profile = profileService.getProfile(player.getUniqueId());
         if (profile.getProfileData().getLayoutData().getLayouts().size() > 1) {
             LayoutData kitLayout = profile.getProfileData().getLayoutData().getLayouts().get(kit.getName()).get(0);
             player.getInventory().setContents(kitLayout.getItems());
         } else {
-            this.plugin.getLayoutService().giveBooks(player, kit.getName());
+            layoutService.giveBooks(player, kit.getName());
         }
 
         player.updateInventory();
@@ -265,6 +283,10 @@ public abstract class AbstractMatch {
             return;
         }
 
+        ICombatService combatService = Alley.getInstance().getService(ICombatService.class);
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+
+
         GameParticipant<MatchGamePlayerImpl> participant = this.getParticipant(player);
         MatchGamePlayerImpl gamePlayer = this.getFromAllGamePlayers(player);
         if (participant.isAllEliminated() && !gamePlayer.isDisconnected()) {
@@ -273,9 +295,9 @@ public abstract class AbstractMatch {
 
         this.handleParticipant(player, gamePlayer);
 
-        Player killer = this.plugin.getCombatService().getLastAttacker(player);
-        Profile victimProfile = this.plugin.getProfileService().getProfile(player.getUniqueId());
-        Profile killerProfile = (killer != null) ? this.plugin.getProfileService().getProfile(killer.getUniqueId()) : null;
+        Player killer = combatService.getLastAttacker(player);
+        Profile victimProfile = profileService.getProfile(player.getUniqueId());
+        Profile killerProfile = (killer != null) ? profileService.getProfile(killer.getUniqueId()) : null;
 
         this.handleDeathMessages(player, killer, victimProfile, killerProfile, cause);
 
@@ -377,7 +399,8 @@ public abstract class AbstractMatch {
             return;
         }
 
-        BaseCosmeticRepository<?> repository = this.plugin.getCosmeticRepository().getRepository(EnumCosmeticType.KILL_MESSAGE);
+        ICosmeticRepository cosmeticRepository = Alley.getInstance().getService(ICosmeticRepository.class);
+        BaseCosmeticRepository<?> repository = cosmeticRepository.getRepository(EnumCosmeticType.KILL_MESSAGE);
         AbstractKillMessagePack pack = (AbstractKillMessagePack) repository.getCosmetic(selectedPackName);
 
         if (pack == null) {
@@ -409,11 +432,13 @@ public abstract class AbstractMatch {
     private void processKillerActions(Player victim, Player killer, Profile victimProfile) {
         processKillerStatActions(killer);
 
-        Profile killerProfile = this.plugin.getProfileService().getProfile(killer.getUniqueId());
 
-        this.plugin.getReflectionRepository()
-                .getReflectionService(ActionBarReflectionService.class)
-                .sendDeathMessage(killer, victim);
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+        IReflectionRepository reflectionRepository = Alley.getInstance().getService(IReflectionRepository.class);
+
+        Profile killerProfile = profileService.getProfile(killer.getUniqueId());
+
+        reflectionRepository.getReflectionService(ActionBarReflectionService.class).sendDeathMessage(killer, victim);
 
         this.notifyAll("&c" + victimProfile.getNameColor() + victim.getName() + " &fwas slain by &c" + killerProfile.getNameColor() + killer.getName() + "&f.");
     }
@@ -421,7 +446,7 @@ public abstract class AbstractMatch {
     private void processKillerStatActions(Player killer) {
         GameParticipant<MatchGamePlayerImpl> killerParticipant = getParticipant(killer);
         if (killerParticipant != null) {
-            killerParticipant.getPlayer().getData().incrementKills();
+            killerParticipant.getLeader().getData().incrementKills();
         }
     }
 
@@ -433,7 +458,8 @@ public abstract class AbstractMatch {
      * @param killer The player who got the kill.
      */
     private void handleDeathEffects(Player player, Player killer) {
-        Profile profile = this.plugin.getProfileService().getProfile(killer.getUniqueId());
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+        Profile profile = profileService.getProfile(killer.getUniqueId());
 
         String selectedKillEffectName = profile.getProfileData().getCosmeticData().getSelectedKillEffect();
         String selectedSoundEffectName = profile.getProfileData().getCosmeticData().getSelectedSoundEffect();
@@ -455,9 +481,10 @@ public abstract class AbstractMatch {
             return;
         }
 
-        BaseCosmeticRepository<?> repository = this.plugin.getCosmeticRepository().getRepository(cosmeticType);
+        ICosmeticRepository cosmeticRepository = Alley.getInstance().getService(ICosmeticRepository.class);
+        BaseCosmeticRepository<?> repository = cosmeticRepository.getRepository(cosmeticType);
         if (repository == null) {
-            Logger.logError("Could not find cosmetic repository for type " + cosmeticType.name());
+            Logger.error("Could not find cosmetic repository for type " + cosmeticType.name());
             return;
         }
 
@@ -489,6 +516,9 @@ public abstract class AbstractMatch {
     }
 
     private void handleSnapshots() {
+        ISnapshotRepository snapshotRepository = Alley.getInstance().getService(ISnapshotRepository.class);
+        ISnapshotDataService snapshotDataService = Alley.getInstance().getService(ISnapshotDataService.class);
+
         this.getParticipants().forEach(gameParticipant -> gameParticipant.getPlayers().forEach(gamePlayer -> {
             Player player = this.plugin.getServer().getPlayer(gamePlayer.getUuid());
             if (player == null) return;
@@ -496,7 +526,7 @@ public abstract class AbstractMatch {
             Snapshot snapshot = new Snapshot(player, !gamePlayer.isDead());
 
             MatchGamePlayerData data = gamePlayer.getData();
-            snapshot.setOpponent(this.getOpponent(player).getPlayer().getUuid());
+            snapshot.setOpponent(this.getOpponent(player).getLeader().getUuid());
             snapshot.setLongestCombo(data.getLongestCombo());
             snapshot.setTotalHits(data.getHits());
             snapshot.setThrownPotions(data.getThrownPotions());
@@ -505,8 +535,8 @@ public abstract class AbstractMatch {
             snapshot.setBlockedHits(data.getBlockedHits());
             snapshot.setWTaps(data.getWTaps());
 
-            this.plugin.getSnapshotRepository().addSnapshot(snapshot);
-            this.plugin.getSnapshotDataService().clearData(player.getUniqueId());
+            snapshotRepository.addSnapshot(snapshot);
+            snapshotDataService.clearData(player.getUniqueId());
         }));
     }
 
@@ -526,9 +556,13 @@ public abstract class AbstractMatch {
             this.spectators.add(player.getUniqueId());
         }
 
-        this.plugin.getNametagService().updatePlayerState(player);
-        this.plugin.getVisibilityService().updateVisibility(player);
-        this.plugin.getHotbarService().applyHotbarItems(player);
+        INametagService nametagService = Alley.getInstance().getService(INametagService.class);
+        IVisibilityService visibilityService = Alley.getInstance().getService(IVisibilityService.class);
+        IHotbarService hotbarService = Alley.getInstance().getService(IHotbarService.class);
+
+        nametagService.updatePlayerState(player);
+        visibilityService.updateVisibility(player);
+        hotbarService.applyHotbarItems(player);
 
         if (this.arena.getCenter() == null) {
             player.sendMessage(CC.translate("&cThe arena is not set up for spectating"));
@@ -540,7 +574,8 @@ public abstract class AbstractMatch {
 
         ListenerUtil.teleportAndClearSpawn(player, this.arena.getCenter());
 
-        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+        Profile profile = profileService.getProfile(player.getUniqueId());
         this.notifyAll("&6" + profile.getNameColor() + player.getName() + " &fis now spectating the match.");
     }
 
@@ -550,12 +585,16 @@ public abstract class AbstractMatch {
      * @param player The player to remove from spectating.
      */
     public void removeSpectator(Player player, boolean notify) {
-        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+        Profile profile = profileService.getProfile(player.getUniqueId());
         profile.setState(EnumProfileState.LOBBY);
         profile.setMatch(null);
 
-        this.plugin.getNametagService().updatePlayerState(player);
-        this.plugin.getVisibilityService().updateVisibility(player);
+        INametagService nametagService = Alley.getInstance().getService(INametagService.class);
+        IVisibilityService visibilityService = Alley.getInstance().getService(IVisibilityService.class);
+
+        nametagService.updatePlayerState(player);
+        visibilityService.updateVisibility(player);
 
         player.setAllowFlight(false);
         player.setFlying(false);
@@ -799,10 +838,11 @@ public abstract class AbstractMatch {
      * @param fadeOut  The fade-out time in ticks.
      */
     public void sendTitle(String title, String subtitle, int fadeIn, int stay, int fadeOut) {
+        IReflectionRepository reflectionRepository = Alley.getInstance().getService(IReflectionRepository.class);
         this.getParticipants().forEach(gameParticipant -> gameParticipant.getPlayers().forEach(uuid -> {
             Player player = this.plugin.getServer().getPlayer(uuid.getUuid());
             if (player != null) {
-                this.plugin.getReflectionRepository().getReflectionService(TitleReflectionService.class).sendTitle(
+                reflectionRepository.getReflectionService(TitleReflectionService.class).sendTitle(
                         player,
                         title,
                         subtitle,
@@ -814,7 +854,7 @@ public abstract class AbstractMatch {
         this.getSpectators().forEach(uuid -> {
             Player player = this.plugin.getServer().getPlayer(uuid);
             if (player != null) {
-                this.plugin.getReflectionRepository().getReflectionService(TitleReflectionService.class).sendTitle(
+                reflectionRepository.getReflectionService(TitleReflectionService.class).sendTitle(
                         player,
                         title,
                         subtitle,
@@ -882,14 +922,14 @@ public abstract class AbstractMatch {
             Location locationB = this.arena.getPos2();
 
             for (GamePlayer gamePlayer : participantA.getPlayers()) {
-                Player participantPlayer = gamePlayer.getPlayer();
+                Player participantPlayer = gamePlayer.getTeamPlayer();
                 if (participantPlayer != null) {
                     this.teleportBackIfMoved(participantPlayer, locationA);
                 }
             }
 
             for (GamePlayer gamePlayer : participantB.getPlayers()) {
-                Player participantPlayer = gamePlayer.getPlayer();
+                Player participantPlayer = gamePlayer.getTeamPlayer();
                 if (participantPlayer != null) {
                     this.teleportBackIfMoved(participantPlayer, locationB);
                 }
@@ -921,8 +961,12 @@ public abstract class AbstractMatch {
      */
     private void teleportPlayerToSpawn(Player player) {
         if (player == null) return;
-        this.plugin.getSpawnService().teleportToSpawn(player);
-        this.plugin.getHotbarService().applyHotbarItems(player);
+
+        IHotbarService hotbarService = Alley.getInstance().getService(IHotbarService.class);
+        ISpawnService spawnService = Alley.getInstance().getService(ISpawnService.class);
+
+        spawnService.teleportToSpawn(player);
+        hotbarService.applyHotbarItems(player);
     }
 
     /**
@@ -1025,32 +1069,35 @@ public abstract class AbstractMatch {
             int teamSizeA = participantA.getPlayerSize();
             int teamSizeB = participantB.getPlayerSize();
 
-            String message = CC.translate(prefix + "&6" + participantA.getPlayer().getUsername() + "'s Team &7(&a" + teamSizeA + "&7) &avs &6" + participantB.getPlayer().getUsername() + "'s Team &7(&a" + teamSizeB + "&7)");
+            String message = CC.translate(prefix + "&6" + participantA.getLeader().getUsername() + "'s Team &7(&a" + teamSizeA + "&7) &avs &6" + participantB.getLeader().getUsername() + "'s Team &7(&a" + teamSizeB + "&7)");
             this.sendMessage(message);
         } else {
             GameParticipant<MatchGamePlayerImpl> participant = this.getParticipants().get(0);
             GameParticipant<MatchGamePlayerImpl> opponent = this.getParticipants().get(1);
 
-            String message = CC.translate(prefix + "&6" + participant.getPlayer().getUsername() + " &avs &6" + opponent.getPlayer().getUsername());
+            String message = CC.translate(prefix + "&6" + participant.getLeader().getUsername() + " &avs &6" + opponent.getLeader().getUsername());
             this.sendMessage(message);
         }
     }
 
     private void updatePlayerProfileForMatch(Player player) {
-        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+        Profile profile = profileService.getProfile(player.getUniqueId());
         profile.setState(EnumProfileState.PLAYING);
         profile.setMatch(this);
     }
 
     private void updatePlayerProfileForLobby(Player player) {
-        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+        Profile profile = profileService.getProfile(player.getUniqueId());
 
         profile.setState(EnumProfileState.LOBBY);
         profile.setMatch(null);
     }
 
     private void setupSpectatorProfile(Player player) {
-        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+        Profile profile = profileService.getProfile(player.getUniqueId());
         profile.setState(EnumProfileState.SPECTATING);
         profile.setMatch(this);
 

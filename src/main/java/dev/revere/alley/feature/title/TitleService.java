@@ -1,8 +1,14 @@
 package dev.revere.alley.feature.title;
 
 import dev.revere.alley.Alley;
+import dev.revere.alley.base.kit.IKitService;
 import dev.revere.alley.base.kit.Kit;
+import dev.revere.alley.config.IConfigService;
+import dev.revere.alley.core.AlleyContext;
+import dev.revere.alley.core.annotation.Service;
+import dev.revere.alley.feature.abilities.IAbilityService;
 import dev.revere.alley.feature.division.Division;
+import dev.revere.alley.feature.division.IDivisionService;
 import dev.revere.alley.feature.title.record.TitleRecord;
 import dev.revere.alley.tool.logger.Logger;
 import dev.revere.alley.tool.visual.TextFormatter;
@@ -23,35 +29,46 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @since 21/04/2025
  */
 @Getter
-public class TitleService {
-    protected final Alley plugin;
-    private final Map<Kit, TitleRecord> titles;
+@Service(provides = ITitleService.class, priority = 170)
+public class TitleService implements ITitleService {
+    private final IConfigService configService;
+    private final IKitService kitService;
+    private final IDivisionService divisionService;
+
+    private final Map<Kit, TitleRecord> titles = new HashMap<>();
 
     /**
-     * Constructor for the TitleService class.
-     *
-     * @param plugin The Alley plugin instance.
+     * Constructor for DI.
      */
-    public TitleService(Alley plugin) {
-        this.plugin = plugin;
-        this.titles = new HashMap<>();
+    public TitleService(IConfigService configService, IKitService kitService, IDivisionService divisionService) {
+        this.configService = configService;
+        this.kitService = kitService;
+        this.divisionService = divisionService;
+    }
+
+    @Override
+    public void initialize(AlleyContext context) {
         this.loadTitles();
+        Logger.info("Loaded " + this.titles.size() + " kit titles.");
     }
 
     private void loadTitles() {
-        FileConfiguration config = this.plugin.getConfigService().getTitlesConfig();
+        FileConfiguration config = this.configService.getTitlesConfig();
         String path = "titles.";
+        AtomicInteger missingKits = new AtomicInteger(0);
 
-        AtomicInteger missingKits = new AtomicInteger();
-        this.plugin.getKitService().getKits().forEach(kit -> {
+        this.kitService.getKits().forEach(kit -> {
             if (!this.isKitPresentInConfig(config, kit)) {
                 missingKits.getAndIncrement();
                 config.set(path + kit.getName() + ".prefix", this.getPrefixBasedOnHighestDivision(kit));
-                config.set(path + kit.getName() + ".required", this.plugin.getDivisionService().getHighestDivision().getName());
+                config.set(path + kit.getName() + ".required", this.divisionService.getHighestDivision().getName());
             }
         });
 
         if (missingKits.get() > 0) {
+            File titlesFile = this.configService.getConfigFile("storage/titles.yml");
+            this.configService.saveConfig(titlesFile, config);
+
             TextFormatter.centerText(
                     Arrays.asList(
                             "",
@@ -65,21 +82,21 @@ public class TitleService {
             ).forEach(line -> Bukkit.getConsoleSender().sendMessage(CC.translate(line)));
         }
 
-        this.plugin.getKitService().getKits().forEach(kit -> {
+        this.titles.clear();
+        this.kitService.getKits().forEach(kit -> {
             String prefix = config.getString(path + kit.getName() + ".prefix");
             String requiredDivisionName = config.getString(path + kit.getName() + ".required");
 
-            Division requiredDivision = this.plugin.getDivisionService().getDivision(requiredDivisionName);
+            if (prefix == null || requiredDivisionName == null) return;
+
+            Division requiredDivision = this.divisionService.getDivision(requiredDivisionName);
             if (requiredDivision == null) {
-                Logger.logError("Division " + requiredDivisionName + " for kit " + kit.getName() + " does not exist.");
+                Logger.error("Division " + requiredDivisionName + " for kit " + kit.getName() + " does not exist.");
             } else {
                 TitleRecord title = new TitleRecord(kit, prefix, requiredDivision);
                 this.titles.put(kit, title);
             }
         });
-
-        File titlesFile = this.plugin.getConfigService().getConfigFile("storage/titles.yml");
-        this.plugin.getConfigService().saveConfig(titlesFile, config);
     }
 
     /**
@@ -100,7 +117,7 @@ public class TitleService {
      * @return The title for the specified kit.
      */
     private String getPrefixBasedOnHighestDivision(Kit kit) {
-        Division highestDivision = this.plugin.getDivisionService().getHighestDivision();
+        Division highestDivision = Alley.getInstance().getService(IDivisionService.class).getHighestDivision();
 
         return "&6&l" + kit.getName().toUpperCase() + " " + highestDivision.getName().toUpperCase();
     }

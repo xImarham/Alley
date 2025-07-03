@@ -2,7 +2,9 @@ package dev.revere.alley.base.arena.impl;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.base.arena.AbstractArena;
+import dev.revere.alley.base.arena.IArenaService;
 import dev.revere.alley.base.arena.enums.EnumArenaType;
+import dev.revere.alley.config.IConfigService;
 import dev.revere.alley.tool.serializer.Serializer;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -33,14 +35,14 @@ public class FreeForAllArena extends AbstractArena {
 
     @Override
     public void createArena() {
-        this.plugin.getArenaService().getArenas().add(this);
+        Alley.getInstance().getService(IArenaService.class).getArenas().add(this);
         this.saveArena();
     }
 
     @Override
     public void saveArena() {
         String name = "arenas." + this.getName();
-        FileConfiguration config = this.plugin.getConfigService().getArenasConfig();
+        FileConfiguration config = Alley.getInstance().getService(IConfigService.class).getArenasConfig();
 
         config.set(name, null);
         config.set(name + ".type", this.getType().name());
@@ -51,15 +53,15 @@ public class FreeForAllArena extends AbstractArena {
         config.set(name + ".enabled", this.isEnabled());
         config.set(name + ".display-name", this.getDisplayName());
 
-        this.plugin.getConfigService().saveConfig(this.plugin.getConfigService().getConfigFile("storage/arenas.yml"), config);
+        Alley.getInstance().getService(IConfigService.class).saveConfig(Alley.getInstance().getService(IConfigService.class).getConfigFile("storage/arenas.yml"), config);
     }
 
     @Override
     public void deleteArena() {
-        FileConfiguration config = this.plugin.getConfigService().getArenasConfig();
+        FileConfiguration config = Alley.getInstance().getService(IConfigService.class).getArenasConfig();
         config.set("arenas." + this.getName(), null);
 
-        this.plugin.getArenaService().getArenas().remove(this);
-        this.plugin.getConfigService().saveConfig(this.plugin.getConfigService().getConfigFile("storage/arenas.yml"), config);
+        Alley.getInstance().getService(IArenaService.class).getArenas().remove(this);
+        Alley.getInstance().getService(IConfigService.class).saveConfig(Alley.getInstance().getService(IConfigService.class).getConfigFile("storage/arenas.yml"), config);
     }
 }

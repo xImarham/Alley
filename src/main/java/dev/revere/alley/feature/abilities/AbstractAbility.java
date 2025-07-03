@@ -42,28 +42,28 @@ public abstract class AbstractAbility implements Listener {
                 && (itemStack.hasItemMeta())
                 && (itemStack.getItemMeta().getDisplayName() != null)
                 && (itemStack.getItemMeta().getLore() != null)
-                && itemStack.getItemMeta().getDisplayName().equals(CC.translate(Alley.getInstance().getAbilityService().getDisplayName(ability)));
+                && itemStack.getItemMeta().getDisplayName().equals(CC.translate(Alley.getInstance().getService(IAbilityService.class).getDisplayName(ability)));
     }
 
     public String getName() {
-        return Alley.getInstance().getAbilityService().getDisplayName(this.getAbility());
+        return Alley.getInstance().getService(IAbilityService.class).getDisplayName(this.getAbility());
     }
 
     public boolean hasCooldown(Player player) {
-        return this.cooldown.contains(Alley.getInstance().getAbilityService().getDisplayName(this.getAbility()), player.getUniqueId())
-                && this.cooldown.get(Alley.getInstance().getAbilityService().getDisplayName(this.getAbility()), player.getUniqueId()) > System.currentTimeMillis();
+        return this.cooldown.contains(Alley.getInstance().getService(IAbilityService.class).getDisplayName(this.getAbility()), player.getUniqueId())
+                && this.cooldown.get(Alley.getInstance().getService(IAbilityService.class).getDisplayName(this.getAbility()), player.getUniqueId()) > System.currentTimeMillis();
     }
 
     public void setCooldown(Player player, long time) {
         if (time < 1L) {
-            this.cooldown.remove(Alley.getInstance().getAbilityService().getDisplayName(this.getAbility()), player.getUniqueId());
+            this.cooldown.remove(Alley.getInstance().getService(IAbilityService.class).getDisplayName(this.getAbility()), player.getUniqueId());
         }
         else {
-            this.cooldown.put(Alley.getInstance().getAbilityService().getDisplayName(this.getAbility()), player.getUniqueId(), System.currentTimeMillis() + time);
+            this.cooldown.put(Alley.getInstance().getService(IAbilityService.class).getDisplayName(this.getAbility()), player.getUniqueId(), System.currentTimeMillis() + time);
         }
     }
     public String getCooldown(Player player) {
-        long cooldownLeft = this.cooldown.get(Alley.getInstance().getAbilityService().getDisplayName(this.getAbility()), player.getUniqueId()) - System.currentTimeMillis();
+        long cooldownLeft = this.cooldown.get(Alley.getInstance().getService(IAbilityService.class).getDisplayName(this.getAbility()), player.getUniqueId()) - System.currentTimeMillis();
         return TimeUtil.formatLongMin(cooldownLeft);
     }
 }

@@ -5,6 +5,9 @@ import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.base.hotbar.enums.EnumHotbarType;
 import dev.revere.alley.base.kit.Kit;
 import dev.revere.alley.base.queue.Queue;
+import dev.revere.alley.feature.server.IServerService;
+import dev.revere.alley.feature.server.ServerService;
+import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.tool.item.ItemBuilder;
 import dev.revere.alley.util.PlayerUtil;
@@ -74,9 +77,10 @@ public class UnrankedButton extends Button {
     public void clicked(Player player, int slot, ClickType clickType, int hotbarSlot) {
         if (clickType != ClickType.LEFT) return;
 
-        if (this.plugin.getServerService().isQueueingEnabled(player)) return;
+        if (Alley.getInstance().getService(IServerService.class).isQueueingAllowed()) return;
 
-        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+        Profile profile = profileService.getProfile(player.getUniqueId());
         this.queue.addPlayer(player, this.queue.isRanked() ? profile.getProfileData().getRankedKitData().get(this.queue.getKit().getName()).getElo() : 0);
         this.playNeutral(player);
 

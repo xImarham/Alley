@@ -2,18 +2,24 @@ package dev.revere.alley.base.queue.runnable;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.base.arena.AbstractArena;
+import dev.revere.alley.base.arena.IArenaService;
 import dev.revere.alley.base.arena.enums.EnumArenaType;
+import dev.revere.alley.base.queue.IQueueService;
 import dev.revere.alley.base.queue.Queue;
 import dev.revere.alley.base.queue.QueueProfile;
+import dev.revere.alley.game.match.IMatchService;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.game.match.player.participant.TeamGameParticipant;
+import dev.revere.alley.game.party.IPartyService;
 import dev.revere.alley.game.party.Party;
+import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
 import dev.revere.alley.tool.logger.Logger;
 import dev.revere.alley.util.chat.CC;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -26,16 +32,16 @@ import java.util.stream.Collectors;
  * @project Alley
  * @date 5/21/2024
  */
+@RequiredArgsConstructor
 public class QueueRunnable implements Runnable {
-    protected final Alley plugin = Alley.getInstance();
-
     /**
      * Main execution method that processes all active queues.
      * Called periodically by the scheduler.
      */
     @Override
     public void run() {
-        this.plugin.getQueueService().getQueues().forEach(this::processQueue);
+        IQueueService queueService = Alley.getInstance().getService(IQueueService.class);
+        queueService.getQueues().forEach(this::processQueue);
     }
 
     /**
@@ -88,7 +94,9 @@ public class QueueRunnable implements Runnable {
             return true;
         }
 
-        Profile playerProfile = this.plugin.getProfileService().getProfile(profile.getUuid());
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+
+        Profile playerProfile = profileService.getProfile(profile.getUuid());
         if (!playerProfile.getState().equals(EnumProfileState.WAITING)) {
             return true;
         }
@@ -139,8 +147,10 @@ public class QueueRunnable implements Runnable {
      * @return List of available solo players
      */
     private List<QueueProfile> getAvailableSoloPlayers(Queue queue) {
+        IPartyService partyService = Alley.getInstance().getService(IPartyService.class);
+
         return queue.getProfiles().stream()
-                .filter(queueProfile -> this.plugin.getPartyService().getParty(Bukkit.getPlayer(queueProfile.getUuid())) == null)
+                .filter(queueProfile -> partyService.getParty(Bukkit.getPlayer(queueProfile.getUuid())) == null)
                 .sorted(Comparator.comparingLong(QueueProfile::getElapsedTime))
                 .collect(Collectors.toList());
     }
@@ -189,7 +199,9 @@ public class QueueRunnable implements Runnable {
             return true;
         }
 
-        Profile playerProfile = this.plugin.getProfileService().getProfile(profile.getUuid());
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+
+        Profile playerProfile = profileService.getProfile(profile.getUuid());
         if (!playerProfile.getState().equals(EnumProfileState.WAITING)) {
             queue.removePlayer(profile);
             return true;
@@ -218,7 +230,8 @@ public class QueueRunnable implements Runnable {
             return false;
         }
 
-        this.plugin.getMatchService().createAndStartMatch(
+        IMatchService matchService = Alley.getInstance().getService(IMatchService.class);
+        matchService.createAndStartMatch(
                 queue.getKit(), arena, gameParticipantList.participantA, gameParticipantList.participantB,
                 false, true, queue.isRanked()
         );
@@ -256,11 +269,12 @@ public class QueueRunnable implements Runnable {
      * @return List of profiles representing full parties
      */
     private List<QueueProfile> getFullParties(List<QueueProfile> availableProfiles) {
+        IPartyService partyService = Alley.getInstance().getService(IPartyService.class);
         return availableProfiles.stream()
                 .filter(qp -> {
                     Player leader = Bukkit.getPlayer(qp.getUuid());
                     if (leader == null) return false;
-                    Party party = plugin.getPartyService().getPartyByLeader(leader);
+                    Party party = partyService.getPartyByLeader(leader);
                     return party != null && party.getMembers().size() == 2;
                 })
                 .collect(Collectors.toList());
@@ -273,11 +287,12 @@ public class QueueRunnable implements Runnable {
      * @return List of solo duos players
      */
     private List<QueueProfile> getSoloDuosPlayers(List<QueueProfile> availableProfiles) {
+        IPartyService partyService = Alley.getInstance().getService(IPartyService.class);
         return availableProfiles.stream()
                 .filter(qp -> {
                     Player player = Bukkit.getPlayer(qp.getUuid());
                     if (player == null) return false;
-                    Party party = plugin.getPartyService().getPartyByLeader(player);
+                    Party party = partyService.getPartyByLeader(player);
                     return party == null || party.getMembers().size() == 1;
                 })
                 .collect(Collectors.toList());
@@ -333,7 +348,7 @@ public class QueueRunnable implements Runnable {
      */
     private boolean tryMatchDuos(Queue queue, QueueProfile... potentialPlayers) {
         if (potentialPlayers.length < 2 || potentialPlayers.length > 4) {
-            Logger.logError("Invalid number of potential players for tryMatchDuos: " + potentialPlayers.length);
+            Logger.error("Invalid number of potential players for tryMatchDuos: " + potentialPlayers.length);
             return false;
         }
 
@@ -347,7 +362,7 @@ public class QueueRunnable implements Runnable {
         List<Player> allMatchPlayers = buildMatchPlayerList(onlinePlayers, potentialPlayers.length);
 
         if (allMatchPlayers.size() != 4) {
-            Logger.log("Expected exactly 4 players for duos match, but got: " + allMatchPlayers.size());
+            Logger.info("Expected exactly 4 players for duos match, but got: " + allMatchPlayers.size());
             return false;
         }
 
@@ -363,10 +378,11 @@ public class QueueRunnable implements Runnable {
      * @return true if all players are valid
      */
     private boolean validatePotentialPlayers(QueueProfile[] potentialPlayers, List<Player> onlinePlayers, List<QueueProfile> validQueueProfiles) {
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
         for (QueueProfile qp : potentialPlayers) {
             Player p = Bukkit.getPlayer(qp.getUuid());
-            if (p == null || !p.isOnline() || !plugin.getProfileService().getProfile(p.getUniqueId()).getState().equals(EnumProfileState.WAITING)) {
-                Logger.log("One of the potential players is not ready: " + qp.getUuid());
+            if (p == null || !p.isOnline() || !profileService.getProfile(p.getUniqueId()).getState().equals(EnumProfileState.WAITING)) {
+                Logger.info("One of the potential players is not ready: " + qp.getUuid());
                 return false;
             }
             onlinePlayers.add(p);
@@ -379,7 +395,7 @@ public class QueueRunnable implements Runnable {
      * Builds the complete list of players for the duos match by including
      * party members and handling different team compositions.
      *
-     * @param onlinePlayers List of validated online players
+     * @param onlinePlayers        List of validated online players
      * @param potentialPlayerCount Number of potential players
      * @return Complete list of match players
      */
@@ -413,7 +429,8 @@ public class QueueRunnable implements Runnable {
      * @param allMatchPlayers List to add party members to
      */
     private void addPartyMembersToMatch(Player leader, List<Player> allMatchPlayers) {
-        Party party = this.plugin.getPartyService().getPartyByLeader(leader);
+        IPartyService partyService = Alley.getInstance().getService(IPartyService.class);
+        Party party = partyService.getPartyByLeader(leader);
         if (party != null && party.getMembers().size() == 2) {
             party.getMembers().stream()
                     .filter(uuid -> !uuid.equals(leader.getUniqueId()))
@@ -474,7 +491,7 @@ public class QueueRunnable implements Runnable {
         assignPlayersToTeams(allMatchPlayers, validQueueProfiles, team1Leader, team2Leader, participantA, participantB);
 
         if (participantA.getPlayerSize() != 2 || participantB.getPlayerSize() != 2) {
-            Logger.log("Teams don't have exactly 2 players each. Team A: " + participantA.getPlayerSize() + " Team B: " + participantB.getPlayerSize());
+            Logger.info("Teams don't have exactly 2 players each. Team A: " + participantA.getPlayerSize() + " Team B: " + participantB.getPlayerSize());
             return false;
         }
 
@@ -487,7 +504,8 @@ public class QueueRunnable implements Runnable {
             return false;
         }
 
-        this.plugin.getMatchService().createAndStartMatch(
+        IMatchService matchService = Alley.getInstance().getService(IMatchService.class);
+        matchService.createAndStartMatch(
                 queue.getKit(), arena, participantA, participantB, true, false, queue.isRanked()
         );
 
@@ -525,8 +543,9 @@ public class QueueRunnable implements Runnable {
                                       Player team1Leader, Player team2Leader,
                                       GameParticipant<MatchGamePlayerImpl> participantA,
                                       GameParticipant<MatchGamePlayerImpl> participantB) {
-        Party team1Party = this.plugin.getPartyService().getPartyByLeader(team1Leader);
-        Party team2Party = this.plugin.getPartyService().getPartyByLeader(team2Leader);
+        IPartyService partyService = Alley.getInstance().getService(IPartyService.class);
+        Party team1Party = partyService.getPartyByLeader(team1Leader);
+        Party team2Party = partyService.getPartyByLeader(team2Leader);
 
         for (Player player : allMatchPlayers) {
             if (player.equals(team1Leader) || player.equals(team2Leader)) {
@@ -605,7 +624,8 @@ public class QueueRunnable implements Runnable {
      * @return An available arena or null if none found
      */
     private AbstractArena getArena(Queue queue) {
-        return this.plugin.getArenaService().getRandomArena(queue.getKit());
+        IArenaService arenaService = Alley.getInstance().getService(IArenaService.class);
+        return arenaService.getRandomArena(queue.getKit());
     }
 
     /**
@@ -636,9 +656,10 @@ public class QueueRunnable implements Runnable {
      * @return Set of unique queue profiles
      */
     private Set<QueueProfile> getUniqueQueueProfiles(List<UUID> playerUUIDs) {
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
         Set<QueueProfile> uniqueProfiles = new HashSet<>();
         for (UUID uuid : playerUUIDs) {
-            Profile profile = this.plugin.getProfileService().getProfile(uuid);
+            Profile profile = profileService.getProfile(uuid);
             if (profile != null && profile.getQueueProfile() != null) {
                 uniqueProfiles.add(profile.getQueueProfile());
             }
@@ -656,7 +677,8 @@ public class QueueRunnable implements Runnable {
         Player leader = Bukkit.getPlayer(queueProfile.getUuid());
         if (leader == null) return;
 
-        Party party = plugin.getPartyService().getParty(leader);
+        IPartyService partyService = Alley.getInstance().getService(IPartyService.class);
+        Party party = partyService.getParty(leader);
         List<UUID> membersToClean = getMembersToClean(queue, party, leader);
 
         cleanupPlayerProfiles(membersToClean);
@@ -687,8 +709,9 @@ public class QueueRunnable implements Runnable {
      * @param memberUUIDs List of member UUIDs to clean up
      */
     private void cleanupPlayerProfiles(List<UUID> memberUUIDs) {
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
         for (UUID memberId : memberUUIDs) {
-            Profile memberProfile = this.plugin.getProfileService().getProfile(memberId);
+            Profile memberProfile = profileService.getProfile(memberId);
             if (memberProfile != null) {
                 memberProfile.setQueueProfile(null);
             }

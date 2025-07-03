@@ -2,6 +2,7 @@ package dev.revere.alley.feature.server.menu.button;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.menu.Button;
+import dev.revere.alley.feature.server.IServerService;
 import dev.revere.alley.feature.server.ServerService;
 import dev.revere.alley.tool.item.ItemBuilder;
 import dev.revere.alley.util.chat.CC;
@@ -47,19 +48,18 @@ public class ServicePrepareRebootButton extends Button {
             return;
         }
 
-        Alley plugin = Alley.getInstance();
-        ServerService serverService = plugin.getServerService();
+        IServerService serverService = Alley.getInstance().getService(IServerService.class);
 
-        if (!serverService.isAllowQueueing()) {
+        if (!serverService.isQueueingAllowed()) {
             player.sendMessage(CC.translate("&cThe server is already preparing for a reboot."));
             return;
         }
 
-        serverService.disbandMatches(player, plugin);
-        serverService.disbandParties(player, plugin);
-        serverService.removePlayersFromQueue(player, plugin);
+        serverService.endAllMatches(player);
+        serverService.disbandAllParties(player);
+        serverService.clearAllQueues(player);
 
-        serverService.setAllowQueueing(false);
+        serverService.setQueueingAllowed(false);
         Arrays.asList(
                 "",
                 "&c&lServer is preparing for a reboot...",

@@ -5,6 +5,7 @@ import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.api.menu.Menu;
 import dev.revere.alley.base.kit.Kit;
 import dev.revere.alley.game.match.data.AbstractMatchData;
+import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.menu.match.button.MatchHistoryViewButton;
 import lombok.AllArgsConstructor;
@@ -33,7 +34,7 @@ public class MatchHistoryViewMenu extends Menu {
     public Map<Integer, Button> getButtons(Player player) {
         Map<Integer, Button> buttons = new HashMap<>();
 
-        Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
+        Profile profile = Alley.getInstance().getService(IProfileService.class).getProfile(player.getUniqueId());
 
         List<AbstractMatchData> matchDataList = profile.getProfileData().getPreviousMatches();
 

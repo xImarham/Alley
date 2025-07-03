@@ -4,13 +4,17 @@ import com.google.common.collect.Maps;
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.api.menu.Menu;
+import dev.revere.alley.base.kit.IKitService;
 import dev.revere.alley.base.kit.Kit;
 import dev.revere.alley.base.kit.setting.impl.mode.KitSettingRankedImpl;
+import dev.revere.alley.feature.abilities.IAbilityService;
+import dev.revere.alley.feature.leaderboard.ILeaderboardService;
 import dev.revere.alley.feature.leaderboard.LeaderboardService;
 import dev.revere.alley.feature.leaderboard.data.LeaderboardPlayerData;
 import dev.revere.alley.feature.leaderboard.enums.EnumLeaderboardType;
 import dev.revere.alley.feature.leaderboard.menu.button.DisplayTypeButton;
 import dev.revere.alley.feature.leaderboard.menu.button.LeaderboardKitButton;
+import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.menu.statistic.button.StatisticsButton;
 import org.bukkit.entity.Player;
@@ -28,7 +32,8 @@ public class LeaderboardMenu extends Menu {
 
     @Override
     public String getTitle(Player player) {
-        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+        Profile profile = profileService.getProfile(player.getUniqueId());
 
         switch (profile.getLeaderboardType()) {
             case RANKED:
@@ -51,16 +56,17 @@ public class LeaderboardMenu extends Menu {
     @Override
     public Map<Integer, Button> getButtons(Player player) {
         final Map<Integer, Button> buttons = Maps.newHashMap();
-        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+        Profile profile = profileService.getProfile(player.getUniqueId());
         EnumLeaderboardType currentType = profile.getLeaderboardType();
-        LeaderboardService leaderboardService = this.plugin.getLeaderboardService();
+        ILeaderboardService leaderboardService = Alley.getInstance().getService(ILeaderboardService.class);
 
         buttons.put(2, new StatisticsButton());
         buttons.put(6, new DisplayTypeButton());
 
         int slot = 10;  // declare slot here once
 
-        for (Kit kit : this.plugin.getKitService().getKits()) {
+        for (Kit kit : Alley.getInstance().getService(IKitService.class).getKits()) {
             if (!kit.isEnabled() || kit.getIcon() == null) continue;
 
             List<LeaderboardPlayerData> leaderboard = leaderboardService.getLeaderboardEntries(kit, currentType);

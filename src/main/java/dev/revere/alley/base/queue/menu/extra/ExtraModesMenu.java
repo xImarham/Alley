@@ -4,6 +4,7 @@ import dev.revere.alley.Alley;
 import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.api.menu.Menu;
 import dev.revere.alley.base.kit.enums.EnumKitCategory;
+import dev.revere.alley.base.queue.IQueueService;
 import dev.revere.alley.base.queue.Queue;
 import dev.revere.alley.base.queue.enums.EnumQueueType;
 import dev.revere.alley.base.queue.menu.button.UnrankedButton;
@@ -35,7 +36,7 @@ public class ExtraModesMenu extends Menu {
         buttons.put(4, new QueueModeSwitcherButton(this.queueType, EnumKitCategory.NORMAL));
 
         int slot = 10;
-        for (Queue queue : Alley.getInstance().getQueueService().getQueues()) {
+        for (Queue queue : Alley.getInstance().getService(IQueueService.class).getQueues()) {
             if (shouldAddQueue(queue, queueType)) {
                 slot = this.skipIfSlotCrossingBorder(slot);
                 buttons.put(slot++, new UnrankedButton(queue));

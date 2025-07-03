@@ -1,11 +1,16 @@
 package dev.revere.alley.game.match.command.admin.impl;
 
+import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.annotation.CompleterData;
 import dev.revere.alley.base.arena.AbstractArena;
+import dev.revere.alley.base.arena.IArenaService;
+import dev.revere.alley.base.kit.IKitService;
 import dev.revere.alley.base.kit.Kit;
+import dev.revere.alley.base.visibility.IVisibilityService;
+import dev.revere.alley.game.match.IMatchService;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.util.chat.CC;
@@ -36,12 +41,12 @@ public class MatchStartCommand extends BaseCommand {
                     }
                     break;
                 case 3:
-                    this.plugin.getKitService().getKits().forEach(kit -> completion.add(kit.getName()));
+                    Alley.getInstance().getService(IKitService.class).getKits().forEach(kit -> completion.add(kit.getName()));
                     break;
                 case 4:
-                    Kit kit = this.plugin.getKitService().getKit(command.getArgs()[2]);
+                    Kit kit = Alley.getInstance().getService(IKitService.class).getKit(command.getArgs()[2]);
                     if (kit != null) {
-                        this.plugin.getArenaService().getArenas()
+                        Alley.getInstance().getService(IArenaService.class).getArenas()
                                 .stream()
                                 .filter(arena -> arena.getKits().contains(kit.getName()))
                                 .forEach(arena -> completion.add(arena.getName()));
@@ -75,13 +80,13 @@ public class MatchStartCommand extends BaseCommand {
             return;
         }
 
-        Kit kit = this.plugin.getKitService().getKit(kitName);
+        Kit kit = Alley.getInstance().getService(IKitService.class).getKit(kitName);
         if (kit == null) {
             player.sendMessage(CC.translate("&cKit not found."));
             return;
         }
 
-        AbstractArena arena = this.plugin.getArenaService().getArenaByName(arenaName);
+        AbstractArena arena = Alley.getInstance().getService(IArenaService.class).getArenaByName(arenaName);
         if (arena == null) {
             player.sendMessage(CC.translate("&cArena not found."));
             return;
@@ -93,8 +98,8 @@ public class MatchStartCommand extends BaseCommand {
         GameParticipant<MatchGamePlayerImpl> participantA = new GameParticipant<>(playerA);
         GameParticipant<MatchGamePlayerImpl> participantB = new GameParticipant<>(playerB);
 
-        this.plugin.getMatchService().createAndStartMatch(
-                kit, this.plugin.getArenaService().selectArenaWithPotentialTemporaryCopy(arena), participantA, participantB, false, false, false
+        Alley.getInstance().getService(IMatchService.class).createAndStartMatch(
+                kit, Alley.getInstance().getService(IArenaService.class).selectArenaWithPotentialTemporaryCopy(arena), participantA, participantB, false, false, false
         );
     }
 }

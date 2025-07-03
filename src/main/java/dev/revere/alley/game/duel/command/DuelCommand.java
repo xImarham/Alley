@@ -1,9 +1,12 @@
 package dev.revere.alley.game.duel.command;
 
+import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
+import dev.revere.alley.feature.server.IServerService;
 import dev.revere.alley.game.duel.DuelRequestService;
+import dev.revere.alley.game.duel.IDuelRequestService;
 import dev.revere.alley.game.duel.menu.DuelRequestMenu;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.entity.Player;
@@ -36,13 +39,13 @@ public class DuelCommand extends BaseCommand {
             return;
         }
 
-        DuelRequestService duelRequestService = this.plugin.getDuelRequestService();
+        IDuelRequestService duelRequestService = Alley.getInstance().getService(IDuelRequestService.class);
         if (duelRequestService.getDuelRequest(player, target) != null) {
             player.sendMessage(CC.translate("&cYou already have a pending duel request with this player."));
             return;
         }
 
-        if (this.plugin.getServerService().isQueueingEnabled(player)) {
+        if (Alley.getInstance().getService(IServerService.class).isQueueingAllowed()) {
             return;
         }
 

@@ -3,10 +3,12 @@ package dev.revere.alley.game.match.menu;
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.api.menu.pagination.PaginatedMenu;
+import dev.revere.alley.config.IConfigService;
 import dev.revere.alley.game.match.AbstractMatch;
 import dev.revere.alley.game.match.impl.MatchRegularImpl;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
+import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.menu.statistic.StatisticsMenu;
 import dev.revere.alley.tool.item.ItemBuilder;
@@ -29,7 +31,7 @@ import java.util.*;
  */
 @AllArgsConstructor
 public class SpectatorTeleportMenu extends PaginatedMenu {
-    private final FileConfiguration config = Alley.getInstance().getConfigService().getMenusConfig();
+    private final FileConfiguration config = Alley.getInstance().getService(IConfigService.class).getMenusConfig();
     private final String path = "menus.spectator-teleport";
 
     private final AbstractMatch match;
@@ -67,14 +69,14 @@ public class SpectatorTeleportMenu extends PaginatedMenu {
 
     @AllArgsConstructor
     private static class SpectatorTeleportButton extends Button {
-        private final FileConfiguration config = Alley.getInstance().getConfigService().getMenusConfig();
+        private final FileConfiguration config = Alley.getInstance().getService(IConfigService.class).getMenusConfig();
         private final String path = "menus.spectator-teleport";
 
         private final MatchGamePlayerImpl gamePlayer;
 
         @Override
         public ItemStack getButtonItem(Player player) {
-            Profile profile = Alley.getInstance().getProfileService().getProfile(this.gamePlayer.getUuid());
+            Profile profile = Alley.getInstance().getService(IProfileService.class).getProfile(this.gamePlayer.getUuid());
             MatchRegularImpl match = (MatchRegularImpl) profile.getMatch();
 
             List<String> lore = new ArrayList<>();
@@ -85,8 +87,8 @@ public class SpectatorTeleportMenu extends PaginatedMenu {
                 );
             }
 
-            int ping = ReflectionUtility.getPing(this.gamePlayer.getPlayer());
-            ChatColor team = match.getTeamColor(match.getParticipant(this.gamePlayer.getPlayer()));
+            int ping = ReflectionUtility.getPing(this.gamePlayer.getTeamPlayer());
+            ChatColor team = match.getTeamColor(match.getParticipant(this.gamePlayer.getTeamPlayer()));
             String teamColor = team.name();
             int elo = match.isRanked() ? profile.getProfileData().getRankedKitData().get(match.getKit().getName()).getElo() : -1;
 
@@ -121,9 +123,9 @@ public class SpectatorTeleportMenu extends PaginatedMenu {
                     player.sendMessage(CC.translate("&cThis player is either dead or disconnected."));
                     return;
                 }
-                player.teleport(this.gamePlayer.getPlayer().getLocation());
+                player.teleport(this.gamePlayer.getTeamPlayer().getLocation());
             } else if (clickType == ClickType.RIGHT) {
-                new StatisticsMenu(this.gamePlayer.getPlayer()).openMenu(player);
+                new StatisticsMenu(this.gamePlayer.getTeamPlayer()).openMenu(player);
             }
         }
     }
@@ -138,7 +140,7 @@ public class SpectatorTeleportMenu extends PaginatedMenu {
                     .mapToInt(participant -> participant.getPlayers().size())
                     .sum();
 
-            FileConfiguration config = Alley.getInstance().getConfigService().getMenusConfig();
+            FileConfiguration config = Alley.getInstance().getService(IConfigService.class).getMenusConfig();
             String path = "menus.spectator-teleport.buttons.match-info-button";
             String name = config.getString(path + ".name", "&6&lMatch Info");
             List<String> lore = config.getStringList(path + ".lore");

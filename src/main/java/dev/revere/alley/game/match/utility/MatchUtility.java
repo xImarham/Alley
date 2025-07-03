@@ -3,6 +3,7 @@ package dev.revere.alley.game.match.utility;
 import dev.revere.alley.Alley;
 import dev.revere.alley.base.arena.AbstractArena;
 import dev.revere.alley.base.kit.setting.impl.mode.*;
+import dev.revere.alley.config.IConfigService;
 import dev.revere.alley.game.match.AbstractMatch;
 import dev.revere.alley.game.match.enums.EnumMatchState;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
@@ -76,7 +77,7 @@ public class MatchUtility {
      * @param loserUuid     The UUID of the losing team.
      */
     public void sendMatchResult(AbstractMatch match, String winnerName, String loserName, UUID winnerUuid, UUID loserUuid) {
-        FileConfiguration config = plugin.getConfigService().getMessagesConfig();
+        FileConfiguration config = Alley.getInstance().getService(IConfigService.class).getMessagesConfig();
 
         String path = "match.ended.match-result.regular.";
 
@@ -85,7 +86,7 @@ public class MatchUtility {
         String loserCommand = config.getString(path + "loser.command").replace("{loser}", String.valueOf(loserUuid));
         String loserHover = config.getString(path + "loser.hover").replace("{loser}", loserName);
 
-        for (String line : plugin.getConfigService().getMessagesConfig().getStringList(path + "format")) {
+        for (String line : Alley.getInstance().getService(IConfigService.class).getMessagesConfig().getStringList(path + "format")) {
             if (line.contains("{winner}") && line.contains("{loser}")) {
                 String[] parts = line.split("\\{winner}", 2);
 
@@ -146,8 +147,8 @@ public class MatchUtility {
      * @param loserParticipant  The loser participant.
      */
     public void sendConjoinedMatchResult(AbstractMatch match, GameParticipant<MatchGamePlayerImpl> winnerParticipant, GameParticipant<MatchGamePlayerImpl> loserParticipant) {
-        String winnerTeamName = winnerParticipant.getPlayer().getUsername();
-        String loserTeamName = loserParticipant.getPlayer().getUsername();
+        String winnerTeamName = winnerParticipant.getLeader().getUsername();
+        String loserTeamName = loserParticipant.getLeader().getUsername();
 
         match.sendMessage("");
         match.sendMessage(CC.translate("&aWinner Team: &f" + winnerTeamName));

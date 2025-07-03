@@ -1,10 +1,14 @@
 package dev.revere.alley.game.ffa.command.impl.player;
 
+import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
+import dev.revere.alley.base.kit.IKitService;
 import dev.revere.alley.base.kit.Kit;
 import dev.revere.alley.game.ffa.FFAService;
+import dev.revere.alley.game.ffa.IFFAService;
+import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
 import dev.revere.alley.util.chat.CC;
@@ -28,13 +32,14 @@ public class FFAJoinCommand extends BaseCommand {
         }
 
         String kitName = args[0];
-        Kit kit = this.plugin.getKitService().getKit(kitName);
+        Kit kit = Alley.getInstance().getService(IKitService.class).getKit(kitName);
         if (kit == null) {
             player.sendMessage("Kit not found.");
             return;
         }
 
-        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+        Profile profile = profileService.getProfile(player.getUniqueId());
         if (profile.getParty() != null) {
             player.sendMessage(CC.translate("&cYou must leave your party to join FFA."));
             return;
@@ -45,7 +50,7 @@ public class FFAJoinCommand extends BaseCommand {
             return;
         }
 
-        FFAService ffaService = this.plugin.getFfaService();
+        IFFAService ffaService = Alley.getInstance().getService(IFFAService.class);
         ffaService.getMatches().stream()
                 .filter(match -> match.getKit().equals(kit))
                 .filter(match -> match.getPlayers().size() < match.getMaxPlayers())

@@ -3,6 +3,8 @@ package dev.revere.alley.game.party.menu.duel;
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.api.menu.pagination.PaginatedMenu;
+import dev.revere.alley.game.ffa.IFFAService;
+import dev.revere.alley.game.party.IPartyService;
 import dev.revere.alley.game.party.menu.duel.button.DuelOtherPartyButton;
 import org.bukkit.entity.Player;
 
@@ -34,7 +36,7 @@ public class DuelOtherPartyMenu extends PaginatedMenu {
     public Map<Integer, Button> getAllPagesButtons(Player player) {
         Map<Integer, Button> buttons = new HashMap<>();
 
-        Alley.getInstance().getPartyService().getParties().stream()
+        Alley.getInstance().getService(IPartyService.class).getParties().stream()
                 .sorted(Comparator.comparing(party -> party.getLeader().getName()))
                 //.filter(party -> !party.getLeader().equals(player))
                 .sorted(Comparator.comparingInt(party -> party.getMembers().size()))

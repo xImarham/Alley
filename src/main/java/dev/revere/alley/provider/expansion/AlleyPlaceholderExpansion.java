@@ -1,6 +1,8 @@
 package dev.revere.alley.provider.expansion;
 
 import dev.revere.alley.Alley;
+import dev.revere.alley.api.constant.IPluginConstant;
+import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.ProfileService;
 import dev.revere.alley.profile.data.ProfileData;
@@ -38,7 +40,7 @@ public class AlleyPlaceholderExpansion extends PlaceholderExpansion {
 
     @Override
     public @NotNull String getIdentifier() {
-        return this.plugin.getPluginConstant().getName();
+        return this.plugin.getService(IPluginConstant.class).getName();
     }
 
     @Override
@@ -48,7 +50,7 @@ public class AlleyPlaceholderExpansion extends PlaceholderExpansion {
 
     @Override
     public @NotNull String getVersion() {
-        return this.plugin.getPluginConstant().getVersion();
+        return this.plugin.getService(IPluginConstant.class).getVersion();
     }
 
     @Override
@@ -57,7 +59,7 @@ public class AlleyPlaceholderExpansion extends PlaceholderExpansion {
             return null;
         }
 
-        ProfileService profileService = this.plugin.getProfileService();
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
         Profile profile = profileService.getProfile(player.getUniqueId());
         ProfileData profileData = profile.getProfileData();
 

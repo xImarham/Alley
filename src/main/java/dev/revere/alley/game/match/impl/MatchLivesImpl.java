@@ -10,8 +10,6 @@ import dev.revere.alley.util.PlayerUtil;
 import lombok.Getter;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.PlayerDeathEvent;
 
 /**
  * @author Emmy
@@ -44,7 +42,7 @@ public class MatchLivesImpl extends MatchRegularImpl {
 
     @Override
     public boolean canStartRound() {
-        return participantA.getPlayer().getData().getLives() > 0 && participantB.getPlayer().getData().getLives() > 0;
+        return participantA.getLeader().getData().getLives() > 0 && participantB.getLeader().getData().getLives() > 0;
     }
 
     @Override
@@ -64,16 +62,9 @@ public class MatchLivesImpl extends MatchRegularImpl {
     }
 
     @Override
-    public void handleDeath(Player player, EntityDamageEvent.DamageCause cause) {
-        MatchGamePlayerData data = this.getGamePlayer(player).getData();
-
-        this.reduceLife(data);
-        super.handleDeath(player, cause);
-    }
-
-    @Override
     public void handleParticipant(Player player, MatchGamePlayerImpl gamePlayer) {
         MatchGamePlayerData data = this.getGamePlayer(player).getData();
+        this.reduceLife(data);
 
         if (data.getLives() <= 0) {
             gamePlayer.setEliminated(true);

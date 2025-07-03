@@ -1,10 +1,12 @@
 package dev.revere.alley.game.ffa.command.impl;
 
+import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.base.arena.AbstractArena;
 import dev.revere.alley.base.arena.ArenaService;
+import dev.revere.alley.base.arena.IArenaService;
 import dev.revere.alley.base.arena.enums.EnumArenaType;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.entity.Player;
@@ -26,7 +28,7 @@ public class FFASetSpawnCommand extends BaseCommand {
             return;
         }
 
-        ArenaService arenaService = this.plugin.getArenaService();
+        IArenaService arenaService = Alley.getInstance().getService(IArenaService.class);
         AbstractArena arena = arenaService.getArenaByName(args[0]);
         if (arena == null) {
             player.sendMessage(CC.translate("&cAn arena with that name does not exist!"));

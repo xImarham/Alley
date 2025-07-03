@@ -92,15 +92,15 @@ public class MatchFFAImpl extends AbstractMatch {
                 .findFirst()
                 .ifPresent(remaining -> {
                     this.winner = remaining;
-                    this.winner.getPlayer().setEliminated(true);
+                    this.winner.getLeader().setEliminated(true);
 
                     // temporarily, couldnt be asked to mess with clickables again
 
-                    this.sendMessage("Winner: " + this.winner.getPlayer().getUsername());
+                    this.sendMessage("Winner: " + this.winner.getLeader().getUsername());
 
                     String losers = this.participants.stream()
                             .filter(participant -> participant != this.winner)
-                            .map(GameParticipant::getPlayer)
+                            .map(GameParticipant::getLeader)
                             .map(MatchGamePlayerImpl::getUsername)
                             .reduce((a, b) -> a + ", " + b)
                             .orElse("None");

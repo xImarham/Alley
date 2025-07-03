@@ -1,11 +1,14 @@
 package dev.revere.alley.feature.cosmetic.command.impl.admin;
 
+import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.feature.cosmetic.AbstractCosmetic;
 import dev.revere.alley.feature.cosmetic.EnumCosmeticType;
 import dev.revere.alley.feature.cosmetic.repository.BaseCosmeticRepository;
+import dev.revere.alley.feature.cosmetic.repository.ICosmeticRepository;
+import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.util.StringUtil;
 import dev.revere.alley.util.chat.CC;
@@ -35,7 +38,7 @@ public class CosmeticSetCommand extends BaseCommand {
             return;
         }
 
-        Profile profile = this.plugin.getProfileService().getProfile(target.getUniqueId());
+        Profile profile = Alley.getInstance().getService(IProfileService.class).getProfile(target.getUniqueId());
 
         String typeName = args[1];
         String cosmeticName = args[2];
@@ -46,7 +49,7 @@ public class CosmeticSetCommand extends BaseCommand {
             return;
         }
 
-        BaseCosmeticRepository<?> repository = this.plugin.getCosmeticRepository().getRepository(cosmeticType);
+        BaseCosmeticRepository<?> repository = Alley.getInstance().getService(ICosmeticRepository.class).getRepository(cosmeticType);
         if (repository == null) {
             player.sendMessage(CC.translate("&cError: No repository found for that type."));
             return;

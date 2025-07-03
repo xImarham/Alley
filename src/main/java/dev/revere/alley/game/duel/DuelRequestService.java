@@ -2,12 +2,17 @@ package dev.revere.alley.game.duel;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.base.arena.AbstractArena;
+import dev.revere.alley.base.arena.IArenaService;
 import dev.revere.alley.base.arena.impl.StandAloneArena;
 import dev.revere.alley.base.kit.Kit;
+import dev.revere.alley.core.annotation.Service;
+import dev.revere.alley.feature.server.IServerService;
+import dev.revere.alley.game.match.IMatchService;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.game.match.player.participant.TeamGameParticipant;
 import dev.revere.alley.game.party.Party;
+import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
 import dev.revere.alley.util.chat.CC;
@@ -32,33 +37,26 @@ import java.util.UUID;
  * @date 17/10/2024 - 20:02
  */
 @Getter
-@Setter
-public class DuelRequestService {
-    protected final Alley plugin;
-    private final List<DuelRequest> duelRequests;
+@Service(provides = IDuelRequestService.class, priority = 260)
+public class DuelRequestService implements IDuelRequestService {
+    private final IProfileService profileService;
+    private final IArenaService arenaService;
+    private final IMatchService matchService;
+    private final IServerService serverService;
 
-    /**
-     * Constructor for the DuelRequestService class.
-     *
-     * @param plugin The Alley plugin instance.
-     */
-    public DuelRequestService(Alley plugin) {
-        this.plugin = plugin;
-        this.duelRequests = new ArrayList<>();
+    private final List<DuelRequest> duelRequests = new ArrayList<>();
+
+    public DuelRequestService(IProfileService profileService, IArenaService arenaService, IMatchService matchService, IServerService serverService) {
+        this.profileService = profileService;
+        this.arenaService = arenaService;
+        this.matchService = matchService;
+        this.serverService = serverService;
     }
 
-    /**
-     * The primary, centralized method for creating and validating a duel request.
-     * Call this from any command or menu.
-     *
-     * @param sender The player initiating the request.
-     * @param initialTarget The player who was initially targeted.
-     * @param kit The kit for the duel.
-     * @param arena The specific arena chosen, or null for a random one.
-     */
+    @Override
     public void createAndSendRequest(Player sender, Player initialTarget, Kit kit, @Nullable AbstractArena arena) {
-        Profile senderProfile = this.plugin.getProfileService().getProfile(sender.getUniqueId());
-        Profile initialTargetProfile = this.plugin.getProfileService().getProfile(initialTarget.getUniqueId());
+        Profile senderProfile = this.profileService.getProfile(sender.getUniqueId());
+        Profile initialTargetProfile = this.profileService.getProfile(initialTarget.getUniqueId());
 
         Party senderParty = senderProfile.getParty();
         Party targetParty = initialTargetProfile.getParty();
@@ -76,9 +74,9 @@ public class DuelRequestService {
             return;
         }
 
-        AbstractArena finalArena = arena != null ? arena : this.plugin.getArenaService().getRandomArena(kit);
+        AbstractArena finalArena = arena != null ? arena : this.arenaService.getRandomArena(kit);
         if (finalArena instanceof StandAloneArena) {
-            finalArena = plugin.getArenaService().getArenaByName(finalArena.getName());
+            finalArena = this.arenaService.getArenaByName(finalArena.getName());
         }
 
         if (finalArena == null) {
@@ -91,6 +89,82 @@ public class DuelRequestService {
 
         sender.sendMessage(CC.translate("&aYou have successfully sent a " + (isPartyDuel ? "party " : "") + "duel request to &6" + finalTarget.getName() + "&a."));
         sendInvite(sender, finalTarget, kit, finalArena, isPartyDuel);
+    }
+
+    @Override
+    public void acceptPendingRequest(DuelRequest duelRequest) {
+        if (!isValidAcceptRequest(duelRequest)) {
+            return;
+        }
+
+        if (duelRequest.isParty()) {
+            Profile senderProfile = this.profileService.getProfile(duelRequest.getSender().getUniqueId());
+            Profile targetProfile = this.profileService.getProfile(duelRequest.getTarget().getUniqueId());
+
+            Party partyA = senderProfile.getParty();
+            Party partyB = targetProfile.getParty();
+
+            if (partyA == null || partyB == null) {
+                duelRequest.getSender().sendMessage(CC.translate("&cThe duel could not be started because one of the parties has disbanded."));
+                duelRequest.getTarget().sendMessage(CC.translate("&cThe duel could not be started because one of the parties has disbanded."));
+                removeDuelRequest(duelRequest);
+                return;
+            }
+
+            MatchGamePlayerImpl leaderA = new MatchGamePlayerImpl(duelRequest.getSender().getUniqueId(), duelRequest.getSender().getName());
+            MatchGamePlayerImpl leaderB = new MatchGamePlayerImpl(duelRequest.getTarget().getUniqueId(), duelRequest.getTarget().getName());
+
+            GameParticipant<MatchGamePlayerImpl> participantA = new TeamGameParticipant<>(leaderA);
+            GameParticipant<MatchGamePlayerImpl> participantB = new TeamGameParticipant<>(leaderB);
+
+            UUID leaderAUUID = leaderA.getUuid();
+            for (UUID memberUUID : partyA.getMembers()) {
+                if (!memberUUID.equals(leaderAUUID)) {
+                    Player memberPlayer = Bukkit.getPlayer(memberUUID);
+                    if (memberPlayer != null) {
+                        participantA.addPlayer(new MatchGamePlayerImpl(memberPlayer.getUniqueId(), memberPlayer.getName()));
+                    }
+                }
+            }
+
+            UUID leaderBUUID = leaderB.getUuid();
+            for (UUID memberUUID : partyB.getMembers()) {
+                if (!memberUUID.equals(leaderBUUID)) {
+                    Player memberPlayer = Bukkit.getPlayer(memberUUID);
+                    if (memberPlayer != null) {
+                        participantB.addPlayer(new MatchGamePlayerImpl(memberPlayer.getUniqueId(), memberPlayer.getName()));
+                    }
+                }
+            }
+
+            boolean isTeamMatch = (!participantA.getPlayers().isEmpty() || !participantB.getPlayers().isEmpty());
+
+            this.matchService.createAndStartMatch(
+                    duelRequest.getKit(), this.arenaService.selectArenaWithPotentialTemporaryCopy(duelRequest.getArena()), participantA, participantB, isTeamMatch, false, false
+            );
+
+        } else {
+            MatchGamePlayerImpl playerA = new MatchGamePlayerImpl(duelRequest.getSender().getUniqueId(), duelRequest.getSender().getName());
+            MatchGamePlayerImpl playerB = new MatchGamePlayerImpl(duelRequest.getTarget().getUniqueId(), duelRequest.getTarget().getName());
+
+            GameParticipant<MatchGamePlayerImpl> participantA = new GameParticipant<>(playerA);
+            GameParticipant<MatchGamePlayerImpl> participantB = new GameParticipant<>(playerB);
+
+            this.matchService.createAndStartMatch(
+                    duelRequest.getKit(), this.arenaService.selectArenaWithPotentialTemporaryCopy(duelRequest.getArena()), participantA, participantB, false, false, false
+            );
+        }
+        this.removeDuelRequest(duelRequest);
+    }
+
+    @Override
+    public DuelRequest getDuelRequest(Player sender, Player target) {
+        for (DuelRequest duelRequest : this.duelRequests) {
+            if (duelRequest.getSender().equals(sender) && duelRequest.getTarget().equals(target) || (duelRequest.getSender().equals(target) && duelRequest.getTarget().equals(sender))) {
+                return duelRequest;
+            }
+        }
+        return null;
     }
 
     /**
@@ -115,7 +189,7 @@ public class DuelRequestService {
             return true;
         }
 
-        Profile finalTargetProfile = this.plugin.getProfileService().getProfile(finalTarget.getUniqueId());
+        Profile finalTargetProfile = this.profileService.getProfile(finalTarget.getUniqueId());
         if (finalTargetProfile.getState() != EnumProfileState.LOBBY) {
             sender.sendMessage(CC.translate("&cThe target player is not in the lobby."));
             return true;
@@ -157,7 +231,7 @@ public class DuelRequestService {
         String title = isParty ? "&6&lParty Duel Request" : "&6&lDuel Request";
         TextComponent fromComponent = new TextComponent();
         if (isParty) {
-            Party senderParty = this.plugin.getProfileService().getProfile(sender.getUniqueId()).getParty();
+            Party senderParty = this.profileService.getProfile(sender.getUniqueId()).getParty();
             int partySize = (senderParty != null) ? senderParty.getMembers().size() : 1;
 
             fromComponent.setText(CC.translate(String.format("&f&l ● &fFrom: &6%s's Party (&a%d&6)", sender.getName(), partySize)));
@@ -206,76 +280,6 @@ public class DuelRequestService {
     }
 
     /**
-     * Accept a pending duel request.
-     *
-     * @param duelRequest the duel
-     */
-    public void acceptPendingRequest(DuelRequest duelRequest) {
-        if (!isValidAcceptRequest(duelRequest)) {
-            return;
-        }
-
-        if (duelRequest.isParty()) {
-            Profile senderProfile = this.plugin.getProfileService().getProfile(duelRequest.getSender().getUniqueId());
-            Profile targetProfile = this.plugin.getProfileService().getProfile(duelRequest.getTarget().getUniqueId());
-
-            Party partyA = senderProfile.getParty();
-            Party partyB = targetProfile.getParty();
-
-            if (partyA == null || partyB == null) {
-                duelRequest.getSender().sendMessage(CC.translate("&cThe duel could not be started because one of the parties has disbanded."));
-                duelRequest.getTarget().sendMessage(CC.translate("&cThe duel could not be started because one of the parties has disbanded."));
-                removeDuelRequest(duelRequest);
-                return;
-            }
-
-            MatchGamePlayerImpl leaderA = new MatchGamePlayerImpl(duelRequest.getSender().getUniqueId(), duelRequest.getSender().getName());
-            MatchGamePlayerImpl leaderB = new MatchGamePlayerImpl(duelRequest.getTarget().getUniqueId(), duelRequest.getTarget().getName());
-
-            GameParticipant<MatchGamePlayerImpl> participantA = new TeamGameParticipant<>(leaderA);
-            GameParticipant<MatchGamePlayerImpl> participantB = new TeamGameParticipant<>(leaderB);
-
-            UUID leaderAUUID = leaderA.getUuid();
-            for (UUID memberUUID : partyA.getMembers()) {
-                if (!memberUUID.equals(leaderAUUID)) {
-                    Player memberPlayer = Bukkit.getPlayer(memberUUID);
-                    if (memberPlayer != null) {
-                        participantA.addPlayer(new MatchGamePlayerImpl(memberPlayer.getUniqueId(), memberPlayer.getName()));
-                    }
-                }
-            }
-
-            UUID leaderBUUID = leaderB.getUuid();
-            for (UUID memberUUID : partyB.getMembers()) {
-                if (!memberUUID.equals(leaderBUUID)) {
-                    Player memberPlayer = Bukkit.getPlayer(memberUUID);
-                    if (memberPlayer != null) {
-                        participantB.addPlayer(new MatchGamePlayerImpl(memberPlayer.getUniqueId(), memberPlayer.getName()));
-                    }
-                }
-            }
-
-            boolean isTeamMatch = (!participantA.getPlayers().isEmpty() || !participantB.getPlayers().isEmpty());
-
-            this.plugin.getMatchService().createAndStartMatch(
-                    duelRequest.getKit(), this.plugin.getArenaService().selectArenaWithPotentialTemporaryCopy(duelRequest.getArena()), participantA, participantB, isTeamMatch, false, false
-            );
-
-        } else {
-            MatchGamePlayerImpl playerA = new MatchGamePlayerImpl(duelRequest.getSender().getUniqueId(), duelRequest.getSender().getName());
-            MatchGamePlayerImpl playerB = new MatchGamePlayerImpl(duelRequest.getTarget().getUniqueId(), duelRequest.getTarget().getName());
-
-            GameParticipant<MatchGamePlayerImpl> participantA = new GameParticipant<>(playerA);
-            GameParticipant<MatchGamePlayerImpl> participantB = new GameParticipant<>(playerB);
-
-            this.plugin.getMatchService().createAndStartMatch(
-                    duelRequest.getKit(), this.plugin.getArenaService().selectArenaWithPotentialTemporaryCopy(duelRequest.getArena()), participantA, participantB, false, false, false
-            );
-        }
-        this.removeDuelRequest(duelRequest);
-    }
-
-    /**
      * Checks if the accept request is valid.
      *
      * @param duelRequest the duel request
@@ -286,13 +290,13 @@ public class DuelRequestService {
             return false;
         }
 
-        if (this.plugin.getServerService().isQueueingEnabled(duelRequest.getSender())) {
+        if (this.serverService.isQueueingAllowed()) {
             return false;
         }
 
         if (duelRequest.hasExpired()) return false;
 
-        Profile profile = this.plugin.getProfileService().getProfile(duelRequest.getSender().getUniqueId());
+        Profile profile = this.profileService.getProfile(duelRequest.getSender().getUniqueId());
         if (profile.getState() != EnumProfileState.LOBBY) {
             duelRequest.getSender().sendMessage(CC.translate("&cYou can only accept duel requests in the lobby."));
             return false;
@@ -303,7 +307,7 @@ public class DuelRequestService {
             return false;
         }
 
-        Profile targetProfile = this.plugin.getProfileService().getProfile(duelRequest.getTarget().getUniqueId());
+        Profile targetProfile = this.profileService.getProfile(duelRequest.getTarget().getUniqueId());
         if (targetProfile.getState() != EnumProfileState.LOBBY) {
             duelRequest.getSender().sendMessage(CC.translate("&cThat player is not in the lobby."));
             return false;
@@ -347,22 +351,6 @@ public class DuelRequestService {
      */
     public void removeDuelRequest(DuelRequest duelRequest) {
         this.duelRequests.remove(duelRequest);
-    }
-
-    /**
-     * Get a duel request by the sender and target.
-     *
-     * @param sender the sender
-     * @param target the target
-     * @return the duel request
-     */
-    public DuelRequest getDuelRequest(Player sender, Player target) {
-        for (DuelRequest duelRequest : this.duelRequests) {
-            if (duelRequest.getSender().equals(sender) && duelRequest.getTarget().equals(target) || (duelRequest.getSender().equals(target) && duelRequest.getTarget().equals(sender))) {
-                return duelRequest;
-            }
-        }
-        return null;
     }
 
     /**

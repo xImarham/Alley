@@ -1,8 +1,10 @@
 package dev.revere.alley.game.match.command.admin.impl;
 
+import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
+import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.Bukkit;
@@ -33,7 +35,7 @@ public class MatchInfoCommand extends BaseCommand {
             return;
         }
 
-        Profile profile = this.plugin.getProfileService().getProfile(target.getUniqueId());
+        Profile profile = Alley.getInstance().getService(IProfileService.class).getProfile(target.getUniqueId());
         if (profile.getMatch() == null) {
             sender.sendMessage(CC.translate("&cThis player is not in a match."));
             return;

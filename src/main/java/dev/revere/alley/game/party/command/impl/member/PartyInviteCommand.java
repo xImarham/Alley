@@ -1,10 +1,13 @@
 package dev.revere.alley.game.party.command.impl.member;
 
+import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.config.locale.impl.PartyLocale;
+import dev.revere.alley.game.party.IPartyService;
 import dev.revere.alley.game.party.Party;
+import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.Bukkit;
@@ -21,6 +24,9 @@ public class PartyInviteCommand extends BaseCommand {
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
         String[] args = command.getArgs();
+
+        IPartyService partyService = Alley.getInstance().getService(IPartyService.class);
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
 
         if (command.length() < 1) {
             player.sendMessage(CC.translate("&cUsage: /party invite (player)"));
@@ -40,7 +46,7 @@ public class PartyInviteCommand extends BaseCommand {
             return;
         }
 
-        Party party = this.plugin.getPartyService().getPartyByMember(player.getUniqueId());
+        Party party = partyService.getPartyByMember(player.getUniqueId());
         if (party == null) {
             player.sendMessage(CC.translate(PartyLocale.NOT_IN_PARTY.getMessage()));
             return;
@@ -51,7 +57,7 @@ public class PartyInviteCommand extends BaseCommand {
             return;
         }
 
-        Profile targetProfile = this.plugin.getProfileService().getProfile(targetPlayer.getUniqueId());
+        Profile targetProfile = profileService.getProfile(targetPlayer.getUniqueId());
         if (!targetProfile.getProfileData().getSettingData().isPartyInvitesEnabled()) {
             player.sendMessage(CC.translate(PartyLocale.PLAYER_DISABLED_PARTY_INVITES.getMessage().replace("{player}", target)));
             return;
@@ -62,7 +68,7 @@ public class PartyInviteCommand extends BaseCommand {
             return;
         }
 
-        this.plugin.getPartyService().sendInvite(party, player, targetPlayer);
+        partyService.sendInvite(party, player, targetPlayer);
         party.notifyParty("&6" + targetPlayer.getName() + " &awas invited to the party by &6" + player.getName() + "&a.");
     }
 }

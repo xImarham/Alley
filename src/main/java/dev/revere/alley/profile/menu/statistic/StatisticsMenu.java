@@ -4,6 +4,7 @@ import dev.revere.alley.Alley;
 import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.api.menu.Menu;
 import dev.revere.alley.base.kit.Kit;
+import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.data.impl.ProfileFFAData;
 import dev.revere.alley.profile.data.impl.ProfileRankedKitData;
@@ -40,9 +41,9 @@ public class StatisticsMenu extends Menu {
         buttons.put(2, new StatisticsButton());
         buttons.put(4, new GlobalStatButton());
         buttons.put(6, new LeaderboardButton());
-        //buttons.put(8, new DivisionViewButton(Alley.getInstance().getProfileService().getProfile(player.getUniqueId())));
+        //buttons.put(8, new DivisionViewButton(Alley.getInstance().getService(IProfileService.class).getProfile(player.getUniqueId())));
 
-        Profile profile = Alley.getInstance().getProfileService().getProfile(this.target == player ? player.getUniqueId() : this.target.getUniqueId());
+        Profile profile = Alley.getInstance().getService(IProfileService.class).getProfile(this.target == player ? player.getUniqueId() : this.target.getUniqueId());
         List<Kit> sortedKits = profile.getSortedKits();
 
         int slot = 10;

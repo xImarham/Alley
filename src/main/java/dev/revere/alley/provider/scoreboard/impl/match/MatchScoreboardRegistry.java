@@ -24,12 +24,10 @@ public class MatchScoreboardRegistry {
     private IMatchScoreboard defaultScoreboard;
 
     /**
-     * Constructs the registry and immediately scans the classpath to discover
-     * and register all annotated scoreboard providers.
-     *
-     * @param plugin The main plugin instance, required for dependency injection.
+     * Scans the classpath to discover and register all annotated scoreboard providers.
+     * This should be called once by the object that creates the registry.
      */
-    public MatchScoreboardRegistry(Alley plugin) {
+    public void initialize() {
         String searchPackage = "dev.revere.alley.provider.scoreboard";
         long startTime = System.nanoTime();
 
@@ -45,11 +43,13 @@ public class MatchScoreboardRegistry {
                         continue;
                     }
 
-                    Constructor<?> constructor = clazz.getConstructor(Alley.class);
-                    IMatchScoreboard scoreboard = (IMatchScoreboard) constructor.newInstance(plugin);
+                    // CORRECT: Get the no-argument constructor now.
+                    Constructor<?> constructor = clazz.getConstructor();
+                    // CORRECT: Create instance without passing the plugin.
+                    // The individual scoreboard providers will use Alley.getInstance().getService(...)
+                    IMatchScoreboard scoreboard = (IMatchScoreboard) constructor.newInstance();
                     ScoreboardData annotation = clazz.getAnnotation(ScoreboardData.class);
 
-                    assert annotation != null;
                     if (annotation.isDefault()) {
                         this.defaultScoreboard = scoreboard;
                     } else if (annotation.kit() != KitSetting.class) {
@@ -65,7 +65,7 @@ public class MatchScoreboardRegistry {
 
         long duration = (System.nanoTime() - startTime) / 1_000_000;
         int total = kitSettingScoreboards.size() + matchTypeScoreboards.size() + (defaultScoreboard != null ? 1 : 0);
-        Logger.log("Discovered and registered " + total + " match scoreboard providers in " + duration + "ms.");
+        Logger.info("Discovered and registered " + total + " match scoreboard providers in " + duration + "ms.");
     }
 
     /**

@@ -1,10 +1,22 @@
 package dev.revere.alley.tool.logger;
 
 import dev.revere.alley.Alley;
+import dev.revere.alley.api.constant.IPluginConstant;
 import dev.revere.alley.api.constant.PluginConstant;
+import dev.revere.alley.base.arena.IArenaService;
+import dev.revere.alley.base.kit.IKitService;
+import dev.revere.alley.config.IConfigService;
+import dev.revere.alley.feature.division.IDivisionService;
+import dev.revere.alley.feature.knockback.IKnockbackAdapter;
+import dev.revere.alley.feature.level.ILevelService;
+import dev.revere.alley.feature.title.ITitleService;
+import dev.revere.alley.game.ffa.IFFAService;
+import dev.revere.alley.profile.IProfileService;
+import dev.revere.alley.server.ICoreAdapter;
 import dev.revere.alley.util.chat.CC;
 import lombok.experimental.UtilityClass;
 import org.bukkit.ChatColor;
+import org.bukkit.Server;
 
 import java.util.Arrays;
 
@@ -22,42 +34,53 @@ public class PluginLogger {
      */
     public void onEnable(long timeTaken) {
         Alley plugin = Alley.getInstance();
+        Server server = plugin.getServer();
 
-        PluginConstant pluginConstant = plugin.getPluginConstant();
-        ChatColor color = pluginConstant.getMainColor();
+        IPluginConstant constants = plugin.getService(IPluginConstant.class);
+        IConfigService configService = plugin.getService(IConfigService.class);
+        ICoreAdapter coreAdapter = plugin.getService(ICoreAdapter.class);
+        IKnockbackAdapter knockbackAdapter = plugin.getService(IKnockbackAdapter.class);
+        IKitService kitService = plugin.getService(IKitService.class);
+        IFFAService ffaService = plugin.getService(IFFAService.class);
+        IArenaService arenaService = plugin.getService(IArenaService.class);
+        IDivisionService divisionService = plugin.getService(IDivisionService.class);
+        ITitleService titleService = plugin.getService(ITitleService.class);
+        ILevelService levelService = plugin.getService(ILevelService.class);
+        IProfileService profileService = plugin.getService(IProfileService.class);
+
+        ChatColor color = constants.getMainColor();
         ChatColor secondary = ChatColor.WHITE;
 
         Arrays.asList(
                 "",
-                "        " + color + "&l" + pluginConstant.getName() + color + " Practice",
+                "        " + color + "&l" + constants.getName() + color + " Practice",
                 "",
-                "    " + secondary + "Authors: " + color + plugin.getDescription().getAuthors().toString().replace("[", "").replace("]", ""),
+                "    " + secondary + "Authors: " + color + constants.getAuthors().toString().replace("[", "").replace("]", ""),
                 "",
-                "    " + secondary + "Version: " + color + pluginConstant.getVersion(),
-                "    " + secondary + "Discord: " + color + plugin.getDescription().getWebsite(),
-                "    " + secondary + "Description: " + color + pluginConstant.getDescription(),
+                "    " + secondary + "Version: " + color + constants.getVersion(),
+                "    " + secondary + "Description: " + color + constants.getDescription(),
                 "",
-                "    " + secondary + "Hooked Core: " + color + plugin.getCoreAdapter().getCore().getType().getPluginName(),
-                "    " + secondary + "Hooked Knockback: " + color + plugin.getKnockbackAdapter().getKnockbackType().getType().getSpigotName(),
+                "    " + secondary + "Hooked Core: " + color + coreAdapter.getCore().getType().getPluginName(),
+                "    " + secondary + "Hooked Knockback: " + color + knockbackAdapter.getKnockbackImplementation().getType().getSpigotName(),
                 "",
-                "    " + secondary + "Kits " + color + plugin.getKitService().getKits().size(),
-                "    " + secondary + "FFA Kits: " + color + plugin.getFfaService().getFfaKits().size(),
-                "    " + secondary + "Arenas: " + color + plugin.getArenaService().getArenas().size(),
-                "    " + secondary + "Divisions: " + color + plugin.getDivisionService().getDivisions().size(),
-                "    " + secondary + "Titles: " + color + plugin.getTitleService().getTitles().size(),
-                "    " + secondary + "Levels: " + color + plugin.getLevelService().getLevels().size(),
+                "    " + secondary + "Kits: " + color + kitService.getKits().size(),
+                "    " + secondary + "FFA Kits: " + color + ffaService.getFfaKits().size(),
+                "    " + secondary + "Arenas: " + color + arenaService.getArenas().size(),
+                "    " + secondary + "Divisions: " + color + divisionService.getDivisions().size(),
+                "    " + secondary + "Titles: " + color + titleService.getTitles().size(),
+                "    " + secondary + "Levels: " + color + levelService.getLevels().size(),
                 "",
                 "    " + color + "MongoDB " + secondary + "| " + color + "Status: &aConnected",
-                "     " + secondary + "Host: " + color + plugin.getConfigService().getDatabaseConfig().getString("mongo.uri"),
-                "     " + secondary + "Database: " + color + plugin.getConfigService().getDatabaseConfig().getString("mongo.database"),
-                "     " + secondary + "Loaded Profiles: " + color + plugin.getProfileService().getProfiles().size(),
+                "     " + secondary + "Host: " + color + configService.getDatabaseConfig().getString("mongo.uri"),
+                "     " + secondary + "Database: " + color + configService.getDatabaseConfig().getString("mongo.database"),
+                "     " + secondary + "Loaded Profiles: " + color + profileService.getProfiles().size(),
                 "",
-                "    " + secondary + "Spigot: " + color + plugin.getServer().getName(),
-                "    " + secondary + "Version: " + color + pluginConstant.getBukkitVersionExact(plugin),
+                "    " + secondary + "Spigot: " + color + server.getName(),
+                "    " + secondary + "Version: " + color + constants.getSpigotVersion(),
                 "",
-                "    " + secondary + "Loaded in " + color + timeTaken + " " + color + "ms",
+                "    " + secondary + "Loaded in " + color + timeTaken + "ms",
                 ""
-        ).forEach(line -> plugin.getServer().getConsoleSender().sendMessage(CC.translate(line)));
+        ).forEach(line -> server.getConsoleSender().sendMessage(CC.translate(line)));
     }
 
     public void onDisable() {

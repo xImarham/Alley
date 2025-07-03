@@ -2,6 +2,7 @@ package dev.revere.alley.provider.scoreboard.impl.match.impl.type;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.base.kit.setting.impl.mode.KitSettingBoxingImpl;
+import dev.revere.alley.config.IConfigService;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.profile.Profile;
@@ -35,13 +36,13 @@ public class MatchScoreboardBoxingImpl extends AbstractMatchScoreboard {
     @Override
     protected String replacePlaceholders(String line, Profile profile, Player player, GameParticipant<MatchGamePlayerImpl> you, GameParticipant<MatchGamePlayerImpl> opponent) {
         String baseLine = super.replacePlaceholders(line, profile, player, you, opponent);
-        FileConfiguration config = plugin.getConfigService().getScoreboardConfig();
+        FileConfiguration config = Alley.getInstance().getService(IConfigService.class).getScoreboardConfig();
 
-        int playerHits = profile.getMatch().isTeamMatch() ? you.getTeamHits() : you.getPlayer().getData().getHits();
-        int opponentHits = profile.getMatch().isTeamMatch() ? opponent.getTeamHits() : opponent.getPlayer().getData().getHits();
+        int playerHits = profile.getMatch().isTeamMatch() ? you.getTeamHits() : you.getLeader().getData().getHits();
+        int opponentHits = profile.getMatch().isTeamMatch() ? opponent.getTeamHits() : opponent.getLeader().getData().getHits();
 
-        int playerCombo = you.getPlayer().getData().getCombo();
-        int opponentCombo = opponent.getPlayer().getData().getCombo();
+        int playerCombo = you.getLeader().getData().getCombo();
+        int opponentCombo = opponent.getLeader().getData().getCombo();
 
         String hitDifference = formatHitDifference(playerHits, opponentHits, config);
         String combo = formatCombo(playerCombo, opponentCombo, config);

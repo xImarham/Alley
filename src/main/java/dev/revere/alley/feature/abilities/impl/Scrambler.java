@@ -2,8 +2,11 @@ package dev.revere.alley.feature.abilities.impl;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.feature.abilities.AbstractAbility;
+import dev.revere.alley.feature.abilities.IAbilityService;
 import dev.revere.alley.feature.abilities.utils.DurationFormatter;
+import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
+import dev.revere.alley.profile.enums.EnumGlobalCooldown;
 import dev.revere.alley.util.PlayerUtil;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.entity.Player;
@@ -25,17 +28,22 @@ public class Scrambler extends AbstractAbility {
     private void onDamage(EntityDamageByEntityEvent event) {
         if (event.getEntity() instanceof Player && event.getDamager() instanceof Player) {
             Player damager = (Player) event.getDamager();
-            Profile profile = Alley.getInstance().getProfileService().getProfile(damager.getUniqueId());
+
+            IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+            IAbilityService abilityService = Alley.getInstance().getService(IAbilityService.class);
+
+            Profile profile = profileService.getProfile(damager.getUniqueId());
+
             if (!isAbility(damager.getItemInHand())) return;
 
-            if (profile.getScrambler().onCooldown(damager)) {
-                damager.sendMessage(CC.translate("&fYou are on &6&lScrambler &7cooldown for &4" + DurationFormatter.getRemaining(profile.getScrambler().getRemainingMillis(damager), true, true)));
+            if (profile.getCooldown(Scrambler.class).onCooldown(damager)) {
+                damager.sendMessage(CC.translate("&fYou are on &6&lScrambler &7cooldown for &4" + DurationFormatter.getRemaining(profile.getCooldown(Scrambler.class).getRemainingMillis(damager), true, true)));
                 damager.updateInventory();
                 return;
             }
 
-            if (profile.getPartneritem().onCooldown(damager)) {
-                damager.sendMessage(CC.translate("&fYou are on &6&lPartner Item &fcooldown for &6" + DurationFormatter.getRemaining(profile.getPartneritem().getRemainingMillis(damager), true, true)));
+            if (profile.getGlobalCooldown(EnumGlobalCooldown.PARTNER_ITEM).onCooldown(damager)) {
+                damager.sendMessage(CC.translate("&fYou are on &6&lPartner Item &fcooldown for &6" + DurationFormatter.getRemaining(profile.getGlobalCooldown(EnumGlobalCooldown.PARTNER_ITEM).getRemainingMillis(damager), true, true)));
                 damager.updateInventory();
                 return;
             }
@@ -44,14 +52,14 @@ public class Scrambler extends AbstractAbility {
 
             Player victim = (Player) event.getEntity();
 
-            profile.getScrambler().applyCooldown(damager, 60 * 1000);
-            profile.getPartneritem().applyCooldown(damager, 10 * 1000);
+            profile.getCooldown(Scrambler.class).applyCooldown(damager, 60 * 1000);
+            profile.getGlobalCooldown(EnumGlobalCooldown.PARTNER_ITEM).applyCooldown(damager, 10 * 1000);
 
             this.random(victim);
 
-            plugin.getAbilityService().cooldownExpired(damager, this.getName(), this.getAbility());
-            plugin.getAbilityService().playerMessage(damager, this.getAbility());
-            plugin.getAbilityService().targetMessage(victim, damager, this.getAbility());
+            abilityService.sendCooldownExpiredMessage(damager, this.getName(), this.getAbility());
+            abilityService.sendPlayerMessage(damager, this.getAbility());
+            abilityService.sendTargetMessage(victim, damager, this.getAbility());
         }
     }
 
@@ -59,14 +67,14 @@ public class Scrambler extends AbstractAbility {
     public void checkCooldown(PlayerInteractEvent event) {
         Player player = event.getPlayer();
         Action action = event.getAction();
-        Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
+        Profile profile = Alley.getInstance().getService(IProfileService.class).getProfile(player.getUniqueId());
         if (action.equals(Action.LEFT_CLICK_AIR) || action.equals(Action.LEFT_CLICK_BLOCK)) {
             if (!isAbility(player.getItemInHand())) {
                 return;
             }
             if (isAbility(player.getItemInHand())) {
                 if (this.hasCooldown(player)) {
-                    player.sendMessage(CC.translate("&fYou are on cooldown for &4" + DurationFormatter.getRemaining(profile.getCombo().getRemainingMillis(player), true)));
+                    player.sendMessage(CC.translate("&fYou are on cooldown for &4" + DurationFormatter.getRemaining(profile.getCooldown(Scrambler.class).getRemainingMillis(player), true)));
                     event.setCancelled(true);
                     player.updateInventory();
                 }
@@ -79,12 +87,13 @@ public class Scrambler extends AbstractAbility {
         Player player = event.getPlayer();
 
         if (!isAbility(event.getItem())) return;
+        IAbilityService abilityService = Alley.getInstance().getService(IAbilityService.class);
 
         if (event.getAction().equals(Action.LEFT_CLICK_AIR) || event.getAction().equals(Action.LEFT_CLICK_BLOCK)) {
             event.setCancelled(true);
 
             if (this.hasCooldown(player)) {
-                plugin.getAbilityService().cooldown(player, this.getName(), this.getCooldown(player));
+                abilityService.sendCooldownMessage(player, this.getName(), this.getCooldown(player));
                 player.updateInventory();
             }
         }
