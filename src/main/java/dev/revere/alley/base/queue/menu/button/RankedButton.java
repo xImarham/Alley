@@ -79,7 +79,12 @@ public class RankedButton extends Button {
     public void clicked(Player player, int slot, ClickType clickType, int hotbarSlot) {
         if (clickType != ClickType.LEFT) return;
 
-        if (Alley.getInstance().getService(IServerService.class).isQueueingAllowed()) return;
+        IServerService serverService = Alley.getInstance().getService(IServerService.class);
+        if (!serverService.isQueueingAllowed()) {
+            player.sendMessage(CC.translate("&cQueueing is temporarily disabled. Please try again later."));
+            player.closeInventory();
+            return;
+        }
 
         IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
         Profile profile = profileService.getProfile(player.getUniqueId());

@@ -25,7 +25,7 @@ import java.util.List;
  * @date 19/05/2024 - 23:30
  */
 @Getter
-@Service(provides = IKitService.class, priority = 90)
+@Service(provides = IKitService.class, priority = 80)
 public class KitService implements IKitService {
     private final IConfigService configService;
     private final IKitSettingService kitSettingService;

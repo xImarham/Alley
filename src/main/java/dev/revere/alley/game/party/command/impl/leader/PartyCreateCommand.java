@@ -28,10 +28,12 @@ public class PartyCreateCommand extends BaseCommand {
         Player player = command.getPlayer();
         UUID playerUUID = player.getUniqueId();
 
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
         IPartyService partyService = Alley.getInstance().getService(IPartyService.class);
+        IServerService serverService = Alley.getInstance().getService(IServerService.class);
 
-        if (Alley.getInstance().getService(IProfileService.class).getProfile(player.getUniqueId()).getState() != EnumProfileState.LOBBY) {
-            player.sendMessage(CC.translate("&cYou must be at spawn in order to execute this command :v"));
+        if (profileService.getProfile(playerUUID).getState() != EnumProfileState.LOBBY) {
+            player.sendMessage(CC.translate("&cYou must be at spawn to execute this command."));
             return;
         }
 
@@ -40,12 +42,8 @@ public class PartyCreateCommand extends BaseCommand {
             return;
         }
 
-        if (partyService.getPartyByMember(playerUUID) != null) {
-            player.sendMessage(CC.translate(PartyLocale.ALREADY_IN_PARTY.getMessage()));
-            return;
-        }
-
-        if (Alley.getInstance().getService(IServerService.class).isQueueingAllowed()) {
+        if (!serverService.isQueueingAllowed()) {
+            player.sendMessage(CC.translate("&cYou cannot create a party while server queueing is disabled."));
             return;
         }
 

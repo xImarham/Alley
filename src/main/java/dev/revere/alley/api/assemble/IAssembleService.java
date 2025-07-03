@@ -2,6 +2,7 @@ package dev.revere.alley.api.assemble;
 
 import dev.revere.alley.api.assemble.interfaces.IAssembleAdapter;
 import dev.revere.alley.core.lifecycle.IService;
+import org.bukkit.entity.Player;
 
 import java.util.Map;
 import java.util.UUID;
@@ -25,4 +26,22 @@ public interface IAssembleService extends IService {
      * @return The active IAssembleAdapter instance.
      */
     IAssembleAdapter getAdapter();
+
+    boolean isCallEvents();
+
+    /**
+     * Creates and registers a new scoreboard for a player.
+     * This should be called when a player joins.
+     *
+     * @param player The player to create the board for.
+     */
+    void createBoard(Player player);
+
+    /**
+     * Removes the scoreboard for a player.
+     * This should be called when a player quits.
+     *
+     * @param player The player whose board to remove.
+     */
+    void removeBoard(Player player);
 }

@@ -73,7 +73,6 @@ public class PartyService implements IPartyService {
     @Override
     public void initialize(AlleyContext context) {
         this.chatFormat = configService.getMessagesConfig().getString("party.chat-format");
-        context.getPlugin().getServer().getPluginManager().registerEvents(new PartyListener(), context.getPlugin());
     }
 
     @Override
@@ -128,9 +127,11 @@ public class PartyService implements IPartyService {
         }
 
         Party party = new Party(player);
+
         this.parties.add(party);
 
         profile.setParty(party);
+
         this.hotbarService.applyHotbarItems(player);
 
         this.reflectionRepository.getReflectionService(TitleReflectionService.class).sendTitle(

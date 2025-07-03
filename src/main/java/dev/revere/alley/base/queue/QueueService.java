@@ -26,7 +26,7 @@ import java.util.List;
  * @date 5/21/2024
  */
 @Getter
-@Service(provides = IQueueService.class, priority = 70)
+@Service(provides = IQueueService.class, priority = 90)
 public class QueueService implements IQueueService {
     private final IConfigService configService;
     private final IKitService kitService;
@@ -56,7 +56,6 @@ public class QueueService implements IQueueService {
         this.queues.clear();
         this.kitService.getKits().forEach(kit -> {
             if (!kit.isEnabled()) return;
-            // The service now creates and owns the Queue objects.
             this.queues.add(new Queue(kit, false, false));
             this.queues.add(new Queue(kit, false, true));
             if (kit.isSettingEnabled(KitSettingRankedImpl.class)) {
@@ -85,7 +84,6 @@ public class QueueService implements IQueueService {
                 return new QueuesMenuDefault();
         }
     }
-
 
     /**
      * Get the player count of a specific game type

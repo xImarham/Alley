@@ -11,6 +11,7 @@ import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.tool.item.ItemBuilder;
 import dev.revere.alley.util.PlayerUtil;
+import dev.revere.alley.util.chat.CC;
 import lombok.AllArgsConstructor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
@@ -77,7 +78,12 @@ public class UnrankedButton extends Button {
     public void clicked(Player player, int slot, ClickType clickType, int hotbarSlot) {
         if (clickType != ClickType.LEFT) return;
 
-        if (Alley.getInstance().getService(IServerService.class).isQueueingAllowed()) return;
+        IServerService serverService = Alley.getInstance().getService(IServerService.class);
+        if (!serverService.isQueueingAllowed()) {
+            player.sendMessage(CC.translate("&cQueueing is temporarily disabled. Please try again later."));
+            player.closeInventory();
+            return;
+        }
 
         IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
         Profile profile = profileService.getProfile(player.getUniqueId());

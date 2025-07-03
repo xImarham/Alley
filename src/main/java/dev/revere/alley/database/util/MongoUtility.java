@@ -79,6 +79,7 @@ public class MongoUtility {
             kitEntry.put("tier", entry.getValue().getTier().getName());
             kitEntry.put("wins", entry.getValue().getWins());
             kitEntry.put("losses", entry.getValue().getLosses());
+            kitEntry.put("winstreak", entry.getValue().getWinstreak());
             kitDataDocument.put(entry.getKey(), kitEntry);
         }
         return kitDataDocument;
@@ -267,6 +268,7 @@ public class MongoUtility {
 
             kit.setWins(kitEntry.getInteger("wins"));
             kit.setLosses(kitEntry.getInteger("losses"));
+            kit.setWinstreak(kitEntry.getInteger("winstreak"));
 
             kitData.put(entry.getKey(), kit);
         }

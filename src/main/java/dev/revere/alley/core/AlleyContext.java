@@ -26,10 +26,10 @@ public final class AlleyContext {
 
     private final Alley plugin;
     private final Map<Class<? extends IService>, IService> serviceInstances = new ConcurrentHashMap<>();
-
     private final Map<Class<? extends IService>, Class<? extends IService>> serviceRegistry = new HashMap<>();
     private final Set<Class<? extends IService>> servicesBeingConstructed = new HashSet<>();
 
+    private ScanResult scanResult;
     private List<IService> sortedServices = Collections.emptyList();
 
     public AlleyContext(Alley plugin) {
@@ -42,23 +42,25 @@ public final class AlleyContext {
     public void initialize() throws Exception {
         Logger.logPhaseStart("Service Initialization");
 
-        // 1. Discover all service implementation classes ONCE.
-        List<Class<? extends IService>> implementationClasses = discoverServices();
+        try {
+            this.scanResult = new ClassGraph().enableAllInfo().acceptPackages(SERVICE_IMPL_PACKAGE).scan();
+        } catch (Exception e) {
+            throw new IllegalStateException("Classpath scanning failed.", e);
+        }
+
+        List<Class<? extends IService>> implementationClasses = discoverServices(this.scanResult);
         if (implementationClasses.isEmpty()) {
             throw new IllegalStateException("No services found to load.");
         }
 
-        // 2. Build the Interface -> Implementation registry map.
         for (Class<? extends IService> implClass : implementationClasses) {
             serviceRegistry.put(getProvidedInterface(implClass), implClass);
         }
 
-        // 3. Sort services by priority for ordered initialization.
         List<Class<? extends IService>> sortedImplClasses = sortServicesByPriority(implementationClasses);
         Logger.info("Service Initialization Order: " +
                 sortedImplClasses.stream().map(Class::getSimpleName).collect(Collectors.joining(" -> ")));
 
-        // 4. Instantiate all services.
         for (Class<? extends IService> implClass : sortedImplClasses) {
             instantiateService(implClass);
         }
@@ -67,7 +69,6 @@ public final class AlleyContext {
                 .map(impl -> serviceInstances.get(getProvidedInterface(impl)))
                 .collect(Collectors.toList());
 
-        // 5. Run lifecycle methods
         Logger.logPhaseStart("Service Setup Phase");
         for (IService service : sortedServices) {
             Logger.logTime(service.getClass().getSimpleName() + " Setup", () -> service.setup(this));
@@ -153,13 +154,11 @@ public final class AlleyContext {
     }
 
     @SuppressWarnings("unchecked")
-    private List<Class<? extends IService>> discoverServices() {
+    private List<Class<? extends IService>> discoverServices(ScanResult scanResult) {
         List<Class<? extends IService>> services = new ArrayList<>();
-        try (ScanResult scanResult = new ClassGraph().acceptPackages(SERVICE_IMPL_PACKAGE).enableAnnotationInfo().scan()) {
-            for (ClassInfo classInfo : scanResult.getClassesWithAnnotation(Service.class.getName())) {
-                if (!classInfo.isAbstract() && !classInfo.isInterface()) {
-                    services.add((Class<? extends IService>) classInfo.loadClass());
-                }
+        for (ClassInfo classInfo : scanResult.getClassesWithAnnotation(Service.class.getName())) {
+            if (!classInfo.isAbstract() && !classInfo.isInterface()) {
+                services.add((Class<? extends IService>) classInfo.loadClass());
             }
         }
         return services;

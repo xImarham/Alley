@@ -3,6 +3,7 @@ package dev.revere.alley.api.assemble;
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.assemble.enums.EnumAssembleStyle;
 import dev.revere.alley.api.assemble.events.AssembleBoardCreateEvent;
+import dev.revere.alley.api.assemble.events.AssembleBoardDestroyEvent;
 import dev.revere.alley.api.assemble.interfaces.IAssembleAdapter;
 import dev.revere.alley.api.assemble.listener.AssembleListener;
 import dev.revere.alley.config.IConfigService;
@@ -92,6 +93,33 @@ public class Assemble implements IAssembleService {
         }
         this.boards.clear();
         Logger.info("Assemble scoreboard has been shut down.");
+    }
+
+    @Override
+    public void createBoard(Player player) {
+        if (isCallEvents()) {
+            AssembleBoardCreateEvent createEvent = new AssembleBoardCreateEvent(player);
+            Bukkit.getPluginManager().callEvent(createEvent);
+            if (createEvent.isCancelled()) {
+                return;
+            }
+        }
+        this.boards.put(player.getUniqueId(), new AssembleBoard(player, this));
+    }
+
+    @Override
+    public void removeBoard(Player player) {
+        if (isCallEvents()) {
+            AssembleBoardDestroyEvent destroyEvent = new AssembleBoardDestroyEvent(player);
+            Bukkit.getPluginManager().callEvent(destroyEvent);
+            if (destroyEvent.isCancelled()) {
+                return;
+            }
+        }
+        this.boards.remove(player.getUniqueId());
+        if (player.getScoreboard() != null) {
+            player.setScoreboard(Bukkit.getScoreboardManager().getMainScoreboard());
+        }
     }
 
     @Override

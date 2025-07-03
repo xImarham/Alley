@@ -63,24 +63,28 @@ public class CommandFramework implements ICommandFramework, CommandExecutor {
 
     @Override
     public void initialize(AlleyContext context) {
-        String rootPackage = this.pluginConstant.getPackageDirectory();
+        ScanResult scanResult = context.getScanResult();
+        if (scanResult == null) {
+            Logger.error("CommandFramework cannot initialize: ScanResult from context is null.");
+            return;
+        }
 
-        try (ScanResult scanResult = new ClassGraph().enableClassInfo().acceptPackages(rootPackage).scan()) {
-            for (ClassInfo classInfo : scanResult.getSubclasses(BaseCommand.class.getName())) {
-                if (classInfo.isAbstract() || classInfo.isInterface()) {
-                    continue;
-                }
+        for (ClassInfo classInfo : scanResult.getSubclasses(BaseCommand.class.getName())) {
+            if (classInfo.isAbstract() || classInfo.isInterface()) {
+                continue;
+            }
 
-                try {
-                    Object instance = classInfo.loadClass().getDeclaredConstructor().newInstance();
-                    registerCommands(instance);
-                } catch (Exception e) {
-                    Logger.logException("Failed to instantiate and register command container: " + classInfo.getName(), e);
-                }
+            try {
+                Object instance = classInfo.loadClass().getDeclaredConstructor().newInstance();
+                registerCommands(instance);
+            } catch (Exception e) {
+                Logger.logException("Failed to instantiate and register command container: " + classInfo.getName(), e);
             }
         }
+
         registerHelp();
     }
+
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {

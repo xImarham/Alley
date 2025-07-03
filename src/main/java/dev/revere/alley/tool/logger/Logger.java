@@ -24,7 +24,7 @@ public class Logger {
 
     private static final String PHASE_HEADER_PREFIX = "&6&l--- ";
     private static final String PHASE_HEADER_SUFFIX = " ---";
-    private static final String TASK_PREFIX_SUCCESS = " &a✔  &f";
+    private static final String TASK_PREFIX_SUCCESS = "&a✔  &f";
     private static final String TASK_PREFIX_FAIL = "&c✖ &f";
 
     static {

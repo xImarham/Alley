@@ -31,7 +31,6 @@ public class PartyListener implements Listener {
         Profile profile = profileService.getProfile(event.getPlayer().getUniqueId());
 
         if (profile.getProfileData().getSettingData().getChatChannel().equalsIgnoreCase(EnumChatChannel.PARTY.toString())) {
-            event.setCancelled(true);
             if (profile.getParty() == null) {
                 player.sendMessage(CC.translate("&cYou're not in a party."));
                 event.setCancelled(true);

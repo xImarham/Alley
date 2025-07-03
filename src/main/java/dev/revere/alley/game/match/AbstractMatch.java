@@ -142,7 +142,7 @@ public abstract class AbstractMatch {
         this.getParticipants().forEach(this::finalizeParticipant);
         this.updateParticipantNametags();
 
-        Alley.getInstance().getService(MatchService.class).removeMatch(this);
+        Alley.getInstance().getService(IMatchService.class).removeMatch(this);
         this.runnable.cancel();
 
         this.deactivateArenaIfStandalone();

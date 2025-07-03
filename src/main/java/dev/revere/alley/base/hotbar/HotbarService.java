@@ -35,7 +35,6 @@ public class HotbarService implements IHotbarService {
         this.profileService = profileService;
     }
 
-
     @Override
     public void initialize(AlleyContext context) {
         Arrays.stream(EnumHotbarType.values()).forEach(type -> this.hotbarItemsByType.put(type, new ArrayList<>()));
@@ -104,13 +103,8 @@ public class HotbarService implements IHotbarService {
         return null;
     }
 
-    /**
-     * Get the corresponding hotbar type for the given profile.
-     *
-     * @param profile the profile
-     * @return the corresponding hotbar type
-     */
-    private EnumHotbarType getCorrespondingType(Profile profile) {
+    @Override
+    public EnumHotbarType getCorrespondingType(Profile profile) {
         EnumHotbarType type;
 
         switch (profile.getState()) {
@@ -131,6 +125,11 @@ public class HotbarService implements IHotbarService {
         }
 
         return type;
+    }
+
+    @Override
+    public List<HotbarItem> getItemsForType(EnumHotbarType type) {
+        return this.hotbarItemsByType.getOrDefault(type, Collections.emptyList());
     }
 
     /**

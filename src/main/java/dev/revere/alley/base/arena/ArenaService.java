@@ -11,7 +11,6 @@ import dev.revere.alley.base.kit.Kit;
 import dev.revere.alley.config.IConfigService;
 import dev.revere.alley.core.AlleyContext;
 import dev.revere.alley.core.annotation.Service;
-import dev.revere.alley.core.lifecycle.IService;
 import dev.revere.alley.tool.logger.Logger;
 import dev.revere.alley.tool.serializer.Serializer;
 import dev.revere.alley.util.FileUtil;
@@ -25,10 +24,8 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
+import java.util.*;
+import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
@@ -44,10 +41,17 @@ public class ArenaService implements IArenaService {
     private final IConfigService configService;
     private final IKitService kitService;
     private final IArenaSchematicService arenaSchematicService;
+    private final ExecutorService executorService;
 
     private final List<AbstractArena> arenas = new ArrayList<>();
     private final List<StandAloneArena> temporaryArenas = new ArrayList<>();
     private final AtomicInteger copyIdCounter = new AtomicInteger(0);
+
+    private final Map<String, List<AbstractArena>> arenasByKit = new ConcurrentHashMap<>();
+    private final Map<String, AbstractArena> arenasByName = new ConcurrentHashMap<>();
+    private final List<AbstractArena> standAloneArenas = new ArrayList<>();
+
+    private final ThreadLocalRandom random = ThreadLocalRandom.current();
 
     private World temporaryWorld;
     private Location nextCopyLocation;
@@ -58,12 +62,15 @@ public class ArenaService implements IArenaService {
         this.configService = configService;
         this.kitService = kitService;
         this.arenaSchematicService = arenaSchematicService;
+        this.executorService = Executors.newFixedThreadPool(4);
     }
 
     @Override
     public void initialize(AlleyContext context) {
         this.loadArenas();
         this.initializeTemporaryWorld();
+        buildCaches();
+
         this.arenaSchematicService.generateMissingSchematics(this.arenas);
     }
 
@@ -90,6 +97,41 @@ public class ArenaService implements IArenaService {
             }
             temporaryWorld = null;
         }
+
+        if (executorService != null && !executorService.isShutdown()) {
+            executorService.shutdown();
+            try {
+                if (!executorService.awaitTermination(5, TimeUnit.SECONDS)) {
+                    executorService.shutdownNow();
+                }
+            } catch (InterruptedException e) {
+                executorService.shutdownNow();
+                Thread.currentThread().interrupt();
+            }
+        }
+    }
+
+    private void buildCaches() {
+        arenasByKit.clear();
+        standAloneArenas.clear();
+        arenasByName.clear();
+
+        for (Kit kit : kitService.getKits()) {
+            List<AbstractArena> kitArenas = arenas.stream()
+                    .filter(arena -> arena.getKits().contains(kit.getName()))
+                    .filter(AbstractArena::isEnabled)
+                    .collect(Collectors.toList());
+            arenasByKit.put(kit.getName(), kitArenas);
+        }
+
+        standAloneArenas.addAll(arenas.stream()
+                .filter(arena -> arena.getType() == EnumArenaType.STANDALONE)
+                .filter(AbstractArena::isEnabled)
+                .collect(Collectors.toList()));
+
+        for (AbstractArena arena : arenas) {
+            arenasByName.put(arena.getName().toLowerCase(), arena);
+        }
     }
 
     private void initializeTemporaryWorld() {
@@ -108,82 +150,118 @@ public class ArenaService implements IArenaService {
      */
     public void loadArenas() {
         FileConfiguration config = configService.getArenasConfig();
-
         ConfigurationSection arenasConfig = config.getConfigurationSection("arenas");
+
         if (arenasConfig == null) {
             return;
         }
 
-        for (String arenaName : arenasConfig.getKeys(false)) {
+        Set<String> arenaNames = arenasConfig.getKeys(false);
+
+        if (arenaNames.size() <= 5) {
+            for (String arenaName : arenaNames) {
+                AbstractArena arena = loadSingleArena(config, arenaName);
+                if (arena != null) {
+                    this.arenas.add(arena);
+                }
+            }
+            return;
+        }
+
+        List<CompletableFuture<AbstractArena>> futures = new ArrayList<>();
+
+        for (String arenaName : arenaNames) {
+            CompletableFuture<AbstractArena> future = CompletableFuture.supplyAsync(() -> loadSingleArena(config, arenaName), executorService);
+            futures.add(future);
+        }
+
+        for (CompletableFuture<AbstractArena> future : futures) {
+            try {
+                AbstractArena arena = future.get(5, TimeUnit.SECONDS);
+                if (arena != null) {
+                    this.arenas.add(arena);
+                }
+            } catch (TimeoutException e) {
+                Logger.error("Arena loading timed out after 5 seconds");
+                future.cancel(true);
+            } catch (Exception e) {
+                Logger.error("Failed to load arena: " + e.getMessage());
+            }
+        }
+    }
+
+    private AbstractArena loadSingleArena(FileConfiguration config, String arenaName) {
+        try {
             String name = "arenas." + arenaName;
 
             EnumArenaType arenaType = EnumArenaType.valueOf(config.getString(name + ".type"));
             Location minimum = Serializer.deserializeLocation(config.getString(name + ".minimum"));
             Location maximum = Serializer.deserializeLocation(config.getString(name + ".maximum"));
 
-            AbstractArena arena;
-            switch (arenaType) {
-                case SHARED:
-                    arena = new SharedArena(
-                            arenaName,
-                            minimum,
-                            maximum
-                    );
-                    break;
-                case STANDALONE:
-                    int heightLimit = config.getInt(name + ".height-limit", 7);
-                    int voidLevel = config.getInt(name + ".void-level", 70);
+            AbstractArena arena = createArenaByType(arenaType, arenaName, minimum, maximum, config, name);
+            configureArena(arena, config, name);
 
-                    arena = new StandAloneArena(
-                            arenaName,
-                            minimum,
-                            maximum,
-                            Serializer.deserializeLocation(config.getString(name + ".team-one-portal")),
-                            Serializer.deserializeLocation(config.getString(name + ".team-two-portal")),
-                            heightLimit,
-                            voidLevel
-                    );
-                    break;
-                case FFA:
-                    arena = new FreeForAllArena(
-                            arenaName,
-                            Serializer.deserializeLocation(config.getString(name + ".safe-zone.pos1")),
-                            Serializer.deserializeLocation(config.getString(name + ".safe-zone.pos2"))
-                    );
-                    break;
-                default:
-                    throw new IllegalStateException("Unexpected value: " + arenaType);
-            }
+            return arena;
+        } catch (Exception e) {
+            Logger.error("Error loading arena " + arenaName + ": " + e.getMessage());
+            return null;
+        }
+    }
 
-            if (config.contains(name + ".kits")) {
-                for (String kitName : config.getStringList(name + ".kits")) {
-                    if (kitService.getKit(kitName) != null) {
-                        arena.getKits().add(kitName);
-                    }
+    private AbstractArena createArenaByType(EnumArenaType arenaType, String arenaName,
+                                            Location minimum, Location maximum,
+                                            FileConfiguration config, String name) {
+        switch (arenaType) {
+            case SHARED:
+                return new SharedArena(arenaName, minimum, maximum);
+
+            case STANDALONE:
+                int heightLimit = config.getInt(name + ".height-limit", 7);
+                int voidLevel = config.getInt(name + ".void-level", 70);
+                return new StandAloneArena(
+                        arenaName, minimum, maximum,
+                        Serializer.deserializeLocation(config.getString(name + ".team-one-portal")),
+                        Serializer.deserializeLocation(config.getString(name + ".team-two-portal")),
+                        heightLimit, voidLevel
+                );
+
+            case FFA:
+                return new FreeForAllArena(
+                        arenaName,
+                        Serializer.deserializeLocation(config.getString(name + ".safe-zone.pos1")),
+                        Serializer.deserializeLocation(config.getString(name + ".safe-zone.pos2"))
+                );
+
+            default:
+                throw new IllegalStateException("Unexpected arena type: " + arenaType);
+        }
+    }
+
+    private void configureArena(AbstractArena arena, FileConfiguration config, String name) {
+        if (config.contains(name + ".kits")) {
+            Set<String> validKits = new HashSet<>();
+            for (String kitName : config.getStringList(name + ".kits")) {
+                if (kitService.getKit(kitName) != null) {
+                    validKits.add(kitName);
                 }
             }
+            arena.getKits().addAll(validKits);
+        }
 
-            if (config.contains(name + ".pos1")) {
-                arena.setPos1(Serializer.deserializeLocation(config.getString(name + ".pos1")));
-            }
-
-            if (config.contains(name + ".pos2")) {
-                arena.setPos2(Serializer.deserializeLocation(config.getString(name + ".pos2")));
-            }
-
-            if (config.contains(name + ".center")) {
-                arena.setCenter(Serializer.deserializeLocation(config.getString(name + ".center")));
-            }
-
-            if (config.contains(name + ".display-name")) {
-                arena.setDisplayName(config.getString(name + ".display-name"));
-            }
-
-            if (config.contains(name + ".enabled")) {
-                arena.setEnabled(config.getBoolean(name + ".enabled"));
-            }
-
-            this.arenas.add(arena);
+        if (config.contains(name + ".pos1")) {
+            arena.setPos1(Serializer.deserializeLocation(config.getString(name + ".pos1")));
+        }
+        if (config.contains(name + ".pos2")) {
+            arena.setPos2(Serializer.deserializeLocation(config.getString(name + ".pos2")));
+        }
+        if (config.contains(name + ".center")) {
+            arena.setCenter(Serializer.deserializeLocation(config.getString(name + ".center")));
+        }
+        if (config.contains(name + ".display-name")) {
+            arena.setDisplayName(config.getString(name + ".display-name"));
+        }
+        if (config.contains(name + ".enabled")) {
+            arena.setEnabled(config.getBoolean(name + ".enabled"));
         }
     }
 
@@ -202,9 +280,7 @@ public class ArenaService implements IArenaService {
 
         if (originalPos1 != null && originalMin != null && originalMax != null) {
             int actualMinY = Math.min(originalMin.getBlockY(), originalMax.getBlockY());
-
             int pos1OffsetFromActualMin = originalPos1.getBlockY() - actualMinY;
-
             int targetMinY = 100 - pos1OffsetFromActualMin;
             copyLocation.setY(targetMinY);
         }
@@ -215,7 +291,6 @@ public class ArenaService implements IArenaService {
         this.arenaSchematicService.paste(copyLocation, this.arenaSchematicService.getSchematicFile(originalArena.getName()));
 
         temporaryArenas.add(copiedArena);
-
         return copiedArena;
     }
 
@@ -242,7 +317,6 @@ public class ArenaService implements IArenaService {
     public void cleanupTemporaryArenas() {
         for (StandAloneArena arena : new ArrayList<>(temporaryArenas)) {
             arena.deleteCopiedArena();
-            ;
         }
         temporaryArenas.clear();
     }
@@ -285,26 +359,28 @@ public class ArenaService implements IArenaService {
 
     @Override
     public void saveArena(AbstractArena arena) {
-        arena.saveArena();
+        CompletableFuture.runAsync(() -> {
+            arena.saveArena();
+            buildCaches();
+        }, executorService);
     }
 
     @Override
     public void deleteArena(AbstractArena arena) {
         arena.deleteArena();
+        arenas.remove(arena);
+        buildCaches();
     }
 
     @Override
     public AbstractArena getRandomArena(Kit kit) {
-        List<AbstractArena> availableArenas = this.arenas.stream()
-                .filter(arena -> arena.getKits().contains(kit.getName()))
-                .filter(AbstractArena::isEnabled)
-                .collect(Collectors.toList());
+        List<AbstractArena> availableArenas = arenasByKit.get(kit.getName());
 
-        if (availableArenas.isEmpty()) {
+        if (availableArenas == null || availableArenas.isEmpty()) {
             return null;
         }
 
-        AbstractArena selectedArena = availableArenas.get(ThreadLocalRandom.current().nextInt(availableArenas.size()));
+        AbstractArena selectedArena = availableArenas.get(random.nextInt(availableArenas.size()));
         if (selectedArena instanceof StandAloneArena) {
             return createTemporaryArenaCopy((StandAloneArena) selectedArena);
         }
@@ -313,7 +389,7 @@ public class ArenaService implements IArenaService {
 
     @Override
     public AbstractArena getArenaByName(String name) {
-        return this.arenas.stream().filter(arena -> arena.getName().equalsIgnoreCase(name)).findFirst().orElse(null);
+        return arenasByName.get(name.toLowerCase());
     }
 
     @Override
@@ -331,15 +407,16 @@ public class ArenaService implements IArenaService {
      */
     @Override
     public AbstractArena getRandomStandAloneArena() {
-        List<AbstractArena> availableArenas = this.arenas.stream()
-                .filter(arena -> arena.getType() == EnumArenaType.STANDALONE)
-                .filter(AbstractArena::isEnabled)
-                .collect(Collectors.toList());
-
-        if (availableArenas.isEmpty()) {
+        if (standAloneArenas.isEmpty()) {
             return null;
         }
+        return standAloneArenas.get(random.nextInt(standAloneArenas.size()));
+    }
 
-        return availableArenas.get(ThreadLocalRandom.current().nextInt(availableArenas.size()));
+    /**
+     * Refresh caches when kits or arenas are modified
+     */
+    public void refreshCaches() {
+        CompletableFuture.runAsync(this::buildCaches, executorService);
     }
 }

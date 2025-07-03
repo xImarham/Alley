@@ -1,6 +1,7 @@
 package dev.revere.alley.game.party;
 
 import dev.revere.alley.Alley;
+import dev.revere.alley.feature.emoji.IEmojiRepository;
 import dev.revere.alley.game.party.enums.EnumPartyState;
 import dev.revere.alley.util.chat.CC;
 import lombok.Getter;
@@ -9,6 +10,7 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -43,6 +45,12 @@ public class Party {
      * @param message The message to notify the party members of.
      */
     public void notifyParty(String message) {
+        for (Map.Entry<String, String> entry : Alley.getInstance().getService(IEmojiRepository.class).getEmojis().entrySet()) {
+            if (message.contains(entry.getKey())) {
+                message = message.replace(entry.getKey(), entry.getValue());
+            }
+        }
+
         for (UUID member : members) {
             Player player = Alley.getInstance().getServer().getPlayer(member);
             if (player != null) {

@@ -22,7 +22,7 @@ import java.util.Map;
  * @date 5/21/2024
  */
 @Getter
-@Service(provides = IKitSettingService.class, priority = 80)
+@Service(provides = IKitSettingService.class, priority = 70)
 public class KitSettingService implements IKitSettingService {
     private final IPluginConstant pluginConstant;
 

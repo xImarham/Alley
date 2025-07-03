@@ -25,7 +25,6 @@ public class FileUtil {
     public void deleteWorldFolder(File worldFolder) {
         try {
             deleteDirectory(worldFolder);
-            Logger.info("Successfully deleted world folder: " + worldFolder.getAbsolutePath());
         } catch (Exception e) {
             Logger.logException("Failed to delete world folder", e);
 

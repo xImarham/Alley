@@ -3,6 +3,7 @@ package dev.revere.alley.base.hotbar.listener;
 import dev.revere.alley.Alley;
 import dev.revere.alley.base.hotbar.HotbarItem;
 import dev.revere.alley.base.hotbar.IHotbarService;
+import dev.revere.alley.base.hotbar.enums.EnumHotbarType;
 import dev.revere.alley.base.queue.IQueueService;
 import dev.revere.alley.base.queue.enums.EnumQueueType;
 import dev.revere.alley.base.queue.menu.sub.RankedMenu;
@@ -19,6 +20,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+
+import java.util.List;
 
 /**
  * @author Remi
@@ -38,14 +41,22 @@ public class HotbarListener implements Listener {
         IQueueService queueService = Alley.getInstance().getService(IQueueService.class);
 
         Player player = event.getPlayer();
+        ItemStack clickedItem = player.getItemInHand();
 
-        ItemStack item = player.getItemInHand();
-        if (item == null || !item.hasItemMeta() || !item.getItemMeta().hasDisplayName()) {
+        if (clickedItem == null || !clickedItem.hasItemMeta() || !clickedItem.getItemMeta().hasDisplayName()) {
             return;
         }
 
         Profile profile = profileService.getProfile(player.getUniqueId());
-        HotbarItem hotbarItem = hotbarService.getItemByStack(item);
+        EnumHotbarType currentHotbarType = hotbarService.getCorrespondingType(profile);
+        if (currentHotbarType == null) return;
+
+        List<HotbarItem> possibleItems = hotbarService.getItemsForType(currentHotbarType);
+
+        HotbarItem hotbarItem = possibleItems.stream()
+                .filter(item -> item.getItemStack().getItemMeta().getDisplayName().equals(clickedItem.getItemMeta().getDisplayName()))
+                .findFirst()
+                .orElse(null);
 
         if (hotbarItem != null) {
             String command = hotbarItem.getHotbarItems().getCommand();

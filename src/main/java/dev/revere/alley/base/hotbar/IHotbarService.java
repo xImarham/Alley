@@ -2,8 +2,11 @@ package dev.revere.alley.base.hotbar;
 
 import dev.revere.alley.base.hotbar.enums.EnumHotbarType;
 import dev.revere.alley.core.lifecycle.IService;
+import dev.revere.alley.profile.Profile;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+
+import java.util.List;
 
 /**
  * @author Remi
@@ -43,4 +46,14 @@ public interface IHotbarService extends IService {
      * @return The HotbarItem, or null if not found.
      */
     HotbarItem getItemByStack(EnumHotbarType type, HotbarItems hotbarItem);
+
+    /**
+     * Get the corresponding hotbar type for the given profile.
+     *
+     * @param profile the profile
+     * @return the corresponding hotbar type
+     */
+    EnumHotbarType getCorrespondingType(Profile profile);
+
+    List<HotbarItem> getItemsForType(EnumHotbarType type);
 }

@@ -22,19 +22,23 @@ public class ProfileUnrankedKitData {
     private String tier;
     private int wins;
     private int losses;
+    private int winstreak;
 
     public ProfileUnrankedKitData() {
         this.determineDivision();
         this.wins = 0;
         this.losses = 0;
+        this.winstreak = 0;
     }
 
     public void incrementWins() {
+        this.winstreak++;
         this.wins++;
         this.determineDivision();
     }
 
     public void incrementLosses() {
+        this.winstreak = 0;
         this.losses++;
     }
 
