@@ -16,9 +16,7 @@ import com.sk89q.worldedit.function.operation.Operations;
 import com.sk89q.worldedit.regions.CuboidRegion;
 import dev.revere.alley.Alley;
 import dev.revere.alley.base.arena.AbstractArena;
-import dev.revere.alley.base.arena.IArenaService;
 import dev.revere.alley.base.arena.impl.StandAloneArena;
-import dev.revere.alley.core.AlleyContext;
 import dev.revere.alley.core.annotation.Service;
 import dev.revere.alley.tool.logger.Logger;
 import org.bukkit.Location;
@@ -36,23 +34,17 @@ import java.util.List;
 @Service(provides = IArenaSchematicService.class, priority = 120)
 public class ArenaSchematicService implements IArenaSchematicService {
     private final Alley plugin;
-    private final IArenaService arenaService;
 
     /**
      * Constructor for DI.
      */
-    public ArenaSchematicService(Alley plugin, IArenaService arenaService) {
+    public ArenaSchematicService(Alley plugin) {
         this.plugin = plugin;
-        this.arenaService = arenaService;
     }
 
     @Override
-    public void initialize(AlleyContext context) {
-        this.convertArenasToSchematic();
-    }
-
-    public void convertArenasToSchematic() {
-        for (AbstractArena arena : this.arenaService.getArenas()) {
+    public void generateMissingSchematics(List<AbstractArena> arenas) {
+        for (AbstractArena arena : arenas) {
             File schematicFile = getSchematicFile(arena);
             if (!schematicFile.exists()) {
                 Logger.info("Schematic for " + arena.getName() + " not found, creating...");

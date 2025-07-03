@@ -52,7 +52,7 @@ public class PluginConstant implements IPluginConstant {
         this.description = pluginDescription.getDescription();
         this.spigotVersion = this.getBukkitVersionExact();
 
-        this.mainColor = ChatColor.AQUA;
+        this.mainColor = ChatColor.GOLD;
         this.packageDirectory = "dev.revere.alley";
 
         this.adminPermissionPrefix = this.name + ".admin";

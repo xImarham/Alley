@@ -30,7 +30,6 @@ public class KnockbackAdapter implements IKnockbackAdapter {
     @Override
     public void initialize(AlleyContext context) {
         this.knockbackImplementation = this.determineKnockback();
-        Logger.info("Adapting to &6" + knockbackImplementation.getType().getSpigotName() + " &fby &6" + knockbackImplementation.getType().getSpigotAuthor() + "&f.");
     }
 
     @Override

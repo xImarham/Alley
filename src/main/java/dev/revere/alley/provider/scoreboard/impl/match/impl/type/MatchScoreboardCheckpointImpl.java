@@ -1,18 +1,12 @@
 package dev.revere.alley.provider.scoreboard.impl.match.impl.type;
 
-import dev.revere.alley.Alley;
 import dev.revere.alley.game.match.impl.MatchCheckpointImpl;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.provider.scoreboard.impl.match.AbstractMatchScoreboard;
-import dev.revere.alley.provider.scoreboard.impl.match.IMatchScoreboard;
 import dev.revere.alley.provider.scoreboard.impl.match.annotation.ScoreboardData;
-import dev.revere.alley.util.chat.CC;
 import org.bukkit.entity.Player;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author Remi
@@ -21,10 +15,6 @@ import java.util.List;
  */
 @ScoreboardData(match = MatchCheckpointImpl.class)
 public class MatchScoreboardCheckpointImpl extends AbstractMatchScoreboard {
-    public MatchScoreboardCheckpointImpl(Alley plugin) {
-        super(plugin);
-    }
-
     @Override
     protected String getSoloConfigPath() {
         return "scoreboard.lines.playing.solo.checkpoint-match";

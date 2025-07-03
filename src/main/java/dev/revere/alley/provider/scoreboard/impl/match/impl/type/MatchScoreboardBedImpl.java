@@ -20,10 +20,6 @@ import org.bukkit.entity.Player;
  */
 @ScoreboardData(match = MatchBedImpl.class)
 public class MatchScoreboardBedImpl extends AbstractMatchScoreboard {
-    public MatchScoreboardBedImpl(Alley plugin) {
-        super(plugin);
-    }
-
     @Override
     protected String getSoloConfigPath() {
         return "scoreboard.lines.playing.solo.bed-match";

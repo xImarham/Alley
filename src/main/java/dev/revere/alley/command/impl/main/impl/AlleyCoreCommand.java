@@ -3,7 +3,6 @@ package dev.revere.alley.command.impl.main.impl;
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
-import dev.revere.alley.api.command.annotation.CommandContainer;
 import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.server.ICore;
 import dev.revere.alley.server.ICoreAdapter;
@@ -18,7 +17,6 @@ import java.util.Arrays;
  * @project Alley
  * @since 26/04/2025
  */
-@CommandContainer
 public class AlleyCoreCommand extends BaseCommand {
     @CommandData(name = "alley.server", isAdminOnly = true, inGameOnly = false)
     @Override

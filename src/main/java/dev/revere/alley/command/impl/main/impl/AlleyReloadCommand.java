@@ -3,11 +3,9 @@ package dev.revere.alley.command.impl.main.impl;
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
-import dev.revere.alley.api.command.annotation.CommandContainer;
 import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.config.IConfigService;
 import dev.revere.alley.util.chat.CC;
-import net.minecraft.server.v1_8_R3.WorldServer;
 import org.bukkit.entity.Player;
 
 /**
@@ -15,7 +13,6 @@ import org.bukkit.entity.Player;
  * @project Alley
  * @date 06/06/2024 - 17:34
  */
-@CommandContainer
 public class AlleyReloadCommand extends BaseCommand {
     @Override
     @CommandData(name = "alley.reload", isAdminOnly = true)

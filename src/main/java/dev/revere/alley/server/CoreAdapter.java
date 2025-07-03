@@ -37,7 +37,6 @@ public class CoreAdapter implements ICoreAdapter {
     @Override
     public void initialize(AlleyContext context) {
         this.core = this.determineCore();
-        Logger.info("Adapting to &6" + core.getType().getPluginName() + " Core &fby &6" + core.getType().getPluginAuthor() + "&f.");
     }
 
     @Override

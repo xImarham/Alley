@@ -43,7 +43,6 @@ public class KitService implements IKitService {
     @Override
     public void initialize(AlleyContext context) {
         this.loadKits();
-        Logger.info("Loaded " + this.kits.size() + " kits.");
     }
 
     @Override

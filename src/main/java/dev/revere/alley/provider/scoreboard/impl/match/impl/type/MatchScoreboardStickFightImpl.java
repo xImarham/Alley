@@ -1,6 +1,5 @@
 package dev.revere.alley.provider.scoreboard.impl.match.impl.type;
 
-import dev.revere.alley.Alley;
 import dev.revere.alley.base.kit.setting.impl.mode.KitSettingStickFightImpl;
 import dev.revere.alley.game.match.impl.MatchRoundsImpl;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
@@ -18,10 +17,6 @@ import org.bukkit.entity.Player;
  */
 @ScoreboardData(kit = KitSettingStickFightImpl.class)
 public class MatchScoreboardStickFightImpl extends AbstractMatchScoreboard {
-    public MatchScoreboardStickFightImpl(Alley plugin) {
-        super(plugin);
-    }
-
     @Override
     protected String getSoloConfigPath() {
         return "scoreboard.lines.playing.solo.stickfight-match";

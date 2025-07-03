@@ -68,7 +68,6 @@ public class FFASpawnService implements IFFASpawnService {
         }
 
         this.cuboid = new Cuboid(this.minimum, this.maximum);
-        Logger.info("Loaded FFA spawn and safe-zone for arena: " + arena.getName());
     }
 
     public Cuboid getCuboid() {

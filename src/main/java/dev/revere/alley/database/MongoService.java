@@ -54,8 +54,6 @@ public class MongoService implements IMongoService {
             this.mongoDatabase = this.mongoClient.getDatabase(databaseName);
 
             this.mongoDatabase.listCollectionNames().first();
-            Logger.info("Successfully connected to MongoDB.");
-
         } catch (Exception e) {
             Logger.error("Failed to connect to MongoDB. Please check your credentials and network access.");
             throw new RuntimeException("MongoDB Connection Failure", e);

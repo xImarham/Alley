@@ -15,8 +15,10 @@ public class DefaultReflection implements IReflection {
     public static final IReflection INSTANCE = new DefaultReflection();
 
     /**
-     * Private constructor to ensure this class is only instantiated
-     * internally, promoting the use of the singleton INSTANCE field.
+     * Constructor for reflection-based instantiation by `ReflectionRepository`.
+     * This constructor must be public for `ReflectionRepository` to successfully
+     * create an instance using `getDeclaredConstructor().newInstance()`.
+     * The `ReflectionRepository` will manage the lifecycle of this service.
      */
-    private DefaultReflection() {}
+    public DefaultReflection() {}
 }

@@ -12,6 +12,7 @@ import lombok.Getter;
 import java.lang.reflect.Constructor;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 /**
@@ -25,6 +26,10 @@ public final class AlleyContext {
 
     private final Alley plugin;
     private final Map<Class<? extends IService>, IService> serviceInstances = new ConcurrentHashMap<>();
+
+    private final Map<Class<? extends IService>, Class<? extends IService>> serviceRegistry = new HashMap<>();
+    private final Set<Class<? extends IService>> servicesBeingConstructed = new HashSet<>();
+
     private List<IService> sortedServices = Collections.emptyList();
 
     public AlleyContext(Alley plugin) {
@@ -35,20 +40,25 @@ public final class AlleyContext {
      * Discovers, instantiates, and initializes all services.
      */
     public void initialize() throws Exception {
-        Logger.info("--- Service Initialization Start ---");
+        Logger.logPhaseStart("Service Initialization");
 
-        // 1. Discover all classes annotated with @Service
+        // 1. Discover all service implementation classes ONCE.
         List<Class<? extends IService>> implementationClasses = discoverServices();
         if (implementationClasses.isEmpty()) {
             throw new IllegalStateException("No services found to load.");
         }
 
-        // 2. Sort services by priority
+        // 2. Build the Interface -> Implementation registry map.
+        for (Class<? extends IService> implClass : implementationClasses) {
+            serviceRegistry.put(getProvidedInterface(implClass), implClass);
+        }
+
+        // 3. Sort services by priority for ordered initialization.
         List<Class<? extends IService>> sortedImplClasses = sortServicesByPriority(implementationClasses);
         Logger.info("Service Initialization Order: " +
                 sortedImplClasses.stream().map(Class::getSimpleName).collect(Collectors.joining(" -> ")));
 
-        // 3. Instantiate services with dependency injection
+        // 4. Instantiate all services.
         for (Class<? extends IService> implClass : sortedImplClasses) {
             instantiateService(implClass);
         }
@@ -57,18 +67,18 @@ public final class AlleyContext {
                 .map(impl -> serviceInstances.get(getProvidedInterface(impl)))
                 .collect(Collectors.toList());
 
-        // 4. Run lifecycle methods
-        Logger.info("--- Service Setup Phase ---");
+        // 5. Run lifecycle methods
+        Logger.logPhaseStart("Service Setup Phase");
         for (IService service : sortedServices) {
             Logger.logTime(service.getClass().getSimpleName() + " Setup", () -> service.setup(this));
         }
 
-        Logger.info("--- Service Initialization Phase ---");
+        Logger.logPhaseStart("Service Initialization Phase");
         for (IService service : sortedServices) {
             Logger.logTime(service.getClass().getSimpleName() + " Initialization", () -> service.initialize(this));
         }
 
-        Logger.info("--- Service Initialization Complete ---");
+        Logger.logPhaseComplete("Service Initialization");
     }
 
     /**
@@ -107,6 +117,11 @@ public final class AlleyContext {
             return;
         }
 
+        if (servicesBeingConstructed.contains(implClass)) {
+            throw new IllegalStateException("Cyclic Dependency Detected! Cycle involves: " + implClass.getName());
+        }
+        servicesBeingConstructed.add(implClass);
+
         Constructor<?> constructor = Arrays.stream(implClass.getConstructors())
                 .max(Comparator.comparingInt(Constructor::getParameterCount))
                 .orElseThrow(() -> new NoSuchMethodException("No suitable constructor found for " + implClass.getSimpleName()));
@@ -119,7 +134,11 @@ public final class AlleyContext {
             }
             if (IService.class.isAssignableFrom(paramType)) {
                 Class<? extends IService> dependencyInterface = (Class<? extends IService>) paramType;
-                Class<? extends IService> dependencyImpl = findImplementationFor(dependencyInterface);
+                Class<? extends IService> dependencyImpl = this.serviceRegistry.get(dependencyInterface);
+                if (dependencyImpl == null) {
+                    throw new ClassNotFoundException("No implementation found for service interface: " + dependencyInterface.getName());
+                }
+
                 instantiateService(dependencyImpl);
                 dependencies.add(serviceInstances.get(dependencyInterface));
             } else {
@@ -129,6 +148,8 @@ public final class AlleyContext {
 
         IService serviceInstance = (IService) constructor.newInstance(dependencies.toArray());
         serviceInstances.put(providedInterface, serviceInstance);
+
+        servicesBeingConstructed.remove(implClass);
     }
 
     @SuppressWarnings("unchecked")
@@ -152,18 +173,5 @@ public final class AlleyContext {
 
     private Class<? extends IService> getProvidedInterface(Class<? extends IService> implClass) {
         return implClass.getAnnotation(Service.class).provides();
-    }
-
-    @SuppressWarnings("unchecked")
-    private Class<? extends IService> findImplementationFor(Class<? extends IService> interfaceType) throws ClassNotFoundException {
-        try (ScanResult scanResult = new ClassGraph().acceptPackages(SERVICE_IMPL_PACKAGE).enableAnnotationInfo().scan()) {
-            for (ClassInfo classInfo : scanResult.getClassesWithAnnotation(Service.class.getName())) {
-                Service annotation = (Service) classInfo.getAnnotationInfo(Service.class.getName()).loadClassAndInstantiate();
-                if (annotation.provides().equals(interfaceType)) {
-                    return (Class<? extends IService>) Class.forName(classInfo.getName());
-                }
-            }
-        }
-        throw new ClassNotFoundException("No implementation found for service interface: " + interfaceType.getName());
     }
 }

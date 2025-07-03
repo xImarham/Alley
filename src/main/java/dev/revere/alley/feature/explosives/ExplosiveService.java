@@ -50,9 +50,6 @@ public class ExplosiveService implements IExplosiveService {
         if (this.enabled) {
             this.assignValues(settingsConfig);
             this.registerListener();
-            Logger.info("Custom Explosives feature has been enabled.");
-        } else {
-            Logger.info("Custom Explosives feature is disabled in settings.yml.");
         }
     }
 

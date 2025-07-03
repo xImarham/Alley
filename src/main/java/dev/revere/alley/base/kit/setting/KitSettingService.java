@@ -57,7 +57,6 @@ public class KitSettingService implements IKitSettingService {
                 Logger.logException("Failed to register setting class " + clazz.getSimpleName() + "!", exception);
             }
         }
-        Logger.info("Registered " + this.settings.size() + " kit settings.");
     }
 
     @Override

@@ -9,6 +9,8 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,47 +32,73 @@ public class LeaderboardKitButton extends Button {
 
     @Override
     public ItemStack getButtonItem(Player player) {
+        ItemBuilder builder = new ItemBuilder(this.kit.getIcon())
+                .name(this.kit.getDisplayName())
+                .durability(this.kit.getDurability())
+                .hideMeta();
 
         switch (this.type) {
             case RANKED:
-                return new ItemBuilder(this.kit.getIcon())
-                        .name(this.kit.getDisplayName())
-                        .durability(this.kit.getDurability())
-                        .hideMeta()
-                        .lore(this.leaderboard.stream()
-                                .limit(10)
-                                .map(data -> {
-                                    int currentRank = this.leaderboard.indexOf(data) + 1;
-
-                                    String rankNumber;
-                                    switch (currentRank) {
-                                        case 1:
-                                            rankNumber = "&6&l✫1";
-                                            break;
-                                        case 2:
-                                            rankNumber = "&7&l✫2";
-                                            break;
-                                        case 3:
-                                            rankNumber = "&8&l✫3";
-                                            break;
-                                        default:
-                                            rankNumber = "&6" + currentRank + ".";
-                                            break;
-                                    }
-
-                                    return rankNumber + " &f" + data.getName() + " &6- " + data.getElo();
-                                })
-                                .collect(Collectors.toList()))
-                        .build();
+                return builder.lore(generateLore("Elo")).build();
+            case UNRANKED:
+                return builder.lore(generateLore("Wins")).build();
+            case FFA:
+                return builder.lore(generateLore("Kills")).build();
+            case WIN_STREAK:
+                return builder.lore(generateLore("Wins")).build();
+            case UNRANKED_MONTHLY:
+            case TOURNAMENT:
             default:
                 return this.inDevelopment();
         }
     }
 
     /**
-     * To be used when the leaderboard is in development.
+     * A reusable helper method to generate the lore for any numerical leaderboard.
      *
-     * @return an ItemStack with a barrier icon and a message stating that the leaderboard is in development
+     * @param statName The name of the statistic being displayed (e.g., "Elo", "Wins").
+     * @return A list of formatted strings for the item's lore.
+     */
+    private List<String> generateLore(String statName) {
+        if (this.leaderboard.isEmpty()) {
+            return Arrays.asList("", "&7No entries yet for this kit.");
+        }
+
+        List<String> lore = new ArrayList<>();
+        lore.add("");
+
+        List<String> topEntries = this.leaderboard.stream()
+                .limit(10)
+                .map(data -> {
+                    int currentRank = this.leaderboard.indexOf(data) + 1;
+
+                    String rankPrefix;
+                    switch (currentRank) {
+                        case 1:
+                            rankPrefix = "&6&l✫" + currentRank;
+                            break;
+                        case 2:
+                            rankPrefix = "&7&l✫" + currentRank;
+                            break;
+                        case 3:
+                            rankPrefix = "&c&l✫" + currentRank;
+                            break;
+                        default:
+                            rankPrefix = "&6" + currentRank + ".";
+                            break;
+                    }
+
+                    return rankPrefix + " &f" + data.getName() + " &7- &f" + data.getValue() + " " + statName;
+                })
+                .collect(Collectors.toList());
+
+        lore.addAll(topEntries);
+        lore.add("");
+        return lore;
+    }
+
+    /**
+     * Returns a placeholder item for leaderboards that are not yet implemented.
      */
     private ItemStack inDevelopment() {
         return new ItemBuilder(Material.BARRIER)
@@ -82,5 +110,4 @@ public class LeaderboardKitButton extends Button {
                 )
                 .build();
     }
-
 }

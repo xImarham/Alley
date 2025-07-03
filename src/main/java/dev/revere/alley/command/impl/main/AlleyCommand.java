@@ -2,13 +2,9 @@ package dev.revere.alley.command.impl.main;
 
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
-import dev.revere.alley.api.command.annotation.CommandContainer;
 import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.annotation.CompleterData;
 import dev.revere.alley.api.constant.IPluginConstant;
-import dev.revere.alley.command.impl.main.impl.AlleyCoreCommand;
-import dev.revere.alley.command.impl.main.impl.AlleyDebugCommand;
-import dev.revere.alley.command.impl.main.impl.AlleyReloadCommand;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.command.CommandSender;
 
@@ -21,7 +17,6 @@ import java.util.List;
  * @project Alley
  * @date 19/04/2024 - 17:39
  */
-@CommandContainer
 public class AlleyCommand extends BaseCommand {
     @SuppressWarnings("unused")
     @CompleterData(name = "alley")

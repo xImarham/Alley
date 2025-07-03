@@ -14,21 +14,21 @@ import java.util.UUID;
 public class LeaderboardPlayerData {
     private final String name;
     private final UUID uuid;
-    private final int elo;
-    private Kit kit;
+    private final Kit kit;
+    private int value;
 
     /**
      * Constructor for the LeaderboardEntry class.
      *
-     * @param name The name of the player
-     * @param uuid The UUID of the player
-     * @param elo  The ELO of the player
-     * @param kit  The kit of the player
+     * @param name  The name of the player
+     * @param uuid  The UUID of the player
+     * @param kit   The kit of the player
+     * @param value The value of the player
      */
-    public LeaderboardPlayerData(String name, UUID uuid, int elo, Kit kit) {
+    public LeaderboardPlayerData(String name, UUID uuid, Kit kit, int value) {
         this.name = name;
         this.uuid = uuid;
-        this.elo = elo;
         this.kit = kit;
+        this.value = value;
     }
 }

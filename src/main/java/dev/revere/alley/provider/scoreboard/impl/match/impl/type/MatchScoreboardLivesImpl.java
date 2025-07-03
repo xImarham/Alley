@@ -1,6 +1,5 @@
 package dev.revere.alley.provider.scoreboard.impl.match.impl.type;
 
-import dev.revere.alley.Alley;
 import dev.revere.alley.game.match.impl.MatchLivesImpl;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
@@ -16,11 +15,6 @@ import org.bukkit.entity.Player;
  */
 @ScoreboardData(match = MatchLivesImpl.class)
 public class MatchScoreboardLivesImpl extends AbstractMatchScoreboard {
-
-    public MatchScoreboardLivesImpl(Alley plugin) {
-        super(plugin);
-    }
-
     @Override
     protected String getSoloConfigPath() {
         return "scoreboard.lines.playing.solo.lives-match";

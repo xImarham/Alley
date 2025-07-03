@@ -21,17 +21,6 @@ import org.bukkit.scheduler.BukkitRunnable;
  * @since 03/04/2025
  */
 public class ActionBarReflectionService implements IReflection {
-    protected final Alley plugin;
-
-    /**
-     * Constructor for the ActionBarReflectionService class.
-     *
-     * @param plugin The Alley plugin instance.
-     */
-    public ActionBarReflectionService(Alley plugin) {
-        this.plugin = plugin;
-    }
-
     /**
      * Method to send an action bar message to a player in a specific interval.
      *
@@ -53,7 +42,7 @@ public class ActionBarReflectionService implements IReflection {
                         PacketPlayOutChat clearPacket = new PacketPlayOutChat(clearChatBaseComponent, (byte) 2);
                         sendPacket(player, clearPacket);
                     }
-                }.runTaskLater(this.plugin, durationSeconds * 20L);
+                }.runTaskLater(Alley.getInstance(), durationSeconds * 20L);
             }
         } catch (Exception exception) {
             Logger.logException("An error occurred while trying to send an action bar message to " + player.getName(), exception);

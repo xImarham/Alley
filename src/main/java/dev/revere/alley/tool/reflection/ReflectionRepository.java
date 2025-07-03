@@ -36,7 +36,6 @@ public class ReflectionRepository implements IReflectionRepository {
     @Override
     public void initialize(AlleyContext context) {
         this.registerReflectionServices();
-        Logger.info("Registered " + this.reflectionServices.size() + " reflection helpers.");
     }
 
     private void registerReflectionServices() {
@@ -52,7 +51,9 @@ public class ReflectionRepository implements IReflectionRepository {
             }
 
             try {
-                IReflection instance = clazz.getDeclaredConstructor().newInstance();
+                Constructor<? extends IReflection> constructor = clazz.getDeclaredConstructor();
+                constructor.setAccessible(true);
+                IReflection instance = constructor.newInstance();
                 this.reflectionServices.add(instance);
             } catch (Exception exception) {
                 Logger.logException("Failed to register reflection service: " + clazz.getName(), exception);

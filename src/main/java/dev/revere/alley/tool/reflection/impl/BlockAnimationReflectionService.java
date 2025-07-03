@@ -17,17 +17,6 @@ import java.util.List;
  * @since 25/04/2025
  */
 public class BlockAnimationReflectionService implements IReflection {
-    protected final Alley plugin;
-
-    /**
-     * Constructor for the BlockAnimationReflectionService class.
-     *
-     * @param plugin The Alley plugin instance.
-     */
-    public BlockAnimationReflectionService(Alley plugin) {
-        this.plugin = plugin;
-    }
-
     /**
      * Animates a block being broken over time (0 → 9).
      *
@@ -56,7 +45,7 @@ public class BlockAnimationReflectionService implements IReflection {
 
                 this.stage++;
             }
-        }.runTaskTimer(this.plugin, 0L, interval);
+        }.runTaskTimer(Alley.getInstance(), 0L, interval);
     }
 
     /**

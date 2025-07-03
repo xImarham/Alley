@@ -8,7 +8,6 @@ import dev.revere.alley.profile.Profile;
  * @date 5/22/2024
  */
 public interface IProfile {
-
     /**
      * Saves a profile to the database.
      *

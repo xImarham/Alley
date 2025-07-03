@@ -6,7 +6,6 @@ import dev.revere.alley.base.combat.listener.CombatListener;
 import dev.revere.alley.base.hotbar.listener.HotbarListener;
 import dev.revere.alley.base.queue.listener.QueueListener;
 import dev.revere.alley.base.spawn.listener.SpawnListener;
-import dev.revere.alley.command.CommandUtility;
 import dev.revere.alley.config.IConfigService;
 import dev.revere.alley.core.AlleyContext;
 import dev.revere.alley.core.lifecycle.IService;
@@ -61,6 +60,7 @@ public class Alley extends JavaPlugin {
         new AlleyAPI();
     }
 
+    @Override
     public void onEnable() {
         instance = this;
         long start = System.currentTimeMillis();
@@ -81,7 +81,7 @@ public class Alley extends JavaPlugin {
         this.runTasks();
         this.initializeEssentials();
 
-        CommandUtility.registerCommands();
+        // CommandUtility.registerCommands();
 
         long end = System.currentTimeMillis();
         long timeTaken = end - start;
@@ -130,7 +130,6 @@ public class Alley extends JavaPlugin {
             Logger.logTime(AlleyPlaceholderExpansion.class.getSimpleName(), () -> {
                 AlleyPlaceholderExpansion expansion = new AlleyPlaceholderExpansion(this);
                 expansion.register();
-                Logger.info("Successfully registered PlaceholderAPI expansion.");
             });
         }
     }
@@ -179,10 +178,6 @@ public class Alley extends JavaPlugin {
         FileConfiguration config = getService(IConfigService.class).getSettingsConfig();
 
         Logger.logTime("Essential Services", () -> {
-            if (config.getBoolean("essentials.emojis")) {
-                Logger.info("Emojis have been enabled.");
-            }
-
             if (config.getBoolean("essentials.chat-logging.enabled")) {
                 String webhookUrl = config.getString("essentials.chat-logging.webhook-url");
                 this.getServer().getPluginManager().registerEvents(new WebhookListener(this), this);

@@ -19,11 +19,6 @@ import java.util.List;
  * @since 26/06/2025
  */
 public abstract class AbstractMatchScoreboard implements IMatchScoreboard {
-    protected final Alley plugin;
-
-    public AbstractMatchScoreboard(Alley plugin) {
-        this.plugin = plugin;
-    }
 
     /**
      * Gets the path to the solo version of the scoreboard in the config.

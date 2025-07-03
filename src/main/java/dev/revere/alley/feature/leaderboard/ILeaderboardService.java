@@ -16,18 +16,18 @@ public interface ILeaderboardService extends IService {
     /**
      * Gets the sorted leaderboard data for a specific kit and type.
      * <p>
-     * Note: This data is typically calculated once on startup.
+     * This method performs a live, in-memory refresh for all online players
+     * before returning the data, ensuring it is always up-to-date.
      *
      * @param kit  The kit to get the leaderboard for.
-     * @param type The type of leaderboard (e.g., ELO).
-     * @return A sorted list of LeaderboardPlayerData, or an empty list if not found.
+     * @param type The type of leaderboard to retrieve.
+     * @return A sorted list of LeaderboardPlayerData.
      */
     List<LeaderboardPlayerData> getLeaderboardEntries(Kit kit, EnumLeaderboardType type);
 
     /**
-     * Recalculates all leaderboards from the current profile data.
-     * This is a heavy operation and should be used sparingly.
+     * Triggers a full, deep recalculation of all leaderboards from the database.
+     * This is a heavy operation and should only be used for a manual refresh command.
      */
-    void recalculateLeaderboards();
-
+    void forceRecalculateAll();
 }

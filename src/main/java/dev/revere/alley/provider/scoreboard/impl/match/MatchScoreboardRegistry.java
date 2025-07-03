@@ -29,7 +29,6 @@ public class MatchScoreboardRegistry {
      */
     public void initialize() {
         String searchPackage = "dev.revere.alley.provider.scoreboard";
-        long startTime = System.nanoTime();
 
         try (ScanResult scanResult = new ClassGraph().enableAllInfo().acceptPackages(searchPackage).scan()) {
             for (ClassInfo classInfo : scanResult.getClassesWithAnnotation(ScoreboardData.class.getName())) {
@@ -43,13 +42,12 @@ public class MatchScoreboardRegistry {
                         continue;
                     }
 
-                    // CORRECT: Get the no-argument constructor now.
                     Constructor<?> constructor = clazz.getConstructor();
-                    // CORRECT: Create instance without passing the plugin.
-                    // The individual scoreboard providers will use Alley.getInstance().getService(...)
+
                     IMatchScoreboard scoreboard = (IMatchScoreboard) constructor.newInstance();
                     ScoreboardData annotation = clazz.getAnnotation(ScoreboardData.class);
 
+                    assert annotation != null;
                     if (annotation.isDefault()) {
                         this.defaultScoreboard = scoreboard;
                     } else if (annotation.kit() != KitSetting.class) {
@@ -62,10 +60,6 @@ public class MatchScoreboardRegistry {
                 }
             }
         }
-
-        long duration = (System.nanoTime() - startTime) / 1_000_000;
-        int total = kitSettingScoreboards.size() + matchTypeScoreboards.size() + (defaultScoreboard != null ? 1 : 0);
-        Logger.info("Discovered and registered " + total + " match scoreboard providers in " + duration + "ms.");
     }
 
     /**

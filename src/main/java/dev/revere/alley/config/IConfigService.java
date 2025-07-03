@@ -11,7 +11,6 @@ import java.io.File;
  * @date 2/07/2025
  */
 public interface IConfigService extends IService {
-
     /**
      * Reloads all configuration files from disk.
      */

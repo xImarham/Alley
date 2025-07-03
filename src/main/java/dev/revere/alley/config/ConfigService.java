@@ -47,7 +47,7 @@ public class ConfigService implements IConfigService {
     }
 
     @Override
-    public void initialize(AlleyContext context) {
+    public void setup(AlleyContext context) {
         for (String fileName : this.configFileNames) {
             this.loadConfig(fileName);
         }

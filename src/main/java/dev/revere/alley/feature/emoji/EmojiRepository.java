@@ -1,10 +1,12 @@
 package dev.revere.alley.feature.emoji;
 
+import dev.revere.alley.config.IConfigService;
 import dev.revere.alley.core.AlleyContext;
 import dev.revere.alley.core.annotation.Service;
 import dev.revere.alley.feature.emoji.enums.EnumEmojiType;
 import dev.revere.alley.tool.logger.Logger;
 import lombok.Getter;
+import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -19,14 +21,24 @@ import java.util.Optional;
 @Getter
 @Service(provides = IEmojiRepository.class, priority = 420)
 public class EmojiRepository implements IEmojiRepository {
+    private final IConfigService configService;
+
     private final Map<String, String> emojis = new HashMap<>();
+    private boolean enabled = false;
+
+    public EmojiRepository(IConfigService configService) {
+        this.configService = configService;
+    }
 
     @Override
     public void initialize(AlleyContext context) {
+        FileConfiguration settingsConfig = this.configService.getSettingsConfig();
+        this.enabled = settingsConfig.getBoolean("essentials.emojis", false);
+        if (!enabled) return;
+
         for (EnumEmojiType value : EnumEmojiType.values()) {
             this.emojis.put(value.getIdentifier(), value.getFormat());
         }
-        Logger.info("Loaded " + this.emojis.size() + " emojis.");
     }
 
     @Override

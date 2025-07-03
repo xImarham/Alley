@@ -34,7 +34,6 @@ public class DivisionService implements IDivisionService {
     @Override
     public void initialize(AlleyContext context) {
         this.loadDivisions();
-        Logger.info("Loaded " + this.divisions.size() + " divisions.");
     }
 
     @Override

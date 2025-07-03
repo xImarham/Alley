@@ -44,9 +44,6 @@ public class ProfileService implements IProfileService {
     public void initialize(AlleyContext context) {
         this.collection = mongoService.getMongoDatabase().getCollection("profiles");
         this.iProfile = new MongoProfileImpl();
-
-        this.loadProfiles();
-        Logger.info("Loaded " + this.profiles.size() + " profiles from the database.");
     }
 
     @Override
@@ -58,12 +55,11 @@ public class ProfileService implements IProfileService {
 
     @Override
     public Profile getProfile(UUID uuid) {
-        if (!this.profiles.containsKey(uuid)) {
-            Profile profile = new Profile(uuid);
+        return this.profiles.computeIfAbsent(uuid, k -> {
+            Profile profile = new Profile(k);
             profile.load();
-            this.profiles.put(uuid, profile);
-        }
-        return this.profiles.get(uuid);
+            return profile;
+        });
     }
 
     @Override

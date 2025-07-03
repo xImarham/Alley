@@ -1,16 +1,17 @@
 package dev.revere.alley.api.command;
 
 import dev.revere.alley.Alley;
-import dev.revere.alley.api.command.annotation.CommandContainer;
 import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.annotation.CompleterData;
 import dev.revere.alley.api.constant.IPluginConstant;
-import dev.revere.alley.api.constant.PluginConstant;
 import dev.revere.alley.config.IConfigService;
 import dev.revere.alley.core.AlleyContext;
 import dev.revere.alley.core.annotation.Service;
 import dev.revere.alley.tool.logger.Logger;
 import dev.revere.alley.util.chat.CC;
+import io.github.classgraph.ClassGraph;
+import io.github.classgraph.ClassInfo;
+import io.github.classgraph.ScanResult;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.*;
@@ -20,17 +21,17 @@ import org.bukkit.help.HelpTopic;
 import org.bukkit.help.HelpTopicComparator;
 import org.bukkit.help.IndexHelpTopic;
 import org.bukkit.plugin.SimplePluginManager;
-import org.reflections.Reflections;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
-import java.util.Map.Entry;
 
 @Service(provides = ICommandFramework.class, priority = 40)
 public class CommandFramework implements ICommandFramework, CommandExecutor {
     private final Map<String, Map.Entry<Method, Object>> commandMap = new HashMap<>();
+    private final Map<String, Command> registeredBukkitCommands = new HashMap<>();
+
     private CommandMap map;
 
     private final Alley plugin;
@@ -62,17 +63,20 @@ public class CommandFramework implements ICommandFramework, CommandExecutor {
 
     @Override
     public void initialize(AlleyContext context) {
-        Reflections reflections = pluginConstant.getReflections();
-        Set<Class<?>> commandContainers = reflections.getTypesAnnotatedWith(CommandContainer.class);
+        String rootPackage = this.pluginConstant.getPackageDirectory();
 
-        Logger.info("Registering " + commandContainers.size() + " command containers...");
-        for (Class<?> containerClass : commandContainers) {
-            try {
-                Object instance = containerClass.getDeclaredConstructor().newInstance();
-                registerCommands(instance);
-                Logger.info("  -> Registered commands from: " + containerClass.getSimpleName());
-            } catch (Exception e) {
-                Logger.logException("Failed to instantiate and register command container: " + containerClass.getSimpleName(), e);
+        try (ScanResult scanResult = new ClassGraph().enableClassInfo().acceptPackages(rootPackage).scan()) {
+            for (ClassInfo classInfo : scanResult.getSubclasses(BaseCommand.class.getName())) {
+                if (classInfo.isAbstract() || classInfo.isInterface()) {
+                    continue;
+                }
+
+                try {
+                    Object instance = classInfo.loadClass().getDeclaredConstructor().newInstance();
+                    registerCommands(instance);
+                } catch (Exception e) {
+                    Logger.logException("Failed to instantiate and register command container: " + classInfo.getName(), e);
+                }
             }
         }
         registerHelp();
@@ -160,12 +164,9 @@ public class CommandFramework implements ICommandFramework, CommandExecutor {
 
     public void registerHelp() {
         Set<HelpTopic> help = new TreeSet<>(HelpTopicComparator.helpTopicComparatorInstance());
-        for (String s : this.commandMap.keySet()) {
-            if (!s.contains(".")) {
-                Command cmd = map.getCommand(s);
-                HelpTopic topic = new GenericCommandHelpTopic(cmd);
-                help.add(topic);
-            }
+        for (Command cmd : this.registeredBukkitCommands.values()) {
+            HelpTopic topic = new GenericCommandHelpTopic(cmd);
+            help.add(topic);
         }
         IndexHelpTopic topic = new IndexHelpTopic(pluginConstant.getName(), "All commands for " + pluginConstant.getName(), null, help,
                 "Below is a list of all " + pluginConstant.getName() + " commands:");
@@ -178,7 +179,10 @@ public class CommandFramework implements ICommandFramework, CommandExecutor {
                 CommandData commandData = m.getAnnotation(CommandData.class);
                 this.commandMap.remove(Objects.requireNonNull(commandData).name().toLowerCase());
                 this.commandMap.remove(pluginConstant.getName() + ":" + commandData.name().toLowerCase());
-                this.map.getCommand(commandData.name().toLowerCase()).unregister(map);
+                Command bukkitCmd = registeredBukkitCommands.remove(commandData.name().toLowerCase());
+                if (bukkitCmd != null) {
+                    bukkitCmd.unregister(map);
+                }
             }
         }
     }
@@ -188,33 +192,42 @@ public class CommandFramework implements ICommandFramework, CommandExecutor {
         this.commandMap.put(pluginConstant.getName() + ':' + label.toLowerCase(),
                 new AbstractMap.SimpleEntry<>(m, obj));
         String cmdLabel = label.replace(".", ",").split(",")[0].toLowerCase();
-        if (map.getCommand(cmdLabel) == null) {
+
+        if (!registeredBukkitCommands.containsKey(cmdLabel)) {
             Command cmd = new BukkitCommand(cmdLabel, this, plugin);
             map.register(pluginConstant.getName(), cmd);
+            registeredBukkitCommands.put(cmdLabel, cmd);
         }
-        if (!commandData.description().equalsIgnoreCase("") && cmdLabel.equals(label)) {
-            map.getCommand(cmdLabel).setDescription(commandData.description());
-        }
-        if (!commandData.usage().equalsIgnoreCase("") && cmdLabel.equals(label)) {
-            map.getCommand(cmdLabel).setUsage(commandData.usage());
+
+        Command registeredCmd = registeredBukkitCommands.get(cmdLabel);
+        if (registeredCmd != null) {
+            if (!commandData.description().equalsIgnoreCase("") && cmdLabel.equals(label)) {
+                registeredCmd.setDescription(commandData.description());
+            }
+            if (!commandData.usage().equalsIgnoreCase("") && cmdLabel.equals(label)) {
+                registeredCmd.setUsage(commandData.usage());
+            }
         }
     }
 
     public void registerCompleter(String label, Method m, Object obj) {
         String cmdLabel = label.replace(".", ",").split(",")[0].toLowerCase();
-        if (map.getCommand(cmdLabel) == null) {
-            Command command = new BukkitCommand(cmdLabel, this, plugin);
+        Command command = registeredBukkitCommands.get(cmdLabel);
+
+        if (command == null) {
+            command = new BukkitCommand(cmdLabel, this, plugin);
             map.register(pluginConstant.getName(), command);
+            registeredBukkitCommands.put(cmdLabel, command);
         }
-        if (map.getCommand(cmdLabel) instanceof BukkitCommand) {
-            BukkitCommand command = (BukkitCommand) map.getCommand(cmdLabel);
-            if (command.completer == null) {
-                command.completer = new BukkitCompleter();
+
+        if (command instanceof BukkitCommand) {
+            BukkitCommand bukkitCommand = (BukkitCommand) command;
+            if (bukkitCommand.completer == null) {
+                bukkitCommand.completer = new BukkitCompleter();
             }
-            command.completer.addCompleter(label, m, obj);
-        } else if (map.getCommand(cmdLabel) instanceof PluginCommand) {
+            bukkitCommand.completer.addCompleter(label, m, obj);
+        } else if (command instanceof PluginCommand) {
             try {
-                Object command = map.getCommand(cmdLabel);
                 Field field = command.getClass().getDeclaredField("completer");
                 field.setAccessible(true);
                 if (field.get(command) == null) {
@@ -235,30 +248,35 @@ public class CommandFramework implements ICommandFramework, CommandExecutor {
     }
 
     private void defaultCommand(CommandArgs args) {
-
         String label = args.getLabel();
         String[] parts = label.split(":");
 
-        if (args.getSender().hasPermission(configService.getSettingsConfig().getString("command.syntax-bypass-perm"))) {
-            if (parts.length > 1) {
-                String commandToExecute = parts[1];
+        if (configService != null && configService.getSettingsConfig() != null) {
+            if (args.getSender().hasPermission(configService.getSettingsConfig().getString("command.syntax-bypass-perm"))) {
+                if (parts.length > 1) {
+                    String commandToExecute = parts[1];
 
-                StringBuilder commandBuilder = new StringBuilder(commandToExecute);
-                for (String arg : args.getArgs()) {
-                    commandBuilder.append(" ").append(arg);
-                }
-                String command = commandBuilder.toString();
+                    StringBuilder commandBuilder = new StringBuilder(commandToExecute);
+                    for (String arg : args.getArgs()) {
+                        commandBuilder.append(" ").append(arg);
+                    }
+                    String command = commandBuilder.toString();
 
-                if (args.getSender() instanceof Player) {
-                    ((Player) args.getSender()).performCommand(command);
+                    if (args.getSender() instanceof Player) {
+                        ((Player) args.getSender()).performCommand(command);
+                    } else {
+                        args.getSender().getServer().dispatchCommand(args.getSender(), command);
+                    }
                 } else {
-                    args.getSender().getServer().dispatchCommand(args.getSender(), command);
+                    args.getSender().sendMessage(CC.translate("&cMissing arguments / Wrong format or Internal error."));
                 }
             } else {
-                args.getSender().sendMessage(CC.translate("&cMissing arguments / Wrong format or Internal error."));
+                args.getSender().sendMessage(CC.translate(configService.getSettingsConfig().getString("command.anti-syntax-message").replace("{argument}", args.getLabel())));
             }
         } else {
-            args.getSender().sendMessage(CC.translate(configService.getSettingsConfig().getString("command.anti-syntax-message").replace("{argument}", args.getLabel())));
+            args.getSender().sendMessage(ChatColor.RED + "An internal error occurred with command handling. Please contact an administrator.");
+            Logger.error("ConfigService or settingsConfig is null in defaultCommand! This indicates a severe initialization issue.");
         }
     }
+
 }

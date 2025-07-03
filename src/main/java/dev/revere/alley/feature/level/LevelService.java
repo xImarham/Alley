@@ -37,7 +37,6 @@ public class LevelService implements ILevelService {
     @Override
     public void initialize(AlleyContext context) {
         this.loadLevels();
-        Logger.info("Loaded " + this.levels.size() + " Elo levels.");
     }
 
     @Override

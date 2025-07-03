@@ -19,10 +19,6 @@ import org.bukkit.entity.Player;
  */
 @ScoreboardData(kit = KitSettingBoxingImpl.class)
 public class MatchScoreboardBoxingImpl extends AbstractMatchScoreboard {
-    public MatchScoreboardBoxingImpl(Alley plugin) {
-        super(plugin);
-    }
-
     @Override
     protected String getSoloConfigPath() {
         return "scoreboard.lines.playing.solo.boxing-match";

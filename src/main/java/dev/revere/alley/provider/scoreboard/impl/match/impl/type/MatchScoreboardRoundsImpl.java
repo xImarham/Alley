@@ -1,6 +1,5 @@
 package dev.revere.alley.provider.scoreboard.impl.match.impl.type;
 
-import dev.revere.alley.Alley;
 import dev.revere.alley.game.match.impl.MatchRoundsImpl;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
@@ -19,10 +18,6 @@ import org.jetbrains.annotations.NotNull;
  */
 @ScoreboardData(match = MatchRoundsImpl.class)
 public class MatchScoreboardRoundsImpl extends AbstractMatchScoreboard {
-    public MatchScoreboardRoundsImpl(Alley plugin) {
-        super(plugin);
-    }
-
     @Override
     protected String getSoloConfigPath() {
         return "scoreboard.lines.playing.solo.rounds-match";

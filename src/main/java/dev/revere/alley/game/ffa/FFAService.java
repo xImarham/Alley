@@ -44,7 +44,6 @@ public class FFAService implements IFFAService {
     public void initialize(AlleyContext context) {
         this.ffaKits.addAll(this.kitService.getKits().stream().filter(Kit::isFfaEnabled).collect(Collectors.toList()));
         this.initializeMatches();
-        Logger.info("Initialized " + this.matches.size() + " persistent FFA matches.");
     }
 
     @Override

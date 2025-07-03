@@ -49,7 +49,6 @@ public class TitleService implements ITitleService {
     @Override
     public void initialize(AlleyContext context) {
         this.loadTitles();
-        Logger.info("Loaded " + this.titles.size() + " kit titles.");
     }
 
     private void loadTitles() {

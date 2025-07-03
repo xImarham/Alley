@@ -6,6 +6,7 @@ import dev.revere.alley.core.lifecycle.IService;
 import org.bukkit.Location;
 
 import java.io.File;
+import java.util.List;
 
 /**
  * @author Remi
@@ -13,6 +14,13 @@ import java.io.File;
  * @date 2/07/2025
  */
 public interface IArenaSchematicService extends IService {
+    /**
+     * Checks for missing schematic files for a given list of arenas and creates them.
+     * This is intended to be called once on startup.
+     * @param arenas The list of all loaded arenas to check.
+     */
+    void generateMissingSchematics(List<AbstractArena> arenas);
+
     /**
      * Saves the schematic of a given arena to a file.
      *

@@ -50,8 +50,6 @@ public class AnimationRepository implements IAnimationRepository {
 
         this.registerAnimations(reflections, AbstractAnimation.class, this.internalAnimations);
         this.registerAnimations(reflections, TextAnimation.class, this.configAnimations);
-
-        Logger.info("Registered " + (this.internalAnimations.size() + this.configAnimations.size()) + " total animations.");
     }
 
     @Override

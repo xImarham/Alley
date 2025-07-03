@@ -4,6 +4,7 @@ import dev.revere.alley.Alley;
 import dev.revere.alley.config.IConfigService;
 import dev.revere.alley.feature.cosmetic.AbstractCosmetic;
 import dev.revere.alley.tool.logger.Logger;
+import dev.revere.alley.util.chat.CC;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -19,6 +20,7 @@ import java.util.stream.Collectors;
  */
 public abstract class AbstractKillMessagePack extends AbstractCosmetic {
     private final Map<EntityDamageEvent.DamageCause, List<String>> messagesByCause = new EnumMap<>(EntityDamageEvent.DamageCause.class);
+    private List<String> genericMessages = Collections.emptyList();
 
     public AbstractKillMessagePack() {
         super();
@@ -34,10 +36,20 @@ public abstract class AbstractKillMessagePack extends AbstractCosmetic {
 
     private void loadMessages() {
         String fileName = getResourceFileName();
+        if (fileName == null || fileName.isEmpty()) {
+            Logger.error("Kill message pack tried to load with empty or null file name. Aborting loading.");
+            return;
+        }
+
         String configPath = "cosmetics/messages/" + fileName;
 
-        FileConfiguration config = Alley.getInstance().getService(IConfigService.class).getConfig(configPath);
+        IConfigService configService = Alley.getInstance().getService(IConfigService.class);
+        if (configService == null) {
+            Logger.error("ConfigService is null when loading " + fileName + ". Service not available!");
+            return;
+        }
 
+        FileConfiguration config = configService.getConfig(configPath);
         if (config == null) {
             Logger.error("Could not load kill message config: " + configPath);
             Logger.error("Make sure the file is added to ConfigService.configFileNames array!");
@@ -51,14 +63,12 @@ public abstract class AbstractKillMessagePack extends AbstractCosmetic {
                     this.messagesByCause.put(cause, config.getStringList(key));
                 } catch (IllegalArgumentException e) {
                     if (key.equalsIgnoreCase("GENERIC")) {
-                        this.messagesByCause.put(null, config.getStringList(key));
+                        this.genericMessages = config.getStringList(key);
                     } else {
                         Logger.error("Unknown damage cause in " + fileName + ": " + key);
                     }
                 }
             }
-
-            Logger.info("Loaded kill message pack: " + fileName);
         } catch (Exception e) {
             Logger.logException("Failed to load kill message pack: " + fileName, e);
         }
@@ -74,7 +84,7 @@ public abstract class AbstractKillMessagePack extends AbstractCosmetic {
         List<String> messageList = messagesByCause.get(cause);
 
         if (messageList == null || messageList.isEmpty()) {
-            messageList = messagesByCause.get(null);
+            messageList = genericMessages;
         }
 
         if (messageList == null || messageList.isEmpty()) {
@@ -88,22 +98,25 @@ public abstract class AbstractKillMessagePack extends AbstractCosmetic {
      * Gathers all message strings from all categories into a single list.
      */
     public List<String> getDisplayableMessages() {
-        return this.messagesByCause.values().stream()
+        List<String> allMessages = messagesByCause.values().stream()
                 .flatMap(Collection::stream)
-                .collect(Collectors.toList());
+                .collect(Collectors.toCollection(ArrayList::new));
+        allMessages.addAll(genericMessages);
+
+        return Collections.unmodifiableList(allMessages);
     }
 
     @Override
     public List<String> getDisplayLore() {
         List<String> lore = new ArrayList<>();
-        for (String message : getDisplayableMessages()) {
-            lore.add("&f- &6" + message.replace("{victim}", "victim").replace("{killer}", "killer"));
-        }
-
-        if (lore.isEmpty()) {
+        List<String> displayable = getDisplayableMessages();
+        if (displayable.isEmpty()) {
             lore.add("&7" + this.getDescription());
+        } else {
+            for (String message : displayable) {
+                lore.add(CC.translate("&f- &6" + message.replace("{victim}", "victim").replace("{killer}", "killer")));
+            }
         }
-
         return lore;
     }
 

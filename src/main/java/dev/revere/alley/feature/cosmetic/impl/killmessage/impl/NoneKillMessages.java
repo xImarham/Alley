@@ -21,6 +21,6 @@ import org.bukkit.Material;
 public class NoneKillMessages extends AbstractKillMessagePack {
     @Override
     protected String getResourceFileName() {
-        return "";
+        return null;
     }
 }

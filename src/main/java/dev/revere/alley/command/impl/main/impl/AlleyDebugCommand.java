@@ -3,7 +3,6 @@ package dev.revere.alley.command.impl.main.impl;
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
-import dev.revere.alley.api.command.annotation.CommandContainer;
 import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.base.arena.IArenaService;
 import dev.revere.alley.base.combat.ICombatService;
@@ -30,7 +29,6 @@ import java.util.Locale;
  * @project Alley
  * @date 30/05/2024 - 12:15
  */
-@CommandContainer
 public class AlleyDebugCommand extends BaseCommand {
 
     @Override

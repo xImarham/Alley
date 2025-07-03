@@ -1,6 +1,5 @@
 package dev.revere.alley.provider.scoreboard.impl.match.impl.type;
 
-import dev.revere.alley.Alley;
 import dev.revere.alley.base.kit.setting.impl.mode.KitSettingRaidingImpl;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
@@ -16,10 +15,6 @@ import org.bukkit.entity.Player;
  */
 @ScoreboardData(kit = KitSettingRaidingImpl.class)
 public class MatchScoreboardRaidingImpl extends AbstractMatchScoreboard {
-    public MatchScoreboardRaidingImpl(Alley plugin) {
-        super(plugin);
-    }
-
     @Override
     protected String getSoloConfigPath() {
         return "scoreboard.lines.playing.solo.raiding-match";

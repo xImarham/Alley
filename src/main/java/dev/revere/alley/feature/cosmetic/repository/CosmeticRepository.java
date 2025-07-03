@@ -29,8 +29,6 @@ public class CosmeticRepository implements ICosmeticRepository {
         this.register(new SoundEffectRepository());
         this.register(new ProjectileTrailRepository());
         this.register(new KillMessageRepository());
-
-        Logger.info("Registered " + this.repositories.size() + " cosmetic repositories.");
     }
 
     /**

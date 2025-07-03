@@ -64,7 +64,7 @@ public class ArenaService implements IArenaService {
     public void initialize(AlleyContext context) {
         this.loadArenas();
         this.initializeTemporaryWorld();
-        Logger.info("Loaded " + this.arenas.size() + " persistent arenas and initialized temporary world.");
+        this.arenaSchematicService.generateMissingSchematics(this.arenas);
     }
 
     @Override
