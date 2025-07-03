@@ -2,6 +2,7 @@ package dev.revere.alley.game.match.snapshot;
 
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;
+import com.comphenix.protocol.ProtocolManager;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
@@ -54,7 +55,9 @@ public class SnapshotDataService implements ISnapshotDataService {
     }
 
     private void registerSprintListener() {
-        ProtocolLibrary.getProtocolManager().addPacketListener(new PacketAdapter(this.plugin, PacketType.Play.Client.ENTITY_ACTION) {
+        ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();
+
+        this.packetAdapter = new PacketAdapter(this.plugin, PacketType.Play.Client.ENTITY_ACTION) {
             @Override
             public void onPacketReceiving(PacketEvent event) {
                 Player player = event.getPlayer();
@@ -77,7 +80,9 @@ public class SnapshotDataService implements ISnapshotDataService {
                         break;
                 }
             }
-        });
+        };
+
+        protocolManager.addPacketListener(this.packetAdapter);
     }
 
     @Override
