@@ -71,7 +71,6 @@ public class PluginLogger {
                 "    " + secondary + "Levels: " + color + levelService.getLevels().size(),
                 "",
                 "    " + color + "MongoDB " + secondary + "| " + color + "Status: &aConnected",
-                "     " + secondary + "Host: " + color + configService.getDatabaseConfig().getString("mongo.uri"),
                 "     " + secondary + "Database: " + color + configService.getDatabaseConfig().getString("mongo.database"),
                 "     " + secondary + "Loaded Profiles: " + color + profileService.getProfiles().size(),
                 "",
