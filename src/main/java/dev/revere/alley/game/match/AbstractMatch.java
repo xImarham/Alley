@@ -303,6 +303,10 @@ public abstract class AbstractMatch {
 
         player.setVelocity(new Vector());
 
+        if (this.shouldHandleRegularRespawn(player)) {
+            handleRespawn(player);
+        }
+
         if (this.canEndRound()) {
             this.state = EnumMatchState.ENDING_ROUND;
             this.handleRoundEnd();
