@@ -290,7 +290,7 @@ public class DuelRequestService implements IDuelRequestService {
             return false;
         }
 
-        if (this.serverService.isQueueingAllowed()) {
+        if (!this.serverService.isQueueingAllowed()) {
             return false;
         }
 

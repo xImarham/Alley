@@ -45,7 +45,10 @@ public class DuelCommand extends BaseCommand {
             return;
         }
 
-        if (Alley.getInstance().getService(IServerService.class).isQueueingAllowed()) {
+        IServerService serverService = Alley.getInstance().getService(IServerService.class);
+        if (!serverService.isQueueingAllowed()) {
+            player.sendMessage(CC.translate("&cQueueing is temporarily disabled. Please try again later."));
+            player.closeInventory();
             return;
         }
 
