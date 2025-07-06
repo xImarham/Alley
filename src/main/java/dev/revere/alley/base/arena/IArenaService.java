@@ -78,4 +78,10 @@ public interface IArenaService extends IService {
      * @return A temporary copy or the original arena.
      */
     AbstractArena selectArenaWithPotentialTemporaryCopy(AbstractArena arena);
+
+    /**
+     * Adds a newly created arena to the service's tracking list and caches.
+     * @param arena The new arena to add.
+     */
+    void registerNewArena(AbstractArena arena);
 }

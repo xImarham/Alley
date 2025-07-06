@@ -1,0 +1,3 @@
+replicate:
+  api-token: "YOUR-REPLICATE-API-KEY-HERE"
+  model-version: "meta/meta-llama-3-70b-instruct"

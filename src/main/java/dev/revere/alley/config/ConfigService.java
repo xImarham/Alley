@@ -28,14 +28,14 @@ public class ConfigService implements IConfigService {
 
     private FileConfiguration settingsConfig, messagesConfig, databaseConfig, kitsConfig, arenasConfig,
             scoreboardConfig, tabListConfig, divisionsConfig, menusConfig, titlesConfig, levelsConfig,
-            pearlConfig, abilityConfig, visualsConfig, saltyMessagesConfig, yeetMessagesConfig,
+            pearlConfig, abilityConfig, visualsConfig, aiConfig, saltyMessagesConfig, yeetMessagesConfig,
             nerdMessagesConfig, spigotCommunityMessagesConfig;
 
     private final String[] configFileNames = {
             "settings.yml", "messages.yml", "menus.yml", "pearls.yml", "abilities.yml", "visuals.yml",
             "database/database.yml", "storage/kits.yml", "storage/arenas.yml", "storage/divisions.yml",
             "storage/titles.yml", "storage/levels.yml", "providers/scoreboard.yml", "providers/tablist.yml",
-            "cosmetics/messages/salty_messages.yml", "cosmetics/messages/yeet_messages.yml",
+            "providers/ai.yml", "cosmetics/messages/salty_messages.yml", "cosmetics/messages/yeet_messages.yml",
             "cosmetics/messages/nerd_messages.yml", "cosmetics/messages/spigot_community_messages.yml",
     };
 
@@ -66,6 +66,7 @@ public class ConfigService implements IConfigService {
         this.divisionsConfig = this.getConfig("storage/divisions.yml");
         this.tabListConfig = this.getConfig("providers/tablist.yml");
         this.scoreboardConfig = this.getConfig("providers/scoreboard.yml");
+        this.aiConfig = this.getConfig("providers/ai.yml");
         this.saltyMessagesConfig = this.getConfig("cosmetics/messages/salty_messages.yml");
         this.yeetMessagesConfig = this.getConfig("cosmetics/messages/yeet_messages.yml");
         this.nerdMessagesConfig = this.getConfig("cosmetics/messages/nerd_messages.yml");

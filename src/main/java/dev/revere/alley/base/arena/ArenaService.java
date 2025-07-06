@@ -400,6 +400,14 @@ public class ArenaService implements IArenaService {
         return arena;
     }
 
+    @Override
+    public void registerNewArena(AbstractArena arena) {
+        if (arena != null && !arenasByName.containsKey(arena.getName().toLowerCase())) {
+            this.arenas.add(arena);
+            this.buildCaches();
+        }
+    }
+
     /**
      * Get a random arena of type StandAlone
      *
