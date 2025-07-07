@@ -1,13 +1,11 @@
 package dev.revere.alley.provider.scoreboard.impl;
 
 import dev.revere.alley.Alley;
-import dev.revere.alley.base.combat.CombatService;
 import dev.revere.alley.base.combat.ICombatService;
 import dev.revere.alley.config.IConfigService;
-import dev.revere.alley.feature.level.ILevelService;
 import dev.revere.alley.game.ffa.cuboid.IFFASpawnService;
-import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
+import dev.revere.alley.profile.data.impl.ProfileFFAData;
 import dev.revere.alley.provider.scoreboard.IScoreboard;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.entity.Player;
@@ -36,6 +34,8 @@ public class FFAScoreboard implements IScoreboard {
      */
     @Override
     public List<String> getLines(Profile profile, Player player) {
+        ProfileFFAData profileFFAData = profile.getProfileData().getFfaData().get(profile.getFfaMatch().getKit().getName());
+
         IFFASpawnService ffaSpawnService = Alley.getInstance().getService(IFFASpawnService.class);
         IConfigService configService = Alley.getInstance().getService(IConfigService.class);
         ICombatService combatService = Alley.getInstance().getService(ICombatService.class);
@@ -58,8 +58,9 @@ public class FFAScoreboard implements IScoreboard {
                         .replaceAll("\\{kit}", profile.getFfaMatch().getKit().getDisplayName())
                         .replaceAll("\\{players}", String.valueOf(profile.getFfaMatch().getPlayers().size()))
                         .replaceAll("\\{zone}", ffaSpawnService.getCuboid().isIn(player) ? "Spawn" : "Warzone")
-                        .replaceAll("\\{kills}", String.valueOf(profile.getProfileData().getFfaData().get(profile.getFfaMatch().getKit().getName()).getKills()))
-                        .replaceAll("\\{deaths}", String.valueOf(profile.getProfileData().getFfaData().get(profile.getFfaMatch().getKit().getName()).getDeaths()))
+                        .replaceAll("\\{ks}", String.valueOf(profileFFAData.getKillstreak()))
+                        .replaceAll("\\{kills}", String.valueOf(profileFFAData.getKills()))
+                        .replaceAll("\\{deaths}", String.valueOf(profileFFAData.getDeaths()))
                         .replaceAll("\\{ping}", String.valueOf(this.getPing(player))));
             }
         }

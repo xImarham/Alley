@@ -1,7 +1,11 @@
 package dev.revere.alley.util;
 
 import lombok.experimental.UtilityClass;
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
+import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -39,6 +43,9 @@ public class PlayerUtil {
 
         player.getActivePotionEffects().forEach(effect -> player.removePotionEffect(effect.getType()));
         player.updateInventory();
+
+        // Clears visuals from the player's model
+        ((CraftPlayer) player).getHandle().getDataWatcher().watch(9, (byte) 0);
 
         if (closeInventory) {
             player.closeInventory();

@@ -140,6 +140,15 @@ match:
         - "  &6&l● &f{loser} &7{loser-color}{loser-indicator}{math-loser-elo} &7(&f{old-loser-elo} &7-> &f{new-loser-elo})"
         - ""
 
+ffa:
+  killstreak-alert:
+    enabled: true # Whether to enable killstreak alerts or not
+    interval: 5 # the required amount of kills to alert ffa players about killstreaks
+    message:
+      - ""
+      - "&6&l{name-color}{player} &fis on a &6&l{killstreak} &fkillstreak!"
+      - ""
+
 player-settings:
   party-invites: "&aYou've {status} &aparty invites."
   party-messages: "&aYou've {status} &aparty messages."

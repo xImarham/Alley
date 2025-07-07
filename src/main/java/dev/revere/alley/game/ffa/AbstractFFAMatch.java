@@ -2,21 +2,22 @@ package dev.revere.alley.game.ffa;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.base.arena.AbstractArena;
-import dev.revere.alley.base.combat.CombatService;
 import dev.revere.alley.base.combat.ICombatService;
 import dev.revere.alley.base.hotbar.IHotbarService;
-import dev.revere.alley.base.hotbar.enums.EnumHotbarType;
 import dev.revere.alley.base.kit.Kit;
 import dev.revere.alley.base.spawn.ISpawnService;
 import dev.revere.alley.base.visibility.IVisibilityService;
+import dev.revere.alley.config.IConfigService;
 import dev.revere.alley.game.ffa.player.GameFFAPlayer;
 import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
-import dev.revere.alley.profile.ProfileService;
+import dev.revere.alley.profile.data.impl.ProfileFFAData;
 import dev.revere.alley.profile.enums.EnumProfileState;
 import dev.revere.alley.util.chat.CC;
 import lombok.Getter;
 import lombok.Setter;
+import org.bukkit.Location;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -77,9 +78,9 @@ public abstract class AbstractFFAMatch {
      * @param player The player who wants to spectate the match.
      */
     public void addSpectator(Player player) {
-        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
-        IVisibilityService visibilityService = Alley.getInstance().getService(IVisibilityService.class);
-        IHotbarService hotbarService = Alley.getInstance().getService(IHotbarService.class);
+        IProfileService profileService = this.plugin.getService(IProfileService.class);
+        IVisibilityService visibilityService = this.plugin.getService(IVisibilityService.class);
+        IHotbarService hotbarService = this.plugin.getService(IHotbarService.class);
 
         Profile profile = profileService.getProfile(player.getUniqueId());
 
@@ -110,10 +111,10 @@ public abstract class AbstractFFAMatch {
      * @param player The player to remove from the spectator list.
      */
     public void removeSpectator(Player player) {
-        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
-        IVisibilityService visibilityService = Alley.getInstance().getService(IVisibilityService.class);
-        IHotbarService hotbarService = Alley.getInstance().getService(IHotbarService.class);
-        ISpawnService spawnService = Alley.getInstance().getService(ISpawnService.class);
+        IProfileService profileService = this.plugin.getService(IProfileService.class);
+        IVisibilityService visibilityService = this.plugin.getService(IVisibilityService.class);
+        IHotbarService hotbarService = this.plugin.getService(IHotbarService.class);
+        ISpawnService spawnService = this.plugin.getService(ISpawnService.class);
 
         Profile profile = profileService.getProfile(player.getUniqueId());
         if (profile.getState() == EnumProfileState.SPECTATING) {
@@ -153,17 +154,70 @@ public abstract class AbstractFFAMatch {
      * @param killer The killer
      */
     public void handleCombatLog(Player player, Player killer) {
-        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
-        ICombatService combatService = Alley.getInstance().getService(ICombatService.class);
+        IProfileService profileService = this.plugin.getService(IProfileService.class);
+        ICombatService combatService = this.plugin.getService(ICombatService.class);
 
         Profile profile = profileService.getProfile(player.getUniqueId());
-        Profile killerProfile = profileService.getProfile(killer.getUniqueId());
+        ProfileFFAData ffaData = profile.getProfileData().getFfaData().get(this.getKit().getName());
+        ffaData.incrementDeaths();
+        ffaData.resetKillstreak();
 
-        profile.getProfileData().getFfaData().get(this.getKit().getName()).incrementDeaths();
-        killerProfile.getProfileData().getFfaData().get(this.getKit().getName()).incrementKills();
+        Profile killerProfile = profileService.getProfile(killer.getUniqueId());
+        ProfileFFAData killerFfaData = killerProfile.getProfileData().getFfaData().get(this.getKit().getName());
+        killerFfaData.incrementKills();
+        killerFfaData.incrementKillstreak();
 
         this.getPlayers().forEach(ffaPlayer -> ffaPlayer.getPlayer().sendMessage(CC.translate("&7(Combat Log) &c" + player.getName() + " has been killed by " + killer.getName() + ".")));
+        this.sendKillstreakAlertMessage(killer);
 
         combatService.resetCombatLog(player);
+    }
+
+    /**
+     * Teleports a player to the safe zone of the FFA arena.
+     *
+     * @param player The player to teleport.
+     */
+    public void teleportToSafeZone(Player player) {
+        ICombatService combatService = this.plugin.getService(ICombatService.class);
+        if (combatService.isPlayerInCombat(player.getUniqueId())) {
+            player.sendMessage(CC.translate("&cYou're still in combat!"));
+            return;
+        }
+
+        Location ffaSpawn = this.arena.getPos1();
+        player.teleport(ffaSpawn);
+        player.sendMessage(CC.translate("&aTeleported to the safe zone!"));
+    }
+
+    /**
+     * Alerts all players in the match if a player reaches a killstreak of 5 or more.
+     *
+     * @param player The player who reached the killstreak.
+     */
+    public void sendKillstreakAlertMessage(Player player) {
+        IConfigService configService = this.plugin.getService(IConfigService.class);
+        FileConfiguration config = configService.getMessagesConfig();
+        if (!config.getBoolean("ffa.killstreak-alert.enabled")) {
+            return;
+        }
+
+        IProfileService profileService = this.plugin.getService(IProfileService.class);
+        Profile profile = profileService.getProfile(player.getUniqueId());
+        ProfileFFAData ffaData = profile.getProfileData().getFfaData().get(this.getKit().getName());
+
+        int interval = config.getInt("ffa.killstreak-alert.interval");
+        List<String> messages = config.getStringList("ffa.killstreak-alert.message");
+
+        if (ffaData.getKillstreak() % interval == 0) {
+            this.getPlayers().forEach(ffaPlayer -> {
+                for (String message : messages) {
+                    ffaPlayer.getPlayer().sendMessage(CC.translate(message
+                            .replace("{player}", player.getName())
+                            .replace("{name-color}", String.valueOf(profile.getNameColor()))
+                            .replace("{killstreak}", String.valueOf(ffaData.getKillstreak()))));
+                }
+            });
+        }
     }
 }
