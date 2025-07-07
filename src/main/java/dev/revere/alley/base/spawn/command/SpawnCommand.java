@@ -30,29 +30,27 @@ public class SpawnCommand extends BaseCommand {
         Profile profile = profileService.getProfile(player.getUniqueId());
         EnumProfileState state = profile.getState();
 
-        if (state == EnumProfileState.FFA) {
-            AbstractFFAMatch ffaMatch = profile.getFfaMatch();
-            if (ffaMatch == null) return;
+        switch (state) {
+            case FFA:
+                AbstractFFAMatch ffaMatch = profile.getFfaMatch();
+                if (ffaMatch == null) return;
 
-            if (ffaMatch.getGameFFAPlayer(player).getState() == EnumFFAState.FIGHTING) {
-                ffaMatch.teleportToSafeZone(player);
-            } else {
-                ffaMatch.leave(player);
-            }
-
-            return;
+                if (ffaMatch.getGameFFAPlayer(player).getState() == EnumFFAState.FIGHTING) {
+                    ffaMatch.teleportToSafeZone(player);
+                } else {
+                    ffaMatch.leave(player);
+                }
+                break;
+            case PLAYING:
+                player.sendMessage(CC.translate("&cYou cannot do this right now."));
+                break;
+            case SPECTATING:
+                profile.getMatch().removeSpectator(player, false);
+                break;
+            default:
+                this.sendToSpawn(player);
+                break;
         }
-
-        if (state == EnumProfileState.PLAYING) {
-            player.sendMessage(CC.translate("&cYou cannot do this right now."));
-            return;
-        }
-
-        if (state == EnumProfileState.SPECTATING) {
-            profile.getMatch().removeSpectator(player, false);
-        }
-
-        this.sendToSpawn(player);
     }
 
     /**
