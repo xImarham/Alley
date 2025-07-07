@@ -6,6 +6,7 @@ import dev.revere.alley.base.combat.listener.CombatListener;
 import dev.revere.alley.base.hotbar.listener.HotbarListener;
 import dev.revere.alley.base.queue.listener.QueueListener;
 import dev.revere.alley.base.spawn.listener.SpawnListener;
+import dev.revere.alley.config.IConfigService;
 import dev.revere.alley.core.AlleyContext;
 import dev.revere.alley.core.lifecycle.IService;
 import dev.revere.alley.feature.emoji.listener.EmojiListener;
@@ -18,6 +19,7 @@ import dev.revere.alley.game.match.snapshot.listener.SnapshotListener;
 import dev.revere.alley.game.party.listener.PartyListener;
 import dev.revere.alley.profile.listener.ProfileListener;
 import dev.revere.alley.provider.expansion.AlleyPlaceholderExpansion;
+import dev.revere.alley.provider.tablist.task.TablistUpdateTask;
 import dev.revere.alley.server.listener.CoreChatListener;
 import dev.revere.alley.task.ArrowRemovalTask;
 import dev.revere.alley.task.MatchPearlCooldownTask;
@@ -163,9 +165,9 @@ public class Alley extends JavaPlugin {
         tasks.put(MatchPearlCooldownTask.class.getSimpleName(), () -> new MatchPearlCooldownTask().runTaskTimer(this, 2L, 2L));
         tasks.put(ArrowRemovalTask.class.getSimpleName(), () -> new ArrowRemovalTask().runTaskTimer(this, 20L, 20L));
 
-        /* if (this.configService.getTabListConfig().getBoolean("tablist.enabled")) {
+        if (this.getService(IConfigService.class).getTabListConfig().getBoolean("tablist.enabled")) {
             tasks.put(TablistUpdateTask.class.getSimpleName(), () -> new TablistUpdateTask().runTaskTimer(this, 0L, 20L));
-        } */
+        }
 
         tasks.forEach(Logger::logTimeTask);
     }
