@@ -6,12 +6,10 @@ import dev.revere.alley.base.combat.listener.CombatListener;
 import dev.revere.alley.base.hotbar.listener.HotbarListener;
 import dev.revere.alley.base.queue.listener.QueueListener;
 import dev.revere.alley.base.spawn.listener.SpawnListener;
-import dev.revere.alley.config.IConfigService;
 import dev.revere.alley.core.AlleyContext;
 import dev.revere.alley.core.lifecycle.IService;
 import dev.revere.alley.feature.emoji.listener.EmojiListener;
 import dev.revere.alley.feature.layout.listener.LayoutListener;
-import dev.revere.alley.feature.webhook.WebhookListener;
 import dev.revere.alley.game.ffa.listener.FFAListener;
 import dev.revere.alley.game.ffa.listener.impl.FFACuboidListener;
 import dev.revere.alley.game.match.listener.MatchListener;
@@ -27,7 +25,6 @@ import dev.revere.alley.task.RepositoryCleanupTask;
 import dev.revere.alley.tool.logger.Logger;
 import dev.revere.alley.tool.logger.PluginLogger;
 import lombok.Getter;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.*;
@@ -79,7 +76,6 @@ public class Alley extends JavaPlugin {
         this.registerExpansion();
         this.registerListeners();
         this.runTasks();
-        this.initializeEssentials();
 
         // CommandUtility.registerCommands();
 
@@ -172,17 +168,5 @@ public class Alley extends JavaPlugin {
         } */
 
         tasks.forEach(Logger::logTimeTask);
-    }
-
-    private void initializeEssentials() {
-        FileConfiguration config = getService(IConfigService.class).getSettingsConfig();
-
-        Logger.logTime("Essential Services", () -> {
-            if (config.getBoolean("essentials.chat-logging.enabled")) {
-                String webhookUrl = config.getString("essentials.chat-logging.webhook-url");
-                this.getServer().getPluginManager().registerEvents(new WebhookListener(this), this);
-                Logger.info("Chat logging is enabled. Discord Webhook URL: " + webhookUrl);
-            }
-        });
     }
 }

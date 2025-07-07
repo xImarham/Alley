@@ -28,12 +28,6 @@ explosive:
     horizontal: 1.2
     tnt-fuse-ticks: 80
 
-essentials:
-  emojis: true # Whether to enable emojis in the chat or not (e.g. :smile:)
-  chat-logging: # Setting to log the in-game chat to a specific discord channel via webhook (OPTIONAL)
-    enabled: false
-    webhook-url: "" # create a webhook on one of your channels and paste the url here, make sure the channel is accessible to the '@everyone' role, it won't work otherwise
-
 parkour:
   starter-location: world:-5.1145064347201865:69.0:40.13243289901497:-1.9397448:20.588186
 
