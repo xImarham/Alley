@@ -3,6 +3,7 @@ package dev.revere.alley.provider.scoreboard.impl.match;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.profile.Profile;
+import dev.revere.alley.tool.reflection.utility.ReflectionUtility;
 import org.bukkit.ChatColor;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
@@ -54,6 +55,6 @@ public interface IMatchScoreboard {
             return 0;
         }
 
-        return ((CraftPlayer) player).getHandle().ping;
+        return ReflectionUtility.getPing(player);
     }
 }

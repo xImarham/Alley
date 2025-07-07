@@ -16,12 +16,26 @@ public class ProfileFFAData {
     private int kills = 0;
     private int deaths = 0;
 
+    private int killstreak = 0;
+    private int highestKillstreak = 0;
+
     public void incrementKills() {
         this.kills++;
     }
 
     public void incrementDeaths() {
         this.deaths++;
+    }
+
+    public void incrementKillstreak() {
+        this.killstreak++;
+        if (this.killstreak > this.highestKillstreak) {
+            this.highestKillstreak = this.killstreak;
+        }
+    }
+
+    public void resetKillstreak() {
+        this.killstreak = 0;
     }
 
     /**

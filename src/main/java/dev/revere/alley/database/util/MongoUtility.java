@@ -115,6 +115,8 @@ public class MongoUtility {
             Document ffaEntry = new Document();
             ffaEntry.put("kills", entry.getValue().getKills());
             ffaEntry.put("deaths", entry.getValue().getDeaths());
+            ffaEntry.put("killstreak", entry.getValue().getKillstreak());
+            ffaEntry.put("highestKillstreak", entry.getValue().getHighestKillstreak());
             ffaDataDocument.put(entry.getKey(), ffaEntry);
         }
         return ffaDataDocument;
@@ -307,6 +309,8 @@ public class MongoUtility {
             ProfileFFAData ffa = new ProfileFFAData();
             ffa.setKills(ffaEntry.getInteger("kills"));
             ffa.setDeaths(ffaEntry.getInteger("deaths"));
+            ffa.setKillstreak(ffaEntry.getInteger("killstreak", 0));
+            ffa.setHighestKillstreak(ffaEntry.getInteger("highestKillstreak"));
             ffaData.put(entry.getKey(), ffa);
         }
         return ffaData;

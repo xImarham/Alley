@@ -5,7 +5,7 @@ import dev.revere.alley.profile.Profile;
 import dev.revere.alley.tool.animation.IAnimationRepository;
 import dev.revere.alley.tool.animation.enums.EnumAnimationType;
 import dev.revere.alley.tool.animation.type.internal.impl.DotAnimationImpl;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
+import dev.revere.alley.tool.reflection.utility.ReflectionUtility;
 import org.bukkit.entity.Player;
 
 import java.util.List;
@@ -49,6 +49,10 @@ public interface IScoreboard {
      * @return The ping of the player.
      */
     default int getPing(Player player) {
-        return ((CraftPlayer) player).getHandle().ping;
+        if (player == null) {
+            return 0;
+        }
+
+        return ReflectionUtility.getPing(player);
     }
 }

@@ -107,7 +107,6 @@ public class ProfileListener implements Listener {
         Profile profile = profileService.getProfile(player.getUniqueId());
 
         if (profile.getState() == EnumProfileState.LOBBY
-                || profile.getState() == EnumProfileState.FFA
                 || profile.getState() == EnumProfileState.EDITING
                 || profile.getState() == EnumProfileState.SPECTATING) {
             if (player.getGameMode() == GameMode.CREATIVE) return;
