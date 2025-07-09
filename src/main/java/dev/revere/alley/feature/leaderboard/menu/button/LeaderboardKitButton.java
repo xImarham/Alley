@@ -33,7 +33,7 @@ public class LeaderboardKitButton extends Button {
     @Override
     public ItemStack getButtonItem(Player player) {
         ItemBuilder builder = new ItemBuilder(this.kit.getIcon())
-                .name(this.kit.getDisplayName())
+                .name(this.kit.getMenuTitle())
                 .durability(this.kit.getDurability())
                 .hideMeta();
 
