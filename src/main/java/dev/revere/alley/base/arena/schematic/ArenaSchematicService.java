@@ -121,8 +121,10 @@ public class ArenaSchematicService implements IArenaSchematicService {
         }
 
         try {
+            World bukkitWorld = location.getWorld();
             Vector toVector = BukkitUtil.toVector(location);
-            EditSession session = FaweAPI.getEditSessionBuilder(new BukkitWorld(location.getWorld())).fastmode(true).build();
+            EditSession session = new EditSession(BukkitUtil.getLocalWorld(bukkitWorld), -1);
+            session.setFastMode(true);
 
             Schematic schema = FaweAPI.load(schematicFile);
             schema.paste(session, toVector, false);
@@ -148,9 +150,16 @@ public class ArenaSchematicService implements IArenaSchematicService {
                 return;
             }
 
-            EditSession session = FaweAPI.getEditSessionBuilder(new BukkitWorld(min.getWorld())).fastmode(true).build();
-            CuboidRegion region = new CuboidRegion(BukkitUtil.toVector(min), BukkitUtil.toVector(max));
-            session.setBlocks(region, new BaseBlock(0));
+            World bukkitWorld = min.getWorld();
+            BukkitWorld world = new BukkitWorld(bukkitWorld);
+
+            Vector minVector = BukkitUtil.toVector(min);
+            Vector maxVector = BukkitUtil.toVector(max);
+
+            EditSession session = new EditSession(world, -1);
+            session.setFastMode(true);
+
+            session.setBlocks(new CuboidRegion(minVector, maxVector), new BaseBlock(0));
             session.flushQueue();
         } catch (Exception exception) {
             Logger.logException("Failed to delete arena " + arena.getName(), exception);
