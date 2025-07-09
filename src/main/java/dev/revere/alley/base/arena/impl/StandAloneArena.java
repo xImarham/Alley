@@ -95,7 +95,8 @@ public class StandAloneArena extends AbstractArena {
     @Override
     public void saveArena() {
         String name = "arenas." + this.getName();
-        FileConfiguration config = Alley.getInstance().getService(IConfigService.class).getArenasConfig();
+        IConfigService configService = Alley.getInstance().getService(IConfigService.class);
+        FileConfiguration config = configService.getArenasConfig();
 
         config.set(name, null);
         config.set(name + ".type", this.getType().name());
@@ -116,7 +117,7 @@ public class StandAloneArena extends AbstractArena {
         config.set(name + ".height-limit", this.heightLimit);
         config.set(name + ".void-level", this.voidLevel);
 
-        Alley.getInstance().getService(IConfigService.class).saveConfig(Alley.getInstance().getService(IConfigService.class).getConfigFile("storage/arenas.yml"), config);
+        configService.saveConfig(configService.getConfigFile("storage/arenas.yml"), config);
 
         Alley.getInstance().getService(IArenaSchematicService.class).updateSchematic(this);
     }

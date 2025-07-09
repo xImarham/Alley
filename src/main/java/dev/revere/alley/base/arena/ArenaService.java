@@ -359,10 +359,8 @@ public class ArenaService implements IArenaService {
 
     @Override
     public void saveArena(AbstractArena arena) {
-        CompletableFuture.runAsync(() -> {
-            arena.saveArena();
-            buildCaches();
-        }, executorService);
+        arena.saveArena();
+        buildCaches();
     }
 
     @Override

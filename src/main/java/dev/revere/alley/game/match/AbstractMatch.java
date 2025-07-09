@@ -286,7 +286,6 @@ public abstract class AbstractMatch {
         ICombatService combatService = Alley.getInstance().getService(ICombatService.class);
         IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
 
-
         GameParticipant<MatchGamePlayerImpl> participant = this.getParticipant(player);
         MatchGamePlayerImpl gamePlayer = this.getFromAllGamePlayers(player);
         if (participant.isAllEliminated() && !gamePlayer.isDisconnected()) {

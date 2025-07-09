@@ -3,7 +3,6 @@ package dev.revere.alley.game.match.impl;
 import dev.revere.alley.Alley;
 import dev.revere.alley.base.arena.AbstractArena;
 import dev.revere.alley.base.kit.Kit;
-import dev.revere.alley.base.kit.service.BaseRaidingService;
 import dev.revere.alley.base.kit.service.IBaseRaidingService;
 import dev.revere.alley.base.kit.setting.impl.mechanic.KitSettingDropItemsImpl;
 import dev.revere.alley.base.kit.setting.impl.mode.KitSettingRaidingImpl;
@@ -22,11 +21,8 @@ import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.game.match.utility.MatchUtility;
 import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
-import dev.revere.alley.profile.ProfileService;
 import dev.revere.alley.profile.progress.IProgressService;
 import dev.revere.alley.profile.progress.PlayerProgress;
-import dev.revere.alley.profile.progress.ProgressService;
-import dev.revere.alley.tool.elo.EloCalculator;
 import dev.revere.alley.tool.elo.IEloCalculator;
 import dev.revere.alley.tool.elo.result.EloResult;
 import dev.revere.alley.tool.elo.result.OldEloResult;
@@ -141,7 +137,7 @@ public class MatchRegularImpl extends AbstractMatch {
 
     @Override
     public void handleRoundEnd() {
-        final boolean teamADead = this.participantA.isAllEliminated();
+        final boolean teamADead = this.participantA.isAllEliminated() || this.participantA.isAllDead();
         final GameParticipant<MatchGamePlayerImpl> winner = teamADead ? this.participantB : this.participantA;
         final GameParticipant<MatchGamePlayerImpl> loser = teamADead ? this.participantA : this.participantB;
 
