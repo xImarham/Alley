@@ -35,7 +35,8 @@ public class SharedArena extends AbstractArena {
 
     @Override
     public void createArena() {
-        Alley.getInstance().getService(IArenaService.class).getArenas().add(this);
+        IArenaService arenaService = Alley.getInstance().getService(IArenaService.class);
+        arenaService.registerNewArena(this);
         this.saveArena();
     }
 

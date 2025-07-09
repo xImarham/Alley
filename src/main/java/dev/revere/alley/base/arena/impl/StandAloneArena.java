@@ -86,7 +86,8 @@ public class StandAloneArena extends AbstractArena {
     @Override
     public void createArena() {
         if (!this.isTemporaryCopy) {
-            Alley.getInstance().getService(IArenaService.class).getArenas().add(this);
+            IArenaService arenaService = Alley.getInstance().getService(IArenaService.class);
+            arenaService.registerNewArena(this);
             this.saveArena();
         }
     }

@@ -52,25 +52,7 @@ public class ConfigService implements IConfigService {
             this.loadConfig(fileName);
         }
 
-        this.menusConfig = this.getConfig("menus.yml");
-        this.pearlConfig = this.getConfig("pearls.yml");
-        this.abilityConfig = this.getConfig("abilities.yml");
-        this.visualsConfig = this.getConfig("visuals.yml");
-        this.settingsConfig = this.getConfig("settings.yml");
-        this.messagesConfig = this.getConfig("messages.yml");
-        this.databaseConfig = this.getConfig("database/database.yml");
-        this.kitsConfig = this.getConfig("storage/kits.yml");
-        this.arenasConfig = this.getConfig("storage/arenas.yml");
-        this.titlesConfig = this.getConfig("storage/titles.yml");
-        this.levelsConfig = this.getConfig("storage/levels.yml");
-        this.divisionsConfig = this.getConfig("storage/divisions.yml");
-        this.tabListConfig = this.getConfig("providers/tablist.yml");
-        this.scoreboardConfig = this.getConfig("providers/scoreboard.yml");
-        this.aiConfig = this.getConfig("providers/ai.yml");
-        this.saltyMessagesConfig = this.getConfig("cosmetics/messages/salty_messages.yml");
-        this.yeetMessagesConfig = this.getConfig("cosmetics/messages/yeet_messages.yml");
-        this.nerdMessagesConfig = this.getConfig("cosmetics/messages/nerd_messages.yml");
-        this.spigotCommunityMessagesConfig = this.getConfig("cosmetics/messages/spigot_community_messages.yml");
+        this.assignConfigs();
     }
 
     @Override
@@ -80,6 +62,8 @@ public class ConfigService implements IConfigService {
         for (String fileName : this.configFileNames) {
             this.loadConfig(fileName);
         }
+
+        this.assignConfigs();
     }
 
     @Override
@@ -99,6 +83,28 @@ public class ConfigService implements IConfigService {
     @Override
     public File getConfigFile(String fileName) {
         return this.configFiles.get(fileName);
+    }
+
+    private void assignConfigs() {
+        this.menusConfig = this.getConfig("menus.yml");
+        this.pearlConfig = this.getConfig("pearls.yml");
+        this.abilityConfig = this.getConfig("abilities.yml");
+        this.visualsConfig = this.getConfig("visuals.yml");
+        this.settingsConfig = this.getConfig("settings.yml");
+        this.messagesConfig = this.getConfig("messages.yml");
+        this.databaseConfig = this.getConfig("database/database.yml");
+        this.kitsConfig = this.getConfig("storage/kits.yml");
+        this.arenasConfig = this.getConfig("storage/arenas.yml");
+        this.titlesConfig = this.getConfig("storage/titles.yml");
+        this.levelsConfig = this.getConfig("storage/levels.yml");
+        this.divisionsConfig = this.getConfig("storage/divisions.yml");
+        this.tabListConfig = this.getConfig("providers/tablist.yml");
+        this.scoreboardConfig = this.getConfig("providers/scoreboard.yml");
+        this.aiConfig = this.getConfig("providers/ai.yml");
+        this.saltyMessagesConfig = this.getConfig("cosmetics/messages/salty_messages.yml");
+        this.yeetMessagesConfig = this.getConfig("cosmetics/messages/yeet_messages.yml");
+        this.nerdMessagesConfig = this.getConfig("cosmetics/messages/nerd_messages.yml");
+        this.spigotCommunityMessagesConfig = this.getConfig("cosmetics/messages/spigot_community_messages.yml");
     }
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
