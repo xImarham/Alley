@@ -4,8 +4,6 @@ import dev.revere.alley.Alley;
 import dev.revere.alley.game.match.AbstractMatch;
 import dev.revere.alley.game.match.enums.EnumMatchState;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
-import dev.revere.alley.game.match.snapshot.ISnapshotDataService;
-import dev.revere.alley.game.match.snapshot.SnapshotDataService;
 import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
@@ -17,8 +15,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PotionSplashEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
-
-import java.util.UUID;
 
 /**
  * @author Emmy
@@ -107,14 +103,6 @@ public class SnapshotListener implements Listener {
         boolean isBlocked = defender.isBlocking();
         if (isBlocked) {
             defenderGamePlayer.getData().incrementBlockedHits();
-        }
-
-        UUID attackerId = attacker.getUniqueId();
-
-        ISnapshotDataService snapshotDataService = Alley.getInstance().getService(ISnapshotDataService.class);
-        if (snapshotDataService.isWTap(attackerId)) {
-            attackerGamePlayer.getData().incrementWTaps();
-            snapshotDataService.resetSprint(attackerId);
         }
     }
 }

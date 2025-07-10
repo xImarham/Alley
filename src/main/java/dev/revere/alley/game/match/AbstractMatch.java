@@ -27,7 +27,6 @@ import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.game.match.runnable.MatchRunnable;
 import dev.revere.alley.game.match.runnable.other.MatchRespawnRunnable;
-import dev.revere.alley.game.match.snapshot.ISnapshotDataService;
 import dev.revere.alley.game.match.snapshot.ISnapshotRepository;
 import dev.revere.alley.game.match.snapshot.Snapshot;
 import dev.revere.alley.profile.IProfileService;
@@ -326,7 +325,7 @@ public abstract class AbstractMatch {
                 this.handleDeathEffects(player, killer);
             }
             this.setupSpectatorProfile(player);
-            this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> this.addSpectator(player),1L);
+            this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> this.addSpectator(player), 1L);
             return;
         }
 
@@ -520,7 +519,6 @@ public abstract class AbstractMatch {
 
     private void handleSnapshots() {
         ISnapshotRepository snapshotRepository = Alley.getInstance().getService(ISnapshotRepository.class);
-        ISnapshotDataService snapshotDataService = Alley.getInstance().getService(ISnapshotDataService.class);
 
         this.getParticipants().forEach(gameParticipant -> gameParticipant.getPlayers().forEach(gamePlayer -> {
             Player player = this.plugin.getServer().getPlayer(gamePlayer.getUuid());
@@ -539,7 +537,6 @@ public abstract class AbstractMatch {
             snapshot.setWTaps(data.getWTaps());
 
             snapshotRepository.addSnapshot(snapshot);
-            snapshotDataService.clearData(player.getUniqueId());
         }));
     }
 
