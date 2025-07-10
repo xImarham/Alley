@@ -6,5 +6,4 @@ description: '${project.description}'
 website: https://discord.gg/revere
 softDepend:
   - PlaceholderAPI
-  - ProtocolLib
 depend: [WorldEdit]
