@@ -90,7 +90,7 @@ public class AlleyPlaceholderExpansion extends PlaceholderExpansion {
             case "player-ranked-losses":
                 return String.valueOf(profileData.getRankedLosses());
             case "player-level":
-                return Objects.requireNonNull(this.plugin.getService(ILevelService.class).getLevel(profileData.getElo()).getName(), this.notAvailableString);
+                return Objects.requireNonNull(this.plugin.getService(ILevelService.class).getLevel(profileData.getElo()).getDisplayName(), this.notAvailableString);
             case "player-coins":
                 return String.valueOf(profileData.getCoins());
         }
