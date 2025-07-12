@@ -2,8 +2,8 @@ package dev.revere.alley.api.server;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.server.listener.ServerEnvironmentListener;
-import dev.revere.alley.core.AlleyContext;
-import dev.revere.alley.core.annotation.Service;
+import dev.revere.alley.plugin.AlleyContext;
+import dev.revere.alley.plugin.annotation.Service;
 import dev.revere.alley.util.chat.CC;
 import lombok.Getter;
 import org.bukkit.Difficulty;

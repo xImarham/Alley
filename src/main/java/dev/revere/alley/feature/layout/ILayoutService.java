@@ -1,7 +1,7 @@
 package dev.revere.alley.feature.layout;
 
 import dev.revere.alley.api.menu.Menu;
-import dev.revere.alley.core.lifecycle.IService;
+import dev.revere.alley.plugin.lifecycle.IService;
 import dev.revere.alley.feature.layout.data.LayoutData;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;

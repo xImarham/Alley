@@ -1,6 +1,6 @@
 package dev.revere.alley.game.match.snapshot;
 
-import dev.revere.alley.core.lifecycle.IService;
+import dev.revere.alley.plugin.lifecycle.IService;
 
 import java.util.Map;
 import java.util.UUID;

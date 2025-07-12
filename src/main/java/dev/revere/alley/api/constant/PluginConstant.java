@@ -1,12 +1,11 @@
 package dev.revere.alley.api.constant;
 
 import dev.revere.alley.Alley;
-import dev.revere.alley.core.AlleyContext;
-import dev.revere.alley.core.annotation.Service;
+import dev.revere.alley.plugin.AlleyContext;
+import dev.revere.alley.plugin.annotation.Service;
 import lombok.Getter;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.PluginDescriptionFile;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.reflections.Reflections;
 
 import java.util.List;

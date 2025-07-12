@@ -1,9 +1,8 @@
 package dev.revere.alley.feature.server;
 
 import dev.revere.alley.base.hotbar.IHotbarService;
-import dev.revere.alley.base.queue.IQueueService;
 import dev.revere.alley.base.spawn.ISpawnService;
-import dev.revere.alley.core.annotation.Service;
+import dev.revere.alley.plugin.annotation.Service;
 import dev.revere.alley.game.match.AbstractMatch;
 import dev.revere.alley.game.match.IMatchService;
 import dev.revere.alley.game.party.IPartyService;

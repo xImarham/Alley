@@ -1,6 +1,6 @@
 package dev.revere.alley.profile.progress;
 
-import dev.revere.alley.core.annotation.Service;
+import dev.revere.alley.plugin.annotation.Service;
 import dev.revere.alley.feature.division.Division;
 import dev.revere.alley.feature.division.tier.DivisionTier;
 import dev.revere.alley.profile.Profile;

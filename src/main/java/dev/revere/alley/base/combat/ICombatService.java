@@ -1,6 +1,6 @@
 package dev.revere.alley.base.combat;
 
-import dev.revere.alley.core.lifecycle.IService;
+import dev.revere.alley.plugin.lifecycle.IService;
 import org.bukkit.entity.Player;
 
 import java.util.Map;

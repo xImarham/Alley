@@ -1,9 +1,8 @@
 package dev.revere.alley.feature.division;
 
-import dev.revere.alley.Alley;
 import dev.revere.alley.config.IConfigService;
-import dev.revere.alley.core.AlleyContext;
-import dev.revere.alley.core.annotation.Service;
+import dev.revere.alley.plugin.AlleyContext;
+import dev.revere.alley.plugin.annotation.Service;
 import dev.revere.alley.feature.division.tier.DivisionTier;
 import dev.revere.alley.tool.logger.Logger;
 import lombok.Getter;

@@ -1,6 +1,5 @@
 package dev.revere.alley.game.match;
 
-import dev.revere.alley.Alley;
 import dev.revere.alley.base.arena.AbstractArena;
 import dev.revere.alley.base.kit.Kit;
 import dev.revere.alley.base.kit.setting.KitSetting;
@@ -8,8 +7,8 @@ import dev.revere.alley.base.kit.setting.impl.mode.*;
 import dev.revere.alley.base.queue.IQueueService;
 import dev.revere.alley.base.queue.Queue;
 import dev.revere.alley.config.IConfigService;
-import dev.revere.alley.core.AlleyContext;
-import dev.revere.alley.core.annotation.Service;
+import dev.revere.alley.plugin.AlleyContext;
+import dev.revere.alley.plugin.annotation.Service;
 import dev.revere.alley.game.match.impl.*;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;

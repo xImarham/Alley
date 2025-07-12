@@ -1,6 +1,6 @@
 package dev.revere.alley.feature.cosmetic.repository;
 
-import dev.revere.alley.core.lifecycle.IService;
+import dev.revere.alley.plugin.lifecycle.IService;
 import dev.revere.alley.feature.cosmetic.EnumCosmeticType;
 
 import java.util.Map;

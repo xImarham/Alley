@@ -1,10 +1,9 @@
 package dev.revere.alley.feature.emoji;
 
 import dev.revere.alley.config.IConfigService;
-import dev.revere.alley.core.AlleyContext;
-import dev.revere.alley.core.annotation.Service;
+import dev.revere.alley.plugin.AlleyContext;
+import dev.revere.alley.plugin.annotation.Service;
 import dev.revere.alley.feature.emoji.enums.EnumEmojiType;
-import dev.revere.alley.tool.logger.Logger;
 import lombok.Getter;
 import org.bukkit.configuration.file.FileConfiguration;
 

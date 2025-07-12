@@ -1,7 +1,7 @@
-package dev.revere.alley.server.impl;
+package dev.revere.alley.adapter.core.impl;
 
-import dev.revere.alley.server.ICore;
-import dev.revere.alley.server.enums.EnumCoreType;
+import dev.revere.alley.adapter.core.ICore;
+import dev.revere.alley.adapter.core.enums.EnumCoreType;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import xyz.refinedev.phoenix.SharedAPI;

@@ -1,12 +1,11 @@
-package dev.revere.alley.feature.knockback;
+package dev.revere.alley.adapter.knockback;
 
 import dev.revere.alley.Alley;
-import dev.revere.alley.core.AlleyContext;
-import dev.revere.alley.core.annotation.Service;
-import dev.revere.alley.feature.knockback.enums.EnumKnockbackType;
-import dev.revere.alley.feature.knockback.impl.DefaultKnockbackImpl;
-import dev.revere.alley.feature.knockback.impl.ZoneKnockbackImpl;
-import dev.revere.alley.tool.logger.Logger;
+import dev.revere.alley.plugin.AlleyContext;
+import dev.revere.alley.plugin.annotation.Service;
+import dev.revere.alley.adapter.knockback.enums.EnumKnockbackType;
+import dev.revere.alley.adapter.knockback.impl.DefaultKnockbackImpl;
+import dev.revere.alley.adapter.knockback.impl.ZoneKnockbackImpl;
 import lombok.Getter;
 
 /**

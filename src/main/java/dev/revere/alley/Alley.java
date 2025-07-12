@@ -1,5 +1,6 @@
 package dev.revere.alley;
 
+import dev.revere.alley.adapter.core.listener.CoreChatListener;
 import dev.revere.alley.api.menu.MenuListener;
 import dev.revere.alley.base.arena.listener.ArenaListener;
 import dev.revere.alley.base.combat.listener.CombatListener;
@@ -7,8 +8,6 @@ import dev.revere.alley.base.hotbar.listener.HotbarListener;
 import dev.revere.alley.base.queue.listener.QueueListener;
 import dev.revere.alley.base.spawn.listener.SpawnListener;
 import dev.revere.alley.config.IConfigService;
-import dev.revere.alley.core.AlleyContext;
-import dev.revere.alley.core.lifecycle.IService;
 import dev.revere.alley.feature.emoji.listener.EmojiListener;
 import dev.revere.alley.feature.layout.listener.LayoutListener;
 import dev.revere.alley.game.ffa.listener.FFAListener;
@@ -17,10 +16,11 @@ import dev.revere.alley.game.match.listener.MatchListener;
 import dev.revere.alley.game.match.listener.impl.*;
 import dev.revere.alley.game.match.snapshot.listener.SnapshotListener;
 import dev.revere.alley.game.party.listener.PartyListener;
+import dev.revere.alley.plugin.AlleyContext;
+import dev.revere.alley.plugin.lifecycle.IService;
 import dev.revere.alley.profile.listener.ProfileListener;
 import dev.revere.alley.provider.expansion.AlleyPlaceholderExpansion;
 import dev.revere.alley.provider.tablist.task.TablistUpdateTask;
-import dev.revere.alley.server.listener.CoreChatListener;
 import dev.revere.alley.task.ArrowRemovalTask;
 import dev.revere.alley.task.MatchPearlCooldownTask;
 import dev.revere.alley.task.RepositoryCleanupTask;
@@ -124,12 +124,15 @@ public class Alley extends JavaPlugin {
     }
 
     private void registerExpansion() {
-        if (this.getServer().getPluginManager().isPluginEnabled("PlaceholderAPI")) {
-            Logger.logTime(AlleyPlaceholderExpansion.class.getSimpleName(), () -> {
-                AlleyPlaceholderExpansion expansion = new AlleyPlaceholderExpansion(this);
-                expansion.register();
-            });
+        if (this.getServer().getPluginManager().getPlugin("PlaceholderAPI") == null) {
+            Logger.info("PlaceholderAPI is not installed! AlleyPlaceholderExpansion will not be registered.");
+            return;
         }
+
+        Logger.logTime(AlleyPlaceholderExpansion.class.getSimpleName(), () -> {
+            AlleyPlaceholderExpansion expansion = new AlleyPlaceholderExpansion(this);
+            expansion.register();
+        });
     }
 
     private void registerListeners() {

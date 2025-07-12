@@ -1,10 +1,9 @@
-package dev.revere.alley.server.impl;
+package dev.revere.alley.adapter.core.impl;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.constant.IPluginConstant;
-import dev.revere.alley.profile.progress.IProgressService;
-import dev.revere.alley.server.ICore;
-import dev.revere.alley.server.enums.EnumCoreType;
+import dev.revere.alley.adapter.core.ICore;
+import dev.revere.alley.adapter.core.enums.EnumCoreType;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;

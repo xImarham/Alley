@@ -2,7 +2,7 @@ package dev.revere.alley.base.queue;
 
 import dev.revere.alley.api.menu.Menu;
 import dev.revere.alley.base.queue.runnable.QueueRunnable;
-import dev.revere.alley.core.lifecycle.IService;
+import dev.revere.alley.plugin.lifecycle.IService;
 
 import java.util.List;
 

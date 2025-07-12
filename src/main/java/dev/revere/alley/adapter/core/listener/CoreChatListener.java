@@ -1,11 +1,11 @@
-package dev.revere.alley.server.listener;
+package dev.revere.alley.adapter.core.listener;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.feature.filter.IFilterService;
 import dev.revere.alley.profile.IProfileService;
-import dev.revere.alley.server.ICore;
+import dev.revere.alley.adapter.core.ICore;
 import dev.revere.alley.profile.Profile;
-import dev.revere.alley.server.ICoreAdapter;
+import dev.revere.alley.adapter.core.ICoreAdapter;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;

@@ -1,6 +1,6 @@
 package dev.revere.alley.game.ffa.cuboid;
 
-import dev.revere.alley.core.lifecycle.IService;
+import dev.revere.alley.plugin.lifecycle.IService;
 import dev.revere.alley.tool.cuboid.Cuboid;
 import org.bukkit.Location;
 

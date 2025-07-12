@@ -1,8 +1,8 @@
-package dev.revere.alley.server;
+package dev.revere.alley.adapter.core;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.profile.IProfileService;
-import dev.revere.alley.server.enums.EnumCoreType;
+import dev.revere.alley.adapter.core.enums.EnumCoreType;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.ChatColor;

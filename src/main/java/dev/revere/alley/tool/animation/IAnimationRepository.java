@@ -1,6 +1,6 @@
 package dev.revere.alley.tool.animation;
 
-import dev.revere.alley.core.lifecycle.IService;
+import dev.revere.alley.plugin.lifecycle.IService;
 import dev.revere.alley.tool.animation.enums.EnumAnimationType;
 import dev.revere.alley.tool.animation.type.config.TextAnimation;
 import dev.revere.alley.tool.animation.type.internal.AbstractAnimation;

@@ -7,7 +7,7 @@ import dev.revere.alley.base.hotbar.IHotbarService;
 import dev.revere.alley.base.kit.Kit;
 import dev.revere.alley.base.spawn.ISpawnService;
 import dev.revere.alley.base.visibility.IVisibilityService;
-import dev.revere.alley.feature.knockback.IKnockbackAdapter;
+import dev.revere.alley.adapter.knockback.IKnockbackAdapter;
 import dev.revere.alley.game.ffa.AbstractFFAMatch;
 import dev.revere.alley.game.ffa.enums.EnumFFAState;
 import dev.revere.alley.game.ffa.player.GameFFAPlayer;

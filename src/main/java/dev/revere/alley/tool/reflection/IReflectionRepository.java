@@ -1,6 +1,6 @@
 package dev.revere.alley.tool.reflection;
 
-import dev.revere.alley.core.lifecycle.IService;
+import dev.revere.alley.plugin.lifecycle.IService;
 
 import java.util.List;
 

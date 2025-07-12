@@ -17,7 +17,7 @@ import com.sk89q.worldedit.regions.CuboidRegion;
 import dev.revere.alley.Alley;
 import dev.revere.alley.base.arena.AbstractArena;
 import dev.revere.alley.base.arena.impl.StandAloneArena;
-import dev.revere.alley.core.annotation.Service;
+import dev.revere.alley.plugin.annotation.Service;
 import dev.revere.alley.tool.logger.Logger;
 import org.bukkit.Location;
 import org.bukkit.World;

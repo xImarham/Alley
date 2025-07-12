@@ -2,8 +2,8 @@ package dev.revere.alley.profile;
 
 import com.mongodb.client.MongoCollection;
 import dev.revere.alley.base.kit.Kit;
-import dev.revere.alley.core.AlleyContext;
-import dev.revere.alley.core.annotation.Service;
+import dev.revere.alley.plugin.AlleyContext;
+import dev.revere.alley.plugin.annotation.Service;
 import dev.revere.alley.database.IMongoService;
 import dev.revere.alley.database.profile.IProfile;
 import dev.revere.alley.database.profile.impl.MongoProfileImpl;

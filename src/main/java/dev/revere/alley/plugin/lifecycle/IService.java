@@ -1,6 +1,6 @@
-package dev.revere.alley.core.lifecycle;
+package dev.revere.alley.plugin.lifecycle;
 
-import dev.revere.alley.core.AlleyContext;
+import dev.revere.alley.plugin.AlleyContext;
 
 /**
  * @author Remi

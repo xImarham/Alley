@@ -1,7 +1,7 @@
 package dev.revere.alley.base.hotbar;
 
 import dev.revere.alley.base.hotbar.enums.EnumHotbarType;
-import dev.revere.alley.core.lifecycle.IService;
+import dev.revere.alley.plugin.lifecycle.IService;
 import dev.revere.alley.profile.Profile;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;

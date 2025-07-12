@@ -1,6 +1,6 @@
 package dev.revere.alley.config;
 
-import dev.revere.alley.core.lifecycle.IService;
+import dev.revere.alley.plugin.lifecycle.IService;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import java.io.File;

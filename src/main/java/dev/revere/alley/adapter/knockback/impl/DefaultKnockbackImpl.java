@@ -1,7 +1,7 @@
-package dev.revere.alley.feature.knockback.impl;
+package dev.revere.alley.adapter.knockback.impl;
 
-import dev.revere.alley.feature.knockback.IKnockback;
-import dev.revere.alley.feature.knockback.enums.EnumKnockbackType;
+import dev.revere.alley.adapter.knockback.IKnockback;
+import dev.revere.alley.adapter.knockback.enums.EnumKnockbackType;
 import org.bukkit.entity.Player;
 
 /**

@@ -4,9 +4,9 @@ import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
-import dev.revere.alley.server.ICore;
-import dev.revere.alley.server.ICoreAdapter;
-import dev.revere.alley.server.enums.EnumCoreType;
+import dev.revere.alley.adapter.core.ICore;
+import dev.revere.alley.adapter.core.ICoreAdapter;
+import dev.revere.alley.adapter.core.enums.EnumCoreType;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.command.CommandSender;
 

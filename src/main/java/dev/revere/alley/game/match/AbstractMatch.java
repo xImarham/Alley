@@ -16,7 +16,7 @@ import dev.revere.alley.feature.cosmetic.EnumCosmeticType;
 import dev.revere.alley.feature.cosmetic.impl.killmessage.AbstractKillMessagePack;
 import dev.revere.alley.feature.cosmetic.repository.BaseCosmeticRepository;
 import dev.revere.alley.feature.cosmetic.repository.ICosmeticRepository;
-import dev.revere.alley.feature.knockback.IKnockbackAdapter;
+import dev.revere.alley.adapter.knockback.IKnockbackAdapter;
 import dev.revere.alley.feature.layout.ILayoutService;
 import dev.revere.alley.feature.layout.data.LayoutData;
 import dev.revere.alley.game.match.enums.EnumMatchState;

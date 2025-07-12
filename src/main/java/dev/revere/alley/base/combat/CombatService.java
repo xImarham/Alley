@@ -1,6 +1,6 @@
 package dev.revere.alley.base.combat;
 
-import dev.revere.alley.core.annotation.Service;
+import dev.revere.alley.plugin.annotation.Service;
 import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.enums.EnumProfileState;
 import dev.revere.alley.util.TimeUtil;

@@ -1,7 +1,7 @@
 package dev.revere.alley.base.cooldown;
 
 import dev.revere.alley.base.cooldown.enums.EnumCooldownType;
-import dev.revere.alley.core.lifecycle.IService;
+import dev.revere.alley.plugin.lifecycle.IService;
 import dev.revere.alley.tool.triple.impl.MutableTriple;
 
 import java.util.List;

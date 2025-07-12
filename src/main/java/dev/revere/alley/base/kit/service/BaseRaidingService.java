@@ -1,12 +1,11 @@
 package dev.revere.alley.base.kit.service;
 
-import dev.revere.alley.Alley;
 import dev.revere.alley.base.kit.IKitService;
 import dev.revere.alley.base.kit.Kit;
 import dev.revere.alley.base.kit.setting.impl.mode.KitSettingRaidingImpl;
 import dev.revere.alley.config.IConfigService;
-import dev.revere.alley.core.AlleyContext;
-import dev.revere.alley.core.annotation.Service;
+import dev.revere.alley.plugin.AlleyContext;
+import dev.revere.alley.plugin.annotation.Service;
 import dev.revere.alley.game.match.player.enums.EnumBaseRaiderRole;
 import dev.revere.alley.tool.logger.Logger;
 import lombok.Getter;

@@ -1,6 +1,6 @@
-package dev.revere.alley.server;
+package dev.revere.alley.adapter.core;
 
-import dev.revere.alley.core.lifecycle.IService;
+import dev.revere.alley.plugin.lifecycle.IService;
 
 /**
  * @author Remi

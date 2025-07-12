@@ -2,7 +2,7 @@ package dev.revere.alley.game.duel;
 
 import dev.revere.alley.base.arena.AbstractArena;
 import dev.revere.alley.base.kit.Kit;
-import dev.revere.alley.core.lifecycle.IService;
+import dev.revere.alley.plugin.lifecycle.IService;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
 

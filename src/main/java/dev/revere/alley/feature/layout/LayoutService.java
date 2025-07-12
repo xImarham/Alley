@@ -1,11 +1,10 @@
 package dev.revere.alley.feature.layout;
 
-import dev.revere.alley.Alley;
 import dev.revere.alley.api.menu.Menu;
 import dev.revere.alley.base.kit.enums.EnumKitCategory;
 import dev.revere.alley.config.IConfigService;
-import dev.revere.alley.core.AlleyContext;
-import dev.revere.alley.core.annotation.Service;
+import dev.revere.alley.plugin.AlleyContext;
+import dev.revere.alley.plugin.annotation.Service;
 import dev.revere.alley.feature.layout.data.LayoutData;
 import dev.revere.alley.feature.layout.menu.LayoutMenu;
 import dev.revere.alley.profile.IProfileService;

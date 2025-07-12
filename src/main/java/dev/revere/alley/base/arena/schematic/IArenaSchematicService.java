@@ -2,7 +2,7 @@ package dev.revere.alley.base.arena.schematic;
 
 import dev.revere.alley.base.arena.AbstractArena;
 import dev.revere.alley.base.arena.impl.StandAloneArena;
-import dev.revere.alley.core.lifecycle.IService;
+import dev.revere.alley.plugin.lifecycle.IService;
 import org.bukkit.Location;
 
 import java.io.File;

@@ -1,6 +1,6 @@
 package dev.revere.alley.tool.elo;
 
-import dev.revere.alley.core.lifecycle.IService;
+import dev.revere.alley.plugin.lifecycle.IService;
 
 /**
  * @author Remi

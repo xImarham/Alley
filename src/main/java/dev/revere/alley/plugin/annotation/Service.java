@@ -1,6 +1,6 @@
-package dev.revere.alley.core.annotation;
+package dev.revere.alley.plugin.annotation;
 
-import dev.revere.alley.core.lifecycle.IService;
+import dev.revere.alley.plugin.lifecycle.IService;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

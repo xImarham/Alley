@@ -1,11 +1,10 @@
 package dev.revere.alley.game.duel;
 
-import dev.revere.alley.Alley;
 import dev.revere.alley.base.arena.AbstractArena;
 import dev.revere.alley.base.arena.IArenaService;
 import dev.revere.alley.base.arena.impl.StandAloneArena;
 import dev.revere.alley.base.kit.Kit;
-import dev.revere.alley.core.annotation.Service;
+import dev.revere.alley.plugin.annotation.Service;
 import dev.revere.alley.feature.server.IServerService;
 import dev.revere.alley.game.match.IMatchService;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
@@ -18,7 +17,6 @@ import dev.revere.alley.profile.enums.EnumProfileState;
 import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.util.chat.ClickableUtil;
 import lombok.Getter;
-import lombok.Setter;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;

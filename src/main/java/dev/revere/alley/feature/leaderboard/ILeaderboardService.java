@@ -1,7 +1,7 @@
 package dev.revere.alley.feature.leaderboard;
 
 import dev.revere.alley.base.kit.Kit;
-import dev.revere.alley.core.lifecycle.IService;
+import dev.revere.alley.plugin.lifecycle.IService;
 import dev.revere.alley.feature.leaderboard.data.LeaderboardPlayerData;
 import dev.revere.alley.feature.leaderboard.enums.EnumLeaderboardType;
 

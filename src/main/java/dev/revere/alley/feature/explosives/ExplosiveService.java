@@ -1,13 +1,10 @@
 package dev.revere.alley.feature.explosives;
 
 import dev.revere.alley.Alley;
-import dev.revere.alley.config.ConfigService;
 import dev.revere.alley.config.IConfigService;
-import dev.revere.alley.core.AlleyContext;
-import dev.revere.alley.core.annotation.Service;
-import dev.revere.alley.feature.explosives.command.ExplosiveCommand;
+import dev.revere.alley.plugin.AlleyContext;
+import dev.revere.alley.plugin.annotation.Service;
 import dev.revere.alley.feature.explosives.listener.ExplosiveListener;
-import dev.revere.alley.tool.logger.Logger;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.configuration.file.FileConfiguration;

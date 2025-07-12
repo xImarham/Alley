@@ -1,7 +1,7 @@
 package dev.revere.alley.base.cooldown;
 
 import dev.revere.alley.base.cooldown.enums.EnumCooldownType;
-import dev.revere.alley.core.annotation.Service;
+import dev.revere.alley.plugin.annotation.Service;
 import dev.revere.alley.tool.triple.impl.MutableTriple;
 import lombok.Getter;
 

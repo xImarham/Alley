@@ -2,8 +2,8 @@ package dev.revere.alley.base.hotbar;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.base.hotbar.enums.EnumHotbarType;
-import dev.revere.alley.core.AlleyContext;
-import dev.revere.alley.core.annotation.Service;
+import dev.revere.alley.plugin.AlleyContext;
+import dev.revere.alley.plugin.annotation.Service;
 import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.tool.item.ItemBuilder;

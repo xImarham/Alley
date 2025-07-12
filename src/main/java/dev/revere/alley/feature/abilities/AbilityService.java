@@ -2,8 +2,8 @@ package dev.revere.alley.feature.abilities;
 
 import dev.revere.alley.api.constant.IPluginConstant;
 import dev.revere.alley.config.IConfigService;
-import dev.revere.alley.core.AlleyContext;
-import dev.revere.alley.core.annotation.Service;
+import dev.revere.alley.plugin.AlleyContext;
+import dev.revere.alley.plugin.annotation.Service;
 import dev.revere.alley.tool.item.ItemBuilder;
 import dev.revere.alley.tool.logger.Logger;
 import dev.revere.alley.util.TaskUtil;

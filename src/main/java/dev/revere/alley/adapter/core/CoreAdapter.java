@@ -1,16 +1,14 @@
-package dev.revere.alley.server;
+package dev.revere.alley.adapter.core;
 
 import dev.revere.alley.Alley;
-import dev.revere.alley.core.AlleyContext;
-import dev.revere.alley.core.annotation.Service;
-import dev.revere.alley.server.enums.EnumCoreType;
-import dev.revere.alley.server.impl.AquaCoreImpl;
-import dev.revere.alley.server.impl.DefaultCoreImpl;
-import dev.revere.alley.server.impl.HeliumCoreImpl;
-import dev.revere.alley.server.impl.PhoenixCoreImpl;
-import dev.revere.alley.tool.logger.Logger;
+import dev.revere.alley.plugin.AlleyContext;
+import dev.revere.alley.plugin.annotation.Service;
+import dev.revere.alley.adapter.core.enums.EnumCoreType;
+import dev.revere.alley.adapter.core.impl.AquaCoreImpl;
+import dev.revere.alley.adapter.core.impl.DefaultCoreImpl;
+import dev.revere.alley.adapter.core.impl.HeliumCoreImpl;
+import dev.revere.alley.adapter.core.impl.PhoenixCoreImpl;
 import lombok.Getter;
-import lombok.Setter;
 import me.activated.core.plugin.AquaCoreAPI;
 import services.plasma.helium.api.HeliumAPI;
 import xyz.refinedev.phoenix.SharedAPI;

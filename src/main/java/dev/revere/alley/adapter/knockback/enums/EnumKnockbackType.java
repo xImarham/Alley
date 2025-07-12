@@ -1,4 +1,4 @@
-package dev.revere.alley.feature.knockback.enums;
+package dev.revere.alley.adapter.knockback.enums;
 
 import lombok.Getter;
 

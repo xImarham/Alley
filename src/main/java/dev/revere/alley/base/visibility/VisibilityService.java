@@ -1,7 +1,7 @@
 package dev.revere.alley.base.visibility;
 
 import dev.revere.alley.Alley;
-import dev.revere.alley.core.annotation.Service;
+import dev.revere.alley.plugin.annotation.Service;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;

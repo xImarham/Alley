@@ -2,7 +2,7 @@ package dev.revere.alley.profile;
 
 import com.mongodb.client.MongoCollection;
 import dev.revere.alley.base.kit.Kit;
-import dev.revere.alley.core.lifecycle.IService;
+import dev.revere.alley.plugin.lifecycle.IService;
 import dev.revere.alley.database.profile.IProfile;
 import org.bson.Document;
 import org.bukkit.entity.Player;

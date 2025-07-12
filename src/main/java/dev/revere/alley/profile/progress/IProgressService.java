@@ -1,6 +1,6 @@
 package dev.revere.alley.profile.progress;
 
-import dev.revere.alley.core.lifecycle.IService;
+import dev.revere.alley.plugin.lifecycle.IService;
 import dev.revere.alley.profile.Profile;
 
 /**

@@ -1,6 +1,6 @@
 package dev.revere.alley.game.match.snapshot;
 
-import dev.revere.alley.core.annotation.Service;
+import dev.revere.alley.plugin.annotation.Service;
 import lombok.Getter;
 
 import java.util.Map;

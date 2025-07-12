@@ -1,14 +1,12 @@
 package dev.revere.alley.base.kit.setting;
 
-import dev.revere.alley.Alley;
 import dev.revere.alley.api.constant.IPluginConstant;
 import dev.revere.alley.base.kit.Kit;
 import dev.revere.alley.base.kit.setting.annotation.KitSettingData;
-import dev.revere.alley.core.AlleyContext;
-import dev.revere.alley.core.annotation.Service;
+import dev.revere.alley.plugin.AlleyContext;
+import dev.revere.alley.plugin.annotation.Service;
 import dev.revere.alley.tool.logger.Logger;
 import lombok.Getter;
-import lombok.Setter;
 import org.reflections.Reflections;
 
 import java.util.ArrayList;
