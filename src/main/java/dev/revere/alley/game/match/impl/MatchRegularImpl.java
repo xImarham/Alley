@@ -11,8 +11,6 @@ import dev.revere.alley.base.queue.Queue;
 import dev.revere.alley.config.IConfigService;
 import dev.revere.alley.feature.layout.data.LayoutData;
 import dev.revere.alley.game.match.AbstractMatch;
-import dev.revere.alley.game.match.data.AbstractMatchData;
-import dev.revere.alley.game.match.data.impl.MatchDataSoloImpl;
 import dev.revere.alley.game.match.enums.EnumMatchState;
 import dev.revere.alley.game.match.player.data.MatchGamePlayerData;
 import dev.revere.alley.game.match.player.enums.EnumBaseRaiderRole;
@@ -239,29 +237,10 @@ public class MatchRegularImpl extends AbstractMatch {
         winnerProfile.getProfileData().getUnrankedKitData().get(getKit().getName()).incrementWins();
         winnerProfile.getProfileData().incrementUnrankedWins();
         winnerProfile.getProfileData().determineTitles();
-        this.addMatchToHistory(winner, loser, winnerProfile);
 
         Profile loserProfile = profileService.getProfile(loser.getLeader().getUuid());
         loserProfile.getProfileData().getUnrankedKitData().get(getKit().getName()).incrementLosses();
         loserProfile.getProfileData().incrementUnrankedLosses();
-        this.addMatchToHistory(loser, winner, loserProfile);
-    }
-
-    /**
-     * Creates a match data entry and adds it to a player's match history.
-     *
-     * @param self         The participant whose history is being updated.
-     * @param opponent     The opponent in the match.
-     * @param profileToAdd The profile to add the match data to.
-     */
-    private void addMatchToHistory(GameParticipant<MatchGamePlayerImpl> self, GameParticipant<MatchGamePlayerImpl> opponent, Profile profileToAdd) {
-        AbstractMatchData matchData = new MatchDataSoloImpl(
-                this.getKit().getName(),
-                this.getArena().getName(),
-                self.getLeader().getUuid(),
-                opponent.getLeader().getUuid()
-        );
-        profileToAdd.getProfileData().getPreviousMatches().add(matchData);
     }
 
     /**

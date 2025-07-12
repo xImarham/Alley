@@ -19,6 +19,8 @@ import dev.revere.alley.feature.cosmetic.repository.ICosmeticRepository;
 import dev.revere.alley.adapter.knockback.IKnockbackAdapter;
 import dev.revere.alley.feature.layout.ILayoutService;
 import dev.revere.alley.feature.layout.data.LayoutData;
+import dev.revere.alley.game.match.data.AbstractMatchData;
+import dev.revere.alley.game.match.data.impl.MatchDataSoloImpl;
 import dev.revere.alley.game.match.enums.EnumMatchState;
 import dev.revere.alley.game.match.impl.MatchRoundsImpl;
 import dev.revere.alley.game.match.player.GamePlayer;
@@ -514,7 +516,43 @@ public abstract class AbstractMatch {
     public void handleRoundEnd() {
         this.endTime = System.currentTimeMillis();
 
+        this.handleMatchHistoryData();
         this.handleSnapshots();
+    }
+
+    private void handleMatchHistoryData() {
+        if (this.isTeamMatch()) return; //TODO: either handle this case too or we're just not storing team match history
+
+        this.getParticipants().forEach(gameParticipant -> gameParticipant.getAllPlayers().forEach(gamePlayer -> {
+            Player player = this.plugin.getServer().getPlayer(gamePlayer.getUuid());
+            if (player == null) return;
+
+            Profile profile = this.plugin.getService(IProfileService.class).getProfile(player.getUniqueId());
+
+            UUID winnerID;
+            UUID loserID;
+
+            if (gamePlayer.isDead()) {
+                winnerID = this.getOpponent(player).getLeader().getUuid();
+                loserID = gamePlayer.getUuid();
+            } else {
+                winnerID = gamePlayer.getUuid();
+                loserID = this.getOpponent(player).getLeader().getUuid();
+            }
+
+            AbstractMatchData matchData = new MatchDataSoloImpl(
+                    this.getKit().getName(),
+                    this.getArena().getName(),
+                    winnerID,
+                    loserID
+            );
+
+            if (this.isRanked()) {
+                matchData.setRanked(true);
+            }
+
+            profile.getProfileData().getPreviousMatches().add(matchData);
+        }));
     }
 
     private void handleSnapshots() {

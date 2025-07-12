@@ -34,15 +34,24 @@ public class MatchHistorySelectKitButton extends Button {
                 .filter(matchData -> matchData.getKit().equals(this.kit.getName()))
                 .count();
 
+        int unrankedCount = (int) matchDataList.stream()
+                .filter(matchData -> matchData.getKit().equals(this.kit.getName()) && !matchData.isRanked())
+                .count();
+
+        int rankedCount = count - unrankedCount;
+
         return new ItemBuilder(this.kit.getIcon())
                 .name("&6&l" + this.kit.getDisplayName())
                 .lore(
-                        "&fMatches stored for this kit: &6" + count,
+                        " &f● Total: &6" + count,
+                        " &f● Ranked: &6" + rankedCount,
+                        " &f● Unranked: &6" + unrankedCount,
                         "",
                         "&aClick to view!"
                 )
                 .durability(this.kit.getDurability())
                 .hideMeta()
+                .amount(count > 0 ? count : 1)
                 .build();
     }
 
