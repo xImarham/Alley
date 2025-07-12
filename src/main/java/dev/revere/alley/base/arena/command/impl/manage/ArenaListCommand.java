@@ -6,6 +6,7 @@ import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.base.arena.AbstractArena;
 import dev.revere.alley.base.arena.IArenaService;
+import dev.revere.alley.tool.visual.LoreHelper;
 import dev.revere.alley.tool.visual.TextFormatter;
 import dev.revere.alley.util.chat.CC;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -42,8 +43,9 @@ public class ArenaListCommand extends BaseCommand {
                 .sorted(Comparator.comparing(AbstractArena::getName))
                 .forEach(arena -> {
                     ComponentBuilder hover = new ComponentBuilder("")
-                            .append(CC.translate("&6&lArena Info:\n"))
+                            .append(CC.translate("&6&lArena Info " + LoreHelper.enabledOrDisabled(arena.isEnabled()) + "\n"))
                             .append(CC.translate(" &f● Display Name: &6" + arena.getDisplayName() + "\n"))
+                            .append(CC.translate(" &f● Type: &6" + arena.getType().name() + "\n"))
                             .append(CC.translate(" &f● Center: &6" + TextFormatter.formatLocation(arena.getCenter()) + "\n"))
                             .append(CC.translate(" &f● Pos1: &6" + TextFormatter.formatLocation(arena.getPos1()) + "\n"))
                             .append(CC.translate(" &f● Pos2: &6" + TextFormatter.formatLocation(arena.getPos2()) + "\n"));
@@ -68,7 +70,7 @@ public class ArenaListCommand extends BaseCommand {
                     message.append("[i]")
                             .color(ChatColor.GRAY.asBungee())
                             .event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/arena view " + arena.getName()))
-                            .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Click to view info for " + arena.getName()).color(ChatColor.GRAY.asBungee()).create()));
+                            .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Click to view more detailed info for " + arena.getName()).color(ChatColor.GRAY.asBungee()).create()));
 
                     player.spigot().sendMessage(message.create());
                 });
