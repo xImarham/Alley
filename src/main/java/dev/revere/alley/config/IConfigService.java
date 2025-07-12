@@ -68,8 +68,6 @@ public interface IConfigService extends IService {
 
     FileConfiguration getVisualsConfig();
 
-    FileConfiguration getAiConfig();
-
     FileConfiguration getSaltyMessagesConfig();
 
     FileConfiguration getYeetMessagesConfig();
