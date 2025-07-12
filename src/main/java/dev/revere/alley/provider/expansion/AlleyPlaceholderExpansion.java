@@ -2,14 +2,16 @@ package dev.revere.alley.provider.expansion;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.constant.IPluginConstant;
+import dev.revere.alley.feature.level.ILevelService;
 import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
-import dev.revere.alley.profile.ProfileService;
 import dev.revere.alley.profile.data.ProfileData;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Objects;
 
 /**
  * @author Emmy
@@ -77,12 +79,20 @@ public class AlleyPlaceholderExpansion extends PlaceholderExpansion {
         }
 
         switch (params.toLowerCase()) {
-            case "global-elo":
+            case "player-global-elo":
                 return String.valueOf(profileData.getElo());
-            case "global-wins":
+            case "player-unranked-wins":
                 return String.valueOf(profileData.getTotalWins());
-            case "global-losses":
+            case "player-unranked-losses":
                 return String.valueOf(profileData.getTotalLosses());
+            case "player-ranked-wins":
+                return String.valueOf(profileData.getRankedWins());
+            case "player-ranked-losses":
+                return String.valueOf(profileData.getRankedLosses());
+            case "player-level":
+                return Objects.requireNonNull(this.plugin.getService(ILevelService.class).getLevel(profileData.getElo()).getName(), this.notAvailableString);
+            case "player-coins":
+                return String.valueOf(profileData.getCoins());
         }
 
         return null;
