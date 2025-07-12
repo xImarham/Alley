@@ -5,7 +5,6 @@ import dev.revere.alley.base.arena.AbstractArena;
 import dev.revere.alley.base.arena.IArenaService;
 import dev.revere.alley.base.arena.enums.EnumArenaType;
 import dev.revere.alley.base.arena.schematic.IArenaSchematicService;
-import dev.revere.alley.base.visibility.IVisibilityService;
 import dev.revere.alley.config.IConfigService;
 import dev.revere.alley.game.match.impl.MatchBedImpl;
 import dev.revere.alley.game.match.impl.MatchRoundsImpl;
@@ -59,7 +58,7 @@ public class StandAloneArena extends AbstractArena {
 
         if (team1Portal != null) this.team1Portal = team1Portal;
         if (team2Portal != null) this.team2Portal = team2Portal;
-        this.portalRadius = Alley.getInstance().getService(IConfigService.class).getSettingsConfig().getInt("game.portal-radius");
+        this.portalRadius = this.plugin.getService(IConfigService.class).getSettingsConfig().getInt("game.portal-radius");
         this.heightLimit = heightLimit;
         this.voidLevel = voidLevel;
     }
@@ -73,7 +72,7 @@ public class StandAloneArena extends AbstractArena {
 
         if (team1Portal != null) this.team1Portal = team1Portal;
         if (team2Portal != null) this.team2Portal = team2Portal;
-        this.portalRadius = Alley.getInstance().getService(IConfigService.class).getSettingsConfig().getInt("game.portal-radius");
+        this.portalRadius = this.plugin.getService(IConfigService.class).getSettingsConfig().getInt("game.portal-radius");
         this.heightLimit = heightLimit;
         this.voidLevel = voidLevel;
     }
@@ -86,7 +85,7 @@ public class StandAloneArena extends AbstractArena {
     @Override
     public void createArena() {
         if (!this.isTemporaryCopy) {
-            IArenaService arenaService = Alley.getInstance().getService(IArenaService.class);
+            IArenaService arenaService = this.plugin.getService(IArenaService.class);
             arenaService.registerNewArena(this);
             this.saveArena();
         }
@@ -95,7 +94,7 @@ public class StandAloneArena extends AbstractArena {
     @Override
     public void saveArena() {
         String name = "arenas." + this.getName();
-        IConfigService configService = Alley.getInstance().getService(IConfigService.class);
+        IConfigService configService = this.plugin.getService(IConfigService.class);
         FileConfiguration config = configService.getArenasConfig();
 
         config.set(name, null);
@@ -119,7 +118,7 @@ public class StandAloneArena extends AbstractArena {
 
         configService.saveConfig(configService.getConfigFile("storage/arenas.yml"), config);
 
-        Alley.getInstance().getService(IArenaSchematicService.class).updateSchematic(this);
+        this.plugin.getService(IArenaSchematicService.class).updateSchematic(this);
     }
 
     @Override
@@ -128,11 +127,10 @@ public class StandAloneArena extends AbstractArena {
             this.deleteCopiedArena();
             return;
         }
-        FileConfiguration config = Alley.getInstance().getService(IConfigService.class).getArenasConfig();
+        FileConfiguration config = this.plugin.getService(IConfigService.class).getArenasConfig();
         config.set("arenas." + this.getName(), null);
 
-        Alley.getInstance().getService(IArenaService.class).getArenas().remove(this);
-        Alley.getInstance().getService(IConfigService.class).saveConfig(Alley.getInstance().getService(IConfigService.class).getConfigFile("storage/arenas.yml"), config);
+        this.plugin.getService(IConfigService.class).saveConfig(this.plugin.getService(IConfigService.class).getConfigFile("storage/arenas.yml"), config);
     }
 
     public void deleteCopiedArena() {
@@ -140,7 +138,7 @@ public class StandAloneArena extends AbstractArena {
             return;
         }
 
-        Alley.getInstance().getService(IArenaSchematicService.class).delete(this);
+        this.plugin.getService(IArenaSchematicService.class).delete(this);
     }
 
     public void verifyArenaExists() {
@@ -295,7 +293,7 @@ public class StandAloneArena extends AbstractArena {
         Location bedLocation = block.getLocation();
 
         UUID breakerUUID = breakerParticipant.getLeader().getUuid();
-        Profile profile = Alley.getInstance().getService(IProfileService.class).getProfile(breakerUUID);
+        Profile profile = this.plugin.getService(IProfileService.class).getProfile(breakerUUID);
 
         Location spawnA = this.getPos1();
         Location spawnB = this.getPos2();

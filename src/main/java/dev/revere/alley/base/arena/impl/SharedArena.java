@@ -35,7 +35,7 @@ public class SharedArena extends AbstractArena {
 
     @Override
     public void createArena() {
-        IArenaService arenaService = Alley.getInstance().getService(IArenaService.class);
+        IArenaService arenaService = this.plugin.getService(IArenaService.class);
         arenaService.registerNewArena(this);
         this.saveArena();
     }
@@ -43,7 +43,7 @@ public class SharedArena extends AbstractArena {
     @Override
     public void saveArena() {
         String name = "arenas." + this.getName();
-        FileConfiguration config = Alley.getInstance().getService(IConfigService.class).getArenasConfig();
+        FileConfiguration config = this.plugin.getService(IConfigService.class).getArenasConfig();
 
         config.set(name, null);
         config.set(name + ".type", this.getType().name());
@@ -56,15 +56,14 @@ public class SharedArena extends AbstractArena {
         config.set(name + ".enabled", this.isEnabled());
         config.set(name + ".display-name", this.getDisplayName());
 
-        Alley.getInstance().getService(IConfigService.class).saveConfig(Alley.getInstance().getService(IConfigService.class).getConfigFile("storage/arenas.yml"), config);
+        this.plugin.getService(IConfigService.class).saveConfig(this.plugin.getService(IConfigService.class).getConfigFile("storage/arenas.yml"), config);
     }
 
     @Override
     public void deleteArena() {
-        FileConfiguration config = Alley.getInstance().getService(IConfigService.class).getArenasConfig();
+        FileConfiguration config = this.plugin.getService(IConfigService.class).getArenasConfig();
         config.set("arenas." + this.getName(), null);
 
-        Alley.getInstance().getService(IArenaService.class).getArenas().remove(this);
-        Alley.getInstance().getService(IConfigService.class).saveConfig(Alley.getInstance().getService(IConfigService.class).getConfigFile("storage/arenas.yml"), config);
+        this.plugin.getService(IConfigService.class).saveConfig(this.plugin.getService(IConfigService.class).getConfigFile("storage/arenas.yml"), config);
     }
 }
