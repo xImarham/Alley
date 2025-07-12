@@ -1,6 +1,7 @@
 package dev.revere.alley.game.match;
 
 import dev.revere.alley.Alley;
+import dev.revere.alley.adapter.knockback.IKnockbackAdapter;
 import dev.revere.alley.base.arena.AbstractArena;
 import dev.revere.alley.base.arena.impl.StandAloneArena;
 import dev.revere.alley.base.combat.ICombatService;
@@ -16,7 +17,6 @@ import dev.revere.alley.feature.cosmetic.EnumCosmeticType;
 import dev.revere.alley.feature.cosmetic.impl.killmessage.AbstractKillMessagePack;
 import dev.revere.alley.feature.cosmetic.repository.BaseCosmeticRepository;
 import dev.revere.alley.feature.cosmetic.repository.ICosmeticRepository;
-import dev.revere.alley.adapter.knockback.IKnockbackAdapter;
 import dev.revere.alley.feature.layout.ILayoutService;
 import dev.revere.alley.feature.layout.data.LayoutData;
 import dev.revere.alley.game.match.data.AbstractMatchData;
@@ -24,7 +24,6 @@ import dev.revere.alley.game.match.data.impl.MatchDataSoloImpl;
 import dev.revere.alley.game.match.enums.EnumMatchState;
 import dev.revere.alley.game.match.impl.MatchRoundsImpl;
 import dev.revere.alley.game.match.player.GamePlayer;
-import dev.revere.alley.game.match.player.data.MatchGamePlayerData;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.game.match.runnable.MatchRunnable;
@@ -44,10 +43,7 @@ import dev.revere.alley.util.SoundUtil;
 import dev.revere.alley.util.chat.CC;
 import lombok.Getter;
 import lombok.Setter;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Sound;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.Player;
@@ -58,6 +54,8 @@ import org.bukkit.util.Vector;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
+
+import static sun.audio.AudioPlayer.player;
 
 /**
  * @author Remi
@@ -77,6 +75,7 @@ public abstract class AbstractMatch {
     private final Map<BlockState, Location> brokenBlocks = new ConcurrentHashMap<>();
     private final Map<BlockState, Location> placedBlocks = new ConcurrentHashMap<>();
     private final List<UUID> spectators = new CopyOnWriteArrayList<>();
+    private final List<Snapshot> snapshots = new ArrayList<>();
 
     private boolean teamMatch;
     private boolean affectStatistics = true;
@@ -301,6 +300,8 @@ public abstract class AbstractMatch {
 
         this.handleDeathMessages(player, killer, victimProfile, killerProfile, cause);
 
+        this.createSnapshot(player);
+
         player.setVelocity(new Vector());
 
         if (this.shouldHandleRegularRespawn(player)) {
@@ -517,7 +518,18 @@ public abstract class AbstractMatch {
         this.endTime = System.currentTimeMillis();
 
         this.handleMatchHistoryData();
-        this.handleSnapshots();
+
+        this.getParticipants().forEach(
+                participant -> participant.getAllPlayers().forEach(gamePlayer -> {
+                    Player player = this.plugin.getServer().getPlayer(gamePlayer.getUuid());
+                    if (player != null) {
+                        this.createSnapshot(player);
+                    }
+                })
+        );
+
+        ISnapshotRepository snapshotRepository = this.plugin.getService(ISnapshotRepository.class);
+        this.snapshots.forEach(snapshotRepository::addSnapshot);
     }
 
     private void handleMatchHistoryData() {
@@ -555,27 +567,34 @@ public abstract class AbstractMatch {
         }));
     }
 
-    private void handleSnapshots() {
-        ISnapshotRepository snapshotRepository = Alley.getInstance().getService(ISnapshotRepository.class);
+    /**
+     * Creates a snapshot of the current match state for a player.
+     * This method captures various statistics and the opponent's UUID.
+     *
+     * @param player The player for whom to create the snapshot.
+     */
+    public void createSnapshot(Player player) {
+        MatchGamePlayerImpl gamePlayer = this.getGamePlayer(player);
 
-        this.getParticipants().forEach(gameParticipant -> gameParticipant.getPlayers().forEach(gamePlayer -> {
-            Player player = this.plugin.getServer().getPlayer(gamePlayer.getUuid());
-            if (player == null) return;
+        if (this.snapshots.stream().anyMatch(snapshot -> snapshot.getUuid().equals(player.getUniqueId()))) {
+            return;
+        }
 
-            Snapshot snapshot = new Snapshot(player, !gamePlayer.isDead());
+        if (gamePlayer == null || gamePlayer.isDisconnected()) {
+            return;
+        }
 
-            MatchGamePlayerData data = gamePlayer.getData();
-            snapshot.setOpponent(this.getOpponent(player).getLeader().getUuid());
-            snapshot.setLongestCombo(data.getLongestCombo());
-            snapshot.setTotalHits(data.getHits());
-            snapshot.setThrownPotions(data.getThrownPotions());
-            snapshot.setMissedPotions(data.getMissedPotions());
-            snapshot.setCriticalHits(data.getCriticalHits());
-            snapshot.setBlockedHits(data.getBlockedHits());
-            snapshot.setWTaps(data.getWTaps());
+        Snapshot snapshot = new Snapshot(player, !gamePlayer.isDead());
+        snapshot.setOpponent(this.getOpponent(player).getLeader().getUuid());
+        snapshot.setLongestCombo(gamePlayer.getData().getLongestCombo());
+        snapshot.setTotalHits(gamePlayer.getData().getHits());
+        snapshot.setThrownPotions(gamePlayer.getData().getThrownPotions());
+        snapshot.setMissedPotions(gamePlayer.getData().getMissedPotions());
+        snapshot.setCriticalHits(gamePlayer.getData().getCriticalHits());
+        snapshot.setBlockedHits(gamePlayer.getData().getBlockedHits());
+        snapshot.setWTaps(gamePlayer.getData().getWTaps());
 
-            snapshotRepository.addSnapshot(snapshot);
-        }));
+        this.snapshots.add(snapshot);
     }
 
     /**
