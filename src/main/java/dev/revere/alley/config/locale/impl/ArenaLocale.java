@@ -12,7 +12,16 @@ import dev.revere.alley.util.chat.CC;
  */
 public enum ArenaLocale implements ILocale {
 
-    TEST("arena.test", "test"),
+    ALREADY_EXISTS("messages.yml", "arena.error.already-exists"),
+    NOT_FOUND("messages.yml", "arena.error.not-found"),
+
+    SELECTION_TOOL_ADDED("messages.yml", "arena.manage.selection-tool.added"),
+    SELECTION_TOOL_REMOVED("messages.yml", "arena.manage.selection-tool.removed"),
+
+    CREATED("messages.yml", "arena.manage.created"),
+    DELETED("messages.yml", "arena.manage.deleted"),
+
+    SAVED_ALL("messages.yml", "arena.storage.saved-all"),
 
     ;
 

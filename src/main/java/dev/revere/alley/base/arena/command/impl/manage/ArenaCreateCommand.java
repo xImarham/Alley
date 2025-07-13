@@ -12,6 +12,7 @@ import dev.revere.alley.base.arena.impl.SharedArena;
 import dev.revere.alley.base.arena.impl.StandAloneArena;
 import dev.revere.alley.base.arena.selection.ArenaSelection;
 import dev.revere.alley.config.IConfigService;
+import dev.revere.alley.config.locale.impl.ArenaLocale;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -49,7 +50,7 @@ public class ArenaCreateCommand extends BaseCommand {
         }
 
         if (Alley.getInstance().getService(IArenaService.class).getArenaByName(arenaName) != null) {
-            player.sendMessage(CC.translate("&cAn arena with that name already exists!"));
+            player.sendMessage(ArenaLocale.ALREADY_EXISTS.getMessage());
             return;
         }
 
@@ -77,7 +78,7 @@ public class ArenaCreateCommand extends BaseCommand {
         arena.setDisplayName(Objects.requireNonNull(this.getDefaultDisplayName(arenaType)).replace("{arena-name}", arenaName));
 
         arena.createArena();
-        player.sendMessage(CC.translate("&aSuccessfully created a new arena named &6" + arenaName + "&a with type &6" + arenaType.name() + "&a!"));
+        player.sendMessage(ArenaLocale.CREATED.getMessage().replace("{arena-name}", arenaName).replace("{arena-type}", arenaType.name()));
     }
 
     /**

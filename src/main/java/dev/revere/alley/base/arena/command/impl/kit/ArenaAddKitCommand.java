@@ -8,6 +8,7 @@ import dev.revere.alley.api.command.annotation.CompleterData;
 import dev.revere.alley.base.arena.IArenaService;
 import dev.revere.alley.base.arena.enums.EnumArenaType;
 import dev.revere.alley.base.kit.IKitService;
+import dev.revere.alley.config.locale.impl.ArenaLocale;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.entity.Player;
 
@@ -47,7 +48,7 @@ public class ArenaAddKitCommand extends BaseCommand {
         String kitName = args[1];
 
         if (Alley.getInstance().getService(IArenaService.class).getArenaByName(arenaName) == null) {
-            player.sendMessage(CC.translate("&cAn arena with that name does not exist!"));
+            player.sendMessage(ArenaLocale.NOT_FOUND.getMessage().replace("{arena-name}", arenaName));
             return;
         }
 

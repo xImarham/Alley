@@ -16,6 +16,19 @@ welcome-message:
     - "&6&lMade by &f{author} &7(v{version})"
     - ""
 
+arena:
+  error:
+    not-found: "&cAn arena named &6{arena-name} &cdoes not exist!"
+    already-exists: "&cAn arena with that name already exists!"
+  manage:
+    created: "&aSuccessfully created a new arena named &6{arena-name}&a with type &6{arena-type}&a!"
+    deleted: "&cSuccessfully deleted the arena named &6{arena-name}&c!"
+    selection-tool:
+      added: "&aSuccessfully added the selection tool to your inventory!"
+      removed: "&cSuccessfully removed the selection tool from your inventory!"
+  storage:
+    saved-all: "&aSuccessfully saved all arenas!"
+
 kit:
   error:
     not-found: "&cThere is no kit with that name!"

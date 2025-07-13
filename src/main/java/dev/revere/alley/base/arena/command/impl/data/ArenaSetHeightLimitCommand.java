@@ -9,6 +9,7 @@ import dev.revere.alley.base.arena.ArenaService;
 import dev.revere.alley.base.arena.IArenaService;
 import dev.revere.alley.base.arena.enums.EnumArenaType;
 import dev.revere.alley.base.arena.impl.StandAloneArena;
+import dev.revere.alley.config.locale.impl.ArenaLocale;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.entity.Player;
 
@@ -32,7 +33,7 @@ public class ArenaSetHeightLimitCommand extends BaseCommand {
         IArenaService arenaService = Alley.getInstance().getService(IArenaService.class);
         AbstractArena arena = arenaService.getArenaByName(args[0]);
         if (arena == null) {
-            player.sendMessage(CC.translate("&cAn arena with that name does not exist!"));
+            player.sendMessage(ArenaLocale.NOT_FOUND.getMessage().replace("{arena-name}", args[0]));
             return;
         }
 
