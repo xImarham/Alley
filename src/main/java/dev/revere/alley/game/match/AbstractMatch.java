@@ -582,12 +582,11 @@ public abstract class AbstractMatch {
      * @param player The player for whom to create the snapshot.
      */
     public void createSnapshot(Player player) {
-        MatchGamePlayerImpl gamePlayer = this.getGamePlayer(player);
-
         if (this.snapshots.stream().anyMatch(snapshot -> snapshot.getUuid().equals(player.getUniqueId()))) {
             return;
         }
 
+        MatchGamePlayerImpl gamePlayer = this.getGamePlayer(player);
         if (gamePlayer == null || gamePlayer.isDisconnected()) {
             return;
         }
