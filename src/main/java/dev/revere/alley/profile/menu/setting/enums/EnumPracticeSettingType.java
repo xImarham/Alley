@@ -86,6 +86,16 @@ public enum EnumPracticeSettingType {
             )
     ),
 
+    DUEL_REQUESTS(21, "&6&lDuel Requests", Material.DIAMOND_SWORD,
+            settings -> Arrays.asList(
+                    "&fReceive duel requests.",
+                    "",
+                    " " + LoreHelper.enabledOrDisabled(settings.isReceiveDuelRequestsEnabled()),
+                    "",
+                    "&aClick to change!"
+            )
+    ),
+
     MATCH_SETTINGS(16, "&6&lMatch Settings", Material.BOOK,
             settings -> Arrays.asList(
                     "&fAdjust your match settings.",

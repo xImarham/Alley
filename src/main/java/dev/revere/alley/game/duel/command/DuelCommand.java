@@ -8,6 +8,8 @@ import dev.revere.alley.feature.server.IServerService;
 import dev.revere.alley.game.duel.DuelRequestService;
 import dev.revere.alley.game.duel.IDuelRequestService;
 import dev.revere.alley.game.duel.menu.DuelRequestMenu;
+import dev.revere.alley.profile.IProfileService;
+import dev.revere.alley.profile.Profile;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.entity.Player;
 
@@ -39,16 +41,22 @@ public class DuelCommand extends BaseCommand {
             return;
         }
 
-        IDuelRequestService duelRequestService = Alley.getInstance().getService(IDuelRequestService.class);
+        IDuelRequestService duelRequestService = this.plugin.getService(IDuelRequestService.class);
         if (duelRequestService.getDuelRequest(player, target) != null) {
             player.sendMessage(CC.translate("&cYou already have a pending duel request with this player."));
             return;
         }
 
-        IServerService serverService = Alley.getInstance().getService(IServerService.class);
+        IServerService serverService = this.plugin.getService(IServerService.class);
         if (!serverService.isQueueingAllowed()) {
             player.sendMessage(CC.translate("&cQueueing is temporarily disabled. Please try again later."));
             player.closeInventory();
+            return;
+        }
+
+        Profile profile = Alley.getInstance().getService(IProfileService.class).getProfile(target.getUniqueId());
+        if (!profile.getProfileData().getSettingData().isReceiveDuelRequestsEnabled()) {
+            player.sendMessage(CC.translate("&cThis player has disabled duel requests."));
             return;
         }
 

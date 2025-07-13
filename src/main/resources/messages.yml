@@ -156,6 +156,7 @@ player-settings:
   scoreboard-lines: "&aYou've {status} &athe scoreboard lines."
   tablist: "&aYou've {status} &athe tablist."
   profanity-filter: "&aYou've {status} &athe profanity filter."
+  duel-requests: "&aYou've {status} &areceiving duel requests."
 
 rename-item:
   missing-arguments: "&cMissing arguments! Please enter a name for the item."

@@ -16,7 +16,10 @@ public enum ProfileLocale implements ILocale {
     TOGGLED_SCOREBOARD("messages.yml", "player-settings.scoreboard"),
     TOGGLED_SCOREBOARD_LINES("messages.yml", "player-settings.scoreboard-lines"),
     TOGGLE_TABLIST("messages.yml", "player-settings.tablist"),
-    TOGGLED_PROFANITY_FILTER("messages.yml", "player-settings.profanity-filter");
+    TOGGLED_PROFANITY_FILTER("messages.yml", "player-settings.profanity-filter"),
+    TOGGLE_DUEL_REQUESTS("messages.yml", "player-settings.duel-requests"),
+
+    ;
 
     private final String configName, configString;
 

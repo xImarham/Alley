@@ -102,6 +102,9 @@ public class PracticeSettingsButton extends Button {
             case ROTTEN_FLESH:
                 player.performCommand("toggleprofanityfilter");
                 break;
+            case DIAMOND_SWORD:
+                player.performCommand("toggleduelrequests");
+                break;
         }
 
         this.playNeutral(player);
