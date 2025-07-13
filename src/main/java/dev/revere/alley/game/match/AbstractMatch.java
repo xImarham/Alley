@@ -43,7 +43,10 @@ import dev.revere.alley.util.SoundUtil;
 import dev.revere.alley.util.chat.CC;
 import lombok.Getter;
 import lombok.Setter;
-import org.bukkit.*;
+import org.bukkit.GameMode;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.Player;
@@ -54,8 +57,6 @@ import org.bukkit.util.Vector;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
-
-import static sun.audio.AudioPlayer.player;
 
 /**
  * @author Remi
@@ -552,9 +553,16 @@ public abstract class AbstractMatch {
                 loserID = this.getOpponent(player).getLeader().getUuid();
             }
 
+            String arenaName;
+            if (this.arena instanceof StandAloneArena) {
+                arenaName = ((StandAloneArena) this.arena).getOriginalArenaName();
+            } else {
+                arenaName = this.arena.getName();
+            }
+
             AbstractMatchData matchData = new MatchDataSoloImpl(
                     this.getKit().getName(),
-                    this.getArena().getName(),
+                    arenaName,
                     winnerID,
                     loserID
             );
