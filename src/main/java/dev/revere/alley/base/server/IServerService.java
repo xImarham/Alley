@@ -58,7 +58,7 @@ public interface IServerService extends IService {
      *
      * @return A list of blocked crafting materials.
      */
-    List<Material> getBlockedCraftingMaterials();
+    List<Material> getBlockedCraftingItems();
 
     /**
      * Adds a material to the list of blocked crafting materials.

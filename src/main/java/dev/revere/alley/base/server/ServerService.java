@@ -43,7 +43,7 @@ public class ServerService implements IServerService {
 
     private boolean queueingAllowed;
 
-    private List<Material> blockedCraftingMaterials;
+    private List<Material> blockedCraftingItems;
     private final String BLOCKED_MATERIALS_SECTION = "blocked-crafting-items";
 
     /**
@@ -68,7 +68,7 @@ public class ServerService implements IServerService {
     @Override
     public void initialize(AlleyContext context) {
         this.queueingAllowed = true;
-        this.blockedCraftingMaterials = new ArrayList<>();
+        this.blockedCraftingItems = new ArrayList<>();
         this.loadBlockedCraftingMaterials();
     }
 
@@ -150,8 +150,8 @@ public class ServerService implements IServerService {
     }
 
     @Override
-    public List<Material> getBlockedCraftingMaterials() {
-        return Collections.unmodifiableList(this.blockedCraftingMaterials);
+    public List<Material> getBlockedCraftingItems() {
+        return Collections.unmodifiableList(this.blockedCraftingItems);
     }
 
     @Override
@@ -159,11 +159,11 @@ public class ServerService implements IServerService {
         FileConfiguration config = this.configService.getSettingsConfig();
         List<String> blocked = config.getStringList(this.BLOCKED_MATERIALS_SECTION);
 
-        this.blockedCraftingMaterials.clear();
+        this.blockedCraftingItems.clear();
         for (String mat : blocked) {
             try {
                 Material material = Material.valueOf(mat);
-                this.blockedCraftingMaterials.add(material);
+                this.blockedCraftingItems.add(material);
             } catch (IllegalArgumentException ignored) {
                 Bukkit.getLogger().warning("[ServerService] Invalid material in blocked list: " + mat);
             }
@@ -175,7 +175,7 @@ public class ServerService implements IServerService {
         FileConfiguration config = this.configService.getSettingsConfig();
         File configFile = this.configService.getConfigFile("settings.yml");
 
-        config.set(this.BLOCKED_MATERIALS_SECTION, this.blockedCraftingMaterials.stream().map(Material::name).collect(Collectors.toList()));
+        config.set(this.BLOCKED_MATERIALS_SECTION, this.blockedCraftingItems.stream().map(Material::name).collect(Collectors.toList()));
 
         this.configService.saveConfig(configFile, config);
         this.updateCraftingRecipes();
@@ -183,14 +183,14 @@ public class ServerService implements IServerService {
 
     @Override
     public void addToBlockedCraftingList(Material material) {
-        if (!this.blockedCraftingMaterials.contains(material)) {
-            this.blockedCraftingMaterials.add(material);
+        if (!this.blockedCraftingItems.contains(material)) {
+            this.blockedCraftingItems.add(material);
         }
     }
 
     @Override
     public void removeFromBlockedCraftingList(Material material) {
-        this.blockedCraftingMaterials.remove(material);
+        this.blockedCraftingItems.remove(material);
     }
 
 
@@ -209,7 +209,7 @@ public class ServerService implements IServerService {
         while (iterator.hasNext()) {
             Recipe recipe = iterator.next();
 
-            for (Material blockedMaterial : this.blockedCraftingMaterials) {
+            for (Material blockedMaterial : this.blockedCraftingItems) {
                 if (recipe.getResult().getType() == blockedMaterial) {
                     iterator.remove();
                     break;

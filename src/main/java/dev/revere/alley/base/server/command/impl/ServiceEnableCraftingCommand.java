@@ -32,7 +32,7 @@ public class ServiceEnableCraftingCommand extends BaseCommand {
         IServerService serverService = this.plugin.getService(IServerService.class);
         Material itemType = player.getInventory().getItemInHand().getType();
 
-        if (!serverService.getBlockedCraftingMaterials().contains(itemType)) {
+        if (!serverService.getBlockedCraftingItems().contains(itemType)) {
             player.sendMessage(CC.translate("&aThe item you're holding is not blocked from crafting."));
             return;
         }

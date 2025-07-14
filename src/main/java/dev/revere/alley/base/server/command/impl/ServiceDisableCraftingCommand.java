@@ -36,7 +36,7 @@ public class ServiceDisableCraftingCommand extends BaseCommand {
             return;
         }
 
-        if (serverService.getBlockedCraftingMaterials().contains(itemType)) {
+        if (serverService.getBlockedCraftingItems().contains(itemType)) {
             player.sendMessage(CC.translate("&cThe item you're holding is already blocked from crafting."));
             return;
         }
