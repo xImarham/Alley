@@ -1,6 +1,5 @@
 package dev.revere.alley.base.arena.command.impl.manage;
 
-import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
@@ -23,7 +22,7 @@ public class ArenaDeleteCommand extends BaseCommand {
     @CompleterData(name = "arena.delete")
     public List<String> arenaDeleteCompleter(CommandArgs command) {
         List<String> completion = new ArrayList<>();
-        IArenaService arenaService = Alley.getInstance().getService(IArenaService.class);
+        IArenaService arenaService = this.plugin.getService(IArenaService.class);
 
 
         if (command.getArgs().length == 1 && command.getPlayer().hasPermission("alley.admin")) {
@@ -39,7 +38,7 @@ public class ArenaDeleteCommand extends BaseCommand {
         Player player = command.getPlayer();
         String[] args = command.getArgs();
         
-        IArenaService arenaService = Alley.getInstance().getService(IArenaService.class);
+        IArenaService arenaService = this.plugin.getService(IArenaService.class);
 
         if (args.length < 1) {
             player.sendMessage(CC.translate("&6Usage: &e/arena delete &6<arenaName>"));

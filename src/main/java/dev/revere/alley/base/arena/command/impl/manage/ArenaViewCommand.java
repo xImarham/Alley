@@ -1,11 +1,9 @@
 package dev.revere.alley.base.arena.command.impl.manage;
 
-import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.base.arena.AbstractArena;
-import dev.revere.alley.base.arena.ArenaService;
 import dev.revere.alley.base.arena.IArenaService;
 import dev.revere.alley.base.arena.impl.StandAloneArena;
 import dev.revere.alley.config.locale.impl.ArenaLocale;
@@ -29,7 +27,7 @@ public class ArenaViewCommand extends BaseCommand {
             return;
         }
 
-        IArenaService arenaService = Alley.getInstance().getService(IArenaService.class);
+        IArenaService arenaService = this.plugin.getService(IArenaService.class);
 
         AbstractArena arena = arenaService.getArenaByName(args[0]);
         if (arena == null) {

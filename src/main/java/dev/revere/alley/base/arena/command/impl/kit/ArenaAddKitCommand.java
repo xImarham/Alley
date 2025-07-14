@@ -1,14 +1,16 @@
 package dev.revere.alley.base.arena.command.impl.kit;
 
-import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.annotation.CompleterData;
+import dev.revere.alley.base.arena.AbstractArena;
 import dev.revere.alley.base.arena.IArenaService;
 import dev.revere.alley.base.arena.enums.EnumArenaType;
 import dev.revere.alley.base.kit.IKitService;
+import dev.revere.alley.base.kit.Kit;
 import dev.revere.alley.config.locale.impl.ArenaLocale;
+import dev.revere.alley.config.locale.impl.KitLocale;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.entity.Player;
 
@@ -27,7 +29,7 @@ public class ArenaAddKitCommand extends BaseCommand {
         List<String> completion = new ArrayList<>();
 
         if (command.getArgs().length == 1 && command.getPlayer().hasPermission("alley.admin")) {
-            Alley.getInstance().getService(IArenaService.class).getArenas().forEach(arena -> completion.add(arena.getName()));
+            this.plugin.getService(IArenaService.class).getArenas().forEach(arena -> completion.add(arena.getName()));
         }
 
         return completion;
@@ -47,28 +49,31 @@ public class ArenaAddKitCommand extends BaseCommand {
         String arenaName = args[0];
         String kitName = args[1];
 
-        if (Alley.getInstance().getService(IArenaService.class).getArenaByName(arenaName) == null) {
+        IArenaService arenaService = this.plugin.getService(IArenaService.class);
+        AbstractArena arena = arenaService.getArenaByName(arenaName);
+        if (arena == null) {
             player.sendMessage(ArenaLocale.NOT_FOUND.getMessage().replace("{arena-name}", arenaName));
             return;
         }
 
-        if (Alley.getInstance().getService(IArenaService.class).getArenaByName(arenaName).getType() == EnumArenaType.FFA) {
+        if (arena.getType() == EnumArenaType.FFA) {
             player.sendMessage(CC.translate("&cYou cannot add kits to Free-For-All arenas!"));
             return;
         }
 
-        if (Alley.getInstance().getService(IKitService.class).getKit(kitName) == null) {
-            player.sendMessage(CC.translate("&cA kit with that name does not exist!"));
+        Kit kit = this.plugin.getService(IKitService.class).getKit(kitName);
+        if (kit == null) {
+            player.sendMessage(KitLocale.KIT_NOT_FOUND.getMessage().replace("{kit-name}", kitName));
             return;
         }
 
-        if (Alley.getInstance().getService(IArenaService.class).getArenaByName(arenaName).getKits().contains(kitName)) {
-            player.sendMessage(CC.translate("&cThis arena already has this kit!"));
+        if (arena.getKits().contains(kit.getName())) {
+            player.sendMessage(ArenaLocale.KIT_ALREADY_ADDED_TO_ARENA.getMessage().replace("{arena-name}", arenaName).replace("{kit-name}", kitName));
             return;
         }
 
-        player.sendMessage(CC.translate("&aKit &6" + kitName + "&a has been added to arena &6" + arenaName + "&a!"));
-        Alley.getInstance().getService(IArenaService.class).getArenaByName(arenaName).getKits().add(Alley.getInstance().getService(IKitService.class).getKit(kitName).getName());
-        Alley.getInstance().getService(IArenaService.class).saveArena(Alley.getInstance().getService(IArenaService.class).getArenaByName(arenaName));
+        arena.getKits().add(kit.getName());
+        arenaService.saveArena(arena);
+        player.sendMessage(ArenaLocale.KIT_ADDED.getMessage().replace("{arena-name}", arenaName).replace("{kit-name}", kitName));
     }
 }

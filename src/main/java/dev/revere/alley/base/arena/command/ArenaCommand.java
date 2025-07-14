@@ -4,19 +4,13 @@ import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.annotation.CompleterData;
-import dev.revere.alley.base.arena.command.impl.data.*;
-import dev.revere.alley.base.arena.command.impl.kit.ArenaAddKitCommand;
-import dev.revere.alley.base.arena.command.impl.kit.ArenaKitListCommand;
-import dev.revere.alley.base.arena.command.impl.kit.ArenaRemoveKitCommand;
-import dev.revere.alley.base.arena.command.impl.manage.*;
-import dev.revere.alley.base.arena.command.impl.storage.ArenaSaveAllCommand;
-import dev.revere.alley.base.arena.schematic.command.ArenaPasteTestCommand;
 import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.util.chat.ClickableUtil;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -26,55 +20,18 @@ import java.util.List;
  */
 public class ArenaCommand extends BaseCommand {
 
-    /**
-     * Register all Arena subcommands in the constructor
-     */
-    public ArenaCommand() {
-        new ArenaSetHeightLimitCommand();
-        new ArenaSetVoidLevelCommand();
-        new ArenaSetPortalCommand();
-        new ArenaSetCenterCommand();
-        new ArenaCreateCommand();
-        new ArenaSetCuboidCommand();
-        new ArenaTeleportCommand();
-        new ArenaDeleteCommand();
-        new ArenaAddKitCommand();
-        new ArenaKitListCommand();
-        new ArenaListCommand();
-        new ArenaRemoveKitCommand();
-        new ArenaSaveAllCommand();
-        new ArenaSetSpawnCommand();
-        new ArenaToggleCommand();
-        new ArenaToolCommand();
-        new ArenaSetDisplayNameCommand();
-        new ArenaViewCommand();
-        new ArenaTestCommand();
-        new ArenaPasteTestCommand();
-    }
-
     @SuppressWarnings("unused")
     @CompleterData(name = "arena")
     public List<String> arenaCompleter(CommandArgs command) {
         List<String> completion = new ArrayList<>();
 
         if (command.getArgs().length == 1 && command.getPlayer().hasPermission("alley.admin")) {
-            completion.add("create");
-            completion.add("delete");
-            completion.add("list");
-            completion.add("kitlist");
-            completion.add("setcuboid");
-            completion.add("setcenter");
-            completion.add("setspawn");
-            completion.add("removekit");
-            completion.add("addkit");
-            completion.add("teleport");
-            completion.add("toggle");
-            completion.add("tool");
-            completion.add("saveall");
-            completion.add("setsafezone");
-            completion.add("setdisplayname");
-            completion.add("setheightlimit");
-            completion.add("setvoidlevel");
+            completion.addAll(Arrays.asList(
+                    "create", "delete", "list", "kitlist", "setcuboid", "setcenter",
+                    "setspawn", "removekit", "addkit", "teleport", "toggle", "tool",
+                    "saveall", "setsafezone", "setdisplayname", "setheightlimit",
+                    "setvoidlevel", "setportal", "view", "test", "paste-test"
+            ));
         }
 
         return completion;
@@ -116,11 +73,11 @@ public class ArenaCommand extends BaseCommand {
     private final String[][] pages = {
             {
                     " &f● &6/arena list &7| List all arenas",
-                    " &f● &6/arena kitlist &8(&7arenaName&8) &7| List all kits for an arena",
-                    " &f● &6/arena saveall &7| Save all arenas",
-                    " &f● &6/arena view &8(&7arenaName&8) &7| View arena information",
-                    " &f● &6/arena delete &8(&7arenaName&8) &7| Delete an arena",
                     " &f● &6/arena create &8(&7arenaName&8) &7| Create an arena",
+                    " &f● &6/arena delete &8(&7arenaName&8) &7| Delete an arena",
+                    " &f● &6/arena toggle &8(&7arenaName&8) &7| Enable or Disable an Arena",
+                    " &f● &6/arena view &8(&7arenaName&8) &7| View arena information",
+                    " &f● &6/arena teleport &8(&7arenaName&8) &7| Teleport to an arena",
                     " &f● &6/arena tool &7| Get the Arena Selection tool"
             },
             {
@@ -128,15 +85,17 @@ public class ArenaCommand extends BaseCommand {
                     " &f● &6/arena setcenter &8(&7arenaName&8) &7| Set center position",
                     " &f● &6/arena setcuboid &8(&7arenaName&8) &7| Set min and max position",
                     " &f● &6/arena setspawn &8(&7arenaName&8) &8<&7pos1/pos2&8> &7| Set spawn positions",
-                    " &f● &6/arena removekit &8(&7arenaName&8) &8(&7kitName&8) &7| Remove arena kit",
-                    " &f● &6/arena teleport &8(&7arenaName&8) &7| Teleport to an arena",
-                    " &f● &6/arena toggle &8(&7arenaName&8) &7| Enable or Disable an Arena",
-                    " &f● &6/arena addkit &8(&7arenaName&8) &8(&7kitName&8) &7| Add a kit to an arena"
+                    " &f● &6/arena setportal &8(&7arenaName&8) &8<&71/2&8> &7| Set portal positions",
+                    " &f● &6/arena setheightlimit &8(&7arenaName&8) &7| Set height limit for standalone arenas",
+                    " &f● &6/arena setvoidlevel &8(&7arenaName&8) &7| Set void level for standalone arenas"
             },
             {
-                    " &f● &6/arena setportal &8(&7arenaName&8) &8<&71/2&8> &7| Set portal positions for battlerush",
-                    " &f● &6/arena setheightlimit &8(&7arenaName&8) &7| Set height limit for standalone arenas",
-                    " &f● &6/arena setvoidlevel &8(&7arenaName&8) &7| Set void level for standalone arenas",
-            }
+                    " &f● &6/arena kitlist &8(&7arenaName&8) &7| List all kits for an arena",
+                    " &f● &6/arena addkit &8(&7arenaName&8) &8(&7kitName&8) &7| Add a kit to an arena",
+                    " &f● &6/arena removekit &8(&7arenaName&8) &8(&7kitName&8) &7| Remove arena kit"
+            },
+            {
+                    " &f● &6/arena saveall &7| Save all arenas"
+            },
     };
 }

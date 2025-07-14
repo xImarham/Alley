@@ -1,6 +1,5 @@
 package dev.revere.alley.base.arena.command.impl.manage;
 
-import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
@@ -29,7 +28,7 @@ public class ArenaListCommand extends BaseCommand {
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
 
-        IArenaService arenaService = Alley.getInstance().getService(IArenaService.class);
+        IArenaService arenaService = this.plugin.getService(IArenaService.class);
 
         player.sendMessage("");
         player.sendMessage(CC.translate("     &6&lArena List &f(" + arenaService.getArenas().size() + "&f)"));

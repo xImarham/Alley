@@ -1,11 +1,9 @@
 package dev.revere.alley.base.arena.command.impl.data;
 
-import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.base.arena.AbstractArena;
-import dev.revere.alley.base.arena.ArenaService;
 import dev.revere.alley.base.arena.IArenaService;
 import dev.revere.alley.base.arena.enums.EnumArenaType;
 import dev.revere.alley.base.arena.impl.StandAloneArena;
@@ -30,7 +28,7 @@ public class ArenaSetVoidLevelCommand extends BaseCommand {
             return;
         }
 
-        IArenaService arenaService = Alley.getInstance().getService(IArenaService.class);
+        IArenaService arenaService = this.plugin.getService(IArenaService.class);
         AbstractArena arena = arenaService.getArenaByName(args[0]);
         if (arena == null) {
             player.sendMessage(ArenaLocale.NOT_FOUND.getMessage().replace("{arena-name}", args[0]));
@@ -56,6 +54,7 @@ public class ArenaSetVoidLevelCommand extends BaseCommand {
 
         ((StandAloneArena) arena).setVoidLevel(voidLevel);
         arenaService.saveArena(arena);
-        player.sendMessage(CC.translate("&aVoid level for arena &6" + arena.getName() + "&a has been set to &6" + voidLevel + "&a!"));
+
+        player.sendMessage(ArenaLocale.VOID_LEVEL_SET.getMessage().replace("{arena-name}", arena.getName()).replace("{void-level}", String.valueOf(voidLevel)));
     }
 }

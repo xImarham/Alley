@@ -1,6 +1,5 @@
 package dev.revere.alley.base.arena.command.impl.manage;
 
-import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
@@ -49,7 +48,7 @@ public class ArenaCreateCommand extends BaseCommand {
             return;
         }
 
-        if (Alley.getInstance().getService(IArenaService.class).getArenaByName(arenaName) != null) {
+        if (this.plugin.getService(IArenaService.class).getArenaByName(arenaName) != null) {
             player.sendMessage(ArenaLocale.ALREADY_EXISTS.getMessage());
             return;
         }
@@ -88,7 +87,7 @@ public class ArenaCreateCommand extends BaseCommand {
      * @return The default display name.
      */
     private String getDefaultDisplayName(EnumArenaType arenaType) {
-        FileConfiguration config = Alley.getInstance().getService(IConfigService.class).getSettingsConfig();
+        FileConfiguration config = this.plugin.getService(IConfigService.class).getSettingsConfig();
 
         switch (arenaType) {
             case SHARED:

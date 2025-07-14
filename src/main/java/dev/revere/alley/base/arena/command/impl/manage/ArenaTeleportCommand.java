@@ -1,6 +1,5 @@
 package dev.revere.alley.base.arena.command.impl.manage;
 
-import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
@@ -26,7 +25,7 @@ public class ArenaTeleportCommand extends BaseCommand {
         List<String> completion = new ArrayList<>();
 
         if (command.getArgs().length == 1 && command.getPlayer().hasPermission("alley.admin")) {
-            Alley.getInstance().getService(IArenaService.class).getArenas().forEach(arena -> completion.add(arena.getName()));
+            this.plugin.getService(IArenaService.class).getArenas().forEach(arena -> completion.add(arena.getName()));
         }
 
         return completion;
@@ -44,7 +43,7 @@ public class ArenaTeleportCommand extends BaseCommand {
         }
 
         String arenaName = args[0];
-        AbstractArena arena = Alley.getInstance().getService(IArenaService.class).getArenaByName(arenaName);
+        AbstractArena arena = this.plugin.getService(IArenaService.class).getArenaByName(arenaName);
 
         if (arena == null) {
             player.sendMessage(ArenaLocale.NOT_FOUND.getMessage().replace("{arena-name}", arenaName));

@@ -1,11 +1,9 @@
 package dev.revere.alley.base.arena.command.impl.data;
 
-import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.base.arena.AbstractArena;
-import dev.revere.alley.base.arena.ArenaService;
 import dev.revere.alley.base.arena.IArenaService;
 import dev.revere.alley.base.arena.enums.EnumArenaType;
 import dev.revere.alley.base.arena.impl.StandAloneArena;
@@ -30,7 +28,7 @@ public class ArenaSetPortalCommand extends BaseCommand {
             return;
         }
 
-        IArenaService arenaService = Alley.getInstance().getService(IArenaService.class);
+        IArenaService arenaService = this.plugin.getService(IArenaService.class);
         String name = args[0];
 
         AbstractArena arena = arenaService.getArenaByName(name);
@@ -57,7 +55,7 @@ public class ArenaSetPortalCommand extends BaseCommand {
             standAloneArena.setTeam2Portal(player.getLocation());
         }
 
-        player.sendMessage(CC.translate("&aSuccessfully set the " + portal + " portal for the arena " + name + "."));
-        arena.saveArena();
+        arenaService.saveArena(arena);
+        player.sendMessage(ArenaLocale.PORTAL_SET.getMessage().replace("{arena-name}", arena.getName()).replace("{portal}", portal));
     }
 }

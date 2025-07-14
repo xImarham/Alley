@@ -20,6 +20,21 @@ arena:
   error:
     not-found: "&cAn arena named &6{arena-name} &cdoes not exist!"
     already-exists: "&cAn arena with that name already exists!"
+    no-selection: "&cYou don't have the bounds selected for the arena! Use &b/arena wand&c!"
+    kit-already-added-to-arena: "&cThe kit &6{kit-name} &cis already added to the arena &6{arena-name}&c!"
+    arena-does-not-have-kit: "&cThe arena &6{arena-name} &cdoes not have the kit &6{kit-name}&c!"
+  data:
+    center-set: "&aSuccessfully set the center of the arena &6{arena-name}&a!"
+    cuboid-set: "&aSuccessfully set the cuboid of the arena &6{arena-name}&a!"
+    height-limit-set: "&aSuccessfully set the height limit of the arena &6{arena-name}&a to &6{height-limit}&a!"
+    portal-set: "&aSuccessfully set portal &b{portal} &aof arena &6{arena-name}&a!"
+    void-level-set: "&aSuccessfully set the void level of arena &6{arena-name}&a to &6{void-level}&a!"
+    toggled: "&aSuccessfully toggled the arena &6{arena-name}&a to &6{status}&a!"
+    blue-spawn-set: "&aSuccessfully set the blue spawn of arena &6{arena-name}&a!"
+    red-spawn-set: "&aSuccessfully set the red spawn of arena &6{arena-name}&a!"
+    ffa-spawn-set: "&aSuccessfully set the FFA spawn of arena &6{arena-name}&a!"
+    kit-added: "&aSuccessfully added the kit &6{kit-name}&a to arena &6{arena-name}&a!"
+    kit-removed: "&cSuccessfully removed the kit &6{kit-name}&c from arena &6{arena-name}&c!"
   manage:
     created: "&aSuccessfully created a new arena named &6{arena-name}&a with type &6{arena-type}&a!"
     deleted: "&cSuccessfully deleted the arena named &6{arena-name}&c!"

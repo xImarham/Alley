@@ -1,9 +1,9 @@
 package dev.revere.alley.base.arena.command.impl.data;
 
-import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
+import dev.revere.alley.base.arena.AbstractArena;
 import dev.revere.alley.base.arena.IArenaService;
 import dev.revere.alley.config.locale.impl.ArenaLocale;
 import dev.revere.alley.util.chat.CC;
@@ -29,14 +29,18 @@ public class ArenaSetDisplayNameCommand extends BaseCommand {
         }
 
         String arenaName = args[0];
-        String displayName = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
-        if (Alley.getInstance().getService(IArenaService.class).getArenaByName(arenaName) == null) {
+        IArenaService arenaService = this.plugin.getService(IArenaService.class);
+        AbstractArena arena = arenaService.getArenaByName(arenaName);
+        if (arena == null) {
             sender.sendMessage(ArenaLocale.NOT_FOUND.getMessage().replace("{arena-name}", arenaName));
             return;
         }
 
-        Alley.getInstance().getService(IArenaService.class).getArenaByName(arenaName).setDisplayName(displayName);
-        Alley.getInstance().getService(IArenaService.class).getArenaByName(arenaName).saveArena();
+        String displayName = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
+
+        arena.setDisplayName(displayName);
+        arenaService.saveArena(arena);
+
         sender.sendMessage(CC.translate("&aSuccessfully set the display name of the arena &e" + arenaName + " &ato &e" + displayName + "&a."));
     }
 }
