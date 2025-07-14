@@ -1,4 +1,4 @@
-package dev.revere.alley.command.impl.other;
+package dev.revere.alley.base.kit.command.helper.impl;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
