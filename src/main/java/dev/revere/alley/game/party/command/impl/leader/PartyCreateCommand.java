@@ -5,12 +5,10 @@ import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.config.locale.impl.PartyLocale;
-import dev.revere.alley.feature.server.IServerService;
+import dev.revere.alley.base.server.IServerService;
 import dev.revere.alley.game.party.IPartyService;
-import dev.revere.alley.game.party.PartyService;
 import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.enums.EnumProfileState;
-import dev.revere.alley.profile.progress.IProgressService;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.entity.Player;
 
