@@ -2,7 +2,7 @@ package dev.revere.alley.base.nametag;
 
 import dev.revere.alley.tool.logger.Logger;
 import dev.revere.alley.tool.reflection.IReflection;
-import dev.revere.alley.tool.reflection.impl.DefaultReflection;
+import dev.revere.alley.tool.reflection.impl.instance.DefaultReflection;
 import lombok.Getter;
 import net.minecraft.server.v1_8_R3.PacketPlayOutScoreboardTeam;
 import org.bukkit.entity.Player;

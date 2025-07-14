@@ -1,4 +1,4 @@
-package dev.revere.alley.tool.reflection.impl;
+package dev.revere.alley.tool.reflection.impl.instance;
 
 import dev.revere.alley.tool.reflection.IReflection;
 
