@@ -5,7 +5,7 @@ import dev.revere.alley.base.arena.IArenaService;
 import dev.revere.alley.base.arena.impl.StandAloneArena;
 import dev.revere.alley.base.kit.Kit;
 import dev.revere.alley.plugin.annotation.Service;
-import dev.revere.alley.base.server.IServerService;
+import dev.revere.alley.feature.server.IServerService;
 import dev.revere.alley.game.match.IMatchService;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;

@@ -28,7 +28,7 @@ import dev.revere.alley.feature.emoji.command.EmojiCommand;
 import dev.revere.alley.feature.layout.command.LayoutCommand;
 import dev.revere.alley.feature.leaderboard.command.LeaderboardCommand;
 import dev.revere.alley.feature.level.command.LevelAdminCommand;
-import dev.revere.alley.base.server.command.ServiceCommand;
+import dev.revere.alley.feature.server.command.ServiceCommand;
 import dev.revere.alley.feature.tip.command.TipCommand;
 import dev.revere.alley.feature.title.command.TitleCommand;
 import dev.revere.alley.game.duel.command.AcceptCommand;

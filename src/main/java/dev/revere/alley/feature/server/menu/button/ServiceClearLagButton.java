@@ -1,4 +1,4 @@
-package dev.revere.alley.base.server.menu.button;
+package dev.revere.alley.feature.server.menu.button;
 
 import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.tool.item.ItemBuilder;

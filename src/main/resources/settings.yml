@@ -47,8 +47,6 @@ kit:
     disclaimer: "&7{kit-name} kit disclaimer."
     menu-title: "&6&l{kit-name}"
 
-blocked-crafting-items: []
-
 profanity-filter:
   add-default-words: false # Alley has a built-in list of rude and toxic words, set this to true if you want them to apply (The list below will be used in addition to the built-in list).
   staff-notification-format: "&6[S] &f(&6Alley: &fProfanity Detected) &c{player}&f: &7{message}"

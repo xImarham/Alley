@@ -1,10 +1,12 @@
-package dev.revere.alley.base.server.impl;
+package dev.revere.alley.feature.server.command.impl;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
-import dev.revere.alley.base.server.IServerService;
+import dev.revere.alley.feature.abilities.AbilityService;
+import dev.revere.alley.feature.server.IServerService;
+import dev.revere.alley.feature.server.ServerService;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.entity.Player;
 

@@ -1,13 +1,13 @@
-package dev.revere.alley.base.server.menu;
+package dev.revere.alley.feature.server.menu;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.api.menu.Menu;
-import dev.revere.alley.base.server.IServerService;
-import dev.revere.alley.base.server.menu.button.ServiceClearChatButton;
-import dev.revere.alley.base.server.menu.button.ServiceClearLagButton;
-import dev.revere.alley.base.server.menu.button.ServicePrepareRebootButton;
-import dev.revere.alley.base.server.menu.button.ServiceResetRebootButton;
+import dev.revere.alley.feature.server.IServerService;
+import dev.revere.alley.feature.server.menu.button.ServiceClearChatButton;
+import dev.revere.alley.feature.server.menu.button.ServiceClearLagButton;
+import dev.revere.alley.feature.server.menu.button.ServicePrepareRebootButton;
+import dev.revere.alley.feature.server.menu.button.ServiceResetRebootButton;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
