@@ -156,7 +156,7 @@ public class ServerService implements IServerService {
         this.blockedCraftingItems.clear();
         for (String mat : blocked) {
             try {
-                Material material = Material.valueOf(mat);
+                Material material = Material.matchMaterial(mat);
                 this.blockedCraftingItems.add(material);
             } catch (IllegalArgumentException exception) {
                 Logger.logException("Invalid material in blocked crafting items: " + mat, exception);
