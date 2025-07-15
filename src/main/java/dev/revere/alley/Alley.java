@@ -6,6 +6,7 @@ import dev.revere.alley.base.arena.listener.ArenaListener;
 import dev.revere.alley.base.combat.listener.CombatListener;
 import dev.revere.alley.base.hotbar.listener.HotbarListener;
 import dev.revere.alley.base.queue.listener.QueueListener;
+import dev.revere.alley.base.server.listener.CraftingListener;
 import dev.revere.alley.base.spawn.listener.SpawnListener;
 import dev.revere.alley.config.IConfigService;
 import dev.revere.alley.feature.emoji.listener.EmojiListener;
@@ -157,7 +158,8 @@ public class Alley extends JavaPlugin {
                 new QueueListener(),
                 new CoreChatListener(),
                 new LayoutListener(),
-                new SnapshotListener()
+                new SnapshotListener(),
+                new CraftingListener()
         ).forEach(listener -> getServer().getPluginManager().registerEvents(listener, this));
     }
 

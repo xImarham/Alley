@@ -4,7 +4,7 @@ import dev.revere.alley.plugin.lifecycle.IService;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
-import java.util.List;
+import java.util.Set;
 
 /**
  * @author Remi
@@ -51,14 +51,14 @@ public interface IServerService extends IService {
      * Loads the list of materials that are blocked from crafting.
      * This method should be called during server startup to initialize the blocked crafting materials.
      */
-    void loadBlockedCraftingMaterials();
+    void loadBlockedCraftingItems();
 
     /**
      * Retrieves a list of materials that are blocked from crafting.
      *
      * @return A list of blocked crafting materials.
      */
-    List<Material> getBlockedCraftingItems();
+    Set<Material> getBlockedCraftingItems();
 
     /**
      * Adds a material to the list of blocked crafting materials.
@@ -83,16 +83,9 @@ public interface IServerService extends IService {
     boolean isCraftable(Material material);
 
     /**
-     * Updates the crafting conditions based on the current server state.
-     * This method should be called whenever the crafting conditions change,
-     * such as when a material is added or removed from the blocked list.
-     */
-    void updateCraftingRecipes();
-
-    /**
      * Saves the current crafting conditions to the configuration file.
      * This method should be called when the server is shutting down or when
      * the crafting conditions are modified.
      */
-    void saveCraftingRecipes(Material material);
+    void saveBlockedItems(Material material);
 }

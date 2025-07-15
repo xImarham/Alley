@@ -12,19 +12,16 @@ import dev.revere.alley.plugin.annotation.Service;
 import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
+import dev.revere.alley.tool.logger.Logger;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.Recipe;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -41,10 +38,10 @@ public class ServerService implements IServerService {
     private final ISpawnService spawnService;
     private final IConfigService configService;
 
-    private boolean queueingAllowed;
+    private boolean queueingAllowed = true;
 
-    private List<Material> blockedCraftingItems;
-    private final String BLOCKED_MATERIALS_SECTION = "blocked-crafting-items";
+    private final Set<Material> blockedCraftingItems = new HashSet<>();
+    private final String BLOCKED_ITEMS_PATH = "blocked-crafting-items";
 
     /**
      * Constructor for dependency injection.
@@ -67,11 +64,8 @@ public class ServerService implements IServerService {
 
     @Override
     public void initialize(AlleyContext context) {
-        this.queueingAllowed = true;
-        this.blockedCraftingItems = new ArrayList<>();
-        this.loadBlockedCraftingMaterials();
+        this.loadBlockedCraftingItems();
     }
-
 
     @Override
     public boolean isQueueingAllowed() {
@@ -150,42 +144,40 @@ public class ServerService implements IServerService {
     }
 
     @Override
-    public List<Material> getBlockedCraftingItems() {
-        return Collections.unmodifiableList(this.blockedCraftingItems);
+    public Set<Material> getBlockedCraftingItems() {
+        return Collections.unmodifiableSet(this.blockedCraftingItems);
     }
 
     @Override
-    public void loadBlockedCraftingMaterials() {
+    public void loadBlockedCraftingItems() {
         FileConfiguration config = this.configService.getSettingsConfig();
-        List<String> blocked = config.getStringList(this.BLOCKED_MATERIALS_SECTION);
+        List<String> blocked = config.getStringList(this.BLOCKED_ITEMS_PATH);
 
         this.blockedCraftingItems.clear();
         for (String mat : blocked) {
             try {
                 Material material = Material.valueOf(mat);
                 this.blockedCraftingItems.add(material);
-            } catch (IllegalArgumentException ignored) {
-                Bukkit.getLogger().warning("[ServerService] Invalid material in blocked list: " + mat);
+            } catch (IllegalArgumentException exception) {
+                Logger.logException("Invalid material in blocked crafting items: " + mat, exception);
             }
         }
     }
 
     @Override
-    public void saveCraftingRecipes(Material material) {
+    public void saveBlockedItems(Material material) {
         FileConfiguration config = this.configService.getSettingsConfig();
         File configFile = this.configService.getConfigFile("settings.yml");
 
-        config.set(this.BLOCKED_MATERIALS_SECTION, this.blockedCraftingItems.stream().map(Material::name).collect(Collectors.toList()));
+        List<String> materialNames = this.blockedCraftingItems.stream().map(Material::name).collect(Collectors.toList());
+        config.set(this.BLOCKED_ITEMS_PATH, materialNames);
 
         this.configService.saveConfig(configFile, config);
-        this.updateCraftingRecipes();
     }
 
     @Override
     public void addToBlockedCraftingList(Material material) {
-        if (!this.blockedCraftingItems.contains(material)) {
-            this.blockedCraftingItems.add(material);
-        }
+        this.blockedCraftingItems.add(material);
     }
 
     @Override
@@ -193,28 +185,9 @@ public class ServerService implements IServerService {
         this.blockedCraftingItems.remove(material);
     }
 
-
     @Override
     public boolean isCraftable(Material material) {
         ItemStack itemStack = new ItemStack(material);
         return !Bukkit.getServer().getRecipesFor(itemStack).isEmpty();
-    }
-
-    @Override
-    public void updateCraftingRecipes() {
-        Bukkit.resetRecipes();
-
-        Iterator<Recipe> iterator = Bukkit.getServer().recipeIterator();
-
-        while (iterator.hasNext()) {
-            Recipe recipe = iterator.next();
-
-            for (Material blockedMaterial : this.blockedCraftingItems) {
-                if (recipe.getResult().getType() == blockedMaterial) {
-                    iterator.remove();
-                    break;
-                }
-            }
-        }
     }
 }
