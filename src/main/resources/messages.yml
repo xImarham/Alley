@@ -16,6 +16,11 @@ welcome-message:
     - "&6&lMade by &f{author} &7(v{version})"
     - ""
 
+server:
+  crafting-operations:
+    toggled: "&aCrafting operations for &6{item} &aare now &6{status}&a."
+    must-hold-craftable-item: "&cYou must be holding a craftable item to manage crafting operations."
+
 arena:
   error:
     not-found: "&cAn arena named &6{arena-name} &cdoes not exist!"
