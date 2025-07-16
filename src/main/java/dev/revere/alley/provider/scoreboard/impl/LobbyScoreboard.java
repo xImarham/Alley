@@ -43,7 +43,7 @@ public class LobbyScoreboard implements IScoreboard {
                 processedLine = CC.translate(processedLine)
                         .replace("{party-size}", String.valueOf(profile.getParty().getMembers().size()))
                         .replace("{party-privacy}", profile.getParty().isPrivate() ? "&cPrivate" : "&aPublic")
-                        .replace("{party-leader}", profile.getParty().getLeader().getName());
+                        .replace("{party-leader}", profileService.getProfile(profile.getParty().getLeader().getUniqueId()).getFancyName());
             } else {
                 processedLine = processedLine
                         .replace("{playing}", String.valueOf(profileService.getProfiles().values().stream().filter(p -> p.getState() == EnumProfileState.PLAYING).count()))

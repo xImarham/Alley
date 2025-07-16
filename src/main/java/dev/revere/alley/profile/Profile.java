@@ -78,6 +78,15 @@ public class Profile {
     }
 
     /**
+     * Gets the fancy name of the profile with the color.
+     *
+     * @return The colored name of the profile.
+     */
+    public String getFancyName() {
+        return this.nameColor + this.name;
+    }
+
+    /**
      * Loads the profile from the database.
      */
     public void load() {

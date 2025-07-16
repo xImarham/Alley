@@ -429,7 +429,7 @@ public abstract class AbstractMatch {
 
     private void handleDefaultDeathMessages(Player victim, Player killer, Profile victimProfile) {
         if (killer == null) {
-            this.notifyAll("&c" + victimProfile.getNameColor() + victim.getName() + " &fdied.");
+            this.notifyAll("&c" + victimProfile.getFancyName() + " &fdied.");
         } else {
             processKillerActions(victim, killer, victimProfile);
         }
@@ -640,7 +640,7 @@ public abstract class AbstractMatch {
 
         IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
         Profile profile = profileService.getProfile(player.getUniqueId());
-        this.notifyAll("&6" + profile.getNameColor() + player.getName() + " &fis now spectating the match.");
+        this.notifyAll("&6" + profile.getFancyName() + " &fis now spectating the match.");
     }
 
     /**
@@ -668,7 +668,7 @@ public abstract class AbstractMatch {
         this.spectators.remove(player.getUniqueId());
 
         if (notify) {
-            this.notifyAll("&6" + profile.getNameColor() + player.getName() + " &fis no longer spectating the match.");
+            this.notifyAll("&6" + profile.getFancyName() + " &fis no longer spectating the match.");
         }
     }
 

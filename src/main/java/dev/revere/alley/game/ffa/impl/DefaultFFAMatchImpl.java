@@ -86,7 +86,7 @@ public class DefaultFFAMatchImpl extends AbstractFFAMatch {
         this.getPlayers().remove(gameFFAPlayer);
 
         this.getPlayers().forEach(ffaPlayer -> ffaPlayer.getPlayer().sendMessage(CC.translate(
-                "&c" + profile.getNameColor() + player.getName() + " has left the FFA match."))
+                "&c" + profile.getFancyName() + " has left the FFA match."))
         );
 
         player.sendMessage(CC.translate("&aYou have left the FFA match."));
@@ -174,7 +174,7 @@ public class DefaultFFAMatchImpl extends AbstractFFAMatch {
             ffaData.resetKillstreak();
 
             this.getPlayers().forEach(ffaPlayer -> ffaPlayer.getPlayer().sendMessage(CC.translate(
-                    "&c" + profile.getNameColor() + player.getName() + " has died."))
+                    "&c" + profile.getFancyName() + " has died."))
             );
             this.handleRespawn(player);
             return;
@@ -196,7 +196,7 @@ public class DefaultFFAMatchImpl extends AbstractFFAMatch {
         this.plugin.getService(ICombatService.class).resetCombatLog(player);
 
         this.getPlayers().forEach(ffaPlayer -> ffaPlayer.getPlayer().sendMessage(CC.translate(
-                "&6" + profile.getNameColor() + player.getName() + " &ahas been killed by &6" + killer.getName() + "&a."))
+                "&6" + profile.getFancyName() + " &ahas been killed by &6" + killer.getName() + "&a."))
         );
         this.sendKillstreakAlertMessage(killer);
 
