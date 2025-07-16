@@ -19,7 +19,7 @@ public class DivisionListCommand extends BaseCommand {
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
-        IDivisionService divisionService = Alley.getInstance().getService(IDivisionService.class);
+        IDivisionService divisionService = this.plugin.getService(IDivisionService.class);
 
         player.sendMessage("");
         player.sendMessage(CC.translate("     &6&lDivision List &f(" + divisionService.getDivisions().size() + "&f)"));

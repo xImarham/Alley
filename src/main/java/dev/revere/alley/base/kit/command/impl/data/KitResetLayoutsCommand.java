@@ -1,12 +1,10 @@
 package dev.revere.alley.base.kit.command.impl.data;
 
-import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.base.kit.IKitService;
 import dev.revere.alley.base.kit.Kit;
-import dev.revere.alley.base.kit.KitService;
 import dev.revere.alley.config.locale.impl.KitLocale;
 import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.util.chat.CC;
@@ -30,13 +28,13 @@ public class KitResetLayoutsCommand extends BaseCommand {
         }
 
         String kitName = args[0];
-        IKitService kitService = Alley.getInstance().getService(IKitService.class);
+        IKitService kitService = this.plugin.getService(IKitService.class);
         Kit kit = kitService.getKit(kitName);
         if (kit == null) {
             sender.sendMessage(CC.translate(KitLocale.KIT_NOT_FOUND.getMessage()));
             return;
         }
 
-        Alley.getInstance().getService(IProfileService.class).resetLayoutForKit(kit);
+        this.plugin.getService(IProfileService.class).resetLayoutForKit(kit);
     }
 }

@@ -40,7 +40,7 @@ public class ExplosiveCommand extends BaseCommand {
             return;
         }
 
-        IExplosiveService explosiveService = Alley.getInstance().getService(IExplosiveService.class);
+        IExplosiveService explosiveService = this.plugin.getService(IExplosiveService.class);
 
         switch (settingName) {
             case "horizontal":

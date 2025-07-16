@@ -1,10 +1,8 @@
 package dev.revere.alley.game.ffa.command.impl.player;
 
-import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
-import dev.revere.alley.base.combat.CombatService;
 import dev.revere.alley.base.combat.ICombatService;
 import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
@@ -21,7 +19,7 @@ public class FFALeaveCommand extends BaseCommand {
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
-        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+        IProfileService profileService = this.plugin.getService(IProfileService.class);
         Profile profile = profileService.getProfile(player.getUniqueId());
 
         if (profile.getFfaMatch() == null) {
@@ -29,7 +27,7 @@ public class FFALeaveCommand extends BaseCommand {
             return;
         }
 
-        ICombatService combatService = Alley.getInstance().getService(ICombatService.class);
+        ICombatService combatService = this.plugin.getService(ICombatService.class);
         if (combatService.isPlayerInCombat(player.getUniqueId())) {
             profile.getFfaMatch().handleCombatLog(player, combatService.getLastAttacker(player));
         }

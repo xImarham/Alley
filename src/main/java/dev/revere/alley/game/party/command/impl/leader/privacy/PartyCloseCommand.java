@@ -1,6 +1,5 @@
 package dev.revere.alley.game.party.command.impl.leader.privacy;
 
-import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
@@ -21,7 +20,7 @@ public class PartyCloseCommand extends BaseCommand {
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
-        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+        IProfileService profileService = this.plugin.getService(IProfileService.class);
         Profile profile = profileService.getProfile(player.getUniqueId());
         if (profile.getParty() == null) {
             player.sendMessage(CC.translate("&cYou are not in a party."));

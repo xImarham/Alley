@@ -1,6 +1,5 @@
 package dev.revere.alley.base.spawn.command;
 
-import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
@@ -26,7 +25,7 @@ public class SpawnCommand extends BaseCommand {
     @CommandData(name = "spawn", isAdminOnly = true)
     public void onCommand(CommandArgs args) {
         Player player = args.getPlayer();
-        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+        IProfileService profileService = this.plugin.getService(IProfileService.class);
         Profile profile = profileService.getProfile(player.getUniqueId());
         EnumProfileState state = profile.getState();
 
@@ -63,6 +62,6 @@ public class SpawnCommand extends BaseCommand {
         this.plugin.getService(ISpawnService.class).teleportToSpawn(player);
         this.plugin.getService(IHotbarService.class).applyHotbarItems(player);
 
-        player.sendMessage(CC.translate(Alley.getInstance().getService(IConfigService.class).getMessagesConfig().getString("spawn.teleported")));
+        player.sendMessage(CC.translate(this.plugin.getService(IConfigService.class).getMessagesConfig().getString("spawn.teleported")));
     }
 }

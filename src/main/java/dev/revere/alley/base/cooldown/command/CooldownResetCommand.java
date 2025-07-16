@@ -1,11 +1,9 @@
 package dev.revere.alley.base.cooldown.command;
 
-import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.base.cooldown.Cooldown;
-import dev.revere.alley.base.cooldown.CooldownRepository;
 import dev.revere.alley.base.cooldown.ICooldownRepository;
 import dev.revere.alley.base.cooldown.enums.EnumCooldownType;
 import dev.revere.alley.util.StringUtil;
@@ -46,14 +44,14 @@ public class CooldownResetCommand extends BaseCommand {
             return;
         }
 
-        ICooldownRepository repository = Alley.getInstance().getService(ICooldownRepository.class);
+        ICooldownRepository repository = this.plugin.getService(ICooldownRepository.class);
         Cooldown cooldown = repository.getCooldown(target.getUniqueId(), type);
         if (cooldown == null) {
             player.sendMessage(CC.translate("&cNo cooldown found for " + target.getName() + " of type " + StringUtil.formatEnumName(type) + "."));
             return;
         }
 
-        repository.removeCooldown(player.getUniqueId(), type);;
+        repository.removeCooldown(player.getUniqueId(), type);
 
         player.sendMessage(CC.translate("&aCooldown for " + target.getName() + " of type " + StringUtil.formatEnumName(type) + " has been reset."));
     }

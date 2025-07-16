@@ -1,6 +1,5 @@
 package dev.revere.alley.game.match.command.player;
 
-import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
@@ -20,7 +19,7 @@ public class LeaveMatchCommand extends BaseCommand {
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
-        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+        IProfileService profileService = this.plugin.getService(IProfileService.class);
         Profile profile = profileService.getProfile(player.getUniqueId());
 
         if (profile.getState() != EnumProfileState.PLAYING) {

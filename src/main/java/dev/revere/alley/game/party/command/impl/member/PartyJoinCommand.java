@@ -1,6 +1,5 @@
 package dev.revere.alley.game.party.command.impl.member;
 
-import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
@@ -33,7 +32,7 @@ public class PartyJoinCommand extends BaseCommand {
             return;
         }
 
-        Party party = Alley.getInstance().getService(IPartyService.class).getPartyByLeader(target);
+        Party party = this.plugin.getService(IPartyService.class).getPartyByLeader(target);
         if (party == null) {
             player.sendMessage(CC.translate("&cThat player is not in a party."));
             return;
@@ -44,6 +43,6 @@ public class PartyJoinCommand extends BaseCommand {
             return;
         }
 
-        Alley.getInstance().getService(IPartyService.class).joinParty(player, target);
+        this.plugin.getService(IPartyService.class).joinParty(player, target);
     }
 }

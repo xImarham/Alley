@@ -1,12 +1,10 @@
 package dev.revere.alley.base.kit.command.impl.manage.ffa;
 
-import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.base.kit.IKitService;
 import dev.revere.alley.base.kit.Kit;
-import dev.revere.alley.base.kit.KitService;
 import dev.revere.alley.game.ffa.IFFAService;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.entity.Player;
@@ -28,7 +26,7 @@ public class KitToggleFFACommand extends BaseCommand {
             return;
         }
 
-        IKitService kitService = Alley.getInstance().getService(IKitService.class);
+        IKitService kitService = this.plugin.getService(IKitService.class);
         Kit kit = kitService.getKit(args[0]);
         if (kit == null) {
             player.sendMessage(CC.translate("&cA kit with that name does not exist!"));
@@ -45,7 +43,7 @@ public class KitToggleFFACommand extends BaseCommand {
 
         kit.setFfaEnabled(ffaEnabled);
         kitService.saveKit(kit);
-        Alley.getInstance().getService(IFFAService.class).reloadFFAKits();
+        this.plugin.getService(IFFAService.class).reloadFFAKits();
         player.sendMessage(CC.translate("&aFFA mode has been " + (ffaEnabled ? "&aenabled" : "&cdisabled") + " for kit &6" + kit.getName() + "&a!"));
         player.sendMessage(CC.translate("&7Additionally, all FFA matches have been reloaded."));
     }

@@ -20,7 +20,7 @@ public class LevelAdminListCommand extends BaseCommand {
     public void onCommand(CommandArgs command) {
         CommandSender sender = command.getSender();
 
-        ILevelService levelService = Alley.getInstance().getService(ILevelService.class);
+        ILevelService levelService = this.plugin.getService(ILevelService.class);
 
         sender.sendMessage("");
         sender.sendMessage(CC.translate("     &6&lLevel List &f(" + levelService.getLevels().size() + "&f)"));

@@ -1,6 +1,5 @@
 package dev.revere.alley.base.kit.command.impl.manage;
 
-import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
@@ -28,7 +27,7 @@ public class KitViewCommand extends BaseCommand {
             return;
         }
 
-        Kit kit = Alley.getInstance().getService(IKitService.class).getKit(args[0]);
+        Kit kit = this.plugin.getService(IKitService.class).getKit(args[0]);
         if (kit == null) {
             player.sendMessage(CC.translate(KitLocale.KIT_NOT_FOUND.getMessage()));
             return;

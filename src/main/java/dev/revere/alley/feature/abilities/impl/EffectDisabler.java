@@ -47,7 +47,7 @@ public class EffectDisabler extends AbstractAbility {
             if (!isAbility(damager.getItemInHand())) return;
 
             if (isBard(victim) || isArcher(victim) || isRogue(victim) || isMiner(victim)) return;
-            
+
             if (profile.getCooldown(EffectDisabler.class).onCooldown(damager)) {
                 damager.sendMessage(CC.translate("&fYou are on &6&lEffect Disabler &7cooldown for &4" + DurationFormatter.getRemaining(profile.getCooldown(EffectDisabler.class).getRemainingMillis(damager), true, true)));
                 damager.updateInventory();

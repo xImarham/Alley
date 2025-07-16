@@ -25,9 +25,9 @@ public class DivisionSetWinsCommand extends BaseCommand {
     public List<String> DivisionSetWinsCompleter(CommandArgs command) {
         List<String> completion = new ArrayList<>();
         if (command.getArgs().length == 1 && command.getPlayer().hasPermission("alley.admin")) {
-            Alley.getInstance().getService(IDivisionService.class).getDivisions().forEach(division -> completion.add(division.getName()));
+            this.plugin.getService(IDivisionService.class).getDivisions().forEach(division -> completion.add(division.getName()));
         } else if (command.getArgs().length == 2 && command.getPlayer().hasPermission("alley.admin")) {
-            Division division = Alley.getInstance().getService(IDivisionService.class).getDivision(command.getArgs()[0]);
+            Division division = this.plugin.getService(IDivisionService.class).getDivision(command.getArgs()[0]);
             if (division != null) {
                 division.getTiers().forEach(tier -> completion.add(tier.getName()));
             }
@@ -47,7 +47,7 @@ public class DivisionSetWinsCommand extends BaseCommand {
             return;
         }
 
-        IDivisionService divisionService = Alley.getInstance().getService(IDivisionService.class);
+        IDivisionService divisionService = this.plugin.getService(IDivisionService.class);
         Division division = divisionService.getDivision(args[0]);
         if (division == null) {
             player.sendMessage(CC.translate("&cA division with that name does not exist."));

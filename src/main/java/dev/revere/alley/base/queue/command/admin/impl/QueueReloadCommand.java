@@ -1,6 +1,5 @@
 package dev.revere.alley.base.queue.command.admin.impl;
 
-import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
@@ -19,7 +18,7 @@ public class QueueReloadCommand extends BaseCommand {
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
 
-        Alley.getInstance().getService(IQueueService.class).reloadQueues();
+        this.plugin.getService(IQueueService.class).reloadQueues();
         player.sendMessage(CC.translate("&aYou've reloaded the queues."));
     }
 }

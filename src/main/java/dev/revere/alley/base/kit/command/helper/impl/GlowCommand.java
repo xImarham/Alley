@@ -5,9 +5,7 @@ import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.tool.reflection.utility.ReflectionUtility;
 import dev.revere.alley.util.chat.CC;
-import net.minecraft.server.v1_8_R3.NBTTagCompound;
 import org.bukkit.Material;
-import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 

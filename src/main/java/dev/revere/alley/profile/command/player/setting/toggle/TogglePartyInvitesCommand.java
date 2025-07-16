@@ -1,6 +1,5 @@
 package dev.revere.alley.profile.command.player.setting.toggle;
 
-import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
@@ -22,7 +21,7 @@ public class TogglePartyInvitesCommand extends BaseCommand {
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
 
-        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+        IProfileService profileService = this.plugin.getService(IProfileService.class);
         Profile profile = profileService.getProfile(player.getUniqueId());
         profile.getProfileData().getSettingData().setPartyInvitesEnabled(!profile.getProfileData().getSettingData().isPartyInvitesEnabled());
 

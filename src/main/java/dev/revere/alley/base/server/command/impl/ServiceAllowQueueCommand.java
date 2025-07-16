@@ -1,6 +1,5 @@
 package dev.revere.alley.base.server.impl;
 
-import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
@@ -33,7 +32,7 @@ public class ServiceAllowQueueCommand extends BaseCommand {
             return;
         }
 
-        IServerService serverService = Alley.getInstance().getService(IServerService.class);
+        IServerService serverService = this.plugin.getService(IServerService.class);
         serverService.clearAllQueues(player);
         serverService.setQueueingAllowed(allowQueue);
         player.sendMessage(CC.translate("&aYou've " + (allowQueue ? "&aenabled" : "&cdisabled") + " queueing."));

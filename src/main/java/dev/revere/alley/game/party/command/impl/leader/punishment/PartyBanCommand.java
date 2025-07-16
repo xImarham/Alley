@@ -1,6 +1,5 @@
 package dev.revere.alley.game.party.command.impl.leader.punishment;
 
-import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
@@ -36,6 +35,6 @@ public class PartyBanCommand extends BaseCommand {
             return;
         }
 
-        Alley.getInstance().getService(IPartyService.class).banMember(player, target);
+        this.plugin.getService(IPartyService.class).banMember(player, target);
     }
 }

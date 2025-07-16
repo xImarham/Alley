@@ -1,6 +1,5 @@
 package dev.revere.alley.game.duel.command;
 
-import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
@@ -53,7 +52,7 @@ public class DuelCommand extends BaseCommand {
             return;
         }
 
-        Profile profile = Alley.getInstance().getService(IProfileService.class).getProfile(target.getUniqueId());
+        Profile profile = this.plugin.getService(IProfileService.class).getProfile(target.getUniqueId());
         if (!profile.getProfileData().getSettingData().isReceiveDuelRequestsEnabled()) {
             player.sendMessage(CC.translate("&cThis player has disabled duel requests."));
             return;

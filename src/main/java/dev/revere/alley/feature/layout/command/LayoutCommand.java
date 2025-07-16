@@ -21,11 +21,11 @@ public class LayoutCommand extends BaseCommand {
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
 
-        if (Alley.getInstance().getService(IProfileService.class).getProfile(player.getUniqueId()).getState() != EnumProfileState.LOBBY) {
+        if (this.plugin.getService(IProfileService.class).getProfile(player.getUniqueId()).getState() != EnumProfileState.LOBBY) {
             player.sendMessage(CC.translate("&cYou are not in the lobby!"));
             return;
         }
 
-        Alley.getInstance().getService(ILayoutService.class).getLayoutMenu().openMenu(player);
+        this.plugin.getService(ILayoutService.class).getLayoutMenu().openMenu(player);
     }
 }

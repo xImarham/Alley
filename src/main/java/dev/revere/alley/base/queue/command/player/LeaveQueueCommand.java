@@ -1,6 +1,5 @@
 package dev.revere.alley.base.queue.command.player;
 
-import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
@@ -20,7 +19,7 @@ public class LeaveQueueCommand extends BaseCommand {
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
-        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+        IProfileService profileService = this.plugin.getService(IProfileService.class);
         Profile profile = profileService.getProfile(player.getUniqueId());
         if (!profile.getState().equals(EnumProfileState.WAITING)) {
             player.sendMessage(CC.translate("&cYou are not in a queue."));

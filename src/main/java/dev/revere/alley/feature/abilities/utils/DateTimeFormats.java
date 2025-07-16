@@ -23,7 +23,7 @@ public final class DateTimeFormats
     public static final FastDateFormat PALACE_FORMAT;
     public static final ThreadLocal<DecimalFormat> REMAINING_SECONDS;
     public static final ThreadLocal<DecimalFormat> REMAINING_SECONDS_TRAILING;
-    
+
     static {
         SERVER_TIME_ZONE = TimeZone.getTimeZone("EST");
         SERVER_ZONE_ID = DateTimeFormats.SERVER_TIME_ZONE.toZoneId();
