@@ -40,8 +40,9 @@ public class LobbyScoreboard implements IScoreboard {
                     .replace("{level}", String.valueOf(levelService.getLevel(profile.getProfileData().getGlobalLevel()).getDisplayName()));
 
             if (profile.getParty() != null) {
-                processedLine = processedLine
+                processedLine = CC.translate(processedLine)
                         .replace("{party-size}", String.valueOf(profile.getParty().getMembers().size()))
+                        .replace("{party-privacy}", profile.getParty().isPrivate() ? "&cPrivate" : "&aPublic")
                         .replace("{party-leader}", profile.getParty().getLeader().getName());
             } else {
                 processedLine = processedLine

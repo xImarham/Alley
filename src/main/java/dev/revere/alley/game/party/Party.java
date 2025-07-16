@@ -85,4 +85,8 @@ public class Party {
             }
         }
     }
+
+    public boolean isPrivate() {
+        return this.state == EnumPartyState.PRIVATE;
+    }
 }
