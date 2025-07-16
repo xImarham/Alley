@@ -87,6 +87,15 @@ public class Profile {
     }
 
     /**
+     * Checks if the profile is currently busy with a match or FFA.
+     *
+     * @return True if the profile is busy, otherwise false.
+     */
+    public boolean isBusy() {
+        return this.state != EnumProfileState.LOBBY && this.state != EnumProfileState.WAITING;
+    }
+
+    /**
      * Loads the profile from the database.
      */
     public void load() {
