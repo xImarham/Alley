@@ -228,10 +228,10 @@ public abstract class AbstractMatch {
      *
      * @param player The player to finalize.
      */
-    private void finalizePlayer(Player player) {
+    public void finalizePlayer(Player player) {
         IVisibilityService visibilityService = Alley.getInstance().getService(IVisibilityService.class);
         this.resetPlayerState(player);
-        updatePlayerProfileForLobby(player);
+        this.updatePlayerProfileForLobby(player);
         visibilityService.updateVisibility(player);
         this.teleportPlayerToSpawn(player);
     }
@@ -299,7 +299,9 @@ public abstract class AbstractMatch {
         Profile victimProfile = profileService.getProfile(player.getUniqueId());
         Profile killerProfile = (killer != null) ? profileService.getProfile(killer.getUniqueId()) : null;
 
-        this.handleDeathMessages(player, killer, victimProfile, killerProfile, cause);
+        if (!gamePlayer.isDisconnected()) {
+            this.handleDeathMessages(player, killer, victimProfile, killerProfile, cause);
+        }
 
         this.createSnapshot(player);
 
