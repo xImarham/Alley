@@ -77,7 +77,6 @@ public class Alley extends JavaPlugin {
         }
 
         this.registerExpansion();
-        this.registerListeners();
         this.runTasks();
 
         // CommandUtility.registerCommands();
@@ -134,33 +133,6 @@ public class Alley extends JavaPlugin {
             AlleyPlaceholderExpansion expansion = new AlleyPlaceholderExpansion(this);
             expansion.register();
         });
-    }
-
-    private void registerListeners() {
-        Arrays.asList(
-                new ProfileListener(),
-                new HotbarListener(),
-                new PartyListener(),
-                new MatchListener(),
-                new MatchInteractListener(),
-                new MatchPearlListener(),
-                new MatchDisconnectListener(),
-                new MatchDamageListener(),
-                new MatchChatListener(),
-                new MatchBlockListener(),
-                new ArenaListener(),
-                new MenuListener(),
-                new SpawnListener(),
-                new FFAListener(),
-                new FFACuboidListener(),
-                new EmojiListener(),
-                new CombatListener(),
-                new QueueListener(),
-                new CoreChatListener(),
-                new LayoutListener(),
-                new SnapshotListener(),
-                new CraftingListener()
-        ).forEach(listener -> getServer().getPluginManager().registerEvents(listener, this));
     }
 
     private void runTasks() {
