@@ -6,6 +6,7 @@ import dev.revere.alley.feature.level.ILevelService;
 import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.data.ProfileData;
+import dev.revere.alley.util.chat.CC;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -90,7 +91,7 @@ public class AlleyPlaceholderExpansion extends PlaceholderExpansion {
             case "player-ranked-losses":
                 return String.valueOf(profileData.getRankedLosses());
             case "player-level":
-                return Objects.requireNonNull(this.plugin.getService(ILevelService.class).getLevel(profileData.getElo()).getDisplayName(), this.notAvailableString);
+                return Objects.requireNonNull(CC.translate(this.plugin.getService(ILevelService.class).getLevel(profileData.getElo()).getDisplayName()), this.notAvailableString);
             case "player-coins":
                 return String.valueOf(profileData.getCoins());
         }
