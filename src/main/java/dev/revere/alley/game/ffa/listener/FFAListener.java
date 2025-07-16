@@ -1,13 +1,11 @@
 package dev.revere.alley.game.ffa.listener;
 
 import dev.revere.alley.Alley;
-import dev.revere.alley.base.combat.CombatService;
 import dev.revere.alley.base.combat.ICombatService;
 import dev.revere.alley.base.cooldown.Cooldown;
-import dev.revere.alley.base.cooldown.CooldownRepository;
 import dev.revere.alley.base.cooldown.ICooldownRepository;
 import dev.revere.alley.base.cooldown.enums.EnumCooldownType;
-import dev.revere.alley.game.ffa.cuboid.FFASpawnService;
+import dev.revere.alley.base.kit.setting.impl.mechanic.KitSettingNoHungerImpl;
 import dev.revere.alley.game.ffa.cuboid.IFFASpawnService;
 import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
@@ -26,6 +24,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
@@ -70,8 +69,7 @@ public class FFAListener implements Listener {
     @EventHandler
     private void onPlayerItemConsume(PlayerItemConsumeEvent event) {
         Player player = event.getPlayer();
-        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
-        Profile profile = profileService.getProfile(player.getUniqueId());
+        Profile profile = this.accessProfile(player);
         if (profile.getState() != EnumProfileState.FFA) {
             return;
         }
@@ -141,7 +139,7 @@ public class FFAListener implements Listener {
         Player player = (Player) event.getEntity();
         Player attacker = (Player) event.getDamager();
 
-        Profile profile = accessProfile(player);
+        Profile profile = this.accessProfile(player);
         if (profile.getState() != EnumProfileState.FFA) return;
 
         ICombatService combatService = Alley.getInstance().getService(ICombatService.class);
@@ -167,7 +165,7 @@ public class FFAListener implements Listener {
         if (!(event.getEntity() instanceof Player)) return;
         Player victim = (Player) event.getEntity();
 
-        Profile profile = accessProfile(victim);
+        Profile profile = this.accessProfile(victim);
         if (profile.getState() != EnumProfileState.FFA) {
             return;
         }
@@ -221,8 +219,7 @@ public class FFAListener implements Listener {
         if (!(event.getEntity().getShooter() instanceof Player)) return;
 
         Player player = (Player) event.getEntity().getShooter();
-        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
-        Profile profile = profileService.getProfile(player.getUniqueId());
+        Profile profile = this.accessProfile(player);
 
         if (profile.getState() != EnumProfileState.FFA) return;
 
@@ -252,5 +249,18 @@ public class FFAListener implements Listener {
         });
 
         cooldown.resetCooldown();
+    }
+
+    @EventHandler
+    private void onHunger(FoodLevelChangeEvent event) {
+        if (event.getEntity() instanceof Player) {
+            Player player = (Player) event.getEntity();
+            Profile profile = this.accessProfile(player);
+            if (profile.getState() != EnumProfileState.FFA) return;
+
+            if (profile.getFfaMatch().getKit().isSettingEnabled(KitSettingNoHungerImpl.class)) {
+                event.setCancelled(true);
+            }
+        }
     }
 }

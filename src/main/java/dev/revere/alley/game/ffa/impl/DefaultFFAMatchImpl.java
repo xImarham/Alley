@@ -196,7 +196,7 @@ public class DefaultFFAMatchImpl extends AbstractFFAMatch {
         this.plugin.getService(ICombatService.class).resetCombatLog(player);
 
         this.getPlayers().forEach(ffaPlayer -> ffaPlayer.getPlayer().sendMessage(CC.translate(
-                "&6" + profile.getFancyName() + " &ahas been killed by &6" + killer.getName() + "&a."))
+                "&6" + profile.getFancyName() + " &ahas been killed by &6" + killerProfile.getFancyName() + "&a."))
         );
         this.sendKillstreakAlertMessage(killer);
 
