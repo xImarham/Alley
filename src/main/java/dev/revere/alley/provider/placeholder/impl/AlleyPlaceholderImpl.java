@@ -1,4 +1,4 @@
-package dev.revere.alley.provider.expansion;
+package dev.revere.alley.provider.placeholder.impl;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.constant.IPluginConstant;
@@ -19,7 +19,7 @@ import java.util.Objects;
  * @project Alley
  * @since 21/05/2025
  */
-public class AlleyPlaceholderExpansion extends PlaceholderExpansion {
+public class AlleyPlaceholderImpl extends PlaceholderExpansion {
 
     /*
      * Examples:
@@ -36,7 +36,7 @@ public class AlleyPlaceholderExpansion extends PlaceholderExpansion {
      *
      * @param plugin The Alley plugin instance.
      */
-    public AlleyPlaceholderExpansion(Alley plugin) {
+    public AlleyPlaceholderImpl(Alley plugin) {
         this.plugin = plugin;
         this.notAvailableString = "&cN/A";
     }

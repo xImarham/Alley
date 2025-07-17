@@ -3,7 +3,6 @@ package dev.revere.alley;
 import dev.revere.alley.config.IConfigService;
 import dev.revere.alley.plugin.AlleyContext;
 import dev.revere.alley.plugin.lifecycle.IService;
-import dev.revere.alley.provider.expansion.AlleyPlaceholderExpansion;
 import dev.revere.alley.provider.tablist.task.TablistUpdateTask;
 import dev.revere.alley.task.ArrowRemovalTask;
 import dev.revere.alley.task.MatchPearlCooldownTask;
@@ -60,7 +59,6 @@ public class Alley extends JavaPlugin {
             return;
         }
 
-        this.registerExpansion();
         this.runTasks();
 
         // CommandUtility.registerCommands();
@@ -105,18 +103,6 @@ public class Alley extends JavaPlugin {
         if (!new HashSet<>(authors).containsAll(expectedAuthors)) {
             System.exit(0);
         }
-    }
-
-    private void registerExpansion() {
-        if (this.getServer().getPluginManager().getPlugin("PlaceholderAPI") == null) {
-            Logger.info("PlaceholderAPI is not installed! AlleyPlaceholderExpansion will not be registered.");
-            return;
-        }
-
-        Logger.logTime(AlleyPlaceholderExpansion.class.getSimpleName(), () -> {
-            AlleyPlaceholderExpansion expansion = new AlleyPlaceholderExpansion(this);
-            expansion.register();
-        });
     }
 
     private void runTasks() {
