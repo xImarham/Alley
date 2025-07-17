@@ -92,7 +92,7 @@ public class Profile {
      * @return True if the profile is busy, otherwise false.
      */
     public boolean isBusy() {
-        return this.state != EnumProfileState.LOBBY && this.state != EnumProfileState.WAITING;
+        return this.state != EnumProfileState.LOBBY;
     }
 
     /**
