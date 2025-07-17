@@ -1,38 +1,44 @@
 package dev.revere.alley.game.match.impl;
 
+import dev.revere.alley.Alley;
 import dev.revere.alley.base.arena.AbstractArena;
 import dev.revere.alley.base.kit.Kit;
+import dev.revere.alley.base.kit.service.IBaseRaidingService;
+import dev.revere.alley.base.kit.setting.impl.mechanic.KitSettingDropItemsImpl;
 import dev.revere.alley.base.kit.setting.impl.mode.KitSettingRaidingImpl;
+import dev.revere.alley.base.kit.setting.impl.mode.KitSettingRespawnTimerImpl;
 import dev.revere.alley.base.queue.Queue;
-import dev.revere.alley.feature.division.Division;
-import dev.revere.alley.feature.division.tier.DivisionTier;
+import dev.revere.alley.config.IConfigService;
+import dev.revere.alley.feature.layout.data.LayoutData;
 import dev.revere.alley.game.match.AbstractMatch;
-import dev.revere.alley.game.match.data.AbstractMatchData;
-import dev.revere.alley.game.match.data.impl.MatchDataSoloImpl;
 import dev.revere.alley.game.match.enums.EnumMatchState;
+import dev.revere.alley.game.match.player.data.MatchGamePlayerData;
 import dev.revere.alley.game.match.player.enums.EnumBaseRaiderRole;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.game.match.utility.MatchUtility;
+import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
-import dev.revere.alley.profile.ProfileService;
-import dev.revere.alley.profile.data.ProfileData;
-import dev.revere.alley.tool.elo.EloCalculator;
+import dev.revere.alley.profile.progress.IProgressService;
+import dev.revere.alley.profile.progress.PlayerProgress;
+import dev.revere.alley.tool.elo.IEloCalculator;
 import dev.revere.alley.tool.elo.result.EloResult;
 import dev.revere.alley.tool.elo.result.OldEloResult;
-import dev.revere.alley.tool.item.ItemBuilder;
 import dev.revere.alley.tool.logger.Logger;
+import dev.revere.alley.tool.reflection.IReflectionRepository;
 import dev.revere.alley.tool.reflection.impl.TitleReflectionService;
+import dev.revere.alley.util.InventoryUtil;
+import dev.revere.alley.util.ListenerUtil;
 import dev.revere.alley.util.PlayerUtil;
 import dev.revere.alley.util.chat.CC;
-import dev.revere.alley.util.visual.ProgressBarUtil;
 import lombok.Getter;
 import lombok.Setter;
-import org.bukkit.*;
+import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.LeatherArmorMeta;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
@@ -76,7 +82,7 @@ public class MatchRegularImpl extends AbstractMatch {
     @Override
     public void setupPlayer(Player player) {
         super.setupPlayer(player);
-        this.applyWoolAndArmorColor(player);
+        this.applyColorKit(player);
 
         Location spawnLocation = this.participantA.containsPlayer(player.getUniqueId()) ? getArena().getPos1() : getArena().getPos2();
         player.teleport(spawnLocation);
@@ -106,69 +112,135 @@ public class MatchRegularImpl extends AbstractMatch {
      *
      * @param player The player to apply the wool color to.
      */
-    public void applyWoolAndArmorColor(Player player) {
+    public void applyColorKit(Player player) {
         GameParticipant<MatchGamePlayerImpl> participant = this.getParticipant(player);
         if (participant == null) {
             return;
         }
 
-        int woolColor = (participant == this.participantA) ? 11 : 14;
+        final InventoryUtil.TeamColor colorToApply = (participant == this.participantA)
+                ? InventoryUtil.TeamColor.BLUE
+                : InventoryUtil.TeamColor.RED;
 
-        participant.getPlayers().forEach(gamePlayer -> {
-            Player teamPlayer = gamePlayer.getPlayer();
+        participant.getPlayers().stream()
+                .map(MatchGamePlayerImpl::getTeamPlayer)
+                .filter(p -> p != null && p.isOnline())
+                .forEach(teamPlayer -> InventoryUtil.applyTeamColorToInventory(teamPlayer, colorToApply));
+    }
 
-            teamPlayer.getInventory().all(Material.WOOL).forEach((key, value) ->
-                    teamPlayer.getInventory().setItem(key, new ItemBuilder(Material.WOOL).durability(woolColor).amount(64).build())
-            );
-
-            Color color = (woolColor == 11) ? Color.fromRGB(0, 102, 255) : Color.fromRGB(255, 0, 0);
-
-            for (int i = 36; i <= 39; i++) {
-                ItemStack item = teamPlayer.getInventory().getItem(i);
-                if (item != null && item.getType().toString().contains("LEATHER_")) {
-                    LeatherArmorMeta meta = (LeatherArmorMeta) item.getItemMeta();
-                    meta.setColor(color);
-                    item.setItemMeta(meta);
-                    teamPlayer.getInventory().setItem(i, item);
-                }
-            }
-
-            teamPlayer.updateInventory();
-        });
+    @Override
+    protected boolean shouldHandleRegularRespawn(Player player) {
+        return !this.getKit().isSettingEnabled(KitSettingRespawnTimerImpl.class);
     }
 
     @Override
     public void handleRoundEnd() {
-        this.winner = this.participantA.isAllDead() ? this.participantB : this.participantA;
-        this.loser = this.participantA.isAllDead() ? this.participantA : this.participantB;
-        this.loser.setEliminated(true);
+        final boolean teamADead = this.participantA.isAllEliminated() || this.participantA.isAllDead();
+        final GameParticipant<MatchGamePlayerImpl> winner = teamADead ? this.participantB : this.participantA;
+        final GameParticipant<MatchGamePlayerImpl> loser = teamADead ? this.participantA : this.participantB;
 
-        this.sendVictory(this.winner.getPlayer().getPlayer());
-        this.sendDefeat(this.loser.getPlayer().getPlayer());
+        this.winner = winner;
+        this.loser = loser;
 
-        if (this.isTeamMatch()) {
-            MatchUtility.sendConjoinedMatchResult(this, this.winner, this.loser);
-        } else {
-            MatchUtility.sendMatchResult(this, this.winner.getPlayer().getPlayer().getName(), this.loser.getPlayer().getPlayer().getName());
-        }
+        broadcastMatchOutcome(winner, loser);
+        processStatistics(winner, loser);
 
         if (!this.getSpectators().isEmpty()) {
             this.broadcastAndStopSpectating();
         }
 
-        if (this.isAffectStatistics()) {
-            this.handleData(this.winner, this.loser, this.participantA, this.participantB);
+        super.handleRoundEnd();
+    }
 
-            ProfileData profileData = this.plugin.getProfileService().getProfile(this.winner.getPlayer().getUuid()).getProfileData();
-            Division currentDivision = profileData.getUnrankedKitData().get(this.getKit().getName()).getDivision();
-            DivisionTier currentTier = profileData.getUnrankedKitData().get(this.getKit().getName()).getTier();
+    /**
+     * Handles all player-facing messages at the end of a match, including titles and results.
+     */
+    private void broadcastMatchOutcome(GameParticipant<MatchGamePlayerImpl> winner, GameParticipant<MatchGamePlayerImpl> loser) {
+        winner.getPlayers().forEach(gamePlayer -> sendVictory(gamePlayer.getTeamPlayer()));
+        loser.getPlayers().forEach(gamePlayer -> sendDefeat(gamePlayer.getTeamPlayer()));
 
-            if (!this.isRanked()) {
-                this.sendProgressToWinner(this.winner.getPlayer().getPlayer(), currentDivision, currentTier);
-            }
+        if (this.isTeamMatch()) {
+            MatchUtility.sendConjoinedMatchResult(this, winner, loser);
+        } else {
+            MatchGamePlayerImpl winnerPlayer = winner.getLeader();
+            MatchGamePlayerImpl loserPlayer = loser.getLeader();
+            MatchUtility.sendMatchResult(
+                    this,
+                    winnerPlayer.getUsername(),
+                    loserPlayer.getUsername(),
+                    winnerPlayer.getUuid(),
+                    loserPlayer.getUuid()
+            );
+        }
+    }
+
+    /**
+     * Processes all backend statistics if the match is configured to affect them.
+     */
+    private void processStatistics(GameParticipant<MatchGamePlayerImpl> winner, GameParticipant<MatchGamePlayerImpl> loser) {
+        if (!this.isAffectStatistics()) {
+            return;
         }
 
-        super.handleRoundEnd();
+        handleMatchData(winner, loser);
+
+        if (!this.isRanked()) {
+            this.sendProgressToWinner(winner.getLeader().getTeamPlayer());
+        }
+    }
+
+    /**
+     * Routes to the correct statistics handling method based on the match type.
+     *
+     * @param winner The winning participant.
+     * @param loser  The losing participant.
+     */
+    private void handleMatchData(GameParticipant<MatchGamePlayerImpl> winner, GameParticipant<MatchGamePlayerImpl> loser) {
+        if (this.isTeamMatch()) {
+            return;
+        }
+
+        if (this.isRanked()) {
+            updateRankedStats(winner, loser);
+        } else {
+            updateUnrankedStats(winner, loser);
+        }
+    }
+
+    /**
+     * Updates player profiles and Elo for a ranked match.
+     */
+    private void updateRankedStats(GameParticipant<MatchGamePlayerImpl> winner, GameParticipant<MatchGamePlayerImpl> loser) {
+        OldEloResult result = this.getOldEloResult(winner, loser);
+        EloResult eloResult = this.getEloResult(result.getOldWinnerElo(), result.getOldLoserElo());
+
+        this.handleWinner(eloResult.getNewWinnerElo(), winner);
+        this.handleLoser(eloResult.getNewLoserElo(), loser);
+
+        this.sendEloResult(
+                winner.getLeader().getTeamPlayer().getName(),
+                loser.getLeader().getTeamPlayer().getName(),
+                result.getOldWinnerElo(),
+                result.getOldLoserElo(),
+                eloResult.getNewWinnerElo(),
+                eloResult.getNewLoserElo()
+        );
+    }
+
+    /**
+     * Updates player profiles with wins/losses for an unranked match.
+     */
+    private void updateUnrankedStats(GameParticipant<MatchGamePlayerImpl> winner, GameParticipant<MatchGamePlayerImpl> loser) {
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+
+        Profile winnerProfile = profileService.getProfile(winner.getLeader().getUuid());
+        winnerProfile.getProfileData().getUnrankedKitData().get(getKit().getName()).incrementWins();
+        winnerProfile.getProfileData().incrementUnrankedWins();
+        winnerProfile.getProfileData().determineTitles();
+
+        Profile loserProfile = profileService.getProfile(loser.getLeader().getUuid());
+        loserProfile.getProfileData().getUnrankedKitData().get(getKit().getName()).incrementLosses();
+        loserProfile.getProfileData().incrementUnrankedLosses();
     }
 
     /**
@@ -177,9 +249,9 @@ public class MatchRegularImpl extends AbstractMatch {
      * @param player The player to send the title to.
      */
     private void sendVictory(Player player) {
-        this.plugin.getReflectionRepository().getReflectionService(TitleReflectionService.class).sendTitle(
+        Alley.getInstance().getService(IReflectionRepository.class).getReflectionService(TitleReflectionService.class).sendTitle(
                 player,
-                "&bVictory!",
+                "&6Victory!",
                 "&fYou have won the match!",
                 2, 20, 2
         );
@@ -191,65 +263,12 @@ public class MatchRegularImpl extends AbstractMatch {
      * @param player The player to send the title to.
      */
     private void sendDefeat(Player player) {
-        this.plugin.getReflectionRepository().getReflectionService(TitleReflectionService.class).sendTitle(
+        Alley.getInstance().getService(IReflectionRepository.class).getReflectionService(TitleReflectionService.class).sendTitle(
                 player,
                 "&cDefeat!",
                 "&fYou have lost the match!",
                 2, 20, 2
         );
-    }
-
-    /**
-     * Method to handle the data of the match such as elo changes and unranked stats.
-     *
-     * @param winner       The winner of the match.
-     * @param loser        The loser of the match.
-     * @param participantA The first participant.
-     * @param participantB The second participant.
-     */
-    public void handleData(GameParticipant<MatchGamePlayerImpl> winner, GameParticipant<MatchGamePlayerImpl> loser, GameParticipant<MatchGamePlayerImpl> participantA, GameParticipant<MatchGamePlayerImpl> participantB) {
-        if (!this.isTeamMatch()) {
-            if (this.isRanked()) {
-                OldEloResult result = this.getOldEloResult(winner, loser);
-                EloResult eloResult = this.getEloResult(result.getOldWinnerElo(), result.getOldLoserElo());
-
-                this.handleWinner(eloResult.getNewWinnerElo(), winner);
-                this.handleLoser(eloResult.getNewLoserElo(), loser);
-
-                this.sendEloResult(winner.getPlayer().getPlayer().getName(), loser.getPlayer().getPlayer().getName(), result.getOldWinnerElo(), result.getOldLoserElo(), eloResult.getNewWinnerElo(), eloResult.getNewLoserElo());
-            } else {
-                ProfileService profileService = this.plugin.getProfileService();
-
-                Profile winnerProfile = profileService.getProfile(winner.getPlayer().getUuid());
-                winnerProfile.getProfileData().getUnrankedKitData().get(getKit().getName()).incrementWins();
-                winnerProfile.getProfileData().incrementUnrankedWins();
-                winnerProfile.getProfileData().determineTitles();
-                this.createMatchDataForHistory(winner, loser, winnerProfile);
-
-                Profile loserProfile = profileService.getProfile(loser.getPlayer().getUuid());
-                loserProfile.getProfileData().getUnrankedKitData().get(getKit().getName()).incrementLosses();
-                loserProfile.getProfileData().incrementUnrankedLosses();
-                this.createMatchDataForHistory(loser, winner, loserProfile);
-            }
-        }
-    }
-
-    /**
-     * Creates match data for the history of the winner.
-     *
-     * @param winner       The winner of the match.
-     * @param loser        The loser of the match.
-     * @param profileToAdd The profile to add the match data to.
-     */
-    public void createMatchDataForHistory(GameParticipant<MatchGamePlayerImpl> winner, GameParticipant<MatchGamePlayerImpl> loser, Profile profileToAdd) {
-        AbstractMatchData matchData = new MatchDataSoloImpl(
-                this.getKit().getName(),
-                this.getArena().getName(),
-                winner.getPlayer().getUuid(),
-                loser.getPlayer().getUuid()
-        );
-
-        profileToAdd.getProfileData().getPreviousMatches().add(matchData);
     }
 
     /**
@@ -263,7 +282,7 @@ public class MatchRegularImpl extends AbstractMatch {
      * @param newEloLoser  The new elo of the loser.
      */
     public void sendEloResult(String winnerName, String loserName, int oldEloWinner, int oldEloLoser, int newEloWinner, int newEloLoser) {
-        FileConfiguration config = this.plugin.getConfigService().getMessagesConfig();
+        FileConfiguration config = Alley.getInstance().getService(IConfigService.class).getMessagesConfig();
 
         List<String> list = config.getStringList("match.ended.elo-changes.format");
         String winnerIndicatorColor = config.getString("match.ended.elo-changes.winner-indicator-color", "&a");
@@ -288,48 +307,34 @@ public class MatchRegularImpl extends AbstractMatch {
     }
 
     /**
-     * Sends the progress of the winner to the player.
+     * Sends the progress of the winner to the player using the ProgressService.
+     * The method no longer needs Division or Tier passed in.
      *
-     * @param winner          The winner of the match.
-     * @param currentDivision The current division of the winner.
-     * @param currentTier     The current tier of the winner.
+     * @param winner The winning player.
      */
-    public void sendProgressToWinner(Player winner, Division currentDivision, DivisionTier currentTier) {
-        Profile winnerProfile = this.plugin.getProfileService().getProfile(winner.getUniqueId());
-        ProfileData profileData = winnerProfile.getProfileData();
-        int wins = profileData.getUnrankedKitData().get(this.getKit().getName()).getWins();
+    public void sendProgressToWinner(Player winner) {
+        Profile winnerProfile = Alley.getInstance().getService(IProfileService.class).getProfile(winner.getUniqueId());
 
-        List<DivisionTier> tiers = currentDivision.getTiers(); //division 2
-        int tierIndex = tiers.indexOf(currentTier); // 0
+        PlayerProgress progress = Alley.getInstance().getService(IProgressService.class).calculateProgress(winnerProfile, this.getKit().getName());
 
-        int nextTierWins;
-        if (tierIndex < tiers.size() - 1) { // if there is a next tier
-            nextTierWins = tiers.get(tierIndex + 1).getRequiredWins(); // 40
-        } else if (winnerProfile.getNextDivision(this.getKit().getName()) != null) { // if division doesn't have a next tier, but there is a next division
-            nextTierWins = winnerProfile.getNextDivision(this.getKit().getName()).getTiers().get(0).getRequiredWins();
-        } else {
-            nextTierWins = currentTier.getRequiredWins();
-        }
-
-        String nextRank = winnerProfile.getNextDivisionAndTier(this.getKit().getName());
-        String progressBar = ProgressBarUtil.generate(wins, wins == currentTier.getRequiredWins() ? currentTier.getRequiredWins() : nextTierWins, 12, "■");
-        String progressPercent = nextTierWins > 0 ? Math.round((float) wins / nextTierWins * 100) + "%" : "100%";
-        int requiredWinsToUnlock = nextTierWins - wins; // 40 - 10 (first tier of bronze 1)
-        String winOrWins = requiredWinsToUnlock == 1 ? "win" : "wins";
-        
         String progressLine;
-        if (wins == currentTier.getRequiredWins()) {
-            progressLine = " &b&l● &fUNLOCKED &b" + currentDivision.getName() + " " + currentTier.getName() + "&f!";
+
+        if (progress.isMaxRank() && progress.getCurrentWins() >= progress.getWinsForNextTier()) {
+            progressLine = " &6&l● &fCONGRATULATIONS! You have reached the maximum rank!";
         } else {
-            progressLine = " &b&l● &fUnlock &b" + nextRank + " &fwith " + requiredWinsToUnlock + " more " + winOrWins + "!";
+            progressLine = String.format(" &6&l● &fUnlock &6%s &fwith %d more %s!",
+                    progress.getNextRankName(),
+                    progress.getWinsRequired(),
+                    progress.getWinOrWins()
+            );
         }
 
         Arrays.asList(
-                "&b&lProgress",
+                "&6&lProgress",
                 progressLine,
-                "  &7(" + progressBar + "&7) " + progressPercent,
-                " &b&l● &fDaily Streak: &b" + "N/A" + " &f(Best: " + "N/A" + ")",
-                " &b&l● &fWin Streak: &b" + "N/A" + " &f(Best: " + "N/A" + ")",
+                "  &7(" + progress.getProgressBar(12, "■") + "&7) " + progress.getProgressPercentage(),
+                " &6&l● &fDaily Streak: &6" + "N/A" + " &f(Best: " + "N/A" + ")",
+                " &6&l● &fWin Streak: &6" + "N/A" + " &f(Best: " + "N/A" + ")",
                 ""
         ).forEach(line -> winner.sendMessage(CC.translate(line)));
     }
@@ -340,8 +345,8 @@ public class MatchRegularImpl extends AbstractMatch {
      * @return The old elo result.
      */
     public @NotNull OldEloResult getOldEloResult(GameParticipant<MatchGamePlayerImpl> winner, GameParticipant<MatchGamePlayerImpl> loser) {
-        int oldWinnerElo = winner.getPlayer().getElo();
-        int oldLoserElo = loser.getPlayer().getElo();
+        int oldWinnerElo = winner.getLeader().getElo();
+        int oldLoserElo = loser.getLeader().getElo();
         return new OldEloResult(oldWinnerElo, oldLoserElo);
     }
 
@@ -353,7 +358,7 @@ public class MatchRegularImpl extends AbstractMatch {
      * @return The elo result.
      */
     public @NotNull EloResult getEloResult(int oldWinnerElo, int oldLoserElo) {
-        EloCalculator eloCalculator = this.plugin.getEloCalculator();
+        IEloCalculator eloCalculator = Alley.getInstance().getService(IEloCalculator.class);
         int newWinnerElo = eloCalculator.determineNewElo(oldWinnerElo, oldLoserElo, true);
         int newLoserElo = eloCalculator.determineNewElo(oldLoserElo, oldWinnerElo, false);
         return new EloResult(newWinnerElo, newLoserElo);
@@ -366,7 +371,7 @@ public class MatchRegularImpl extends AbstractMatch {
      * @param winner The winner of the match.
      */
     public void handleWinner(int elo, GameParticipant<MatchGamePlayerImpl> winner) {
-        Profile winnerProfile = this.plugin.getProfileService().getProfile(winner.getPlayer().getUuid());
+        Profile winnerProfile = Alley.getInstance().getService(IProfileService.class).getProfile(winner.getLeader().getUuid());
         winnerProfile.getProfileData().getRankedKitData().get(getKit().getName()).setElo(elo);
         winnerProfile.getProfileData().getRankedKitData().get(getKit().getName()).incrementWins();
         winnerProfile.getProfileData().incrementRankedWins();
@@ -380,7 +385,7 @@ public class MatchRegularImpl extends AbstractMatch {
      * @param loser The loser of the match.
      */
     public void handleLoser(int elo, GameParticipant<MatchGamePlayerImpl> loser) {
-        Profile loserProfile = this.plugin.getProfileService().getProfile(loser.getPlayer().getUuid());
+        Profile loserProfile = Alley.getInstance().getService(IProfileService.class).getProfile(loser.getLeader().getUuid());
         loserProfile.getProfileData().getRankedKitData().get(getKit().getName()).setElo(elo);
         loserProfile.getProfileData().getRankedKitData().get(getKit().getName()).incrementLosses();
         loserProfile.getProfileData().incrementRankedLosses();
@@ -394,7 +399,9 @@ public class MatchRegularImpl extends AbstractMatch {
 
     @Override
     public boolean canEndRound() {
-        return this.participantA.isAllDead() || this.participantB.isAllDead();
+        return (this.participantA.isAllDead() || this.participantB.isAllDead())
+                || (this.participantA.getAllPlayers().stream().allMatch(MatchGamePlayerImpl::isDisconnected)
+                || this.participantB.getAllPlayers().stream().allMatch(MatchGamePlayerImpl::isDisconnected));
     }
 
     @Override
@@ -409,17 +416,34 @@ public class MatchRegularImpl extends AbstractMatch {
     }
 
     @Override
+    public void handleDeathItemDrop(Player player, PlayerDeathEvent event) {
+        if (this.getKit().isSettingEnabled(KitSettingDropItemsImpl.class)) {
+            ListenerUtil.clearDroppedItemsOnDeath(event, player);
+        } else {
+            event.getDrops().clear();
+        }
+    }
+
+    @Override
     public void handleDisconnect(Player player) {
         if (!(this.getState() == EnumMatchState.STARTING || this.getState() == EnumMatchState.RUNNING)) {
             return;
         }
 
-        MatchGamePlayerImpl gamePlayer = this.getGamePlayer(player);
+        Profile profile = this.plugin.getService(IProfileService.class).getProfile(player.getUniqueId());
+        this.sendMessage(profile.getFancyName() + " &fdisconnected.");
+
+        MatchGamePlayerImpl gamePlayer = this.getFromAllGamePlayers(player);
         if (gamePlayer != null) {
             gamePlayer.setDisconnected(true);
+            gamePlayer.setEliminated(true);
             if (!gamePlayer.isDead()) {
-                this.handleDeath(player);
+                this.handleDeath(player, EntityDamageEvent.DamageCause.CUSTOM);
             }
+        }
+
+        if (player.isOnline()) {
+            this.finalizePlayer(player);
         }
     }
 
@@ -429,29 +453,42 @@ public class MatchRegularImpl extends AbstractMatch {
      * @param player The player to give the kit to.
      */
     public void determineRolesAndGiveKit(Player player) {
-        Kit toBeGivenKit;
-
-        if (this.getParticipantA() != null || this.getParticipantB() != null) {
-            assert this.getParticipantA() != null;
-            if (this.getParticipantA().containsPlayer(player.getUniqueId())) {
-                toBeGivenKit = this.plugin.getKitService().getKit("BaseTrapper");
-
-                GameParticipant<MatchGamePlayerImpl> participant = this.getParticipant(player);
-                participant.getPlayer().getData().setRole(EnumBaseRaiderRole.TRAPPER);
-
-                Logger.log("player a role: " + participant.getPlayer().getData().getRole());
-            } else {
-                toBeGivenKit = this.plugin.getKitService().getKit("BaseRaider");
-
-                GameParticipant<MatchGamePlayerImpl> participant = this.getParticipant(player);
-                participant.getPlayer().getData().setRole(EnumBaseRaiderRole.RAIDER);
-
-                Logger.log("player b role: " + participant.getPlayer().getData().getRole());
-            }
-
-            player.getInventory().setArmorContents(toBeGivenKit.getArmor());
-            player.getInventory().setContents(toBeGivenKit.getItems());
-            player.updateInventory();
+        if (this.getParticipantA() == null || this.getParticipantB() == null) {
+            return;
         }
+
+        Kit parentKit = this.getKit();
+        if (parentKit == null) {
+            Logger.error("&cCould not determine the parent kit for the raiding match.");
+            return;
+        }
+
+        EnumBaseRaiderRole role = getParticipantA().containsPlayer(player.getUniqueId())
+                ? EnumBaseRaiderRole.TRAPPER
+                : EnumBaseRaiderRole.RAIDER;
+
+        Kit kitToGive = Alley.getInstance().getService(IBaseRaidingService.class).getRaidingKitByRole(parentKit, role);
+        if (kitToGive == null) {
+            Logger.info("&cNo kit found for role: " + role.name() + " linked to parent kit.");
+            return;
+        }
+
+        MatchGamePlayerData data = this.getGamePlayer(player).getData();
+        data.setRole(role);
+
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+        Profile profile = profileService.getProfile(player.getUniqueId());
+        LayoutData layout = profile.getProfileData().getLayoutData().getLayouts().get(kitToGive.getName()).get(0);
+
+        //TODO: after implementing multiple layouts, we need to give the books here, if multiple layouts are present in profile.
+
+        if (layout != null) {
+            player.getInventory().setContents(layout.getItems());
+        } else {
+            player.getInventory().setContents(kitToGive.getItems());
+        }
+
+        player.getInventory().setArmorContents(kitToGive.getArmor());
+        player.updateInventory();
     }
 }

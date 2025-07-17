@@ -3,7 +3,9 @@ package dev.revere.alley.base.kit.command.impl.settings;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
+import dev.revere.alley.base.kit.IKitService;
 import dev.revere.alley.base.kit.Kit;
+import dev.revere.alley.base.kit.setting.IKitSettingService;
 import dev.revere.alley.config.locale.impl.KitLocale;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.entity.Player;
@@ -21,11 +23,11 @@ public class KitSetSettingCommand extends BaseCommand {
         String[] args = command.getArgs();
 
         if (args.length != 3) {
-            player.sendMessage(CC.translate("&6Usage: &e/kit setsetting &b<kit> <setting> <true/false>"));
+            player.sendMessage(CC.translate("&6Usage: &e/kit setsetting &6<kit> <setting> <true/false>"));
             return;
         }
 
-        Kit kit = this.plugin.getKitService().getKit(args[0]);
+        Kit kit = this.plugin.getService(IKitService.class).getKit(args[0]);
         if (kit == null) {
             player.sendMessage(CC.translate(KitLocale.KIT_NOT_FOUND.getMessage()));
             return;
@@ -34,13 +36,13 @@ public class KitSetSettingCommand extends BaseCommand {
         String settingName = args[1];
         boolean enabled = Boolean.parseBoolean(args[2]);
 
-        if (this.plugin.getKitSettingService().getSettings().stream().filter(setting -> setting.getName().equalsIgnoreCase(settingName)).findFirst().orElse(null) == null) {
+        if (this.plugin.getService(IKitSettingService.class).getSettings().stream().filter(setting -> setting.getName().equalsIgnoreCase(settingName)).findFirst().orElse(null) == null) {
             player.sendMessage(CC.translate("&cA setting with that name does not exist."));
             return;
         }
 
         kit.getKitSettings().stream().filter(setting -> setting.getName().equalsIgnoreCase(settingName)).findFirst().ifPresent(setting -> setting.setEnabled(enabled));
-        this.plugin.getKitService().saveKit(kit);
+        this.plugin.getService(IKitService.class).saveKit(kit);
         player.sendMessage(CC.translate(KitLocale.KIT_SETTING_SET.getMessage()).replace("{setting-name}", settingName).replace("{enabled}", String.valueOf(enabled)).replace("{kit-name}", kit.getName()));
     }
 }

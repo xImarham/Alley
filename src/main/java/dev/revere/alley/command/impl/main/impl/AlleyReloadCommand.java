@@ -3,6 +3,7 @@ package dev.revere.alley.command.impl.main.impl;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
+import dev.revere.alley.config.IConfigService;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.entity.Player;
 
@@ -18,9 +19,9 @@ public class AlleyReloadCommand extends BaseCommand {
         Player player = command.getPlayer();
 
         player.sendMessage("");
-        player.sendMessage(CC.translate("&eReloading &b&lAlley&e..."));
-        this.plugin.getConfigService().reloadConfigs();
-        player.sendMessage(CC.translate("&b&lAlley &ehas been reloaded."));
+        player.sendMessage(CC.translate("&eReloading &6&lAlley&e..."));
+        this.plugin.getService(IConfigService.class).reloadConfigs();
+        player.sendMessage(CC.translate("&6&lAlley &ehas been reloaded."));
         player.sendMessage("");
     }
 }

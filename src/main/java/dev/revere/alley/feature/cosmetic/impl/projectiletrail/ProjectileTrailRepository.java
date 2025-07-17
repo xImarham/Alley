@@ -1,0 +1,15 @@
+package dev.revere.alley.feature.cosmetic.impl.projectiletrail;
+
+import dev.revere.alley.feature.cosmetic.impl.projectiletrail.impl.FlameTrail;
+import dev.revere.alley.feature.cosmetic.repository.BaseCosmeticRepository;
+
+/**
+ * @author Remi
+ * @project Alley
+ * @date 6/23/2025
+ */
+public class ProjectileTrailRepository extends BaseCosmeticRepository<AbstractProjectileTrail> {
+    public ProjectileTrailRepository() {
+        this.registerCosmetic(FlameTrail.class);
+    }
+}

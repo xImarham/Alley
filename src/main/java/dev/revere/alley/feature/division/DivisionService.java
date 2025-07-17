@@ -1,6 +1,8 @@
 package dev.revere.alley.feature.division;
 
-import dev.revere.alley.Alley;
+import dev.revere.alley.config.IConfigService;
+import dev.revere.alley.plugin.AlleyContext;
+import dev.revere.alley.plugin.annotation.Service;
 import dev.revere.alley.feature.division.tier.DivisionTier;
 import dev.revere.alley.tool.logger.Logger;
 import lombok.Getter;
@@ -8,10 +10,7 @@ import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author Emmy
@@ -19,37 +18,50 @@ import java.util.List;
  * @since 25/01/2025
  */
 @Getter
-public class DivisionService {
-    protected final Alley plugin;
-    private final List<Division> divisions;
+@Service(provides = IDivisionService.class, priority = 150)
+public class DivisionService implements IDivisionService {
+    private final IConfigService configService;
+    private final List<Division> divisions = new ArrayList<>();
 
     /**
-     * Constructor for the DivisionService class.
-     *
-     * @param plugin The Alley plugin instance.
+     * Constructor for DI.
      */
-    public DivisionService(Alley plugin) {
-        this.plugin = plugin;
-        this.divisions = new ArrayList<>();
+    public DivisionService(IConfigService configService) {
+        this.configService = configService;
+    }
+
+    @Override
+    public void initialize(AlleyContext context) {
         this.loadDivisions();
+    }
+
+    @Override
+    public void shutdown(AlleyContext context) {
+        this.saveDivisions();
+        Logger.info("Saved all divisions.");
+    }
+
+    @Override
+    public List<Division> getDivisions() {
+        return Collections.unmodifiableList(this.divisions);
     }
 
     /**
      * Method to load all divisions from the divisions.yml file.
      */
     private void loadDivisions() {
-        FileConfiguration config = this.plugin.getConfigService().getDivisionsConfig();
+        FileConfiguration config = this.configService.getDivisionsConfig();
         ConfigurationSection divisionsSection = config.getConfigurationSection("divisions");
 
         if (divisionsSection == null) {
-            Logger.logError("No divisions found in the configuration file.");
+            Logger.error("No divisions found in the configuration file.");
             return;
         }
 
         List<Division> loadedDivisions = new ArrayList<>();
         for (String key : divisionsSection.getKeys(false)) {
             if (key == null || key.trim().isEmpty()) {
-                Logger.logError("Encountered a null or empty division key. Skipping.");
+                Logger.error("Encountered a null or empty division key. Skipping.");
                 continue;
             }
 
@@ -82,17 +94,13 @@ public class DivisionService {
             loadedDivisions.add(division);
         }
 
-        loadedDivisions.sort(Comparator.comparingInt(d -> d.getTiers().get(0).getRequiredWins()));
+        loadedDivisions.sort(Comparator.comparingInt(d -> d.getTiers().stream().mapToInt(DivisionTier::getRequiredWins).min().orElse(0)));
         this.divisions.addAll(loadedDivisions);
     }
 
-    /**
-     * Save a division to the divisions configuration file.
-     *
-     * @param division The division to save.
-     */
+    @Override
     public void saveDivision(Division division) {
-        FileConfiguration config = this.plugin.getConfigService().getDivisionsConfig();
+        FileConfiguration config = this.configService.getDivisionsConfig();
         String path = "divisions." + division.getName();
 
         config.set(path + ".display-name", division.getDisplayName());
@@ -105,31 +113,20 @@ public class DivisionService {
             config.set(tierPath + ".required-wins", tier.getRequiredWins());
         }
 
-        this.plugin.getConfigService().saveConfig(this.plugin.getConfigService().getConfigFile("storage/divisions.yml"), config);
+        this.configService.saveConfig(this.configService.getConfigFile("storage/divisions.yml"), config);
     }
 
-    public void saveDivisions() {
-        this.divisions.forEach(this::saveDivision);
-    }
-
-    /**
-     * Get a division by its name.
-     *
-     * @param name The name of the division to get.
-     * @return The division.
-     */
+    @Override
     public Division getDivision(String name) {
-        return this.divisions.stream().filter(division -> division.getName().equalsIgnoreCase(name)).findFirst().orElse(null);
+        return this.divisions.stream()
+                .filter(division -> division.getName().equalsIgnoreCase(name))
+                .findFirst()
+                .orElse(null);
     }
 
-    /**
-     * Create a division with I, II, III, IV, V tiers.
-     *
-     * @param name         The name of the division.
-     * @param requiredWins The required wins of the division.
-     */
+    @Override
     public void createDivision(String name, int requiredWins) {
-        Division division = new Division(name, "&b&l" + name, "The " + name + " Division", 0, Material.DIRT, Arrays.asList(
+        Division division = new Division(name, "&6&l" + name, "The " + name + " Division", 0, Material.DIRT, Arrays.asList(
                 new DivisionTier("I", requiredWins),
                 new DivisionTier("II", (int) (requiredWins * 1.25)),
                 new DivisionTier("III", (int) (requiredWins * 1.5)),
@@ -141,30 +138,26 @@ public class DivisionService {
         this.saveDivision(division);
     }
 
-    /**
-     * Delete a division by its name.
-     *
-     * @param name The name of the division to delete.
-     */
+    @Override
     public void deleteDivision(String name) {
-        FileConfiguration config = this.plugin.getConfigService().getDivisionsConfig();
+        FileConfiguration config = this.configService.getDivisionsConfig();
         Division division = this.getDivision(name);
         if (division == null) return;
 
         this.divisions.remove(division);
         config.set("divisions." + name, null);
 
-        this.plugin.getConfigService().saveConfig(this.plugin.getConfigService().getConfigFile("storage/divisions.yml"), config);
+        this.configService.saveConfig(this.configService.getConfigFile("storage/divisions.yml"), config);
     }
 
-    /**
-     * Get the highest division based on the required wins of the first tier.
-     *
-     * @return The highest division.
-     */
+    @Override
     public Division getHighestDivision() {
         return this.divisions.stream()
-                .max(Comparator.comparingInt(d -> d.getTiers().get(0).getRequiredWins()))
+                .max(Comparator.comparingInt(d -> d.getTiers().stream().mapToInt(DivisionTier::getRequiredWins).max().orElse(0)))
                 .orElse(null);
+    }
+
+    public void saveDivisions() {
+        this.divisions.forEach(this::saveDivision);
     }
 }

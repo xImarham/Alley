@@ -1,6 +1,8 @@
 package dev.revere.alley.provider.tablist.impl;
 
 import dev.revere.alley.Alley;
+import dev.revere.alley.config.IConfigService;
+import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.provider.tablist.ITablist;
 import dev.revere.alley.tool.logger.Logger;
 import dev.revere.alley.util.chat.CC;
@@ -32,17 +34,17 @@ public class TablistVisualizer implements ITablist {
 
     @Override
     public List<String> getHeader(Player player) {
-        return this.plugin.getConfigService().getTabListConfig().getStringList("tablist.header");
+        return Alley.getInstance().getService(IConfigService.class).getTabListConfig().getStringList("tablist.header");
     }
 
     @Override
     public List<String> getFooter(Player player) {
-        return this.plugin.getConfigService().getTabListConfig().getStringList("tablist.footer");
+        return Alley.getInstance().getService(IConfigService.class).getTabListConfig().getStringList("tablist.footer");
     }
 
     @Override
     public void update(Player player) {
-        if (this.plugin.getProfileService().getProfile(player.getUniqueId()).getProfileData().getSettingData().isTablistEnabled()) {
+        if (Alley.getInstance().getService(IProfileService.class).getProfile(player.getUniqueId()).getProfileData().getSettingData().isTablistEnabled()) {
             List<String> headerLines = getHeader(player).stream()
                     .map(CC::translate)
                     .collect(Collectors.toList());
@@ -66,7 +68,7 @@ public class TablistVisualizer implements ITablist {
 
                 ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
             } catch (Exception e) {
-                Logger.logError("Failed to update tablist for " + player.getName());
+                Logger.error("Failed to update tablist for " + player.getName());
             }
         } else {
             PacketPlayOutPlayerListHeaderFooter packet = new PacketPlayOutPlayerListHeaderFooter();
@@ -81,7 +83,7 @@ public class TablistVisualizer implements ITablist {
 
                 ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
             } catch (Exception e) {
-                Logger.logError("Failed to update tablist for " + player.getName());
+                Logger.error("Failed to update tablist for " + player.getName());
             }
         }
     }

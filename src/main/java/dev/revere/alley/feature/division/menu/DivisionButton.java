@@ -4,6 +4,7 @@ import dev.revere.alley.Alley;
 import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.feature.division.Division;
 import dev.revere.alley.feature.title.menu.TitleMenu;
+import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.tool.item.ItemBuilder;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -25,14 +26,14 @@ public class DivisionButton extends Button {
     public ItemStack getButtonItem(Player player) {
         return new ItemBuilder(this.division.getIcon())
                 .durability(this.division.getDurability())
-                .name("&b&l" + this.division.getDisplayName() + " Division")
+                .name("&6&l" + this.division.getDisplayName() + " Division")
                 .lore(
-                        "&f&l● &bTiers: &f" + this.division.getTiers().size(),
+                        "&f&l● &6Tiers: &f" + this.division.getTiers().size(),
                         "  &7▶ (" + this.division.getTiers().get(0).getRequiredWins() + " - " + this.division.getTotalWins() + " Wins)",
                         "",
                         " &fFor each kit, you will have",
                         " &fa division based on your",
-                        " &bUnranked &fwins.",
+                        " &6Unranked &fwins.",
                         "",
                         "&aClick to see your titles."
                 )
@@ -44,6 +45,6 @@ public class DivisionButton extends Button {
     public void clicked(Player player, ClickType clickType) {
         if (clickType != ClickType.LEFT) return;
 
-        new TitleMenu(Alley.getInstance().getProfileService().getProfile(player.getUniqueId())).openMenu(player);
+        new TitleMenu(Alley.getInstance().getService(IProfileService.class).getProfile(player.getUniqueId())).openMenu(player);
     }
 }

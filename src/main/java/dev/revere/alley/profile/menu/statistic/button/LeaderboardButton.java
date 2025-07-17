@@ -24,7 +24,7 @@ public class LeaderboardButton extends Button {
     @Override
     public ItemStack getButtonItem(Player player) {
         return new ItemBuilder(Material.EYE_OF_ENDER)
-                .name("&b&lLeaderboards")
+                .name("&6&lLeaderboards")
                 .lore(
                         "",
                         " &fAll of the leaderboards are displayed here.",

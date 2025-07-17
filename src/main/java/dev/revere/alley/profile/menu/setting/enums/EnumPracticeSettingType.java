@@ -15,7 +15,7 @@ import java.util.function.Function;
  */
 public enum EnumPracticeSettingType {
 
-    PARTY_MESSAGES(10, "&b&lToggle Party Messages", Material.FEATHER,
+    PARTY_MESSAGES(10, "&6&lToggle Party Messages", Material.FEATHER,
             settings -> Arrays.asList(
                     "&fSee party chat messages.",
                     "",
@@ -25,7 +25,7 @@ public enum EnumPracticeSettingType {
             )
     ),
 
-    PARTY_INVITES(11, "&b&lToggle Party Invites", Material.NAME_TAG,
+    PARTY_INVITES(11, "&6&lToggle Party Invites", Material.NAME_TAG,
             settings -> Arrays.asList(
                     "&fReceive party invites.",
                     "",
@@ -35,7 +35,7 @@ public enum EnumPracticeSettingType {
             )
     ),
 
-    SIDEBAR_VISIBILITY(12, "&b&lSidebar Visibility", Material.CARPET, 5,
+    SIDEBAR_VISIBILITY(12, "&6&lSidebar Visibility", Material.CARPET, 5,
             settings -> Arrays.asList(
                     "&fSee the scoreboard.",
                     "",
@@ -45,7 +45,7 @@ public enum EnumPracticeSettingType {
             )
     ),
 
-    TAB_VISIBILITY(13, "&b&lTablist Visibility", Material.ITEM_FRAME,
+    TAB_VISIBILITY(13, "&6&lTablist Visibility", Material.ITEM_FRAME,
             settings -> Arrays.asList(
                     "&fSee the tablist.",
                     "",
@@ -55,7 +55,7 @@ public enum EnumPracticeSettingType {
             )
     ),
 
-    WORLD_TIME(14, "&b&lWorld time", Material.WATCH, settings -> Arrays.asList(
+    WORLD_TIME(14, "&6&lWorld time", Material.WATCH, settings -> Arrays.asList(
             "&fChange your world time.",
             "",
             formatTime("Default", settings.isDefaultTime(), "&a&l"),
@@ -66,7 +66,7 @@ public enum EnumPracticeSettingType {
             "&aClick to change!"
     )),
 
-    SCOREBOARD_LINES(19, "&b&lShow Scoreboard Lines", Material.STRING,
+    SCOREBOARD_LINES(19, "&6&lShow Scoreboard Lines", Material.STRING,
             settings -> Arrays.asList(
                     "&fShow scoreboard lines.",
                     "",
@@ -76,7 +76,7 @@ public enum EnumPracticeSettingType {
             )
     ),
 
-    PROFANITY_FILTER(20, "&b&lProfanity Filter", Material.ROTTEN_FLESH,
+    PROFANITY_FILTER(20, "&6&lProfanity Filter", Material.ROTTEN_FLESH,
             settings -> Arrays.asList(
                     "&fHide rude and offensive words.",
                     "",
@@ -86,7 +86,17 @@ public enum EnumPracticeSettingType {
             )
     ),
 
-    MATCH_SETTINGS(16, "&b&lMatch Settings", Material.BOOK,
+    DUEL_REQUESTS(21, "&6&lDuel Requests", Material.DIAMOND_SWORD,
+            settings -> Arrays.asList(
+                    "&fReceive duel requests.",
+                    "",
+                    " " + LoreHelper.enabledOrDisabled(settings.isReceiveDuelRequestsEnabled()),
+                    "",
+                    "&aClick to change!"
+            )
+    ),
+
+    MATCH_SETTINGS(16, "&6&lMatch Settings", Material.BOOK,
             settings -> Arrays.asList(
                     "&fAdjust your match settings.",
                     "",
@@ -94,7 +104,7 @@ public enum EnumPracticeSettingType {
             )
     ),
 
-    COSMETICS(25, "&b&lCosmetics", Material.NETHER_STAR,
+    COSMETICS(25, "&6&lCosmetics", Material.NETHER_STAR,
             settings -> Arrays.asList(
                     "&fCustomize your cosmetics.",
                     "",

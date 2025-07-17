@@ -4,6 +4,7 @@ import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.feature.level.menu.LevelMenu;
+import dev.revere.alley.profile.IProfileService;
 import org.bukkit.entity.Player;
 
 /**
@@ -16,6 +17,6 @@ public class LevelCommand extends BaseCommand {
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
-        new LevelMenu(this.plugin.getProfileService().getProfile(player.getUniqueId())).openMenu(player);
+        new LevelMenu(this.plugin.getService(IProfileService.class).getProfile(player.getUniqueId())).openMenu(player);
     }
 }

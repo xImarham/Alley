@@ -1,6 +1,12 @@
 package dev.revere.alley.tool.reflection.utility;
 
+import net.minecraft.server.v1_8_R3.NBTTagCompound;
 import org.bukkit.Bukkit;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -616,4 +622,57 @@ public final class ReflectionUtility {
             throw new RuntimeException(exception);
         }
     }
+
+    /**
+     * Gets the ping of a player.
+     *
+     * @param player The player to get the ping of.
+     * @return The ping of the player in milliseconds.
+     * @author Emmy
+     */
+    public static int getPing(Player player) {
+        return ((CraftPlayer) player).getHandle().ping;
+    }
+
+    /**
+     * Sets the unbreakable state of an item.
+     *
+     * @param item        The item to modify.
+     * @param unbreakable Whether the item should be unbreakable.
+     * @return The modified item with the unbreakable state set.
+     * @author Emmy
+     */
+    public static @NotNull ItemStack setUnbreakable(ItemStack item, boolean unbreakable) {
+        net.minecraft.server.v1_8_R3.ItemStack nmsItem = CraftItemStack.asNMSCopy(item);
+        NBTTagCompound tag = nmsItem.hasTag() ? nmsItem.getTag() : new NBTTagCompound();
+        tag.setBoolean("Unbreakable", unbreakable);
+        nmsItem.setTag(tag);
+
+        return CraftItemStack.asBukkitCopy(nmsItem);
+    }
+
+    /**
+     * Sets the glowing state of an item.
+     *
+     * @param item The item to modify.
+     * @param glow Whether the item should glow.
+     * @return The modified item with the glowing state set.
+     * @author Emmy
+     */
+    public static ItemStack setGlowing(ItemStack item, boolean glow) {
+        net.minecraft.server.v1_8_R3.ItemStack nmsStack = CraftItemStack.asNMSCopy(item);
+        NBTTagCompound tag = nmsStack.hasTag() ? nmsStack.getTag() : new NBTTagCompound();
+
+        if (glow) {
+            if (!tag.hasKey("ench")) {
+                tag.set("ench", new net.minecraft.server.v1_8_R3.NBTTagList()); // Fake enchantment list
+            }
+        } else {
+            tag.remove("ench");
+        }
+
+        nmsStack.setTag(tag);
+        return CraftItemStack.asBukkitCopy(nmsStack);
+    }
+
 }

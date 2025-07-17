@@ -1,8 +1,10 @@
 package dev.revere.alley.provider.scoreboard.impl.match.impl.state;
 
 import dev.revere.alley.Alley;
+import dev.revere.alley.config.IConfigService;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
+import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.provider.scoreboard.impl.match.IMatchScoreboard;
 import dev.revere.alley.tool.animation.type.internal.impl.DotAnimationImpl;
@@ -18,36 +20,33 @@ import java.util.List;
  * @since 30/04/2025
  */
 public class MatchScoreboardStartingImpl implements IMatchScoreboard {
-    protected final Alley plugin;
-
     private final DotAnimationImpl dotAnimation;
 
     /**
      * Constructor for the MatchScoreboardStartingImpl class.
-     *
-     * @param plugin The Alley plugin instance.
      */
-    public MatchScoreboardStartingImpl(Alley plugin) {
-        this.plugin = plugin;
-
+    public MatchScoreboardStartingImpl() {
         this.dotAnimation = new DotAnimationImpl();
     }
 
     @Override
     public List<String> getLines(Profile profile, Player player, GameParticipant<MatchGamePlayerImpl> you, GameParticipant<MatchGamePlayerImpl> opponent) {
-        List<String> scoreboardLines = new ArrayList<>();
+        IConfigService configService = Alley.getInstance().getService(IConfigService.class);
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
 
-        for (String line : this.plugin.getConfigService().getScoreboardConfig().getStringList("scoreboard.lines.starting")) {
+        List<String> scoreboardLines = new ArrayList<>();
+        List<String> template = configService.getScoreboardConfig().getStringList("scoreboard.lines.starting");
+
+        for (String line : template) {
             scoreboardLines.add(CC.translate(line)
-                    .replaceAll("\\{player}", this.getColoredName(this.plugin.getProfileService().getProfile(opponent.getPlayer().getUuid())))
-                    .replaceAll("\\{opponent}", this.getColoredName(this.plugin.getProfileService().getProfile(opponent.getPlayer().getUuid())))
-                    .replaceAll("\\{opponent-ping}", String.valueOf(this.getPing(opponent.getPlayer().getPlayer())))
-                    .replaceAll("\\{player-ping}", String.valueOf(this.getPing(player)))
-                    .replaceAll("\\{duration}", profile.getMatch().getDuration())
-                    .replaceAll("\\{arena}", profile.getMatch().getArena().getDisplayName() == null ? "&c&lNULL" : profile.getMatch().getArena().getDisplayName())
-                    .replaceAll("\\{dot-animation}", this.dotAnimation.getCurrentFrame())
-                    .replaceAll("\\{countdown}", String.valueOf(profile.getMatch().getRunnable().getStage()))
-                    .replaceAll("\\{kit}", profile.getMatch().getKit().getDisplayName()));
+                    .replace("{opponent}", this.getColoredName(profileService.getProfile(opponent.getLeader().getUuid())))
+                    .replace("{opponent-ping}", String.valueOf(this.getPing(opponent.getLeader().getTeamPlayer())))
+                    .replace("{player-ping}", String.valueOf(this.getPing(player)))
+                    .replace("{duration}", profile.getMatch().getDuration())
+                    .replace("{arena}", profile.getMatch().getArena().getDisplayName() == null ? "&c&lNULL" : profile.getMatch().getArena().getDisplayName())
+                    .replace("{dot-animation}", this.dotAnimation.getCurrentFrame())
+                    .replace("{countdown}", String.valueOf(profile.getMatch().getRunnable().getStage()))
+                    .replace("{kit}", profile.getMatch().getKit().getDisplayName()));
         }
 
         return scoreboardLines;

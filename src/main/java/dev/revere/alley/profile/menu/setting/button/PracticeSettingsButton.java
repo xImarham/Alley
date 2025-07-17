@@ -3,6 +3,7 @@ package dev.revere.alley.profile.menu.setting.button;
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.feature.cosmetic.menu.CosmeticsMenu;
+import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumWorldTime;
 import dev.revere.alley.tool.item.ItemBuilder;
@@ -39,7 +40,7 @@ public class PracticeSettingsButton extends Button {
 
     @Override
     public void clicked(Player player, int slot, ClickType clickType, int hotbarSlot) {
-        Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
+        Profile profile = Alley.getInstance().getService(IProfileService.class).getProfile(player.getUniqueId());
 
         if (this.material == Material.WATCH) {
             EnumWorldTime newTime = this.getNextWorldTime(clickType, profile);
@@ -90,7 +91,7 @@ public class PracticeSettingsButton extends Button {
                 player.sendMessage(CC.translate("&cThis feature is currently in development."));
                 break;
             case NETHER_STAR:
-                new CosmeticsMenu("KillEffect").openMenu(player);
+                new CosmeticsMenu().openMenu(player);
                 break;
             case STRING:
                 player.performCommand("togglescoreboardlines");
@@ -100,6 +101,9 @@ public class PracticeSettingsButton extends Button {
                 break;
             case ROTTEN_FLESH:
                 player.performCommand("toggleprofanityfilter");
+                break;
+            case DIAMOND_SWORD:
+                player.performCommand("toggleduelrequests");
                 break;
         }
 

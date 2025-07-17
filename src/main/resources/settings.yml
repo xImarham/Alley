@@ -10,26 +10,23 @@ spawn:
   join-location: world:0.5:73.0:0.5:90.0:0.0
 
 game:
-  # In kits with lives setting enabled, this is the void (y) level where the player will die/lose a point.
-  # [!] Must be within the cuboid of the arena.
-  death-y-level: 10
+  blocked-commands: # Commands that will be blocked in-game, players won't be able to execute them.
+    - "kill"
+    - "gamemode"
+    - "troll"
   # The amount of lives each player will have in a lives match.
   lives: 3
   # The radius of the portal in blocks.
   portal-radius: 5
 
-fireball:
-  enabled: true # Whether to enable fireballs or not (in case if you want to use your own custom approach)
+explosive:
+  enabled: true # Whether to enable explosives or not (in case if you want to use your own custom approach)
   values:
-    range: 3.0 # Measured in blocks (the distance in which other players will be affected by the fireball)
+    range: 3.0 # Measured in blocks (the distance in which other players will be affected by the explosives)
+    speed: 1.2
     vertical: 0.8
     horizontal: 1.2
-
-essentials:
-  emojis: true # Whether to enable emojis in the chat or not (e.g. :smile:)
-  chat-logging: # Setting to log the in-game chat to a specific discord channel via webhook (OPTIONAL)
-    enabled: false
-    webhook-url: "" # create a webhook on one of your channels and paste the url here, make sure the channel is accessible to the '@everyone' role, it won't work otherwise
+    tnt-fuse-ticks: 80
 
 parkour:
   starter-location: world:-5.1145064347201865:69.0:40.13243289901497:-1.9397448:20.588186
@@ -38,20 +35,23 @@ arena:
   # When creating an arena, the following display-name for each
   # arena type will be set. {arena} represents the arena name.
   default-display-name:
-    shared: "&b{arena-name}"
-    standalone: "&b{arena-name}"
-    ffa: "&b{arena-name}"
+    shared: "&6{arena-name}"
+    standalone: "&6{arena-name}"
+    ffa: "&6{arena-name}"
 
 kit:
   # The default name and description that's going to be set when creating a kit.
   default-values:
-    display-name: "&b{kit-name}"
-    description: "&7{kit-name} kit description."
+    display-name: "&6{kit-name}"
+    description: ""
     disclaimer: "&7{kit-name} kit disclaimer."
+    menu-title: "&6&l{kit-name}"
+
+blocked-crafting-items: []
 
 profanity-filter:
   add-default-words: false # Alley has a built-in list of rude and toxic words, set this to true if you want them to apply (The list below will be used in addition to the built-in list).
-  staff-notification-format: "&3[S] &f(&bAlley: &fProfanity Detected) &c{player}&f: &7{message}"
+  staff-notification-format: "&6[S] &f(&6Alley: &fProfanity Detected) &c{player}&f: &7{message}"
   filtered-words:
     - "shit"
     - "fuck"

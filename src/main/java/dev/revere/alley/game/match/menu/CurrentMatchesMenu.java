@@ -3,7 +3,10 @@ package dev.revere.alley.game.match.menu;
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.api.menu.pagination.PaginatedMenu;
+import dev.revere.alley.base.queue.IQueueService;
 import dev.revere.alley.game.match.AbstractMatch;
+import dev.revere.alley.game.match.IMatchService;
+import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.tool.item.ItemBuilder;
 import dev.revere.alley.util.chat.CC;
 import lombok.AllArgsConstructor;
@@ -31,7 +34,7 @@ public class CurrentMatchesMenu extends PaginatedMenu {
      */
     @Override
     public String getPrePaginatedTitle(Player player) {
-        return "&b&lCurrent Matches (" + Alley.getInstance().getMatchService().getMatches().size() + ")";
+        return "&6&lCurrent Matches (" + Alley.getInstance().getService(IMatchService.class).getMatches().size() + ")";
     }
 
     /**
@@ -45,7 +48,7 @@ public class CurrentMatchesMenu extends PaginatedMenu {
         final Map<Integer, Button> buttons = new ConcurrentHashMap<>();
         int slot = 0;
 
-        for (AbstractMatch match : Alley.getInstance().getMatchService().getMatches()) {
+        for (AbstractMatch match : Alley.getInstance().getService(IMatchService.class).getMatches()) {
             buttons.put(slot++, new CurrentMatchButton(match));
         }
 
@@ -80,11 +83,11 @@ public class CurrentMatchesMenu extends PaginatedMenu {
          */
         @Override
         public ItemStack getButtonItem(Player player) {
-            return new ItemBuilder(match.getKit().getIcon()).name("&b&l" + match.getParticipants().get(0).getPlayer().getUsername() + " &7vs &b&l" + match.getParticipants().get(1).getPlayer().getUsername()).durability(match.getKit().getDurability()).hideMeta()
+            return new ItemBuilder(match.getKit().getIcon()).name("&6&l" + match.getParticipants().get(0).getLeader().getUsername() + " &7vs &6&l" + match.getParticipants().get(1).getLeader().getUsername()).durability(match.getKit().getDurability()).hideMeta()
                     .lore(
-                            " &f● &bArena: &f" + match.getArena().getName(),
-                            " &f● &bKit: &f" + match.getKit().getName(),
-                            " &f● &bQueue: &f" + (match.getQueue() == null ? "None" : match.getQueue().getQueueType()),
+                            " &f● &6Arena: &f" + match.getArena().getName(),
+                            " &f● &6Kit: &f" + match.getKit().getDisplayName(),
+                            " &f● &6Queue: &f" + (match.getQueue() == null ? "None" : match.getQueue().getQueueType()),
                             " ",
                             "&aClick to spectate!"
                     )
@@ -103,7 +106,7 @@ public class CurrentMatchesMenu extends PaginatedMenu {
         public void clicked(Player player, int slot, ClickType clickType, int hotbarButton) {
             if (clickType != ClickType.LEFT) return;
 
-            if (Alley.getInstance().getProfileService().getProfile(player.getUniqueId()).getMatch() != null) {
+            if (Alley.getInstance().getService(IProfileService.class).getProfile(player.getUniqueId()).getMatch() != null) {
                 player.sendMessage(CC.translate("&cYou can't spectate a match in your current state."));
                 return;
             }
@@ -124,8 +127,8 @@ public class CurrentMatchesMenu extends PaginatedMenu {
         @Override
         public ItemStack getButtonItem(Player player) {
             return new ItemBuilder(Material.CARPET)
-                    .name("&b&lRefresh")
-                    .lore(" &f● &bPress to refresh the matches")
+                    .name("&6&lRefresh")
+                    .lore(" &f● &6Press to refresh the matches")
                     .durability(2)
                     .build();
         }

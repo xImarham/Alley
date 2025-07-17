@@ -2,9 +2,11 @@ package dev.revere.alley.profile.menu.match;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.menu.Button;
-import dev.revere.alley.api.menu.Menu;
+import dev.revere.alley.api.menu.impl.BackButton;
+import dev.revere.alley.api.menu.pagination.PaginatedMenu;
 import dev.revere.alley.base.kit.Kit;
 import dev.revere.alley.game.match.data.AbstractMatchData;
+import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.menu.match.button.MatchHistoryViewButton;
 import lombok.AllArgsConstructor;
@@ -21,21 +23,33 @@ import java.util.stream.Collectors;
  * @since 04/06/2025
  */
 @AllArgsConstructor
-public class MatchHistoryViewMenu extends Menu {
+public class MatchHistoryViewMenu extends PaginatedMenu {
     protected final Kit kit;
 
     @Override
-    public String getTitle(Player player) {
-        return "";
+    public String getPrePaginatedTitle(Player player) {
+        return "&6&l" + this.kit.getName() + " Match History";
     }
 
     @Override
-    public Map<Integer, Button> getButtons(Player player) {
+    public Map<Integer, Button> getGlobalButtons(Player player) {
         Map<Integer, Button> buttons = new HashMap<>();
 
-        Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
+        this.addGlassHeader(buttons, 15);
+        buttons.put(4, new BackButton(new MatchHistorySelectKitMenu()));
 
-        List<AbstractMatchData> matchDataList = profile.getProfileData().getPreviousMatches();
+        return buttons;
+    }
+
+    @Override
+    public Map<Integer, Button> getAllPagesButtons(Player player) {
+        Map<Integer, Button> buttons = new HashMap<>();
+
+        Profile profile = Alley.getInstance().getService(IProfileService.class).getProfile(player.getUniqueId());
+
+        List<AbstractMatchData> matchDataList = profile.getProfileData().getPreviousMatches().stream()
+                .sorted((m1, m2) -> Long.compare(m2.getCreationTime(), m1.getCreationTime()))
+                .collect(Collectors.toList());
 
         List<AbstractMatchData> filteredMatches = matchDataList.stream()
                 .filter(matchData -> matchData.getKit().equals(this.kit.getName()))

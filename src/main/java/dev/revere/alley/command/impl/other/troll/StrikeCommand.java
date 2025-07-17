@@ -19,7 +19,7 @@ public class StrikeCommand extends BaseCommand {
         String[] args = command.getArgs();
 
         if (args.length < 1) {
-            player.sendMessage(CC.translate("&6Usage: &e/strike &b<player>"));
+            player.sendMessage(CC.translate("&6Usage: &e/strike &6<player>"));
             return;
         }
 
@@ -32,6 +32,6 @@ public class StrikeCommand extends BaseCommand {
         }
 
         target.getWorld().strikeLightning(target.getLocation());
-        player.sendMessage(CC.translate("&fYou've struck &b" + target.getName()));
+        player.sendMessage(CC.translate("&fYou've struck &6" + target.getName()));
     }
 }

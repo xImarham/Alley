@@ -4,7 +4,7 @@ import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.game.ffa.AbstractFFAMatch;
-import dev.revere.alley.game.ffa.FFAService;
+import dev.revere.alley.game.ffa.IFFAService;
 import dev.revere.alley.game.ffa.impl.DefaultFFAMatchImpl;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.entity.Player;
@@ -22,12 +22,12 @@ public class FFAAddCommand extends BaseCommand {
         String[] args = command.getArgs();
 
         if (args.length < 2) {
-            player.sendMessage(CC.translate("&6Usage: &e/ffa add &b<player> <kit>"));
+            player.sendMessage(CC.translate("&6Usage: &e/ffa add &6<player> <kit>"));
             return;
         }
 
         String targetName = args[0];
-        FFAService ffaService = this.plugin.getFfaService();
+        IFFAService ffaService = this.plugin.getService(IFFAService.class);
         AbstractFFAMatch match = ffaService.getMatches().stream()
                 .filter(m -> m.getKit().getName().equalsIgnoreCase(args[1]))
                 .findFirst()

@@ -3,8 +3,8 @@ package dev.revere.alley.base.kit.command.impl.data;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
+import dev.revere.alley.base.kit.IKitService;
 import dev.revere.alley.base.kit.Kit;
-import dev.revere.alley.base.kit.KitService;
 import dev.revere.alley.config.locale.impl.KitLocale;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.command.CommandSender;
@@ -24,11 +24,11 @@ public class KitSetDisclaimerCommand extends BaseCommand {
         String[] args = command.getArgs();
 
         if (args.length < 2) {
-            sender.sendMessage(CC.translate("&6Usage: &e/kit setdisclaimer &b<kitName> <disclaimer>"));
+            sender.sendMessage(CC.translate("&6Usage: &e/kit setdisclaimer &6<kitName> <disclaimer>"));
             return;
         }
 
-        KitService kitService = this.plugin.getKitService();
+        IKitService kitService = this.plugin.getService(IKitService.class);
         Kit kit = kitService.getKit(args[0]);
         if (kit == null) {
             sender.sendMessage(CC.translate(KitLocale.KIT_NOT_FOUND.getMessage()));

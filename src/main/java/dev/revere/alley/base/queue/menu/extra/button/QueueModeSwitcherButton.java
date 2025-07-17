@@ -3,6 +3,7 @@ package dev.revere.alley.base.queue.menu.extra.button;
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.base.kit.enums.EnumKitCategory;
+import dev.revere.alley.base.queue.IQueueService;
 import dev.revere.alley.base.queue.enums.EnumQueueType;
 import dev.revere.alley.base.queue.menu.extra.ExtraModesMenu;
 import dev.revere.alley.tool.item.ItemBuilder;
@@ -25,7 +26,7 @@ public class QueueModeSwitcherButton extends Button {
     @Override
     public ItemStack getButtonItem(Player player) {
         return new ItemBuilder(Material.ARROW)
-                .name("&b&l" + this.kitCategory.getName() + " Modes")
+                .name("&6&l" + this.kitCategory.getName() + " Modes")
                 .lore(
                         ("&f" + this.kitCategory.getDescription()),
                         "",
@@ -44,6 +45,6 @@ public class QueueModeSwitcherButton extends Button {
             return;
         }
 
-        Alley.getInstance().getQueueService().getQueueMenu().openMenu(player);
+        Alley.getInstance().getService(IQueueService.class).getQueueMenu().openMenu(player);
     }
 }

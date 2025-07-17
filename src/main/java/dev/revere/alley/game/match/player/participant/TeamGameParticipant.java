@@ -5,6 +5,7 @@ import dev.revere.alley.game.match.player.GamePlayer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 /**
  * @author Remi
@@ -27,12 +28,24 @@ public class TeamGameParticipant<T extends GamePlayer> extends GameParticipant<T
     }
 
     /**
-     * Method to retrieve the players in the team participant.
+     * Method to retrieve the players in the team participant who are not disconnected.
      *
      * @return the list of players in the team participant.
      */
     @Override
     public List<T> getPlayers() {
+        return this.players.stream()
+                .filter(player -> !player.isDisconnected())
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Method to retrieve the players in the team participant who are not disconnected.
+     *
+     * @return the list of players in the team participant.
+     */
+    @Override
+    public List<T> getAllPlayers() {
         return this.players;
     }
 
@@ -44,6 +57,30 @@ public class TeamGameParticipant<T extends GamePlayer> extends GameParticipant<T
     @Override
     public int getPlayerSize() {
         return this.players.size();
+    }
+
+    /**
+     * Adds a player to the team participant.
+     *
+     * @param t the player to add.
+     */
+    @Override
+    public void addPlayer(T t) {
+        if (t == null || this.players.contains(t)) {
+            return;
+        }
+
+        this.players.add(t);
+    }
+
+    /**
+     * Removes a player from the team participant.
+     *
+     * @param player The player to remove.
+     */
+    @Override
+    public void removePlayer(T player) {
+        this.players.remove(player);
     }
 
     /**
@@ -75,6 +112,19 @@ public class TeamGameParticipant<T extends GamePlayer> extends GameParticipant<T
 
         for (GamePlayer gamePlayer : this.players) {
             if (gamePlayer.isDead() || gamePlayer.isDisconnected()) {
+                i++;
+            }
+        }
+
+        return this.players.size() == i;
+    }
+
+    @Override
+    public boolean isAllEliminated() {
+        int i = 0;
+
+        for (GamePlayer gamePlayer : this.players) {
+            if (gamePlayer.isEliminated()) {
                 i++;
             }
         }

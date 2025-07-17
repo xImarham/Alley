@@ -4,6 +4,11 @@ import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.annotation.CompleterData;
+import dev.revere.alley.base.arena.AbstractArena;
+import dev.revere.alley.base.arena.IArenaService;
+import dev.revere.alley.base.kit.IKitService;
+import dev.revere.alley.config.locale.impl.ArenaLocale;
+import dev.revere.alley.config.locale.impl.KitLocale;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.entity.Player;
 
@@ -22,7 +27,7 @@ public class ArenaRemoveKitCommand extends BaseCommand {
         List<String> completion = new ArrayList<>();
 
         if (command.getArgs().length == 1 && command.getPlayer().hasPermission("alley.admin")) {
-            this.plugin.getArenaService().getArenas().forEach(arena -> completion.add(arena.getName()));
+            this.plugin.getService(IArenaService.class).getArenas().forEach(arena -> completion.add(arena.getName()));
         }
 
         return completion;
@@ -35,30 +40,33 @@ public class ArenaRemoveKitCommand extends BaseCommand {
         String[] args = command.getArgs();
 
         if (args.length < 2) {
-            player.sendMessage(CC.translate("&6Usage: &e/arena removekit &b<arenaName> <kitName>"));
+            player.sendMessage(CC.translate("&6Usage: &e/arena removekit &6<arenaName> <kitName>"));
             return;
         }
 
         String arenaName = args[0];
         String kitName = args[1];
 
-        if (this.plugin.getArenaService().getArenaByName(arenaName) == null) {
-            player.sendMessage(CC.translate("&cAn arena with that name does not exist!"));
+        IArenaService arenaService = this.plugin.getService(IArenaService.class);
+        AbstractArena arena = arenaService.getArenaByName(arenaName);
+        if (arena.getName() == null) {
+            player.sendMessage(ArenaLocale.NOT_FOUND.getMessage().replace("{arena-name}", arenaName));
             return;
         }
 
-        if (this.plugin.getKitService().getKit(kitName) == null) {
-            player.sendMessage(CC.translate("&cA kit with that name does not exist!"));
+        if (this.plugin.getService(IKitService.class).getKit(kitName).getName() == null) {
+            player.sendMessage(KitLocale.KIT_NOT_FOUND.getMessage().replace("{kit-name}", kitName));
             return;
         }
 
-        if (!this.plugin.getArenaService().getArenaByName(arenaName).getKits().contains(kitName)) {
-            player.sendMessage(CC.translate("&cThis arena does not have this kit!"));
+        if (!arena.getKits().contains(kitName)) {
+            player.sendMessage(ArenaLocale.ARENA_DOES_NOT_HAVE_KIT.getMessage().replace("{arena-name}", arenaName).replace("{kit-name}", kitName));
             return;
         }
 
-        player.sendMessage(CC.translate("&aKit &b" + kitName + "&a has been removed from arena &b" + arenaName + "&a!"));
-        this.plugin.getArenaService().getArenaByName(arenaName).getKits().remove(kitName);
-        this.plugin.getArenaService().saveArena(this.plugin.getArenaService().getArenaByName(arenaName));
+        arena.getKits().remove(kitName);
+        arenaService.saveArena(arena);
+
+        player.sendMessage(ArenaLocale.KIT_REMOVED.getMessage().replace("{arena-name}", arenaName).replace("{kit-name}", kitName));
     }
 }

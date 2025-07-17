@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -23,10 +24,15 @@ public class GamePlayer {
     private String username;
 
     private boolean disconnected;
+    private boolean eliminated;
     private boolean dead;
 
     private List<UUID> players;
-    private List<UUID> alivePlayers;
+
+    // These fields are all for game logic
+    private Location checkpoint;
+    private int checkpointCount;
+    private final List<Location> checkpoints;
 
     /**
      * Constructor for the GamePlayer class.
@@ -38,6 +44,10 @@ public class GamePlayer {
         this.uuid = uuid;
         this.username = username;
         this.players = new ArrayList<>();
+
+        this.checkpoints = new ArrayList<>();
+        this.checkpointCount = 0;
+        this.checkpoint = null;
     }
 
     /**
@@ -45,7 +55,7 @@ public class GamePlayer {
      *
      * @return The player associated with the GamePlayer.
      */
-    public Player getPlayer() {
+    public Player getTeamPlayer() {
         return Bukkit.getPlayer(uuid);
     }
 }

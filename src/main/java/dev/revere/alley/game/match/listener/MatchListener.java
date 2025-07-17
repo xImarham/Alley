@@ -1,22 +1,28 @@
 package dev.revere.alley.game.match.listener;
 
 import dev.revere.alley.Alley;
+import dev.revere.alley.api.menu.Menu;
+import dev.revere.alley.base.arena.enums.EnumArenaType;
 import dev.revere.alley.base.arena.impl.StandAloneArena;
-import dev.revere.alley.base.combat.CombatService;
 import dev.revere.alley.base.kit.Kit;
 import dev.revere.alley.base.kit.setting.impl.mechanic.KitSettingDenyMovementImpl;
 import dev.revere.alley.base.kit.setting.impl.mechanic.KitSettingNoHungerImpl;
-import dev.revere.alley.base.kit.setting.impl.mode.*;
+import dev.revere.alley.base.kit.setting.impl.mechanic.KitSettingVoidDeathImpl;
+import dev.revere.alley.base.kit.setting.impl.mode.KitSettingRoundsImpl;
+import dev.revere.alley.base.kit.setting.impl.mode.KitSettingSpleefImpl;
+import dev.revere.alley.base.kit.setting.impl.mode.KitSettingStickFightImpl;
+import dev.revere.alley.base.kit.setting.impl.mode.KitSettingSumoImpl;
 import dev.revere.alley.game.match.AbstractMatch;
 import dev.revere.alley.game.match.enums.EnumMatchState;
 import dev.revere.alley.game.match.impl.MatchRoundsImpl;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.game.match.utility.MatchUtility;
+import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
-import dev.revere.alley.tool.reflection.impl.ActionBarReflectionService;
 import dev.revere.alley.util.ListenerUtil;
+import dev.revere.alley.util.PlayerUtil;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -24,10 +30,12 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.*;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 
@@ -37,21 +45,11 @@ import java.util.List;
  * @date 5/21/2024
  */
 public class MatchListener implements Listener {
-    protected final Alley plugin;
-
-    /**
-     * Constructor for the MatchListener class.
-     *
-     * @param plugin The plugin instance.
-     */
-    public MatchListener(Alley plugin) {
-        this.plugin = plugin;
-    }
-
     @EventHandler
     private void onTeleport(PlayerTeleportEvent event) {
         Player player = event.getPlayer();
-        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+        Profile profile = profileService.getProfile(player.getUniqueId());
         if (profile.getState() == EnumProfileState.SPECTATING || profile.getState() == EnumProfileState.PLAYING) {
             if (event.getCause() == PlayerTeleportEvent.TeleportCause.ENDER_PEARL) {
                 if (MatchUtility.isBeyondBounds(event.getTo(), profile)) {
@@ -65,7 +63,8 @@ public class MatchListener implements Listener {
     @EventHandler
     private void onPlayerMove(PlayerMoveEvent event) {
         Player player = event.getPlayer();
-        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+        Profile profile = profileService.getProfile(player.getUniqueId());
         AbstractMatch match = profile.getMatch();
         if (match == null) return;
 
@@ -77,37 +76,21 @@ public class MatchListener implements Listener {
                 }
             }
 
-            if (player.getLocation().getY() <= this.plugin.getConfigService().getSettingsConfig().getInt("game.death-y-level")) {
-                if (player.getGameMode() == GameMode.SPECTATOR) return;
-                if (player.getGameMode() == GameMode.CREATIVE) return;
+            if (match.getArena() instanceof StandAloneArena) {
+                StandAloneArena arena = (StandAloneArena) match.getArena();
+                if (player.getLocation().getY() <= arena.getVoidLevel() && matchKit.isSettingEnabled(KitSettingVoidDeathImpl.class)) {
+                    if (player.getGameMode() == GameMode.SPECTATOR) return;
+                    if (player.getGameMode() == GameMode.CREATIVE) return;
+                    if (match.getArena().getType() != EnumArenaType.STANDALONE) return;
+                    if (profile.getState() != EnumProfileState.PLAYING) return;
 
-                if (match.getKit().isSettingEnabled(KitSettingStickFightImpl.class)) {
-                    MatchRoundsImpl roundsMatch = (MatchRoundsImpl) match;
-
-                    CombatService combatService = this.plugin.getCombatService();
-                    Player lastAttacker = combatService.getLastAttacker(player);
-                    if (lastAttacker == null) {
-                        GameParticipant<MatchGamePlayerImpl> opponent = roundsMatch.getParticipantA().containsPlayer(player.getUniqueId())
-                                ? roundsMatch.getParticipantB()
-                                : roundsMatch.getParticipantA();
-
-                        roundsMatch.setScorer(opponent.getPlayer().getUsername());
-                    } else {
-                        roundsMatch.setScorer(lastAttacker.getName());
+                    if (match.getKit().isSettingEnabled(KitSettingStickFightImpl.class)) {
+                        MatchRoundsImpl roundsMatch = (MatchRoundsImpl) match;
+                        roundsMatch.handleDeath(player, EntityDamageEvent.DamageCause.VOID);
+                        return;
                     }
 
-                    roundsMatch.handleDeath(player);
-                    return;
-                }
-
-                if (matchKit.isSettingEnabled(KitSettingLivesImpl.class)
-                        || matchKit.isSettingEnabled(KitSettingBedImpl.class)
-                        || matchKit.isSettingEnabled(KitSettingRoundsImpl.class)
-                        || matchKit.isSettingEnabled(KitSettingStickFightImpl.class)) {
-                    player.setHealth(0);
-                    player.setAllowFlight(true);
-                    player.setFlying(true);
-                    player.setGameMode(GameMode.SPECTATOR);
+                    profile.getMatch().handleDeath(player, EntityDamageEvent.DamageCause.VOID);
                 }
             }
         }
@@ -121,7 +104,7 @@ public class MatchListener implements Listener {
             }
         }
 
-        if (profile.getState() == EnumProfileState.SPECTATING || profile.getState() == EnumProfileState.PLAYING) {
+        if (profile.getState() == EnumProfileState.PLAYING) {
             if (profile.getMatch() == null) {
                 return;
             }
@@ -136,7 +119,8 @@ public class MatchListener implements Listener {
     @EventHandler
     private void onPlayerRespawn(PlayerRespawnEvent event) {
         Player player = event.getPlayer();
-        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+        Profile profile = profileService.getProfile(player.getUniqueId());
         if (profile.getState() == EnumProfileState.PLAYING) {
             event.setRespawnLocation(player.getLocation());
         }
@@ -145,41 +129,19 @@ public class MatchListener implements Listener {
     @EventHandler
     private void onPlayerDeath(PlayerDeathEvent event) {
         Player player = event.getEntity();
-        Player killer = this.plugin.getCombatService().getLastAttacker(player);
 
-        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+        Profile profile = profileService.getProfile(player.getUniqueId());
         if (profile.getState() != EnumProfileState.PLAYING) return;
 
         event.setDeathMessage(null);
 
-        if (killer != null) {
-            GameParticipant<MatchGamePlayerImpl> killerParticipant = profile.getMatch().getParticipant(killer);
-            killerParticipant.getPlayer().getData().incrementKills();
+        profile.getMatch().handleDeathItemDrop(player, event);
 
-            Profile killerProfile = this.plugin.getProfileService().getProfile(killer.getUniqueId());
+        Alley.getInstance().getServer().getScheduler().runTaskLater(Alley.getInstance(), () -> player.spigot().respawn(), 1L);
 
-            this.plugin.getReflectionRepository().getReflectionService(ActionBarReflectionService.class).sendDeathMessage(killer, player);
-            profile.getMatch().getParticipants().forEach(participant -> participant.getPlayer().getPlayer().sendMessage(CC.translate("&c" + profile.getNameColor() + player.getName() + " &fwas slain by &c" + killerProfile.getNameColor() + killer.getName() + "&f.")));
-        } else {
-            profile.getMatch().getParticipants().forEach(participant -> participant.getPlayer().getPlayer().sendMessage(CC.translate("&c" + profile.getNameColor() + player.getName() + " &fdied.")));
-        }
-
-        ListenerUtil.clearDroppedItemsOnDeath(event, player);
-
-        this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> player.spigot().respawn(), 1L);
-
-        profile.getMatch().handleDeath(player);
-
-        if (!profile.getMatch().getParticipant(player).isAllDead()) {
-            Kit matchKit = profile.getMatch().getKit();
-            if (matchKit.isSettingEnabled(KitSettingLivesImpl.class)
-                    || matchKit.isSettingEnabled(KitSettingRoundsImpl.class)
-                    || matchKit.isSettingEnabled(KitSettingBedImpl.class)) {
-                return;
-            }
-
-            profile.getMatch().addSpectator(player);
-        }
+        EntityDamageEvent.DamageCause cause = player.getLastDamageCause() != null ? player.getLastDamageCause().getCause() : EntityDamageEvent.DamageCause.CUSTOM;
+        profile.getMatch().handleDeath(player, cause);
     }
 
     @EventHandler
@@ -187,16 +149,20 @@ public class MatchListener implements Listener {
         Player player = (Player) event.getWhoClicked();
         if (event.getClickedInventory() == null) return;
 
-        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+        Profile profile = profileService.getProfile(player.getUniqueId());
         if (profile.getState() == EnumProfileState.SPECTATING) {
-            event.setCancelled(true);
+            if (!Menu.currentlyOpenedMenus.containsKey(player.getName())) {
+                event.setCancelled(true);
+            }
         }
     }
 
     @EventHandler
     private void onPlayerDropItem(PlayerDropItemEvent event) {
         Player player = event.getPlayer();
-        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+        Profile profile = profileService.getProfile(player.getUniqueId());
 
         if (profile.getState() == EnumProfileState.SPECTATING) {
             event.setCancelled(true);
@@ -204,7 +170,40 @@ public class MatchListener implements Listener {
         }
 
         if (profile.getState() == EnumProfileState.PLAYING) {
-            event.getItemDrop().remove();
+            if (ListenerUtil.isSword(event.getItemDrop().getItemStack().getType())) {
+                event.setCancelled(true);
+                player.sendMessage(CC.translate("&cYou cannot drop your sword during this match."));
+                return;
+            }
+        }
+        ListenerUtil.clearDroppedItemsOnRegularItemDrop(event.getItemDrop());
+    }
+
+    @EventHandler
+    private void onPlayerPickupItem(PlayerPickupItemEvent event) {
+        Player player = event.getPlayer();
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+        Profile profile = profileService.getProfile(player.getUniqueId());
+        if (profile.getState() == EnumProfileState.SPECTATING) {
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    private void onPlayerItemConsume(PlayerItemConsumeEvent event) {
+        Player player = event.getPlayer();
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+        Profile profile = profileService.getProfile(player.getUniqueId());
+        if (profile.getState() != EnumProfileState.PLAYING) {
+            return;
+        }
+
+        ItemStack item = event.getItem();
+        if (item.getType() == Material.POTION) {
+            Alley.getInstance().getServer().getScheduler().runTaskLater(Alley.getInstance(), () -> {
+                player.getInventory().removeItem(new ItemStack(Material.GLASS_BOTTLE, 1));
+                player.updateInventory();
+            }, 1L);
         }
     }
 
@@ -212,7 +211,8 @@ public class MatchListener implements Listener {
     private void onHunger(FoodLevelChangeEvent event) {
         if (event.getEntity() instanceof Player) {
             Player player = (Player) event.getEntity();
-            Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
+            IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+        Profile profile = profileService.getProfile(player.getUniqueId());
             if (profile.getState() != EnumProfileState.PLAYING) return;
 
             if (profile.getMatch().getKit().isSettingEnabled(KitSettingNoHungerImpl.class)) {
@@ -224,7 +224,8 @@ public class MatchListener implements Listener {
     @EventHandler
     public void onPortal(PlayerPortalEvent event) {
         Player player = event.getPlayer();
-        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+        Profile profile = profileService.getProfile(player.getUniqueId());
         if (profile.getState() == EnumProfileState.PLAYING) {
             MatchRoundsImpl match = (MatchRoundsImpl) profile.getMatch();
             if (match.getKit().isSettingEnabled(KitSettingRoundsImpl.class) /*|| profile.getMatch().getKit().isSettingEnabled(KitSettingBridgesImpl.class)*/) {
@@ -251,10 +252,8 @@ public class MatchListener implements Listener {
 
                     GameParticipant<MatchGamePlayerImpl> opponent = match.getParticipantA().containsPlayer(player.getUniqueId()) ? match.getParticipantB() : match.getParticipantA();
                     opponent.getPlayers().forEach(matchGamePlayer -> matchGamePlayer.setDead(true));
-                    opponent.setEliminated(true);
 
                     if (match.canEndRound()) {
-
                         match.setScorer(player.getName());
                         match.handleRoundEnd();
 

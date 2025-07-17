@@ -7,6 +7,7 @@ import dev.revere.alley.config.locale.impl.PartyLocale;
 import dev.revere.alley.game.party.Party;
 import dev.revere.alley.game.party.menu.event.impl.PartyEventFFAMenu;
 import dev.revere.alley.game.party.menu.event.impl.PartyEventSplitMenu;
+import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.tool.item.ItemBuilder;
 import dev.revere.alley.util.chat.CC;
 import lombok.AllArgsConstructor;
@@ -29,7 +30,7 @@ import java.util.Map;
 public class PartyEventMenu extends Menu {
     @Override
     public String getTitle(Player player) {
-        return "&b&lChoose a party event type";
+        return "&6&lChoose a party event type";
     }
 
     @Override
@@ -38,7 +39,7 @@ public class PartyEventMenu extends Menu {
 
         buttons.put(11, new PartyEventButton(
                 Material.DIAMOND_SWORD, 0,
-                "&b&lTeam split",
+                "&6&lTeam split",
                 Arrays.asList(
                         "&fSplit the party into",
                         "&f2 teams and fight",
@@ -50,7 +51,7 @@ public class PartyEventMenu extends Menu {
 
         buttons.put(13, new PartyEventButton(
                 Material.GOLD_AXE, 0,
-                "&b&lFree for all",
+                "&6&lFree for all",
                 Arrays.asList(
                         "&fEvery player fights",
                         "&fagainst each other.",
@@ -101,7 +102,7 @@ public class PartyEventMenu extends Menu {
         public void clicked(Player player, ClickType clickType) {
             if (clickType != ClickType.LEFT) return;
 
-            Party party = Alley.getInstance().getProfileService().getProfile(player.getUniqueId()).getParty();
+            Party party = Alley.getInstance().getService(IProfileService.class).getProfile(player.getUniqueId()).getParty();
             if (party == null) {
                 player.sendMessage(CC.translate(PartyLocale.NOT_IN_PARTY.getMessage()));
                 return;

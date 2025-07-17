@@ -2,6 +2,7 @@ package dev.revere.alley.database.util;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.feature.division.Division;
+import dev.revere.alley.feature.division.IDivisionService;
 import dev.revere.alley.feature.division.tier.DivisionTier;
 import dev.revere.alley.feature.layout.data.LayoutData;
 import dev.revere.alley.profile.Profile;
@@ -78,6 +79,7 @@ public class MongoUtility {
             kitEntry.put("tier", entry.getValue().getTier().getName());
             kitEntry.put("wins", entry.getValue().getWins());
             kitEntry.put("losses", entry.getValue().getLosses());
+            kitEntry.put("winstreak", entry.getValue().getWinstreak());
             kitDataDocument.put(entry.getKey(), kitEntry);
         }
         return kitDataDocument;
@@ -113,6 +115,8 @@ public class MongoUtility {
             Document ffaEntry = new Document();
             ffaEntry.put("kills", entry.getValue().getKills());
             ffaEntry.put("deaths", entry.getValue().getDeaths());
+            ffaEntry.put("killstreak", entry.getValue().getKillstreak());
+            ffaEntry.put("highestKillstreak", entry.getValue().getHighestKillstreak());
             ffaDataDocument.put(entry.getKey(), ffaEntry);
         }
         return ffaDataDocument;
@@ -154,6 +158,7 @@ public class MongoUtility {
         settingDocument.put("tablistEnabled", settingData.isTablistEnabled());
         settingDocument.put("showScoreboardLines", settingData.isShowScoreboardLines());
         settingDocument.put("profanityFilterEnabled", settingData.isProfanityFilterEnabled());
+        settingDocument.put("receiveDuelRequestsEnabled", settingData.isReceiveDuelRequestsEnabled());
         settingDocument.put("chatChannel", settingData.getChatChannel());
         settingDocument.put("time", settingData.getTime());
         return settingDocument;
@@ -168,7 +173,9 @@ public class MongoUtility {
     private Document convertProfileCosmeticData(ProfileCosmeticData cosmeticData) {
         Document cosmeticDocument = new Document();
         cosmeticDocument.put("selectedKillEffect", cosmeticData.getSelectedKillEffect());
+        cosmeticDocument.put("selectedKillMessage", cosmeticData.getSelectedKillMessage());
         cosmeticDocument.put("selectedSoundEffect", cosmeticData.getSelectedSoundEffect());
+        cosmeticDocument.put("selectedProjectileTrail", cosmeticData.getSelectedProjectileTrail());
         return cosmeticDocument;
     }
 
@@ -252,7 +259,7 @@ public class MongoUtility {
             ProfileUnrankedKitData kit = new ProfileUnrankedKitData();
 
             String storedDivision = kitEntry.getString("division");
-            Division division = Alley.getInstance().getDivisionService().getDivision(storedDivision);
+            Division division = Alley.getInstance().getService(IDivisionService.class).getDivision(storedDivision);
             kit.setDivision(division.getName());
 
             String storedTier = kitEntry.getString("tier");
@@ -264,6 +271,7 @@ public class MongoUtility {
 
             kit.setWins(kitEntry.getInteger("wins"));
             kit.setLosses(kitEntry.getInteger("losses"));
+            kit.setWinstreak(kitEntry.getInteger("winstreak"));
 
             kitData.put(entry.getKey(), kit);
         }
@@ -302,6 +310,8 @@ public class MongoUtility {
             ProfileFFAData ffa = new ProfileFFAData();
             ffa.setKills(ffaEntry.getInteger("kills"));
             ffa.setDeaths(ffaEntry.getInteger("deaths"));
+            ffa.setKillstreak(ffaEntry.getInteger("killstreak", 0));
+            ffa.setHighestKillstreak(ffaEntry.getInteger("highestKillstreak"));
             ffaData.put(entry.getKey(), ffa);
         }
         return ffaData;
@@ -344,6 +354,7 @@ public class MongoUtility {
         settingData.setTablistEnabled(settingDocument.getBoolean("tablistEnabled", true));
         settingData.setShowScoreboardLines(settingDocument.getBoolean("showScoreboardLines", true));
         settingData.setProfanityFilterEnabled(settingDocument.getBoolean("profanityFilterEnabled", true));
+        settingData.setReceiveDuelRequestsEnabled(settingDocument.getBoolean("receiveDuelRequestsEnabled", true));
         settingData.setChatChannel(settingDocument.get("chatChannel", EnumChatChannel.GLOBAL.toString()));
         settingData.setTime(settingDocument.get("time", EnumWorldTime.DEFAULT.getName()));
         return settingData;
@@ -358,7 +369,9 @@ public class MongoUtility {
     private ProfileCosmeticData parseProfileCosmeticData(Document cosmeticDocument) {
         ProfileCosmeticData cosmeticData = new ProfileCosmeticData();
         cosmeticData.setSelectedKillEffect(cosmeticDocument.getString("selectedKillEffect"));
+        cosmeticData.setSelectedKillMessage(cosmeticDocument.getString("selectedKillMessage"));
         cosmeticData.setSelectedSoundEffect(cosmeticDocument.getString("selectedSoundEffect"));
+        cosmeticData.setSelectedProjectileTrail(cosmeticDocument.getString("selectedProjectileTrail"));
         return cosmeticData;
     }
 

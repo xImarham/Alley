@@ -21,15 +21,15 @@ public class FFAButton extends Button {
     @Override
     public ItemStack getButtonItem(Player player) {
         return new ItemBuilder(this.match.getKit().getIcon())
-                .name("&b&l" + this.match.getName())
+                .name("&6&l" + this.match.getKit().getMenuTitle())
                 .durability(this.match.getKit().getDurability())
                 .lore(
                         "",
-                        "&fPlaying: &b" + this.match.getPlayers().size() + "/" + this.match.getMaxPlayers(),
-                        "&fArena: &b" + this.match.getArena().getName(),
-                        "&fKit: &b" + this.match.getKit().getName(),
+                        "&fPlaying: &6" + this.match.getPlayers().size() + "/" + this.match.getMaxPlayers(),
+                        "&fArena: &6" + this.match.getArena().getName(),
+                        "&fKit: &6" + this.match.getKit().getName(),
                         "",
-                        "&fClick to join the &b" + this.match.getName() + " &fqueue."
+                        "&fClick to join the &6" + this.match.getName() + " &fqueue."
                 )
                 .hideMeta()
                 .build();

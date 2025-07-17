@@ -1,10 +1,12 @@
 package dev.revere.alley.game.ffa.cuboid;
 
-import dev.revere.alley.Alley;
 import dev.revere.alley.base.arena.AbstractArena;
+import dev.revere.alley.base.arena.IArenaService;
 import dev.revere.alley.base.arena.enums.EnumArenaType;
+import dev.revere.alley.config.IConfigService;
+import dev.revere.alley.plugin.AlleyContext;
+import dev.revere.alley.plugin.annotation.Service;
 import dev.revere.alley.tool.cuboid.Cuboid;
-import dev.revere.alley.tool.cuboid.CuboidService;
 import dev.revere.alley.tool.logger.Logger;
 import dev.revere.alley.tool.serializer.Serializer;
 import lombok.Getter;
@@ -17,13 +19,26 @@ import org.bukkit.configuration.file.FileConfiguration;
  * @date 12/06/2024 - 22:14
  */
 @Getter
-public class FFASpawnService extends CuboidService {
+@Service(provides = IFFASpawnService.class, priority = 250)
+public class FFASpawnService implements IFFASpawnService {
+    private final IConfigService configService;
+    private final IArenaService arenaService;
+
     private Location minimum;
     private Location maximum;
     private Location spawn;
     private Cuboid cuboid;
 
-    public FFASpawnService() {
+    /**
+     * Constructor for DI.
+     */
+    public FFASpawnService(IConfigService configService, IArenaService arenaService) {
+        this.configService = configService;
+        this.arenaService = arenaService;
+    }
+
+    @Override
+    public void initialize(AlleyContext context) {
         this.loadCuboid();
     }
 
@@ -31,31 +46,34 @@ public class FFASpawnService extends CuboidService {
      * Load the FFA spawn location from the arenas.yml file
      */
     public void loadCuboid() {
-        FileConfiguration config = Alley.getInstance().getConfigService().getArenasConfig();
-        AbstractArena arena = Alley.getInstance().getArenaService().getArenas().stream()
+        FileConfiguration config = this.configService.getArenasConfig();
+        AbstractArena arena = this.arenaService.getArenas().stream()
                 .filter(a -> a.getType() == EnumArenaType.FFA)
                 .findFirst()
                 .orElse(null);
 
         if (arena == null) {
-            Logger.logError("FFA arena not found!");
+            Logger.error("FFA arena not found!");
             return;
         }
 
-        this.spawn = Serializer.deserializeLocation(config.getString("arenas." + arena.getName() + ".pos1"));
-        this.minimum = Serializer.deserializeLocation(config.getString("arenas." + arena.getName() + ".safe-zone.pos1"));
-        this.maximum = Serializer.deserializeLocation(config.getString("arenas." + arena.getName() + ".safe-zone.pos2"));
+        String basePath = "arenas." + arena.getName();
+        this.spawn = Serializer.deserializeLocation(config.getString(basePath + ".pos1"));
+        this.minimum = Serializer.deserializeLocation(config.getString(basePath + ".safe-zone.pos1"));
+        this.maximum = Serializer.deserializeLocation(config.getString(basePath + ".safe-zone.pos2"));
 
         if (this.minimum == null || this.maximum == null) {
-            Logger.logError("FFA safezone not found! Please set the ffa arena safezone and save it using the /arena save command.");
+            Logger.error("FFA safezone not found! Please set the ffa arena safezone and save it using the /arena save command.");
             return;
         }
 
         this.cuboid = new Cuboid(this.minimum, this.maximum);
     }
 
-    @Override
-    public void updateCuboid() {
-
+    public Cuboid getCuboid() {
+        if (this.cuboid == null) {
+            return null;
+        }
+        return cuboid;
     }
 }

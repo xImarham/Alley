@@ -3,6 +3,7 @@ package dev.revere.alley.game.ffa.command.impl;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
+import dev.revere.alley.game.ffa.IFFAService;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.entity.Player;
 
@@ -16,12 +17,14 @@ public class FFAListCommand extends BaseCommand {
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
+        IFFAService ffaService = this.plugin.getService(IFFAService.class);
+
         player.sendMessage("");
-        player.sendMessage(CC.translate("     &b&lFFA Match List &f(" + this.plugin.getFfaService().getMatches().size() + "&f)"));
-        if (this.plugin.getFfaService().getMatches().isEmpty()) {
+        player.sendMessage(CC.translate("     &6&lFFA Match List &f(" + ffaService.getMatches().size() + "&f)"));
+        if (ffaService.getMatches().isEmpty()) {
             player.sendMessage(CC.translate("      &f● &cNo Matches available."));
         }
-        this.plugin.getFfaService().getMatches().forEach(match -> player.sendMessage(CC.translate("      &f● &b" + match.getKit().getDisplayName() + " &f(" + (match.getPlayers().size() + "/" + match.getMaxPlayers()) + "&f)")));
+        ffaService.getMatches().forEach(match -> player.sendMessage(CC.translate("      &f● &6" + match.getKit().getDisplayName() + " &f(" + (match.getPlayers().size() + "/" + match.getMaxPlayers()) + "&f)")));
         player.sendMessage("");
     }
 }

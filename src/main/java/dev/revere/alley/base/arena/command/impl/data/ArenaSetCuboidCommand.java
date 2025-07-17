@@ -4,8 +4,11 @@ import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.annotation.CompleterData;
+import dev.revere.alley.base.arena.AbstractArena;
+import dev.revere.alley.base.arena.IArenaService;
 import dev.revere.alley.base.arena.enums.EnumArenaType;
 import dev.revere.alley.base.arena.selection.ArenaSelection;
+import dev.revere.alley.config.locale.impl.ArenaLocale;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.entity.Player;
 
@@ -24,7 +27,7 @@ public class ArenaSetCuboidCommand extends BaseCommand {
         List<String> completion = new ArrayList<>();
 
         if (command.getArgs().length == 1 && command.getPlayer().hasPermission("alley.admin")) {
-            this.plugin.getArenaService().getArenas().forEach(arena -> completion.add(arena.getName()));
+            this.plugin.getService(IArenaService.class).getArenas().forEach(arena -> completion.add(arena.getName()));
         }
 
         return completion;
@@ -37,31 +40,33 @@ public class ArenaSetCuboidCommand extends BaseCommand {
         String[] args = command.getArgs();
 
         if (args.length < 1) {
-            player.sendMessage(CC.translate("&6Usage: &e/arena setcuboid &b<arenaName>"));
+            player.sendMessage(CC.translate("&6Usage: &e/arena setcuboid &6<arenaName>"));
             return;
         }
 
         ArenaSelection arenaSelection = ArenaSelection.createSelection(player);
         if (!arenaSelection.hasSelection()) {
-            player.sendMessage(CC.translate("&cYou must select the minimum and maximum locations for the arena."));
+            player.sendMessage(ArenaLocale.NO_SELECTION.getMessage());
             return;
         }
 
         String arenaName = args[0];
-        if (this.plugin.getArenaService().getArenaByName(arenaName) == null) {
-            player.sendMessage(CC.translate("&cAn arena with that name does not exist!"));
+        IArenaService arenaService = this.plugin.getService(IArenaService.class);
+        AbstractArena arena = arenaService.getArenaByName(arenaName);
+        if (arena == null) {
+            player.sendMessage(ArenaLocale.NOT_FOUND.getMessage().replace("{arena-name}", arenaName));
             return;
         }
 
-        if (this.plugin.getArenaService().getArenaByName(arenaName).getType() == EnumArenaType.FFA) {
+        if (arena.getType() == EnumArenaType.FFA) {
             player.sendMessage(CC.translate("&cYou cannot set cuboids for Free-For-All arenas! You must use: &4/arena setsafezone pos1/pos2&c."));
             return;
         }
 
-        this.plugin.getArenaService().getArenaByName(arenaName).setMinimum(arenaSelection.getMinimum());
-        this.plugin.getArenaService().getArenaByName(arenaName).setMaximum(arenaSelection.getMaximum());
-        player.sendMessage(CC.translate("&aCuboid has been set for arena &b" + arenaName + "&a!"));
+        arena.setMinimum(arenaSelection.getMinimum());
+        arena.setMaximum(arenaSelection.getMaximum());
+        arenaService.saveArena(arena);
 
-        this.plugin.getArenaService().saveArena(this.plugin.getArenaService().getArenaByName(arenaName));
+        player.sendMessage(ArenaLocale.CUBOID_SET.getMessage().replace("{arena-name}", arena.getName()));
     }
 }

@@ -12,7 +12,7 @@ import org.bukkit.scheduler.BukkitTask;
  */
 @UtilityClass
 public class TaskUtil {
-    private final Alley plugin = Alley.getInstance();
+    protected final Alley plugin = Alley.getInstance();
 
     public void runTaskAsync(Runnable runnable) {
         plugin.getServer().getScheduler().runTaskAsynchronously(plugin, runnable);

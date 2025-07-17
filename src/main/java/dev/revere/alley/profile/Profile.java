@@ -1,10 +1,14 @@
 package dev.revere.alley.profile;
 
 import dev.revere.alley.Alley;
+import dev.revere.alley.base.kit.IKitService;
 import dev.revere.alley.base.kit.Kit;
 import dev.revere.alley.base.queue.QueueProfile;
 import dev.revere.alley.base.queue.enums.EnumQueueType;
+import dev.revere.alley.feature.abilities.AbstractAbility;
+import dev.revere.alley.feature.abilities.cooldown.AbilityCooldown;
 import dev.revere.alley.feature.division.Division;
+import dev.revere.alley.feature.division.IDivisionService;
 import dev.revere.alley.feature.division.tier.DivisionTier;
 import dev.revere.alley.feature.leaderboard.enums.EnumLeaderboardType;
 import dev.revere.alley.game.ffa.AbstractFFAMatch;
@@ -15,15 +19,14 @@ import dev.revere.alley.profile.data.impl.ProfileFFAData;
 import dev.revere.alley.profile.data.impl.ProfilePlayTimeData;
 import dev.revere.alley.profile.data.impl.ProfileRankedKitData;
 import dev.revere.alley.profile.data.impl.ProfileUnrankedKitData;
+import dev.revere.alley.profile.enums.EnumGlobalCooldown;
 import dev.revere.alley.profile.enums.EnumProfileState;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -34,12 +37,10 @@ import java.util.stream.Collectors;
 @Getter
 @Setter
 public class Profile {
-    protected final Alley plugin = Alley.getInstance();
-
     private final UUID uuid;
     private String name;
-
     private long firstJoin;
+    private boolean online;
 
     private ProfileData profileData;
     private QueueProfile queueProfile;
@@ -48,13 +49,14 @@ public class Profile {
     private EnumLeaderboardType leaderboardType;
     private EnumQueueType queueType;
 
+    private final Map<Class<? extends AbstractAbility>, AbilityCooldown> abilityCooldowns;
+    private final Map<EnumGlobalCooldown, AbilityCooldown> globalCooldowns;
+
     private AbstractFFAMatch ffaMatch;
     private AbstractMatch match;
     private Party party;
 
     private ChatColor nameColor;
-
-    private boolean online;
 
     /**
      * Constructor for the Profile class.
@@ -69,20 +71,64 @@ public class Profile {
         this.name = Bukkit.getOfflinePlayer(this.uuid).getName();
         this.leaderboardType = EnumLeaderboardType.RANKED;
         this.queueType = EnumQueueType.UNRANKED;
+        this.nameColor = ChatColor.WHITE;
+
+        this.abilityCooldowns = new HashMap<>();
+        this.globalCooldowns = new EnumMap<>(EnumGlobalCooldown.class);
+    }
+
+    /**
+     * Gets the fancy name of the profile with the color.
+     *
+     * @return The colored name of the profile.
+     */
+    public String getFancyName() {
+        return this.nameColor + this.name;
+    }
+
+    /**
+     * Checks if the profile is currently busy with a match or FFA.
+     *
+     * @return True if the profile is busy, otherwise false.
+     */
+    public boolean isBusy() {
+        return this.state != EnumProfileState.LOBBY;
     }
 
     /**
      * Loads the profile from the database.
      */
     public void load() {
-        this.plugin.getProfileService().getIProfile().loadProfile(this);
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+        profileService.getIProfile().loadProfile(this);
     }
 
     /**
      * Saves the profile to the database.
      */
     public void save() {
-        this.plugin.getProfileService().getIProfile().saveProfile(this);
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+        profileService.getIProfile().saveProfile(this);
+    }
+
+    /**
+     * Gets the cooldown object for a specific ability.
+     * If a cooldown for this ability doesn't exist yet for this profile, it will be created.
+     *
+     * @param abilityClass The class of the ability (e.g., GuardianAngel.class).
+     * @return The AbilityCooldown object for that ability.
+     */
+    public AbilityCooldown getCooldown(Class<? extends AbstractAbility> abilityClass) {
+        return this.abilityCooldowns.computeIfAbsent(abilityClass, key -> new AbilityCooldown());
+    }
+
+    /**
+     * Gets the cooldown object for a specific global cooldown type.
+     * @param type The global cooldown type from the enum.
+     * @return The AbilityCooldown object.
+     */
+    public AbilityCooldown getGlobalCooldown(EnumGlobalCooldown type) {
+        return this.globalCooldowns.computeIfAbsent(type, key -> new AbilityCooldown());
     }
 
     /**
@@ -92,7 +138,8 @@ public class Profile {
      * @return A sorted list of kits that the profile has participated in.
      */
     public List<Kit> getSortedKits() {
-        return this.plugin.getKitService().getKits()
+        IKitService kitService = Alley.getInstance().getService(IKitService.class);
+        return kitService.getKits()
                 .stream()
                 .filter(kit -> {
                     ProfileRankedKitData rankedData = this.profileData.getRankedKitData().get(kit.getName());
@@ -164,7 +211,8 @@ public class Profile {
             return division.getName() + " " + nextTier.getName();
         }
 
-        List<Division> divisions = this.plugin.getDivisionService().getDivisions();
+        IDivisionService divisionService = Alley.getInstance().getService(IDivisionService.class);
+        List<Division> divisions = divisionService.getDivisions();
         int divisionIndex = divisions.indexOf(division);
 
         if (divisionIndex < divisions.size() - 1) {
@@ -185,7 +233,9 @@ public class Profile {
         ProfileUnrankedKitData profileUnrankedKitData = this.profileData.getUnrankedKitData().get(kitName);
         Division division = profileUnrankedKitData.getDivision();
 
-        List<Division> divisions = this.plugin.getDivisionService().getDivisions();
+        IDivisionService divisionService = Alley.getInstance().getService(IDivisionService.class);
+
+        List<Division> divisions = divisionService.getDivisions();
         int divisionIndex = divisions.indexOf(division);
 
         if (divisionIndex < divisions.size() - 1) {

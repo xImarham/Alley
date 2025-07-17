@@ -1,7 +1,11 @@
 package dev.revere.alley.game.party.menu.duel.button;
 
+import dev.revere.alley.Alley;
 import dev.revere.alley.api.menu.Button;
+import dev.revere.alley.game.duel.menu.DuelRequestMenu;
 import dev.revere.alley.game.party.Party;
+import dev.revere.alley.profile.IProfileService;
+import dev.revere.alley.profile.Profile;
 import dev.revere.alley.tool.item.ItemBuilder;
 import dev.revere.alley.util.chat.CC;
 import lombok.AllArgsConstructor;
@@ -24,6 +28,7 @@ import java.util.UUID;
  */
 @AllArgsConstructor
 public class DuelOtherPartyButton extends Button {
+    private final Alley plugin = Alley.getInstance();
     private final Party party;
 
     @Override
@@ -31,11 +36,14 @@ public class DuelOtherPartyButton extends Button {
         List<String> lore = getLore();
 
         ItemStack itemStack = new ItemBuilder(new ItemStack(Material.SKULL_ITEM, 1, (short) 3))
-                .name("&b&l" + party.getLeader().getName() + "'s Party")
+                .name("&6&l" + party.getLeader().getName() + "'s Party")
                 .lore(lore)
                 .build();
         SkullMeta meta = (SkullMeta) itemStack.getItemMeta();
-        meta.setOwner(Bukkit.getPlayer(party.getLeader().getName()).getName());
+        Player leader = Bukkit.getPlayer(party.getLeader().getName());
+        if (leader != null) {
+            meta.setOwner(leader.getName());
+        }
         itemStack.setItemMeta(meta);
 
         return itemStack;
@@ -48,9 +56,12 @@ public class DuelOtherPartyButton extends Button {
      */
     private @NotNull List<String> getLore() {
         List<String> lore = new ArrayList<>();
-        lore.add(" &bMembers: &f(" + party.getMembers().size() + ")");
-        for (UUID member : party.getMembers()) {
-            lore.add("  &f● &b" + Bukkit.getPlayer(member).getName());
+        lore.add(" &6Members: &f(" + party.getMembers().size() + ")");
+        for (UUID memberId : party.getMembers()) {
+            Player member = Bukkit.getPlayer(memberId);
+            if (member != null) {
+                lore.add("  &f● &6" + member.getName());
+            }
         }
         lore.add("");
         lore.add("&aClick to duel this party.");
@@ -61,12 +72,32 @@ public class DuelOtherPartyButton extends Button {
     public void clicked(Player player, ClickType clickType) {
         if (clickType != ClickType.LEFT) return;
 
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+        Profile profile = profileService.getProfile(player.getUniqueId());
+        Party playerParty = profile.getParty();
+
+        if (playerParty == null) {
+            player.sendMessage(CC.translate("&cYou are not in a party."));
+            return;
+        }
+
+        if (!playerParty.isLeader(player)) {
+            player.sendMessage(CC.translate("&cYou must be the leader of your party to challenge another party."));
+            return;
+        }
+
         if (party.getLeader().equals(player)) {
             player.sendMessage(CC.translate("&cYou can't duel your own party."));
             return;
         }
 
+        Player targetLeader = Bukkit.getPlayer(party.getLeader().getUniqueId());
+        if (targetLeader == null) {
+            player.sendMessage(CC.translate("&cThe leader of that party is not online."));
+            return;
+        }
+
         player.closeInventory();
-        player.sendMessage(CC.translate("&cemmy was lazy to finish this class"));
+        new DuelRequestMenu(targetLeader).openMenu(player);
     }
 }

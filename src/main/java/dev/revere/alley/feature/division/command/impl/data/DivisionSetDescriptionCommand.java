@@ -1,10 +1,12 @@
 package dev.revere.alley.feature.division.command.impl.data;
 
+import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.feature.division.Division;
 import dev.revere.alley.feature.division.DivisionService;
+import dev.revere.alley.feature.division.IDivisionService;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.entity.Player;
 
@@ -23,11 +25,11 @@ public class DivisionSetDescriptionCommand extends BaseCommand {
         String[] args = command.getArgs();
 
         if (args.length < 2) {
-            player.sendMessage(CC.translate("&6Usage: &e/division setdescription &b<name> <description>"));
+            player.sendMessage(CC.translate("&6Usage: &e/division setdescription &6<name> <description>"));
             return;
         }
 
-        DivisionService divisionService = this.plugin.getDivisionService();
+        IDivisionService divisionService = this.plugin.getService(IDivisionService.class);
         Division division = divisionService.getDivision(args[0]);
         if (division == null) {
             player.sendMessage(CC.translate("&cA division with that name does not exist."));
@@ -37,6 +39,6 @@ public class DivisionSetDescriptionCommand extends BaseCommand {
         String description = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
         division.setDescription(description);
         divisionService.saveDivision(division);
-        player.sendMessage(CC.translate("&aSuccessfully set the description of the division named &b" + division.getDisplayName() + "&a to &b" + description + "&a."));
+        player.sendMessage(CC.translate("&aSuccessfully set the description of the division named &6" + division.getDisplayName() + "&a to &6" + description + "&a."));
     }
 }

@@ -4,7 +4,10 @@ import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.annotation.CompleterData;
+import dev.revere.alley.base.arena.AbstractArena;
+import dev.revere.alley.base.arena.IArenaService;
 import dev.revere.alley.base.arena.enums.EnumArenaType;
+import dev.revere.alley.config.locale.impl.ArenaLocale;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.entity.Player;
 
@@ -23,7 +26,7 @@ public class ArenaToggleCommand extends BaseCommand {
         List<String> completion = new ArrayList<>();
 
         if (command.getArgs().length == 1 && command.getPlayer().hasPermission("alley.admin")) {
-            this.plugin.getArenaService().getArenas().forEach(arena -> completion.add(arena.getName()));
+            this.plugin.getService(IArenaService.class).getArenas().forEach(arena -> completion.add(arena.getName()));
         }
 
         return completion;
@@ -36,33 +39,36 @@ public class ArenaToggleCommand extends BaseCommand {
         String[] args = command.getArgs();
 
         if (args.length < 1) {
-            player.sendMessage(CC.translate("&6Usage: &e/arena toggle &b<arenaName>"));
+            player.sendMessage(CC.translate("&6Usage: &e/arena toggle &6<arenaName>"));
             return;
         }
 
         String arenaName = args[0];
-        if (this.plugin.getArenaService().getArenaByName(arenaName) == null) {
-            player.sendMessage(CC.translate("&cAn arena with that name does not exist!"));
+        IArenaService arenaService = this.plugin.getService(IArenaService.class);
+        AbstractArena arena = arenaService.getArenaByName(arenaName);
+        if (arena == null) {
+            player.sendMessage(ArenaLocale.NOT_FOUND.getMessage().replace("{arena-name}", arenaName));
             return;
         }
 
-        if (this.plugin.getArenaService().getArenaByName(arenaName).getType() == EnumArenaType.FFA) {
+        if (arena.getType() == EnumArenaType.FFA) {
             player.sendMessage(CC.translate("&cYou cannot enable or disable Free-For-All arenas!"));
             return;
         }
 
-        if (this.plugin.getArenaService().getArenaByName(arenaName).getMinimum() == null || this.plugin.getArenaService().getArenaByName(arenaName).getMaximum() == null || this.plugin.getArenaService().getArenaByName(arenaName).getPos1() == null || this.plugin.getArenaService().getArenaByName(arenaName).getPos2() == null) {
+        if (arena.getMinimum() == null || arena.getMaximum() == null || arena.getPos1() == null || arena.getPos2() == null) {
             player.sendMessage(CC.translate("&cYou must finish configuring this arena before enabling or disabling!"));
             return;
         }
 
-        if (this.plugin.getArenaService().getArenaByName(arenaName).getKits().isEmpty()) {
+        if (arena.getKits().isEmpty()) {
             player.sendMessage(CC.translate("&cYou must add at least one kit to this arena before enabling or disabling!"));
             return;
         }
 
-        this.plugin.getArenaService().getArenaByName(arenaName).setEnabled(!this.plugin.getArenaService().getArenaByName(arenaName).isEnabled());
-        this.plugin.getArenaService().saveArena(this.plugin.getArenaService().getArenaByName(arenaName));
-        player.sendMessage(CC.translate("&aArena &b" + arenaName + "&a has been " + (this.plugin.getArenaService().getArenaByName(arenaName).isEnabled() ? "enabled" : "disabled") + "&a!"));
+        arena.setEnabled(!arena.isEnabled());
+        arenaService.saveArena(arena);
+
+        player.sendMessage(ArenaLocale.TOGGLED.getMessage().replace("{arena-name}", arena.getName()).replace("{status}", arena.isEnabled() ? "enabled" : "disabled"));
     }
 }

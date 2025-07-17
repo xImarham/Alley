@@ -19,7 +19,7 @@ public class FakeExplosionCommand extends BaseCommand {
         String[] args = command.getArgs();
 
         if (args.length < 1) {
-            player.sendMessage(CC.translate("&6Usage: &e/fakeexplosion &b<player>"));
+            player.sendMessage(CC.translate("&6Usage: &e/fakeexplosion &6<player>"));
             return;
         }
 
@@ -30,6 +30,6 @@ public class FakeExplosionCommand extends BaseCommand {
         }
 
         targetPlayer.getWorld().createExplosion(targetPlayer.getLocation(), 0.0F, false);
-        player.sendMessage(CC.translate("&bYou've fake exploded &7" + targetPlayer.getName()));
+        player.sendMessage(CC.translate("&6You've fake exploded &7" + targetPlayer.getName()));
     }
 }

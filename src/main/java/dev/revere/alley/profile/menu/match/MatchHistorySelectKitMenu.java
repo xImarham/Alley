@@ -3,11 +3,18 @@ package dev.revere.alley.profile.menu.match;
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.api.menu.Menu;
+import dev.revere.alley.base.kit.IKitService;
+import dev.revere.alley.base.kit.Kit;
+import dev.revere.alley.game.match.data.AbstractMatchData;
+import dev.revere.alley.profile.IProfileService;
+import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.menu.match.button.MatchHistorySelectKitButton;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author Emmy
@@ -15,20 +22,26 @@ import java.util.Map;
  * @since 04/06/2025
  */
 public class MatchHistorySelectKitMenu extends Menu {
+
     @Override
     public String getTitle(Player player) {
-        return "&b&lMatch History &f- &7Select Kit";
+        return "&6&lMatch History";
     }
 
     @Override
     public Map<Integer, Button> getButtons(Player player) {
         Map<Integer, Button> buttons = new HashMap<>();
 
-        Alley.getInstance().getKitService().getKits().forEach(
-                kit -> buttons.put(buttons.size(), new MatchHistorySelectKitButton(kit))
-        );
+        Profile profile = Alley.getInstance().getService(IProfileService.class).getProfile(player.getUniqueId());
 
-        this.addGlass(buttons, 15);
+        List<AbstractMatchData> matchDataList = profile.getProfileData().getPreviousMatches();
+
+        List<Kit> kits = this.plugin.getService(IKitService.class).getKits();
+        List<Kit> matchedKitsWithData = kits.stream()
+                .filter(kit -> matchDataList.stream().anyMatch(matchData -> matchData.getKit().equals(kit.getName())))
+                .collect(Collectors.toList());
+
+        matchedKitsWithData.forEach(kit -> buttons.put(buttons.size(), new MatchHistorySelectKitButton(kit)));
 
         return buttons;
     }

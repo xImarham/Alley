@@ -5,7 +5,10 @@ import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.annotation.CompleterData;
 import dev.revere.alley.base.arena.AbstractArena;
+import dev.revere.alley.base.arena.IArenaService;
+import dev.revere.alley.base.kit.IKitService;
 import dev.revere.alley.base.kit.Kit;
+import dev.revere.alley.game.match.IMatchService;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.util.chat.CC;
@@ -36,12 +39,12 @@ public class MatchStartCommand extends BaseCommand {
                     }
                     break;
                 case 3:
-                    this.plugin.getKitService().getKits().forEach(kit -> completion.add(kit.getName()));
+                    this.plugin.getService(IKitService.class).getKits().forEach(kit -> completion.add(kit.getName()));
                     break;
                 case 4:
-                    Kit kit = this.plugin.getKitService().getKit(command.getArgs()[2]);
+                    Kit kit = this.plugin.getService(IKitService.class).getKit(command.getArgs()[2]);
                     if (kit != null) {
-                        this.plugin.getArenaService().getArenas()
+                        this.plugin.getService(IArenaService.class).getArenas()
                                 .stream()
                                 .filter(arena -> arena.getKits().contains(kit.getName()))
                                 .forEach(arena -> completion.add(arena.getName()));
@@ -61,7 +64,7 @@ public class MatchStartCommand extends BaseCommand {
         String[] args = command.getArgs();
 
         if (args.length != 4) {
-            player.sendMessage(CC.translate("&6Usage: &e/match start &b<player1> <player2> <kit> <arena>"));
+            player.sendMessage(CC.translate("&6Usage: &e/match start &6<player1> <player2> <kit> <arena>"));
             return;
         }
 
@@ -75,13 +78,13 @@ public class MatchStartCommand extends BaseCommand {
             return;
         }
 
-        Kit kit = this.plugin.getKitService().getKit(kitName);
+        Kit kit = this.plugin.getService(IKitService.class).getKit(kitName);
         if (kit == null) {
             player.sendMessage(CC.translate("&cKit not found."));
             return;
         }
 
-        AbstractArena arena = this.plugin.getArenaService().getArenaByName(arenaName);
+        AbstractArena arena = this.plugin.getService(IArenaService.class).getArenaByName(arenaName);
         if (arena == null) {
             player.sendMessage(CC.translate("&cArena not found."));
             return;
@@ -93,8 +96,8 @@ public class MatchStartCommand extends BaseCommand {
         GameParticipant<MatchGamePlayerImpl> participantA = new GameParticipant<>(playerA);
         GameParticipant<MatchGamePlayerImpl> participantB = new GameParticipant<>(playerB);
 
-        this.plugin.getMatchService().createAndStartMatch(
-                kit, arena, participantA, participantB, false, false, false
+        this.plugin.getService(IMatchService.class).createAndStartMatch(
+                kit, this.plugin.getService(IArenaService.class).selectArenaWithPotentialTemporaryCopy(arena), participantA, participantB, false, false, false
         );
     }
 }

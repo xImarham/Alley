@@ -4,6 +4,8 @@ import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.annotation.CompleterData;
+import dev.revere.alley.base.arena.IArenaService;
+import dev.revere.alley.config.locale.impl.ArenaLocale;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.entity.Player;
 
@@ -20,9 +22,11 @@ public class ArenaDeleteCommand extends BaseCommand {
     @CompleterData(name = "arena.delete")
     public List<String> arenaDeleteCompleter(CommandArgs command) {
         List<String> completion = new ArrayList<>();
+        IArenaService arenaService = this.plugin.getService(IArenaService.class);
+
 
         if (command.getArgs().length == 1 && command.getPlayer().hasPermission("alley.admin")) {
-            this.plugin.getArenaService().getArenas().forEach(arena -> completion.add(arena.getName()));
+            arenaService.getArenas().forEach(arena -> completion.add(arena.getName()));
         }
 
         return completion;
@@ -34,18 +38,20 @@ public class ArenaDeleteCommand extends BaseCommand {
         Player player = command.getPlayer();
         String[] args = command.getArgs();
 
+        IArenaService arenaService = this.plugin.getService(IArenaService.class);
+
         if (args.length < 1) {
-            player.sendMessage(CC.translate("&6Usage: &e/arena delete &b<arenaName>"));
+            player.sendMessage(CC.translate("&6Usage: &e/arena delete &6<arenaName>"));
             return;
         }
 
         String arenaName = args[0];
-        if (this.plugin.getArenaService().getArenaByName(arenaName) == null) {
-            player.sendMessage(CC.translate("&cAn arena with that name does not exist!"));
+        if (arenaService.getArenaByName(arenaName) == null) {
+            player.sendMessage(ArenaLocale.NOT_FOUND.getMessage().replace("{arena-name}", arenaName));
             return;
         }
 
-        player.sendMessage(CC.translate("&aArena &b" + arenaName + "&a has been deleted!"));
-        this.plugin.getArenaService().deleteArena(this.plugin.getArenaService().getArenaByName(arenaName));
+        player.sendMessage(ArenaLocale.DELETED.getMessage().replace("{arena-name}", arenaName));
+        arenaService.deleteArena(arenaService.getArenaByName(arenaName));
     }
 }

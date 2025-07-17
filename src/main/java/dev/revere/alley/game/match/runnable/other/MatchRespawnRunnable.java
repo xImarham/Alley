@@ -1,8 +1,12 @@
 package dev.revere.alley.game.match.runnable.other;
 
+import dev.revere.alley.Alley;
 import dev.revere.alley.game.match.AbstractMatch;
 import dev.revere.alley.game.match.enums.EnumMatchState;
+import dev.revere.alley.tool.reflection.IReflectionRepository;
+import dev.revere.alley.tool.reflection.impl.TitleReflectionService;
 import dev.revere.alley.util.chat.CC;
+import dev.revere.alley.util.chat.Symbol;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -41,6 +45,13 @@ public class MatchRespawnRunnable extends BukkitRunnable {
             this.cancel();
             return;
         }
+
+        Alley.getInstance().getService(IReflectionRepository.class).getReflectionService(TitleReflectionService.class).sendTitle(
+                player,
+                "&6&lRespawn",
+                "&fRespawning in &6" + this.count + "s",
+                2, 10, 2
+        );
 
         this.player.sendMessage(CC.translate("&a" + this.count + "..."));
         this.count--;

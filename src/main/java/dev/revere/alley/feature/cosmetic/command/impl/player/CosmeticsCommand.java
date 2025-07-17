@@ -16,6 +16,6 @@ public class CosmeticsCommand extends BaseCommand {
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
-        new CosmeticsMenu("KillEffect").openMenu(player);
+        new CosmeticsMenu().openMenu(player);
     }
 }

@@ -2,6 +2,7 @@ package dev.revere.alley.feature.layout.listener;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.feature.layout.data.LayoutData;
+import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -19,17 +20,6 @@ import java.util.List;
  * @since 04/05/2025
  */
 public class LayoutListener implements Listener {
-    protected final Alley plugin;
-
-    /**
-     * Constructor for the LayoutListener class.
-     *
-     * @param plugin The Alley plugin instance.
-     */
-    public LayoutListener(Alley plugin) {
-        this.plugin = plugin;
-    }
-
     @EventHandler
     public void onInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
@@ -40,14 +30,14 @@ public class LayoutListener implements Listener {
 
         String clickedName = ChatColor.stripColor(item.getItemMeta().getDisplayName());
 
-        for (List<LayoutData> layoutList : this.plugin.getProfileService()
+        for (List<LayoutData> layoutList : Alley.getInstance().getService(IProfileService.class)
                 .getProfile(player.getUniqueId())
                 .getProfileData().getLayoutData().getLayouts().values()) {
 
             for (LayoutData layout : layoutList) {
                 if (ChatColor.stripColor(layout.getDisplayName()).equalsIgnoreCase(clickedName)) {
                     player.getInventory().setContents(layout.getItems());
-                    player.sendMessage(CC.translate("&aYou have selected the layout &b" + layout.getDisplayName() + "&a."));
+                    player.sendMessage(CC.translate("&aYou have selected the layout &6" + layout.getDisplayName() + "&a."));
                     event.setCancelled(true);
                     return;
                 }

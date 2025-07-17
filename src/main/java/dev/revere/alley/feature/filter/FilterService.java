@@ -1,6 +1,10 @@
 package dev.revere.alley.feature.filter;
 
 import dev.revere.alley.Alley;
+import dev.revere.alley.api.constant.IPluginConstant;
+import dev.revere.alley.config.IConfigService;
+import dev.revere.alley.plugin.AlleyContext;
+import dev.revere.alley.plugin.annotation.Service;
 import dev.revere.alley.util.chat.CC;
 import lombok.Getter;
 import org.bukkit.Bukkit;
@@ -19,31 +23,36 @@ import java.util.Set;
  * @since 27/04/2025
  */
 @Getter
-public class FilterService {
-    protected final Alley plugin;
-    private final Set<String> filteredWords;
+@Service(provides = IFilterService.class, priority = 340)
+public class FilterService implements IFilterService {
+    private final Alley plugin;
+    private final IConfigService configService;
+    private final IPluginConstant pluginConstant;
 
-    private final String notificationMessage;
+    private final Set<String> filteredWords = new HashSet<>();
+    private String notificationMessage;
 
     /**
-     * Constructor for the FilterService class.
-     *
-     * @param plugin The Alley plugin instance.
+     * Constructor for DI.
      */
-    public FilterService(Alley plugin) {
+    public FilterService(Alley plugin, IConfigService configService, IPluginConstant pluginConstant) {
         this.plugin = plugin;
-        this.filteredWords = new HashSet<>();
-        this.notificationMessage = plugin.getConfigService().getSettingsConfig().getString("profanity-filter.staff-notification-format");
+        this.configService = configService;
+        this.pluginConstant = pluginConstant;
+    }
+
+    @Override
+    public void initialize(AlleyContext context) {
+        this.notificationMessage = this.configService.getSettingsConfig().getString("profanity-filter.staff-notification-format");
         this.loadFilteredWords();
     }
 
     private void loadFilteredWords() {
-        FileConfiguration config = this.plugin.getConfigService().getSettingsConfig();
+        FileConfiguration config = this.configService.getSettingsConfig();
         ConfigurationSection section = config.getConfigurationSection("profanity-filter");
 
         if (section != null) {
-            List<String> configFilteredWords = section.getStringList("filtered-words");
-            this.filteredWords.addAll(configFilteredWords);
+            this.filteredWords.addAll(section.getStringList("filtered-words"));
         }
 
         if (config.getBoolean("profanity-filter.add-default-words")) {
@@ -64,48 +73,35 @@ public class FilterService {
         for (String word : words) {
             String normalizedWord = this.normalize(word);
             if (this.filteredWords.contains(normalizedWord)) {
-                censoredMessage = censoredMessage.replaceAll("(?i)" + word, "****");
+                censoredMessage = censoredMessage.replaceAll("(?i)\\b" + word + "\\b", "****");
             }
         }
 
         return censoredMessage;
     }
 
-    /**
-     * Checks if a message contains any profane words.
-     *
-     * @param message The message to check.
-     * @return True if the message contains profane words, false otherwise.
-     */
+    @Override
     public boolean isProfanity(String message) {
-        String[] words = message.split(" ");
-
-        for (String word : words) {
-            String normalizedWord = this.normalize(word);
-            if (this.filteredWords.contains(normalizedWord)) {
+        for (String word : message.split(" ")) {
+            if (this.filteredWords.contains(this.normalize(word))) {
                 return true;
             }
         }
-
         return false;
     }
 
-    /**
-     * Notifies staff members about a rude word detected in a player's message.
-     *
-     * @param message  The message containing the rude word.
-     * @param insulter The player who sent the message.
-     */
-    public void notifyStaff(String message, Player insulter) {
-        String permission = this.plugin.getPluginConstant().getAdminPermissionPrefix();
-        String replacedMessage = this.notificationMessage.replace("{player}", insulter.getName()).replace("{message}", message);
+    @Override
+    public void notifyStaff(String message, Player offender) {
+        String permission = this.pluginConstant.getAdminPermissionPrefix();
+        String replacedMessage = this.notificationMessage
+                .replace("{player}", offender.getName())
+                .replace("{message}", message);
 
-        this.plugin.getServer().getOnlinePlayers().stream().filter(player ->
-                player.hasPermission(permission)).forEach(player ->
-                player.sendMessage(CC.translate(replacedMessage)))
-        ;
+        this.plugin.getServer().getOnlinePlayers().stream()
+                .filter(player -> player.hasPermission(permission))
+                .forEach(player -> player.sendMessage(CC.translate(replacedMessage)));
 
-        Bukkit.getConsoleSender().sendMessage(CC.translate(replacedMessage)); // idk why, but i felt like its necessary to send it to console too
+        Bukkit.getConsoleSender().sendMessage(CC.translate(replacedMessage));
     }
 
     /**
@@ -117,15 +113,15 @@ public class FilterService {
      */
     private String normalize(String word) {
         return word.toLowerCase()
-                .replace("@", "a")
+                .replace("@", "a").replace("4", "a")
                 .replace("0", "o")
-                .replace("1", "i")
+                .replace("1", "i").replace("!", "i")
                 .replace("3", "e")
                 .replace("5", "s")
                 .replace("7", "t")
                 .replace("8", "b")
                 .replace("!", "i")
-                .replaceAll("\\p{Punct}|\\d", "")
+                .replaceAll("\\p{Punct}", "")
                 .trim();
     }
 

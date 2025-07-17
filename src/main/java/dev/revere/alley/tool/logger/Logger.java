@@ -1,6 +1,8 @@
 package dev.revere.alley.tool.logger;
 
 import dev.revere.alley.Alley;
+import dev.revere.alley.api.constant.IPluginConstant;
+import dev.revere.alley.feature.abilities.IAbilityService;
 import dev.revere.alley.util.chat.CC;
 import lombok.experimental.UtilityClass;
 import org.bukkit.command.ConsoleCommandSender;
@@ -20,6 +22,11 @@ public class Logger {
     private final static ConsoleCommandSender consoleSender;
     private static final Map<UUID, Exception> storedExceptions;
 
+    private static final String PHASE_HEADER_PREFIX = "&6&l--- ";
+    private static final String PHASE_HEADER_SUFFIX = " ---";
+    private static final String TASK_PREFIX_SUCCESS = "&a✔  &f";
+    private static final String TASK_PREFIX_FAIL = "&c✖ &f";
+
     static {
         consoleSender = Alley.getInstance().getServer().getConsoleSender();
         storedExceptions = new HashMap<>();
@@ -30,7 +37,7 @@ public class Logger {
      *
      * @param message the message to log
      */
-    public void log(String message) {
+    public void info(String message) {
         consoleSender.sendMessage(CC.translate(CC.PREFIX + message));
     }
 
@@ -39,8 +46,17 @@ public class Logger {
      *
      * @param message the error message to log
      */
-    public void logError(String message) {
+    public void error(String message) {
         consoleSender.sendMessage(CC.translate(CC.ERROR_PREFIX + "&c(ERROR) &8" + message));
+    }
+
+    /**
+     * Log a warning to the console.
+     *
+     * @param message the warning message to log
+     */
+    public void warn(String message) {
+        consoleSender.sendMessage(CC.translate(CC.WARNING_PREFIX + "&e(WARNING) &8" + message));
     }
 
     /**
@@ -90,7 +106,7 @@ public class Logger {
         String locationMessage = "&cError occurred at: Unknown location";
 
         for (StackTraceElement element : stackTrace) {
-            if (element.getClassName().startsWith(Alley.getInstance().getPluginConstant().getPackageDirectory())) {
+            if (element.getClassName().startsWith(Alley.getInstance().getService(IPluginConstant.class).getPackageDirectory())) {
                 locationMessage = "&cError occurred at: " + element.getClassName() + " (Line " + element.getLineNumber() + ")";
                 break;
             }
@@ -106,23 +122,26 @@ public class Logger {
     }
 
     /**
-     * Log the time it takes to run a task.
+     * Log the time it takes to run a task with clear success/failure indication.
      *
      * @param taskName the name of the task to run
      * @param runnable the task to run
      */
     public void logTime(String taskName, Runnable runnable) {
+        long start = System.currentTimeMillis();
+        boolean success = false;
         try {
-            long start = System.currentTimeMillis();
             runnable.run();
-            long end = System.currentTimeMillis();
-
-            consoleSender.sendMessage(CC.translate(CC.PREFIX + "&fSuccessfully initialized the &b" + taskName + " &fin &b" + (end - start) + "ms&f."));
+            success = true;
         } catch (Exception exception) {
             logException("Failed to run the " + taskName + " task", exception);
+        } finally {
+            long end = System.currentTimeMillis();
+            String prefix = success ? TASK_PREFIX_SUCCESS : TASK_PREFIX_FAIL;
+            String message = success ? "&fSuccessfully initialized &6" : "&cFailed to initialize &6";
+            consoleSender.sendMessage(CC.translate(prefix + message + taskName + " &fin &6" + (end - start) + "ms&f."));
         }
     }
-
     /**
      * Log the time it takes to run a task.
      *
@@ -130,14 +149,18 @@ public class Logger {
      * @param runnable         the task to run
      */
     public void logTimeTask(String runnableTaskName, Runnable runnable) {
+        long start = System.currentTimeMillis();
+        boolean success = false;
         try {
-            long start = System.currentTimeMillis();
             runnable.run();
-            long end = System.currentTimeMillis();
-
-            consoleSender.sendMessage(CC.translate(CC.PREFIX + "&fSuccessfully ran the &b" + runnableTaskName + " &fin &b" + (end - start) + "ms&f."));
+            success = true;
         } catch (Exception exception) {
             logException("Failed to run the " + runnableTaskName + " task", exception);
+        } finally {
+            long end = System.currentTimeMillis();
+            String prefix = success ? TASK_PREFIX_SUCCESS : TASK_PREFIX_FAIL;
+            String message = success ? "&fSuccessfully ran &6" : "&cFailed to run &6";
+            consoleSender.sendMessage(CC.translate( prefix + message + runnableTaskName + " &fin &6" + (end - start) + "ms&f."));
         }
     }
 
@@ -150,8 +173,35 @@ public class Logger {
      */
     public void logTimeWithAction(String action, String task, Runnable runnable) {
         long start = System.currentTimeMillis();
-        runnable.run();
-        long runtime = System.currentTimeMillis() - start;
-        consoleSender.sendMessage(CC.translate(CC.PREFIX + "&fSuccessfully " + action + "&f the &b" + task + " &fin &b" + runtime + "ms&f."));
+        boolean success = false;
+        try {
+            runnable.run();
+            success = true;
+        } catch (Exception exception) {
+            logException("Failed to " + action + " the " + task + " task", exception);
+        } finally {
+            long runtime = System.currentTimeMillis() - start;
+            String prefix = success ? TASK_PREFIX_SUCCESS : TASK_PREFIX_FAIL;
+            String message = success ? "&fSuccessfully " + action + "&f the &6" : "&cFailed to " + action + "&f the &6";
+            consoleSender.sendMessage(CC.translate(prefix + message + task + " &fin &6" + runtime + "ms&f."));
+        }
+    }
+
+    /**
+     * Logs the start of a major initialization phase.
+     * @param phaseName The name of the phase (e.g., "Service Setup Phase").
+     */
+    public void logPhaseStart(String phaseName) {
+        consoleSender.sendMessage(CC.translate(""));
+        consoleSender.sendMessage(CC.translate(PHASE_HEADER_PREFIX + phaseName.toUpperCase() + PHASE_HEADER_SUFFIX));
+    }
+
+    /**
+     * Logs the completion of a major initialization phase.
+     * @param phaseName The name of the phase (e.g., "Service Initialization").
+     */
+    public void logPhaseComplete(String phaseName) {
+        consoleSender.sendMessage(CC.translate(PHASE_HEADER_PREFIX + phaseName.toUpperCase() + " COMPLETE" + PHASE_HEADER_SUFFIX));
+        consoleSender.sendMessage(CC.translate(""));
     }
 }

@@ -2,16 +2,22 @@ package dev.revere.alley.base.arena.impl;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.base.arena.AbstractArena;
+import dev.revere.alley.base.arena.IArenaService;
 import dev.revere.alley.base.arena.enums.EnumArenaType;
+import dev.revere.alley.base.arena.schematic.IArenaSchematicService;
+import dev.revere.alley.config.IConfigService;
 import dev.revere.alley.game.match.impl.MatchBedImpl;
 import dev.revere.alley.game.match.impl.MatchRoundsImpl;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
+import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.tool.serializer.Serializer;
 import lombok.Getter;
 import lombok.Setter;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
 
@@ -25,15 +31,20 @@ import java.util.UUID;
 @Setter
 @Getter
 public class StandAloneArena extends AbstractArena {
-    private final Alley plugin = Alley.getInstance();
+    protected final Alley plugin = Alley.getInstance();
 
     private boolean active = false;
+
+    private boolean isTemporaryCopy = false;
+    private String originalArenaName;
+    private int copyId = -1;
 
     private Location team1Portal;
     private Location team2Portal;
 
     private int portalRadius;
     private int heightLimit;
+    private int voidLevel;
 
     /**
      * Constructor for the StandAloneArena class.
@@ -42,13 +53,28 @@ public class StandAloneArena extends AbstractArena {
      * @param minimum The minimum location of the arena.
      * @param maximum The maximum location of the arena.
      */
-    public StandAloneArena(String name, Location minimum, Location maximum, Location team1Portal, Location team2Portal, int heightLimit) {
+    public StandAloneArena(String name, Location minimum, Location maximum, Location team1Portal, Location team2Portal, int heightLimit, int voidLevel) {
         super(name, minimum, maximum);
 
         if (team1Portal != null) this.team1Portal = team1Portal;
         if (team2Portal != null) this.team2Portal = team2Portal;
-        this.portalRadius = this.plugin.getConfigService().getSettingsConfig().getInt("game.portal-radius");
+        this.portalRadius = this.plugin.getService(IConfigService.class).getSettingsConfig().getInt("game.portal-radius");
         this.heightLimit = heightLimit;
+        this.voidLevel = voidLevel;
+    }
+
+    public StandAloneArena(String originalArenaName, int copyId, Location minimum, Location maximum, Location team1Portal, Location team2Portal, int heightLimit, int voidLevel) {
+        super(originalArenaName + "-copy-" + copyId, minimum, maximum);
+        this.originalArenaName = originalArenaName;
+        this.copyId = copyId;
+        this.isTemporaryCopy = true;
+        this.active = true;
+
+        if (team1Portal != null) this.team1Portal = team1Portal;
+        if (team2Portal != null) this.team2Portal = team2Portal;
+        this.portalRadius = this.plugin.getService(IConfigService.class).getSettingsConfig().getInt("game.portal-radius");
+        this.heightLimit = heightLimit;
+        this.voidLevel = voidLevel;
     }
 
     @Override
@@ -58,14 +84,18 @@ public class StandAloneArena extends AbstractArena {
 
     @Override
     public void createArena() {
-        this.plugin.getArenaService().getArenas().add(this);
-        this.saveArena();
+        if (!this.isTemporaryCopy) {
+            IArenaService arenaService = this.plugin.getService(IArenaService.class);
+            arenaService.registerNewArena(this);
+            this.saveArena();
+        }
     }
 
     @Override
     public void saveArena() {
         String name = "arenas." + this.getName();
-        FileConfiguration config = this.plugin.getConfigService().getArenasConfig();
+        IConfigService configService = this.plugin.getService(IConfigService.class);
+        FileConfiguration config = configService.getArenasConfig();
 
         config.set(name, null);
         config.set(name + ".type", this.getType().name());
@@ -84,17 +114,159 @@ public class StandAloneArena extends AbstractArena {
             config.set(name + ".team-two-portal", Serializer.serializeLocation(this.team2Portal));
 
         config.set(name + ".height-limit", this.heightLimit);
+        config.set(name + ".void-level", this.voidLevel);
 
-        this.plugin.getConfigService().saveConfig(this.plugin.getConfigService().getConfigFile("storage/arenas.yml"), config);
+        configService.saveConfig(configService.getConfigFile("storage/arenas.yml"), config);
+
+        this.plugin.getService(IArenaSchematicService.class).updateSchematic(this);
     }
 
     @Override
     public void deleteArena() {
-        FileConfiguration config = this.plugin.getConfigService().getArenasConfig();
+        if (this.isTemporaryCopy) {
+            this.deleteCopiedArena();
+            return;
+        }
+        FileConfiguration config = this.plugin.getService(IConfigService.class).getArenasConfig();
         config.set("arenas." + this.getName(), null);
 
-        this.plugin.getArenaService().getArenas().remove(this);
-        this.plugin.getConfigService().saveConfig(this.plugin.getConfigService().getConfigFile("storage/arenas.yml"), config);
+        this.plugin.getService(IConfigService.class).saveConfig(this.plugin.getService(IConfigService.class).getConfigFile("storage/arenas.yml"), config);
+    }
+
+    public void deleteCopiedArena() {
+        if (!this.isTemporaryCopy) {
+            return;
+        }
+
+        this.plugin.getService(IArenaSchematicService.class).delete(this);
+    }
+
+    public void verifyArenaExists() {
+        if (this.getMinimum() == null || this.getMaximum() == null) {
+            Bukkit.broadcastMessage("[Arena] Cannot verify - bounds are null");
+            return;
+        }
+
+        org.bukkit.World world = this.getMinimum().getWorld();
+        if (world == null) {
+            Bukkit.broadcastMessage("[Arena] Cannot verify - world is null");
+            return;
+        }
+
+        Bukkit.broadcastMessage("[Arena] Verifying arena: " + this.getName());
+        Bukkit.broadcastMessage("[Arena] Bounds: " + this.getMinimum() + " to " + this.getMaximum());
+        Bukkit.broadcastMessage("[Arena] World: " + world.getName());
+
+        int nonAirBlocks = 0;
+        int totalSampled = 0;
+
+        Location min = this.getMinimum();
+        Location max = this.getMaximum();
+
+        for (int x = min.getBlockX(); x <= max.getBlockX(); x += 10) {
+            for (int y = min.getBlockY(); y <= max.getBlockY(); y += 10) {
+                for (int z = min.getBlockZ(); z <= max.getBlockZ(); z += 10) {
+                    org.bukkit.block.Block block = world.getBlockAt(x, y, z);
+                    totalSampled++;
+
+                    if (block.getType() != org.bukkit.Material.AIR) {
+                        nonAirBlocks++;
+                        if (nonAirBlocks <= 5) {
+                            Bukkit.broadcastMessage("[Arena] Found block: " + block.getType() + " at " + x + "," + y + "," + z);
+                        }
+                    }
+                }
+            }
+        }
+
+        Bukkit.broadcastMessage("[Arena] Verification complete: " + nonAirBlocks + "/" + totalSampled + " sampled blocks are non-air");
+
+        if (nonAirBlocks == 0) {
+            Bukkit.broadcastMessage("[Arena] WARNING: No non-air blocks found! Arena may not have pasted correctly.");
+        } else {
+            Bukkit.broadcastMessage("[Arena] Arena appears to exist with " + nonAirBlocks + " non-air blocks sampled.");
+        }
+    }
+
+
+    public StandAloneArena createCopy(World targetWorld, Location targetLocation, int copyId) {
+        if (isTemporaryCopy) {
+            throw new IllegalStateException("Cannot create a copy of a temporary copy arena.");
+        }
+
+        Location originalMin = this.getMinimum();
+        Location originalMax = this.getMaximum();
+
+        int actualMinX = Math.min(originalMin.getBlockX(), originalMax.getBlockX());
+        int actualMaxX = Math.max(originalMin.getBlockX(), originalMax.getBlockX());
+
+        int actualMinY = Math.min(originalMin.getBlockY(), originalMax.getBlockY());
+        int actualMaxY = Math.max(originalMin.getBlockY(), originalMax.getBlockY());
+
+        int actualMinZ = Math.min(originalMin.getBlockZ(), originalMax.getBlockZ());
+        int actualMaxZ = Math.max(originalMin.getBlockZ(), originalMax.getBlockZ());
+
+        int sizeX = actualMaxX - actualMinX + 1;
+        int sizeY = actualMaxY - actualMinY + 1;
+        int sizeZ = actualMaxZ - actualMinZ + 1;
+
+        Location newMin = new Location(targetWorld, targetLocation.getX(), targetLocation.getY(), targetLocation.getZ());
+        Location newMax = new Location(targetWorld, targetLocation.getX() + sizeX - 1, targetLocation.getY() + sizeY - 1, targetLocation.getZ() + sizeZ - 1);
+
+        Location newTeam1Portal = null;
+        Location newTeam2Portal = null;
+
+        if (this.team1Portal != null) {
+            int offsetX = this.team1Portal.getBlockX() - actualMinX;
+            int offsetY = this.team1Portal.getBlockY() - actualMinY;
+            int offsetZ = this.team1Portal.getBlockZ() - actualMinZ;
+            newTeam1Portal = targetLocation.clone().add(offsetX, offsetY, offsetZ);
+        }
+
+        if (this.team2Portal != null) {
+            int offsetX = this.team2Portal.getBlockX() - actualMinX;
+            int offsetY = this.team2Portal.getBlockY() - actualMinY;
+            int offsetZ = this.team2Portal.getBlockZ() - actualMinZ;
+            newTeam2Portal = targetLocation.clone().add(offsetX, offsetY, offsetZ);
+        }
+
+        StandAloneArena copiedArena = new StandAloneArena(
+                this.getName(), copyId, newMin, newMax,
+                newTeam1Portal, newTeam2Portal, this.heightLimit, this.voidLevel
+        );
+
+        copiedArena.setEnabled(true);
+        copiedArena.setDisplayName(this.getDisplayName());
+        copiedArena.setKits(this.getKits());
+
+        double middleOffset = 0.5;
+
+        if (this.getPos1() != null) {
+            int offsetX = this.getPos1().getBlockX() - actualMinX;
+            int offsetY = this.getPos1().getBlockY() - actualMinY;
+            int offsetZ = this.getPos1().getBlockZ() - actualMinZ;
+            Location location = targetLocation.clone().add(offsetX + middleOffset, offsetY, offsetZ + middleOffset);
+            location.setYaw(getPos1().getYaw());
+            copiedArena.setPos1(location);
+        }
+
+        if (this.getPos2() != null) {
+            int offsetX = this.getPos2().getBlockX() - actualMinX;
+            int offsetY = this.getPos2().getBlockY() - actualMinY;
+            int offsetZ = this.getPos2().getBlockZ() - actualMinZ;
+            Location location = targetLocation.clone().add(offsetX + middleOffset, offsetY, offsetZ + middleOffset);
+            location.setYaw(getPos2().getYaw());
+            copiedArena.setPos2(location);
+        }
+
+        if (this.getCenter() != null) {
+            int offsetX = this.getCenter().getBlockX() - actualMinX;
+            int offsetY = this.getCenter().getBlockY() - actualMinY;
+            int offsetZ = this.getCenter().getBlockZ() - actualMinZ;
+            copiedArena.setCenter(targetLocation.clone().add(offsetX + middleOffset, offsetY, offsetZ + middleOffset));
+        }
+
+        return copiedArena;
     }
 
     /**
@@ -120,8 +292,8 @@ public class StandAloneArena extends AbstractArena {
     public boolean isEnemyBed(Block block, GameParticipant<MatchGamePlayerImpl> breakerParticipant) {
         Location bedLocation = block.getLocation();
 
-        UUID breakerUUID = breakerParticipant.getPlayer().getUuid();
-        Profile profile = this.plugin.getProfileService().getProfile(breakerUUID);
+        UUID breakerUUID = breakerParticipant.getLeader().getUuid();
+        Profile profile = this.plugin.getService(IProfileService.class).getProfile(breakerUUID);
 
         Location spawnA = this.getPos1();
         Location spawnB = this.getPos2();

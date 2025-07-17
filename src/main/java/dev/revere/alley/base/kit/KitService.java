@@ -1,13 +1,11 @@
 package dev.revere.alley.base.kit;
 
-import dev.revere.alley.Alley;
-import dev.revere.alley.base.kit.data.BaseRaidingKitData;
 import dev.revere.alley.base.kit.enums.EnumKitCategory;
+import dev.revere.alley.base.kit.setting.IKitSettingService;
 import dev.revere.alley.base.kit.setting.KitSetting;
-import dev.revere.alley.base.kit.setting.impl.mode.KitSettingRaidingImpl;
-import dev.revere.alley.base.kit.setting.impl.mode.KitSettingRankedImpl;
-import dev.revere.alley.base.queue.Queue;
-import dev.revere.alley.game.match.player.enums.EnumBaseRaiderRole;
+import dev.revere.alley.config.IConfigService;
+import dev.revere.alley.plugin.AlleyContext;
+import dev.revere.alley.plugin.annotation.Service;
 import dev.revere.alley.tool.logger.Logger;
 import dev.revere.alley.tool.serializer.Serializer;
 import lombok.Getter;
@@ -17,8 +15,8 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 
-import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -27,26 +25,43 @@ import java.util.List;
  * @date 19/05/2024 - 23:30
  */
 @Getter
-public class KitService {
-    protected final Alley plugin;
-    private final List<Kit> kits;
+@Service(provides = IKitService.class, priority = 80)
+public class KitService implements IKitService {
+    private final IConfigService configService;
+    private final IKitSettingService kitSettingService;
+
+    private final List<Kit> kits = new ArrayList<>();
 
     /**
-     * Constructor for the KitService class.
-     *
-     * @param plugin The main class.
+     * Constructor for DI.
      */
-    public KitService(Alley plugin) {
-        this.plugin = plugin;
-        this.kits = new ArrayList<>();
+    public KitService(IConfigService configService, IKitSettingService kitSettingService) {
+        this.configService = configService;
+        this.kitSettingService = kitSettingService;
+    }
+
+    @Override
+    public void initialize(AlleyContext context) {
         this.loadKits();
+    }
+
+    @Override
+    public void shutdown(AlleyContext context) {
+        this.saveKits();
+        Logger.info("Saved all kits.");
+    }
+
+    @Override
+    public List<Kit> getKits() {
+        return Collections.unmodifiableList(this.kits);
     }
 
     /**
      * Method to load all kits from the kits.yml file.
      */
     public void loadKits() {
-        FileConfiguration config = this.plugin.getConfigService().getKitsConfig();
+        this.kits.clear();
+        FileConfiguration config = this.configService.getKitsConfig();
         ConfigurationSection kitsSection = config.getConfigurationSection("kits");
         if (kitsSection == null) {
             return;
@@ -60,6 +75,7 @@ public class KitService {
                     config.getString(key + ".display-name"),
                     config.getString(key + ".description"),
                     config.getString(key + ".disclaimer"),
+                    config.getString(key + ".menu-title"),
                     EnumKitCategory.valueOf(config.getString(key + ".category")),
                     Material.matchMaterial(config.getString(key + ".icon.material")),
                     config.getInt(key + ".icon.durability"),
@@ -70,75 +86,17 @@ public class KitService {
 
             kit.setEnabled(config.getBoolean(key + ".enabled"));
             kit.setEditable(config.getBoolean(key + ".editable"));
+            kit.setKnockbackProfile(config.getString(key + ".knockback-profile"));
 
             this.setupFFA(kit, config, key);
             this.loadKitSettings(config, key, kit);
 
-            //TODO: base trapper and raider kits arent loaded yet so the setup fails, need to fix this later.
-            this.setupBaseRaidingKitData(kit, config, key);
-
             this.loadPotionEffects(config, key, kit);
-            this.addMissingKitSettings(kit, config, key); // Only necessary for development purposes if you're lazy like me - to add the new kit setting manually.
+            this.addMissingKitSettings(kit, config, key);
             this.kits.add(kit);
-            this.addKitToQueue(kit);
         }
     }
 
-    /**
-     * Method to setup the FFA settings of a kit.
-     *
-     * @param kit    The kit.
-     * @param config The configuration file.
-     * @param key    The path key.
-     */
-    private void setupFFA(Kit kit, FileConfiguration config, String key) {
-        kit.setFfaEnabled(config.getBoolean(key + ".ffa.enabled"));
-        kit.setFfaArenaName(config.getString(key + ".ffa.arena-name"));
-        kit.setMaxFfaPlayers(config.getInt(key + ".ffa.max-players"));
-        kit.setFfaSlot(config.getInt(key + ".ffa.slot"));
-    }
-
-    /**
-     * Method to setup the base raiding kit data of a kit.
-     *
-     * @param kit    The kit.
-     * @param config The configuration file.
-     * @param key    The path key.
-     */
-    private void setupBaseRaidingKitData(Kit kit, FileConfiguration config, String key) {
-        if (!kit.isSettingEnabled(KitSettingRaidingImpl.class)) return;
-
-        ConfigurationSection raidingSection = config.getConfigurationSection(key + ".raiding-role-kits");
-        if (raidingSection == null) return;
-
-        BaseRaidingKitData raidingData = new BaseRaidingKitData();
-
-        for (String roleKey : raidingSection.getKeys(false)) {
-            try {
-                EnumBaseRaiderRole role = EnumBaseRaiderRole.valueOf(roleKey.toUpperCase());
-                String roleKitName = raidingSection.getString(roleKey);
-                Kit roleKit = this.getKit(roleKitName);
-                if (roleKit != null) {
-                    raidingData.setKit(roleKit, role);
-                    roleKit.setEnabled(false);
-                } else {
-                    Logger.log("&cRole kit " + roleKitName + " for role " + role + " not found.");
-                }
-            } catch (IllegalArgumentException ex) {
-                Logger.log("&cInvalid raider role in config: " + roleKey);
-            }
-        }
-
-        kit.setBaseRaidingKitData(raidingData);
-    }
-
-    /**
-     * Method to load the settings of a kit.
-     *
-     * @param config The configuration file.
-     * @param key    The path key.
-     * @param kit    The kit.
-     */
     private void loadKitSettings(FileConfiguration config, String key, Kit kit) {
         ConfigurationSection settingsSection = config.getConfigurationSection(key + ".settings");
         if (settingsSection == null) {
@@ -149,13 +107,107 @@ public class KitService {
         for (String settingName : settingsSection.getKeys(false)) {
             boolean enabled = settingsSection.getBoolean(settingName);
 
-            KitSetting kitSetting = this.plugin.getKitSettingService().createSettingByName(settingName);
+            KitSetting kitSetting = this.kitSettingService.createSettingByName(settingName);
             if (kitSetting != null) {
                 kitSetting.setEnabled(enabled);
                 kit.addKitSetting(kitSetting);
             }
         }
     }
+
+    @Override
+    public void saveKit(Kit kit) {
+        FileConfiguration config = this.configService.getKitsConfig();
+        String key = "kits." + kit.getName();
+        this.kitToConfig(kit, config, key);
+
+        if (kit.getKitSettings() == null) {
+            this.applyDefaultSettings(config, key, kit);
+        } else {
+            this.saveKitSettings(config, key, kit);
+        }
+
+        if (kit.getPotionEffects() != null) {
+            this.savePotionEffects(config, key, kit);
+        }
+
+        this.configService.saveConfig(this.configService.getConfigFile("storage/kits.yml"), config);
+    }
+
+    @Override
+    public void createKit(String kitName, ItemStack[] inventory, ItemStack[] armor, Material icon) {
+        FileConfiguration config = configService.getSettingsConfig();
+        String defaultKey = "kit.default-values";
+
+        Kit kit = new Kit(
+                kitName,
+                config.getString(defaultKey + ".display-name").replace("{kit-name}", kitName),
+                config.getString(defaultKey + ".description").replace("{kit-name}", kitName),
+                config.getString(defaultKey + ".disclaimer").replace("{kit-name}", kitName),
+                config.getString(defaultKey + ".menu-title").replace("{kit-name}", kitName),
+                EnumKitCategory.NORMAL,
+                icon,
+                0,
+                inventory,
+                armor,
+                new ItemStack[0]
+        );
+
+        kitSettingService.applyAllSettingsToKit(kit);
+        this.kits.add(kit);
+        this.saveKit(kit);
+    }
+
+    @Override
+    public void deleteKit(Kit kit) {
+        FileConfiguration config = this.configService.getKitsConfig();
+
+        this.kits.remove(kit);
+        config.set("kits." + kit.getName(), null);
+
+        this.configService.saveConfig(this.configService.getConfigFile("storage/kits.yml"), config);
+    }
+
+    @Override
+    public Kit getKit(String name) {
+        return this.kits.stream().filter(kit -> kit.getName().equalsIgnoreCase(name)).findFirst().orElse(null);
+    }
+
+    @Override
+    public void saveKits() {
+        for (Kit kit : this.kits) {
+            FileConfiguration config = configService.getKitsConfig();
+            String key = "kits." + kit.getName();
+            this.kitToConfig(kit, config, key);
+            this.saveKitSettings(config, key, kit);
+            this.savePotionEffects(config, key, kit);
+            configService.saveConfig(configService.getConfigFile("storage/kits.yml"), config);
+        }
+    }
+
+    /**
+     * Method to get a kit by its object.
+     *
+     * @param kit The kit instance.
+     * @return The kit.
+     */
+    public Kit getKit(Kit kit) {
+        return this.kits.stream().filter(k -> k.getName().equalsIgnoreCase(kit.getName())).findFirst().orElse(null);
+    }
+
+    /**
+     * Method to save the settings of a kit.
+     *
+     * @param config The configuration file.
+     * @param key    The path key.
+     * @param kit    The kit.
+     */
+    private void saveKitSettings(FileConfiguration config, String key, Kit kit) {
+        for (KitSetting kitSetting : kit.getKitSettings()) {
+            config.set(key + ".settings." + kitSetting.getName(), kitSetting.isEnabled());
+        }
+    }
+
 
     /**
      * Method to load the potion effects of a kit.
@@ -181,63 +233,43 @@ public class KitService {
      * @param key    The path key.
      */
     private void addMissingKitSettings(Kit kit, FileConfiguration config, String key) {
-        this.plugin.getKitSettingService().getSettings().forEach(setting -> {
+        this.kitSettingService.getSettings().forEach(setting -> {
             if (kit.getKitSettings().stream().noneMatch(kitSetting -> kitSetting.getName().equals(setting.getName()))) {
                 kit.addKitSetting(setting);
-                Logger.log("&cAdded missing kit setting to" + kit.getName() + ": " + setting.getName());
+                Logger.info("&cAdded missing kit setting to &4" + kit.getName() + ": &c" + setting.getName());
                 this.saveKitSettings(config, key, kit);
             }
         });
     }
 
     /**
-     * Method to save all kits to the kits.yml file.
-     */
-    public void saveKits() {
-        for (Kit kit : this.kits) {
-            FileConfiguration config = this.plugin.getConfigService().getKitsConfig();
-            String key = "kits." + kit.getName();
-            this.kitToConfig(kit, config, key);
-            this.saveKitSettings(config, key, kit);
-            this.savePotionEffects(config, key, kit);
-            this.saveBaseRaidingKitData(config, key, kit);
-            this.plugin.getConfigService().saveConfig(this.plugin.getConfigService().getConfigFile("storage/kits.yml"), config);
-        }
-    }
-
-    /**
-     * Method to save the settings of a kit.
+     * Method to apply the default settings to a kit.
      *
      * @param config The configuration file.
      * @param key    The path key.
      * @param kit    The kit.
      */
-    private void saveKitSettings(FileConfiguration config, String key, Kit kit) {
-        for (KitSetting kitSetting : kit.getKitSettings()) {
-            config.set(key + ".settings." + kitSetting.getName(), kitSetting.isEnabled());
-        }
+    public void applyDefaultSettings(FileConfiguration config, String key, Kit kit) {
+        kitSettingService.getSettings().forEach(setting -> {
+            kit.addKitSetting(setting);
+            config.set(key + ".settings." + setting.getName(), setting.isEnabled());
+        });
+
+        configService.saveConfig(configService.getConfigFile("storage/kits.yml"), config);
     }
 
     /**
-     * Method to save the base raiding kit data of a kit.
+     * Method to set up the FFA settings of a kit.
      *
      * @param kit    The kit.
      * @param config The configuration file.
      * @param key    The path key.
      */
-    private void saveBaseRaidingKitData(FileConfiguration config, String key, Kit kit) {
-        BaseRaidingKitData raidingData = kit.getBaseRaidingKitData();
-        if (raidingData == null) return;
-
-        for (EnumBaseRaiderRole role : EnumBaseRaiderRole.values()) {
-            Kit roleKit = raidingData.getKitAssociatedWithRole(role);
-            String path = key + ".raiding-role-kits." + role.name().toLowerCase();
-            if (roleKit != null) {
-                config.set(path, roleKit.getName());
-            } else {
-                config.set(path, null);
-            }
-        }
+    private void setupFFA(Kit kit, FileConfiguration config, String key) {
+        kit.setFfaEnabled(config.getBoolean(key + ".ffa.enabled"));
+        kit.setFfaArenaName(config.getString(key + ".ffa.arena-name"));
+        kit.setMaxFfaPlayers(config.getInt(key + ".ffa.max-players"));
+        kit.setFfaSlot(config.getInt(key + ".ffa.slot"));
     }
 
     /**
@@ -253,126 +285,6 @@ public class KitService {
     }
 
     /**
-     * Method to add a kit to the queue.
-     *
-     * @param kit The kit to add.
-     */
-    private void addKitToQueue(Kit kit) {
-        if (!kit.isEnabled()) return;
-        new Queue(kit, false);
-
-        if (kit.isSettingEnabled(KitSettingRankedImpl.class)) {
-            new Queue(kit, true);
-        }
-    }
-
-    /**
-     * Method to save a kit to the kits.yml file.
-     *
-     * @param kit The kit to save.
-     */
-    public void saveKit(Kit kit) {
-        FileConfiguration config = this.plugin.getConfigService().getKitsConfig();
-        String key = "kits." + kit.getName();
-        this.kitToConfig(kit, config, key);
-
-        if (kit.getKitSettings() == null) {
-            this.applyDefaultSettings(config, key, kit);
-        } else {
-            this.saveKitSettings(config, key, kit);
-        }
-
-        if (kit.getPotionEffects() != null) {
-            this.savePotionEffects(config, key, kit);
-        }
-
-        if (kit.getBaseRaidingKitData() != null) {
-            this.saveBaseRaidingKitData(config, key, kit);
-        }
-
-        this.plugin.getConfigService().saveConfig(this.plugin.getConfigService().getConfigFile("storage/kits.yml"), config);
-    }
-
-    /**
-     * Method to apply the default settings to a kit.
-     *
-     * @param config The configuration file.
-     * @param key    The path key.
-     * @param kit    The kit.
-     */
-    public void applyDefaultSettings(FileConfiguration config, String key, Kit kit) {
-        this.plugin.getKitSettingService().getSettings().forEach(setting -> {
-            kit.addKitSetting(setting);
-            config.set(key + ".settings." + setting.getName(), setting.isEnabled());
-        });
-
-        this.plugin.getConfigService().saveConfig(this.plugin.getConfigService().getConfigFile("storage/kits.yml"), config);
-    }
-
-
-    /**
-     * Method to create a kit.
-     *
-     * @param kitName   The name of the kit.
-     * @param inventory The inventory of the kit.
-     * @param armor     The armor of the kit.
-     * @param icon      The icon of the kit.
-     */
-    public void createKit(String kitName, ItemStack[] inventory, ItemStack[] armor, Material icon) {
-        Kit kit = new Kit(
-                kitName,
-                this.plugin.getConfigService().getSettingsConfig().getString("kit.default-values.display-name").replace("{kit-name}", kitName),
-                this.plugin.getConfigService().getSettingsConfig().getString("kit.default-values.description").replace("{kit-name}", kitName),
-                this.plugin.getConfigService().getSettingsConfig().getString("kit.default-values.disclaimer").replace("{kit-name}", kitName),
-                EnumKitCategory.NORMAL,
-                icon,
-                0,
-                inventory,
-                armor,
-                new ItemStack[0]
-        );
-
-        this.plugin.getKitSettingService().applyAllSettingsToKit(kit);
-        this.kits.add(kit);
-        this.saveKit(kit);
-    }
-
-    /**
-     * Method to delete a kit.
-     *
-     * @param kit The kit to delete.
-     */
-    public void deleteKit(Kit kit) {
-        FileConfiguration config = this.plugin.getConfigService().getKitsConfig();
-        File file = this.plugin.getConfigService().getConfigFile("storage/kits.yml");
-
-        this.kits.remove(kit);
-        config.set("kits." + kit.getName(), null);
-
-        this.plugin.getConfigService().saveConfig(file, config);
-    }
-
-    /**
-     * Method to get a kit by name.
-     *
-     * @param name The name of the kit.
-     * @return The kit.
-     */
-    public Kit getKit(String name) {
-        return this.kits.stream().filter(kit -> kit.getName().equalsIgnoreCase(name)).findFirst().orElse(null);
-    }
-
-    /**
-     * Method to get a kit by its object.
-     *
-     * @param kit The kit instance.
-     * @return The kit.
-     */
-    public Kit getKit(Kit kit) {
-        return this.kits.stream().filter(k -> k.getName().equalsIgnoreCase(kit.getName())).findFirst().orElse(null);
-    }
-
-    /**
      * Method to save a kit to the configuration specified in the parameters with a given key path.
      *
      * @param kit    The kit to save.
@@ -383,6 +295,7 @@ public class KitService {
         config.set(key + ".display-name", kit.getDisplayName());
         config.set(key + ".description", kit.getDescription());
         config.set(key + ".disclaimer", kit.getDisclaimer());
+        config.set(key + ".menu-title", kit.getMenuTitle());
         config.set(key + ".enabled", kit.isEnabled());
         config.set(key + ".editable", kit.isEditable());
         config.set(key + ".category", kit.getCategory().name());
@@ -394,6 +307,7 @@ public class KitService {
         config.set(key + ".ffa.max-players", kit.getMaxFfaPlayers());
         config.set(key + ".items", Serializer.serializeItemStack(kit.getItems()));
         config.set(key + ".armor", Serializer.serializeItemStack(kit.getArmor()));
+        config.set(key + ".knockback-profile", kit.getKnockbackProfile());
         config.set(key + ".editor-items", Serializer.serializeItemStack(kit.getEditorItems()));
     }
 }

@@ -1,6 +1,7 @@
 package dev.revere.alley.game.match.data;
 
 import lombok.Getter;
+import lombok.Setter;
 
 /**
  * @author Emmy
@@ -8,9 +9,13 @@ import lombok.Getter;
  * @since 29/05/2025
  */
 @Getter
+@Setter
 public abstract class AbstractMatchData {
     private final String kit;
     private final String arena;
+
+    private final long creationTime;
+    private boolean ranked;
 
     /**
      * Constructor for the AbstractMatchData class.
@@ -21,5 +26,7 @@ public abstract class AbstractMatchData {
     public AbstractMatchData(String kit, String arena) {
         this.kit = kit;
         this.arena = arena;
+        this.creationTime = System.currentTimeMillis();
+        this.ranked = false;
     }
 }

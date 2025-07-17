@@ -42,6 +42,11 @@ public final class TimeUtil {
         return String.format("%02d:%02d", minutes, seconds);
     }
 
+    public static String formatLongMin(final long time) {
+        final long totalSecs = time / 1000L;
+        return String.format("%02d:%02d", totalSecs / 60L, totalSecs % 60L);
+    }
+
     /**
      * Converts milliseconds to a seconds format. (00)
      *

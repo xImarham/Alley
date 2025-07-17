@@ -3,6 +3,7 @@ package dev.revere.alley.profile.command.admin.statistic;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
+import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.menu.reset.ResetConfirmMenu;
 import dev.revere.alley.util.PlayerUtil;
@@ -26,7 +27,7 @@ public class ResetStatsCommand extends BaseCommand {
         String[] args = command.getArgs();
 
         if (args.length < 1) {
-            player.sendMessage(CC.translate("&6Usage: &e/resetstats &b<player>"));
+            player.sendMessage(CC.translate("&6Usage: &e/resetstats &6<player>"));
             return;
         }
 
@@ -39,7 +40,7 @@ public class ResetStatsCommand extends BaseCommand {
             return;
         }
 
-        Profile profile = this.plugin.getProfileService().getProfile(uuid);
+        Profile profile = this.plugin.getService(IProfileService.class).getProfile(uuid);
         if (profile == null) {
             player.sendMessage(CC.translate("&cThat player does not exist."));
             return;

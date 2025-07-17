@@ -1,11 +1,12 @@
 package dev.revere.alley.task;
 
 import dev.revere.alley.Alley;
-import dev.revere.alley.base.combat.CombatService;
+import dev.revere.alley.base.combat.ICombatService;
 import dev.revere.alley.game.duel.DuelRequest;
-import dev.revere.alley.game.duel.DuelRequestService;
+import dev.revere.alley.game.duel.IDuelRequestService;
+import dev.revere.alley.game.match.snapshot.ISnapshotRepository;
+import dev.revere.alley.game.party.IPartyService;
 import dev.revere.alley.game.party.PartyRequest;
-import dev.revere.alley.game.party.PartyService;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -32,7 +33,7 @@ public class RepositoryCleanupTask extends BukkitRunnable {
 
     @Override
     public void run() {
-        CombatService combatService = this.plugin.getCombatService();
+        ICombatService combatService = Alley.getInstance().getService(ICombatService.class);
         if (!combatService.getCombatMap().isEmpty()) {
             combatService.getCombatMap().forEach((uuid, combat) -> {
                 Player player = this.plugin.getServer().getPlayer(uuid);
@@ -42,7 +43,7 @@ public class RepositoryCleanupTask extends BukkitRunnable {
             });
         }
 
-        DuelRequestService duelRequestService = this.plugin.getDuelRequestService();
+        IDuelRequestService duelRequestService = Alley.getInstance().getService(IDuelRequestService.class);
         if (!duelRequestService.getDuelRequests().isEmpty()) {
             List<DuelRequest> expiredRequests = new ArrayList<>();
             synchronized (duelRequestService.getDuelRequests()) {
@@ -57,7 +58,10 @@ public class RepositoryCleanupTask extends BukkitRunnable {
             this.notifyDuelRequestIndividuals(expiredRequests);
         }
 
-        PartyService partyService = this.plugin.getPartyService();
+        ISnapshotRepository snapshotRepository = Alley.getInstance().getService(ISnapshotRepository.class);
+        snapshotRepository.getSnapshots().entrySet().removeIf(entry -> System.currentTimeMillis() - entry.getValue().getCreatedAt() >= 60_000);
+
+        IPartyService partyService = Alley.getInstance().getService(IPartyService.class);
         if (!partyService.getParties().isEmpty()) {
             List<PartyRequest> expiredRequests = new ArrayList<>();
             synchronized (partyService.getPartyRequests()) {
@@ -80,6 +84,10 @@ public class RepositoryCleanupTask extends BukkitRunnable {
      */
     private void notifyDuelRequestIndividuals(List<DuelRequest> expiredRequests) {
         expiredRequests.forEach(duelRequest -> {
+            if (duelRequest.getSender() == null || duelRequest.getTarget() == null) {
+                return;
+            }
+
             duelRequest.getSender().sendMessage(CC.translate("&cYour duel request to " + duelRequest.getTarget().getName() + " has expired."));
             duelRequest.getTarget().sendMessage(CC.translate("&cThe duel request from " + duelRequest.getSender().getName() + " has expired."));
         });
@@ -92,8 +100,12 @@ public class RepositoryCleanupTask extends BukkitRunnable {
      */
     private void notifyPartyRequestIndividuals(List<PartyRequest> partyRequests) {
         partyRequests.forEach(partyRequest -> {
-            partyRequest.getSender().sendMessage(CC.translate("&cYour party request to &b" + partyRequest.getSender().getName() + " &chas expired."));
-            partyRequest.getTarget().sendMessage(CC.translate("&cThe party request from &b" + partyRequest.getTarget().getName() + " &chas expired."));
+            if (partyRequest.getSender() == null || partyRequest.getTarget() == null) {
+                return;
+            }
+
+            partyRequest.getSender().sendMessage(CC.translate("&cYour party request to &6" + partyRequest.getSender().getName() + " &chas expired."));
+            partyRequest.getTarget().sendMessage(CC.translate("&cThe party request from &6" + partyRequest.getTarget().getName() + " &chas expired."));
         });
     }
 }

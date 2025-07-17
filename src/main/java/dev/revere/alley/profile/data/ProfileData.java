@@ -2,8 +2,11 @@ package dev.revere.alley.profile.data;
 
 import com.google.common.collect.Maps;
 import dev.revere.alley.Alley;
+import dev.revere.alley.base.kit.IKitService;
 import dev.revere.alley.base.kit.Kit;
 import dev.revere.alley.base.kit.setting.impl.mode.KitSettingRankedImpl;
+import dev.revere.alley.feature.level.ILevelService;
+import dev.revere.alley.feature.title.ITitleService;
 import dev.revere.alley.feature.title.record.TitleRecord;
 import dev.revere.alley.game.match.data.AbstractMatchData;
 import dev.revere.alley.profile.Profile;
@@ -36,7 +39,6 @@ public class ProfileData {
     private ProfileCosmeticData cosmeticData;
     private ProfilePlayTimeData playTimeData;
 
-    //should probably be a map or a data class... will do.
     private List<AbstractMatchData> previousMatches;
 
     private List<String> unlockedTitles;
@@ -69,7 +71,8 @@ public class ProfileData {
     }
 
     private void feedDataClasses() {
-        for (Kit kit : Alley.getInstance().getKitService().getKits()) {
+        IKitService kitService = Alley.getInstance().getService(IKitService.class);
+        for (Kit kit : kitService.getKits()) {
             this.rankedKitData.put(kit.getName(), new ProfileRankedKitData());
             this.unrankedKitData.put(kit.getName(), new ProfileUnrankedKitData());
             this.ffaData.put(kit.getName(), new ProfileFFAData());
@@ -89,7 +92,8 @@ public class ProfileData {
      * @return the global elo of the player
      */
     private int calculateGlobalElo(Profile profile) {
-        List<Kit> rankedKits = Alley.getInstance().getKitService().getKits().stream()
+        IKitService kitService = Alley.getInstance().getService(IKitService.class);
+        List<Kit> rankedKits = kitService.getKits().stream()
                 .filter(kit -> kit.isSettingEnabled(KitSettingRankedImpl.class))
                 .collect(Collectors.toList());
 
@@ -108,7 +112,9 @@ public class ProfileData {
     }
 
     public void determineTitles() {
-        for (TitleRecord title : Alley.getInstance().getTitleService().getTitles().values()) {
+        ITitleService titleService = Alley.getInstance().getService(ITitleService.class);
+
+        for (TitleRecord title : titleService.getTitles().values()) {
             if (this.unrankedKitData.get(title.getKit().getName()).getDivision() == title.getRequiredDivision()) {
                 if (!this.unlockedTitles.contains(title.getKit().getName())) {
                     this.unlockedTitles.add(title.getKit().getName());
@@ -118,7 +124,8 @@ public class ProfileData {
     }
 
     public void determineLevel() {
-        this.globalLevel = Alley.getInstance().getLevelService().getLevel(this.elo).getName();
+        ILevelService levelService = Alley.getInstance().getService(ILevelService.class);
+        this.globalLevel = levelService.getLevel(this.elo).getName();
     }
 
     /**
@@ -128,10 +135,11 @@ public class ProfileData {
      */
     public void updateElo(Profile profile) {
         int previousElo = this.elo;
-        String previousLevel = Alley.getInstance().getLevelService().getLevel(previousElo).getName();
+        ILevelService levelService = Alley.getInstance().getService(ILevelService.class);
+        String previousLevel = levelService.getLevel(previousElo).getName();
 
         this.elo = this.calculateGlobalElo(profile);
-        String newLevel = Alley.getInstance().getLevelService().getLevel(this.elo).getName();
+        String newLevel = levelService.getLevel(this.elo).getName();
 
         if (!newLevel.equals(previousLevel)) {
             this.sendLevelUpMessage(profile, newLevel);
@@ -147,8 +155,8 @@ public class ProfileData {
     private void sendLevelUpMessage(Profile profile, String newLevel) {
         Arrays.asList(
                 "",
-                "&b&lNEW LEVEL &f| &a&lCONGRATULATIONS!",
-                " &fYou have reached &b" + newLevel + " &fin the global ranking system.",
+                "&6&lNEW LEVEL &f| &a&lCONGRATULATIONS!",
+                " &fYou have reached &6" + newLevel + " &fin the global ranking system.",
                 ""
         ).forEach(line -> Bukkit.getPlayer(profile.getUuid()).sendMessage(CC.translate(line)));
     }

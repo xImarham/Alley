@@ -3,6 +3,7 @@ package dev.revere.alley.game.match.utility;
 import dev.revere.alley.Alley;
 import dev.revere.alley.base.arena.AbstractArena;
 import dev.revere.alley.base.kit.setting.impl.mode.*;
+import dev.revere.alley.config.IConfigService;
 import dev.revere.alley.game.match.AbstractMatch;
 import dev.revere.alley.game.match.enums.EnumMatchState;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
@@ -14,6 +15,8 @@ import net.md_5.bungee.api.chat.*;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
+
+import java.util.UUID;
 
 /**
  * @author Emmy
@@ -55,7 +58,7 @@ public class MatchUtility {
                 || profile.getMatch().getKit().isSettingEnabled(KitSettingLivesImpl.class)
                 || profile.getMatch().getKit().isSettingEnabled(KitSettingRoundsImpl.class)
                 || profile.getMatch().getKit().isSettingEnabled(KitSettingStickFightImpl.class)
-                || profile.getMatch().getKit().isSettingEnabled(KitSettingParkourImpl.class)) {
+                || profile.getMatch().getKit().isSettingEnabled(KitSettingCheckpointImpl.class)) {
             withinBounds = location.getX() >= minX && location.getX() <= maxX && location.getZ() >= minZ && location.getZ() <= maxZ;
         } else {
             withinBounds = location.getX() >= minX && location.getX() <= maxX && location.getY() >= minY && location.getY() <= maxY && location.getZ() >= minZ && location.getZ() <= maxZ;
@@ -65,23 +68,25 @@ public class MatchUtility {
     }
 
     /**
-     * Sends the match result message.
+     * Sends a match result message to all participants and spectators.
      *
-     * @param match      The match.
-     * @param winnerName The name of the winner.
-     * @param loserName  The name of the loser.
+     * @param match         The match.
+     * @param winnerName    The name of the winning team.
+     * @param loserName     The name of the losing team.
+     * @param winnerUuid    The UUID of the winning team.
+     * @param loserUuid     The UUID of the losing team.
      */
-    public void sendMatchResult(AbstractMatch match, String winnerName, String loserName) {
-        FileConfiguration config = plugin.getConfigService().getMessagesConfig();
+    public void sendMatchResult(AbstractMatch match, String winnerName, String loserName, UUID winnerUuid, UUID loserUuid) {
+        FileConfiguration config = Alley.getInstance().getService(IConfigService.class).getMessagesConfig();
 
         String path = "match.ended.match-result.regular.";
 
-        String winnerCommand = config.getString(path + "winner.command").replace("{winner}", winnerName);
+        String winnerCommand = config.getString(path + "winner.command").replace("{winner}", String.valueOf(winnerUuid));
         String winnerHover = config.getString(path + "winner.hover").replace("{winner}", winnerName);
-        String loserCommand = config.getString(path + "loser.command").replace("{loser}", loserName);
+        String loserCommand = config.getString(path + "loser.command").replace("{loser}", String.valueOf(loserUuid));
         String loserHover = config.getString(path + "loser.hover").replace("{loser}", loserName);
 
-        for (String line : plugin.getConfigService().getMessagesConfig().getStringList(path + "format")) {
+        for (String line : Alley.getInstance().getService(IConfigService.class).getMessagesConfig().getStringList(path + "format")) {
             if (line.contains("{winner}") && line.contains("{loser}")) {
                 String[] parts = line.split("\\{winner}", 2);
 
@@ -142,15 +147,14 @@ public class MatchUtility {
      * @param loserParticipant  The loser participant.
      */
     public void sendConjoinedMatchResult(AbstractMatch match, GameParticipant<MatchGamePlayerImpl> winnerParticipant, GameParticipant<MatchGamePlayerImpl> loserParticipant) {
-        String winnerTeamName = winnerParticipant.getPlayer().getUsername();
-        String loserTeamName = loserParticipant.getPlayer().getUsername();
+        String winnerTeamName = winnerParticipant.getLeader().getUsername();
+        String loserTeamName = loserParticipant.getLeader().getUsername();
 
         match.sendMessage("");
         match.sendMessage(CC.translate("&aWinner Team: &f" + winnerTeamName));
 
-        for (MatchGamePlayerImpl player : winnerParticipant.getPlayers()) {
-            Player bukkitPlayer = player.getPlayer();
-            String playerName = bukkitPlayer.getName();
+        for (MatchGamePlayerImpl player : winnerParticipant.getAllPlayers()) {
+            String playerName = player.getUsername();
 
             TextComponent playerComponent = new TextComponent(CC.translate("&7- &f" + playerName));
             playerComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/inventory " + playerName));
@@ -163,9 +167,8 @@ public class MatchUtility {
         match.sendMessage("");
         match.sendMessage(CC.translate("&cLoser Team: &f" + loserTeamName));
 
-        for (MatchGamePlayerImpl player : loserParticipant.getPlayers()) {
-            Player bukkitPlayer = player.getPlayer();
-            String playerName = bukkitPlayer.getName();
+        for (MatchGamePlayerImpl player : loserParticipant.getAllPlayers()) {
+            String playerName = player.getUsername();
 
             TextComponent playerComponent = new TextComponent(CC.translate("&7- &f" + playerName));
             playerComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/inventory " + playerName));

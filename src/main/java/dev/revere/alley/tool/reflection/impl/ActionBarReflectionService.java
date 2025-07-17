@@ -1,12 +1,17 @@
 package dev.revere.alley.tool.reflection.impl;
 
 import dev.revere.alley.Alley;
+import dev.revere.alley.config.IConfigService;
+import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.tool.logger.Logger;
 import dev.revere.alley.tool.reflection.IReflection;
 import dev.revere.alley.util.chat.CC;
+import dev.revere.alley.util.chat.Symbol;
 import net.minecraft.server.v1_8_R3.IChatBaseComponent;
 import net.minecraft.server.v1_8_R3.PacketPlayOutChat;
+import org.bukkit.ChatColor;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -16,17 +21,6 @@ import org.bukkit.scheduler.BukkitRunnable;
  * @since 03/04/2025
  */
 public class ActionBarReflectionService implements IReflection {
-    protected final Alley plugin;
-
-    /**
-     * Constructor for the ActionBarReflectionService class.
-     *
-     * @param plugin The Alley plugin instance.
-     */
-    public ActionBarReflectionService(Alley plugin) {
-        this.plugin = plugin;
-    }
-
     /**
      * Method to send an action bar message to a player in a specific interval.
      *
@@ -48,7 +42,7 @@ public class ActionBarReflectionService implements IReflection {
                         PacketPlayOutChat clearPacket = new PacketPlayOutChat(clearChatBaseComponent, (byte) 2);
                         sendPacket(player, clearPacket);
                     }
-                }.runTaskLater(this.plugin, durationSeconds * 20L);
+                }.runTaskLater(Alley.getInstance(), durationSeconds * 20L);
             }
         } catch (Exception exception) {
             Logger.logException("An error occurred while trying to send an action bar message to " + player.getName(), exception);
@@ -78,7 +72,49 @@ public class ActionBarReflectionService implements IReflection {
      * @param victim The player who died.
      */
     public void sendDeathMessage(Player killer, Player victim) {
-        Profile victimProfile = this.plugin.getProfileService().getProfile(victim.getUniqueId());
-        this.sendMessage(killer, "&c&lKILL! &f" + victimProfile.getNameColor() + victim.getName(), 3);
+        Profile victimProfile = Alley.getInstance().getService(IProfileService.class).getProfile(victim.getUniqueId());
+        this.sendMessage(killer, "&c&lKILL! &f" + victimProfile.getFancyName(), 3);
+    }
+
+    /**
+     * Visualizes the target's health in the action bar for a player.
+     *
+     * @param player The player who will see the target's health.
+     * @param target The player whose health will be visualized.
+     */
+    public void visualizeTargetHealth(Player player, Player target) {
+        FileConfiguration config = Alley.getInstance().getService(IConfigService.class).getVisualsConfig();
+        String path = "game.health-bar";
+
+        String symbol = config.getString(path + ".symbol.appearance", Symbol.HEART);
+        String fullColor = config.getString(path + ".symbol.color.full", "&a&l");
+        String emptyColor = config.getString(path + ".symbol.color.empty", "&7&l");
+
+        boolean roundUp = config.getBoolean(path + ".round-up-health", true);
+
+        int maxHealth = (int) target.getMaxHealth() / 2;
+        double rawHealth = target.getHealth() / 2;
+        int currentHealth = roundUp ? (int) Math.ceil(rawHealth) : (int) Math.floor(rawHealth);
+
+        StringBuilder healthBar = new StringBuilder();
+        for (int i = 0; i < maxHealth; i++) {
+            if (i < currentHealth) {
+                healthBar.append(CC.translate(fullColor + symbol));
+            } else {
+                healthBar.append(CC.translate(emptyColor + symbol));
+            }
+        }
+
+        ChatColor nameColor = Alley.getInstance().getService(IProfileService.class).getProfile(target.getUniqueId()).getNameColor();
+
+        String template = config.getString(path + ".message-format", "&6{name-color}{target} &f{health-bar}");
+        String message = CC.translate(
+                template
+                        .replace("{target}", target.getName())
+                        .replace("{name-color}", nameColor.toString())
+                        .replace("{health-bar}", healthBar.toString())
+        );
+
+        this.sendMessage(player, message);
     }
 }

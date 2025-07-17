@@ -1,56 +1,42 @@
 package dev.revere.alley.provider.scoreboard.impl.match.impl.type;
 
-import dev.revere.alley.Alley;
+import dev.revere.alley.base.kit.setting.impl.mode.KitSettingStickFightImpl;
 import dev.revere.alley.game.match.impl.MatchRoundsImpl;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.profile.Profile;
-import dev.revere.alley.provider.scoreboard.impl.match.IMatchScoreboard;
-import dev.revere.alley.util.chat.CC;
+import dev.revere.alley.provider.scoreboard.impl.match.AbstractMatchScoreboard;
+import dev.revere.alley.provider.scoreboard.impl.match.annotation.ScoreboardData;
 import dev.revere.alley.util.visual.ScoreboardUtil;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
- * @author Emmy
+ * @author Remi
  * @project Alley
- * @since 30/04/2025
+ * @since 26/06/2025
  */
-public class MatchScoreboardStickFightImpl implements IMatchScoreboard {
-    protected final Alley plugin;
-
-    /**
-     * Constructor for the MatchScoreboardStickFightImpl class.
-     *
-     * @param plugin The Alley plugin instance.
-     */
-    public MatchScoreboardStickFightImpl(Alley plugin) {
-        this.plugin = plugin;
+@ScoreboardData(kit = KitSettingStickFightImpl.class)
+public class MatchScoreboardStickFightImpl extends AbstractMatchScoreboard {
+    @Override
+    protected String getSoloConfigPath() {
+        return "scoreboard.lines.playing.solo.stickfight-match";
     }
 
     @Override
-    public List<String> getLines(Profile profile, Player player, GameParticipant<MatchGamePlayerImpl> you, GameParticipant<MatchGamePlayerImpl> opponent) {
-        List<String> scoreboardLines = new ArrayList<>();
+    protected String getTeamConfigPath() {
+        return "scoreboard.lines.playing.team.stickfight-match";
+    }
 
+    @Override
+    protected String replacePlaceholders(String line, Profile profile, Player player, GameParticipant<MatchGamePlayerImpl> you, GameParticipant<MatchGamePlayerImpl> opponent) {
+        String baseLine = super.replacePlaceholders(line, profile, player, you, opponent);
         MatchRoundsImpl roundsMatch = (MatchRoundsImpl) profile.getMatch();
 
-        for (String line : this.plugin.getConfigService().getScoreboardConfig().getStringList("scoreboard.lines.playing.solo.stickfight-match")) {
-            scoreboardLines.add(CC.translate(line)
-                    .replaceAll("\\{opponent}", this.getColoredName(this.plugin.getProfileService().getProfile(opponent.getPlayer().getUuid())))
-                    .replaceAll("\\{opponent-ping}", String.valueOf(this.getPing(opponent.getPlayer().getPlayer())))
-                    .replaceAll("\\{player-ping}", String.valueOf(this.getPing(player)))
-                    .replaceAll("\\{goals}", ScoreboardUtil.visualizeGoals(roundsMatch.getParticipantA().getPlayer().getData().getScore(), 5))
-                    .replaceAll("\\{opponent-goals}", ScoreboardUtil.visualizeGoals(roundsMatch.getParticipantB().getPlayer().getData().getScore(), 5))
-                    .replaceAll("\\{current-round}", String.valueOf(roundsMatch.getCurrentRound()))
-                    .replaceAll("\\{duration}", profile.getMatch().getDuration())
-                    .replaceAll("\\{color}", String.valueOf(roundsMatch.getTeamAColor()))
-                    .replaceAll("\\{opponent-color}", String.valueOf(roundsMatch.getTeamBColor()))
-                    .replaceAll("\\{arena}", profile.getMatch().getArena().getDisplayName() == null ? "&c&lNULL" : profile.getMatch().getArena().getDisplayName())
-                    .replaceAll("\\{kit}", profile.getMatch().getKit().getDisplayName()));
-        }
-
-        return scoreboardLines;
+        return baseLine
+                .replace("{goals}", ScoreboardUtil.visualizeGoals(roundsMatch.getParticipantA().getLeader().getData().getScore(), 5))
+                .replace("{opponent-goals}", ScoreboardUtil.visualizeGoals(roundsMatch.getParticipantB().getLeader().getData().getScore(), 5))
+                .replace("{current-round}", String.valueOf(roundsMatch.getCurrentRound()))
+                .replace("{color}", String.valueOf(roundsMatch.getTeamAColor()))
+                .replace("{opponent-color}", String.valueOf(roundsMatch.getTeamBColor()));
     }
 }

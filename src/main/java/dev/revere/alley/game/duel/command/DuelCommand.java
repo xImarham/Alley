@@ -3,9 +3,12 @@ package dev.revere.alley.game.duel.command;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
-import dev.revere.alley.game.duel.menu.DuelKitSelectorMenu;
+import dev.revere.alley.base.server.IServerService;
+import dev.revere.alley.config.locale.impl.ProfileLocale;
+import dev.revere.alley.game.duel.IDuelRequestService;
+import dev.revere.alley.game.duel.menu.DuelRequestMenu;
+import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
-import dev.revere.alley.profile.enums.EnumProfileState;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.entity.Player;
 
@@ -22,7 +25,7 @@ public class DuelCommand extends BaseCommand {
         String[] args = command.getArgs();
 
         if (args.length < 1) {
-            player.sendMessage(CC.translate("&6Usage: &e/duel &b<player>"));
+            player.sendMessage(CC.translate("&6Usage: &e/duel &6<player>"));
             return;
         }
 
@@ -37,27 +40,30 @@ public class DuelCommand extends BaseCommand {
             return;
         }
 
-        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
-        if (profile.getState() != EnumProfileState.LOBBY) {
-            player.sendMessage(CC.translate("&cYou must be in the lobby to duel a player."));
+        IDuelRequestService duelRequestService = this.plugin.getService(IDuelRequestService.class);
+        if (duelRequestService.getDuelRequest(player, target) != null) {
+            player.sendMessage(CC.translate("&cYou already have a pending duel request with this player."));
             return;
         }
 
-        Profile targetProfile = this.plugin.getProfileService().getProfile(target.getUniqueId());
-        if (targetProfile.getParty() != null && profile.getParty() == null) {
-            player.sendMessage(CC.translate("&cThat player is in a party and you're not. You can't duel them."));
+        IServerService serverService = this.plugin.getService(IServerService.class);
+        if (!serverService.isQueueingAllowed()) {
+            player.sendMessage(CC.translate("&cQueueing is temporarily disabled. Please try again later."));
+            player.closeInventory();
             return;
         }
 
-        if (profile.getParty() != null && targetProfile.getParty() != null) {
-            player.sendMessage(CC.translate("&cYou're both in a party and dueling other parties through this command is not implemented yet."));
+        Profile targetProfile = this.plugin.getService(IProfileService.class).getProfile(target.getUniqueId());
+        if (!targetProfile.getProfileData().getSettingData().isReceiveDuelRequestsEnabled()) {
+            player.sendMessage(CC.translate("&cThis player has disabled duel requests."));
             return;
         }
 
-        if (this.plugin.getServerService().isQueueingEnabled(player)) {
+        if (targetProfile.isBusy()) {
+            player.sendMessage(ProfileLocale.IS_BUSY.getMessage().replace("{color}", String.valueOf(targetProfile.getNameColor())).replace("{player}", target.getName()));
             return;
         }
 
-        new DuelKitSelectorMenu(target).openMenu(player);
+        new DuelRequestMenu(target).openMenu(player);
     }
 }

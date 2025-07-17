@@ -3,6 +3,7 @@ package dev.revere.alley.game.match.command.admin.impl;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
+import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.Bukkit;
@@ -22,7 +23,7 @@ public class MatchInfoCommand extends BaseCommand {
         String[] args = command.getArgs();
 
         if (args.length == 0) {
-            sender.sendMessage(CC.translate("&6Usage: &e/match info &b<player>"));
+            sender.sendMessage(CC.translate("&6Usage: &e/match info &6<player>"));
             return;
         }
 
@@ -33,7 +34,7 @@ public class MatchInfoCommand extends BaseCommand {
             return;
         }
 
-        Profile profile = this.plugin.getProfileService().getProfile(target.getUniqueId());
+        Profile profile = this.plugin.getService(IProfileService.class).getProfile(target.getUniqueId());
         if (profile.getMatch() == null) {
             sender.sendMessage(CC.translate("&cThis player is not in a match."));
             return;
@@ -41,9 +42,9 @@ public class MatchInfoCommand extends BaseCommand {
 
         sender.sendMessage(CC.translate("&c&lMatch Information"));
         sender.sendMessage(CC.translate(" &f&l● &fPlayers:"));
-        profile.getMatch().getParticipants().forEach(participant ->
-                sender.sendMessage(CC.translate("   &f* &c" + participant.getPlayer().getPlayer().getName()))
-        );
+        profile.getMatch().getParticipants().forEach(gameParticipant -> gameParticipant.getPlayers().forEach(gamePlayer -> {
+            sender.sendMessage(CC.translate("   &f* &c" + gamePlayer.getUsername()));
+        }));
 
         sender.sendMessage(CC.translate(" &f&l● &fSpectators:"));
         if (profile.getMatch().getSpectators().isEmpty()) {

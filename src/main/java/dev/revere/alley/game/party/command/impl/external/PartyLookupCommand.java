@@ -3,6 +3,7 @@ package dev.revere.alley.game.party.command.impl.external;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
+import dev.revere.alley.game.party.IPartyService;
 import dev.revere.alley.game.party.Party;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.entity.Player;
@@ -22,7 +23,7 @@ public class PartyLookupCommand extends BaseCommand {
         String[] args = command.getArgs();
 
         if (args.length < 1) {
-            player.sendMessage(CC.translate("&6Usage: &e/party lookup &b<player>"));
+            player.sendMessage(CC.translate("&6Usage: &e/party lookup &6<player>"));
             return;
         }
 
@@ -32,18 +33,18 @@ public class PartyLookupCommand extends BaseCommand {
             return;
         }
 
-        Party party = this.plugin.getPartyService().getParty(target);
+        Party party = this.plugin.getService(IPartyService.class).getParty(target);
         if (party == null) {
             player.sendMessage(CC.translate("&cThis player is not in a party."));
             return;
         }
 
         Arrays.asList(
-                "&b&l" + party.getLeader().getName() + "'s Party",
-                " &f● &bLeader: &f" + party.getLeader().getName(),
-                " &f● &bMembers: &f" + party.getMembers().size(),
-                " &f● &bStatus: &f" + (party.getState().getName()),
-                " &f● &bPrivacy: &f" + (party.getState().getDescription()
+                "&6&l" + party.getLeader().getName() + "'s Party",
+                " &f● &6Leader: &f" + party.getLeader().getName(),
+                " &f● &6Members: &f" + party.getMembers().size(),
+                " &f● &6Status: &f" + (party.getState().getName()),
+                " &f● &6Privacy: &f" + (party.getState().getDescription()
                 )).forEach(msg -> player.sendMessage(CC.translate(msg)));
     }
 }

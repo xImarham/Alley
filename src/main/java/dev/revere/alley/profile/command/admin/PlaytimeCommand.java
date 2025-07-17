@@ -3,6 +3,7 @@ package dev.revere.alley.profile.command.admin;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
+import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.data.impl.ProfilePlayTimeData;
 import dev.revere.alley.tool.date.DateFormatter;
@@ -39,7 +40,7 @@ public class PlaytimeCommand extends BaseCommand {
             return;
         }
 
-        Profile targetProfile = this.plugin.getProfileService().getProfile(targetPlayer.getUniqueId());
+        Profile targetProfile = this.plugin.getService(IProfileService.class).getProfile(targetPlayer.getUniqueId());
         if (targetProfile == null) {
             sender.sendMessage(CC.translate("&cThe player profile could not be found."));
             return;
@@ -59,13 +60,13 @@ public class PlaytimeCommand extends BaseCommand {
 
         List<String> messages = new ArrayList<>();
         messages.add("");
-        messages.add("&b&l" + targetPlayer.getName() + "'s Playtime");
-        messages.add("  &f&l● &bDays: &f" + days);
-        messages.add("  &f&l● &bHours: &f" + hours);
-        messages.add("  &f&l● &bMinutes: &f" + minutes);
-        messages.add("  &f&l● &bSeconds: &f" + seconds);
+        messages.add("&6&l" + targetPlayer.getName() + "'s Playtime");
+        messages.add("  &f&l● &6Days: &f" + days);
+        messages.add("  &f&l● &6Hours: &f" + hours);
+        messages.add("  &f&l● &6Minutes: &f" + minutes);
+        messages.add("  &f&l● &6Seconds: &f" + seconds);
         messages.add("");
-        messages.add("&fTheir first join was on &b" + firstJoinFormatted.setFancy(ChatColor.AQUA, ChatColor.WHITE) + "&f.");
+        messages.add("&fTheir first join was on &6" + firstJoinFormatted.setFancy(ChatColor.AQUA, ChatColor.WHITE) + "&f.");
         messages.add("");
 
         if (targetProfile.isOnline()) {

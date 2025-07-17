@@ -3,6 +3,8 @@ package dev.revere.alley.game.match.command.admin.impl;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
+import dev.revere.alley.game.match.enums.EnumMatchState;
+import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
 import dev.revere.alley.util.chat.CC;
@@ -21,7 +23,7 @@ public class MatchCancelCommand extends BaseCommand {
         String[] args = command.getArgs();
 
         if (args.length != 1) {
-            player.sendMessage(CC.translate("&6Usage: &e/match cancel &b<player>"));
+            player.sendMessage(CC.translate("&6Usage: &e/match cancel &6<player>"));
             return;
         }
 
@@ -31,14 +33,17 @@ public class MatchCancelCommand extends BaseCommand {
             return;
         }
 
-        Profile profile = this.plugin.getProfileService().getProfile(target.getUniqueId());
+        Profile profile = this.plugin.getService(IProfileService.class).getProfile(target.getUniqueId());
 
         if (profile.getState() != EnumProfileState.PLAYING || profile.getMatch() == null) {
             player.sendMessage(CC.translate("&cThat player is not in a match."));
             return;
         }
 
-        profile.getMatch().endMatch();
-        player.sendMessage(CC.translate("&aYou have ended the match for &b" + target.getName() + "&a."));
+        profile.getMatch().handleRoundEnd();
+        profile.getMatch().setState(EnumMatchState.ENDING_MATCH);
+        profile.getMatch().getRunnable().setStage(4);
+
+        player.sendMessage(CC.translate("&aYou have ended the match for &6" + target.getName() + "&a."));
     }
 }

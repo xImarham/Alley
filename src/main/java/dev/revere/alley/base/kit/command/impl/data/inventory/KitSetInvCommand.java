@@ -3,12 +3,11 @@ package dev.revere.alley.base.kit.command.impl.data.inventory;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
+import dev.revere.alley.base.kit.IKitService;
 import dev.revere.alley.base.kit.Kit;
-import dev.revere.alley.base.kit.KitService;
 import dev.revere.alley.config.locale.impl.KitLocale;
 import dev.revere.alley.util.InventoryUtil;
 import dev.revere.alley.util.chat.CC;
-import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -25,19 +24,14 @@ public class KitSetInvCommand extends BaseCommand {
         String[] args = command.getArgs();
 
         if (args.length < 1) {
-            player.sendMessage(CC.translate("&6Usage: &e/kit setinventory &b<kitName>"));
+            player.sendMessage(CC.translate("&6Usage: &e/kit setinventory &6<kitName>"));
             return;
         }
 
-        KitService kitService = this.plugin.getKitService();
+        IKitService kitService = this.plugin.getService(IKitService.class);
         Kit kit = kitService.getKit(args[0]);
         if (kit == null) {
             player.sendMessage(CC.translate(KitLocale.KIT_NOT_FOUND.getMessage()));
-            return;
-        }
-
-        if (player.getGameMode() == GameMode.CREATIVE) {
-            player.sendMessage(CC.translate(KitLocale.KIT_CANNOT_SET_IN_CREATIVE.getMessage()));
             return;
         }
 

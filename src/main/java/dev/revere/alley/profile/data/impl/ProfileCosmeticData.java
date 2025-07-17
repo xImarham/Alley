@@ -1,13 +1,8 @@
 package dev.revere.alley.profile.data.impl;
 
 import dev.revere.alley.Alley;
-import dev.revere.alley.feature.cosmetic.impl.killeffect.AbstractKillEffect;
-import dev.revere.alley.feature.cosmetic.impl.killeffect.KillEffectRepository;
-import dev.revere.alley.feature.cosmetic.impl.killeffect.impl.NoneKillEffect;
-import dev.revere.alley.feature.cosmetic.impl.soundeffect.AbstractSoundEffect;
-import dev.revere.alley.feature.cosmetic.impl.soundeffect.SoundEffectRepository;
-import dev.revere.alley.feature.cosmetic.impl.soundeffect.impl.NoneSoundEffect;
-import dev.revere.alley.feature.cosmetic.interfaces.ICosmetic;
+import dev.revere.alley.feature.cosmetic.AbstractCosmetic;
+import dev.revere.alley.feature.cosmetic.EnumCosmeticType;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -22,71 +17,70 @@ public class ProfileCosmeticData {
     protected final Alley plugin = Alley.getInstance();
     private String selectedKillEffect;
     private String selectedSoundEffect;
+    private String selectedProjectileTrail;
+    private String selectedKillMessage;
 
     public ProfileCosmeticData() {
-        KillEffectRepository killEffectRepository = this.plugin.getCosmeticRepository().getCosmeticRepository(KillEffectRepository.class);
-        this.selectedKillEffect = killEffectRepository.getCosmetics().isEmpty() ? "None" : killEffectRepository.getCosmetic(NoneKillEffect.class).getName();
-
-        SoundEffectRepository soundEffectRepository = this.plugin.getCosmeticRepository().getCosmeticRepository(SoundEffectRepository.class);
-        this.selectedSoundEffect = soundEffectRepository.getCosmetics().isEmpty() ? "None" : soundEffectRepository.getCosmetic(NoneSoundEffect.class).getName();
+        this.selectedKillEffect = "None";
+        this.selectedSoundEffect = "None";
+        this.selectedProjectileTrail = "None";
+        this.selectedKillMessage = "None";
     }
 
     /**
-     * Set the active cosmetic
+     * Sets the active cosmetic for the correct category using its type.
      *
-     * @param type the type of cosmetic
-     * @param name the cosmetic to set
+     * @param cosmetic The cosmetic object to select.
      */
-    public void setActiveCosmetic(String type, ICosmetic name) {
-        if (type.equalsIgnoreCase("KillEffect")) {
-            this.selectedKillEffect = name.getName();
-        } else if (type.equalsIgnoreCase("SoundEffect")) {
-            this.selectedSoundEffect = name.getName();
+    public void setSelected(AbstractCosmetic cosmetic) {
+        if (cosmetic == null) return;
+
+        switch (cosmetic.getType()) {
+            case KILL_EFFECT:
+                this.selectedKillEffect = cosmetic.getName();
+                break;
+            case SOUND_EFFECT:
+                this.selectedSoundEffect = cosmetic.getName();
+                break;
+            case PROJECTILE_TRAIL:
+                this.selectedProjectileTrail = cosmetic.getName();
+                break;
+            case KILL_MESSAGE:
+                this.selectedKillMessage = cosmetic.getName();
+                break;
         }
     }
 
     /**
-     * Get the active cosmetic
+     * Gets the name of the selected cosmetic for a given type.
      *
-     * @param type the type of cosmetic
-     * @return the active cosmetic
+     * @param type The CosmeticType category to check.
+     * @return The name of the selected cosmetic.
      */
-    public String getActiveCosmetic(String type) {
-        if (type.equalsIgnoreCase("KillEffect")) {
-            return this.selectedKillEffect != null ? this.selectedKillEffect : "None";
-        } else if (type.equalsIgnoreCase("SoundEffect")) {
-            return this.selectedSoundEffect != null ? this.selectedSoundEffect : "None";
+    public String getSelected(EnumCosmeticType type) {
+        switch (type) {
+            case KILL_EFFECT:
+                return this.selectedKillEffect;
+            case SOUND_EFFECT:
+                return this.selectedSoundEffect;
+            case PROJECTILE_TRAIL:
+                return this.selectedProjectileTrail;
+            case KILL_MESSAGE:
+                return this.selectedKillMessage;
+            default:
+                return "None";
         }
-        return "None";
     }
 
     /**
-     * Get the active cosmetic
+     * Checks if a specific cosmetic is currently selected.
      *
-     * @param cosmetic the cosmetic to get
-     * @return the active cosmetic
+     * @param cosmetic The cosmetic to check.
+     * @return true if it is the currently selected cosmetic for its type.
      */
-    public String getActiveCosmetic(ICosmetic cosmetic) {
-        if (cosmetic instanceof AbstractKillEffect) {
-            return this.selectedKillEffect != null ? this.selectedKillEffect : "None";
-        } else if (cosmetic instanceof AbstractSoundEffect) {
-            return this.selectedSoundEffect != null ? this.selectedSoundEffect : "None";
-        }
-        return "None";
-    }
-
-    /**
-     * Check if the cosmetic is selected
-     *
-     * @param cosmetic the cosmetic to check
-     * @return true if the cosmetic is selected
-     */
-    public boolean isSelectedCosmetic(ICosmetic cosmetic) {
-        if (cosmetic instanceof AbstractKillEffect) {
-            return this.selectedKillEffect != null && this.selectedKillEffect.equals(cosmetic.getName());
-        } else if (cosmetic instanceof AbstractSoundEffect) {
-            return this.selectedSoundEffect != null && this.selectedSoundEffect.equals(cosmetic.getName());
-        }
-        return false;
+    public boolean isSelected(AbstractCosmetic cosmetic) {
+        if (cosmetic == null) return false;
+        String selectedName = getSelected(cosmetic.getType());
+        return cosmetic.getName().equals(selectedName);
     }
 }

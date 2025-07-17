@@ -18,8 +18,10 @@ public class MatchDataSoloImpl extends AbstractMatchData {
     /**
      * Constructor for the MatchDataSoloImpl class.
      *
-     * @param winner The UUID of the winner.
-     * @param loser  The UUID of the loser.
+     * @param kit    The kit used in the match.
+     * @param arena  The arena where the match took place.
+     * @param winner The UUID of the winning player.
+     * @param loser  The UUID of the losing player.
      */
     public MatchDataSoloImpl(String kit, String arena, UUID winner, UUID loser) {
         super(kit, arena);

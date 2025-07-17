@@ -1,16 +1,19 @@
 package dev.revere.alley.feature.cosmetic.command.impl.admin;
 
+import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
-import dev.revere.alley.feature.cosmetic.interfaces.ICosmetic;
-import dev.revere.alley.feature.cosmetic.interfaces.ICosmeticRepository;
+import dev.revere.alley.feature.cosmetic.AbstractCosmetic;
+import dev.revere.alley.feature.cosmetic.EnumCosmeticType;
+import dev.revere.alley.feature.cosmetic.repository.BaseCosmeticRepository;
+import dev.revere.alley.feature.cosmetic.repository.ICosmeticRepository;
+import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
+import dev.revere.alley.util.StringUtil;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-
-import java.util.Map;
 
 /**
  * @author Remi
@@ -35,28 +38,30 @@ public class CosmeticSetCommand extends BaseCommand {
             return;
         }
 
-        Profile profile = this.plugin.getProfileService().getProfile(target.getUniqueId());
+        Profile profile = this.plugin.getService(IProfileService.class).getProfile(target.getUniqueId());
 
-        String type = args[1];
+        String typeName = args[1];
         String cosmeticName = args[2];
 
-        Map<String, ICosmeticRepository<?>> cosmeticRepositories = this.plugin.getCosmeticRepository().getCosmeticRepositories();
-        ICosmeticRepository<?> repository = cosmeticRepositories.get(type);
+        EnumCosmeticType cosmeticType = EnumCosmeticType.fromString(typeName);
+        if (cosmeticType == null) {
+            player.sendMessage(CC.translate("&cInvalid cosmetic type."));
+            return;
+        }
+
+        BaseCosmeticRepository<?> repository = this.plugin.getService(ICosmeticRepository.class).getRepository(cosmeticType);
         if (repository == null) {
-            player.sendMessage(CC.translate("&cInvalid cosmetic type"));
+            player.sendMessage(CC.translate("&cError: No repository found for that type."));
             return;
         }
 
-        ICosmetic cosmetic = repository.getCosmetics().stream()
-                .filter(c -> c.getName().equalsIgnoreCase(cosmeticName))
-                .findFirst().orElse(null);
-
+        AbstractCosmetic cosmetic = repository.getCosmetic(cosmeticName);
         if (cosmetic == null) {
-            player.sendMessage(CC.translate("&cInvalid cosmetic name"));
+            player.sendMessage(CC.translate("&cCosmetic with name '" + cosmeticName + "' not found in that type."));
             return;
         }
 
-        profile.getProfileData().getCosmeticData().setActiveCosmetic(type, cosmetic);
-        player.sendMessage(CC.translate("&aSuccessfully set &b" + cosmetic.getName() + " &aas the active cosmetic for &b" + target.getName()));
+        profile.getProfileData().getCosmeticData().setSelected(cosmetic);
+        player.sendMessage(CC.translate("&aSuccessfully set &6" + cosmetic.getName() + " " + StringUtil.formatEnumName(cosmeticType) + " &aas the active cosmetic for &6" + target.getName()));
     }
 }

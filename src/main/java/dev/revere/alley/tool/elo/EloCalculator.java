@@ -1,5 +1,6 @@
 package dev.revere.alley.tool.elo;
 
+import dev.revere.alley.plugin.annotation.Service;
 import dev.revere.alley.tool.elo.range.EloRangeFactor;
 import lombok.Getter;
 
@@ -9,7 +10,8 @@ import lombok.Getter;
  * @date 6/2/2024
  */
 @Getter
-public class EloCalculator {
+@Service(provides = IEloCalculator.class, priority = 290)
+public class EloCalculator implements IEloCalculator {
     private final EloRangeFactor[] ELO_RANGES = {
             new EloRangeFactor(0, 1100, 25),
             new EloRangeFactor(1001, 1400, 20),
@@ -19,27 +21,13 @@ public class EloCalculator {
 
     private final int DEFAULT_RANGE_FACTOR = 25;
 
-    /**
-     * Calculates the new Elo rating for a player based on a match result.
-     *
-     * @param playerElo   The player's current Elo rating.
-     * @param opponentElo The opponent's Elo rating.
-     * @param playerWon   Whether the player won the match.
-     * @return The player's updated Elo rating.
-     */
+    @Override
     public int determineNewElo(int playerElo, int opponentElo, boolean playerWon) {
         int score = playerWon ? 1 : 0;
         return this.calculateElo(playerElo, opponentElo, score);
     }
 
-    /**
-     * Calculates the new Elo rating for a player based on the match score.
-     *
-     * @param playerElo   The player's current Elo rating.
-     * @param opponentElo The opponent's Elo rating.
-     * @param score       The score of the player (1 for win, 0 for loss).
-     * @return The updated Elo rating.
-     */
+    @Override
     public int calculateElo(int playerElo, int opponentElo, int score) {
         double range = this.determineRange(playerElo);
         double expectedScore = this.calculateExpectedScore(playerElo, opponentElo);
@@ -53,20 +41,21 @@ public class EloCalculator {
 
     /**
      * Determines the expected outcome for a player against an opponent based on Elo ratings.
+     * An expected score of 0.5 means the players are evenly matched.
      *
      * @param playerElo   The player's current Elo rating.
      * @param opponentElo The opponent's Elo rating.
-     * @return The expected score for the player.
+     * @return The expected score for the player (a value between 0 and 1).
      */
     private double calculateExpectedScore(int playerElo, int opponentElo) {
         return 1.0 / (1.0 + Math.pow(10, (opponentElo - playerElo) / 400.0));
     }
 
     /**
-     * Determines the range for the player's Elo rating.
+     * Determines the K-factor (range factor) for the player's Elo rating.
      *
      * @param elo The player's Elo rating.
-     * @return The range factor.
+     * @return The K-factor (range).
      */
     private double determineRange(int elo) {
         for (EloRangeFactor range : this.ELO_RANGES) {

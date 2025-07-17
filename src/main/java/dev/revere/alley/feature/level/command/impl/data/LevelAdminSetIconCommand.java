@@ -1,8 +1,10 @@
 package dev.revere.alley.feature.level.command.impl.data;
 
+import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
+import dev.revere.alley.feature.level.ILevelService;
 import dev.revere.alley.feature.level.LevelService;
 import dev.revere.alley.feature.level.data.LevelData;
 import dev.revere.alley.util.chat.CC;
@@ -22,12 +24,12 @@ public class LevelAdminSetIconCommand extends BaseCommand {
         String[] args = command.getArgs();
 
         if (args.length < 1) {
-            player.sendMessage(CC.translate("&6Usage: &e/leveladmin seticon &b<levelName>"));
+            player.sendMessage(CC.translate("&6Usage: &e/leveladmin seticon &6<levelName>"));
             return;
         }
 
         String levelName = args[0];
-        LevelService levelService = this.plugin.getLevelService();
+        ILevelService levelService = this.plugin.getService(ILevelService.class);
         LevelData level = levelService.getLevel(levelName);
         if (level == null) {
             player.sendMessage(CC.translate("&cNo level found with that name!"));
@@ -44,6 +46,6 @@ public class LevelAdminSetIconCommand extends BaseCommand {
         level.setMaterial(iconMaterial);
         level.setDurability(durability);
         levelService.saveLevel(level);
-        player.sendMessage(CC.translate("&aSuccessfully set the icon for level &b" + levelName + " &ato " + iconMaterial.name() + "&a!"));
+        player.sendMessage(CC.translate("&aSuccessfully set the icon for level &6" + levelName + " &ato " + iconMaterial.name() + "&a!"));
     }
 }

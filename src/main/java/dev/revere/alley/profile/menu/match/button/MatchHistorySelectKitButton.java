@@ -4,6 +4,7 @@ import dev.revere.alley.Alley;
 import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.base.kit.Kit;
 import dev.revere.alley.game.match.data.AbstractMatchData;
+import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.menu.match.MatchHistoryViewMenu;
 import dev.revere.alley.tool.item.ItemBuilder;
@@ -25,7 +26,7 @@ public class MatchHistorySelectKitButton extends Button {
 
     @Override
     public ItemStack getButtonItem(Player player) {
-        Profile profile = Alley.getInstance().getProfileService().getProfile(player.getUniqueId());
+        Profile profile = Alley.getInstance().getService(IProfileService.class).getProfile(player.getUniqueId());
 
         List<AbstractMatchData> matchDataList = profile.getProfileData().getPreviousMatches();
 
@@ -33,15 +34,24 @@ public class MatchHistorySelectKitButton extends Button {
                 .filter(matchData -> matchData.getKit().equals(this.kit.getName()))
                 .count();
 
+        int unrankedCount = (int) matchDataList.stream()
+                .filter(matchData -> matchData.getKit().equals(this.kit.getName()) && !matchData.isRanked())
+                .count();
+
+        int rankedCount = count - unrankedCount;
+
         return new ItemBuilder(this.kit.getIcon())
-                .name("&b&l" + this.kit.getName())
+                .name("&6&l" + this.kit.getDisplayName())
                 .lore(
-                        "&fMatches stored for this kit: &b" + count,
+                        " &f● Total: &6" + count,
+                        " &f● Ranked: &6" + rankedCount,
+                        " &f● Unranked: &6" + unrankedCount,
                         "",
                         "&aClick to view!"
                 )
                 .durability(this.kit.getDurability())
                 .hideMeta()
+                .amount(count > 0 ? count : 1)
                 .build();
     }
 

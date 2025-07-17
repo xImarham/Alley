@@ -1,8 +1,10 @@
 package dev.revere.alley.feature.layout.menu;
 
+import dev.revere.alley.Alley;
 import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.api.menu.Menu;
 import dev.revere.alley.base.kit.enums.EnumKitCategory;
+import dev.revere.alley.base.queue.IQueueService;
 import dev.revere.alley.base.queue.Queue;
 import dev.revere.alley.feature.layout.menu.button.LayoutButton;
 import dev.revere.alley.feature.layout.menu.button.LayoutModeSwitcherButton;
@@ -23,7 +25,7 @@ public class LayoutMenu extends Menu {
 
     @Override
     public String getTitle(Player player) {
-        return "&b&lLayout Editor";
+        return "&6&lLayout Editor";
     }
 
     @Override
@@ -32,8 +34,8 @@ public class LayoutMenu extends Menu {
 
         int slot = 10;
 
-        for (Queue queue : this.plugin.getQueueService().getQueues()) {
-            if (!queue.isRanked() && queue.getKit().getCategory() == this.kitCategory && queue.getKit().isEditable()) {
+        for (Queue queue : Alley.getInstance().getService(IQueueService.class).getQueues()) {
+            if (!queue.isRanked() && !queue.isDuos() && queue.getKit().getCategory() == this.kitCategory && queue.getKit().isEditable()) {
                 slot = this.skipIfSlotCrossingBorder(slot);
                 buttons.put(slot++, new LayoutButton(queue.getKit()));
             }
@@ -49,7 +51,6 @@ public class LayoutMenu extends Menu {
 
         return buttons;
     }
-
 
     @Override
     public int getSize() {

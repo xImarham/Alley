@@ -1,6 +1,7 @@
 package dev.revere.alley.base.queue;
 
 import dev.revere.alley.Alley;
+import dev.revere.alley.tool.reflection.IReflectionRepository;
 import dev.revere.alley.tool.reflection.impl.ActionBarReflectionService;
 import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.util.chat.Symbol;
@@ -49,8 +50,9 @@ public class QueueProfile {
         this.ticks++;
 
         if (player != null) {
-            String message = "&b&l" + this.queue.getQueueType() + " " + this.queue.getKit().getName() + " &7┃ &f" + this.getFormattedElapsedTime();
-            Alley.getInstance().getReflectionRepository().getReflectionService(ActionBarReflectionService.class).sendMessage(player, message);
+            String message = "&6" + this.queue.getQueueType() + " " + this.queue.getKit().getDisplayName() + " &7┃ &f" + this.getFormattedElapsedTime();
+            IReflectionRepository reflectionRepository = Alley.getInstance().getService(IReflectionRepository.class);
+            reflectionRepository.getReflectionService(ActionBarReflectionService.class).sendMessage(player, message);
         }
 
         if (this.ticks % this.TICK_THRESHOLD != 0) {
@@ -61,8 +63,8 @@ public class QueueProfile {
             if (player != null) {
                 Arrays.asList(
                         "",
-                        "&b&l" + this.queue.getKit().getName(),
-                        " &f● &bPing Range: &fN/A",
+                        "&6&l" + this.queue.getKit().getDisplayName(),
+                        " &f● &6Ping Range: &fN/A",
                         "   &7Searching for match...",
                         ""
                 ).forEach(line -> player.sendMessage(CC.translate(line)));
@@ -81,9 +83,9 @@ public class QueueProfile {
             if (player != null) {
                 Arrays.asList(
                         "",
-                        "&b&l" + this.queue.getKit().getName() + " &6&l" + Symbol.RANKED_STAR + "Ranked",
-                        " &f● &bELO Range: &f" + this.getMinimumElo() + " &7&l" + Symbol.ARROW_R + "&f " + this.getMaximumElo(),
-                        " &f● &bPing Range: &fN/A",
+                        "&6&l" + this.queue.getKit().getDisplayName() + " &6&l" + Symbol.RANKED_STAR + "Ranked",
+                        " &f● &6ELO Range: &f" + this.getMinimumElo() + " &7&l" + Symbol.ARROW_R + "&f " + this.getMaximumElo(),
+                        " &f● &6Ping Range: &fN/A",
                         "   " + (this.range == this.MAX_RANGE ? "&c&lRANGE LIMIT REACHED..." : "&7Searching for match..."),
                         ""
                 ).forEach(line -> player.sendMessage(CC.translate(line)));

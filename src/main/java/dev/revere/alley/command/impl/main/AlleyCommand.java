@@ -4,9 +4,7 @@ import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.annotation.CompleterData;
-import dev.revere.alley.command.impl.main.impl.AlleyCoreCommand;
-import dev.revere.alley.command.impl.main.impl.AlleyDebugCommand;
-import dev.revere.alley.command.impl.main.impl.AlleyReloadCommand;
+import dev.revere.alley.api.constant.IPluginConstant;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.command.CommandSender;
 
@@ -20,20 +18,13 @@ import java.util.List;
  * @date 19/04/2024 - 17:39
  */
 public class AlleyCommand extends BaseCommand {
-
-    public AlleyCommand() {
-        new AlleyCoreCommand();
-        new AlleyDebugCommand();
-        new AlleyReloadCommand();
-    }
-
     @SuppressWarnings("unused")
     @CompleterData(name = "alley")
     public List<String> alleyCompleter(CommandArgs command) {
         List<String> completion = new ArrayList<>();
         if (command.getArgs().length == 1 && command.getPlayer().hasPermission("alley.admin")) {
             completion.addAll(Arrays.asList(
-                    "reload", "debug", "core"
+                    "reload", "debug", "server"
             ));
         }
 
@@ -47,21 +38,21 @@ public class AlleyCommand extends BaseCommand {
 
         Arrays.asList(
                 "",
-                "     &b&lAlley Practice",
-                "      &f┃ Authors: &b" + this.plugin.getDescription().getAuthors().toString().replace("[", "").replace("]", ""),
-                "      &f┃ Version: &b" + this.plugin.getDescription().getVersion(),
+                "     &6&lAlley Practice",
+                "      &f┃ Authors: &6" + this.plugin.getDescription().getAuthors().toString().replace("[", "").replace("]", ""),
+                "      &f┃ Version: &6" + this.plugin.getDescription().getVersion(),
                 "",
-                "     &b&lDescription:",
+                "     &6&lDescription:",
                 "      &f┃ " + this.plugin.getDescription().getDescription(),
                 ""
         ).forEach(line -> sender.sendMessage(CC.translate(line)));
 
-        if (sender.hasPermission(this.plugin.getPluginConstant().getAdminPermissionPrefix())) {
+        if (sender.hasPermission(this.plugin.getService(IPluginConstant.class).getAdminPermissionPrefix())) {
             Arrays.asList(
-                    "     &b&lAdmin Help",
-                    "      &f┃ /alley reload &7- &bReloads the plugin.",
-                    "      &f┃ /alley debug &7- &bDatabase Debugging.",
-                    "      &f┃ /alley core &7- &bCore Hook Info.",
+                    "     &6&lAdmin Help",
+                    "      &f┃ /alley reload &7- &6Reloads the plugin.",
+                    "      &f┃ /alley debug &7- &6Database Debugging.",
+                    "      &f┃ /alley server &7- &6Core Hook Info.",
                     ""
             ).forEach(line -> sender.sendMessage(CC.translate(line)));
         }

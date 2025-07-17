@@ -21,7 +21,7 @@ public class EmojiListCommand extends BaseCommand {
         Player player = command.getPlayer();
 
         player.sendMessage("");
-        player.sendMessage(CC.translate("&b&lEmojis: &7(Alias: &f/el&7)"));
+        player.sendMessage(CC.translate("&6&lEmojis: &7(Alias: &f/el&7)"));
         for (EnumEmojiType emoji : EnumEmojiType.values()) {
             TextComponent emojiComponent = new TextComponent(CC.translate(" " + emoji.getIdentifier() + " &7" + Symbol.ARROW_R + " &f" + emoji.getFormat()));
             emojiComponent.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, emoji.getIdentifier()));

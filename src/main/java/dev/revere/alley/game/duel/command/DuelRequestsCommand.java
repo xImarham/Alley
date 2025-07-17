@@ -3,7 +3,9 @@ package dev.revere.alley.game.duel.command;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
+import dev.revere.alley.base.server.IServerService;
 import dev.revere.alley.game.duel.menu.DuelRequestsMenu;
+import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.entity.Player;
 
@@ -18,12 +20,15 @@ public class DuelRequestsCommand extends BaseCommand {
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
 
-        if (this.plugin.getProfileService().getProfile(player.getUniqueId()).getMatch() != null) {
+        if (this.plugin.getService(IProfileService.class).getProfile(player.getUniqueId()).getMatch() != null) {
             player.sendMessage(CC.translate("&cYou are already in a match."));
             return;
         }
 
-        if (this.plugin.getServerService().isQueueingEnabled(player)) {
+        IServerService serverService = this.plugin.getService(IServerService.class);
+        if (!serverService.isQueueingAllowed()) {
+            player.sendMessage(CC.translate("&cQueueing is temporarily disabled. Please try again later."));
+            player.closeInventory();
             return;
         }
 

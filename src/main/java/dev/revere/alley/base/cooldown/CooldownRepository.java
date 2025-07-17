@@ -1,12 +1,13 @@
 package dev.revere.alley.base.cooldown;
 
 import dev.revere.alley.base.cooldown.enums.EnumCooldownType;
+import dev.revere.alley.plugin.annotation.Service;
 import dev.revere.alley.tool.triple.impl.MutableTriple;
 import lombok.Getter;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * @author Remi
@@ -14,37 +15,32 @@ import java.util.UUID;
  * @date 5/27/2024
  */
 @Getter
-public class CooldownRepository {
-    private final List<MutableTriple<UUID, EnumCooldownType, Cooldown>> cooldowns;
+@Service(provides = ICooldownRepository.class, priority = 200)
+public class CooldownRepository implements ICooldownRepository {
+    private final List<MutableTriple<UUID, EnumCooldownType, Cooldown>> cooldowns = new CopyOnWriteArrayList<>();
 
-    public CooldownRepository() {
-        this.cooldowns = new ArrayList<>();
+    @Override
+    public List<MutableTriple<UUID, EnumCooldownType, Cooldown>> getCooldowns() {
+        return cooldowns;
     }
 
-    /**
-     * Add a cooldown to the repository.
-     *
-     * @param uuid     the uuid of the player
-     * @param type     the type of cooldown
-     * @param cooldown the cooldown
-     */
+    @Override
     public void addCooldown(UUID uuid, EnumCooldownType type, Cooldown cooldown) {
         this.cooldowns.removeIf(triple -> triple.getA().equals(uuid) && triple.getB().equals(type));
         this.cooldowns.add(new MutableTriple<>(uuid, type, cooldown));
     }
 
-    /**
-     * Get a cooldown from the repository by the player's uuid and the type of cooldown.
-     *
-     * @param uuid the uuid of the player
-     * @param type the type of cooldown
-     * @return the cooldown
-     */
+    @Override
     public Cooldown getCooldown(UUID uuid, EnumCooldownType type) {
         return this.cooldowns.stream()
                 .filter(triple -> triple.getA().equals(uuid) && triple.getB().equals(type))
                 .map(MutableTriple::getC)
                 .findFirst()
                 .orElse(null);
+    }
+
+    @Override
+    public void removeCooldown(UUID uuid, EnumCooldownType type) {
+        this.cooldowns.removeIf(triple -> triple.getA().equals(uuid) && triple.getB().equals(type));
     }
 }

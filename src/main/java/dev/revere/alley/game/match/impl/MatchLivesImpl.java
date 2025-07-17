@@ -7,7 +7,6 @@ import dev.revere.alley.game.match.player.data.MatchGamePlayerData;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.util.PlayerUtil;
-import dev.revere.alley.util.TaskUtil;
 import lombok.Getter;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -43,55 +42,35 @@ public class MatchLivesImpl extends MatchRegularImpl {
 
     @Override
     public boolean canStartRound() {
-        return participantA.getPlayer().getData().getLives() > 0 && participantB.getPlayer().getData().getLives() > 0;
+        return participantA.getLeader().getData().getLives() > 0 && participantB.getLeader().getData().getLives() > 0;
     }
 
     @Override
     public boolean canEndRound() {
-        return participantA.isAllDead() || participantB.isAllDead();
-    }
-
-    @Override
-    public boolean canEndMatch() {
-        return participantA.getPlayer().getData().getLives() <= 0 || participantB.getPlayer().getData().getLives() <= 0;
+        return (participantA.isAllEliminated() || participantB.isAllEliminated())
+                || (this.participantA.getAllPlayers().stream().allMatch(MatchGamePlayerImpl::isDisconnected)
+                || this.participantB.getAllPlayers().stream().allMatch(MatchGamePlayerImpl::isDisconnected));
     }
 
     /**
-     * Reduces the lives of a participant by one.
+     * Reduces the life count of a player in the match.
      *
-     * @param participant The participant whose lives are to be reduced.
+     * @param data The MatchGamePlayerData of the player whose life is to be reduced.
      */
-    public void reduceLife(GameParticipant<MatchGamePlayerImpl> participant) {
-        MatchGamePlayerData data = participant.getPlayer().getData();
+    public void reduceLife(MatchGamePlayerData data) {
         data.setLives(data.getLives() - 1);
-        if (data.getLives() <= 0) {
-            this.determineWinnerAndLoser();
-        }
     }
 
     @Override
-    public void handleDeath(Player player) {
-        GameParticipant<MatchGamePlayerImpl> participant = this.participantA.containsPlayer(player.getUniqueId()) ? this.participantA : this.participantB;
-        this.reduceLife(participant);
+    public void handleParticipant(Player player, MatchGamePlayerImpl gamePlayer) {
+        MatchGamePlayerData data = this.getGamePlayer(player).getData();
+        this.reduceLife(data);
 
-        if (participant.getPlayer().getData().getLives() > 0) {
-            TaskUtil.runTaskLater(() -> this.startRespawnProcess(player), 5L);
-        } else {
-            super.handleDeath(player);
+        if (data.getLives() <= 0) {
+            gamePlayer.setEliminated(true);
         }
-    }
 
-    /**
-     * Determines the winner and loser of the match.
-     */
-    private void determineWinnerAndLoser() {
-        if (this.participantA.getPlayer().getData().getLives() <= 0) {
-            this.winner = this.participantB;
-            this.loser = this.participantA;
-        } else if (this.participantB.getPlayer().getData().getLives() <= 0) {
-            this.winner = this.participantA;
-            this.loser = this.participantB;
-        }
+        super.handleParticipant(player, gamePlayer);
     }
 
     @Override
@@ -102,14 +81,6 @@ public class MatchLivesImpl extends MatchRegularImpl {
         player.teleport(spawnLocation);
 
         this.giveLoadout(player, this.getKit());
-        this.applyWoolAndArmorColor(player);
-
-        this.notifyParticipants("&b" + player.getName() + " &ahas respawned");
-        this.notifySpectators("&b" + player.getName() + " &ahas respawned");
-    }
-
-    @Override
-    public void handleDisconnect(Player player) {
-        super.handleDeath(player);
+        this.applyColorKit(player);
     }
 }

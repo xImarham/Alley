@@ -5,6 +5,8 @@ import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.annotation.CompleterData;
 import dev.revere.alley.base.arena.AbstractArena;
+import dev.revere.alley.base.arena.IArenaService;
+import dev.revere.alley.config.locale.impl.ArenaLocale;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.entity.Player;
 
@@ -23,7 +25,7 @@ public class ArenaTeleportCommand extends BaseCommand {
         List<String> completion = new ArrayList<>();
 
         if (command.getArgs().length == 1 && command.getPlayer().hasPermission("alley.admin")) {
-            this.plugin.getArenaService().getArenas().forEach(arena -> completion.add(arena.getName()));
+            this.plugin.getService(IArenaService.class).getArenas().forEach(arena -> completion.add(arena.getName()));
         }
 
         return completion;
@@ -36,15 +38,15 @@ public class ArenaTeleportCommand extends BaseCommand {
         String[] args = command.getArgs();
 
         if (args.length < 1) {
-            player.sendMessage(CC.translate("&6Usage: &e/arena teleport &b<arenaName>"));
+            player.sendMessage(CC.translate("&6Usage: &e/arena teleport &6<arenaName>"));
             return;
         }
 
         String arenaName = args[0];
-        AbstractArena arena = this.plugin.getArenaService().getArenaByName(arenaName);
+        AbstractArena arena = this.plugin.getService(IArenaService.class).getArenaByName(arenaName);
 
         if (arena == null) {
-            player.sendMessage(CC.translate("&cAn arena with that name does not exist."));
+            player.sendMessage(ArenaLocale.NOT_FOUND.getMessage().replace("{arena-name}", arenaName));
             return;
         }
 

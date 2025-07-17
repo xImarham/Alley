@@ -1,9 +1,11 @@
 package dev.revere.alley.feature.level.command;
 
+import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.annotation.CompleterData;
+import dev.revere.alley.api.constant.IPluginConstant;
 import dev.revere.alley.feature.level.command.impl.data.LevelAdminSetDisplayNameCommand;
 import dev.revere.alley.feature.level.command.impl.data.LevelAdminSetIconCommand;
 import dev.revere.alley.feature.level.command.impl.data.LevelAdminSetMaxEloCommand;
@@ -12,6 +14,7 @@ import dev.revere.alley.feature.level.command.impl.manage.LevelAdminCreateComman
 import dev.revere.alley.feature.level.command.impl.manage.LevelAdminDeleteCommand;
 import dev.revere.alley.feature.level.command.impl.manage.LevelAdminListCommand;
 import dev.revere.alley.feature.level.command.impl.manage.LevelAdminViewCommand;
+import dev.revere.alley.profile.progress.IProgressService;
 import dev.revere.alley.util.chat.CC;
 
 import java.util.ArrayList;
@@ -44,7 +47,7 @@ public class LevelAdminCommand extends BaseCommand {
             return completion;
         }
 
-        if (!command.getPlayer().hasPermission(this.plugin.getPluginConstant().getAdminPermissionPrefix())) {
+        if (!command.getPlayer().hasPermission(this.plugin.getService(IPluginConstant.class).getAdminPermissionPrefix())) {
             return completion;
         }
 
@@ -61,15 +64,15 @@ public class LevelAdminCommand extends BaseCommand {
     public void onCommand(CommandArgs command) {
         Arrays.asList(
                 "",
-                "&b&lLevel Admin Commands Help:",
-                " &f● &b/leveladmin create &8(&7levelName&8) &8(&7minElo&8) &8(&7maxElo&8) &7| Create a new level",
-                " &f● &b/leveladmin delete &8(&7levelName&8) &7| Delete a level",
-                " &f● &b/leveladmin list &7| List all levels",
-                " &f● &b/leveladmin view &8(&7levelName&8) &7| View level info",
-                " &f● &b/leveladmin setminelo &8(&7levelName&8) &8(&7minElo&8) &7| Set minimum Elo for a level",
-                " &f● &b/leveladmin setmaxelo &8(&7levelName&8) &8(&7maxElo&8) &7| Set maximum Elo for a level",
-                " &f● &b/leveladmin setdisplayname &8(&7levelName&8) &8(&7displayName&8) &7| Set display name for a level",
-                " &f● &b/leveladmin seticon &8(&7levelName&8) &7| Set material for a level",
+                "&6&lLevel Admin Commands Help:",
+                " &f● &6/leveladmin create &8(&7levelName&8) &8(&7minElo&8) &8(&7maxElo&8) &7| Create a new level",
+                " &f● &6/leveladmin delete &8(&7levelName&8) &7| Delete a level",
+                " &f● &6/leveladmin list &7| List all levels",
+                " &f● &6/leveladmin view &8(&7levelName&8) &7| View level info",
+                " &f● &6/leveladmin setminelo &8(&7levelName&8) &8(&7minElo&8) &7| Set minimum Elo for a level",
+                " &f● &6/leveladmin setmaxelo &8(&7levelName&8) &8(&7maxElo&8) &7| Set maximum Elo for a level",
+                " &f● &6/leveladmin setdisplayname &8(&7levelName&8) &8(&7displayName&8) &7| Set display name for a level",
+                " &f● &6/leveladmin seticon &8(&7levelName&8) &7| Set material for a level",
                 ""
         ).forEach(line -> command.getSender().sendMessage(CC.translate(line)));
     }

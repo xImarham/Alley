@@ -1,6 +1,7 @@
 package dev.revere.alley.game.party;
 
 import dev.revere.alley.Alley;
+import dev.revere.alley.feature.emoji.IEmojiRepository;
 import dev.revere.alley.game.party.enums.EnumPartyState;
 import dev.revere.alley.util.chat.CC;
 import lombok.Getter;
@@ -9,6 +10,7 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -35,7 +37,6 @@ public class Party {
         this.members.add(leader.getUniqueId());
         this.bannedPlayers = new ArrayList<>();
         this.state = EnumPartyState.PRIVATE;
-        Alley.getInstance().getPartyService().getParties().add(this);
     }
 
     /**
@@ -44,6 +45,12 @@ public class Party {
      * @param message The message to notify the party members of.
      */
     public void notifyParty(String message) {
+        for (Map.Entry<String, String> entry : Alley.getInstance().getService(IEmojiRepository.class).getEmojis().entrySet()) {
+            if (message.contains(entry.getKey())) {
+                message = message.replace(entry.getKey(), entry.getValue());
+            }
+        }
+
         for (UUID member : members) {
             Player player = Alley.getInstance().getServer().getPlayer(member);
             if (player != null) {
@@ -53,19 +60,21 @@ public class Party {
     }
 
     /**
-     * Sends a message to all party members excluding the leader.
+     * Determines whether the specified player is the leader of the party.
      *
-     * @param message The message to notify the party members of.
+     * @param player The player to check.
+     * @return True if the specified player is the leader of the party, false otherwise.
      */
-    public void notifyPartyExcludeLeader(String message) {
-        for (UUID member : members) {
-            if (member.equals(leader.getUniqueId())) {
-                continue;
-            }
-            Player player = Alley.getInstance().getServer().getPlayer(member);
-            if (player != null) {
-                player.sendMessage(CC.translate(message));
-            }
-        }
+    public boolean isLeader(Player player) {
+        return leader == player;
+    }
+
+    /**
+     * Checks if the party is private.
+     *
+     * @return True if the party is private, false otherwise.
+     */
+    public boolean isPrivate() {
+        return this.state == EnumPartyState.PRIVATE;
     }
 }

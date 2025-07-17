@@ -1,6 +1,8 @@
 package dev.revere.alley.feature.emoji.listener;
 
 import dev.revere.alley.Alley;
+import dev.revere.alley.feature.emoji.EmojiRepository;
+import dev.revere.alley.feature.emoji.IEmojiRepository;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -14,17 +16,6 @@ import java.util.Map;
  * @date 10/11/2024 - 09:34
  */
 public class EmojiListener implements Listener {
-    protected final Alley plugin;
-
-    /**
-     * Constructor for the EmojiListener class.
-     *
-     * @param plugin The Alley plugin instance.
-     */
-    public EmojiListener(Alley plugin) {
-        this.plugin = plugin;
-    }
-
     @EventHandler
     private void onAsyncChat(AsyncPlayerChatEvent event) {
         Player player = event.getPlayer();
@@ -34,7 +25,7 @@ public class EmojiListener implements Listener {
             return;
         }
 
-        for (Map.Entry<String, String> entry : this.plugin.getEmojiRepository().getEmojis().entrySet()) {
+        for (Map.Entry<String, String> entry : Alley.getInstance().getService(IEmojiRepository.class).getEmojis().entrySet()) {
             if (message.contains(entry.getKey())) {
                 message = message.replace(entry.getKey(), entry.getValue());
             }

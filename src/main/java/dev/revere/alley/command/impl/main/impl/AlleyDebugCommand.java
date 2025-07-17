@@ -3,6 +3,18 @@ package dev.revere.alley.command.impl.main.impl;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
+import dev.revere.alley.base.arena.IArenaService;
+import dev.revere.alley.base.combat.ICombatService;
+import dev.revere.alley.base.cooldown.ICooldownRepository;
+import dev.revere.alley.base.kit.IKitService;
+import dev.revere.alley.base.kit.setting.IKitSettingService;
+import dev.revere.alley.base.queue.IQueueService;
+import dev.revere.alley.feature.emoji.IEmojiRepository;
+import dev.revere.alley.game.duel.IDuelRequestService;
+import dev.revere.alley.game.match.IMatchService;
+import dev.revere.alley.game.match.snapshot.ISnapshotRepository;
+import dev.revere.alley.game.party.IPartyService;
+import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.entity.Player;
@@ -23,10 +35,11 @@ public class AlleyDebugCommand extends BaseCommand {
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
         String[] args = command.getArgs();
-        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
+        IProfileService profileService = this.plugin.getService(IProfileService.class);
+        Profile profile = profileService.getProfile(player.getUniqueId());
 
         if (args.length < 1) {
-            player.sendMessage(CC.translate("&6Usage: &e/alley debug &b<memory/instance/profile/profiledata>"));
+            player.sendMessage(CC.translate("&6Usage: &e/alley debug &6<memory/instance/profile/profiledata>"));
             return;
         }
 
@@ -44,7 +57,7 @@ public class AlleyDebugCommand extends BaseCommand {
                 this.sendProfileData(profile, player);
                 break;
             default:
-                player.sendMessage(CC.translate("&6Usage: &e/alley debug &b<memory/instance/profile/profileData>"));
+                player.sendMessage(CC.translate("&6Usage: &e/alley debug &6<memory/instance/profile/profileData>"));
                 break;
         }
     }
@@ -63,11 +76,11 @@ public class AlleyDebugCommand extends BaseCommand {
 
         Arrays.asList(
                 "",
-                "     &b&lAlley &7┃ &fMemory Information",
-                "      &f┃ Max Memory: &b" + this.formatNumber((int) (maxMemory / 1024 / 1024)) + "MB",
-                "      &f┃ Allocated Memory: &b" + this.formatNumber((int) (allocatedMemory / 1024 / 1024)) + "MB",
-                "      &f┃ Free Memory: &b" + this.formatNumber((int) (freeMemory / 1024 / 1024)) + "MB",
-                "      &f┃ Used Memory: &b" + this.formatNumber((int) (usedMemory / 1024 / 1024)) + "MB",
+                "     &6&lAlley &7┃ &fMemory Information",
+                "      &f┃ Max Memory: &6" + this.formatNumber((int) (maxMemory / 1024 / 1024)) + "MB",
+                "      &f┃ Allocated Memory: &6" + this.formatNumber((int) (allocatedMemory / 1024 / 1024)) + "MB",
+                "      &f┃ Free Memory: &6" + this.formatNumber((int) (freeMemory / 1024 / 1024)) + "MB",
+                "      &f┃ Used Memory: &6" + this.formatNumber((int) (usedMemory / 1024 / 1024)) + "MB",
                 ""
         ).forEach(line -> player.sendMessage(CC.translate(line)));
     }
@@ -80,21 +93,21 @@ public class AlleyDebugCommand extends BaseCommand {
     private void sendInstanceInfo(Player player) {
         Arrays.asList(
                 "",
-                "     &b&lAlley &7┃ &fInstance Information",
-                "      &f┃ Profiles: &b" + this.formatNumber(this.plugin.getProfileService().getProfiles().size()),
-                "      &f┃ Matches: &b" + this.formatNumber(this.plugin.getMatchService().getMatches().size()),
-                "      &f┃ Queues: &b" + this.formatNumber(this.plugin.getQueueService().getQueues().size()),
-                "      &f┃ Queue profiles: &b" + this.formatNumber(Arrays.stream(this.plugin.getQueueService().getQueues().stream().mapToInt(queue -> queue.getProfiles().size()).toArray()).sum()),
-                "      &f┃ Cooldowns: &b" + this.formatNumber(this.plugin.getCooldownRepository().getCooldowns().size()),
-                "      &f┃ Active Cooldowns: &b" + this.formatNumber((int) this.plugin.getCooldownRepository().getCooldowns().stream().filter(cooldown -> cooldown.getC().isActive()).count()),
-                "      &f┃ Combats: &b" + this.formatNumber(this.plugin.getCombatService().getCombatMap().size()),
-                "      &f┃ Kits: &b" + this.formatNumber(this.plugin.getKitService().getKits().size()),
-                "      &f┃ Kit Settings: &b" + this.formatNumber(this.plugin.getKitSettingService().getSettings().size()),
-                "      &f┃ Parties: &b" + this.formatNumber(this.plugin.getPartyService().getParties().size()),
-                "      &f┃ Arenas: &b" + this.formatNumber(this.plugin.getArenaService().getArenas().size()),
-                "      &f┃ Snapshots: &b" + this.formatNumber(this.plugin.getSnapshotRepository().getSnapshots().size()),
-                "      &f┃ Duel Requests: &b" + this.formatNumber(this.plugin.getDuelRequestService().getDuelRequests().size()),
-                "      &f┃ Emojis: &b" + this.formatNumber(this.plugin.getEmojiRepository().getEmojis().size()),
+                "     &6&lAlley &7┃ &fInstance Information",
+                "      &f┃ Profiles: &6" + this.formatNumber(this.plugin.getService(IProfileService.class).getProfiles().size()),
+                "      &f┃ Matches: &6" + this.formatNumber(this.plugin.getService(IMatchService.class).getMatches().size()),
+                "      &f┃ Queues: &6" + this.formatNumber(this.plugin.getService(IQueueService.class).getQueues().size()),
+                "      &f┃ Queue profiles: &6" + this.formatNumber(Arrays.stream(this.plugin.getService(IQueueService.class).getQueues().stream().mapToInt(queue -> queue.getProfiles().size()).toArray()).sum()),
+                "      &f┃ Cooldowns: &6" + this.formatNumber(this.plugin.getService(ICooldownRepository.class).getCooldowns().size()),
+                "      &f┃ Active Cooldowns: &6" + this.formatNumber((int) this.plugin.getService(ICooldownRepository.class).getCooldowns().stream().filter(cooldown -> cooldown.getC().isActive()).count()),
+                "      &f┃ Combats: &6" + this.formatNumber(this.plugin.getService(ICombatService.class).getCombatMap().size()),
+                "      &f┃ Kits: &6" + this.formatNumber(this.plugin.getService(IKitService.class).getKits().size()),
+                "      &f┃ Kit Settings: &6" + this.formatNumber(this.plugin.getService(IKitSettingService.class).getSettings().size()),
+                "      &f┃ Parties: &6" + this.formatNumber(this.plugin.getService(IPartyService.class).getParties().size()),
+                "      &f┃ Arenas: &6" + this.formatNumber(this.plugin.getService(IArenaService.class).getArenas().size()),
+                "      &f┃ Snapshots: &6" + this.formatNumber(this.plugin.getService(ISnapshotRepository.class).getSnapshots().size()),
+                "      &f┃ Duel Requests: &6" + this.formatNumber(this.plugin.getService(IDuelRequestService.class).getDuelRequests().size()),
+                "      &f┃ Emojis: &6" + this.formatNumber(this.plugin.getService(IEmojiRepository.class).getEmojis().size()),
                 ""
         ).forEach(line -> player.sendMessage(CC.translate(line)));
     }
@@ -109,13 +122,13 @@ public class AlleyDebugCommand extends BaseCommand {
         String banned = profile.getProfileData().isRankedBanned() ? "&c&lBANNED" : "&a&lNOT BANNED";
         Arrays.asList(
                 "",
-                "     &b&lProfile &7┃ &f" + profile.getName(),
-                "      &f┃ UUID: &b" + profile.getUuid(),
-                "      &f┃ Elo: &b" + this.formatNumber(profile.getProfileData().getElo()),
-                "      &f┃ Coins: &b" + this.formatNumber(profile.getProfileData().getCoins()),
-                "      &f┃ State: &b" + profile.getState() + " &7(" + profile.getState().getDescription() + ")",
-                "      &f┃ Queue Profile: &b" + (profile.getQueueProfile() != null ? profile.getQueueProfile().getQueue().getKit().getName() : "&c&lNULL"),
-                "      &f┃ Ranked: &b" + banned,
+                "     &6&lProfile &7┃ &f" + profile.getName(),
+                "      &f┃ UUID: &6" + profile.getUuid(),
+                "      &f┃ Elo: &6" + this.formatNumber(profile.getProfileData().getElo()),
+                "      &f┃ Coins: &6" + this.formatNumber(profile.getProfileData().getCoins()),
+                "      &f┃ State: &6" + profile.getState() + " &7(" + profile.getState().getDescription() + ")",
+                "      &f┃ Queue Profile: &6" + (profile.getQueueProfile() != null ? profile.getQueueProfile().getQueue().getKit().getName() : "&c&lNULL"),
+                "      &f┃ Ranked: &6" + banned,
                 ""
         ).forEach(line -> player.sendMessage(CC.translate(line).replace("The player", profile.getName())));
     }
@@ -129,13 +142,13 @@ public class AlleyDebugCommand extends BaseCommand {
     private void sendProfileData(Profile profile, Player player) {
         Arrays.asList(
                 "",
-                "     &b&lProfile Data &7┃ &f" + profile.getName(),
-                "      &f┃ Unranked Wins: &b" + this.formatNumber(profile.getProfileData().getUnrankedWins()),
-                "      &f┃ Unranked Losses: &b" + this.formatNumber(profile.getProfileData().getUnrankedLosses()),
-                "      &f┃ Ranked Wins: &b" + this.formatNumber(profile.getProfileData().getRankedWins()),
-                "      &f┃ Ranked Losses: &b" + this.formatNumber(profile.getProfileData().getRankedLosses()),
-                "      &f┃ Total FFA Kills: &b" + this.formatNumber(profile.getProfileData().getTotalFFAKills()),
-                "      &f┃ Total FFA Deaths: &b" + this.formatNumber(profile.getProfileData().getTotalFFADeaths()),
+                "     &6&lProfile Data &7┃ &f" + profile.getName(),
+                "      &f┃ Unranked Wins: &6" + this.formatNumber(profile.getProfileData().getUnrankedWins()),
+                "      &f┃ Unranked Losses: &6" + this.formatNumber(profile.getProfileData().getUnrankedLosses()),
+                "      &f┃ Ranked Wins: &6" + this.formatNumber(profile.getProfileData().getRankedWins()),
+                "      &f┃ Ranked Losses: &6" + this.formatNumber(profile.getProfileData().getRankedLosses()),
+                "      &f┃ Total FFA Kills: &6" + this.formatNumber(profile.getProfileData().getTotalFFAKills()),
+                "      &f┃ Total FFA Deaths: &6" + this.formatNumber(profile.getProfileData().getTotalFFADeaths()),
                 ""
         ).forEach(line -> player.sendMessage(CC.translate(line)));
     }

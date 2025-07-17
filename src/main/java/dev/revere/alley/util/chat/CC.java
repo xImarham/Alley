@@ -3,6 +3,8 @@ package dev.revere.alley.util.chat;
 import dev.revere.alley.Alley;
 import lombok.experimental.UtilityClass;
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,11 +19,13 @@ public class CC {
     public final String MENU_BAR;
     public final String PREFIX;
     public final String ERROR_PREFIX;
+    public final String WARNING_PREFIX;
 
     static {
         MENU_BAR = translate("&7&m------------------------");
-        PREFIX = translate("&f[&b" + Alley.getInstance().getDescription().getName() + "&f] &r");
+        PREFIX = translate("&f[&6" + Alley.getInstance().getDescription().getName() + "&f] &r");
         ERROR_PREFIX = translate("&c[&4" + Alley.getInstance().getDescription().getName() + "&c] &r");
+        WARNING_PREFIX = translate("&6[&e" + Alley.getInstance().getDescription().getName() + "&6] &r");
     }
 
     /**
@@ -66,5 +70,13 @@ public class CC {
         }
 
         return list;
+    }
+
+    public static void sender(CommandSender sender, String in) {
+        sender.sendMessage(translate(in));
+    }
+
+    public static void message(Player player, String in) {
+        player.sendMessage(translate(in));
     }
 }

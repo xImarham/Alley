@@ -83,6 +83,16 @@ public class Cooldown {
     }
 
     /**
+     * Get the remaining time of the cooldown in milliseconds.
+     *
+     * @return the remaining time of the cooldown in milliseconds
+     */
+    public long remainingTimeMillis() {
+        long remaining = calculateEndTime() - System.currentTimeMillis();
+        return Math.max(0, remaining);
+    }
+
+    /**
      * Cancel the existing task.
      */
     private void cancelExistingTask() {

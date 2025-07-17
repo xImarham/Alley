@@ -17,7 +17,6 @@ import org.bukkit.inventory.ItemStack;
  * @date 5/20/2024
  */
 public class ArenaListener implements Listener {
-
     @EventHandler(priority = EventPriority.LOW)
     private void onPlayerInteractEvent(PlayerInteractEvent event) {
         if (event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
@@ -47,7 +46,7 @@ public class ArenaListener implements Listener {
                 int getBlockZ = clickedBlock.getLocation().getBlockZ();
 
                 String coordinates = getBlockX + " | " + getBlockY + " | " + getBlockZ;
-                String message = locationType == 1 ? "&aSet minimum location to &b" + coordinates : "&aSet maximum location to &b" + coordinates;
+                String message = locationType == 1 ? "&aSet minimum location to &6" + coordinates : "&aSet maximum location to &6" + coordinates;
 
                 player.sendMessage(CC.translate(message));
             }

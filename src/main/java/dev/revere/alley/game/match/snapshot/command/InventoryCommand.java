@@ -1,12 +1,13 @@
 package dev.revere.alley.game.match.snapshot.command;
 
+import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
-import dev.revere.alley.game.match.snapshot.SnapshotRepository;
-import dev.revere.alley.game.match.snapshot.menu.InventorySnapshotMenu;
+import dev.revere.alley.game.match.snapshot.ISnapshotRepository;
+import dev.revere.alley.game.match.snapshot.Snapshot;
+import dev.revere.alley.game.match.snapshot.menu.SnapshotMenu;
 import dev.revere.alley.util.chat.CC;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
@@ -24,22 +25,25 @@ public class InventoryCommand extends BaseCommand {
         String[] args = command.getArgs();
 
         if (command.length() < 1) {
-            player.sendMessage(CC.translate("&cUsage: /inventory (player)"));
+            player.sendMessage(CC.translate("&cUsage: /inventory (uuid)"));
             return;
         }
 
-        UUID uuid = Bukkit.getOfflinePlayer(args[0]).getUniqueId();
-        if (uuid == null) {
-            player.sendMessage(CC.translate("&cThat player is invalid."));
+        String uuid = args[0];
+        Snapshot snapshot;
+        ISnapshotRepository snapshotRepository = Alley.getInstance().getService(ISnapshotRepository.class);
+
+        try {
+            snapshot = snapshotRepository.getSnapshot(UUID.fromString(uuid));
+        } catch (Exception exception) {
+            snapshot = snapshotRepository.getSnapshot(uuid);
+        }
+
+        if (snapshot == null) {
+            player.sendMessage(CC.translate("&cThis inventory has expired."));
             return;
         }
 
-        SnapshotRepository snapshotRepository = this.plugin.getSnapshotRepository();
-        if (snapshotRepository.getSnapshot(uuid) == null) {
-            player.sendMessage(CC.translate("&cYou cannot view that player's inventory any longer."));
-            return;
-        }
-
-        new InventorySnapshotMenu(uuid).openMenu(player);
+        new SnapshotMenu(snapshot).openMenu(player);
     }
 }

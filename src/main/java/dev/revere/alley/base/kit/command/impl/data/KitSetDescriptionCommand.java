@@ -3,8 +3,8 @@ package dev.revere.alley.base.kit.command.impl.data;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
+import dev.revere.alley.base.kit.IKitService;
 import dev.revere.alley.base.kit.Kit;
-import dev.revere.alley.base.kit.KitService;
 import dev.revere.alley.config.locale.impl.KitLocale;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.entity.Player;
@@ -24,11 +24,11 @@ public class KitSetDescriptionCommand extends BaseCommand {
         String[] args = command.getArgs();
 
         if (command.length() < 2) {
-            sender.sendMessage(CC.translate("&6Usage: &e/kit description &b<kitName> <description/clear>"));
+            sender.sendMessage(CC.translate("&6Usage: &e/kit description &6<kitName> <description/clear>"));
             return;
         }
 
-        KitService kitService = this.plugin.getKitService();
+        IKitService kitService = this.plugin.getService(IKitService.class);
         Kit kit = kitService.getKit(args[0]);
         if (kit == null) {
             sender.sendMessage(CC.translate(KitLocale.KIT_NOT_FOUND.getMessage()));
@@ -37,14 +37,14 @@ public class KitSetDescriptionCommand extends BaseCommand {
 
         if (args[1].equalsIgnoreCase("clear")) {
             kit.setDescription("");
-            this.plugin.getKitService().saveKit(kit);
+            this.plugin.getService(IKitService.class).saveKit(kit);
             sender.sendMessage(CC.translate(KitLocale.KIT_DESCRIPTION_CLEARED.getMessage().replace("{kit-name}", kit.getName())));
             return;
         }
 
         String description = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
         kit.setDescription(description);
-        this.plugin.getKitService().saveKit(kit);
+        this.plugin.getService(IKitService.class).saveKit(kit);
         sender.sendMessage(CC.translate(KitLocale.KIT_DESCRIPTION_SET.getMessage().replace("{kit-name}", kit.getName()).replace("{description}", description)));
     }
 }

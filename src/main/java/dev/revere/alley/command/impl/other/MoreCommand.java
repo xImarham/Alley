@@ -21,7 +21,7 @@ public class MoreCommand extends BaseCommand {
         String[] args = command.getArgs();
 
         if (args.length < 2) {
-            player.sendMessage(CC.translate("&6Usage: &e/more &b<soup/potion> <amount>"));
+            player.sendMessage(CC.translate("&6Usage: &e/more &6<soup/potion> <amount>"));
             return;
         }
 
@@ -37,12 +37,12 @@ public class MoreCommand extends BaseCommand {
             for (int i = 0; i < amount; i++) {
                 player.getInventory().addItem(new ItemStack(Material.MUSHROOM_SOUP));
             }
-            player.sendMessage(CC.translate("&aYou've received &b" + amount + " &asoups."));
+            player.sendMessage(CC.translate("&aYou've received &6" + amount + " &asoups."));
         } else if (args[0].equalsIgnoreCase("potion")) {
             for (int i = 0; i < amount; i++) {
                 player.getInventory().addItem(new ItemStack(Material.POTION, 1, (short) 16421));
             }
-            player.sendMessage(CC.translate("&aYou've received &b" + amount + " &apotions."));
+            player.sendMessage(CC.translate("&aYou've received &6" + amount + " &apotions."));
         } else {
             player.sendMessage(CC.translate("&cInvalid item."));
         }

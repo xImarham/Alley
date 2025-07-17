@@ -2,12 +2,14 @@ package dev.revere.alley.base.queue.menu.button;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.menu.Button;
-import dev.revere.alley.base.hotbar.enums.EnumHotbarType;
 import dev.revere.alley.base.kit.Kit;
 import dev.revere.alley.base.queue.Queue;
+import dev.revere.alley.base.server.IServerService;
+import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.tool.item.ItemBuilder;
 import dev.revere.alley.util.PlayerUtil;
+import dev.revere.alley.util.chat.CC;
 import lombok.AllArgsConstructor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
@@ -33,7 +35,7 @@ public class UnrankedButton extends Button {
         Kit kit = this.queue.getKit();
 
         return new ItemBuilder(kit.getIcon())
-                .name(kit.getDisplayName())
+                .name(kit.getMenuTitle())
                 .durability(kit.getDurability())
                 .hideMeta()
                 .lore(this.getLore(kit))
@@ -56,13 +58,13 @@ public class UnrankedButton extends Button {
         }
 
         Collections.addAll(lore,
-                "&fPlaying: &b" + this.queue.getQueueFightCount(),
-                "&fQueueing: &b" + this.queue.getProfiles().size(),
+                "&fPlaying: &6" + this.queue.getQueueFightCount(),
+                "&fQueueing: &6" + this.queue.getTotalPlayerCount(),
                 "",
-                "&f&lDaily Streak: &bN/A",
-                " &f1. &bNULL &f- &bN/A",
-                " &f2. &bNULL &f- &bN/A",
-                " &f3. &bNULL &f- &bN/A",
+                "&f&lDaily Streak: &6N/A",
+                " &f1. &6NULL &f- &6N/A",
+                " &f2. &6NULL &f- &6N/A",
+                " &f3. &6NULL &f- &6N/A",
                 "",
                 "&aClick to play!"
         );
@@ -74,13 +76,19 @@ public class UnrankedButton extends Button {
     public void clicked(Player player, int slot, ClickType clickType, int hotbarSlot) {
         if (clickType != ClickType.LEFT) return;
 
-        if (this.plugin.getServerService().isQueueingEnabled(player)) return;
+        IServerService serverService = Alley.getInstance().getService(IServerService.class);
+        if (!serverService.isQueueingAllowed()) {
+            player.sendMessage(CC.translate("&cQueueing is temporarily disabled. Please try again later."));
+            player.closeInventory();
+            return;
+        }
 
-        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+        Profile profile = profileService.getProfile(player.getUniqueId());
         this.queue.addPlayer(player, this.queue.isRanked() ? profile.getProfileData().getRankedKitData().get(this.queue.getKit().getName()).getElo() : 0);
+        this.playNeutral(player);
+
         PlayerUtil.reset(player, false);
         player.closeInventory();
-        this.playNeutral(player);
-        this.plugin.getHotbarService().applyHotbarItems(player, EnumHotbarType.QUEUE);
     }
 }

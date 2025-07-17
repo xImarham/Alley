@@ -4,7 +4,8 @@ import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.base.arena.AbstractArena;
-import dev.revere.alley.util.chat.CC;
+import dev.revere.alley.base.arena.IArenaService;
+import dev.revere.alley.config.locale.impl.ArenaLocale;
 import org.bukkit.entity.Player;
 
 /**
@@ -18,10 +19,10 @@ public class ArenaSaveAllCommand extends BaseCommand {
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
 
-        for (AbstractArena arena : this.plugin.getArenaService().getArenas()) {
-            this.plugin.getArenaService().saveArena(arena);
+        for (AbstractArena arena : this.plugin.getService(IArenaService.class).getArenas()) {
+            this.plugin.getService(IArenaService.class).saveArena(arena);
         }
 
-        player.sendMessage(CC.translate("&aAll arenas have been saved!"));
+        player.sendMessage(ArenaLocale.SAVED_ALL.getMessage());
     }
 }

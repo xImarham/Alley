@@ -1,10 +1,15 @@
 package dev.revere.alley.profile.listener;
 
 import dev.revere.alley.Alley;
-import dev.revere.alley.base.hotbar.enums.EnumHotbarType;
+import dev.revere.alley.api.constant.IPluginConstant;
+import dev.revere.alley.base.hotbar.IHotbarService;
+import dev.revere.alley.base.spawn.ISpawnService;
+import dev.revere.alley.base.visibility.IVisibilityService;
+import dev.revere.alley.config.IConfigService;
+import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
-import dev.revere.alley.profile.ProfileService;
 import dev.revere.alley.profile.enums.EnumProfileState;
+import dev.revere.alley.adapter.core.ICoreAdapter;
 import dev.revere.alley.util.PlayerUtil;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.GameMode;
@@ -28,22 +33,10 @@ import org.bukkit.inventory.InventoryHolder;
  * @since 19/04/2024
  */
 public class ProfileListener implements Listener {
-    protected final Alley plugin;
-    protected final ProfileService profileService;
-
-    /**
-     * Constructor for the ProfileListener class.
-     *
-     * @param plugin The Alley instance
-     */
-    public ProfileListener(Alley plugin) {
-        this.plugin = plugin;
-        this.profileService = plugin.getProfileService();
-    }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     private void onLogin(PlayerLoginEvent event) {
-        if (!this.plugin.isLoaded()) {
+        if (!Alley.getInstance().isEnabled()) {
             event.disallow(PlayerLoginEvent.Result.KICK_OTHER, CC.translate("&cThe server is still loading, please try again in a few seconds."));
             return;
         }
@@ -55,12 +48,13 @@ public class ProfileListener implements Listener {
         Profile profile = new Profile(event.getPlayer().getUniqueId());
         profile.load();
 
-        this.profileService.addProfile(profile);
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+        profileService.getProfile(event.getPlayer().getUniqueId());
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     private void onJoin(PlayerJoinEvent event) {
-        if (!this.plugin.isLoaded()) {
+        if (!Alley.getInstance().isEnabled()) {
             event.getPlayer().kickPlayer(CC.translate("&cThe server is still loading, please try again in a few seconds."));
             return;
         }
@@ -68,7 +62,8 @@ public class ProfileListener implements Listener {
         event.setJoinMessage(null);
 
         Player player = event.getPlayer();
-        Profile profile = this.profileService.getProfile(player.getUniqueId());
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+        Profile profile = profileService.getProfile(player.getUniqueId());
 
         this.handlePlayerJoin(profile, player);
         this.sendJoinMessage(player);
@@ -78,7 +73,10 @@ public class ProfileListener implements Listener {
     private void onEntityDamage(EntityDamageEvent event) {
         if (!(event.getEntity() instanceof Player)) return;
         Player player = (Player) event.getEntity();
-        Profile profile = this.profileService.getProfile(player.getUniqueId());
+
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+        Profile profile = profileService.getProfile(player.getUniqueId());
+
         if (profile.getState() == EnumProfileState.LOBBY
                 || profile.getState() == EnumProfileState.SPECTATING
                 || profile.getState() == EnumProfileState.EDITING
@@ -90,7 +88,8 @@ public class ProfileListener implements Listener {
     @EventHandler
     private void onPlayerQuitEvent(PlayerQuitEvent event) {
         Player player = event.getPlayer();
-        Profile profile = this.profileService.getProfile(player.getUniqueId());
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+        Profile profile = profileService.getProfile(player.getUniqueId());
 
         event.setQuitMessage(null);
 
@@ -102,17 +101,21 @@ public class ProfileListener implements Listener {
     @EventHandler
     private void onPlayerInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
-        Profile profile = this.profileService.getProfile(player.getUniqueId());
-        if (profile.getState() == EnumProfileState.LOBBY) {
+
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+        Profile profile = profileService.getProfile(player.getUniqueId());
+
+        if (profile.getState() == EnumProfileState.LOBBY
+                || profile.getState() == EnumProfileState.EDITING
+                || profile.getState() == EnumProfileState.SPECTATING) {
             if (player.getGameMode() == GameMode.CREATIVE) return;
             event.setCancelled(true);
-        }
 
-        Block block = event.getClickedBlock();
-        if (block != null && block.getState() instanceof InventoryHolder) {
-            if (block.getType() == Material.CHEST || block.getType() == Material.DISPENSER ||
-                    block.getType() == Material.FURNACE || block.getType() == Material.BREWING_STAND) {
-                event.setCancelled(true);
+            Block block = event.getClickedBlock();
+            if (block != null && block.getState() instanceof InventoryHolder) {
+                if (block.getType() == Material.CHEST || block.getType() == Material.DISPENSER || block.getType() == Material.FURNACE || block.getType() == Material.BREWING_STAND) {
+                    event.setCancelled(true);
+                }
             }
         }
     }
@@ -127,6 +130,11 @@ public class ProfileListener implements Listener {
      * @param player  The player who joined.
      */
     private void handlePlayerJoin(Profile profile, Player player) {
+        ICoreAdapter coreAdapter = Alley.getInstance().getService(ICoreAdapter.class);
+        ISpawnService spawnService = Alley.getInstance().getService(ISpawnService.class);
+        IHotbarService hotbarService = Alley.getInstance().getService(IHotbarService.class);
+        IVisibilityService visibilityService = Alley.getInstance().getService(IVisibilityService.class);
+
         profile.setState(EnumProfileState.LOBBY);
         profile.setName(player.getName());
         profile.setOnline(true);
@@ -134,7 +142,7 @@ public class ProfileListener implements Listener {
         profile.setParty(null);
         profile.setFfaMatch(null);
 
-        profile.setNameColor(this.plugin.getCoreAdapter().getCore().getPlayerColor(player));
+        profile.setNameColor(coreAdapter.getCore().getPlayerColor(player));
         profile.getProfileData().getSettingData().setTimeBasedOnProfileSetting(player);
         profile.getProfileData().getPlayTimeData().setLastLogin(System.currentTimeMillis());
         profile.getProfileData().determineLevel();
@@ -145,10 +153,11 @@ public class ProfileListener implements Listener {
 
         PlayerUtil.reset(player, false);
 
-        this.plugin.getSpawnService().teleportToSpawn(player);
-        this.plugin.getHotbarService().applyHotbarItems(player, EnumHotbarType.LOBBY);
+        spawnService.teleportToSpawn(player);
+        hotbarService.applyHotbarItems(player);
+        visibilityService.updateVisibility(player);
 
-        this.plugin.getVisibilityService().updateVisibilityAll(player);
+        player.updateInventory();
     }
 
     /**
@@ -158,13 +167,16 @@ public class ProfileListener implements Listener {
      * @param player The player who joined.
      */
     private void sendJoinMessage(Player player) {
-        FileConfiguration config = this.plugin.getConfigService().getMessagesConfig();
-        if (config.getBoolean("welcome-message.enabled")) {
-            for (String message : config.getStringList("welcome-message.message")) {
+        IConfigService configService = Alley.getInstance().getService(IConfigService.class);
+        IPluginConstant constants = Alley.getInstance().getService(IPluginConstant.class);
+
+        FileConfiguration msgConfig = configService.getMessagesConfig();
+        if (msgConfig.getBoolean("welcome-message.enabled")) {
+            for (String message : msgConfig.getStringList("welcome-message.message")) {
                 player.sendMessage(CC.translate(message)
                         .replace("{player}", player.getName())
-                        .replace("{version}", this.plugin.getPluginConstant().getVersion())
-                        .replace("{author}", this.plugin.getDescription().getAuthors().toString().replace("[", "").replace("]", ""))
+                        .replace("{version}", constants.getVersion())
+                        .replace("{author}", constants.getAuthors().toString().replace("[", "").replace("]", ""))
                 );
             }
         }

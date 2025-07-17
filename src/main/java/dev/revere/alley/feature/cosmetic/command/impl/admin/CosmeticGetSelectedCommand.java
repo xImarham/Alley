@@ -1,10 +1,14 @@
 package dev.revere.alley.feature.cosmetic.command.impl.admin;
 
+import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
+import dev.revere.alley.feature.cosmetic.EnumCosmeticType;
+import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.data.impl.ProfileCosmeticData;
+import dev.revere.alley.util.StringUtil;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -22,7 +26,7 @@ public class CosmeticGetSelectedCommand extends BaseCommand {
         String[] args = command.getArgs();
 
         if (args.length != 1) {
-            player.sendMessage(CC.translate("&cUsage: /cosmetic getselected <player>"));
+            player.sendMessage(CC.translate("&cUsage: /cosmetic get <player>"));
             return;
         }
 
@@ -32,14 +36,17 @@ public class CosmeticGetSelectedCommand extends BaseCommand {
             return;
         }
 
-        Profile profile = this.plugin.getProfileService().getProfile(target.getUniqueId());
-        player.sendMessage(CC.translate("     &b&lSelected Cosmetics for " + target.getName()));
+        Profile profile = this.plugin.getService(IProfileService.class).getProfile(target.getUniqueId());
+        player.sendMessage(CC.translate("     &6&lSelected Cosmetics for " + target.getName()));
 
         ProfileCosmeticData cosmeticData = profile.getProfileData().getCosmeticData();
-        String killEffect = cosmeticData.getSelectedKillEffect();
-        String soundEffect = cosmeticData.getSelectedSoundEffect();
 
-        player.sendMessage(CC.translate("      &f● &bKill Effect: &f" + killEffect));
-        player.sendMessage(CC.translate("      &f● &bSound Effect: &f" + soundEffect));
+        for (EnumCosmeticType type : EnumCosmeticType.values()) {
+            String selectedName = cosmeticData.getSelected(type);
+
+            String friendlyTypeName = StringUtil.formatEnumName(type);
+
+            player.sendMessage(CC.translate(String.format("      &f● &6%s: &f%s", friendlyTypeName, selectedName)));
+        }
     }
 }

@@ -4,6 +4,9 @@ import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.annotation.CompleterData;
+import dev.revere.alley.base.arena.AbstractArena;
+import dev.revere.alley.base.arena.IArenaService;
+import dev.revere.alley.config.locale.impl.ArenaLocale;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.entity.Player;
 
@@ -22,7 +25,7 @@ public class ArenaKitListCommand extends BaseCommand {
         List<String> completion = new ArrayList<>();
 
         if (command.getArgs().length == 1 && command.getPlayer().hasPermission("alley.admin")) {
-            this.plugin.getArenaService().getArenas().forEach(arena -> completion.add(arena.getName()));
+            this.plugin.getService(IArenaService.class).getArenas().forEach(arena -> completion.add(arena.getName()));
         }
 
         return completion;
@@ -35,22 +38,24 @@ public class ArenaKitListCommand extends BaseCommand {
         String[] args = command.getArgs();
 
         if (args.length < 1) {
-            player.sendMessage(CC.translate("&6Usage: &e/arena kitlist &b<arenaName>"));
+            player.sendMessage(CC.translate("&6Usage: &e/arena kitlist &6<arenaName>"));
             return;
         }
 
         String arenaName = args[0];
-        if (this.plugin.getArenaService().getArenaByName(arenaName) == null) {
-            player.sendMessage(CC.translate("&cAn arena with that name does not exist!"));
+        IArenaService arenaService = this.plugin.getService(IArenaService.class);
+        AbstractArena arena = arenaService.getArenaByName(arenaName);
+        if (arena == null) {
+            player.sendMessage(ArenaLocale.NOT_FOUND.getMessage().replace("{arena-name}", arenaName));
             return;
         }
 
         player.sendMessage("");
-        player.sendMessage(CC.translate("     &b&l" + arenaName + " Kit List &f(" + this.plugin.getArenaService().getArenaByName(arenaName).getKits().size() + "&f)"));
-        if (this.plugin.getArenaService().getArenaByName(arenaName).getKits().isEmpty()) {
+        player.sendMessage(CC.translate("     &6&l" + arenaName + " Kit List &f(" + arena.getKits().size() + "&f)"));
+        if (arena.getKits().isEmpty()) {
             player.sendMessage(CC.translate("      &f● &cNo Arena Kits available."));
         }
-        this.plugin.getArenaService().getArenaByName(arenaName).getKits().forEach(kit -> player.sendMessage(CC.translate("      &f● &b" + kit)));
+        arena.getKits().forEach(kit -> player.sendMessage(CC.translate("      &f● &6" + kit)));
         player.sendMessage("");
     }
 }

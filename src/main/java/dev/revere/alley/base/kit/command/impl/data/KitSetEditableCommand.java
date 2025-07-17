@@ -3,8 +3,8 @@ package dev.revere.alley.base.kit.command.impl.data;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
+import dev.revere.alley.base.kit.IKitService;
 import dev.revere.alley.base.kit.Kit;
-import dev.revere.alley.base.kit.KitService;
 import dev.revere.alley.config.locale.impl.KitLocale;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.command.CommandSender;
@@ -22,12 +22,12 @@ public class KitSetEditableCommand extends BaseCommand {
         String[] args = command.getArgs();
 
         if (args.length < 1) {
-            sender.sendMessage(CC.translate("&6Usage: &e/kit seteditable &b<name> <true/false>"));
+            sender.sendMessage(CC.translate("&6Usage: &e/kit seteditable &6<name> <true/false>"));
             return;
         }
 
         String kitName = args[0];
-        KitService kitService = this.plugin.getKitService();
+        IKitService kitService = this.plugin.getService(IKitService.class);
         Kit kit = kitService.getKit(kitName);
         if (kit == null) {
             sender.sendMessage(CC.translate(KitLocale.KIT_NOT_FOUND.getMessage()));
@@ -44,6 +44,8 @@ public class KitSetEditableCommand extends BaseCommand {
 
         kit.setEditable(editable);
         kitService.saveKit(kit);
-        sender.sendMessage(CC.translate("&aSuccessfully set the kit named &b" + kit.getDisplayName() + " &ato editable: &b" + editable + "&a."));
+        sender.sendMessage(CC.translate(KitLocale.KIT_SET_EDITABLE.getMessage()
+                .replace("{kit-name}", kit.getName())
+                .replace("{editable}", String.valueOf(editable))));
     }
 }

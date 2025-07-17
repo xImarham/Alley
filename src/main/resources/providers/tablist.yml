@@ -2,9 +2,9 @@ tablist:
   enabled: true
   header:
     - ""
-    - "&b&lRevere Network"
+    - "&6&lRevere Network"
     - ""
   footer:
     - ""
-    - "&fPlaying with &b&lAlley &fdeveloped by &b&lRevere Inc."
+    - "&fPlaying with &6&lAlley &fdeveloped by &6&lRevere Inc."
     - ""

@@ -4,6 +4,7 @@ import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.game.ffa.AbstractFFAMatch;
+import dev.revere.alley.game.ffa.IFFAService;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.entity.Player;
 
@@ -25,18 +26,18 @@ public class FFAListPlayersCommand extends BaseCommand {
         }
 
         String kitName = args[0];
-        AbstractFFAMatch match = this.plugin.getFfaService().getFFAMatch(kitName);
+        AbstractFFAMatch match = this.plugin.getService(IFFAService.class).getFFAMatch(kitName);
         if (match == null) {
             player.sendMessage(CC.translate("&cThere is no FFA match with the name " + kitName + "."));
             return;
         }
 
         player.sendMessage("");
-        player.sendMessage(CC.translate("     &b&l" + match.getKit().getDisplayName() + " Player List &f(" + match.getPlayers().size() + "&f)"));
+        player.sendMessage(CC.translate("     &6&l" + match.getKit().getDisplayName() + " Player List &f(" + match.getPlayers().size() + "&f)"));
         if (match.getPlayers().isEmpty()) {
             player.sendMessage(CC.translate("      &f● &cNo Players available."));
         }
-        match.getPlayers().forEach(participant -> player.sendMessage(CC.translate("      &f● &b" + participant.getName())));
+        match.getPlayers().forEach(participant -> player.sendMessage(CC.translate("      &f● &6" + participant.getName())));
         player.sendMessage("");
     }
 }

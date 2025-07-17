@@ -1,6 +1,8 @@
 package dev.revere.alley.tool.visual;
 
+import dev.revere.alley.util.chat.CC;
 import lombok.experimental.UtilityClass;
+import org.bukkit.Location;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +14,17 @@ import java.util.List;
  */
 @UtilityClass
 public class TextFormatter {
+    /**
+     * Formats a Location object into a string representation.
+     *
+     * @param location The Location object to format.
+     * @return A string in the format "X, Y, Z" or "Not set" if the location is null.
+     */
+    public String formatLocation(Location location) {
+        if (location == null) return CC.translate("&cNot set");
+        return location.getBlockX() + ", " + location.getBlockY() + ", " + location.getBlockZ();
+    }
+
     /**
      * Automatically centers a list of strings within the specified width,
      * taking into account visible characters only (color codes are ignored).

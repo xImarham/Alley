@@ -1,7 +1,8 @@
 package dev.revere.alley.provider.scoreboard;
 
-import dev.revere.alley.Alley;
 import dev.revere.alley.api.assemble.interfaces.IAssembleAdapter;
+import dev.revere.alley.config.IConfigService;
+import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
 import dev.revere.alley.provider.scoreboard.impl.FFAScoreboard;
@@ -9,6 +10,7 @@ import dev.revere.alley.provider.scoreboard.impl.LobbyScoreboard;
 import dev.revere.alley.provider.scoreboard.impl.QueueScoreboard;
 import dev.revere.alley.provider.scoreboard.impl.SpectatorScoreboard;
 import dev.revere.alley.provider.scoreboard.impl.match.MatchScoreboard;
+import dev.revere.alley.tool.animation.IAnimationRepository;
 import dev.revere.alley.tool.animation.enums.EnumAnimationType;
 import dev.revere.alley.tool.animation.type.config.impl.ScoreboardTitleAnimationImpl;
 import dev.revere.alley.util.chat.CC;
@@ -24,38 +26,25 @@ import java.util.List;
  * @date 27/03/2024 - 14:27
  */
 public class ScoreboardVisualizer implements IAssembleAdapter {
-    protected final Alley plugin;
+    private final IAnimationRepository animationRepository;
+    private final IProfileService profileService;
+    private final IConfigService configService;
 
-    private final LobbyScoreboard lobbyScoreboard;
-    private final QueueScoreboard queueScoreboard;
-    private final MatchScoreboard matchScoreboard;
-    private final SpectatorScoreboard spectatorScoreboard;
-    private final FFAScoreboard ffaScoreboard;
+    private final LobbyScoreboard lobbyScoreboard = new LobbyScoreboard();
+    private final QueueScoreboard queueScoreboard = new QueueScoreboard();
+    private final MatchScoreboard matchScoreboard = new MatchScoreboard();
+    private final SpectatorScoreboard spectatorScoreboard = new SpectatorScoreboard();
+    private final FFAScoreboard ffaScoreboard = new FFAScoreboard();
 
-    /**
-     * Constructor for the ScoreboardVisualizer class.
-     *
-     * @param plugin The Alley plugin instance.
-     */
-    public ScoreboardVisualizer(Alley plugin) {
-        this.plugin = plugin;
-
-        this.lobbyScoreboard = new LobbyScoreboard(plugin);
-        this.queueScoreboard = new QueueScoreboard(plugin);
-        this.matchScoreboard = new MatchScoreboard(plugin);
-        this.spectatorScoreboard = new SpectatorScoreboard(plugin);
-        this.ffaScoreboard = new FFAScoreboard(plugin);
+    public ScoreboardVisualizer(IAnimationRepository animationRepository, IProfileService profileService, IConfigService configService) {
+        this.animationRepository = animationRepository;
+        this.profileService = profileService;
+        this.configService = configService;
     }
 
-    /**
-     * Get the title of the scoreboard.
-     *
-     * @param player The player to get the title for.
-     * @return The title of the scoreboard.
-     */
     @Override
     public String getTitle(Player player) {
-        return this.plugin.getAnimationRepository().getAnimation(ScoreboardTitleAnimationImpl.class, EnumAnimationType.CONFIG).getText();
+        return this.animationRepository.getAnimation(ScoreboardTitleAnimationImpl.class, EnumAnimationType.CONFIG).getText();
     }
 
     /**
@@ -66,7 +55,7 @@ public class ScoreboardVisualizer implements IAssembleAdapter {
      */
     @Override
     public List<String> getLines(Player player) {
-        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
+        Profile profile = this.profileService.getProfile(player.getUniqueId());
 
         if (profile.getProfileData().getSettingData().isScoreboardEnabled()) {
 
@@ -94,13 +83,10 @@ public class ScoreboardVisualizer implements IAssembleAdapter {
                     break;
             }
 
-            List<String> footer = this.plugin.getConfigService().getScoreboardConfig().getStringList("scoreboard.footer-addition");
-            for (String line : footer) {
-                lines.add(CC.translate(line));
-            }
+            List<String> footer = this.configService.getScoreboardConfig().getStringList("scoreboard.footer-addition");
+            footer.forEach(line -> lines.add(CC.translate(line)));
 
-            lines.replaceAll(line -> line.replaceAll("\\{sidebar}", this.getScoreboardLines(profile)));
-
+            lines.replaceAll(line -> line.replace("{sidebar}", this.getScoreboardLines(profile)));
             return lines;
         }
         return null;
@@ -114,9 +100,8 @@ public class ScoreboardVisualizer implements IAssembleAdapter {
      */
     private String getScoreboardLines(Profile profile) {
         if (profile.getProfileData().getSettingData().isShowScoreboardLines()) {
-            return this.plugin.getConfigService().getScoreboardConfig().getString("scoreboard.sidebar-format");
+            return this.configService.getScoreboardConfig().getString("scoreboard.sidebar-format");
         }
-
         return "";
     }
 }

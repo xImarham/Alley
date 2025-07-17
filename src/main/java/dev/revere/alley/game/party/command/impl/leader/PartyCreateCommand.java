@@ -3,8 +3,10 @@ package dev.revere.alley.game.party.command.impl.leader;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
+import dev.revere.alley.base.server.IServerService;
 import dev.revere.alley.config.locale.impl.PartyLocale;
-import dev.revere.alley.game.party.PartyService;
+import dev.revere.alley.game.party.IPartyService;
+import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.enums.EnumProfileState;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.entity.Player;
@@ -23,10 +25,12 @@ public class PartyCreateCommand extends BaseCommand {
         Player player = command.getPlayer();
         UUID playerUUID = player.getUniqueId();
 
-        PartyService partyService = this.plugin.getPartyService();
+        IProfileService profileService = this.plugin.getService(IProfileService.class);
+        IPartyService partyService = this.plugin.getService(IPartyService.class);
+        IServerService serverService = this.plugin.getService(IServerService.class);
 
-        if (this.plugin.getProfileService().getProfile(player.getUniqueId()).getState() != EnumProfileState.LOBBY) {
-            player.sendMessage(CC.translate("&cYou must be at spawn in order to execute this command :v"));
+        if (profileService.getProfile(playerUUID).getState() != EnumProfileState.LOBBY) {
+            player.sendMessage(CC.translate("&cYou must be at spawn to execute this command."));
             return;
         }
 
@@ -35,12 +39,8 @@ public class PartyCreateCommand extends BaseCommand {
             return;
         }
 
-        if (partyService.getPartyByMember(playerUUID) != null) {
-            player.sendMessage(CC.translate(PartyLocale.ALREADY_IN_PARTY.getMessage()));
-            return;
-        }
-
-        if (this.plugin.getServerService().isQueueingEnabled(player)) {
+        if (!serverService.isQueueingAllowed()) {
+            player.sendMessage(CC.translate("&cYou cannot create a party while server queueing is disabled."));
             return;
         }
 

@@ -4,9 +4,10 @@ import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.base.arena.AbstractArena;
-import dev.revere.alley.base.arena.ArenaService;
+import dev.revere.alley.base.arena.IArenaService;
 import dev.revere.alley.base.arena.enums.EnumArenaType;
 import dev.revere.alley.base.arena.impl.StandAloneArena;
+import dev.revere.alley.config.locale.impl.ArenaLocale;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.entity.Player;
 
@@ -23,16 +24,16 @@ public class ArenaSetPortalCommand extends BaseCommand {
         String[] args = command.getArgs();
 
         if (args.length < 2) {
-            player.sendMessage(CC.translate("&6Usage: &e/arena setportal &b<name> <1/2>"));
+            player.sendMessage(CC.translate("&6Usage: &e/arena setportal &6<name> <red/blue>"));
             return;
         }
 
-        ArenaService arenaService = this.plugin.getArenaService();
+        IArenaService arenaService = this.plugin.getService(IArenaService.class);
         String name = args[0];
 
         AbstractArena arena = arenaService.getArenaByName(name);
         if (arena == null) {
-            player.sendMessage(CC.translate("&cAn arena with that name does not exist."));
+            player.sendMessage(ArenaLocale.NOT_FOUND.getMessage().replace("{arena-name}", name));
             return;
         }
 
@@ -42,19 +43,19 @@ public class ArenaSetPortalCommand extends BaseCommand {
         }
 
         String portal = args[1];
-        if (!portal.equalsIgnoreCase("1") && !portal.equalsIgnoreCase("2")) {
-            player.sendMessage(CC.translate("&cInvalid portal. Please use '1' or '2'."));
+        if (!portal.equalsIgnoreCase("red") && !portal.equalsIgnoreCase("blue")) {
+            player.sendMessage(CC.translate("&cInvalid portal. Please use 'red' or 'blue'."));
             return;
         }
 
         StandAloneArena standAloneArena = (StandAloneArena) arena;
-        if (portal.equalsIgnoreCase("1")) {
+        if (portal.equalsIgnoreCase("red")) {
             standAloneArena.setTeam1Portal(player.getLocation());
-        } else if (portal.equalsIgnoreCase("2")) {
+        } else if (portal.equalsIgnoreCase("blue")) {
             standAloneArena.setTeam2Portal(player.getLocation());
         }
 
-        player.sendMessage(CC.translate("&aSuccessfully set the " + portal + " portal for the arena " + name + "."));
-        arena.saveArena();
+        arenaService.saveArena(arena);
+        player.sendMessage(ArenaLocale.PORTAL_SET.getMessage().replace("{arena-name}", arena.getName()).replace("{portal}", portal));
     }
 }

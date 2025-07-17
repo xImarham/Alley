@@ -1,13 +1,21 @@
 package dev.revere.alley.game.match.impl;
 
+import dev.revere.alley.Alley;
 import dev.revere.alley.base.arena.AbstractArena;
+import dev.revere.alley.base.combat.ICombatService;
 import dev.revere.alley.base.kit.Kit;
+import dev.revere.alley.base.kit.setting.impl.mode.KitSettingBridgesImpl;
 import dev.revere.alley.base.kit.setting.impl.mode.KitSettingStickFightImpl;
 import dev.revere.alley.base.queue.Queue;
+import dev.revere.alley.base.visibility.IVisibilityService;
+import dev.revere.alley.config.IConfigService;
 import dev.revere.alley.game.match.enums.EnumMatchState;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.game.match.player.participant.TeamGameParticipant;
+import dev.revere.alley.tool.reflection.IReflectionRepository;
+import dev.revere.alley.tool.reflection.impl.TitleReflectionService;
+import dev.revere.alley.util.ListenerUtil;
 import dev.revere.alley.util.PlayerUtil;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,6 +23,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.util.Vector;
 
 /**
@@ -59,7 +68,7 @@ public class MatchRoundsImpl extends MatchRegularImpl {
     @Override
     public void handleRoundEnd() {
         this.winner = this.participantA.isAllDead() ? this.participantB : this.participantA;
-        this.winner.getPlayer().getData().incrementScore();
+        this.winner.getLeader().getData().incrementScore();
         this.loser = this.participantA.isAllDead() ? this.participantA : this.participantB;
         this.currentRound++;
 
@@ -73,13 +82,12 @@ public class MatchRoundsImpl extends MatchRegularImpl {
                 this.getRunnable().setStage(4);
                 super.handleRoundEnd();
             } else {
-
                 this.removePlacedBlocks();
                 this.handleRespawn(this.fallenPlayer);
                 this.setState(EnumMatchState.ENDING_ROUND);
 
                 this.getParticipants().forEach(participant -> participant.getPlayers().forEach(playerParticipant -> {
-                    Player player1 = playerParticipant.getPlayer();
+                    Player player1 = playerParticipant.getTeamPlayer();
                     player1.setVelocity(new Vector(0, 0, 0));
                     playerParticipant.setDead(false);
 
@@ -90,11 +98,13 @@ public class MatchRoundsImpl extends MatchRegularImpl {
             if (this.canEndMatch()) {
                 super.handleRoundEnd();
             } else {
-                this.removePlacedBlocks();
+                if (!getKit().isSettingEnabled(KitSettingBridgesImpl.class)) {
+                    this.removePlacedBlocks();
+                }
                 this.setState(EnumMatchState.ENDING_ROUND);
 
                 this.getParticipants().forEach(participant -> participant.getPlayers().forEach(playerParticipant -> {
-                    Player player = playerParticipant.getPlayer();
+                    Player player = playerParticipant.getTeamPlayer();
                     player.setVelocity(new Vector(0, 0, 0));
                     playerParticipant.setDead(false);
 
@@ -105,19 +115,25 @@ public class MatchRoundsImpl extends MatchRegularImpl {
     }
 
     @Override
-    public void handleDeath(Player player) {
-        GameParticipant<MatchGamePlayerImpl> participant = this.participantA.containsPlayer(player.getUniqueId()) ? this.participantA : this.participantB;
-        participant.getPlayer().getData().incrementDeaths();
+    public void handleDeath(Player player, EntityDamageEvent.DamageCause cause) {
+        GameParticipant<MatchGamePlayerImpl> participant = this.participantA.containsPlayer(player.getUniqueId())
+                ? this.participantA
+                : this.participantB;
+        participant.getLeader().getData().incrementDeaths();
 
         this.fallenPlayer = player;
 
-        this.startRespawnProcess(player);
-    }
-
-    @Override
-    public void startRespawnProcess(Player player) {
         if (this.getKit().isSettingEnabled(KitSettingStickFightImpl.class)) {
-            GameParticipant<MatchGamePlayerImpl> participant;
+            Player lastAttacker = Alley.getInstance().getService(ICombatService.class).getLastAttacker(player);
+            if (lastAttacker == null) {
+                GameParticipant<MatchGamePlayerImpl> opponent = this.participantA.containsPlayer(player.getUniqueId())
+                        ? this.participantB
+                        : this.participantA;
+
+                this.setScorer(opponent.getLeader().getUsername());
+            } else {
+                this.setScorer(lastAttacker.getName());
+            }
 
             if (this.participantA.containsPlayer(player.getUniqueId())) {
                 participant = this.participantA;
@@ -133,24 +149,32 @@ public class MatchRoundsImpl extends MatchRegularImpl {
                         .orElse(null);
 
                 if (gamePlayer != null) {
-                    gamePlayer.getData().incrementDeaths();
-                    gamePlayer.setDead(true);
+                    team.getPlayers().forEach(matchGamePlayer -> {
+                        matchGamePlayer.getData().incrementDeaths();
+                        matchGamePlayer.setDead(true);
+                    });
                     this.handleRoundEnd();
                 }
             } else {
-                MatchGamePlayerImpl gamePlayer = participant.getPlayer();
+                MatchGamePlayerImpl gamePlayer = participant.getLeader();
                 gamePlayer.getData().incrementDeaths();
                 gamePlayer.setDead(true);
                 this.handleRoundEnd();
             }
-        } else {
-            GameParticipant<MatchGamePlayerImpl> participant = this.participantA.containsPlayer(player.getUniqueId()) ? this.participantA : this.participantB;
-            if (participant.getPlayer().getData().isBedBroken() && participant.isAllDead()) {
-                this.handleRoundEnd();
-                return;
-            }
+            return;
+        }
 
-            super.startRespawnProcess(player);
+        super.handleDeath(player, cause);
+    }
+
+    @Override
+    public void handleParticipant(Player player, MatchGamePlayerImpl gamePlayer) {
+        GameParticipant<MatchGamePlayerImpl> participant = this.participantA.containsPlayer(player.getUniqueId())
+                ? this.participantA
+                : this.participantB;
+        if (participant.getLeader().getData().getScore() == this.rounds) {
+            GameParticipant<MatchGamePlayerImpl> opponent = participant == this.participantA ? this.participantB : this.participantA;
+            opponent.getLeader().setEliminated(true);
         }
     }
 
@@ -159,25 +183,29 @@ public class MatchRoundsImpl extends MatchRegularImpl {
         PlayerUtil.reset(player, true);
 
         Location spawnLocation = getParticipants().get(0).containsPlayer(player.getUniqueId()) ? this.getArena().getPos1() : this.getArena().getPos2();
-        player.teleport(spawnLocation);
+        ListenerUtil.teleportAndClearSpawn(player, spawnLocation);
 
         this.giveLoadout(player, this.getKit());
-        this.applyWoolAndArmorColor(player);
+        this.applyColorKit(player);
     }
 
     @Override
     public boolean canStartRound() {
-        return this.participantA.getPlayer().getData().getScore() < this.rounds && this.participantB.getPlayer().getData().getScore() < this.rounds;
+        return this.participantA.getLeader().getData().getScore() < this.rounds && this.participantB.getLeader().getData().getScore() < this.rounds;
     }
 
     @Override
     public boolean canEndRound() {
-        return this.participantA.isAllDead() || this.participantB.isAllDead();
+        return (this.participantA.isAllDead() || this.participantB.isAllDead())
+                || (this.participantA.getAllPlayers().stream().allMatch(MatchGamePlayerImpl::isDisconnected)
+                || this.participantB.getAllPlayers().stream().allMatch(MatchGamePlayerImpl::isDisconnected));
     }
 
     @Override
     public boolean canEndMatch() {
-        return this.participantA.getPlayer().getData().getScore() == this.rounds || this.participantB.getPlayer().getData().getScore() == this.rounds;
+        return (this.participantA.getLeader().getData().getScore() == this.rounds || this.participantB.getLeader().getData().getScore() == this.rounds)
+                || (this.participantA.getAllPlayers().stream().allMatch(MatchGamePlayerImpl::isDisconnected)
+                || this.participantB.getAllPlayers().stream().allMatch(MatchGamePlayerImpl::isDisconnected));
     }
 
     /**
@@ -193,19 +221,29 @@ public class MatchRoundsImpl extends MatchRegularImpl {
 
         String configPath = this.isTeamMatch() ? "match.scored.format.team" : "match.scored.format.solo";
 
-        FileConfiguration config = this.plugin.getConfigService().getMessagesConfig();
+        FileConfiguration config = Alley.getInstance().getService(IConfigService.class).getMessagesConfig();
         if (config.getBoolean("match.scored.enabled")) {
             for (String message : config.getStringList(configPath)) {
                 this.notifyAll(message
                         .replace("{scorer}", scorer)
-                        .replace("{winner}", winner.getPlayer().getUsername())
+                        .replace("{winner}", winner.getLeader().getUsername())
                         .replace("{winner-color}", teamWinnerColor.toString())
-                        .replace("{winner-goals}", String.valueOf(winner.getPlayer().getData().getScore()))
-                        .replace("{loser}", loser.getPlayer().getUsername())
+                        .replace("{winner-goals}", String.valueOf(winner.getLeader().getData().getScore()))
+                        .replace("{loser}", loser.getLeader().getUsername())
                         .replace("{loser-color}", teamLoserColor.toString())
-                        .replace("{loser-goals}", String.valueOf(loser.getPlayer().getData().getScore()))
+                        .replace("{loser-goals}", String.valueOf(loser.getLeader().getData().getScore()))
                 );
             }
         }
+
+        this.getParticipants().forEach(gameParticipant -> gameParticipant.getPlayers().forEach(uuid -> {
+            Player player = this.plugin.getServer().getPlayer(uuid.getUuid());
+            Alley.getInstance().getService(IReflectionRepository.class).getReflectionService(TitleReflectionService.class).sendTitle(
+                    player,
+                    teamWinnerColor.toString() + scorer + " &fhas scored!",
+                    "&f" + winner.getLeader().getData().getScore() + " &7/&f " + this.rounds,
+                    2, 20, 2
+            );
+        }));
     }
 }

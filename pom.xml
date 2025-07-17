@@ -103,6 +103,20 @@
     </repositories>
 
     <dependencies>
+        <dependency>
+            <groupId>dev.revere.spigot</groupId>
+            <artifactId>ZoneSpigot</artifactId>
+            <version>1.0.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/libs/zonespigot-api-1.8.8-R0.1-SNAPSHOT.jar</systemPath>
+        </dependency>
+
+        <dependency>
+            <groupId>io.github.classgraph</groupId>
+            <artifactId>classgraph</artifactId>
+            <version>4.8.165</version>
+        </dependency>
+
         <!-- Lombok -->
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -127,20 +141,18 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- WorldEdit Core -->
         <dependency>
             <groupId>com.sk89q.worldedit</groupId>
-            <artifactId>worldedit-core</artifactId>
-            <version>6.1.4-SNAPSHOT</version>
-            <scope>provided</scope>
+            <artifactId>WorldEdit</artifactId>
+            <version>6.0.0</version>
         </dependency>
 
-        <!-- WorldEdit Bukkit -->
         <dependency>
-            <groupId>com.sk89q.worldedit</groupId>
-            <artifactId>worldedit-bukkit</artifactId>
-            <version>6.1.5</version>
-            <scope>provided</scope>
+            <groupId>com.fastasyncworldedit</groupId>
+            <artifactId>FAWE</artifactId>
+            <version>7.0.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/libs/FAWE.jar</systemPath>
         </dependency>
 
         <!-- ProtocolLib -->
@@ -156,13 +168,6 @@
             <groupId>org.mongodb</groupId>
             <artifactId>mongodb-driver-sync</artifactId>
             <version>4.11.1</version>
-        </dependency>
-
-        <!-- MongoDB Java Driver -->
-        <dependency>
-            <groupId>org.mongodb</groupId>
-            <artifactId>mongo-java-driver</artifactId>
-            <version>3.9.0</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/me.clip/placeholderapi -->

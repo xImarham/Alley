@@ -2,9 +2,11 @@ package dev.revere.alley.base.queue.menu.button;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.menu.Button;
-import dev.revere.alley.base.hotbar.enums.EnumHotbarType;
+import dev.revere.alley.base.hotbar.IHotbarService;
 import dev.revere.alley.base.kit.Kit;
 import dev.revere.alley.base.queue.Queue;
+import dev.revere.alley.base.server.IServerService;
+import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.tool.item.ItemBuilder;
 import dev.revere.alley.util.PlayerUtil;
@@ -34,7 +36,7 @@ public class RankedButton extends Button {
     public ItemStack getButtonItem(Player player) {
         Kit kit = this.queue.getKit();
         return new ItemBuilder(kit.getIcon())
-                .name(kit.getDisplayName())
+                .name(kit.getMenuTitle())
                 .durability(kit.getDurability())
                 .hideMeta()
                 .lore(this.getLore(kit, player))
@@ -57,13 +59,13 @@ public class RankedButton extends Button {
         }
 
         Collections.addAll(lore,
-                "&fPlaying: &b" + this.queue.getQueueFightCount(),
-                "&fQueueing: &b" + this.queue.getProfiles().size(),
+                "&fPlaying: &6" + this.queue.getQueueFightCount(),
+                "&fQueueing: &6" + this.queue.getProfiles().size(),
                 "",
-                "&f&lYour ELO: &b" + this.plugin.getProfileService().getProfile(player.getUniqueId()).getProfileData().getRankedKitData().get(kit.getName()).getElo(),
-                " &f1. &bNULL &f- &bN/A",
-                " &f2. &bNULL &f- &bN/A",
-                " &f3. &bNULL &f- &bN/A",
+                "&f&lYour ELO: &6" + Alley.getInstance().getService(IProfileService.class).getProfile(player.getUniqueId()).getProfileData().getRankedKitData().get(kit.getName()).getElo(),
+                " &f1. &6NULL &f- &6N/A",
+                " &f2. &6NULL &f- &6N/A",
+                " &f3. &6NULL &f- &6N/A",
                 "",
                 "&aClick to play!"
         );
@@ -75,16 +77,22 @@ public class RankedButton extends Button {
     public void clicked(Player player, int slot, ClickType clickType, int hotbarSlot) {
         if (clickType != ClickType.LEFT) return;
 
-        if (this.plugin.getServerService().isQueueingEnabled(player)) return;
+        IServerService serverService = Alley.getInstance().getService(IServerService.class);
+        if (!serverService.isQueueingAllowed()) {
+            player.sendMessage(CC.translate("&cQueueing is temporarily disabled. Please try again later."));
+            player.closeInventory();
+            return;
+        }
 
-        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+        Profile profile = profileService.getProfile(player.getUniqueId());
         if (profile.getProfileData().isRankedBanned()) {
             player.closeInventory();
             Arrays.asList(
                     "",
                     "&c&lRANKED BAN",
                     "&cYou are currently banned from ranked queues.",
-                    "&7You may appeal at &b&ndiscord.gg/alley-practice&7.",
+                    "&7You may appeal at &6&ndiscord.gg/alley-practice&7.",
                     ""
             ).forEach(line -> player.sendMessage(CC.translate(line)));
             return;
@@ -94,6 +102,6 @@ public class RankedButton extends Button {
         PlayerUtil.reset(player, false);
         player.closeInventory();
         this.playNeutral(player);
-        this.plugin.getHotbarService().applyHotbarItems(player, EnumHotbarType.QUEUE);
+        Alley.getInstance().getService(IHotbarService.class).applyHotbarItems(player);
     }
 }

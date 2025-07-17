@@ -2,11 +2,16 @@ package dev.revere.alley.base.hotbar.listener;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.base.hotbar.HotbarItem;
+import dev.revere.alley.base.hotbar.IHotbarService;
+import dev.revere.alley.base.hotbar.enums.EnumHotbarType;
+import dev.revere.alley.base.queue.IQueueService;
+import dev.revere.alley.base.queue.enums.EnumQueueType;
 import dev.revere.alley.base.queue.menu.sub.RankedMenu;
 import dev.revere.alley.feature.leaderboard.menu.LeaderboardMenu;
 import dev.revere.alley.game.match.menu.CurrentMatchesMenu;
 import dev.revere.alley.game.party.menu.duel.DuelOtherPartyMenu;
 import dev.revere.alley.game.party.menu.event.PartyEventMenu;
+import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.entity.Player;
@@ -16,23 +21,14 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.List;
+
 /**
  * @author Remi
  * @project Alley
  * @date 5/27/2024
  */
 public class HotbarListener implements Listener {
-    protected final Alley plugin;
-
-    /**
-     * Constructor for the HotbarListener class.
-     *
-     * @param plugin The Alley plugin instance.
-     */
-    public HotbarListener(Alley plugin) {
-        this.plugin = plugin;
-    }
-
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
         Action action = event.getAction();
@@ -40,15 +36,27 @@ public class HotbarListener implements Listener {
             return;
         }
 
-        Player player = event.getPlayer();
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+        IHotbarService hotbarService = Alley.getInstance().getService(IHotbarService.class);
+        IQueueService queueService = Alley.getInstance().getService(IQueueService.class);
 
-        ItemStack item = player.getItemInHand();
-        if (item == null || !item.hasItemMeta() || !item.getItemMeta().hasDisplayName()) {
+        Player player = event.getPlayer();
+        ItemStack clickedItem = player.getItemInHand();
+
+        if (clickedItem == null || !clickedItem.hasItemMeta() || !clickedItem.getItemMeta().hasDisplayName()) {
             return;
         }
 
-        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
-        HotbarItem hotbarItem = this.plugin.getHotbarService().getItemByStack(item);
+        Profile profile = profileService.getProfile(player.getUniqueId());
+        EnumHotbarType currentHotbarType = hotbarService.getCorrespondingType(profile);
+        if (currentHotbarType == null) return;
+
+        List<HotbarItem> possibleItems = hotbarService.getItemsForType(currentHotbarType);
+
+        HotbarItem hotbarItem = possibleItems.stream()
+                .filter(item -> item.getItemStack().getItemMeta().getDisplayName().equals(clickedItem.getItemMeta().getDisplayName()))
+                .findFirst()
+                .orElse(null);
 
         if (hotbarItem != null) {
             String command = hotbarItem.getHotbarItems().getCommand();
@@ -59,7 +67,11 @@ public class HotbarListener implements Listener {
                     case LOBBY:
                         switch (hotbarItem.getHotbarItems()) {
                             case UNRANKED_QUEUES:
-                                this.plugin.getQueueService().getQueueMenu().openMenu(player);
+                                queueService.getQueueMenu().openMenu(player);
+                                break;
+                            case DUO_UNRANKED_QUEUE:
+                                profile.setQueueType(EnumQueueType.DUOS);
+                                queueService.getQueueMenu().openMenu(player);
                                 break;
                             case RANKED_QUEUES:
                                 new RankedMenu().openMenu(player);
@@ -67,7 +79,7 @@ public class HotbarListener implements Listener {
                             case CURRENT_MATCHES:
                                 new CurrentMatchesMenu().openMenu(player);
                                 break;
-                            case KIT_EDITOR:
+                            case LAYOUT_EDITOR:
                                 break;
                             case LEADERBOARD:
                                 new LeaderboardMenu().openMenu(player);

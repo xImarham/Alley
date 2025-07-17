@@ -4,6 +4,8 @@ import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.config.locale.impl.PartyLocale;
+import dev.revere.alley.game.party.IPartyService;
+import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumChatChannel;
 import dev.revere.alley.util.chat.CC;
@@ -24,16 +26,17 @@ public class PartyChatCommand extends BaseCommand {
         Player player = command.getPlayer();
         String[] args = command.getArgs();
 
-        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
+        IProfileService profileService = this.plugin.getService(IProfileService.class);
+        Profile profile = profileService.getProfile(player.getUniqueId());
         String message = Arrays.stream(args).map(argument -> argument + " ").collect(Collectors.joining());
 
         if (args.length == 0) {
             if (profile.getProfileData().getSettingData().getChatChannel().equals(EnumChatChannel.PARTY.toString())) {
                 profile.getProfileData().getSettingData().setChatChannel(EnumChatChannel.GLOBAL.toString());
-                player.sendMessage(CC.translate("&aSet your chat channel to &bglobal&a."));
+                player.sendMessage(CC.translate("&aSet your chat channel to &6global&a."));
             } else {
                 profile.getProfileData().getSettingData().setChatChannel(EnumChatChannel.PARTY.toString());
-                player.sendMessage(CC.translate("&aSet your chat channel to &bparty&a."));
+                player.sendMessage(CC.translate("&aSet your chat channel to &6party&a."));
             }
             return;
         }
@@ -48,7 +51,7 @@ public class PartyChatCommand extends BaseCommand {
             return;
         }
 
-        String partyMessage = this.plugin.getPartyService().getChatFormat().replace("{player}", player.getName()).replace("{message}", message);
+        String partyMessage = this.plugin.getService(IPartyService.class).getChatFormat().replace("{player}", player.getName()).replace("{message}", message);
         profile.getParty().notifyParty(partyMessage);
     }
 }

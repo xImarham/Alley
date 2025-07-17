@@ -5,22 +5,17 @@ import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.base.arena.AbstractArena;
 import dev.revere.alley.base.kit.Kit;
 import dev.revere.alley.config.locale.impl.PartyLocale;
-import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
-import dev.revere.alley.game.match.player.participant.GameParticipant;
-import dev.revere.alley.game.match.player.participant.TeamGameParticipant;
+import dev.revere.alley.game.party.IPartyService;
 import dev.revere.alley.game.party.Party;
+import dev.revere.alley.game.party.PartyService;
+import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.tool.item.ItemBuilder;
 import dev.revere.alley.util.chat.CC;
 import lombok.AllArgsConstructor;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @author Emmy
@@ -35,10 +30,15 @@ public class PartyEventSplitArenaSelectorButton extends Button {
 
     @Override
     public ItemStack getButtonItem(Player player) {
-        return new ItemBuilder(Material.PAPER).name("&b" + arena.getName()).durability(0).hideMeta()
-                .lore(Collections.singletonList(
-                        "&7Click to select this arena."
-                ))
+        return new ItemBuilder(Material.PAPER)
+                .name("&6&l" + this.arena.getName())
+                .lore(
+                        " &f● &6Kit: &f" + this.kit.getDisplayName(),
+                        "",
+                        "&aClick to select!"
+                )
+                .durability(0)
+                .hideMeta()
                 .build();
     }
 
@@ -46,38 +46,14 @@ public class PartyEventSplitArenaSelectorButton extends Button {
     public void clicked(Player player, ClickType clickType) {
         if (clickType != ClickType.LEFT) return;
 
-        Party party = this.plugin.getProfileService().getProfile(player.getUniqueId()).getParty();
+        Party party = Alley.getInstance().getService(IProfileService.class).getProfile(player.getUniqueId()).getParty();
         if (party == null) {
             player.closeInventory();
             player.sendMessage(CC.translate(PartyLocale.NOT_IN_PARTY.getMessage()));
             return;
         }
 
-        Player playerA = party.getLeader();
-        Player playerB = Bukkit.getPlayer(party.getMembers().get(1));
-
-        MatchGamePlayerImpl gamePlayerA = new MatchGamePlayerImpl(playerA.getUniqueId(), playerA.getName());
-        MatchGamePlayerImpl gamePlayerB = new MatchGamePlayerImpl(playerB.getUniqueId(), playerB.getName());
-
-        GameParticipant<MatchGamePlayerImpl> participantA = new TeamGameParticipant<>(gamePlayerA);
-        GameParticipant<MatchGamePlayerImpl> participantB = new TeamGameParticipant<>(gamePlayerB);
-
-        List<Player> players = party.getMembers().stream().map(Bukkit::getPlayer).collect(Collectors.toList());
-        Collections.shuffle(players);
-
-        for (Player player1 : players) {
-            if (player1.equals(playerA) || player1.equals(playerB)) continue;
-            MatchGamePlayerImpl gamePlayer = new MatchGamePlayerImpl(player1.getUniqueId(), player1.getName());
-
-            if (players.indexOf(player1) % 2 == 0) {
-                participantA.getPlayers().add(gamePlayer);
-            } else {
-                participantB.getPlayers().add(gamePlayer);
-            }
-        }
-
-        this.plugin.getMatchService().createAndStartMatch(
-                this.kit, this.arena, participantA, participantB, true, false, false
-        );
+        IPartyService partyService = Alley.getInstance().getService(IPartyService.class);
+        partyService.startMatch(this.kit, this.arena, party);
     }
 }

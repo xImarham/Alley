@@ -4,21 +4,6 @@ import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.annotation.CompleterData;
-import dev.revere.alley.base.kit.command.impl.data.*;
-import dev.revere.alley.base.kit.command.impl.data.inventory.KitGetInvCommand;
-import dev.revere.alley.base.kit.command.impl.data.inventory.KitSetInvCommand;
-import dev.revere.alley.base.kit.command.impl.data.potion.KitAddPotionCommand;
-import dev.revere.alley.base.kit.command.impl.data.potion.KitClearPotionsCommand;
-import dev.revere.alley.base.kit.command.impl.manage.*;
-import dev.revere.alley.base.kit.command.impl.manage.ffa.KitSetFfaSlotCommand;
-import dev.revere.alley.base.kit.command.impl.manage.ffa.KitSetupFFACommand;
-import dev.revere.alley.base.kit.command.impl.manage.ffa.KitToggleFFACommand;
-import dev.revere.alley.base.kit.command.impl.manage.raiding.KitSetRaidingRoleKitCommand;
-import dev.revere.alley.base.kit.command.impl.settings.KitSetSettingCommand;
-import dev.revere.alley.base.kit.command.impl.settings.KitSettingsCommand;
-import dev.revere.alley.base.kit.command.impl.settings.KitViewSettingsCommand;
-import dev.revere.alley.base.kit.command.impl.storage.KitSaveAllCommand;
-import dev.revere.alley.base.kit.command.impl.storage.KitSaveCommand;
 import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.util.chat.ClickableUtil;
 import org.bukkit.command.CommandSender;
@@ -35,33 +20,6 @@ import java.util.List;
  */
 public class KitCommand extends BaseCommand {
 
-    public KitCommand() {
-        new KitSaveCommand();
-        new KitSaveAllCommand();
-        new KitCreateCommand();
-        new KitDeleteCommand();
-        new KitListCommand();
-        new KitGetInvCommand();
-        new KitSetInvCommand();
-        new KitSetDescriptionCommand();
-        new KitSetDisclaimerCommand();
-        new KitSetDisplayNameCommand();
-        new KitSetSettingCommand();
-        new KitSettingsCommand();
-        new KitSetIconCommand();
-        new KitAddPotionCommand();
-        new KitViewCommand();
-        new KitViewSettingsCommand();
-        new KitSetupFFACommand();
-        new KitToggleFFACommand();
-        new KitSetFfaSlotCommand();
-        new KitSetCategoryCommand();
-        new KitSetEditableCommand();
-        new KitToggleCommand();
-        new KitClearPotionsCommand();
-        new KitSetRaidingRoleKitCommand();
-    }
-
     @SuppressWarnings("unused")
     @CompleterData(name = "kit")
     public List<String> kitCompleter(CommandArgs command) {
@@ -70,8 +28,9 @@ public class KitCommand extends BaseCommand {
             completion.addAll(Arrays.asList(
                     "list", "create", "delete", "toggle", "view", "settings", "viewsettings",
                     "setsetting", "setcategory", "setdescription", "setdisclaimer", "setdisplayname",
-                    "seteditable", "seticon", "setinv", "getinv", "addpotion", "clearpotions",
-                    "setupffa", "toggleffa", "setffaslot", "saveall", "save", "setraidingrolekit"
+                    "seteditable", "seticon", "setinv", "getinv", "addpotion", "clearpotions", "removepotion",
+                    "setupffa", "toggleffa", "setffaslot", "saveall", "save", "setraidingrolekit",
+                    "removeraidingrolekit", "setmenutitle", "setprofile", "resetlayouts"
             ));
         }
 
@@ -99,10 +58,11 @@ public class KitCommand extends BaseCommand {
         }
 
         sender.sendMessage("");
-        sender.sendMessage(CC.translate("&b&lKit Commands &8(&7Page &f" + page + "&7/&f" + this.pages.length + "&8)"));
+        sender.sendMessage(CC.translate("&6&lKit Commands &8(&7Page &f" + page + "&7/&f" + this.pages.length + "&8)"));
         for (String string : this.pages[page - 1]) {
             sender.sendMessage(CC.translate(string));
         }
+
         sender.sendMessage("");
 
         if (sender instanceof Player) {
@@ -113,44 +73,51 @@ public class KitCommand extends BaseCommand {
 
     private final String[][] pages = {
             {
-                    " &f● &b/kit list &7| View all kits",
-                    " &f● &b/kit create &8(&7kitName&8) &7| Create a kit",
-                    " &f● &b/kit delete &8(&7kitName&8) &7| Delete a kit",
-                    " &f● &b/kit toggle &8(&7kitName&8) &7| Toggle a kit",
-                    " &f● &b/kit view &8(&7kitName&8) &7| View a kit",
+                    " &f● &6/kit list &7| View all kits",
+                    " &f● &6/kit create &8(&7kitName&8) &7| Create a kit",
+                    " &f● &6/kit delete &8(&7kitName&8) &7| Delete a kit",
+                    " &f● &6/kit toggle &8(&7kitName&8) &7| Toggle a kit",
+                    " &f● &6/kit view &8(&7kitName&8) &7| View a kit",
+                    "",
+                    "&fUse &6/kithelper &ffor other useful commands."
             },
             {
-                    " &f● &b/kit settings &7| View all existing kit settings",
-                    " &f● &b/kit viewsettings &8(&7kitName&8) &7| View settings of a kit",
-                    " &f● &b/kit setsetting &8(&7kitName&8) &8(&7setting&8) &8(&7enabled&8) &7| Set kit setting",
+                    " &f● &6/kit settings &7| View all existing kit settings",
+                    " &f● &6/kit viewsettings &8(&7kitName&8) &7| View settings of a kit",
+                    " &f● &6/kit setsetting &8(&7kitName&8) &8(&7setting&8) &8(&7enabled&8) &7| Set kit setting"
             },
             {
-                    " &f● &b/kit setcategory &8(&7kitName&8) &8(&7category&8) &7| Set category of a kit",
-                    " &f● &b/kit setdescription &8(&7kitName&8) &8(&7description&8) &7| Set description of a kit",
-                    " &f● &b/kit setdisclaimer &8(&7kitName&8) &8(&7disclaimer&8) &7| Set disclaimer",
-                    " &f● &b/kit setdisplayname &8(&7kitName&8) &8(&7displayname&8) &7| Set display-name of a kit",
-                    " &f● &b/kit seteditable &8(&7kitName&8) &8(&7true/false&8) &7| Set if a kit is editable",
-                    " &f● &b/kit seticon &8(&7kitName&8) &7| Set icon of a kit",
+                    " &f● &6/kit setcategory &8(&7kitName&8) &8(&7category&8) &7| Set category of a kit",
+                    " &f● &6/kit setdescription &8(&7kitName&8) &8(&7description&8) &7| Set description of a kit",
+                    " &f● &6/kit setdisclaimer &8(&7kitName&8) &8(&7disclaimer&8) &7| Set disclaimer",
+                    " &f● &6/kit setdisplayname &8(&7kitName&8) &8(&7displayname&8) &7| Set display-name of a kit",
+                    " &f● &6/kit setmenutitle &8(&7kitName&8) &8(&7title&8) &7| Set menu title of a kit",
+                    " &f● &6/kit seteditable &8(&7kitName&8) &8(&7true/false&8) &7| Set if a kit is editable",
+                    " &f● &6/kit setprofile &8(&7kitName&8) &8(&7profileName&8) &7| Set kb profile of a kit",
+                    " &f● &6/kit seticon &8(&7kitName&8) &7| Set icon of a kit"
             },
             {
-                    " &f● &b/kit setinv &8(&7kitName&8) &7| Set inventory of a kit",
-                    " &f● &b/kit getinv &8(&7kitName&8) &7| Get inventory of a kit",
+                    " &f● &6/kit setinv &8(&7kitName&8) &7| Set inventory of a kit",
+                    " &f● &6/kit getinv &8(&7kitName&8) &7| Get inventory of a kit"
             },
             {
-                    " &f● &b/kit addpotion &8(&7kitName&8) &7| Set potion effects of a kit",
-                    " &f● &b/kit clearpotions &8(&7kitName&8) &7| Clear potion effects of a kit",
+                    " &f● &6/kit addpotion &8(&7kitName&8) &7| Set potion effects of a kit",
+                    " &f● &6/kit removepotion &8(&7kitName&8) &7| Remove potion effects of a kit",
+                    " &f● &6/kit clearpotions &8(&7kitName&8) &7| Clear potion effects of a kit"
             },
             {
-                    " &f● &b/kit setupffa &8(&7kitName&8) &7| Setup ffa kit",
-                    " &f● &b/kit toggleffa &8(&7kitName&8) &7| Toggle ffa kit",
-                    " &f● &b/kit setffaslot &8(&7kitName&8) &8(&7slot&8) &7| Set ffa menu slot"
+                    " &f● &6/kit setupffa &8(&7kitName&8) &7| Setup ffa kit",
+                    " &f● &6/kit toggleffa &8(&7kitName&8) &7| Toggle ffa kit",
+                    " &f● &6/kit setffaslot &8(&7kitName&8) &8(&7slot&8) &7| Set ffa menu slot"
             },
             {
-                    " &f● &b/kit setraidingrolekit &8(&7kitName&8) &8(&7role&8) &8(&7roleKitName&8) &7| Set raiding role kit",
+                    " &f● &6/kit setraidingrolekit &8(&7kitName&8) &8(&7role&8) &8(&7roleKitName&8) &7| Set raiding role kit",
+                    " &f● &6/kit removeraidingrolekit &8(&7kitName&8) &8(&7role&8) &8(&7roleKitName&8) &7| Remove raiding role kit"
             },
             {
-                    " &f● &b/kit saveall &7| Save all kits",
-                    " &f● &b/kit save &8(&7kitName&8) &7| Save a kit",
+                    " &f● &6/kit resetlayouts &8(&7kitName&8) &7| Reset all profile layouts",
+                    " &f● &6/kit saveall &7| Save all kits",
+                    " &f● &6/kit save &8(&7kitName&8) &7| Save a kit"
             }
     };
 }

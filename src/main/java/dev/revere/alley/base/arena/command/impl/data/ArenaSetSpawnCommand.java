@@ -4,7 +4,10 @@ import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.api.command.annotation.CompleterData;
+import dev.revere.alley.base.arena.AbstractArena;
+import dev.revere.alley.base.arena.IArenaService;
 import dev.revere.alley.base.arena.enums.EnumArenaType;
+import dev.revere.alley.config.locale.impl.ArenaLocale;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.entity.Player;
 
@@ -23,7 +26,7 @@ public class ArenaSetSpawnCommand extends BaseCommand {
         List<String> completion = new ArrayList<>();
 
         if (command.getArgs().length == 1 && command.getPlayer().hasPermission("alley.admin")) {
-            this.plugin.getArenaService().getArenas().forEach(arena -> completion.add(arena.getName()));
+            this.plugin.getService(IArenaService.class).getArenas().forEach(arena -> completion.add(arena.getName()));
         }
 
         return completion;
@@ -36,50 +39,52 @@ public class ArenaSetSpawnCommand extends BaseCommand {
         String[] args = command.getArgs();
 
         if (args.length < 2) {
-            player.sendMessage(CC.translate("&6Usage: &e/arena setspawn &b<arenaName> <pos1/pos2/ffa>"));
+            player.sendMessage(CC.translate("&6Usage: &e/arena setspawn &6<arenaName> <blue/red/ffa>"));
             return;
         }
 
         String arenaName = args[0];
         String spawnType = args[1];
 
-        if (this.plugin.getArenaService().getArenaByName(arenaName) == null) {
-            player.sendMessage(CC.translate("&cAn arena with that name does not exist!"));
+        IArenaService arenaService = this.plugin.getService(IArenaService.class);
+        AbstractArena arena = arenaService.getArenaByName(arenaName);
+        if (arena == null) {
+            player.sendMessage(ArenaLocale.NOT_FOUND.getMessage().replace("{arena-name}", arenaName));
             return;
         }
 
-        if (!spawnType.equalsIgnoreCase("pos1") && !spawnType.equalsIgnoreCase("pos2") && !spawnType.equalsIgnoreCase("ffa")) {
-            player.sendMessage(CC.translate("&cInvalid spawn type! Valid types: pos1, pos2, ffa"));
+        if (!spawnType.equalsIgnoreCase("blue") && !spawnType.equalsIgnoreCase("red") && !spawnType.equalsIgnoreCase("ffa")) {
+            player.sendMessage(CC.translate("&cInvalid spawn type! Valid types: blue, red, ffa"));
             return;
         }
 
         switch (spawnType.toLowerCase()) {
-            case "pos1":
-                if (this.plugin.getArenaService().getArenaByName(arenaName).getType() == EnumArenaType.FFA) {
+            case "blue":
+                if (arena.getType() == EnumArenaType.FFA) {
                     player.sendMessage(CC.translate("&cFFA Arenas do not need a spawn position!"));
                     return;
                 }
-                this.plugin.getArenaService().getArenaByName(arenaName).setPos1(player.getLocation());
-                player.sendMessage(CC.translate("&aSpawn Position 1 has been set for arena &b" + arenaName + "&a!"));
+                arena.setPos1(player.getLocation());
+                player.sendMessage(ArenaLocale.BLUE_SPAWN_SET.getMessage().replace("{arena-name}", arenaName));
                 break;
             case "ffa":
-                if (this.plugin.getArenaService().getArenaByName(arenaName).getType() != EnumArenaType.FFA) {
+                if (arena.getType() != EnumArenaType.FFA) {
                     player.sendMessage(CC.translate("&cThis arena is not an FFA arena!"));
                     return;
                 }
-                this.plugin.getArenaService().getArenaByName(arenaName).setPos1(player.getLocation());
-                player.sendMessage(CC.translate("&aSpawn Position has been set for arena &b" + arenaName + "&a!"));
+                arena.setPos1(player.getLocation());
+                player.sendMessage(ArenaLocale.FFA_SPAWN_SET.getMessage().replace("{arena-name}", arenaName));
                 break;
             default:
-                if (this.plugin.getArenaService().getArenaByName(arenaName).getType() == EnumArenaType.FFA) {
+                if (arena.getType() == EnumArenaType.FFA) {
                     player.sendMessage(CC.translate("&cFFA Arenas do not need a spawn position!"));
                     return;
                 }
-                this.plugin.getArenaService().getArenaByName(arenaName).setPos2(player.getLocation());
-                player.sendMessage(CC.translate("&aSpawn Position 2 has been set for arena &b" + arenaName + "&a!"));
+                arena.setPos2(player.getLocation());
+                player.sendMessage(ArenaLocale.RED_SPAWN_SET.getMessage().replace("{arena-name}", arenaName));
                 break;
         }
 
-        this.plugin.getArenaService().saveArena(this.plugin.getArenaService().getArenaByName(arenaName));
+        arenaService.saveArena(arena);
     }
 }

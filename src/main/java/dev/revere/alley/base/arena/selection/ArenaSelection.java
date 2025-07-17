@@ -19,7 +19,7 @@ import org.bukkit.metadata.FixedMetadataValue;
 @Getter
 public class ArenaSelection {
     public static final ItemStack SELECTION_TOOL = new ItemBuilder(Material.FEATHER)
-            .name("&bSelection Tool")
+            .name("&6Selection Tool")
             .lore("&7Use this tool to select the minimum and maximum locations.")
             .build();
 

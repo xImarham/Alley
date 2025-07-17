@@ -3,9 +3,12 @@ package dev.revere.alley.base.queue.command.admin.impl;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
-import dev.revere.alley.base.hotbar.enums.EnumHotbarType;
+import dev.revere.alley.base.hotbar.IHotbarService;
+import dev.revere.alley.base.kit.IKitService;
 import dev.revere.alley.base.kit.Kit;
+import dev.revere.alley.base.queue.IQueueService;
 import dev.revere.alley.base.queue.Queue;
+import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.util.PlayerUtil;
 import dev.revere.alley.util.SoundUtil;
@@ -25,7 +28,7 @@ public class QueueForceCommand extends BaseCommand {
         String[] args = command.getArgs();
 
         if (args.length != 3) {
-            player.sendMessage(CC.translate("&6Usage: &e/queue force &b<player> <kit> <ranked>"));
+            player.sendMessage(CC.translate("&6Usage: &e/queue force &6<player> <kit> <ranked>"));
             player.sendMessage(CC.translate("&7Example: /queue force hmRemi Boxing true"));
             return;
         }
@@ -39,23 +42,23 @@ public class QueueForceCommand extends BaseCommand {
             return;
         }
 
-        Kit kit = this.plugin.getKitService().getKit(kitType);
+        Kit kit = this.plugin.getService(IKitService.class).getKit(kitType);
         if (kit == null) {
             player.sendMessage(CC.translate("&cKit not found."));
             return;
         }
 
-        Profile profile = this.plugin.getProfileService().getProfile(target.getUniqueId());
-        for (Queue queue : this.plugin.getQueueService().getQueues()) {
+        Profile profile = this.plugin.getService(IProfileService.class).getProfile(target.getUniqueId());
+        for (Queue queue : this.plugin.getService(IQueueService.class).getQueues()) {
             if (queue.getKit().equals(kit) && queue.isRanked() == ranked) {
                 queue.addPlayer(target, queue.isRanked() ? profile.getProfileData().getRankedKitData().get(queue.getKit().getName()).getElo() : 0);
                 PlayerUtil.reset(target, false);
                 SoundUtil.playBanHammer(target);
-                this.plugin.getHotbarService().applyHotbarItems(target, EnumHotbarType.QUEUE);
-                player.sendMessage(CC.translate("&aYou've added &b" + target.getName() + " &ato the &b" + queue.getQueueType() + " &aqueue."));
+                this.plugin.getService(IHotbarService.class).applyHotbarItems(target);
+                player.sendMessage(CC.translate("&aYou've added &6" + target.getName() + " &ato the &6" + queue.getQueueType() + " &aqueue."));
 
                 if (ranked && profile.getProfileData().isRankedBanned()) {
-                    player.sendMessage(CC.translate("&cKeep in mind that &b" + target.getName() + " &cis currently banned from ranked queues!"));
+                    player.sendMessage(CC.translate("&cKeep in mind that &6" + target.getName() + " &cis currently banned from ranked queues!"));
                 }
 
                 return;

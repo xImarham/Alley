@@ -2,6 +2,7 @@ package dev.revere.alley.base.combat.listener;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.base.combat.CombatService;
+import dev.revere.alley.base.combat.ICombatService;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -14,12 +15,6 @@ import org.bukkit.event.player.PlayerQuitEvent;
  * @since 14/03/2025
  */
 public class CombatListener implements Listener {
-    protected final Alley alley;
-
-    public CombatListener(Alley alley) {
-        this.alley = alley;
-    }
-
     @EventHandler
     private void onQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
@@ -38,7 +33,7 @@ public class CombatListener implements Listener {
      * @param player The player to remove.
      */
     private void removeFromCombatMap(Player player) {
-        CombatService combatService = this.alley.getCombatService();
+        ICombatService combatService = Alley.getInstance().getService(ICombatService.class);
         if (combatService.getCombatMap().containsKey(player.getUniqueId())) {
             combatService.removeLastAttacker(player, true);
         }

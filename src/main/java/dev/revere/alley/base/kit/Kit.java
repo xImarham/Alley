@@ -1,6 +1,5 @@
 package dev.revere.alley.base.kit;
 
-import dev.revere.alley.base.kit.data.BaseRaidingKitData;
 import dev.revere.alley.base.kit.enums.EnumKitCategory;
 import dev.revere.alley.base.kit.setting.KitSetting;
 import lombok.Getter;
@@ -26,6 +25,7 @@ public class Kit {
     private String displayName;
     private String description;
     private String disclaimer;
+    private String menuTitle;
 
     private boolean enabled;
     private boolean editable;
@@ -42,10 +42,9 @@ public class Kit {
     private int ffaSlot;
     private int maxFfaPlayers;
 
-    private BaseRaidingKitData baseRaidingKitData;
-
     private EnumKitCategory category;
 
+    private String knockbackProfile;
     private List<PotionEffect> potionEffects;
     private final List<KitSetting> kitSettings;
 
@@ -56,6 +55,7 @@ public class Kit {
      * @param displayName The display name of the kit.
      * @param description The description of the kit.
      * @param disclaimer  The disclaimer of the kit.
+     * @param menuTitle   The title of the kit in the menu.
      * @param category    The category of the kit.
      * @param icon        The icon of the kit.
      * @param durability  The durability of the kit's icon.
@@ -63,12 +63,13 @@ public class Kit {
      * @param armor       The armor in the kit.
      * @param editorItems The items used in the editor for this kit.
      */
-    public Kit(String name, String displayName, String description, String disclaimer, EnumKitCategory category, Material icon, int durability, ItemStack[] items, ItemStack[] armor, ItemStack[] editorItems) {
+    public Kit(String name, String displayName, String description, String disclaimer, String menuTitle, EnumKitCategory category, Material icon, int durability, ItemStack[] items, ItemStack[] armor, ItemStack[] editorItems) {
         this.name = name;
 
         this.displayName = displayName;
         this.description = description;
         this.disclaimer = disclaimer;
+        this.menuTitle = menuTitle;
 
         this.enabled = false;
         this.editable = true;
@@ -87,10 +88,9 @@ public class Kit {
         this.maxFfaPlayers = 20;
         this.ffaSlot = 0;
 
-        this.baseRaidingKitData = null;
-
         this.kitSettings = new ArrayList<>();
         this.potionEffects = new ArrayList<>();
+        this.knockbackProfile = "";
     }
 
     /**

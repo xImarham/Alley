@@ -1,18 +1,26 @@
 package dev.revere.alley.game.match;
 
 import dev.revere.alley.Alley;
+import dev.revere.alley.adapter.knockback.IKnockbackAdapter;
 import dev.revere.alley.base.arena.AbstractArena;
 import dev.revere.alley.base.arena.impl.StandAloneArena;
-import dev.revere.alley.base.hotbar.enums.EnumHotbarType;
+import dev.revere.alley.base.combat.ICombatService;
+import dev.revere.alley.base.hotbar.IHotbarService;
 import dev.revere.alley.base.kit.Kit;
-import dev.revere.alley.base.kit.setting.impl.mode.KitSettingLivesImpl;
-import dev.revere.alley.base.kit.setting.impl.mode.KitSettingRaidingImpl;
+import dev.revere.alley.base.kit.setting.impl.mode.*;
+import dev.revere.alley.base.nametag.INametagService;
 import dev.revere.alley.base.queue.Queue;
-import dev.revere.alley.feature.cosmetic.impl.killeffect.AbstractKillEffect;
-import dev.revere.alley.feature.cosmetic.impl.killeffect.KillEffectRepository;
-import dev.revere.alley.feature.cosmetic.impl.soundeffect.AbstractSoundEffect;
-import dev.revere.alley.feature.cosmetic.impl.soundeffect.SoundEffectRepository;
+import dev.revere.alley.base.spawn.ISpawnService;
+import dev.revere.alley.base.visibility.IVisibilityService;
+import dev.revere.alley.feature.cosmetic.AbstractCosmetic;
+import dev.revere.alley.feature.cosmetic.EnumCosmeticType;
+import dev.revere.alley.feature.cosmetic.impl.killmessage.AbstractKillMessagePack;
+import dev.revere.alley.feature.cosmetic.repository.BaseCosmeticRepository;
+import dev.revere.alley.feature.cosmetic.repository.ICosmeticRepository;
+import dev.revere.alley.feature.layout.ILayoutService;
 import dev.revere.alley.feature.layout.data.LayoutData;
+import dev.revere.alley.game.match.data.AbstractMatchData;
+import dev.revere.alley.game.match.data.impl.MatchDataSoloImpl;
 import dev.revere.alley.game.match.enums.EnumMatchState;
 import dev.revere.alley.game.match.impl.MatchRoundsImpl;
 import dev.revere.alley.game.match.player.GamePlayer;
@@ -20,8 +28,14 @@ import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.game.match.runnable.MatchRunnable;
 import dev.revere.alley.game.match.runnable.other.MatchRespawnRunnable;
+import dev.revere.alley.game.match.snapshot.ISnapshotRepository;
+import dev.revere.alley.game.match.snapshot.Snapshot;
+import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
+import dev.revere.alley.tool.logger.Logger;
+import dev.revere.alley.tool.reflection.IReflectionRepository;
+import dev.revere.alley.tool.reflection.impl.ActionBarReflectionService;
 import dev.revere.alley.tool.reflection.impl.TitleReflectionService;
 import dev.revere.alley.util.ListenerUtil;
 import dev.revere.alley.util.PlayerUtil;
@@ -29,15 +43,19 @@ import dev.revere.alley.util.SoundUtil;
 import dev.revere.alley.util.chat.CC;
 import lombok.Getter;
 import lombok.Setter;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.util.Vector;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
@@ -53,19 +71,18 @@ public abstract class AbstractMatch {
     private final Queue queue;
     private final Kit kit;
     private final AbstractArena arena;
+    private final boolean ranked;
 
-    private final List<UUID> spectators;
+    private final Map<BlockState, Location> brokenBlocks = new ConcurrentHashMap<>();
+    private final Map<BlockState, Location> placedBlocks = new ConcurrentHashMap<>();
+    private final List<UUID> spectators = new CopyOnWriteArrayList<>();
+    private final List<Snapshot> snapshots = new ArrayList<>();
+
+    private boolean teamMatch;
+    private boolean affectStatistics = true;
 
     private MatchRunnable runnable;
     private EnumMatchState state;
-
-    private Map<BlockState, Location> brokenBlocks;
-    private Map<BlockState, Location> placedBlocks;
-
-    private boolean ranked;
-    private boolean teamMatch;
-    private boolean affectStatistics;
-
     private long startTime;
     private long endTime;
 
@@ -78,23 +95,17 @@ public abstract class AbstractMatch {
      * @param ranked Whether the match is ranked.
      */
     public AbstractMatch(Queue queue, Kit kit, AbstractArena arena, boolean ranked) {
-        this.queue = queue;
-        this.kit = kit;
-        this.arena = arena;
+        this.queue = Objects.requireNonNull(queue, "Queue cannot be null");
+        this.kit = Objects.requireNonNull(kit, "Kit cannot be null");
+        this.arena = Objects.requireNonNull(arena, "Arena cannot be null");
         this.ranked = ranked;
-        this.teamMatch = false;
-        this.affectStatistics = true;
-        this.placedBlocks = new HashMap<>();
-        this.brokenBlocks = new HashMap<>();
-        this.spectators = new CopyOnWriteArrayList<>();
-        this.plugin.getMatchService().getMatches().add(this);
     }
 
-    public abstract void handleRespawn(Player player);
+    public abstract List<GameParticipant<MatchGamePlayerImpl>> getParticipants();
 
     public abstract void handleDisconnect(Player player);
 
-    public abstract List<GameParticipant<MatchGamePlayerImpl>> getParticipants();
+    public abstract void handleRespawn(Player player);
 
     public abstract boolean canStartRound();
 
@@ -103,33 +114,76 @@ public abstract class AbstractMatch {
     public abstract boolean canEndMatch();
 
     /**
+     * Handles the item drop on death for a player.
+     * This method clears the drops to prevent items from being dropped on death.
+     *
+     * @param player The player that died.
+     * @param event  The PlayerDeathEvent that triggered this method.
+     */
+    public abstract void handleDeathItemDrop(Player player, PlayerDeathEvent event);
+
+    /**
      * Starts the match by setting the state and updating player profiles and running the match runnable.
      */
     public void startMatch() {
-        if (this.arena instanceof StandAloneArena) {
-            ((StandAloneArena) this.arena).setActive(true);
-        }
-
+        this.activateArenaIfStandalone();
         this.sendPlayerVersusPlayerMessage();
 
         this.state = EnumMatchState.STARTING;
         this.runnable = new MatchRunnable(this);
         this.runnable.runTaskTimer(this.plugin, 0L, 20L);
         this.getParticipants().forEach(this::initializeParticipant);
+        this.updateParticipantNametags();
         this.startTime = System.currentTimeMillis();
     }
 
     public void endMatch() {
-        this.resetBlockChanges();
+        deleteArenaCopyIfStandalone();
 
         this.getParticipants().forEach(this::finalizeParticipant);
+        this.updateParticipantNametags();
 
-        this.plugin.getMatchService().getMatches().remove(this);
+        Alley.getInstance().getService(IMatchService.class).removeMatch(this);
         this.runnable.cancel();
 
+        this.deactivateArenaIfStandalone();
+    }
+
+    private void activateArenaIfStandalone() {
         if (this.arena instanceof StandAloneArena) {
-            ((StandAloneArena) this.arena).setActive(false);
+            StandAloneArena standAloneArena = (StandAloneArena) this.arena;
+            standAloneArena.setActive(true);
         }
+    }
+
+    private void deactivateArenaIfStandalone() {
+        if (this.arena instanceof StandAloneArena) {
+            StandAloneArena standAloneArena = (StandAloneArena) this.arena;
+            standAloneArena.setActive(false);
+        }
+    }
+
+    private void deleteArenaCopyIfStandalone() {
+        if (this.arena instanceof StandAloneArena) {
+            StandAloneArena standAloneArena = (StandAloneArena) this.arena;
+            standAloneArena.deleteCopiedArena();
+        }
+    }
+
+    /**
+     * Helper method to trigger a nametag update for all participants in the match.
+     */
+    private void updateParticipantNametags() {
+        INametagService nametagService = Alley.getInstance().getService(INametagService.class);
+
+        getParticipants().forEach(participant -> {
+            List<MatchGamePlayerImpl> playersToUpdate = participant.getAllPlayers();
+
+            playersToUpdate.stream()
+                    .map(gamePlayer -> plugin.getServer().getPlayer(gamePlayer.getUuid()))
+                    .filter(Objects::nonNull)
+                    .forEach(nametagService::updatePlayerState);
+        });
     }
 
     /**
@@ -138,17 +192,15 @@ public abstract class AbstractMatch {
      * @param gameParticipant The game participant to initialize.
      */
     private void initializeParticipant(GameParticipant<MatchGamePlayerImpl> gameParticipant) {
+        IVisibilityService visibilityService = Alley.getInstance().getService(IVisibilityService.class);
+        IKnockbackAdapter knockbackAdapter = Alley.getInstance().getService(IKnockbackAdapter.class);
+
         gameParticipant.getPlayers().forEach(gamePlayer -> {
             Player player = this.plugin.getServer().getPlayer(gamePlayer.getUuid());
             if (player != null) {
-                this.plugin.getSnapshotRepository().getSnapshots().remove(player.getUniqueId());
-
-                Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
-                profile.setState(EnumProfileState.PLAYING);
-                profile.setMatch(this);
-
-                this.plugin.getVisibilityService().updateVisibility(player);
-
+                this.updatePlayerProfileForMatch(player);
+                visibilityService.updateVisibility(player);
+                knockbackAdapter.getKnockbackImplementation().applyKnockback(player, getKit().getKnockbackProfile());
                 this.setupPlayer(player);
             }
         });
@@ -160,21 +212,28 @@ public abstract class AbstractMatch {
      * @param gameParticipant The game participant to finalize.
      */
     private void finalizeParticipant(GameParticipant<MatchGamePlayerImpl> gameParticipant) {
-        gameParticipant.getPlayers().forEach(gamePlayer -> {
-            if (!gamePlayer.isDisconnected()) {
-                Player player = this.plugin.getServer().getPlayer(gamePlayer.getUuid());
-                if (player != null) {
-                    this.resetPlayerState(player);
-                    Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
-                    profile.setState(EnumProfileState.LOBBY);
-                    profile.setMatch(null);
+        gameParticipant.getPlayers().stream()
+                .filter(gamePlayer -> !gamePlayer.isDisconnected())
+                .forEach(gamePlayer -> {
+                    Player player = this.plugin.getServer().getPlayer(gamePlayer.getUuid());
+                    if (player != null) {
+                        finalizePlayer(player);
+                    }
+                });
+    }
 
-                    this.plugin.getVisibilityService().updateVisibility(player);
-
-                    this.teleportPlayerToSpawn(player);
-                }
-            }
-        });
+    /**
+     * Method to finalize a player after the match ends.
+     * This method resets the player's state, updates their profile for the lobby,
+     *
+     * @param player The player to finalize.
+     */
+    public void finalizePlayer(Player player) {
+        IVisibilityService visibilityService = Alley.getInstance().getService(IVisibilityService.class);
+        this.resetPlayerState(player);
+        this.updatePlayerProfileForLobby(player);
+        visibilityService.updateVisibility(player);
+        this.teleportPlayerToSpawn(player);
     }
 
     /**
@@ -186,10 +245,8 @@ public abstract class AbstractMatch {
         MatchGamePlayerImpl gamePlayer = getGamePlayer(player);
         if (gamePlayer != null) {
             gamePlayer.setDead(false);
-            if (!gamePlayer.isDisconnected()) {
-                PlayerUtil.reset(player, true);
-                this.giveLoadout(player, this.kit);
-            }
+            PlayerUtil.reset(player, true);
+            this.giveLoadout(player, this.kit);
         }
     }
 
@@ -199,14 +256,17 @@ public abstract class AbstractMatch {
      * @param player The player to give the kit to.
      */
     public void giveLoadout(Player player, Kit kit) {
+        ILayoutService layoutService = Alley.getInstance().getService(ILayoutService.class);
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+
         player.getInventory().setArmorContents(kit.getArmor());
 
-        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
+        Profile profile = profileService.getProfile(player.getUniqueId());
         if (profile.getProfileData().getLayoutData().getLayouts().size() > 1) {
             LayoutData kitLayout = profile.getProfileData().getLayoutData().getLayouts().get(kit.getName()).get(0);
             player.getInventory().setContents(kitLayout.getItems());
         } else {
-            this.plugin.getLayoutService().giveBooks(player, kit.getName());
+            layoutService.giveBooks(player, kit.getName());
         }
 
         player.updateInventory();
@@ -219,63 +279,229 @@ public abstract class AbstractMatch {
      *
      * @param player The player that died.
      */
-    public void handleDeath(Player player) {
+    public void handleDeath(Player player, EntityDamageEvent.DamageCause cause) {
         if (!(this.state == EnumMatchState.STARTING || this.state == EnumMatchState.RUNNING)) {
             return;
         }
 
-        MatchGamePlayerImpl gamePlayer = this.getGamePlayer(player);
-        if (gamePlayer.isDead()) {
+        ICombatService combatService = Alley.getInstance().getService(ICombatService.class);
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+
+        GameParticipant<MatchGamePlayerImpl> participant = this.getParticipant(player);
+        MatchGamePlayerImpl gamePlayer = this.getFromAllGamePlayers(player);
+        if (participant.isAllEliminated() && !gamePlayer.isDisconnected()) {
             return;
         }
 
-        this.setParticipantAsDead(player, gamePlayer);
-        this.notifySpectators(player.getName() + " has died");
-        //notifyParticipants(player.getName() + " has died");
+        this.handleParticipant(player, gamePlayer);
+
+        Player killer = combatService.getLastAttacker(player);
+        Profile victimProfile = profileService.getProfile(player.getUniqueId());
+        Profile killerProfile = (killer != null) ? profileService.getProfile(killer.getUniqueId()) : null;
+
+        if (!gamePlayer.isDisconnected()) {
+            this.handleDeathMessages(player, killer, victimProfile, killerProfile, cause);
+        }
+
+        this.createSnapshot(player);
 
         player.setVelocity(new Vector());
+
+        if (this.shouldHandleRegularRespawn(player)) {
+            handleRespawn(player);
+        }
 
         if (this.canEndRound()) {
             this.state = EnumMatchState.ENDING_ROUND;
             this.handleRoundEnd();
 
             if (this.canEndMatch()) {
-                Player killer = this.plugin.getCombatService().getLastAttacker(player);
                 if (killer != null) {
-                    this.handleEffects(player, killer);
+                    this.handleDeathEffects(player, killer);
                 }
 
                 this.state = EnumMatchState.ENDING_MATCH;
             }
             this.runnable.setStage(4);
-        } else {
-            this.handleRespawn(player);
+            return;
+        }
+
+        if (handleSpectator(player, victimProfile, participant)) {
+            if (killer != null) {
+                this.handleDeathEffects(player, killer);
+            }
+            this.setupSpectatorProfile(player);
+            this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> this.addSpectator(player), 1L);
+            return;
+        }
+
+        if (gamePlayer.isEliminated()) {
+            return;
+        }
+
+        if (!this.shouldHandleRegularRespawn(player)) {
+            this.startRespawnProcess(player);
         }
     }
 
     /**
-     * Handles the effects of a player.
+     * Handles the player becoming a spectator based on the match state and kit settings.
      *
-     * @param player The player to handle the effects of.
-     * @param killer The killer of the player.
+     * @param player      The player to handle.
+     * @param profile     The profile of the player.
+     * @param participant The participant of the match.
      */
-    private void handleEffects(Player player, Player killer) {
-        Profile profile = this.plugin.getProfileService().getProfile(killer.getUniqueId());
+    private boolean handleSpectator(Player player, Profile profile, GameParticipant<MatchGamePlayerImpl> participant) {
+        Kit matchKit = profile.getMatch().getKit();
+
+        MatchGamePlayerImpl gamePlayer = this.getFromAllGamePlayers(player);
+        if (gamePlayer.isDisconnected()) {
+            return false;
+        }
+
+        return this.shouldBecomeSpectatorForEliminationKit(participant, matchKit, player) || shouldBecomeSpectatorForNonRoundKit(participant, matchKit);
+    }
+
+    private boolean shouldBecomeSpectatorForEliminationKit(GameParticipant<MatchGamePlayerImpl> participant, Kit matchKit, Player player) {
+        if (!participant.isAllEliminated() && this.hasEliminationBasedKit(matchKit)) {
+            MatchGamePlayerImpl gamePlayer = this.getGamePlayer(player);
+            return gamePlayer.isEliminated();
+        }
+        return false;
+    }
+
+    private boolean shouldBecomeSpectatorForNonRoundKit(GameParticipant<MatchGamePlayerImpl> participant, Kit matchKit) {
+        return !participant.isAllDead() && !this.isRoundBasedKit(matchKit) && !this.hasEliminationBasedKit(matchKit);
+    }
+
+    /**
+     * Checks if the kit is elimination-based.
+     *
+     * @param kit The kit to check.
+     * @return True if the kit is elimination-based, false otherwise.
+     */
+    private boolean hasEliminationBasedKit(Kit kit) {
+        return kit.isSettingEnabled(KitSettingBedImpl.class) || kit.isSettingEnabled(KitSettingCheckpointImpl.class) || kit.isSettingEnabled(KitSettingLivesImpl.class);
+    }
+
+    /**
+     * Checks if the kit is round-based.
+     *
+     * @param kit The kit to check.
+     * @return True if the kit is round-based, false otherwise.
+     */
+    private boolean isRoundBasedKit(Kit kit) {
+        return kit.isSettingEnabled(KitSettingStickFightImpl.class) || kit.isSettingEnabled(KitSettingRoundsImpl.class);
+    }
+
+    private void handleDeathMessages(Player victim, Player killer, Profile victimProfile, Profile killerProfile, EntityDamageEvent.DamageCause cause) {
+        if (killer == null || killerProfile == null) {
+            handleDefaultDeathMessages(victim, null, victimProfile);
+            return;
+        }
+
+        String selectedPackName = killerProfile.getProfileData().getCosmeticData().getSelected(EnumCosmeticType.KILL_MESSAGE);
+
+        if (selectedPackName == null || selectedPackName.equalsIgnoreCase("None")) {
+            handleDefaultDeathMessages(victim, killer, victimProfile);
+            return;
+        }
+
+        ICosmeticRepository cosmeticRepository = Alley.getInstance().getService(ICosmeticRepository.class);
+        BaseCosmeticRepository<?> repository = cosmeticRepository.getRepository(EnumCosmeticType.KILL_MESSAGE);
+        AbstractKillMessagePack pack = (AbstractKillMessagePack) repository.getCosmetic(selectedPackName);
+
+        if (pack == null) {
+            handleDefaultDeathMessages(victim, killer, victimProfile);
+            return;
+        }
+
+        String messageTemplate = pack.getRandomMessage(cause);
+
+        if (messageTemplate != null) {
+            String finalMessage = messageTemplate.replace("{victim}", victimProfile.getNameColor() + victim.getName() + "&f");
+            finalMessage = finalMessage.replace("{killer}", killerProfile.getNameColor() + killer.getName() + "&f");
+
+            this.notifyAll(CC.translate(finalMessage));
+            processKillerStatActions(killer);
+        } else {
+            handleDefaultDeathMessages(victim, killer, victimProfile);
+        }
+    }
+
+    private void handleDefaultDeathMessages(Player victim, Player killer, Profile victimProfile) {
+        if (killer == null) {
+            this.notifyAll("&c" + victimProfile.getFancyName() + " &fdied.");
+        } else {
+            processKillerActions(victim, killer, victimProfile);
+        }
+    }
+
+    private void processKillerActions(Player victim, Player killer, Profile victimProfile) {
+        processKillerStatActions(killer);
+
+
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+        IReflectionRepository reflectionRepository = Alley.getInstance().getService(IReflectionRepository.class);
+
+        Profile killerProfile = profileService.getProfile(killer.getUniqueId());
+
+        reflectionRepository.getReflectionService(ActionBarReflectionService.class).sendDeathMessage(killer, victim);
+
+        this.notifyAll("&c" + victimProfile.getNameColor() + victim.getName() + " &fwas slain by &c" + killerProfile.getNameColor() + killer.getName() + "&f.");
+    }
+
+    private void processKillerStatActions(Player killer) {
+        GameParticipant<MatchGamePlayerImpl> killerParticipant = getParticipant(killer);
+        if (killerParticipant != null) {
+            killerParticipant.getLeader().getData().incrementKills();
+        }
+    }
+
+    /**
+     * Handles applying all relevant on-kill cosmetic effects.
+     * This is called when a player is confirmed to be eliminated from the match.
+     *
+     * @param player The player who died (the victim).
+     * @param killer The player who got the kill.
+     */
+    private void handleDeathEffects(Player player, Player killer) {
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+        Profile profile = profileService.getProfile(killer.getUniqueId());
+
         String selectedKillEffectName = profile.getProfileData().getCosmeticData().getSelectedKillEffect();
         String selectedSoundEffectName = profile.getProfileData().getCosmeticData().getSelectedSoundEffect();
 
-        KillEffectRepository killEffectRepository = this.plugin.getCosmeticRepository().getCosmeticRepository(KillEffectRepository.class);
-        SoundEffectRepository soundEffectRepository = this.plugin.getCosmeticRepository().getCosmeticRepository(SoundEffectRepository.class);
+        this.applyCosmetic(EnumCosmeticType.KILL_EFFECT, selectedKillEffectName, player);
+        this.applyCosmetic(EnumCosmeticType.SOUND_EFFECT, selectedSoundEffectName, killer);
+    }
 
-        AbstractKillEffect killEffect = killEffectRepository.getCosmetic(selectedKillEffectName);
-        if (killEffect != null) {
-            killEffect.spawnEffect(player);
+    /**
+     * Applies a selected cosmetic to a target player in a generic, type-safe way.
+     * This method is now updated to use the enum-based repository system.
+     *
+     * @param cosmeticType The type of cosmetic to apply.
+     * @param cosmeticName The name of the cosmetic selected by the player.
+     * @param targetPlayer The player to apply the effect to (e.g., the victim or the killer).
+     */
+    private void applyCosmetic(EnumCosmeticType cosmeticType, String cosmeticName, Player targetPlayer) {
+        if (cosmeticName == null || cosmeticName.equalsIgnoreCase("None")) {
+            return;
         }
 
-        AbstractSoundEffect soundEffect = soundEffectRepository.getCosmetic(selectedSoundEffectName);
-        if (soundEffect != null) {
-            soundEffect.spawnEffect(killer);
+        ICosmeticRepository cosmeticRepository = Alley.getInstance().getService(ICosmeticRepository.class);
+        BaseCosmeticRepository<?> repository = cosmeticRepository.getRepository(cosmeticType);
+        if (repository == null) {
+            Logger.error("Could not find cosmetic repository for type " + cosmeticType.name());
+            return;
         }
+
+        AbstractCosmetic cosmetic = repository.getCosmetic(cosmeticName);
+        if (cosmetic == null) {
+            return;
+        }
+
+        cosmetic.execute(targetPlayer);
     }
 
     /**
@@ -285,7 +511,6 @@ public abstract class AbstractMatch {
         if (this instanceof MatchRoundsImpl && ((MatchRoundsImpl) this).getCurrentRound() > 0) {
             return;
         }
-
         this.startTime = System.currentTimeMillis();
     }
 
@@ -294,6 +519,91 @@ public abstract class AbstractMatch {
      */
     public void handleRoundEnd() {
         this.endTime = System.currentTimeMillis();
+
+        this.handleMatchHistoryData();
+
+        this.getParticipants().forEach(
+                participant -> participant.getAllPlayers().forEach(gamePlayer -> {
+                    Player player = this.plugin.getServer().getPlayer(gamePlayer.getUuid());
+                    if (player != null) {
+                        this.createSnapshot(player);
+                    }
+                })
+        );
+
+        ISnapshotRepository snapshotRepository = this.plugin.getService(ISnapshotRepository.class);
+        this.snapshots.forEach(snapshotRepository::addSnapshot);
+    }
+
+    private void handleMatchHistoryData() {
+        if (this.isTeamMatch()) return; //TODO: either handle this case too or we're just not storing team match history
+
+        this.getParticipants().forEach(gameParticipant -> gameParticipant.getAllPlayers().forEach(gamePlayer -> {
+            Player player = this.plugin.getServer().getPlayer(gamePlayer.getUuid());
+            if (player == null) return;
+
+            Profile profile = this.plugin.getService(IProfileService.class).getProfile(player.getUniqueId());
+
+            UUID winnerID;
+            UUID loserID;
+
+            if (gamePlayer.isDead()) {
+                winnerID = this.getOpponent(player).getLeader().getUuid();
+                loserID = gamePlayer.getUuid();
+            } else {
+                winnerID = gamePlayer.getUuid();
+                loserID = this.getOpponent(player).getLeader().getUuid();
+            }
+
+            String arenaName;
+            if (this.arena instanceof StandAloneArena) {
+                arenaName = ((StandAloneArena) this.arena).getOriginalArenaName();
+            } else {
+                arenaName = this.arena.getName();
+            }
+
+            AbstractMatchData matchData = new MatchDataSoloImpl(
+                    this.getKit().getName(),
+                    arenaName,
+                    winnerID,
+                    loserID
+            );
+
+            if (this.isRanked()) {
+                matchData.setRanked(true);
+            }
+
+            profile.getProfileData().getPreviousMatches().add(matchData);
+        }));
+    }
+
+    /**
+     * Creates a snapshot of the current match state for a player.
+     * This method captures various statistics and the opponent's UUID.
+     *
+     * @param player The player for whom to create the snapshot.
+     */
+    public void createSnapshot(Player player) {
+        if (this.snapshots.stream().anyMatch(snapshot -> snapshot.getUuid().equals(player.getUniqueId()))) {
+            return;
+        }
+
+        MatchGamePlayerImpl gamePlayer = this.getGamePlayer(player);
+        if (gamePlayer == null || gamePlayer.isDisconnected()) {
+            return;
+        }
+
+        Snapshot snapshot = new Snapshot(player, !gamePlayer.isDead());
+        snapshot.setOpponent(this.getOpponent(player).getLeader().getUuid());
+        snapshot.setLongestCombo(gamePlayer.getData().getLongestCombo());
+        snapshot.setTotalHits(gamePlayer.getData().getHits());
+        snapshot.setThrownPotions(gamePlayer.getData().getThrownPotions());
+        snapshot.setMissedPotions(gamePlayer.getData().getMissedPotions());
+        snapshot.setCriticalHits(gamePlayer.getData().getCriticalHits());
+        snapshot.setBlockedHits(gamePlayer.getData().getBlockedHits());
+        snapshot.setWTaps(gamePlayer.getData().getWTaps());
+
+        this.snapshots.add(snapshot);
     }
 
     /**
@@ -302,27 +612,37 @@ public abstract class AbstractMatch {
      * @param player The player to add.
      */
     public void addSpectator(Player player) {
-        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
-        profile.setState(EnumProfileState.SPECTATING);
-        profile.setMatch(this);
+        if (this.getGamePlayer(player) == null) {
+            if (this.getState() == EnumMatchState.ENDING_MATCH) {
+                player.sendMessage(CC.translate("&cThis match has already ended."));
+                return;
+            }
 
-        this.plugin.getVisibilityService().updateVisibility(player);
+            this.setupSpectatorProfile(player);
+            this.spectators.add(player.getUniqueId());
+        }
 
-        this.plugin.getHotbarService().applyHotbarItems(player, EnumHotbarType.SPECTATOR);
+        INametagService nametagService = Alley.getInstance().getService(INametagService.class);
+        IVisibilityService visibilityService = Alley.getInstance().getService(IVisibilityService.class);
+        IHotbarService hotbarService = Alley.getInstance().getService(IHotbarService.class);
+
+        nametagService.updatePlayerState(player);
+        visibilityService.updateVisibility(player);
+        hotbarService.applyHotbarItems(player);
 
         if (this.arena.getCenter() == null) {
             player.sendMessage(CC.translate("&cThe arena is not set up for spectating"));
             return;
         }
 
-        player.teleport(this.arena.getCenter());
-        player.spigot().setCollidesWithEntities(false);
         player.setAllowFlight(true);
         player.setFlying(true);
 
-        this.spectators.add(player.getUniqueId());
+        ListenerUtil.teleportAndClearSpawn(player, this.arena.getCenter());
 
-        this.notifyAll("&b" + profile.getNameColor() + player.getName() + " &fis now spectating the match.");
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+        Profile profile = profileService.getProfile(player.getUniqueId());
+        this.notifyAll("&6" + profile.getFancyName() + " &fis now spectating the match.");
     }
 
     /**
@@ -331,11 +651,16 @@ public abstract class AbstractMatch {
      * @param player The player to remove from spectating.
      */
     public void removeSpectator(Player player, boolean notify) {
-        Profile profile = this.plugin.getProfileService().getProfile(player.getUniqueId());
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+        Profile profile = profileService.getProfile(player.getUniqueId());
         profile.setState(EnumProfileState.LOBBY);
         profile.setMatch(null);
 
-        this.plugin.getVisibilityService().updateVisibility(player);
+        INametagService nametagService = Alley.getInstance().getService(INametagService.class);
+        IVisibilityService visibilityService = Alley.getInstance().getService(IVisibilityService.class);
+
+        nametagService.updatePlayerState(player);
+        visibilityService.updateVisibility(player);
 
         player.setAllowFlight(false);
         player.setFlying(false);
@@ -345,7 +670,7 @@ public abstract class AbstractMatch {
         this.spectators.remove(player.getUniqueId());
 
         if (notify) {
-            this.notifyAll("&b" + profile.getNameColor() + player.getName() + " &fis no longer spectating the match.");
+            this.notifyAll("&6" + profile.getFancyName() + " &fis no longer spectating the match.");
         }
     }
 
@@ -355,7 +680,30 @@ public abstract class AbstractMatch {
      * @param player The player to start the respawn process for.
      */
     public void startRespawnProcess(Player player) {
+        player.setGameMode(GameMode.SPECTATOR);
+        player.setAllowFlight(true);
+        player.setFlying(true);
+
+        MatchGamePlayerImpl gamePlayer = this.getGamePlayer(player);
+        if (gamePlayer != null) {
+            gamePlayer.setDead(false);
+        }
+
+        Location spawnLocation = this.arena.getCenter();
+        ListenerUtil.teleportAndClearSpawn(player, spawnLocation);
+
         new MatchRespawnRunnable(player, this, 3).runTaskTimer(this.plugin, 0L, 20L);
+    }
+
+    /**
+     * Determines whether handleRespawn should be called for a player.
+     * This method can be overridden by subclasses to control the respawn process.
+     *
+     * @param player The player to check.
+     * @return True if handleRespawn should be called, false otherwise.
+     */
+    protected boolean shouldHandleRegularRespawn(Player player) {
+        return true;
     }
 
     /**
@@ -364,16 +712,8 @@ public abstract class AbstractMatch {
      * @param player     The player to set as dead.
      * @param gamePlayer The game player to set as dead.
      */
-    private void setParticipantAsDead(Player player, MatchGamePlayerImpl gamePlayer) {
-        if (this.kit.isSettingEnabled(KitSettingLivesImpl.class)) {
-            if (this.getParticipant(player).getPlayer().getData().getLives() <= 0) {
-                gamePlayer.setDead(true);
-            } else {
-                this.getParticipant(player).getPlayers().forEach(participant -> participant.setDead(false));
-            }
-        } else {
-            gamePlayer.setDead(true);
-        }
+    public void handleParticipant(Player player, MatchGamePlayerImpl gamePlayer) {
+        gamePlayer.setDead(true);
     }
 
     /**
@@ -396,7 +736,6 @@ public abstract class AbstractMatch {
      * @param message The message to notify.
      */
     public void notifySpectators(String message) {
-        if (this.spectators == null) return;
         this.spectators.stream()
                 .map(uuid -> this.plugin.getServer().getPlayer(uuid))
                 .filter(Objects::nonNull)
@@ -428,8 +767,8 @@ public abstract class AbstractMatch {
                 .skip(3)
                 .forEach(player -> remainingSpectators.add(player.getEntityId()));
 
-        this.sendMessage("&b&lSpectators: &f" + String.join(", ", firstThreeSpectatorNames) +
-                (remainingSpectators.isEmpty() ? "" : " &7(and &b" + remainingSpectators.size() + " &7more...)"));
+        this.sendMessage("&6&lSpectators: &f" + String.join(", ", firstThreeSpectatorNames) +
+                (remainingSpectators.isEmpty() ? "" : " &7(and &6" + remainingSpectators.size() + " &7more...)"));
 
         this.spectators.forEach(uuid -> {
             Player player = this.plugin.getServer().getPlayer(uuid);
@@ -489,6 +828,21 @@ public abstract class AbstractMatch {
     }
 
     /**
+     * Gets a game player from all game players in the match.
+     *
+     * @param player The player to get the game player of.
+     * @return The game player of the player, or null if not found.
+     */
+    public MatchGamePlayerImpl getFromAllGamePlayers(Player player) {
+        return this.getParticipants().stream()
+                .map(GameParticipant::getAllPlayers)
+                .flatMap(List::stream)
+                .filter(gamePlayer -> gamePlayer.getUuid().equals(player.getUniqueId()))
+                .findFirst()
+                .orElse(null);
+    }
+
+    /**
      * Gets a participant by a player.
      *
      * @param player The player to get the participant of.
@@ -497,6 +851,24 @@ public abstract class AbstractMatch {
     public GameParticipant<MatchGamePlayerImpl> getParticipant(Player player) {
         return this.getParticipants().stream()
                 .filter(gameParticipant -> gameParticipant.containsPlayer(player.getUniqueId()))
+                .findFirst()
+                .orElse(null);
+    }
+
+    /**
+     * Gets the opposing participant in a two-sided match.
+     *
+     * @param player The player object of a player on one side.
+     * @return The opposing GameParticipant, or null if it cannot be determined.
+     */
+    public GameParticipant<MatchGamePlayerImpl> getOpponent(Player player) {
+        GameParticipant<MatchGamePlayerImpl> participant = this.getParticipant(player);
+        if (participant == null) {
+            return null;
+        }
+
+        return this.getParticipants().stream()
+                .filter(p -> !p.equals(participant))
                 .findFirst()
                 .orElse(null);
     }
@@ -532,10 +904,11 @@ public abstract class AbstractMatch {
      * @param fadeOut  The fade-out time in ticks.
      */
     public void sendTitle(String title, String subtitle, int fadeIn, int stay, int fadeOut) {
+        IReflectionRepository reflectionRepository = Alley.getInstance().getService(IReflectionRepository.class);
         this.getParticipants().forEach(gameParticipant -> gameParticipant.getPlayers().forEach(uuid -> {
             Player player = this.plugin.getServer().getPlayer(uuid.getUuid());
             if (player != null) {
-                this.plugin.getReflectionRepository().getReflectionService(TitleReflectionService.class).sendTitle(
+                reflectionRepository.getReflectionService(TitleReflectionService.class).sendTitle(
                         player,
                         title,
                         subtitle,
@@ -547,7 +920,7 @@ public abstract class AbstractMatch {
         this.getSpectators().forEach(uuid -> {
             Player player = this.plugin.getServer().getPlayer(uuid);
             if (player != null) {
-                this.plugin.getReflectionRepository().getReflectionService(TitleReflectionService.class).sendTitle(
+                reflectionRepository.getReflectionService(TitleReflectionService.class).sendTitle(
                         player,
                         title,
                         subtitle,
@@ -615,14 +988,14 @@ public abstract class AbstractMatch {
             Location locationB = this.arena.getPos2();
 
             for (GamePlayer gamePlayer : participantA.getPlayers()) {
-                Player participantPlayer = gamePlayer.getPlayer();
+                Player participantPlayer = gamePlayer.getTeamPlayer();
                 if (participantPlayer != null) {
                     this.teleportBackIfMoved(participantPlayer, locationA);
                 }
             }
 
             for (GamePlayer gamePlayer : participantB.getPlayers()) {
-                Player participantPlayer = gamePlayer.getPlayer();
+                Player participantPlayer = gamePlayer.getTeamPlayer();
                 if (participantPlayer != null) {
                     this.teleportBackIfMoved(participantPlayer, locationB);
                 }
@@ -639,7 +1012,10 @@ public abstract class AbstractMatch {
     private void teleportBackIfMoved(Player player, Location location) {
         Location playerLocation = player.getLocation();
 
-        if (playerLocation.getBlockX() != location.getBlockX() || playerLocation.getBlockZ() != location.getBlockZ()) {
+        double deltaX = Math.abs(playerLocation.getX() - location.getX());
+        double deltaZ = Math.abs(playerLocation.getZ() - location.getZ());
+
+        if (deltaX > 0.1 || deltaZ > 0.1) {
             player.teleport(new Location(location.getWorld(), location.getX(), playerLocation.getY(), location.getZ(), playerLocation.getYaw(), playerLocation.getPitch()));
         }
     }
@@ -651,8 +1027,12 @@ public abstract class AbstractMatch {
      */
     private void teleportPlayerToSpawn(Player player) {
         if (player == null) return;
-        this.plugin.getSpawnService().teleportToSpawn(player);
-        this.plugin.getHotbarService().applyHotbarItems(player);
+
+        IHotbarService hotbarService = Alley.getInstance().getService(IHotbarService.class);
+        ISpawnService spawnService = Alley.getInstance().getService(ISpawnService.class);
+
+        spawnService.teleportToSpawn(player);
+        hotbarService.applyHotbarItems(player);
     }
 
     /**
@@ -693,14 +1073,6 @@ public abstract class AbstractMatch {
         }
     }
 
-    /**
-     * Removes a block from the broken blocks map.
-     *
-     * @param blockState The block state to remove.
-     */
-    public void removeBlockFromBrokenBlocksMap(BlockState blockState, Location location) {
-        this.brokenBlocks.remove(blockState, location);
-    }
 
     @SuppressWarnings("deprecation")
     public void resetBlockChanges() {
@@ -710,20 +1082,18 @@ public abstract class AbstractMatch {
             Location pos1 = arena.getPos1();
             Location pos2 = arena.getPos2();
 
-            // TODO: close all doors and gates in arena region if kit setting baseraiding is enabled
-
             for (int x = pos1.getBlockX(); x <= pos2.getBlockX(); x++) {
                 for (int z = pos1.getBlockZ(); z <= pos2.getBlockZ(); z++) {
                     for (int y = pos1.getBlockY(); y <= pos2.getBlockY(); y++) {
                         Location location = new Location(pos1.getWorld(), x, y, z);
                         Block block = location.getBlock();
-                        if (ListenerUtil.isDoorOrGate(block.getType())) {
+                        if (ListenerUtil.isInteractiveBlock(block.getType())) {
                             BlockState originalState = block.getState();
                             if (originalState.getType() == Material.AIR) {
                                 continue;
                             }
                             this.brokenBlocks.put(originalState, location);
-                            block.setType(Material.AIR); // Remove the door or gate
+                            block.setType(Material.AIR);
                         }
                     }
                 }
@@ -756,7 +1126,7 @@ public abstract class AbstractMatch {
 
 
     private void sendPlayerVersusPlayerMessage() {
-        String prefix = CC.translate("&7[&bMatch&7] &r");
+        String prefix = CC.translate("&7[&6Match&7] &r");
 
         if (this.isTeamMatch()) {
             GameParticipant<MatchGamePlayerImpl> participantA = this.getParticipants().get(0);
@@ -765,14 +1135,38 @@ public abstract class AbstractMatch {
             int teamSizeA = participantA.getPlayerSize();
             int teamSizeB = participantB.getPlayerSize();
 
-            String message = CC.translate(prefix + "&b" + participantA.getPlayer().getUsername() + "'s Team &7(&a" + teamSizeA + "&7) &avs &b" + participantB.getPlayer().getUsername() + "'s Team &7(&a" + teamSizeB + "&7)");
+            String message = CC.translate(prefix + "&6" + participantA.getLeader().getUsername() + "'s Team &7(&a" + teamSizeA + "&7) &avs &6" + participantB.getLeader().getUsername() + "'s Team &7(&a" + teamSizeB + "&7)");
             this.sendMessage(message);
         } else {
             GameParticipant<MatchGamePlayerImpl> participant = this.getParticipants().get(0);
             GameParticipant<MatchGamePlayerImpl> opponent = this.getParticipants().get(1);
 
-            String message = CC.translate(prefix + "&b" + participant.getPlayer().getUsername() + " &avs &b" + opponent.getPlayer().getUsername());
+            String message = CC.translate(prefix + "&6" + participant.getLeader().getUsername() + " &avs &6" + opponent.getLeader().getUsername());
             this.sendMessage(message);
         }
+    }
+
+    private void updatePlayerProfileForMatch(Player player) {
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+        Profile profile = profileService.getProfile(player.getUniqueId());
+        profile.setState(EnumProfileState.PLAYING);
+        profile.setMatch(this);
+    }
+
+    private void updatePlayerProfileForLobby(Player player) {
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+        Profile profile = profileService.getProfile(player.getUniqueId());
+
+        profile.setState(EnumProfileState.LOBBY);
+        profile.setMatch(null);
+    }
+
+    private void setupSpectatorProfile(Player player) {
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+        Profile profile = profileService.getProfile(player.getUniqueId());
+        profile.setState(EnumProfileState.SPECTATING);
+        profile.setMatch(this);
+
+        PlayerUtil.reset(player, false);
     }
 }

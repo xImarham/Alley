@@ -1,8 +1,10 @@
 package dev.revere.alley.feature.level.command.impl.manage;
 
+import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
+import dev.revere.alley.feature.level.ILevelService;
 import dev.revere.alley.feature.level.LevelService;
 import dev.revere.alley.feature.level.data.LevelData;
 import dev.revere.alley.util.chat.CC;
@@ -21,12 +23,12 @@ public class LevelAdminCreateCommand extends BaseCommand {
         String[] args = command.getArgs();
 
         if (args.length < 3) {
-            sender.sendMessage(CC.translate("&6Usage: &e/leveladmin create &b<levelName> <minElo> <maxElo>"));
+            sender.sendMessage(CC.translate("&6Usage: &e/leveladmin create &6<levelName> <minElo> <maxElo>"));
             return;
         }
 
         String levelName = args[0];
-        LevelService levelService = this.plugin.getLevelService();
+        ILevelService levelService = this.plugin.getService(ILevelService.class);
         LevelData level = levelService.getLevel(levelName);
         if (level != null) {
             sender.sendMessage(CC.translate("&cA level with that name already exists!"));
@@ -55,6 +57,6 @@ public class LevelAdminCreateCommand extends BaseCommand {
         }
 
         levelService.createLevel(levelName, minElo, maxElo);
-        sender.sendMessage(CC.translate("&aLevel &b" + levelName + " &acreated successfully with min Elo &b" + minElo + " &aand max Elo &b" + maxElo + "&a!"));
+        sender.sendMessage(CC.translate("&aLevel &6" + levelName + " &acreated successfully with min Elo &6" + minElo + " &aand max Elo &6" + maxElo + "&a!"));
     }
 }

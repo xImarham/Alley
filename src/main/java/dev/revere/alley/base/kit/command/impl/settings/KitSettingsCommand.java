@@ -3,7 +3,7 @@ package dev.revere.alley.base.kit.command.impl.settings;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
-import dev.revere.alley.base.kit.setting.KitSettingService;
+import dev.revere.alley.base.kit.setting.IKitSettingService;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.entity.Player;
 
@@ -17,14 +17,14 @@ public class KitSettingsCommand extends BaseCommand {
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
-        KitSettingService kitSettingService = this.plugin.getKitSettingService();
+        IKitSettingService kitSettingService = this.plugin.getService(IKitSettingService.class);
 
         player.sendMessage("");
-        player.sendMessage(CC.translate("     &b&lKit Settings List &f(" + kitSettingService.getSettings().size() + "&f)"));
+        player.sendMessage(CC.translate("&6&lKit Settings List &f(" + kitSettingService.getSettings().size() + "&f)"));
         if (kitSettingService.getSettings().isEmpty()) {
-            player.sendMessage(CC.translate("      &f● &cNo Kit Settings available."));
+            player.sendMessage(CC.translate(" &f● &cNo Kit Settings available."));
         }
-        kitSettingService.getSettings().forEach(setting -> player.sendMessage(CC.translate("      &f● &b" + setting.getName())));
+        kitSettingService.getSettings().forEach(setting -> player.sendMessage(CC.translate(" &f● &6" + setting.getName() + " &8(&7" + setting.getDescription() + "&7)")));
         player.sendMessage("");
     }
 }

@@ -2,13 +2,16 @@ package dev.revere.alley.game.match.runnable;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.base.kit.setting.impl.mode.KitSettingRoundsImpl;
+import dev.revere.alley.config.IConfigService;
 import dev.revere.alley.game.match.AbstractMatch;
 import dev.revere.alley.game.match.enums.EnumMatchState;
+import dev.revere.alley.tool.reflection.IReflectionRepository;
 import dev.revere.alley.tool.reflection.impl.TitleReflectionService;
-import dev.revere.alley.util.SoundUtil;
 import dev.revere.alley.util.chat.CC;
 import lombok.Getter;
 import lombok.Setter;
+import org.bukkit.Bukkit;
+import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -66,6 +69,7 @@ public class MatchRunnable extends BukkitRunnable {
                     this.playSoundStarted();
                 } else {
                     this.match.sendMessage(CC.translate("&a" + this.stage + "..."));
+                    this.sendTitleStarting();
                     this.playSoundStarting();
                 }
                 break;
@@ -115,31 +119,35 @@ public class MatchRunnable extends BukkitRunnable {
     }
 
     private void sendTitleStarted() {
-        this.match.getParticipants().forEach(participant -> Alley.getInstance().getReflectionRepository().getReflectionService(TitleReflectionService.class).sendTitle(
-                participant.getPlayer().getPlayer(),
-                "&b&lMatch started",
-                "&fGood Luck!",
-                15, 20, 2
-        ));
+        this.match.getParticipants().forEach(gameParticipant -> gameParticipant.getPlayers().forEach(matchGamePlayer -> {
+            Alley.getInstance().getService(IReflectionRepository.class).getReflectionService(TitleReflectionService.class).sendTitle(
+                    matchGamePlayer.getTeamPlayer(),
+                    "&6&lMatch started",
+                    "&fGood Luck!",
+                    15, 20, 2
+            );
+        }));
     }
 
     private void sendTitleStarting() {
-        this.match.getParticipants().forEach(participant -> Alley.getInstance().getReflectionRepository().getReflectionService(TitleReflectionService.class).sendTitle(
-                participant.getPlayer().getPlayer(),
-                "&a&l" + this.stage,
-                "",
-                2, 10, 2
-        ));
+        this.match.getParticipants().forEach(gameParticipant -> gameParticipant.getPlayers().forEach(matchGamePlayer -> {
+            Alley.getInstance().getService(IReflectionRepository.class).getReflectionService(TitleReflectionService.class).sendTitle(
+                    matchGamePlayer.getTeamPlayer(),
+                    "&6&lMatch",
+                    "&fStarts in &6" + this.stage + "s",
+                    2, 10, 2
+            );
+        }));
     }
 
     /**
      * Send the disclaimer to the participants.
      */
     private void sendDisclaimer() {
-        FileConfiguration config = Alley.getInstance().getConfigService().getMessagesConfig();
+        FileConfiguration config = Alley.getInstance().getService(IConfigService.class).getMessagesConfig();
         if (config.getBoolean("match.started.kit-disclaimer.enabled")) {
             if (this.match.getKit().getDisclaimer() == null) {
-                Alley.getInstance().getConfigService().getMessagesConfig().getStringList("match.started.kit-disclaimer.not-set").forEach(message -> this.match.sendMessage(CC.translate(message)));
+                Alley.getInstance().getService(IConfigService.class).getMessagesConfig().getStringList("match.started.kit-disclaimer.not-set").forEach(message -> this.match.sendMessage(CC.translate(message)));
                 return;
             }
 
@@ -151,10 +159,10 @@ public class MatchRunnable extends BukkitRunnable {
     }
 
     private void playSoundStarting() {
-        this.match.getParticipants().forEach(participant -> SoundUtil.playNeutral(participant.getPlayer().getPlayer()));
+        this.match.playSound(Sound.NOTE_STICKS);
     }
 
     private void playSoundStarted() {
-        this.match.getParticipants().forEach(participant -> SoundUtil.playBlast(participant.getPlayer().getPlayer()));
+        this.match.playSound(Sound.FIREWORK_BLAST);
     }
 }

@@ -1,9 +1,11 @@
 package dev.revere.alley.base.arena.schematic.command;
 
+import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.base.arena.schematic.ArenaSchematicService;
+import dev.revere.alley.base.arena.schematic.IArenaSchematicService;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.entity.Player;
 
@@ -15,19 +17,19 @@ import java.io.File;
  * @since 16/06/2025
  */
 public class ArenaPasteTestCommand extends BaseCommand {
-    @CommandData(name = "arenapastetest", isAdminOnly = true, inGameOnly = false)
+    @CommandData(name = "arena.paste", isAdminOnly = true, inGameOnly = false)
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
         String[] args = command.getArgs();
 
         if (args.length < 1) {
-            player.sendMessage(CC.translate("&6Usage: &e/arenapastetest &b<schematicName>"));
+            player.sendMessage(CC.translate("&6Usage: &e/arena paste &6<schematicName>"));
             return;
         }
 
         String schematicName = args[0];
-        ArenaSchematicService schematicService = this.plugin.getArenaSchematicService();
+        IArenaSchematicService schematicService = Alley.getInstance().getService(IArenaSchematicService.class);
         File schematicFile = schematicService.getSchematicFile(schematicName);
 
         if (!schematicFile.exists()) {

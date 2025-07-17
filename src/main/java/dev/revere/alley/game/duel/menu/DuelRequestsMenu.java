@@ -3,7 +3,10 @@ package dev.revere.alley.game.duel.menu;
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.api.menu.pagination.PaginatedMenu;
+import dev.revere.alley.base.server.IServerService;
 import dev.revere.alley.game.duel.DuelRequest;
+import dev.revere.alley.game.duel.IDuelRequestService;
+import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.tool.item.ItemBuilder;
 import dev.revere.alley.util.chat.CC;
 import lombok.AllArgsConstructor;
@@ -25,7 +28,7 @@ public class DuelRequestsMenu extends PaginatedMenu {
 
     @Override
     public String getPrePaginatedTitle(Player player) {
-        return "&b&lDuel Requests";
+        return "&6&lDuel Requests";
     }
 
     @Override
@@ -43,7 +46,7 @@ public class DuelRequestsMenu extends PaginatedMenu {
     public Map<Integer, Button> getAllPagesButtons(Player player) {
         Map<Integer, Button> buttons = new HashMap<>();
 
-        this.plugin.getDuelRequestService().getDuelRequests()
+        Alley.getInstance().getService(IDuelRequestService.class).getDuelRequests()
                 .stream()
                 .filter(duelRequest -> !duelRequest.getSender().equals(player))
                 .forEach(duelRequest -> buttons.put(buttons.size(), new DuelRequestsButton(duelRequest)));
@@ -59,12 +62,12 @@ public class DuelRequestsMenu extends PaginatedMenu {
 
         @Override
         public ItemStack getButtonItem(Player player) {
-            return new ItemBuilder(Material.PAPER).name("&b&l" + this.duelRequest.getSender().getName()).durability(0).hideMeta()
+            return new ItemBuilder(Material.PAPER).name("&6&l" + this.duelRequest.getSender().getName()).durability(0).hideMeta()
                     .lore(
                             "&fKit: &f" + this.duelRequest.getKit().getDisplayName(),
                             "&fArena: &f" + this.duelRequest.getArena().getDisplayName(),
                             "",
-                            "&fExpires in: &b" + this.duelRequest.getRemainingTimeFormatted(),
+                            "&fExpires in: &6" + this.duelRequest.getRemainingTimeFormatted(),
                             "",
                             "&aClick to accept!"
                     )
@@ -87,16 +90,19 @@ public class DuelRequestsMenu extends PaginatedMenu {
                 return;
             }
 
-            if (this.plugin.getProfileService().getProfile(player.getUniqueId()).getMatch() != null) {
+            if (Alley.getInstance().getService(IProfileService.class).getProfile(player.getUniqueId()).getMatch() != null) {
                 player.sendMessage(CC.translate("&cYou are already in a match."));
                 return;
             }
 
-            if (this.plugin.getServerService().isQueueingEnabled(player)) {
+            IServerService serverService = Alley.getInstance().getService(IServerService.class);
+            if (!serverService.isQueueingAllowed()) {
+                player.sendMessage(CC.translate("&cQueueing is temporarily disabled. Please try again later."));
+                player.closeInventory();
                 return;
             }
 
-            this.plugin.getDuelRequestService().acceptPendingRequest(this.duelRequest);
+            Alley.getInstance().getService(IDuelRequestService.class).acceptPendingRequest(this.duelRequest);
             player.closeInventory();
         }
     }

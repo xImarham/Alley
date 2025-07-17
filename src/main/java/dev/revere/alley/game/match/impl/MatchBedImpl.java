@@ -5,14 +5,17 @@ import dev.revere.alley.base.kit.Kit;
 import dev.revere.alley.base.queue.Queue;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
+import dev.revere.alley.game.match.player.participant.TeamGameParticipant;
+import dev.revere.alley.util.ListenerUtil;
 import dev.revere.alley.util.PlayerUtil;
-import dev.revere.alley.util.TaskUtil;
 import lombok.Getter;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.PlayerDeathEvent;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 
@@ -44,24 +47,50 @@ public class MatchBedImpl extends MatchRegularImpl {
 
     @Override
     public boolean canEndRound() {
-        return (this.participantA.isAllDead() && this.participantA.getPlayer().getData().isBedBroken())
-                || (this.participantB.isAllDead() && this.participantB.getPlayer().getData().isBedBroken());
+        return (this.participantA.isAllEliminated() || this.participantB.isAllEliminated())
+                || (this.participantA.getAllPlayers().stream().allMatch(MatchGamePlayerImpl::isDisconnected)
+                || this.participantB.getAllPlayers().stream().allMatch(MatchGamePlayerImpl::isDisconnected));
     }
 
     @Override
     public boolean canStartRound() {
-        return (!this.participantA.isAllDead() && !this.participantA.getPlayer().getData().isBedBroken())
-                && (!this.participantB.isAllDead() && !this.participantB.getPlayer().getData().isBedBroken());
+        return !this.participantA.isAllEliminated() && !this.participantB.isAllEliminated();
     }
 
     @Override
-    public void handleDeath(Player player) {
-        GameParticipant<MatchGamePlayerImpl> participant = this.participantA.containsPlayer(player.getUniqueId()) ? this.participantA : this.participantB;
-        if (participant.getPlayer().getData().isBedBroken()) {
-            super.handleDeath(player);
-        } else {
-            TaskUtil.runTaskLater(() -> this.startRespawnProcess(player), 5L);
+    public void handleParticipant(Player player, MatchGamePlayerImpl gamePlayer) {
+        GameParticipant<MatchGamePlayerImpl> gameParticipant = this.getParticipantA().containsPlayer(player.getUniqueId())
+                ? this.getParticipantA()
+                : this.getParticipantB();
+
+        if (gameParticipant.isBedBroken()) {
+            GameParticipant<MatchGamePlayerImpl> participant = getParticipant(player);
+            if (participant == null) {
+                return;
+            }
+
+            gamePlayer.setEliminated(true);
         }
+
+        super.handleParticipant(player, gamePlayer);
+    }
+
+    @Override
+    public void handleDeathItemDrop(Player player, PlayerDeathEvent event) {
+        GameParticipant<MatchGamePlayerImpl> participant = this.participantA.containsPlayer(player.getUniqueId())
+                ? this.participantA
+                : this.participantB;
+
+        if (participant.isBedBroken()) {
+            ListenerUtil.clearDroppedItemsOnDeath(event, player);
+            return;
+        }
+        super.handleDeathItemDrop(player, event);
+    }
+
+    @Override
+    protected boolean shouldHandleRegularRespawn(Player player) {
+        return false;
     }
 
     @Override
@@ -69,13 +98,10 @@ public class MatchBedImpl extends MatchRegularImpl {
         PlayerUtil.reset(player, true);
 
         Location spawnLocation = this.getParticipants().get(0).containsPlayer(player.getUniqueId()) ? this.getArena().getPos1() : this.getArena().getPos2();
-        player.teleport(spawnLocation);
+        ListenerUtil.teleportAndClearSpawn(player, spawnLocation);
 
         this.giveLoadout(player, this.getKit());
-        this.applyWoolAndArmorColor(player);
-
-        this.notifyParticipants("&b" + player.getName() + " &ahas respawned");
-        this.notifySpectators("&b" + player.getName() + " &ahas respawned");
+        this.applyColorKit(player);
     }
 
     /**
@@ -86,7 +112,7 @@ public class MatchBedImpl extends MatchRegularImpl {
      */
     public void alertBedDestruction(Player breaker, GameParticipant<MatchGamePlayerImpl> opponent) {
         String destructionMessage = "&6&lBED DESTRUCTION!";
-        String subMessage = " &b" + breaker.getName() + " &7has destroyed the bed of &b" + opponent.getPlayer().getUsername() + "&7!";
+        String subMessage = getBreakMessage(breaker, opponent);
 
         this.sendMessage(
                 Arrays.asList(
@@ -104,6 +130,27 @@ public class MatchBedImpl extends MatchRegularImpl {
         );
 
         this.playSound(Sound.ENDERDRAGON_GROWL);
+    }
+
+    private @NotNull String getBreakMessage(Player breaker, GameParticipant<MatchGamePlayerImpl> opponent) {
+        String subMessage;
+        if (opponent instanceof TeamGameParticipant) {
+            String opponentTeamName;
+            String color;
+
+            if (this.getParticipantA() == opponent) {
+                opponentTeamName = "&9Blue Team";
+                color = "&c";
+            } else {
+                opponentTeamName = "&cRed Team";
+                color = "&9";
+            }
+
+            subMessage = color + breaker.getName() + " &7has destroyed the bed of " + opponentTeamName + "&7!";
+        } else {
+            subMessage = " &c" + breaker.getName() + " &7has destroyed the bed of &9" + opponent.getLeader().getUsername() + "&7!";
+        }
+        return subMessage;
     }
 
     /**

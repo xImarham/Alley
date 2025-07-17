@@ -3,9 +3,9 @@ package dev.revere.alley.base.kit.command.impl.manage.raiding;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
+import dev.revere.alley.base.kit.IKitService;
 import dev.revere.alley.base.kit.Kit;
-import dev.revere.alley.base.kit.KitService;
-import dev.revere.alley.base.kit.data.BaseRaidingKitData;
+import dev.revere.alley.base.kit.service.IBaseRaidingService;
 import dev.revere.alley.base.kit.setting.impl.mode.KitSettingRaidingImpl;
 import dev.revere.alley.game.match.player.enums.EnumBaseRaiderRole;
 import dev.revere.alley.util.chat.CC;
@@ -24,20 +24,20 @@ public class KitSetRaidingRoleKitCommand extends BaseCommand {
         String[] args = command.getArgs();
 
         if (args.length < 3) {
-            sender.sendMessage(CC.translate("&6Usage: &e/kit setraidingrolekit &b<kitName> <role> <kitName>"));
+            sender.sendMessage(CC.translate("&6Usage: &e/kit setraidingrolekit &6<kitName> <role> <kitName>"));
             return;
         }
 
         String kitName = args[0];
-        KitService kitService = this.plugin.getKitService();
+        IKitService kitService = this.plugin.getService(IKitService.class);
         Kit kit = kitService.getKit(kitName);
         if (kit == null) {
-            sender.sendMessage(CC.translate("&cThe &b" + kitName + " &ckit does not exist."));
+            sender.sendMessage(CC.translate("&cThe &6" + kitName + " &ckit does not exist."));
             return;
         }
 
         if (!kit.isSettingEnabled(KitSettingRaidingImpl.class)) {
-            sender.sendMessage(CC.translate("&cThe &b" + kit.getName() + " &ckit does not have &bbase raiding &csetting enabled."));
+            sender.sendMessage(CC.translate("&cThe &6" + kit.getName() + " &ckit does not have &6base raiding &csetting enabled."));
             return;
         }
 
@@ -53,25 +53,18 @@ public class KitSetRaidingRoleKitCommand extends BaseCommand {
         String roleKitName = args[2];
         Kit roleKit = kitService.getKit(roleKitName);
         if (roleKit == null) {
-            sender.sendMessage(CC.translate("&cThe &b" + roleKitName + " &ckit does not exist."));
+            sender.sendMessage(CC.translate("&cThe &6" + roleKitName + " &ckit does not exist."));
             return;
         }
 
         if (roleKit.isEnabled()) {
-            sender.sendMessage(CC.translate("&cThe &b" + roleKitName + " &ckit is currently enabled. Please disable it before setting it as a raiding role kit."));
+            sender.sendMessage(CC.translate("&cThe &6" + roleKitName + " &ckit is currently enabled. Please disable it before setting it as a raiding role kit."));
             return;
         }
 
-        if (kit.getBaseRaidingKitData() == null) {
-            BaseRaidingKitData raidingData = new BaseRaidingKitData();
-            raidingData.setKit(roleKit, role);
-            kit.setBaseRaidingKitData(raidingData);
+        IBaseRaidingService raidingService = this.plugin.getService(IBaseRaidingService.class);
+        raidingService.setRaidingKitMapping(kit, role, roleKit);
 
-        } else {
-            kit.getBaseRaidingKitData().setKit(roleKit, role);
-        }
-
-        kitService.saveKit(kit);
-        sender.sendMessage(CC.translate("&aSuccessfully set the &b" + role + " &araiding role kit to &b" + roleKit.getName() + "&a for the &b" + kit.getName() + " &akit."));
+        sender.sendMessage(CC.translate("&aSuccessfully set the &6" + role + " &araiding role kit to &6" + roleKit.getName() + "&a for the &6" + kit.getName() + " &akit."));
     }
 }

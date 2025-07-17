@@ -8,6 +8,7 @@ import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.PlayerDeathEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -78,6 +79,11 @@ public class MatchFFAImpl extends AbstractMatch {
     }
 
     @Override
+    public void handleDeathItemDrop(Player player, PlayerDeathEvent event) {
+        event.getDrops().clear();
+    }
+
+    @Override
     public void handleRoundEnd() {
         super.handleRoundEnd();
 
@@ -86,15 +92,15 @@ public class MatchFFAImpl extends AbstractMatch {
                 .findFirst()
                 .ifPresent(remaining -> {
                     this.winner = remaining;
-                    this.winner.setEliminated(false);
+                    this.winner.getLeader().setEliminated(true);
 
                     // temporarily, couldnt be asked to mess with clickables again
 
-                    this.sendMessage("Winner: " + this.winner.getPlayer().getUsername());
+                    this.sendMessage("Winner: " + this.winner.getLeader().getUsername());
 
                     String losers = this.participants.stream()
                             .filter(participant -> participant != this.winner)
-                            .map(GameParticipant::getPlayer)
+                            .map(GameParticipant::getLeader)
                             .map(MatchGamePlayerImpl::getUsername)
                             .reduce((a, b) -> a + ", " + b)
                             .orElse("None");

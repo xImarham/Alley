@@ -2,9 +2,9 @@ package dev.revere.alley.game.party.menu.event.impl;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.menu.Button;
-import dev.revere.alley.api.menu.Menu;
+import dev.revere.alley.api.menu.pagination.PaginatedMenu;
 import dev.revere.alley.base.arena.AbstractArena;
-import dev.revere.alley.base.arena.impl.StandAloneArena;
+import dev.revere.alley.base.arena.IArenaService;
 import dev.revere.alley.base.kit.Kit;
 import dev.revere.alley.game.party.menu.event.impl.button.PartyEventSplitArenaSelectorButton;
 import lombok.AllArgsConstructor;
@@ -19,25 +19,38 @@ import java.util.Map;
  * @date 09/11/2024 - 09:37
  */
 @AllArgsConstructor
-public class PartyEventSplitArenaSelectorMenu extends Menu {
+public class PartyEventSplitArenaSelectorMenu extends PaginatedMenu {
     private Kit kit;
 
     @Override
-    public String getTitle(Player player) {
-        return "&b&lSelect an arena";
+    public String getPrePaginatedTitle(Player player) {
+        return "&6&lSelect an arena";
     }
 
     @Override
-    public Map<Integer, Button> getButtons(Player player) {
+    public Map<Integer, Button> getGlobalButtons(Player player) {
         Map<Integer, Button> buttons = new HashMap<>();
 
-        for (AbstractArena arena : Alley.getInstance().getArenaService().getArenas()) {
-            if (arena.getKits().contains(kit.getName()) && arena.isEnabled() &&
-                    (!(arena instanceof StandAloneArena) || !((StandAloneArena) arena).isActive())) {
+        this.addGlassHeader(buttons, 15);
+
+        return buttons;
+    }
+
+    @Override
+    public Map<Integer, Button> getAllPagesButtons(Player player) {
+        Map<Integer, Button> buttons = new HashMap<>();
+
+        for (AbstractArena arena : Alley.getInstance().getService(IArenaService.class).getArenas()) {
+            if (arena.getKits().contains(kit.getName()) && arena.isEnabled()) {
                 buttons.put(buttons.size(), new PartyEventSplitArenaSelectorButton(kit, arena));
             }
         }
 
         return buttons;
+    }
+
+    @Override
+    public int getSize() {
+        return 9 * 6;
     }
 }

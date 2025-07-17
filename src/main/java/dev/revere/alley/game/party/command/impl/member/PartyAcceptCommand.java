@@ -4,9 +4,9 @@ import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.config.locale.impl.PartyLocale;
+import dev.revere.alley.game.party.IPartyService;
 import dev.revere.alley.game.party.Party;
 import dev.revere.alley.game.party.PartyRequest;
-import dev.revere.alley.game.party.PartyService;
 import dev.revere.alley.game.party.enums.EnumPartyState;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.Bukkit;
@@ -36,7 +36,7 @@ public class PartyAcceptCommand extends BaseCommand {
             return;
         }
 
-        PartyService partyService = this.plugin.getPartyService();
+        IPartyService partyService = this.plugin.getService(IPartyService.class);
 
         Party party = partyService.getPartyByLeader(target);
         if (party == null) {
@@ -46,7 +46,6 @@ public class PartyAcceptCommand extends BaseCommand {
 
         if (party.getState() == EnumPartyState.PUBLIC) {
             partyService.joinParty(player, target);
-            player.sendMessage(CC.translate(PartyLocale.JOINED_PARTY.getMessage().replace("{player}", target.getName())));
             return;
         }
 
@@ -64,6 +63,5 @@ public class PartyAcceptCommand extends BaseCommand {
 
         partyService.joinParty(player, target);
         partyService.removeRequest(partyRequest);
-        player.sendMessage(CC.translate(PartyLocale.JOINED_PARTY.getMessage().replace("{player}", target.getName())));
     }
 }

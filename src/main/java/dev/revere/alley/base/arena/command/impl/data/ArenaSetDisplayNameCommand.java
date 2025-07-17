@@ -3,6 +3,9 @@ package dev.revere.alley.base.arena.command.impl.data;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
+import dev.revere.alley.base.arena.AbstractArena;
+import dev.revere.alley.base.arena.IArenaService;
+import dev.revere.alley.config.locale.impl.ArenaLocale;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.command.CommandSender;
 
@@ -21,19 +24,23 @@ public class ArenaSetDisplayNameCommand extends BaseCommand {
         String[] args = command.getArgs();
 
         if (args.length < 2) {
-            sender.sendMessage(CC.translate("&6Usage: &e/arena setdisplayname &b<arenaName> <displayName>"));
+            sender.sendMessage(CC.translate("&6Usage: &e/arena setdisplayname &6<arenaName> <displayName>"));
             return;
         }
 
         String arenaName = args[0];
-        String displayName = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
-        if (this.plugin.getArenaService().getArenaByName(arenaName) == null) {
-            sender.sendMessage(CC.translate("&cAn arena with that name does not exist!"));
+        IArenaService arenaService = this.plugin.getService(IArenaService.class);
+        AbstractArena arena = arenaService.getArenaByName(arenaName);
+        if (arena == null) {
+            sender.sendMessage(ArenaLocale.NOT_FOUND.getMessage().replace("{arena-name}", arenaName));
             return;
         }
 
-        this.plugin.getArenaService().getArenaByName(arenaName).setDisplayName(displayName);
-        this.plugin.getArenaService().getArenaByName(arenaName).saveArena();
+        String displayName = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
+
+        arena.setDisplayName(displayName);
+        arenaService.saveArena(arena);
+
         sender.sendMessage(CC.translate("&aSuccessfully set the display name of the arena &e" + arenaName + " &ato &e" + displayName + "&a."));
     }
 }

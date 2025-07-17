@@ -1,6 +1,5 @@
 package dev.revere.alley.command.impl.other.troll;
 
-import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
@@ -25,7 +24,7 @@ public class TrollCommand extends BaseCommand {
         String[] args = command.getArgs();
 
         if (args.length < 1) {
-            sender.sendMessage(CC.translate("&6Usage: &e/troll &b(player)"));
+            sender.sendMessage(CC.translate("&6Usage: &e/troll &6(player)"));
             return;
         }
 
@@ -36,7 +35,7 @@ public class TrollCommand extends BaseCommand {
         }
 
         try {
-            String path = Alley.getInstance().getServer().getClass().getPackage().getName();
+            String path = this.plugin.getServer().getClass().getPackage().getName();
             String version = path.substring(path.lastIndexOf(".") + 1);
 
             Class<?> craftPlayer = Class.forName("org.bukkit.craftbukkit." + version + ".entity.CraftPlayer");
@@ -51,7 +50,7 @@ public class TrollCommand extends BaseCommand {
             Method sendPacketMethod = pc.getClass().getMethod("sendPacket", Packet);
             sendPacketMethod.invoke(pc, packet);
         } catch (Exception ex) {
-            Logger.logError("An error occurred while trying to troll " + targetPlayer.getName() + ": " + ex.getMessage());
+            Logger.error("An error occurred while trying to troll " + targetPlayer.getName() + ": " + ex.getMessage());
         }
 
         sender.sendMessage(CC.translate("&eYou have trolled &d" + targetPlayer.getName() + "&e."));

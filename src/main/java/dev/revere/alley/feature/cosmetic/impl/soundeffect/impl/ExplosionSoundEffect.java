@@ -1,7 +1,8 @@
 package dev.revere.alley.feature.cosmetic.impl.soundeffect.impl;
 
-import dev.revere.alley.feature.cosmetic.impl.soundeffect.AbstractSoundEffect;
-import dev.revere.alley.feature.cosmetic.impl.soundeffect.annotation.SoundEffectData;
+import dev.revere.alley.feature.cosmetic.AbstractCosmetic;
+import dev.revere.alley.feature.cosmetic.EnumCosmeticType;
+import dev.revere.alley.feature.cosmetic.annotation.CosmeticData;
 import dev.revere.alley.util.SoundUtil;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -12,11 +13,11 @@ import org.bukkit.entity.Player;
  * @project Alley
  * @since 02/04/2025
  */
-@SoundEffectData(name = "Explosion", description = "Play an explosion sound", permission = "explosion", icon = Material.TNT, slot = 12)
-public class ExplosionSoundEffect extends AbstractSoundEffect {
+@CosmeticData(type = EnumCosmeticType.SOUND_EFFECT, name = "Explosion", description = "Play an explosion sound", permission = "explosion", icon = Material.TNT, slot = 12)
+public class ExplosionSoundEffect extends AbstractCosmetic {
 
     @Override
-    public void spawnEffect(Player player) {
+    public void execute(Player player) {
         SoundUtil.playCustomSound(player, Sound.EXPLODE, 1.0f, 1.0f);
     }
 }

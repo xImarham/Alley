@@ -4,7 +4,7 @@ import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.base.arena.AbstractArena;
-import dev.revere.alley.base.arena.ArenaService;
+import dev.revere.alley.base.arena.IArenaService;
 import dev.revere.alley.base.arena.enums.EnumArenaType;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.entity.Player;
@@ -22,11 +22,11 @@ public class FFASetSpawnCommand extends BaseCommand {
         String[] args = command.getArgs();
 
         if (args.length < 1) {
-            player.sendMessage(CC.translate("&6Usage: &e/ffa setspawn &b<arenaName>"));
+            player.sendMessage(CC.translate("&6Usage: &e/ffa setspawn &6<arenaName>"));
             return;
         }
 
-        ArenaService arenaService = this.plugin.getArenaService();
+        IArenaService arenaService = this.plugin.getService(IArenaService.class);
         AbstractArena arena = arenaService.getArenaByName(args[0]);
         if (arena == null) {
             player.sendMessage(CC.translate("&cAn arena with that name does not exist!"));
@@ -39,6 +39,6 @@ public class FFASetSpawnCommand extends BaseCommand {
         }
 
         arena.setPos1(player.getLocation());
-        player.sendMessage(CC.translate("&aFFA spawn position has been set for arena &b" + arena.getName() + "&a!"));
+        player.sendMessage(CC.translate("&aFFA spawn position has been set for arena &6" + arena.getName() + "&a!"));
     }
 }

@@ -5,9 +5,9 @@ import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.base.kit.Kit;
 import dev.revere.alley.game.ffa.AbstractFFAMatch;
-import dev.revere.alley.game.ffa.FFAService;
+import dev.revere.alley.game.ffa.IFFAService;
+import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
-import dev.revere.alley.profile.ProfileService;
 import dev.revere.alley.profile.enums.EnumProfileState;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.entity.Player;
@@ -25,11 +25,11 @@ public class SpectateFFACommand extends BaseCommand {
         String[] args = command.getArgs();
 
         if (args.length < 1) {
-            player.sendMessage(CC.translate("&6Usage: &e/spectateffa &b<ffaKit>"));
+            player.sendMessage(CC.translate("&6Usage: &e/spectateffa &6<ffaKit>"));
             return;
         }
 
-        ProfileService profileService = this.plugin.getProfileService();
+        IProfileService profileService = this.plugin.getService(IProfileService.class);
         Profile profile = profileService.getProfile(player.getUniqueId());
         if (profile.getState() != EnumProfileState.LOBBY) {
             player.sendMessage(CC.translate("&cYou cannot do this right now!"));
@@ -37,7 +37,7 @@ public class SpectateFFACommand extends BaseCommand {
         }
 
         String ffaKitName = args[0];
-        FFAService ffaService = this.plugin.getFfaService();
+        IFFAService ffaService = this.plugin.getService(IFFAService.class);
         Kit ffaKit = ffaService.getFfaKits().stream()
                 .filter(kit -> kit.getName().equalsIgnoreCase(ffaKitName))
                 .findFirst()

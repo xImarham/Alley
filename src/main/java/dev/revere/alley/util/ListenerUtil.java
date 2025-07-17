@@ -2,11 +2,12 @@ package dev.revere.alley.util;
 
 import dev.revere.alley.Alley;
 import lombok.experimental.UtilityClass;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -49,18 +50,62 @@ public class ListenerUtil {
     }
 
     /**
+     * After 5 seconds, clears the dropped items on regular item drop via a BukkitRunnable.
+     *
+     * @param item The dropped item.
+     */
+    public void clearDroppedItemsOnRegularItemDrop(Item item) {
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (item != null && item.isValid()) {
+                    item.remove();
+                }
+            }
+        }.runTaskLater(Alley.getInstance(), 100L);
+    }
+
+    /**
      * Checks if the player is not stepping on a pressure plate.
      *
-     * @param event The event.
+     * @param block The block you are standing on.
      * @return true if the player is stepping on a pressure plate, false otherwise.
      */
-    public boolean notSteppingOnPlate(PlayerInteractEvent event) {
-        if (event.getClickedBlock() == null) {
+    public boolean notSteppingOnPlate(Block block) {
+        if (block == null) {
             return false;
         }
 
-        Material type = event.getClickedBlock().getType();
+        Material type = block.getType();
         return !pressurePlates.contains(type);
+    }
+
+    public boolean checkSteppingOnGoldPressurePlate(Block block) {
+        if (block == null) {
+            return false;
+        }
+
+        Material type = block.getType();
+        return type == Material.GOLD_PLATE;
+    }
+
+    public boolean checkSteppingOnIronPressurePlate(Block block) {
+        if (block == null) {
+            return false;
+        }
+
+        Material type = block.getType();
+        return type == Material.IRON_PLATE;
+    }
+
+    public void teleportAndClearSpawn(Player player, Location spawnLocation) {
+        for (int i = 0; i <= 2; i++) {
+            Block block = spawnLocation.clone().add(0, i, 0).getBlock();
+            if (block.getType() != Material.AIR) {
+                block.setType(Material.AIR);
+            }
+        }
+        player.teleport(spawnLocation);
     }
 
     /**
@@ -79,14 +124,14 @@ public class ListenerUtil {
      * @param material The material to check.
      * @return true if the material is a door or gate, false otherwise.
      */
-    public boolean isDoorOrGate(Material material) {
-        return doors.contains(material);
+    public boolean isInteractiveBlock(Material material) {
+        return interactiveBlocks.contains(material);
     }
 
     /**
      * List of door and gate materials.
      */
-    private final List<Material> doors = Arrays.asList(
+    private final List<Material> interactiveBlocks = Arrays.asList(
             Material.WOODEN_DOOR,
             Material.SPRUCE_DOOR,
             Material.BIRCH_DOOR,
@@ -102,7 +147,14 @@ public class ListenerUtil {
             Material.DARK_OAK_FENCE_GATE,
 
             Material.TRAP_DOOR,
-            Material.IRON_TRAPDOOR
+            Material.IRON_TRAPDOOR,
+
+            Material.CHEST,
+            Material.ENDER_CHEST,
+            Material.TRAPPED_CHEST,
+
+            Material.HOPPER,
+            Material.HOPPER_MINECART
     );
 
     /**
@@ -123,5 +175,26 @@ public class ListenerUtil {
             Material.WOOD,
             Material.WOOL,
             Material.BED_BLOCK
+    );
+
+    /**
+     * Checks if the material is a bed fight protected block.
+     *
+     * @param material The material to check.
+     * @return true if the material is a bed fight protected block, false otherwise.
+     */
+    public boolean isSword(Material material) {
+        return swords.contains(material);
+    }
+
+    /**
+     * List of bed fight protected block materials.
+     */
+    private final List<Material> swords = Arrays.asList(
+            Material.DIAMOND_SWORD,
+            Material.GOLD_SWORD,
+            Material.IRON_SWORD,
+            Material.STONE_SWORD,
+            Material.WOOD_SWORD
     );
 }
