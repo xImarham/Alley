@@ -50,7 +50,7 @@ scoreboard:
       - " &f&l● &rLevel: &6{level}"
     party:
       - "{sidebar}"
-      - "&6&lParty"
+      - "&6&lParty &7({party-privacy}&7)"
       - " &f&l● &rLeader: &6{party-leader}"
       - " &f&l● &rMembers: &6{party-size}"
       - ""
