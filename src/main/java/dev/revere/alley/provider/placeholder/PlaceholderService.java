@@ -1,6 +1,7 @@
 package dev.revere.alley.provider.placeholder;
 
 import dev.revere.alley.Alley;
+import dev.revere.alley.plugin.AlleyContext;
 import dev.revere.alley.plugin.annotation.Service;
 import dev.revere.alley.provider.placeholder.impl.AlleyPlaceholderImpl;
 import dev.revere.alley.tool.logger.Logger;
@@ -12,6 +13,11 @@ import dev.revere.alley.tool.logger.Logger;
  */
 @Service(provides = IPlaceholderService.class, priority = 430)
 public class PlaceholderService implements IPlaceholderService {
+
+    @Override
+    public void initialize(AlleyContext context) {
+        this.registerExpansion(context.getPlugin());
+    }
 
     @Override
     public void registerExpansion(Alley plugin) {
