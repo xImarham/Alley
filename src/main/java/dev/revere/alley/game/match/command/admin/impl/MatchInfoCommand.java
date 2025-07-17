@@ -1,6 +1,5 @@
 package dev.revere.alley.game.match.command.admin.impl;
 
-import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
@@ -35,7 +34,7 @@ public class MatchInfoCommand extends BaseCommand {
             return;
         }
 
-        Profile profile = Alley.getInstance().getService(IProfileService.class).getProfile(target.getUniqueId());
+        Profile profile = this.plugin.getService(IProfileService.class).getProfile(target.getUniqueId());
         if (profile.getMatch() == null) {
             sender.sendMessage(CC.translate("&cThis player is not in a match."));
             return;

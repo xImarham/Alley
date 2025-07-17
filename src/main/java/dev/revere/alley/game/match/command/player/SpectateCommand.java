@@ -1,6 +1,5 @@
 package dev.revere.alley.game.match.command.player;
 
-import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
@@ -34,14 +33,14 @@ public class SpectateCommand extends BaseCommand {
             return;
         }
 
-        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+        IProfileService profileService = this.plugin.getService(IProfileService.class);
         Profile profile = profileService.getProfile(player.getUniqueId());
         if (profile.getState() != EnumProfileState.LOBBY) {
             player.sendMessage(CC.translate("&cYou can only spectate players in the lobby."));
             return;
         }
 
-        Profile targetProfile = Alley.getInstance().getService(IProfileService.class).getProfile(target.getUniqueId());
+        Profile targetProfile = this.plugin.getService(IProfileService.class).getProfile(target.getUniqueId());
         if (targetProfile.getFfaMatch() != null) {
             targetProfile.getFfaMatch().addSpectator(player);
             return;

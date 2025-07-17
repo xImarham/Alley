@@ -19,6 +19,8 @@ public enum ProfileLocale implements ILocale {
     TOGGLED_PROFANITY_FILTER("messages.yml", "player-settings.profanity-filter"),
     TOGGLE_DUEL_REQUESTS("messages.yml", "player-settings.duel-requests"),
 
+    IS_BUSY("messages.yml", "error-messages.player.is-busy"),
+
     ;
 
     private final String configName, configString;

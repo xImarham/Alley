@@ -18,6 +18,6 @@ public class TitleCommand extends BaseCommand {
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
-        new TitleMenu(Alley.getInstance().getService(IProfileService.class).getProfile(player.getUniqueId())).openMenu(player);
+        new TitleMenu(this.plugin.getService(IProfileService.class).getProfile(player.getUniqueId())).openMenu(player);
     }
 }

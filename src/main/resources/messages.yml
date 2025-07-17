@@ -16,6 +16,10 @@ welcome-message:
     - "&6&lMade by &f{author} &7(v{version})"
     - ""
 
+error-messages:
+  player:
+    is-busy: "&6{color}{player} &cis busy."
+
 server:
   crafting-operations:
     toggled: "&aCrafting operations for &6{item} &aare now &6{status}&a."

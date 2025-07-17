@@ -1,11 +1,9 @@
 package dev.revere.alley.game.party.command.impl.donator;
 
-import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.base.cooldown.Cooldown;
-import dev.revere.alley.base.cooldown.CooldownRepository;
 import dev.revere.alley.base.cooldown.ICooldownRepository;
 import dev.revere.alley.base.cooldown.enums.EnumCooldownType;
 import dev.revere.alley.config.locale.impl.PartyLocale;
@@ -29,7 +27,7 @@ public class PartyAnnounceCommand extends BaseCommand {
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
-        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+        IProfileService profileService = this.plugin.getService(IProfileService.class);
         Profile profile = profileService.getProfile(player.getUniqueId());
         if (profile.getParty() == null) {
             player.sendMessage(CC.translate(PartyLocale.NOT_IN_PARTY.getMessage()));
@@ -46,7 +44,7 @@ public class PartyAnnounceCommand extends BaseCommand {
             return;
         }
 
-        ICooldownRepository cooldownRepository = Alley.getInstance().getService(ICooldownRepository.class);
+        ICooldownRepository cooldownRepository = this.plugin.getService(ICooldownRepository.class);
         Optional<Cooldown> optionalCooldown = Optional.ofNullable(cooldownRepository.getCooldown(player.getUniqueId(), EnumCooldownType.PARTY_ANNOUNCE_COOLDOWN));
         if (optionalCooldown.isPresent() && optionalCooldown.get().isActive()) {
             player.sendMessage(CC.translate("&cYou must wait " + optionalCooldown.get().remainingTimeInMinutes() + " &cbefore announcing your party again."));
@@ -61,6 +59,6 @@ public class PartyAnnounceCommand extends BaseCommand {
 
         cooldown.resetCooldown();
 
-        Alley.getInstance().getService(IPartyService.class).announceParty(profile.getParty());
+        this.plugin.getService(IPartyService.class).announceParty(profile.getParty());
     }
 }

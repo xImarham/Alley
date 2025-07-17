@@ -37,7 +37,7 @@ public class ArenaDeleteCommand extends BaseCommand {
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
         String[] args = command.getArgs();
-        
+
         IArenaService arenaService = this.plugin.getService(IArenaService.class);
 
         if (args.length < 1) {

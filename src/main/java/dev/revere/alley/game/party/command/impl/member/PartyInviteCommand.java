@@ -1,6 +1,5 @@
 package dev.revere.alley.game.party.command.impl.member;
 
-import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
@@ -25,8 +24,8 @@ public class PartyInviteCommand extends BaseCommand {
         Player player = command.getPlayer();
         String[] args = command.getArgs();
 
-        IPartyService partyService = Alley.getInstance().getService(IPartyService.class);
-        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+        IPartyService partyService = this.plugin.getService(IPartyService.class);
+        IProfileService profileService = this.plugin.getService(IProfileService.class);
 
         if (command.length() < 1) {
             player.sendMessage(CC.translate("&cUsage: /party invite (player)"));

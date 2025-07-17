@@ -19,22 +19,6 @@ import java.util.Arrays;
  */
 public class FFACommand extends BaseCommand {
 
-    /**
-     * Register all FFA subcommands in the constructor
-     */
-    public FFACommand() {
-        new FFAJoinCommand();
-        new FFALeaveCommand();
-        new SpectateFFACommand();
-        new FFAAddCommand();
-        new FFAKickCommand();
-        new FFAListCommand();
-        new FFAListPlayersCommand();
-        new FFAMaxPlayersCommand();
-        new FFASetSafeZoneCommand();
-        new FFASetSpawnCommand();
-    }
-
     @Override
     @CommandData(name = "ffa", isAdminOnly = true)
     public void onCommand(CommandArgs command) {
@@ -49,6 +33,8 @@ public class FFACommand extends BaseCommand {
                 " &f● &6/ffa maxplayers &7| Set the max player count",
                 " &f● &6/ffa setspawn &7| Set the spawn location for FFA",
                 " &f● &6/ffa setsafezone &7| Set the safezone for FFA",
+                "",
+                "&fDo &6/kit setupffa &fto set up the FFA kits.",
                 ""
         ).forEach(line -> player.sendMessage(CC.translate(line)));
     }

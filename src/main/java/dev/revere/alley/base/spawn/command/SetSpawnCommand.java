@@ -1,10 +1,8 @@
 package dev.revere.alley.base.spawn.command;
 
-import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
-import dev.revere.alley.base.arena.IArenaService;
 import dev.revere.alley.base.spawn.ISpawnService;
 import dev.revere.alley.config.IConfigService;
 import dev.revere.alley.util.chat.CC;
@@ -23,9 +21,9 @@ public class SetSpawnCommand extends BaseCommand {
     public void onCommand(CommandArgs cmd) {
         Player player = (Player) cmd.getSender();
         Location location = player.getLocation();
-        Alley.getInstance().getService(ISpawnService.class).updateSpawnLocation(location);
+        this.plugin.getService(ISpawnService.class).updateSpawnLocation(location);
 
-        String message = Alley.getInstance().getService(IConfigService.class).getMessagesConfig().getString("spawn.spawn-set");
+        String message = this.plugin.getService(IConfigService.class).getMessagesConfig().getString("spawn.spawn-set");
         message = message.replace("{world}", location.getWorld().getName())
                 .replace("{x}", String.format("%.2f", location.getX()))
                 .replace("{y}", String.format("%.2f", location.getY()))

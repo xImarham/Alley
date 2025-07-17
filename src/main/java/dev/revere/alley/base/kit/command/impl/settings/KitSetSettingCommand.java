@@ -1,6 +1,5 @@
 package dev.revere.alley.base.kit.command.impl.settings;
 
-import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
@@ -28,7 +27,7 @@ public class KitSetSettingCommand extends BaseCommand {
             return;
         }
 
-        Kit kit = Alley.getInstance().getService(IKitService.class).getKit(args[0]);
+        Kit kit = this.plugin.getService(IKitService.class).getKit(args[0]);
         if (kit == null) {
             player.sendMessage(CC.translate(KitLocale.KIT_NOT_FOUND.getMessage()));
             return;
@@ -37,13 +36,13 @@ public class KitSetSettingCommand extends BaseCommand {
         String settingName = args[1];
         boolean enabled = Boolean.parseBoolean(args[2]);
 
-        if (Alley.getInstance().getService(IKitSettingService.class).getSettings().stream().filter(setting -> setting.getName().equalsIgnoreCase(settingName)).findFirst().orElse(null) == null) {
+        if (this.plugin.getService(IKitSettingService.class).getSettings().stream().filter(setting -> setting.getName().equalsIgnoreCase(settingName)).findFirst().orElse(null) == null) {
             player.sendMessage(CC.translate("&cA setting with that name does not exist."));
             return;
         }
 
         kit.getKitSettings().stream().filter(setting -> setting.getName().equalsIgnoreCase(settingName)).findFirst().ifPresent(setting -> setting.setEnabled(enabled));
-        Alley.getInstance().getService(IKitService.class).saveKit(kit);
+        this.plugin.getService(IKitService.class).saveKit(kit);
         player.sendMessage(CC.translate(KitLocale.KIT_SETTING_SET.getMessage()).replace("{setting-name}", settingName).replace("{enabled}", String.valueOf(enabled)).replace("{kit-name}", kit.getName()));
     }
 }

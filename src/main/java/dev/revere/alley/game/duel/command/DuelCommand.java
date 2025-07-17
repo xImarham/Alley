@@ -1,10 +1,10 @@
 package dev.revere.alley.game.duel.command;
 
-import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.base.server.IServerService;
+import dev.revere.alley.config.locale.impl.ProfileLocale;
 import dev.revere.alley.game.duel.IDuelRequestService;
 import dev.revere.alley.game.duel.menu.DuelRequestMenu;
 import dev.revere.alley.profile.IProfileService;
@@ -53,9 +53,14 @@ public class DuelCommand extends BaseCommand {
             return;
         }
 
-        Profile profile = Alley.getInstance().getService(IProfileService.class).getProfile(target.getUniqueId());
-        if (!profile.getProfileData().getSettingData().isReceiveDuelRequestsEnabled()) {
+        Profile targetProfile = this.plugin.getService(IProfileService.class).getProfile(target.getUniqueId());
+        if (!targetProfile.getProfileData().getSettingData().isReceiveDuelRequestsEnabled()) {
             player.sendMessage(CC.translate("&cThis player has disabled duel requests."));
+            return;
+        }
+
+        if (targetProfile.isBusy()) {
+            player.sendMessage(ProfileLocale.IS_BUSY.getMessage().replace("{color}", String.valueOf(targetProfile.getNameColor())).replace("{player}", target.getName()));
             return;
         }
 

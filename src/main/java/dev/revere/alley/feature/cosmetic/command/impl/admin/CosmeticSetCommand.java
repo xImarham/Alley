@@ -38,7 +38,7 @@ public class CosmeticSetCommand extends BaseCommand {
             return;
         }
 
-        Profile profile = Alley.getInstance().getService(IProfileService.class).getProfile(target.getUniqueId());
+        Profile profile = this.plugin.getService(IProfileService.class).getProfile(target.getUniqueId());
 
         String typeName = args[1];
         String cosmeticName = args[2];
@@ -49,7 +49,7 @@ public class CosmeticSetCommand extends BaseCommand {
             return;
         }
 
-        BaseCosmeticRepository<?> repository = Alley.getInstance().getService(ICosmeticRepository.class).getRepository(cosmeticType);
+        BaseCosmeticRepository<?> repository = this.plugin.getService(ICosmeticRepository.class).getRepository(cosmeticType);
         if (repository == null) {
             player.sendMessage(CC.translate("&cError: No repository found for that type."));
             return;

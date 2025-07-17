@@ -1,6 +1,5 @@
 package dev.revere.alley.command.impl.other.troll;
 
-import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
@@ -36,7 +35,7 @@ public class TrollCommand extends BaseCommand {
         }
 
         try {
-            String path = Alley.getInstance().getServer().getClass().getPackage().getName();
+            String path = this.plugin.getServer().getClass().getPackage().getName();
             String version = path.substring(path.lastIndexOf(".") + 1);
 
             Class<?> craftPlayer = Class.forName("org.bukkit.craftbukkit." + version + ".entity.CraftPlayer");

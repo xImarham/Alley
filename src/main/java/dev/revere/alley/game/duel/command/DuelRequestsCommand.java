@@ -1,6 +1,5 @@
 package dev.revere.alley.game.duel.command;
 
-import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
@@ -21,12 +20,12 @@ public class DuelRequestsCommand extends BaseCommand {
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
 
-        if (Alley.getInstance().getService(IProfileService.class).getProfile(player.getUniqueId()).getMatch() != null) {
+        if (this.plugin.getService(IProfileService.class).getProfile(player.getUniqueId()).getMatch() != null) {
             player.sendMessage(CC.translate("&cYou are already in a match."));
             return;
         }
 
-        IServerService serverService = Alley.getInstance().getService(IServerService.class);
+        IServerService serverService = this.plugin.getService(IServerService.class);
         if (!serverService.isQueueingAllowed()) {
             player.sendMessage(CC.translate("&cQueueing is temporarily disabled. Please try again later."));
             player.closeInventory();

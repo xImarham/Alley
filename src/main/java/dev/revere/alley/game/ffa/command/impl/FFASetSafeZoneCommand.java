@@ -1,6 +1,5 @@
 package dev.revere.alley.game.ffa.command.impl;
 
-import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
@@ -29,12 +28,12 @@ public class FFASetSafeZoneCommand extends BaseCommand {
         String arenaName = args[0];
         String spawnType = args[1];
 
-        if (Alley.getInstance().getService(IArenaService.class).getArenaByName(arenaName) == null) {
+        if (this.plugin.getService(IArenaService.class).getArenaByName(arenaName) == null) {
             player.sendMessage(CC.translate("&cAn arena with that name does not exist!"));
             return;
         }
 
-        if (Alley.getInstance().getService(IArenaService.class).getArenaByName(arenaName).getType() != EnumArenaType.FFA) {
+        if (this.plugin.getService(IArenaService.class).getArenaByName(arenaName).getType() != EnumArenaType.FFA) {
             player.sendMessage(CC.translate("&cYou can only set the safezone for Free-For-All arenas!"));
             return;
         }
@@ -45,13 +44,13 @@ public class FFASetSafeZoneCommand extends BaseCommand {
         }
 
         if (spawnType.equalsIgnoreCase("pos1")) {
-            Alley.getInstance().getService(IArenaService.class).getArenaByName(arenaName).setMaximum(player.getLocation());
+            this.plugin.getService(IArenaService.class).getArenaByName(arenaName).setMaximum(player.getLocation());
             player.sendMessage(CC.translate("&aSafe Zone position 1 has been set for arena &6" + arenaName + "&a!"));
         } else {
-            Alley.getInstance().getService(IArenaService.class).getArenaByName(arenaName).setMinimum(player.getLocation());
+            this.plugin.getService(IArenaService.class).getArenaByName(arenaName).setMinimum(player.getLocation());
             player.sendMessage(CC.translate("&aSafe Zone position 2 has been set for arena &6" + arenaName + "&a!"));
         }
 
-        Alley.getInstance().getService(IArenaService.class).saveArena(Alley.getInstance().getService(IArenaService.class).getArenaByName(arenaName));
+        this.plugin.getService(IArenaService.class).saveArena(this.plugin.getService(IArenaService.class).getArenaByName(arenaName));
     }
 }

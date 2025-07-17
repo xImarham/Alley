@@ -1,6 +1,5 @@
 package dev.revere.alley.command.impl.main.impl;
 
-import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
@@ -21,7 +20,7 @@ public class AlleyReloadCommand extends BaseCommand {
 
         player.sendMessage("");
         player.sendMessage(CC.translate("&eReloading &6&lAlley&e..."));
-        Alley.getInstance().getService(IConfigService.class).reloadConfigs();
+        this.plugin.getService(IConfigService.class).reloadConfigs();
         player.sendMessage(CC.translate("&6&lAlley &ehas been reloaded."));
         player.sendMessage("");
     }

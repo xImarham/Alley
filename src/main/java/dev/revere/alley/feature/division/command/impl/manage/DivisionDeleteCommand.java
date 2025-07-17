@@ -28,7 +28,7 @@ public class DivisionDeleteCommand extends BaseCommand {
         }
 
         String name = args[0];
-        IDivisionService divisionService = Alley.getInstance().getService(IDivisionService.class);
+        IDivisionService divisionService = this.plugin.getService(IDivisionService.class);
         Division division = divisionService.getDivision(name);
         if (division == null) {
             player.sendMessage(CC.translate("&cA division with that name does not exist."));

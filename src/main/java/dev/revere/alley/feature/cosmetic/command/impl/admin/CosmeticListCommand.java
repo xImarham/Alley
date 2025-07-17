@@ -26,7 +26,7 @@ public class CosmeticListCommand extends BaseCommand {
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
-        Map<EnumCosmeticType, BaseCosmeticRepository<?>> repositories = Alley.getInstance().getService(ICosmeticRepository.class).getRepositories();
+        Map<EnumCosmeticType, BaseCosmeticRepository<?>> repositories = this.plugin.getService(ICosmeticRepository.class).getRepositories();
 
         player.sendMessage("");
 
