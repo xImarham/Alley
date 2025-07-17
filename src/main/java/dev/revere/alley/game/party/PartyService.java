@@ -13,12 +13,12 @@ import dev.revere.alley.base.queue.QueueProfile;
 import dev.revere.alley.base.visibility.IVisibilityService;
 import dev.revere.alley.config.IConfigService;
 import dev.revere.alley.config.locale.impl.PartyLocale;
-import dev.revere.alley.plugin.AlleyContext;
-import dev.revere.alley.plugin.annotation.Service;
 import dev.revere.alley.game.match.IMatchService;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.game.match.player.participant.TeamGameParticipant;
+import dev.revere.alley.plugin.AlleyContext;
+import dev.revere.alley.plugin.annotation.Service;
 import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
@@ -152,39 +152,35 @@ public class PartyService implements IPartyService {
 
     @Override
     public void disbandParty(Player leader) {
-        Profile profile = this.profileService.getProfile(leader.getUniqueId());
-
         Party party = this.getPartyByLeader(leader);
-
         if (party == null) {
             leader.sendMessage(CC.translate(PartyLocale.NOT_IN_PARTY.getMessage()));
             return;
         }
 
-        if (profile.getQueueProfile() != null) {
-            leader.sendMessage(CC.translate("&cYou cannot disband your party while in a queue."));
-            return;
-        }
+        party.notifyParty("&6&lParty &7&l" + Symbol.ARROW_R + " &6" + leader.getName() + " &cdisbanded the party.");
 
         for (UUID memberId : new ArrayList<>(party.getMembers())) {
-            Profile memberProfile = profileService.getProfile(memberId);
-            if (memberProfile != null && memberProfile.getQueueProfile() != null && memberProfile.getState().equals(EnumProfileState.WAITING)) {
-                this.handlePartyMemberLeave(Bukkit.getPlayer(memberId));
+            Player member = Bukkit.getPlayer(memberId);
+
+            Profile profile = this.profileService.getProfile(memberId);
+            if (profile != null && profile.getQueueProfile() != null) {
+                Queue queue = profile.getQueueProfile().getQueue();
+                if (queue != null) {
+                    queue.removePlayer(profile.getQueueProfile());
+                }
+            }
+
+            if (member != null && member.isOnline()) {
+                this.setupProfile(member, false);
             }
         }
-        if (profile.getMatch() != null) {
-            party.getMembers().forEach(member -> this.setupProfile(Bukkit.getPlayer(member), false));
-        }
-        party.notifyParty("&6&lParty &7&l" + Symbol.ARROW_R + " &6" + leader.getName() + " &cdisbanded the party.");
+
         this.parties.remove(party);
 
         Cooldown cooldown = this.cooldownRepository.getCooldown(leader.getUniqueId(), EnumCooldownType.PARTY_ANNOUNCE_COOLDOWN);
         if (cooldown != null && cooldown.isActive()) {
             cooldown.resetCooldown();
-        }
-
-        if (leader.isOnline()) {
-            this.setupProfile(leader, false);
         }
 
         this.reflectionRepository.getReflectionService(TitleReflectionService.class).sendTitle(
@@ -207,19 +203,47 @@ public class PartyService implements IPartyService {
             return;
         }
 
+        Profile profile = this.profileService.getProfile(player.getUniqueId());
+        QueueProfile queueProfile = profile.getQueueProfile();
+
+        if (queueProfile != null) {
+            this.handlePartyMemberLeave(player);
+        }
+
         party.getMembers().remove(player.getUniqueId());
         party.notifyParty("&a" + player.getName() + " has left the party.");
-        this.setupProfile(player, false);
 
-        this.handlePartyMemberLeave(player);
+        this.setupProfile(player, false);
     }
 
     @Override
     public void kickMember(Player leader, Player member) {
         Party party = this.getPartyByLeader(leader);
-        if (party == null) return;
+        if (party == null) {
+            leader.sendMessage(CC.translate("&cYou are not the leader of a party."));
+            return;
+        }
+
+        if (party.getLeader().equals(member)) {
+            leader.sendMessage(CC.translate("&cYou cannot kick the party leader."));
+            return;
+        }
+
+        if (!party.getMembers().contains(member.getUniqueId())) {
+            leader.sendMessage(CC.translate("&cThat player is not in your party."));
+            return;
+        }
+
+        Profile profile = this.profileService.getProfile(member.getUniqueId());
+        QueueProfile queueProfile = profile.getQueueProfile();
+
         party.getMembers().remove(member.getUniqueId());
         party.notifyParty("&c" + member.getName() + " has been kicked from the party.");
+
+        if (queueProfile != null) {
+            this.handlePartyMemberLeave(member);
+        }
+
         this.setupProfile(member, false);
     }
 
@@ -231,13 +255,26 @@ public class PartyService implements IPartyService {
             return;
         }
 
+        if (party.getLeader().equals(target)) {
+            leader.sendMessage(CC.translate("&cYou cannot ban the party leader."));
+            return;
+        }
+
         if (!party.getMembers().contains(target.getUniqueId())) {
             leader.sendMessage(CC.translate("&cThat player is not in your party."));
             return;
         }
 
+        Profile profile = this.profileService.getProfile(target.getUniqueId());
+        QueueProfile queueProfile = profile.getQueueProfile();
+
         party.getBannedPlayers().add(target.getUniqueId());
         party.getMembers().remove(target.getUniqueId());
+
+        if (queueProfile != null) {
+            this.handlePartyMemberLeave(target);
+        }
+
         this.setupProfile(target, false);
 
         party.notifyParty(CC.translate("&c" + target.getName() + " has been banned from the party."));
@@ -296,6 +333,14 @@ public class PartyService implements IPartyService {
             return;
         }
 
+        Profile leaderProfile = this.profileService.getProfile(leader.getUniqueId());
+        QueueProfile queueProfile = leaderProfile.getQueueProfile();
+
+        if (queueProfile != null) {
+            player.sendMessage(CC.translate("&cYou can't join the party as they are already in a queue."));
+            return;
+        }
+
         party.getMembers().add(player.getUniqueId());
         party.notifyParty("&a" + player.getName() + " has joined the party.");
 
@@ -330,19 +375,14 @@ public class PartyService implements IPartyService {
      */
     private void setupProfile(Player player, boolean join) {
         Profile profile = this.profileService.getProfile(player.getUniqueId());
-
         profile.setParty(join ? this.getPartyByMember(player.getUniqueId()) : null);
 
         if (profile.getMatch() != null) {
             return;
         }
 
-        if (join && (profile.getState() == EnumProfileState.LOBBY || profile.getState() == EnumProfileState.WAITING)) {
-            hotbarService.applyHotbarItems(player, EnumHotbarType.PARTY);
-        } else {
-            hotbarService.applyHotbarItems(player, EnumHotbarType.LOBBY);
-        }
-
+        profile.setState(EnumProfileState.LOBBY);
+        this.hotbarService.applyHotbarItems(player, join ? EnumHotbarType.PARTY : EnumHotbarType.LOBBY);
         this.visibilityService.updateVisibility(player);
     }
 
@@ -412,24 +452,16 @@ public class PartyService implements IPartyService {
 
         QueueProfile associatedQueueProfile = profile.getQueueProfile();
         Queue queue = associatedQueueProfile.getQueue();
+        if (queue == null) {
+            return;
+        }
 
         if (queue.isDuos()) {
             Player leader = Bukkit.getPlayer(associatedQueueProfile.getUuid());
-            if (leader != null && leader.isOnline()) {
-                Party party = getPartyByLeader(leader);
-                if (party == null || party.getMembers().size() < 2) {
-                    leader.sendMessage(CC.translate("&eA party member has left/disconnected. You are now queuing solo for duos."));
-                } else {
-                    leader.sendMessage(CC.translate("&eA party member has left/disconnected. Your party size is now " + party.getMembers().size() + "."));
-                    if (party.getMembers().size() < 2 && leader.isOnline()) {
-                        leader.sendMessage(CC.translate("&eYou are now queuing solo for duos, awaiting a random teammate."));
-                    }
-                }
-            } else {
-                queue.removePlayer(associatedQueueProfile);
+            Party party = getPartyByLeader(leader);
+            if (party.getMembers().size() < 2) {
+                leader.sendMessage(CC.translate("&eA party member has left/disconnected. You are now queuing solo for duos."));
             }
-        } else {
-            queue.removePlayer(associatedQueueProfile);
         }
 
         profile.setQueueProfile(null);

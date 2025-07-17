@@ -70,19 +70,11 @@ public class Party {
     }
 
     /**
-     * Sends a message to all party members excluding the leader.
+     * Checks if the party is private.
      *
-     * @param message The message to notify the party members of.
+     * @return True if the party is private, false otherwise.
      */
-    public void notifyPartyExcludeLeader(String message) {
-        for (UUID member : members) {
-            if (member.equals(leader.getUniqueId())) {
-                continue;
-            }
-            Player player = Alley.getInstance().getServer().getPlayer(member);
-            if (player != null) {
-                player.sendMessage(CC.translate(message));
-            }
-        }
+    public boolean isPrivate() {
+        return this.state == EnumPartyState.PRIVATE;
     }
 }

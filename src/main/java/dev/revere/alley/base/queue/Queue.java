@@ -156,10 +156,10 @@ public class Queue {
                         if (memberProfile != null) {
                             memberProfile.setQueueProfile(queueProfile);
                             memberProfile.setState(EnumProfileState.WAITING);
-                            hotbarService.applyHotbarItems(player);
                             Player memberPlayer = Bukkit.getPlayer(memberId);
+                            hotbarService.applyHotbarItems(memberPlayer);
                             if (memberPlayer != null) {
-                                memberPlayer.sendMessage(CC.translate("&fYour party leader has joined the &6" + queueProfile.getQueue().getKit().getDisplayName() + " &fqueue."));
+                                memberPlayer.sendMessage(CC.translate("&aYour party leader has joined the &6" + queueProfile.getQueue().getKit().getDisplayName() + " &aqueue."));
                             }
                         }
                     }

@@ -37,17 +37,17 @@ public class LobbyScoreboard implements IScoreboard {
             String processedLine = CC.translate(line)
                     .replace("{online}", String.valueOf(Bukkit.getOnlinePlayers().size()))
                     .replace("{wins}", String.valueOf(profile.getProfileData().getTotalWins()))
-                    .replace("{level}", String.valueOf(levelService.getLevel(profile.getProfileData().getGlobalLevel()).getDisplayName()));
+                    .replace("{level}", String.valueOf(levelService.getLevel(profile.getProfileData().getGlobalLevel()).getDisplayName()))
+                    .replace("{playing}", String.valueOf(profileService.getProfiles().values().stream().filter(p -> p.getState() == EnumProfileState.PLAYING).count()))
+                    .replace("{in-queue}", String.valueOf(profileService.getProfiles().values().stream().filter(p -> p.getState() == EnumProfileState.WAITING).count()));
 
             if (profile.getParty() != null) {
-                processedLine = processedLine
+                processedLine = CC.translate(processedLine)
                         .replace("{party-size}", String.valueOf(profile.getParty().getMembers().size()))
+                        .replace("{party-privacy}", profile.getParty().isPrivate() ? "&cPrivate" : "&aPublic")
                         .replace("{party-leader}", profileService.getProfile(profile.getParty().getLeader().getUniqueId()).getFancyName());
-            } else {
-                processedLine = processedLine
-                        .replace("{playing}", String.valueOf(profileService.getProfiles().values().stream().filter(p -> p.getState() == EnumProfileState.PLAYING).count()))
-                        .replace("{in-queue}", String.valueOf(profileService.getProfiles().values().stream().filter(p -> p.getState() == EnumProfileState.WAITING).count()));
             }
+
             scoreboardLines.add(processedLine);
         }
 

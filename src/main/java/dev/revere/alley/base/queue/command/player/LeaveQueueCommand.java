@@ -26,6 +26,11 @@ public class LeaveQueueCommand extends BaseCommand {
             return;
         }
 
+        if (profile.getParty() != null && !profile.getParty().isLeader(player)) {
+            player.sendMessage(CC.translate("&cYou must be the party leader to leave the queue."));
+            return;
+        }
+
         profile.getQueueProfile().getQueue().removePlayer(profile.getQueueProfile());
     }
 }
