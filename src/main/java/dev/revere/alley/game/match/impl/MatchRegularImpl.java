@@ -430,6 +430,9 @@ public class MatchRegularImpl extends AbstractMatch {
             return;
         }
 
+        Profile profile = this.plugin.getService(IProfileService.class).getProfile(player.getUniqueId());
+        this.sendMessage(profile.getFancyName() + " &fdisconnected.");
+
         MatchGamePlayerImpl gamePlayer = this.getFromAllGamePlayers(player);
         if (gamePlayer != null) {
             gamePlayer.setDisconnected(true);
@@ -437,6 +440,10 @@ public class MatchRegularImpl extends AbstractMatch {
             if (!gamePlayer.isDead()) {
                 this.handleDeath(player, EntityDamageEvent.DamageCause.CUSTOM);
             }
+        }
+
+        if (player.isOnline()) {
+            this.finalizePlayer(player);
         }
     }
 

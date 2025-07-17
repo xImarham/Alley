@@ -7,7 +7,6 @@ import dev.revere.alley.api.command.annotation.CompleterData;
 import dev.revere.alley.base.arena.AbstractArena;
 import dev.revere.alley.base.arena.IArenaService;
 import dev.revere.alley.base.arena.enums.EnumArenaType;
-import dev.revere.alley.base.arena.impl.StandAloneArena;
 import dev.revere.alley.config.locale.impl.ArenaLocale;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.entity.Player;

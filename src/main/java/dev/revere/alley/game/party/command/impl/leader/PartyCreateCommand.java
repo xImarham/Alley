@@ -1,11 +1,10 @@
 package dev.revere.alley.game.party.command.impl.leader;
 
-import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
-import dev.revere.alley.config.locale.impl.PartyLocale;
 import dev.revere.alley.base.server.IServerService;
+import dev.revere.alley.config.locale.impl.PartyLocale;
 import dev.revere.alley.game.party.IPartyService;
 import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.enums.EnumProfileState;
@@ -26,9 +25,9 @@ public class PartyCreateCommand extends BaseCommand {
         Player player = command.getPlayer();
         UUID playerUUID = player.getUniqueId();
 
-        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
-        IPartyService partyService = Alley.getInstance().getService(IPartyService.class);
-        IServerService serverService = Alley.getInstance().getService(IServerService.class);
+        IProfileService profileService = this.plugin.getService(IProfileService.class);
+        IPartyService partyService = this.plugin.getService(IPartyService.class);
+        IServerService serverService = this.plugin.getService(IServerService.class);
 
         if (profileService.getProfile(playerUUID).getState() != EnumProfileState.LOBBY) {
             player.sendMessage(CC.translate("&cYou must be at spawn to execute this command."));

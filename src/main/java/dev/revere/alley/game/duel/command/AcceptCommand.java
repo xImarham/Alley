@@ -1,13 +1,13 @@
 package dev.revere.alley.game.duel.command;
 
-import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
+import dev.revere.alley.config.locale.impl.ProfileLocale;
 import dev.revere.alley.game.duel.DuelRequest;
 import dev.revere.alley.game.duel.IDuelRequestService;
+import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
-import dev.revere.alley.profile.enums.EnumProfileState;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.entity.Player;
 
@@ -34,11 +34,16 @@ public class AcceptCommand extends BaseCommand {
             return;
         }
 
-        IDuelRequestService duelRequestService = Alley.getInstance().getService(IDuelRequestService.class);
-
+        IDuelRequestService duelRequestService = this.plugin.getService(IDuelRequestService.class);
         DuelRequest duelRequest = duelRequestService.getDuelRequest(player, target);
         if (duelRequest == null) {
             player.sendMessage(CC.translate("&cYou do not have a pending duel request from that player."));
+            return;
+        }
+
+        Profile targetProfile = this.plugin.getService(IProfileService.class).getProfile(target.getUniqueId());
+        if (targetProfile.isBusy()) {
+            player.sendMessage(ProfileLocale.IS_BUSY.getMessage().replace("{color}", String.valueOf(targetProfile.getNameColor())).replace("{player}", target.getName()));
             return;
         }
 

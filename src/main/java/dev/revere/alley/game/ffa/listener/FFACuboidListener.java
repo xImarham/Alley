@@ -1,8 +1,7 @@
-package dev.revere.alley.game.ffa.listener.impl;
+package dev.revere.alley.game.ffa.listener;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.base.combat.ICombatService;
-import dev.revere.alley.game.ffa.AbstractFFAMatch;
 import dev.revere.alley.game.ffa.IFFAService;
 import dev.revere.alley.game.ffa.cuboid.IFFASpawnService;
 import dev.revere.alley.game.ffa.enums.EnumFFAState;
@@ -11,7 +10,6 @@ import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
 import dev.revere.alley.tool.cuboid.Cuboid;
 import dev.revere.alley.util.chat.CC;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -37,13 +35,12 @@ public class FFACuboidListener implements Listener {
         }
 
         Player player = event.getPlayer();
-        UUID playerId = player.getUniqueId();
-
         if (event.getFrom().getBlock().equals(event.getTo().getBlock())) {
             return;
         }
 
-        Profile profile = Alley.getInstance().getService(IProfileService.class).getProfile(playerId);
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+        Profile profile = profileService.getProfile(player.getUniqueId());
         if (profile == null || profile.getState() != EnumProfileState.FFA) {
             return;
         }
@@ -54,6 +51,8 @@ public class FFACuboidListener implements Listener {
         if (ffaService.getFFAMatch(player) == null || !ffaService.getMatchByPlayer(player).isPresent()) {
             return;
         }
+
+        UUID playerId = player.getUniqueId();
 
         boolean isInCuboid = cuboid.isIn(player);
         boolean wasInCuboid = this.playerStates.getOrDefault(playerId, true);

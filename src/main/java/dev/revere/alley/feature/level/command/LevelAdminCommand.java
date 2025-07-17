@@ -47,7 +47,7 @@ public class LevelAdminCommand extends BaseCommand {
             return completion;
         }
 
-        if (!command.getPlayer().hasPermission(Alley.getInstance().getService(IPluginConstant.class).getAdminPermissionPrefix())) {
+        if (!command.getPlayer().hasPermission(this.plugin.getService(IPluginConstant.class).getAdminPermissionPrefix())) {
             return completion;
         }
 

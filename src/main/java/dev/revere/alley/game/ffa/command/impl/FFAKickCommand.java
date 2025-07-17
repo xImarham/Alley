@@ -1,6 +1,5 @@
 package dev.revere.alley.game.ffa.command.impl;
 
-import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
@@ -34,7 +33,7 @@ public class FFAKickCommand extends BaseCommand {
             return;
         }
 
-        AbstractFFAMatch match = Alley.getInstance().getService(IFFAService.class).getFFAMatch(target);
+        AbstractFFAMatch match = this.plugin.getService(IFFAService.class).getFFAMatch(target);
         if (match == null) {
             player.sendMessage(CC.translate("&cThis player is not in a FFA match."));
             return;

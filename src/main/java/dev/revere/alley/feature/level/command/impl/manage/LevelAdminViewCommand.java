@@ -30,7 +30,7 @@ public class LevelAdminViewCommand extends BaseCommand {
         }
 
         String levelName = args[0];
-        ILevelService levelService = Alley.getInstance().getService(ILevelService.class);
+        ILevelService levelService = this.plugin.getService(ILevelService.class);
         LevelData level = levelService.getLevel(levelName);
         if (level == null) {
             sender.sendMessage(CC.translate("&cA level with that name does not exist!"));

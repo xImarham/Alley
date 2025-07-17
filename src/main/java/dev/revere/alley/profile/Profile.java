@@ -78,6 +78,24 @@ public class Profile {
     }
 
     /**
+     * Gets the fancy name of the profile with the color.
+     *
+     * @return The colored name of the profile.
+     */
+    public String getFancyName() {
+        return this.nameColor + this.name;
+    }
+
+    /**
+     * Checks if the profile is currently busy with a match or FFA.
+     *
+     * @return True if the profile is busy, otherwise false.
+     */
+    public boolean isBusy() {
+        return this.state != EnumProfileState.LOBBY;
+    }
+
+    /**
      * Loads the profile from the database.
      */
     public void load() {

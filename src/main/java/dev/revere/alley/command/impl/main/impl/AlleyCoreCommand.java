@@ -1,12 +1,11 @@
 package dev.revere.alley.command.impl.main.impl;
 
-import dev.revere.alley.Alley;
-import dev.revere.alley.api.command.BaseCommand;
-import dev.revere.alley.api.command.CommandArgs;
-import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.adapter.core.ICore;
 import dev.revere.alley.adapter.core.ICoreAdapter;
 import dev.revere.alley.adapter.core.enums.EnumCoreType;
+import dev.revere.alley.api.command.BaseCommand;
+import dev.revere.alley.api.command.CommandArgs;
+import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.command.CommandSender;
 
@@ -22,7 +21,7 @@ public class AlleyCoreCommand extends BaseCommand {
     @Override
     public void onCommand(CommandArgs command) {
         CommandSender sender = command.getSender();
-        ICore core = Alley.getInstance().getService(ICoreAdapter.class).getCore();
+        ICore core = this.plugin.getService(ICoreAdapter.class).getCore();
 
         Arrays.asList(
                 "",

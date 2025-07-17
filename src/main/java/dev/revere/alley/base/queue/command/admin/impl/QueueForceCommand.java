@@ -1,11 +1,9 @@
 package dev.revere.alley.base.queue.command.admin.impl;
 
-import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.base.hotbar.IHotbarService;
-import dev.revere.alley.base.hotbar.enums.EnumHotbarType;
 import dev.revere.alley.base.kit.IKitService;
 import dev.revere.alley.base.kit.Kit;
 import dev.revere.alley.base.queue.IQueueService;
@@ -44,19 +42,19 @@ public class QueueForceCommand extends BaseCommand {
             return;
         }
 
-        Kit kit = Alley.getInstance().getService(IKitService.class).getKit(kitType);
+        Kit kit = this.plugin.getService(IKitService.class).getKit(kitType);
         if (kit == null) {
             player.sendMessage(CC.translate("&cKit not found."));
             return;
         }
 
-        Profile profile = Alley.getInstance().getService(IProfileService.class).getProfile(target.getUniqueId());
-        for (Queue queue : Alley.getInstance().getService(IQueueService.class).getQueues()) {
+        Profile profile = this.plugin.getService(IProfileService.class).getProfile(target.getUniqueId());
+        for (Queue queue : this.plugin.getService(IQueueService.class).getQueues()) {
             if (queue.getKit().equals(kit) && queue.isRanked() == ranked) {
                 queue.addPlayer(target, queue.isRanked() ? profile.getProfileData().getRankedKitData().get(queue.getKit().getName()).getElo() : 0);
                 PlayerUtil.reset(target, false);
                 SoundUtil.playBanHammer(target);
-                Alley.getInstance().getService(IHotbarService.class).applyHotbarItems(target);
+                this.plugin.getService(IHotbarService.class).applyHotbarItems(target);
                 player.sendMessage(CC.translate("&aYou've added &6" + target.getName() + " &ato the &6" + queue.getQueueType() + " &aqueue."));
 
                 if (ranked && profile.getProfileData().isRankedBanned()) {

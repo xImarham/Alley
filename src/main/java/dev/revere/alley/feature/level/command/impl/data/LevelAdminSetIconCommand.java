@@ -29,7 +29,7 @@ public class LevelAdminSetIconCommand extends BaseCommand {
         }
 
         String levelName = args[0];
-        ILevelService levelService = Alley.getInstance().getService(ILevelService.class);
+        ILevelService levelService = this.plugin.getService(ILevelService.class);
         LevelData level = levelService.getLevel(levelName);
         if (level == null) {
             player.sendMessage(CC.translate("&cNo level found with that name!"));

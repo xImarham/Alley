@@ -1,14 +1,10 @@
 package dev.revere.alley.base.kit.command.impl.manage.raiding;
 
-import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.base.kit.IKitService;
 import dev.revere.alley.base.kit.Kit;
-import dev.revere.alley.base.kit.KitService;
-import dev.revere.alley.base.kit.data.BaseRaidingKitData;
-import dev.revere.alley.base.kit.service.BaseRaidingService;
 import dev.revere.alley.base.kit.service.IBaseRaidingService;
 import dev.revere.alley.base.kit.setting.impl.mode.KitSettingRaidingImpl;
 import dev.revere.alley.game.match.player.enums.EnumBaseRaiderRole;
@@ -33,7 +29,7 @@ public class KitSetRaidingRoleKitCommand extends BaseCommand {
         }
 
         String kitName = args[0];
-        IKitService kitService = Alley.getInstance().getService(IKitService.class);
+        IKitService kitService = this.plugin.getService(IKitService.class);
         Kit kit = kitService.getKit(kitName);
         if (kit == null) {
             sender.sendMessage(CC.translate("&cThe &6" + kitName + " &ckit does not exist."));
@@ -66,7 +62,7 @@ public class KitSetRaidingRoleKitCommand extends BaseCommand {
             return;
         }
 
-        IBaseRaidingService raidingService = Alley.getInstance().getService(IBaseRaidingService.class);
+        IBaseRaidingService raidingService = this.plugin.getService(IBaseRaidingService.class);
         raidingService.setRaidingKitMapping(kit, role, roleKit);
 
         sender.sendMessage(CC.translate("&aSuccessfully set the &6" + role + " &araiding role kit to &6" + roleKit.getName() + "&a for the &6" + kit.getName() + " &akit."));

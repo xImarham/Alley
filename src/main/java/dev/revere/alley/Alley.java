@@ -1,26 +1,8 @@
 package dev.revere.alley;
 
-import dev.revere.alley.adapter.core.listener.CoreChatListener;
-import dev.revere.alley.api.menu.MenuListener;
-import dev.revere.alley.base.arena.listener.ArenaListener;
-import dev.revere.alley.base.combat.listener.CombatListener;
-import dev.revere.alley.base.hotbar.listener.HotbarListener;
-import dev.revere.alley.base.queue.listener.QueueListener;
-import dev.revere.alley.base.server.listener.CraftingListener;
-import dev.revere.alley.base.spawn.listener.SpawnListener;
 import dev.revere.alley.config.IConfigService;
-import dev.revere.alley.feature.emoji.listener.EmojiListener;
-import dev.revere.alley.feature.layout.listener.LayoutListener;
-import dev.revere.alley.game.ffa.listener.FFAListener;
-import dev.revere.alley.game.ffa.listener.impl.FFACuboidListener;
-import dev.revere.alley.game.match.listener.MatchListener;
-import dev.revere.alley.game.match.listener.impl.*;
-import dev.revere.alley.game.match.snapshot.listener.SnapshotListener;
-import dev.revere.alley.game.party.listener.PartyListener;
 import dev.revere.alley.plugin.AlleyContext;
 import dev.revere.alley.plugin.lifecycle.IService;
-import dev.revere.alley.profile.listener.ProfileListener;
-import dev.revere.alley.provider.expansion.AlleyPlaceholderExpansion;
 import dev.revere.alley.provider.tablist.task.TablistUpdateTask;
 import dev.revere.alley.task.ArrowRemovalTask;
 import dev.revere.alley.task.MatchPearlCooldownTask;
@@ -55,9 +37,10 @@ public class Alley extends JavaPlugin {
     @Getter
     private static Alley instance;
     private AlleyContext context;
+    private final AlleyAPI api;
 
     public Alley() {
-        new AlleyAPI();
+        this.api = new AlleyAPI();
     }
 
     @Override
@@ -70,14 +53,12 @@ public class Alley extends JavaPlugin {
         try {
             this.context = new AlleyContext(this);
             this.context.initialize();
-        } catch (Exception e) {
-            Logger.logException("A fatal error occurred during service initialization. Alley will be disabled.", e);
+        } catch (Exception exception) {
+            Logger.logException("A fatal error occurred during service initialization. Alley will be disabled.", exception);
             this.getServer().getPluginManager().disablePlugin(this);
             return;
         }
 
-        this.registerExpansion();
-        this.registerListeners();
         this.runTasks();
 
         // CommandUtility.registerCommands();
@@ -87,7 +68,7 @@ public class Alley extends JavaPlugin {
 
         PluginLogger.onEnable(timeTaken);
 
-        AlleyAPI.getInstance().runOnEnableCallbacks();
+        this.api.runOnEnableCallbacks();
     }
 
     @Override
@@ -98,7 +79,7 @@ public class Alley extends JavaPlugin {
 
         PluginLogger.onDisable();
 
-        AlleyAPI.getInstance().runOnDisableCallbacks();
+        this.api.runOnDisableCallbacks();
     }
 
     /**
@@ -122,45 +103,6 @@ public class Alley extends JavaPlugin {
         if (!new HashSet<>(authors).containsAll(expectedAuthors)) {
             System.exit(0);
         }
-    }
-
-    private void registerExpansion() {
-        if (this.getServer().getPluginManager().getPlugin("PlaceholderAPI") == null) {
-            Logger.info("PlaceholderAPI is not installed! AlleyPlaceholderExpansion will not be registered.");
-            return;
-        }
-
-        Logger.logTime(AlleyPlaceholderExpansion.class.getSimpleName(), () -> {
-            AlleyPlaceholderExpansion expansion = new AlleyPlaceholderExpansion(this);
-            expansion.register();
-        });
-    }
-
-    private void registerListeners() {
-        Arrays.asList(
-                new ProfileListener(),
-                new HotbarListener(),
-                new PartyListener(),
-                new MatchListener(),
-                new MatchInteractListener(),
-                new MatchPearlListener(),
-                new MatchDisconnectListener(),
-                new MatchDamageListener(),
-                new MatchChatListener(),
-                new MatchBlockListener(),
-                new ArenaListener(),
-                new MenuListener(),
-                new SpawnListener(),
-                new FFAListener(),
-                new FFACuboidListener(),
-                new EmojiListener(),
-                new CombatListener(),
-                new QueueListener(),
-                new CoreChatListener(),
-                new LayoutListener(),
-                new SnapshotListener(),
-                new CraftingListener()
-        ).forEach(listener -> getServer().getPluginManager().registerEvents(listener, this));
     }
 
     private void runTasks() {

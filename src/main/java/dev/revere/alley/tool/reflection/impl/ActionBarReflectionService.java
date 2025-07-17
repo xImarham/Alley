@@ -73,7 +73,7 @@ public class ActionBarReflectionService implements IReflection {
      */
     public void sendDeathMessage(Player killer, Player victim) {
         Profile victimProfile = Alley.getInstance().getService(IProfileService.class).getProfile(victim.getUniqueId());
-        this.sendMessage(killer, "&c&lKILL! &f" + victimProfile.getNameColor() + victim.getName(), 3);
+        this.sendMessage(killer, "&c&lKILL! &f" + victimProfile.getFancyName(), 3);
     }
 
     /**

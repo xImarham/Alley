@@ -1,6 +1,5 @@
 package dev.revere.alley.base.queue.command.player;
 
-import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
@@ -22,7 +21,7 @@ public class QueuesCommand extends BaseCommand {
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
 
-        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+        IProfileService profileService = this.plugin.getService(IProfileService.class);
         Profile profile = profileService.getProfile(player.getUniqueId());
         if (!profile.getState().equals(EnumProfileState.LOBBY)) {
             player.sendMessage(CC.translate("&cYou must be at spawn in order to execute this command :v"));
@@ -34,6 +33,6 @@ public class QueuesCommand extends BaseCommand {
             return;
         }
 
-        Alley.getInstance().getService(IQueueService.class).getQueueMenu().openMenu(player);
+        this.plugin.getService(IQueueService.class).getQueueMenu().openMenu(player);
     }
 }

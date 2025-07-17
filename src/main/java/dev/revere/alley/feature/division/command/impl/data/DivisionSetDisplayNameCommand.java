@@ -27,7 +27,7 @@ public class DivisionSetDisplayNameCommand extends BaseCommand {
             return;
         }
 
-        IDivisionService divisionService = Alley.getInstance().getService(IDivisionService.class);
+        IDivisionService divisionService = this.plugin.getService(IDivisionService.class);
         Division division = divisionService.getDivision(args[0]);
         if (division == null) {
             player.sendMessage(CC.translate("&cA division with that name does not exist."));

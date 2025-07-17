@@ -1,6 +1,5 @@
 package dev.revere.alley.game.match.command.player;
 
-import dev.revere.alley.Alley;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
@@ -21,7 +20,7 @@ public class CurrentMatchesCommand extends BaseCommand {
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
 
-        if (Alley.getInstance().getService(IProfileService.class).getProfile(player.getUniqueId()).getState() != EnumProfileState.LOBBY) {
+        if (this.plugin.getService(IProfileService.class).getProfile(player.getUniqueId()).getState() != EnumProfileState.LOBBY) {
             player.sendMessage(CC.translate("&cYou can only execute this command at lobby."));
             return;
         }

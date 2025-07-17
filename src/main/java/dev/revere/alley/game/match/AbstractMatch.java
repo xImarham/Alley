@@ -228,10 +228,10 @@ public abstract class AbstractMatch {
      *
      * @param player The player to finalize.
      */
-    private void finalizePlayer(Player player) {
+    public void finalizePlayer(Player player) {
         IVisibilityService visibilityService = Alley.getInstance().getService(IVisibilityService.class);
         this.resetPlayerState(player);
-        updatePlayerProfileForLobby(player);
+        this.updatePlayerProfileForLobby(player);
         visibilityService.updateVisibility(player);
         this.teleportPlayerToSpawn(player);
     }
@@ -299,7 +299,9 @@ public abstract class AbstractMatch {
         Profile victimProfile = profileService.getProfile(player.getUniqueId());
         Profile killerProfile = (killer != null) ? profileService.getProfile(killer.getUniqueId()) : null;
 
-        this.handleDeathMessages(player, killer, victimProfile, killerProfile, cause);
+        if (!gamePlayer.isDisconnected()) {
+            this.handleDeathMessages(player, killer, victimProfile, killerProfile, cause);
+        }
 
         this.createSnapshot(player);
 
@@ -429,7 +431,7 @@ public abstract class AbstractMatch {
 
     private void handleDefaultDeathMessages(Player victim, Player killer, Profile victimProfile) {
         if (killer == null) {
-            this.notifyAll("&c" + victimProfile.getNameColor() + victim.getName() + " &fdied.");
+            this.notifyAll("&c" + victimProfile.getFancyName() + " &fdied.");
         } else {
             processKillerActions(victim, killer, victimProfile);
         }
@@ -640,7 +642,7 @@ public abstract class AbstractMatch {
 
         IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
         Profile profile = profileService.getProfile(player.getUniqueId());
-        this.notifyAll("&6" + profile.getNameColor() + player.getName() + " &fis now spectating the match.");
+        this.notifyAll("&6" + profile.getFancyName() + " &fis now spectating the match.");
     }
 
     /**
@@ -668,7 +670,7 @@ public abstract class AbstractMatch {
         this.spectators.remove(player.getUniqueId());
 
         if (notify) {
-            this.notifyAll("&6" + profile.getNameColor() + player.getName() + " &fis no longer spectating the match.");
+            this.notifyAll("&6" + profile.getFancyName() + " &fis no longer spectating the match.");
         }
     }
 
