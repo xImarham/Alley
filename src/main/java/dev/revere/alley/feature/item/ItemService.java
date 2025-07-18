@@ -6,6 +6,7 @@ import dev.revere.alley.plugin.annotation.Service;
 import dev.revere.alley.tool.item.ItemBuilder;
 import dev.revere.alley.tool.visual.TexturesConstant;
 import dev.revere.alley.util.chat.CC;
+import lombok.Getter;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -19,11 +20,12 @@ import java.util.List;
  * @project alley-practice
  * @since 18/07/2025
  */
+@Getter
 @Service(provides = IItemService.class, priority = 440)
 public class ItemService implements IItemService {
     private final IConfigService configService;
 
-    protected String GOLDEN_HEAD_TEXTURE;
+    private String GOLDEN_HEAD_TEXTURE;
     private ItemStack goldenHead;
 
     /**
@@ -59,11 +61,6 @@ public class ItemService implements IItemService {
                 .durability(3)
                 .setSkullTexture(this.GOLDEN_HEAD_TEXTURE)
                 .build();
-    }
-
-    @Override
-    public ItemStack getGoldenHead() {
-        return this.goldenHead;
     }
 
     @Override

@@ -4,8 +4,6 @@ import dev.revere.alley.Alley;
 import dev.revere.alley.feature.item.IItemService;
 import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
-import dev.revere.alley.util.chat.CC;
-import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -25,7 +23,7 @@ public class ItemListener implements Listener {
     private void onInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
         Profile profile = Alley.getInstance().getService(IProfileService.class).getProfile(player.getUniqueId());
-        if (profile.getMatch() == null) {
+        if (profile.getMatch() == null && profile.getFfaMatch() == null) {
             return;
         }
 
