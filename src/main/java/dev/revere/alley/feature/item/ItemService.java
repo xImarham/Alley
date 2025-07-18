@@ -12,7 +12,10 @@ import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -65,19 +68,13 @@ public class ItemService implements IItemService {
 
     @Override
     public void performHeadConsume(Player player, ItemStack item) {
-        if (player.getHealth() >= player.getMaxHealth()) {
-            player.sendMessage(CC.translate("&cYou're already full at health!"));
-            return;
-        }
+        Arrays.asList(
+                new PotionEffect(PotionEffectType.REGENERATION, 20 * 5, 2), // Regeneration III for 5 seconds
+                new PotionEffect(PotionEffectType.SPEED, 20 * 10, 0),       // Speed I for 10 seconds
+                new PotionEffect(PotionEffectType.ABSORPTION, 20 * 120, 0)  // Absorption I for 2 minutes
+        ).forEach(player::addPotionEffect);
 
-        double currentHealth = player.getHealth();
-
-        player.setHealth(Math.min(player.getHealth() + 8.0, 20.0));
-        player.setSaturation(Math.min(player.getSaturation() + 4.0F, 20.0F));
-
-        double healthGained = player.getHealth() - currentHealth;
-
-        player.sendMessage(CC.translate("&6+" + healthGained + " &4❤"));
+        player.sendMessage(CC.translate("&aYou've consumed a &6&lGolden Head&a!"));
 
         if (player.getGameMode() == GameMode.CREATIVE) {
             return;
