@@ -1,5 +1,6 @@
 package dev.revere.alley.tool.item;
 
+import dev.revere.alley.tool.reflection.utility.ReflectionUtility;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -143,6 +144,29 @@ public class ItemBuilder implements Listener {
 
     public ItemBuilder commandEnabled(boolean enabled) {
         this.commandEnabled = enabled;
+        return this;
+    }
+
+    /**
+     * Sets the skull's texture based on a Base64 string.
+     * This method uses reflection to apply custom textures.
+     *
+     * @param base64Texture The Base64 encoded texture string.
+     * @return The ItemBuilder instance.
+     * @throws IllegalArgumentException if the ItemStack is not a player skull.
+     */
+    public ItemBuilder setSkullTexture(String base64Texture) {
+        if (itemStack.getType() != Material.SKULL_ITEM) {
+            throw new IllegalArgumentException("ItemStack must be a skull to set a custom texture.");
+        }
+
+        if (this.itemStack.getDurability() != 3) {
+            throw new IllegalArgumentException("ItemStack must be a player skull (durability 3) to set a custom texture.");
+        }
+
+        SkullMeta meta = ReflectionUtility.createSkullMeta(this.itemStack, base64Texture);
+
+        this.itemStack.setItemMeta(meta);
         return this;
     }
 

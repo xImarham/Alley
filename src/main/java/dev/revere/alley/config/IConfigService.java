@@ -54,6 +54,8 @@ public interface IConfigService extends IService {
 
     FileConfiguration getTabListConfig();
 
+    FileConfiguration getTexturesConfig();
+
     FileConfiguration getDivisionsConfig();
 
     FileConfiguration getMenusConfig();

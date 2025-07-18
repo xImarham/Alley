@@ -1,11 +1,15 @@
 package dev.revere.alley.tool.reflection.utility;
 
+import com.mojang.authlib.GameProfile;
+import com.mojang.authlib.properties.Property;
+import dev.revere.alley.tool.logger.Logger;
 import net.minecraft.server.v1_8_R3.NBTTagCompound;
 import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.SkullMeta;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Constructor;
@@ -14,6 +18,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * <b>ReflectionUtils</b>
@@ -675,4 +680,26 @@ public final class ReflectionUtility {
         return CraftItemStack.asBukkitCopy(nmsStack);
     }
 
+    /**
+     * Creates a SkullMeta with a base64 texture.
+     *
+     * @param itemStack     The ItemStack to modify.
+     * @param base64Texture The base64 encoded texture string.
+     * @return The modified SkullMeta with the specified texture.
+     * @author Emmy
+     */
+    public static @NotNull SkullMeta createSkullMeta(ItemStack itemStack, String base64Texture) {
+        SkullMeta meta = (SkullMeta) itemStack.getItemMeta();
+        GameProfile profile = new GameProfile(UUID.randomUUID(), null);
+        profile.getProperties().put("textures", new Property("textures", base64Texture));
+
+        try {
+            Field profileField = meta.getClass().getDeclaredField("profile");
+            profileField.setAccessible(true);
+            profileField.set(meta, profile);
+        } catch (NoSuchFieldException | IllegalAccessException exception) {
+            Logger.logException("Failed to set skull texture", exception);
+        }
+        return meta;
+    }
 }

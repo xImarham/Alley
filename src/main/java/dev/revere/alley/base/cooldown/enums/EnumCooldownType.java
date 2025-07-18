@@ -11,7 +11,8 @@ import lombok.Getter;
 public enum EnumCooldownType {
     ENDER_PEARL(15 * 1000L),
     PARTY_ANNOUNCE_COOLDOWN(600 * 1000L),
-    FIREBALL(500L), // 0.5 seconds
+    FIREBALL(500L),
+    GOLDEN_HEAD_CONSUME(2 * 1000L),
 
     ;
 
