@@ -11,20 +11,19 @@ import org.bukkit.entity.Player;
 
 /**
  * @author Emmy
- * @project Alley
- * @date 25/05/2024 - 23:35
+ * @project alley-practice
+ * @since 19/07/2025
  */
-
-public class ToggleTablistCommand extends BaseCommand {
+public class ToggleLobbyMusicCommand extends BaseCommand {
+    @CommandData(name = "togglelobbymusic")
     @Override
-    @CommandData(name = "toggletablist")
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
 
         IProfileService profileService = this.plugin.getService(IProfileService.class);
         Profile profile = profileService.getProfile(player.getUniqueId());
-        profile.getProfileData().getSettingData().setTablistEnabled(!profile.getProfileData().getSettingData().isTablistEnabled());
+        profile.getProfileData().getSettingData().setLobbyMusicEnabled(!profile.getProfileData().getSettingData().isLobbyMusicEnabled());
 
-        player.sendMessage(CC.translate(ProfileLocale.TOGGLED_TABLIST.getMessage().replace("{status}", profile.getProfileData().getSettingData().isTablistEnabled() ? "&aenabled" : "&cdisabled")));
+        player.sendMessage(CC.translate(ProfileLocale.TOGGLED_LOBBY_MUSIC.getMessage().replace("{status}", profile.getProfileData().getSettingData().isLobbyMusicEnabled() ? "&aenabled" : "&cdisabled")));
     }
 }

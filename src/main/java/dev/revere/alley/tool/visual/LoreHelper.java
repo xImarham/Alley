@@ -1,5 +1,6 @@
 package dev.revere.alley.tool.visual;
 
+import com.avaje.ebeaninternal.server.lib.util.StringHelper;
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.constant.IPluginConstant;
 import lombok.experimental.UtilityClass;
@@ -13,6 +14,16 @@ import org.bukkit.entity.Player;
  */
 @UtilityClass
 public class LoreHelper {
+    /**
+     * Returns a string representation of a boolean value indicating toggled status.
+     *
+     * @param value The boolean value to represent.
+     * @return A formatted string indicating whether the feature is toggled or not.
+     */
+    public String toggledOrNot(boolean value) {
+        String returnValue = value ? "&a&l✔ &6Toggled" : "&c&l✘ &cNot Toggled";
+        return ChatColor.translateAlternateColorCodes('&', "&f&l┃ " + returnValue);
+    }
     /**
      * Returns a string representation of a boolean value.
      *

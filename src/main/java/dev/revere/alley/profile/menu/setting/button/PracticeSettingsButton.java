@@ -102,6 +102,9 @@ public class PracticeSettingsButton extends Button {
             case ROTTEN_FLESH:
                 player.performCommand("toggleprofanityfilter");
                 break;
+            case JUKEBOX:
+                player.performCommand("togglelobbymusic");
+                break;
             case DIAMOND_SWORD:
                 player.performCommand("toggleduelrequests");
                 break;

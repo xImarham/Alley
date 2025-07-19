@@ -194,6 +194,7 @@ player-settings:
   tablist: "&aYou've {status} &athe tablist."
   profanity-filter: "&aYou've {status} &athe profanity filter."
   duel-requests: "&aYou've {status} &areceiving duel requests."
+  lobby-music: "&aYou've {status} &alobby music."
 
 rename-item:
   missing-arguments: "&cMissing arguments! Please enter a name for the item."

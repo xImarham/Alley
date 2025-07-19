@@ -96,6 +96,16 @@ public enum EnumPracticeSettingType {
             )
     ),
 
+    LOBBY_MUSIC(22, "&6&lLobby Music", Material.JUKEBOX,
+            settings -> Arrays.asList(
+                    "&fListen to lobby music.",
+                    "",
+                    " " + LoreHelper.enabledOrDisabled(settings.isLobbyMusicEnabled()),
+                    "",
+                    "&aClick to change!"
+            )
+    ),
+
     MATCH_SETTINGS(16, "&6&lMatch Settings", Material.BOOK,
             settings -> Arrays.asList(
                     "&fAdjust your match settings.",

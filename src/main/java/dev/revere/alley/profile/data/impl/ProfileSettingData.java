@@ -21,6 +21,7 @@ public class ProfileSettingData {
     private boolean showScoreboardLines;
     private boolean isProfanityFilterEnabled;
     private boolean receiveDuelRequestsEnabled;
+    private boolean lobbyMusicEnabled;
     private String chatChannel;
     private String time;
 
@@ -35,6 +36,7 @@ public class ProfileSettingData {
         this.showScoreboardLines = true;
         this.isProfanityFilterEnabled = false;
         this.receiveDuelRequestsEnabled = true;
+        this.lobbyMusicEnabled = true;
         this.chatChannel = EnumChatChannel.GLOBAL.toString();
         this.time = EnumWorldTime.DEFAULT.getName();
     }
