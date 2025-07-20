@@ -6,6 +6,7 @@ import dev.revere.alley.base.hotbar.IHotbarService;
 import dev.revere.alley.base.spawn.ISpawnService;
 import dev.revere.alley.base.visibility.IVisibilityService;
 import dev.revere.alley.config.IConfigService;
+import dev.revere.alley.feature.music.IMusicService;
 import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
@@ -89,9 +90,13 @@ public class ProfileListener implements Listener {
     private void onPlayerQuitEvent(PlayerQuitEvent event) {
         Player player = event.getPlayer();
         IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+        IMusicService musicService = Alley.getInstance().getService(IMusicService.class);
+
         Profile profile = profileService.getProfile(player.getUniqueId());
 
         event.setQuitMessage(null);
+
+        musicService.stopMusic(player);
 
         profile.updatePlayTime();
         profile.setOnline(false);
@@ -134,6 +139,7 @@ public class ProfileListener implements Listener {
         ISpawnService spawnService = Alley.getInstance().getService(ISpawnService.class);
         IHotbarService hotbarService = Alley.getInstance().getService(IHotbarService.class);
         IVisibilityService visibilityService = Alley.getInstance().getService(IVisibilityService.class);
+        IMusicService musicService = Alley.getInstance().getService(IMusicService.class);
 
         profile.setState(EnumProfileState.LOBBY);
         profile.setName(player.getName());
@@ -156,6 +162,7 @@ public class ProfileListener implements Listener {
         spawnService.teleportToSpawn(player);
         hotbarService.applyHotbarItems(player);
         visibilityService.updateVisibility(player);
+        musicService.startMusic(player);
 
         player.updateInventory();
     }

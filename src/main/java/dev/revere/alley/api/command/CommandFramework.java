@@ -30,6 +30,7 @@ import java.util.*;
 public class CommandFramework implements ICommandFramework, CommandExecutor {
     private final Map<String, Map.Entry<Method, Object>> commandMap = new HashMap<>();
     private final Map<String, Command> registeredBukkitCommands = new HashMap<>();
+    private final Map<String, Map<UUID, Long>> cooldowns = new HashMap<>();
 
     private CommandMap map;
 
@@ -103,6 +104,29 @@ public class CommandFramework implements ICommandFramework, CommandExecutor {
                 Method method = this.commandMap.get(cmdLabel).getKey();
                 Object methodObject = this.commandMap.get(cmdLabel).getValue();
                 CommandData commandData = method.getAnnotation(CommandData.class);
+
+                if (sender instanceof Player && commandData.cooldown() > 0) {
+                    Player player = (Player) sender;
+                    UUID uuid = player.getUniqueId();
+                    long cooldownMillis = commandData.cooldown() * 1000L;
+
+                    this.cooldowns.computeIfAbsent(cmdLabel, k -> new HashMap<>());
+
+                    Map<UUID, Long> commandCooldowns = this.cooldowns.get(cmdLabel);
+
+                    if (commandCooldowns.containsKey(uuid)) {
+                        long lastUsed = commandCooldowns.get(uuid);
+                        long timeLeft = (lastUsed + cooldownMillis) - System.currentTimeMillis();
+
+                        if (timeLeft > 0) {
+                            String message = CC.translate("&cPlease wait " + String.format("%.1f", timeLeft / 1000.0) + " seconds.");
+                            player.sendMessage(message);
+                            return true;
+                        }
+                    }
+
+                    commandCooldowns.put(uuid, System.currentTimeMillis());
+                }
 
                 String noPermission = pluginConstant.getPermissionLackMessage();
                 if (commandData.isAdminOnly() && !sender.hasPermission(pluginConstant.getAdminPermissionPrefix())) {

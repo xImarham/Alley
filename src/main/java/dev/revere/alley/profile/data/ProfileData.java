@@ -6,6 +6,7 @@ import dev.revere.alley.base.kit.IKitService;
 import dev.revere.alley.base.kit.Kit;
 import dev.revere.alley.base.kit.setting.impl.mode.KitSettingRankedImpl;
 import dev.revere.alley.feature.level.ILevelService;
+import dev.revere.alley.feature.music.IMusicService;
 import dev.revere.alley.feature.title.ITitleService;
 import dev.revere.alley.feature.title.record.TitleRecord;
 import dev.revere.alley.game.match.data.AbstractMatchData;
@@ -38,6 +39,7 @@ public class ProfileData {
     private ProfileSettingData settingData;
     private ProfileCosmeticData cosmeticData;
     private ProfilePlayTimeData playTimeData;
+    private ProfileMusicData musicData;
 
     private List<AbstractMatchData> previousMatches;
 
@@ -68,6 +70,7 @@ public class ProfileData {
         this.cosmeticData = new ProfileCosmeticData();
         this.playTimeData = new ProfilePlayTimeData();
         this.layoutData = new ProfileLayoutData();
+        this.musicData = new ProfileMusicData();
     }
 
     private void feedDataClasses() {

@@ -24,6 +24,6 @@ public class ToggleDuelRequestsCommand extends BaseCommand {
         Profile profile = profileService.getProfile(player.getUniqueId());
         profile.getProfileData().getSettingData().setReceiveDuelRequestsEnabled(!profile.getProfileData().getSettingData().isReceiveDuelRequestsEnabled());
 
-        player.sendMessage(CC.translate(ProfileLocale.TOGGLE_DUEL_REQUESTS.getMessage().replace("{status}", profile.getProfileData().getSettingData().isReceiveDuelRequestsEnabled() ? "&aenabled" : "&cdisabled")));
+        player.sendMessage(CC.translate(ProfileLocale.TOGGLED_DUEL_REQUESTS.getMessage().replace("{status}", profile.getProfileData().getSettingData().isReceiveDuelRequestsEnabled() ? "&aenabled" : "&cdisabled")));
     }
 }

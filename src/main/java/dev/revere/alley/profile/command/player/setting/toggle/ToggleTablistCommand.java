@@ -25,6 +25,6 @@ public class ToggleTablistCommand extends BaseCommand {
         Profile profile = profileService.getProfile(player.getUniqueId());
         profile.getProfileData().getSettingData().setTablistEnabled(!profile.getProfileData().getSettingData().isTablistEnabled());
 
-        player.sendMessage(CC.translate(ProfileLocale.TOGGLE_TABLIST.getMessage().replace("{status}", profile.getProfileData().getSettingData().isTablistEnabled() ? "&aenabled" : "&cdisabled")));
+        player.sendMessage(CC.translate(ProfileLocale.TOGGLED_TABLIST.getMessage().replace("{status}", profile.getProfileData().getSettingData().isTablistEnabled() ? "&aenabled" : "&cdisabled")));
     }
 }

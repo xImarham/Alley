@@ -6,6 +6,7 @@ import dev.revere.alley.feature.cosmetic.menu.CosmeticsMenu;
 import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumWorldTime;
+import dev.revere.alley.profile.menu.music.MusicDiscSelectorMenu;
 import dev.revere.alley.tool.item.ItemBuilder;
 import dev.revere.alley.util.chat.CC;
 import lombok.AllArgsConstructor;
@@ -101,6 +102,9 @@ public class PracticeSettingsButton extends Button {
                 break;
             case ROTTEN_FLESH:
                 player.performCommand("toggleprofanityfilter");
+                break;
+            case JUKEBOX:
+                new MusicDiscSelectorMenu().openMenu(player);
                 break;
             case DIAMOND_SWORD:
                 player.performCommand("toggleduelrequests");

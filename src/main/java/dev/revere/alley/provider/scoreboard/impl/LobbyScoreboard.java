@@ -3,10 +3,13 @@ package dev.revere.alley.provider.scoreboard.impl;
 import dev.revere.alley.Alley;
 import dev.revere.alley.config.IConfigService;
 import dev.revere.alley.feature.level.ILevelService;
+import dev.revere.alley.feature.music.IMusicService;
+import dev.revere.alley.feature.music.MusicSession;
 import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
 import dev.revere.alley.provider.scoreboard.IScoreboard;
+import dev.revere.alley.util.TimeUtil;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -14,6 +17,7 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author Emmy
@@ -27,13 +31,37 @@ public class LobbyScoreboard implements IScoreboard {
         IConfigService configService = Alley.getInstance().getService(IConfigService.class);
         IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
         ILevelService levelService = Alley.getInstance().getService(ILevelService.class);
+        IMusicService musicService = Alley.getInstance().getService(IMusicService.class);
 
         List<String> scoreboardLines = new ArrayList<>();
         List<String> template = (profile.getParty() != null)
                 ? configService.getScoreboardConfig().getStringList("scoreboard.lines.party")
                 : configService.getScoreboardConfig().getStringList("scoreboard.lines.lobby");
 
+        Optional<MusicSession> musicStateOptional = musicService.getMusicState(profile.getUuid());
+
         for (String line : template) {
+            if (line.equalsIgnoreCase("{music}")) {
+                musicStateOptional.ifPresent(state -> {
+                    List<String> musicTemplate = configService.getScoreboardConfig().getStringList("scoreboard.lines.music");
+
+                    int elapsedSeconds = state.getElapsedSeconds();
+                    int totalSeconds = state.getDisc().getDuration();
+
+                    String elapsedTime = TimeUtil.formatTimeFromSeconds(elapsedSeconds);
+                    String totalTime = TimeUtil.formatTimeFromSeconds(totalSeconds);
+                    String duration = elapsedTime + " / " + totalTime;
+
+                    for (String musicLine : musicTemplate) {
+                        scoreboardLines.add(CC.translate(musicLine)
+                                .replace("{song-name}", state.getDisc().getTitle())
+                                .replace("{song-duration}", duration)
+                        );
+                    }
+                });
+                continue;
+            }
+
             String processedLine = CC.translate(line)
                     .replace("{online}", String.valueOf(Bukkit.getOnlinePlayers().size()))
                     .replace("{wins}", String.valueOf(profile.getProfileData().getTotalWins()))

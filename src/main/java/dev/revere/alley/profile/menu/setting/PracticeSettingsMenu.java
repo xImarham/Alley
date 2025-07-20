@@ -40,13 +40,13 @@ public class PracticeSettingsMenu extends Menu {
             ));
         }
 
-        this.addBorder(buttons, 15, 4);
+        this.addBorder(buttons, 15, 5);
 
         return buttons;
     }
 
     @Override
     public int getSize() {
-        return 9 * 4;
+        return 9 * 5;
     }
 }

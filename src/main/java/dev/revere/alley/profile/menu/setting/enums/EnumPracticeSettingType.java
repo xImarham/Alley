@@ -110,7 +110,17 @@ public enum EnumPracticeSettingType {
                     "",
                     "&aClick to view!"
             )
-    );
+    ),
+
+    LOBBY_MUSIC(34, "&6&lLobby Music", Material.JUKEBOX,
+            settings -> Arrays.asList(
+                    "&fCustomize your lobby music.",
+                    "",
+                    "&aClick to customize!"
+            )
+    ),
+
+    ;
 
     public final int slot;
     public final String displayName;

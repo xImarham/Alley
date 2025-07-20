@@ -29,4 +29,6 @@ public @interface CommandData {
     boolean inGameOnly() default true;
 
     boolean isAdminOnly() default false;
+
+    int cooldown() default 0;
 }

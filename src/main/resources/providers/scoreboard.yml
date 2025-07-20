@@ -38,16 +38,22 @@ scoreboard:
     - "&6play.revere.dev"
     - "{sidebar}"
   lines:
+    music:
+      - ""
+      - "&6&lMusic"
+      - " &f&l● &rSong: &6{song-name}"
+      - " &f&l● &rDuration: &6{song-duration}"
     lobby:
       - "{sidebar}"
       - "&6&lServer"
       - " &f&l● &rOnline: &6{online}"
       - " &f&l● &rPlaying: &6{playing}"
-      #      - " &f&l● &rIn Queue: &6{in-queue}"
+      - " &f&l● &rIn Queue: &6{in-queue}"
       - ""
       - "&6&lStats"
       - " &f&l● &rWins: &6{wins}"
       - " &f&l● &rLevel: &6{level}"
+      - "{music}"
     party:
       - "{sidebar}"
       - "&6&lParty &7({party-privacy}&7)"
