@@ -17,14 +17,10 @@ import java.util.Set;
 @Getter
 @Setter
 public class ProfileMusicData {
-    private final Set<String> selectedDiscs;
-    private boolean isPlaying = false;
+    private Set<String> selectedDiscs;
 
-    public ProfileMusicData () {
+    public ProfileMusicData() {
         this.selectedDiscs = new HashSet<>();
-
-        IMusicService musicService = Alley.getInstance().getService(IMusicService.class);
-        musicService.getMusicDiscs().forEach(disc -> this.addDisc(disc.name()));
     }
 
     /**

@@ -5,6 +5,7 @@ import dev.revere.alley.feature.division.Division;
 import dev.revere.alley.feature.division.IDivisionService;
 import dev.revere.alley.feature.division.tier.DivisionTier;
 import dev.revere.alley.feature.layout.data.LayoutData;
+import dev.revere.alley.feature.music.IMusicService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.data.ProfileData;
 import dev.revere.alley.profile.data.impl.*;
@@ -60,6 +61,7 @@ public class MongoUtility {
         profileDataDocument.put("settingData", convertProfileSettingData(profileData.getSettingData()));
         profileDataDocument.put("cosmeticData", convertProfileCosmeticData(profileData.getCosmeticData()));
         profileDataDocument.put("playTimeData", convertProfilePlayTimeData(profileData.getPlayTimeData()));
+        profileDataDocument.put("musicData", convertProfileMusicData(profileData.getMusicData()));
 
         document.put("profileData", profileDataDocument);
         return document;
@@ -159,6 +161,7 @@ public class MongoUtility {
         settingDocument.put("showScoreboardLines", settingData.isShowScoreboardLines());
         settingDocument.put("profanityFilterEnabled", settingData.isProfanityFilterEnabled());
         settingDocument.put("receiveDuelRequestsEnabled", settingData.isReceiveDuelRequestsEnabled());
+        settingDocument.put("lobbyMusicEnabled", settingData.isLobbyMusicEnabled());
         settingDocument.put("chatChannel", settingData.getChatChannel());
         settingDocument.put("time", settingData.getTime());
         return settingDocument;
@@ -190,6 +193,18 @@ public class MongoUtility {
         playTimeDocument.put("total", playTimeData.getTotal());
         playTimeDocument.put("lastLogin", playTimeData.getLastLogin());
         return playTimeDocument;
+    }
+
+    /**
+     * Converts a ProfileMusicData object to a Document.
+     *
+     * @param musicData The music data to convert.
+     * @return The converted Document.
+     */
+    private Document convertProfileMusicData(ProfileMusicData musicData) {
+        Document musicDocument = new Document();
+        musicDocument.put("selectedDiscs", new ArrayList<>(musicData.getSelectedDiscs()));
+        return musicDocument;
     }
 
     /**
@@ -241,6 +256,8 @@ public class MongoUtility {
             profileData.setSettingData(parseProfileSettingData((Document) profileDataDocument.get("settingData")));
             profileData.setCosmeticData(parseProfileCosmeticData((Document) profileDataDocument.get("cosmeticData")));
             profileData.setPlayTimeData(parseProfilePlayTimeData((Document) profileDataDocument.get("playTimeData")));
+
+            profileData.setMusicData(parseProfileMusicData((Document) profileDataDocument.get("musicData")));
 
             profile.setProfileData(profileData);
         }
@@ -341,6 +358,27 @@ public class MongoUtility {
     }
 
     /**
+     * Parses a ProfileMusicData object from a Document.
+     *
+     * @param musicDocument The music document to parse.
+     * @return The parsed ProfileMusicData.
+     */
+    private ProfileMusicData parseProfileMusicData(Document musicDocument) {
+        ProfileMusicData musicData = new ProfileMusicData();
+
+        if (musicDocument == null) {
+            IMusicService musicService = Alley.getInstance().getService(IMusicService.class);
+            musicService.getMusicDiscs().forEach(disc -> musicData.addDisc(disc.name()));
+            return musicData;
+        }
+
+        List<String> selectedDiscs = musicDocument.getList("selectedDiscs", String.class);
+        musicData.getSelectedDiscs().addAll(selectedDiscs);
+
+        return musicData;
+    }
+
+    /**
      * Parses a ProfileSettingData object from a Document.
      *
      * @param settingDocument The setting document to parse.
@@ -355,6 +393,7 @@ public class MongoUtility {
         settingData.setShowScoreboardLines(settingDocument.getBoolean("showScoreboardLines", true));
         settingData.setProfanityFilterEnabled(settingDocument.getBoolean("profanityFilterEnabled", true));
         settingData.setReceiveDuelRequestsEnabled(settingDocument.getBoolean("receiveDuelRequestsEnabled", true));
+        settingData.setLobbyMusicEnabled(settingDocument.getBoolean("lobbyMusicEnabled", true));
         settingData.setChatChannel(settingDocument.get("chatChannel", EnumChatChannel.GLOBAL.toString()));
         settingData.setTime(settingDocument.get("time", EnumWorldTime.DEFAULT.getName()));
         return settingData;
