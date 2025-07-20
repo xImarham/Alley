@@ -66,7 +66,7 @@ public class VisibilityService implements IVisibilityService {
                 this.handleLobbyAndQueueState(viewer, target, targetProfileState);
                 break;
             case FFA:
-                this.handleFfaState(viewer, target, targetProfileState);
+                this.handleFfaState(viewer, target, viewerProfile, targetProfile);
                 break;
             case PLAYING:
                 this.handlePlayingCase(viewer, target, viewerProfile, targetProfile);
@@ -102,8 +102,13 @@ public class VisibilityService implements IVisibilityService {
         //TODO: further logic once we implement /tpv command (TogglePlayerVisibility)
     }
 
-    private void handleFfaState(Player viewer, Player target, EnumProfileState targetProfileState) {
-        if (targetProfileState == EnumProfileState.FFA) {
+    private void handleFfaState(Player viewer, Player target, Profile viewerProfile, Profile targetProfile) {
+        if (targetProfile.getState() != EnumProfileState.FFA) {
+            viewer.hidePlayer(target);
+            return;
+        }
+
+        if (viewerProfile.getFfaMatch().getKit() == targetProfile.getFfaMatch().getKit()) {
             viewer.showPlayer(target);
         } else {
             viewer.hidePlayer(target);
