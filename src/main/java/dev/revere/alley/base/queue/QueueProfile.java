@@ -3,6 +3,7 @@ package dev.revere.alley.base.queue;
 import dev.revere.alley.Alley;
 import dev.revere.alley.tool.reflection.IReflectionRepository;
 import dev.revere.alley.tool.reflection.impl.ActionBarReflectionService;
+import dev.revere.alley.util.TimeUtil;
 import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.util.chat.Symbol;
 import lombok.Data;
@@ -50,7 +51,7 @@ public class QueueProfile {
         this.ticks++;
 
         if (player != null) {
-            String message = "&6" + this.queue.getQueueType() + " " + this.queue.getKit().getDisplayName() + " &7┃ &f" + this.getFormattedElapsedTime();
+            String message = "&6" + this.queue.getQueueType() + " " + this.queue.getKit().getDisplayName() + " &7┃ &f" + TimeUtil.getFormattedElapsedTime(getElapsedTime());
             IReflectionRepository reflectionRepository = Alley.getInstance().getService(IReflectionRepository.class);
             reflectionRepository.getReflectionService(ActionBarReflectionService.class).sendMessage(player, message);
         }
@@ -120,15 +121,5 @@ public class QueueProfile {
      */
     public long getElapsedTime() {
         return System.currentTimeMillis() - this.startTime;
-    }
-
-    /**
-     * Method to get the formatted elapsed time.
-     *
-     * @return The formatted elapsed time.
-     */
-    public String getFormattedElapsedTime() {
-        long elapsedSeconds = getElapsedTime() / 1000;
-        return String.format("%02d:%02d", elapsedSeconds / 60, elapsedSeconds % 60);
     }
 }

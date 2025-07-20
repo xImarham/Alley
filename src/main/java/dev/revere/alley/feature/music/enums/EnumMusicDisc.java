@@ -14,33 +14,28 @@ import org.bukkit.Material;
  */
 @Getter
 public enum EnumMusicDisc {
-    GOLD_RECORD(Material.GOLD_RECORD, "13", 2256),
-    GREEN_RECORD(Material.GREEN_RECORD, "Cat", 2257),
-    RECORD_3(Material.RECORD_3, "Blocks", 2258),
-    RECORD_4(Material.RECORD_4, "Chirp", 2259),
-    RECORD_5(Material.RECORD_5, "Far", 2260),
-    RECORD_6(Material.RECORD_6, "Mall", 2261),
-    RECORD_7(Material.RECORD_7, "Mellohi", 2262),
-    RECORD_8(Material.RECORD_8, "Stal", 2263),
-    RECORD_9(Material.RECORD_9, "Strad", 2264),
-    RECORD_10(Material.RECORD_10, "Ward", 2265),
-    RECORD_11(Material.RECORD_11, "11", 2266),
-    RECORD_12(Material.RECORD_12, "Wait", 2267);
+    GOLD_RECORD(Material.GOLD_RECORD, "13", "records.13", 178),
+    GREEN_RECORD(Material.GREEN_RECORD, "Cat", "records.cat", 185),
+    RECORD_3(Material.RECORD_3, "Blocks", "records.blocks", 345),
+    RECORD_4(Material.RECORD_4, "Chirp", "records.chirp", 185),
+    RECORD_5(Material.RECORD_5, "Far", "records.far", 174),
+    RECORD_6(Material.RECORD_6, "Mall", "records.mall", 197),
+    RECORD_7(Material.RECORD_7, "Mellohi", "records.mellohi", 96),
+    RECORD_8(Material.RECORD_8, "Stal", "records.stal", 150),
+    RECORD_9(Material.RECORD_9, "Strad", "records.strad", 188),
+    RECORD_10(Material.RECORD_10, "Ward", "records.ward", 251),
+    RECORD_11(Material.RECORD_11, "11", "records.11", 71),
+    RECORD_12(Material.RECORD_12, "Wait", "records.wait", 238);
 
     private final Material material;
     private final String title;
-    private final int id;
+    private final String soundName;
+    private final int duration;
 
-    /**
-     * Constructor for the MusicDisc enum.
-     *
-     * @param material The material type of the music disc.
-     * @param title    The title of the music disc.
-     * @param id       The unique ID of the music.
-     */
-    EnumMusicDisc(Material material, String title, int id) {
+    EnumMusicDisc(Material material, String title, String soundName, int duration) {
         this.material = material;
         this.title = title;
-        this.id = id;
+        this.soundName = soundName;
+        this.duration = duration;
     }
 }

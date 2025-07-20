@@ -58,6 +58,29 @@ public final class TimeUtil {
     }
 
     /**
+     * Converts elapsed milliseconds to a formatted time string in "mm:ss" format.
+     *
+     * @param elapsedMillis the elapsed time in milliseconds.
+     * @return the formatted time string.
+     */
+    public String getFormattedElapsedTime(long elapsedMillis) {
+        long elapsedSeconds = elapsedMillis / 1000;
+        return String.format("%02d:%02d", elapsedSeconds / 60, elapsedSeconds % 60);
+    }
+
+    /**
+     * Converts a total number of seconds into a formatted time string in "mm:ss" format.
+     *
+     * @param totalSeconds the total number of seconds to convert.
+     * @return the formatted time string in "mm:ss" format.
+     */
+    public static String formatTimeFromSeconds(int totalSeconds) {
+        int minutes = totalSeconds / 60;
+        int seconds = totalSeconds % 60;
+        return String.format("%02d:%02d", minutes, seconds);
+    }
+
+    /**
      * Converts a date to a string.
      *
      * @param date the date to convert.

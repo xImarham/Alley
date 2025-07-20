@@ -5,6 +5,7 @@ import dev.revere.alley.feature.music.enums.EnumMusicDisc;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.data.impl.ProfileMusicData;
 import dev.revere.alley.tool.item.ItemBuilder;
+import dev.revere.alley.tool.visual.LoreHelper;
 import dev.revere.alley.util.chat.CC;
 import lombok.AllArgsConstructor;
 import org.bukkit.entity.Player;
@@ -26,6 +27,8 @@ public class MusicDiscSelectorButton extends Button {
         return new ItemBuilder(this.disc.getMaterial())
                 .name("&6&l" + this.disc.getTitle())
                 .lore(
+                        "",
+                        LoreHelper.toggledOrNot(this.profile.getProfileData().getMusicData().isDiscSelected(this.disc.name())),
                         "",
                         "&aClick to change!"
                 )

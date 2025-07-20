@@ -40,6 +40,7 @@ import dev.revere.alley.tool.reflection.impl.TitleReflectionService;
 import dev.revere.alley.util.ListenerUtil;
 import dev.revere.alley.util.PlayerUtil;
 import dev.revere.alley.util.SoundUtil;
+import dev.revere.alley.util.TimeUtil;
 import dev.revere.alley.util.chat.CC;
 import lombok.Getter;
 import lombok.Setter;
@@ -785,11 +786,11 @@ public abstract class AbstractMatch {
      */
     public String getDuration() {
         if (this.state == EnumMatchState.STARTING) {
-            return this.getFormattedElapsedTime(this.getElapsedTime());
+            return TimeUtil.getFormattedElapsedTime(this.getElapsedTime());
         } else if (this.state == EnumMatchState.ENDING_MATCH) {
-            return this.getFormattedElapsedTime(this.endTime - this.startTime);
+            return TimeUtil.getFormattedElapsedTime(this.endTime - this.startTime);
         } else {
-            return this.getFormattedElapsedTime(this.getElapsedTime());
+            return TimeUtil.getFormattedElapsedTime(this.getElapsedTime());
         }
     }
 
@@ -800,16 +801,6 @@ public abstract class AbstractMatch {
      */
     public long getElapsedTime() {
         return System.currentTimeMillis() - this.startTime;
-    }
-
-    /**
-     * Gets the formatted elapsed time of the match.
-     *
-     * @return The formatted elapsed time of the match.
-     */
-    public String getFormattedElapsedTime(long elapsedMillis) {
-        long elapsedSeconds = elapsedMillis / 1000;
-        return String.format("%02d:%02d", elapsedSeconds / 60, elapsedSeconds % 60);
     }
 
     /**
