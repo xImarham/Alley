@@ -3,11 +3,14 @@ package dev.revere.alley.profile.menu.music;
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.api.menu.Menu;
+import dev.revere.alley.api.menu.impl.BackButton;
 import dev.revere.alley.feature.music.IMusicService;
 import dev.revere.alley.feature.music.enums.EnumMusicDisc;
 import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.menu.music.button.MusicDiscSelectorButton;
+import dev.revere.alley.profile.menu.music.button.ToggleLobbyMusicButton;
+import dev.revere.alley.profile.menu.setting.PracticeSettingsMenu;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
@@ -41,7 +44,10 @@ public class MusicDiscSelectorMenu extends Menu {
             slot++;
         }
 
-        this.addBorder(buttons, (short)15, 4);
+        this.addBorder(buttons, (short) 15, 4);
+
+        buttons.put(4, new ToggleLobbyMusicButton());
+        buttons.put(0, new BackButton(new PracticeSettingsMenu()));
 
         return buttons;
     }
