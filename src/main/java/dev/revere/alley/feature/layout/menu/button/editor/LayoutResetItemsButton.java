@@ -3,6 +3,7 @@ package dev.revere.alley.feature.layout.menu.button.editor;
 import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.base.kit.Kit;
 import dev.revere.alley.tool.item.ItemBuilder;
+import dev.revere.alley.util.chat.CC;
 import lombok.AllArgsConstructor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -24,9 +25,11 @@ public class LayoutResetItemsButton extends Button {
                 .name("&6&lReset Items")
                 .durability(4)
                 .lore(
+                        CC.MENU_BAR,
                         "&7Reset items to default.",
                         "",
-                        "&aClick to reset!"
+                        "&aClick to reset.",
+                        CC.MENU_BAR
                 )
                 .hideMeta()
                 .build();

@@ -27,6 +27,7 @@ public class PlayerUtil {
             player.setMaxHealth(20.0D);
             player.setHealth(player.getMaxHealth());
         }
+        player.setSaturation(5.0F);
         player.setFallDistance(0.0F);
         player.setFoodLevel(20);
         player.setFireTicks(0);

@@ -13,6 +13,7 @@ import dev.revere.alley.profile.menu.statistic.button.GlobalStatButton;
 import dev.revere.alley.profile.menu.statistic.button.LeaderboardButton;
 import dev.revere.alley.profile.menu.statistic.button.StatisticsButton;
 import dev.revere.alley.tool.item.ItemBuilder;
+import dev.revere.alley.util.chat.CC;
 import lombok.AllArgsConstructor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -39,7 +40,7 @@ public class StatisticsMenu extends Menu {
         Map<Integer, Button> buttons = new HashMap<>();
 
         buttons.put(2, new StatisticsButton());
-        buttons.put(4, new GlobalStatButton());
+        buttons.put(4, new GlobalStatButton(target));
         buttons.put(6, new LeaderboardButton());
         //buttons.put(8, new DivisionViewButton(Alley.getInstance().getService(IProfileService.class).getProfile(player.getUniqueId())));
 
@@ -76,6 +77,7 @@ public class StatisticsMenu extends Menu {
             ProfileFFAData profileFFAData = this.profile.getProfileData().getFfaData().get(this.kit.getName());
 
             List<String> lore = new ArrayList<>(Arrays.asList(
+                    CC.MENU_BAR,
                     "&6&lUnranked &6⭐" + profileUnrankedKitData.getDivision().getName() + " " + profileUnrankedKitData.getTier().getName(),
                     "&f● &6Wins: &f" + profileUnrankedKitData.getWins(),
                     //"&f● &6Losses: &f" + profileUnrankedKitData.getLosses(),
@@ -111,6 +113,8 @@ public class StatisticsMenu extends Menu {
                         "&f● &6Deaths: &f" + profileFFAData.getDeaths()
                 ));
             }
+
+            lore.add(CC.MENU_BAR);
 
             return new ItemBuilder(this.kit.getIcon())
                     .name("&6&l" + this.kit.getDisplayName())

@@ -66,30 +66,36 @@ public class QueuesMenuModern extends Menu {
         Profile profile = profileService.getProfile(player.getUniqueId());
 
         buttons.put(2, new QueuesButtonModern("&6&lUnranked", Material.DIAMOND_SWORD, 0, Arrays.asList(
+                CC.MENU_BAR,
                 "&7Casual 1v1s with",
                 "&7no loss penalty.",
                 "",
-                "&6Players: &f" + queueService.getPlayerCountOfGameType("Unranked Solo"),
+                " &fPlayers: &6" + queueService.getPlayerCountOfGameType("Unranked Solo"),
                 "",
-                this.getLore(profile, EnumQueueType.UNRANKED)
+                this.getLore(profile, EnumQueueType.UNRANKED),
+                CC.MENU_BAR
         )));
 
         buttons.put(4, new QueuesButtonModern("&6&lUnranked Duos", Material.GOLD_SWORD, 0, Arrays.asList(
+                CC.MENU_BAR,
                 "&7Casual 2v2s with",
                 "&7no penalty loss",
                 "",
-                "&6Players: &f" + queueService.getPlayerCountOfGameType("Duos"),
+                " &fPlayers: &6" + queueService.getPlayerCountOfGameType("Duos"),
                 "",
-                this.getLore(profile, EnumQueueType.DUOS)
+                this.getLore(profile, EnumQueueType.DUOS),
+                CC.MENU_BAR
         )));
 
         buttons.put(6, new QueuesButtonModern("&6&lFFA", Material.GOLD_AXE, 0, Arrays.asList(
+                CC.MENU_BAR,
                 "&7Free for all with",
                 "&7infinity respawns.",
                 "",
-                "&6Players: &f" + queueService.getPlayerCountOfGameType("FFA"),
+                " &fPlayers: &6" + queueService.getPlayerCountOfGameType("FFA"),
                 "",
-                this.getLore(profile, EnumQueueType.FFA)
+                this.getLore(profile, EnumQueueType.FFA),
+                CC.MENU_BAR
         )));
 
         int slot = 10;
@@ -188,6 +194,6 @@ public class QueuesMenuModern extends Menu {
      * @param type    the queue type to check
      */
     private String getLore(Profile profile, EnumQueueType type) {
-        return LoreHelper.selectionLore(profile.getQueueType() == type, "play");
+        return LoreHelper.selectionLore(profile.getQueueType() == type, "select");
     }
 }

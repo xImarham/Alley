@@ -5,6 +5,7 @@ import dev.revere.alley.base.kit.Kit;
 import dev.revere.alley.feature.leaderboard.data.LeaderboardPlayerData;
 import dev.revere.alley.feature.leaderboard.enums.EnumLeaderboardType;
 import dev.revere.alley.tool.item.ItemBuilder;
+import dev.revere.alley.util.chat.CC;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -65,7 +66,7 @@ public class LeaderboardKitButton extends Button {
         }
 
         List<String> lore = new ArrayList<>();
-        lore.add("");
+        lore.add(CC.MENU_BAR);
 
         List<String> topEntries = this.leaderboard.stream()
                 .limit(10)
@@ -93,7 +94,7 @@ public class LeaderboardKitButton extends Button {
                 .collect(Collectors.toList());
 
         lore.addAll(topEntries);
-        lore.add("");
+        lore.add(CC.MENU_BAR);
         return lore;
     }
 
@@ -104,9 +105,11 @@ public class LeaderboardKitButton extends Button {
         return new ItemBuilder(Material.BARRIER)
                 .name("&c&lComing Soon")
                 .lore(
+                        CC.MENU_BAR,
                         "&7This leaderboard is currently",
                         "&7being worked on. Please check",
-                        "&7back later."
+                        "&7back later.",
+                        CC.MENU_BAR
                 )
                 .build();
     }

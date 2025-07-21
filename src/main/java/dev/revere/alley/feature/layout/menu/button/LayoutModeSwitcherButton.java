@@ -4,6 +4,7 @@ import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.base.kit.enums.EnumKitCategory;
 import dev.revere.alley.feature.layout.menu.LayoutMenu;
 import dev.revere.alley.tool.item.ItemBuilder;
+import dev.revere.alley.util.chat.CC;
 import lombok.AllArgsConstructor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -24,9 +25,11 @@ public class LayoutModeSwitcherButton extends Button {
         return new ItemBuilder(Material.ARROW)
                 .name("&6&l" + this.kitCategory.getName() + " Modes")
                 .lore(
-                        ("&f" + this.kitCategory.getDescription()),
+                        CC.MENU_BAR,
+                        ("&f " + this.kitCategory.getDescription()),
                         "",
-                        "&aClick to view!"
+                        "&aClick to view!",
+                        CC.MENU_BAR
                 )
                 .hideMeta()
                 .build();

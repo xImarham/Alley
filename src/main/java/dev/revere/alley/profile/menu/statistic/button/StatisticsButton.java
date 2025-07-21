@@ -3,6 +3,7 @@ package dev.revere.alley.profile.menu.statistic.button;
 import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.profile.menu.statistic.StatisticsMenu;
 import dev.revere.alley.tool.item.ItemBuilder;
+import dev.revere.alley.util.chat.CC;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
@@ -26,10 +27,12 @@ public class StatisticsButton extends Button {
         return new ItemBuilder(Material.PAPER)
                 .name("&6&lYour Statistics")
                 .lore(
-                        "&fYour statistics are displayed here.",
-                        "&fYou can view your wins, losses, and more.",
+                        CC.MENU_BAR,
+                        "&7Your statistics are displayed here.",
+                        "&7You can view your wins, losses, and more.",
                         "",
-                        "&aClick to view your statistics."
+                        "&aClick to view your statistics.",
+                        CC.MENU_BAR
                 )
                 .build();
     }

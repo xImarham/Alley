@@ -54,9 +54,11 @@ public class MatchLivesImpl extends MatchRegularImpl {
 
     @Override
     public void setupPlayer(Player player) {
+        super.setupPlayer(player);
+
         MatchGamePlayerData data = this.getGamePlayer(player).getData();
         player.setMaxHealth(data.getLives() * 2);
-        super.setupPlayer(player);
+        player.setHealth(player.getMaxHealth());
     }
 
     /**

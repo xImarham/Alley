@@ -55,12 +55,27 @@ public class DefaultCoreImpl implements ICore {
     }
 
     @Override
+    public String getRank(Player player) {
+        if (player.isOp()) {
+            return "Owner";
+        } else if (player.hasPermission(this.adminPermission)) {
+            return "Admin";
+        }
+
+        return "Default";
+    }
+
+    @Override
     public String getRankSuffix(Player player) {
         return "";
     }
 
     @Override
     public ChatColor getRankColor(Player player) {
+        if (player == null) {
+            return ChatColor.WHITE;
+        }
+
         if (player.isOp()) {
             return ChatColor.DARK_RED;
         } else if (player.hasPermission(this.adminPermission)) {

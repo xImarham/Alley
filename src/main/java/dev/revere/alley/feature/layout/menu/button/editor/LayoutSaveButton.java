@@ -9,6 +9,7 @@ import dev.revere.alley.game.ffa.IFFAService;
 import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.tool.item.ItemBuilder;
+import dev.revere.alley.util.chat.CC;
 import lombok.AllArgsConstructor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -31,10 +32,12 @@ public class LayoutSaveButton extends Button {
                 .name("&6&lSave")
                 .durability(13)
                 .lore(
+                        CC.MENU_BAR,
                         "&7Save changes &",
                         "&7return to main menu.",
                         "",
-                        "&aClick to save!"
+                        "&aClick to save.",
+                        CC.MENU_BAR
                 )
                 .hideMeta()
                 .build();

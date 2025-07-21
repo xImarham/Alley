@@ -3,6 +3,7 @@ package dev.revere.alley.profile.menu.statistic.button;
 import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.feature.leaderboard.menu.LeaderboardMenu;
 import dev.revere.alley.tool.item.ItemBuilder;
+import dev.revere.alley.util.chat.CC;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
@@ -26,11 +27,12 @@ public class LeaderboardButton extends Button {
         return new ItemBuilder(Material.EYE_OF_ENDER)
                 .name("&6&lLeaderboards")
                 .lore(
+                        CC.MENU_BAR,
+                        "&7All of the leaderboards are displayed here.",
+                        "&7You can view top wins, losses, and more.",
                         "",
-                        " &fAll of the leaderboards are displayed here.",
-                        " &fYou can view top wins, losses, and more.",
-                        "",
-                        "&aClick to view the leaderboards."
+                        "&aClick to view the leaderboards.",
+                        CC.MENU_BAR
                 )
                 .build();
     }

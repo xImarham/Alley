@@ -70,7 +70,7 @@ public class DuelArenaSelectorMenu extends PaginatedMenu {
         @Override
         public ItemStack getButtonItem(Player player) {
             return new ItemBuilder(Material.PAPER)
-                    .name("&6&l" + this.arena.getName())
+                    .name("&6&l" + this.arena.getDisplayName())
                     .lore(
                             " &f● &6Target: &f" + this.targetPlayer.getName(),
                             " &f● &6Kit: &f" + this.kit.getDisplayName(),

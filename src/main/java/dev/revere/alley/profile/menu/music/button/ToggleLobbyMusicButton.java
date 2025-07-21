@@ -6,6 +6,7 @@ import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.tool.item.ItemBuilder;
 import dev.revere.alley.tool.visual.LoreHelper;
+import dev.revere.alley.util.chat.CC;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
@@ -23,10 +24,11 @@ public class ToggleLobbyMusicButton extends Button {
         return new ItemBuilder(Material.EMERALD)
                 .name("&6&lLobby Music")
                 .lore(
+                        CC.MENU_BAR,
+                        LoreHelper.displayEnabled(profile.getProfileData().getSettingData().isLobbyMusicEnabled()),
                         "",
-                        " " + LoreHelper.enabledOrDisabled(profile.getProfileData().getSettingData().isLobbyMusicEnabled()),
-                        "",
-                        "&aClick to change!"
+                        "&aClick to toggle.",
+                        CC.MENU_BAR
                 )
                 .hideMeta()
                 .build();

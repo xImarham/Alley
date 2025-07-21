@@ -42,7 +42,7 @@ public class ArenaListCommand extends BaseCommand {
                 .sorted(Comparator.comparing(AbstractArena::getName))
                 .forEach(arena -> {
                     ComponentBuilder hover = new ComponentBuilder("")
-                            .append(CC.translate("&6&lArena Info " + LoreHelper.enabledOrDisabled(arena.isEnabled()) + "\n"))
+                            .append(CC.translate("&6&lArena Info" + LoreHelper.displayEnabled(arena.isEnabled()) + "\n"))
                             .append(CC.translate(" &f● Display Name: &6" + arena.getDisplayName() + "\n"))
                             .append(CC.translate(" &f● Type: &6" + arena.getType().name() + "\n"))
                             .append(CC.translate(" &f● Center: &6" + TextFormatter.formatLocation(arena.getCenter()) + "\n"))

@@ -10,7 +10,9 @@ import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 @AllArgsConstructor
 public class JumpToPageButton extends Button {
@@ -25,18 +27,17 @@ public class JumpToPageButton extends Button {
 
         itemMeta.setDisplayName(CC.translate("&6&lPage " + this.page));
 
+        List<String> lore = new ArrayList<>();
+        lore.add(CC.MENU_BAR);
+        lore.add("");
         if (this.current) {
-            itemMeta.setLore(Arrays.asList(
-                    "",
-                    CC.translate("&6Selected!")
-            ));
+            lore.add(CC.translate("&aSelected."));
         } else {
-            itemMeta.setLore(Arrays.asList(
-                    "",
-                    CC.translate("&6Click to open!")
-            ));
+            lore.add(CC.translate("&aClick to open."));
         }
+        lore.add(CC.MENU_BAR);
 
+        itemMeta.setLore(lore);
         itemStack.setItemMeta(itemMeta);
 
         return itemStack;

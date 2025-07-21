@@ -51,7 +51,7 @@ public class QueueProfile {
         this.ticks++;
 
         if (player != null) {
-            String message = "&6" + this.queue.getQueueType() + " " + this.queue.getKit().getDisplayName() + " &7┃ &f" + TimeUtil.getFormattedElapsedTime(getElapsedTime());
+            String message = "&6" + this.queue.getQueueType() + " " + this.queue.getKit().getDisplayName() + " &7│ &f" + TimeUtil.getFormattedElapsedTime(getElapsedTime());
             IReflectionRepository reflectionRepository = Alley.getInstance().getService(IReflectionRepository.class);
             reflectionRepository.getReflectionService(ActionBarReflectionService.class).sendMessage(player, message);
         }

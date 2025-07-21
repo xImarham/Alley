@@ -38,6 +38,14 @@ public interface ICore {
     String getRankPrefix(Player player);
 
     /**
+     * Retrieves the rank for a given player.
+     *
+     * @param player The player whose rank is to be retrieved.
+     * @return The rank as a String.
+     */
+    String getRank(Player player);
+
+    /**
      * Retrieves the rank suffix for a given player.
      *
      * @param player The player whose rank suffix is to be retrieved.

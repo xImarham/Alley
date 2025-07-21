@@ -296,8 +296,7 @@ public abstract class AbstractMatch {
         MatchGamePlayerImpl gamePlayer = getGamePlayer(player);
         if (gamePlayer != null) {
             gamePlayer.setDead(false);
-            PlayerUtil.reset(player, true, false);
-            player.setHealth(player.getMaxHealth());
+            PlayerUtil.reset(player, true, true);
             this.giveLoadout(player, this.kit);
         }
     }

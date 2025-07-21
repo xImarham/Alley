@@ -22,7 +22,7 @@ public class CC {
     public final String WARNING_PREFIX;
 
     static {
-        MENU_BAR = translate("&7&m------------------------");
+        MENU_BAR = translate("&8&m----------------------");
         PREFIX = translate("&f[&6" + Alley.getInstance().getDescription().getName() + "&f] &r");
         ERROR_PREFIX = translate("&c[&4" + Alley.getInstance().getDescription().getName() + "&c] &r");
         WARNING_PREFIX = translate("&6[&e" + Alley.getInstance().getDescription().getName() + "&6] &r");

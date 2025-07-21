@@ -32,8 +32,9 @@ public class PartyEventSplitButton extends Button {
         return new ItemBuilder(this.kit.getIcon())
                 .name("&6&l" + this.kit.getDisplayName())
                 .lore(
-                        "",
-                        "&aClick to select!"
+                        CC.MENU_BAR,
+                        "&aClick to select!",
+                        CC.MENU_BAR
                 )
                 .durability(this.kit.getDurability())
                 .hideMeta()

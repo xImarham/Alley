@@ -5,10 +5,12 @@ import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.feature.cosmetic.EnumCosmeticType;
 import dev.revere.alley.feature.cosmetic.repository.BaseCosmeticRepository;
 import dev.revere.alley.feature.cosmetic.repository.ICosmeticRepository;
+import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.menu.shop.ShopCategoryMenu;
 import dev.revere.alley.profile.progress.IProgressService;
 import dev.revere.alley.tool.item.ItemBuilder;
 import dev.revere.alley.util.StringUtil;
+import dev.revere.alley.util.chat.CC;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -34,6 +36,7 @@ public class ShopCategoryButton extends Button {
 
         int totalCount = 0;
         int ownedCount = 0;
+        int balance = Alley.getInstance().getService(IProfileService.class).getProfile(player.getUniqueId()).getProfileData().getCoins();
 
         BaseCosmeticRepository<?> repository = Alley.getInstance().getService(ICosmeticRepository.class).getRepository(cosmeticType);
         if (repository != null) {
@@ -48,11 +51,14 @@ public class ShopCategoryButton extends Button {
         String description = cosmeticType.getDescription();
 
         List<String> lore = new ArrayList<>();
+        lore.add(CC.MENU_BAR);
         lore.add(String.format("&7%s", description));
         lore.add("");
-        lore.add(String.format("&fUnlocked: &6%d/%d &7(%d%%)", ownedCount, totalCount, percentage));
+        lore.add(String.format(" &fUnlocked: &6%d/%d &7(%d%%)", ownedCount, totalCount, percentage));
+        lore.add(String.format(" &fBalance: &6$%d", balance));
         lore.add("");
-        lore.add("&aClick to browse!");
+        lore.add("&aClick to view.");
+        lore.add(CC.MENU_BAR);
 
         return new ItemBuilder(this.icon)
                 .name("&6&l" + friendlyName + "s")

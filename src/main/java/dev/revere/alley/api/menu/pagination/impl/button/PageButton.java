@@ -29,10 +29,12 @@ public class PageButton extends Button {
                 return new ItemBuilder(Material.MELON)
                         .name("&6&lNext Page &7" + (this.menu.getPage() + "/" + this.menu.getPages(player)))
                         .lore(
+                                CC.MENU_BAR,
                                 "&7Right-Click:",
                                 " &7▶ View all",
                                 "",
-                                "&6Click to view!"
+                                "&aClick to view.",
+                                CC.MENU_BAR
                         )
                         .hideMeta()
                         .build();
@@ -40,8 +42,10 @@ public class PageButton extends Button {
                 return new ItemBuilder(Material.MELON)
                         .name(CC.translate("&c&lNext Page"))
                         .lore(
-                                "&cThere is no available",
-                                "&cnext page."
+                                CC.MENU_BAR,
+                                " &cThere is no available",
+                                " &cnext page.",
+                                CC.MENU_BAR
                         )
                         .hideMeta()
                         .build();
@@ -51,10 +55,12 @@ public class PageButton extends Button {
                 return new ItemBuilder(Material.SPECKLED_MELON)
                         .name("&6&lLast Page &7" + (this.menu.getPage() + "/" + this.menu.getPages(player)))
                         .lore(
+                                CC.MENU_BAR,
                                 "&7Right-Click:",
                                 " &7▶ View all",
                                 "",
-                                "&6Click to view!"
+                                "&aClick to view.",
+                                CC.MENU_BAR
                         )
                         .hideMeta()
                         .build();
@@ -62,8 +68,10 @@ public class PageButton extends Button {
                 return new ItemBuilder(Material.SPECKLED_MELON)
                         .name(CC.translate("&c&lLast Page"))
                         .lore(
-                                "&cThere is no available",
-                                "&clast page."
+                                CC.MENU_BAR,
+                                " &cThere is no available",
+                                " &clast page.",
+                                CC.MENU_BAR
                         )
                         .hideMeta()
                         .build();

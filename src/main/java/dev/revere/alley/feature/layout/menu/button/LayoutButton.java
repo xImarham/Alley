@@ -32,10 +32,12 @@ public class LayoutButton extends Button {
                 .name("&6&l" + this.kit.getDisplayName())
                 .durability(this.kit.getDurability())
                 .lore(
+                        CC.MENU_BAR,
                         "&7Shift-Click:",
                         " &7" + Symbol.SINGULAR_ARROW_R_2 + " More Layouts",
                         "",
-                        "&aClick to edit!"
+                        "&aClick to edit.",
+                        CC.MENU_BAR
                 )
                 .hideMeta()
                 .build();

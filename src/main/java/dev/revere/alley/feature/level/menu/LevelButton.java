@@ -4,6 +4,7 @@ import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.feature.level.data.LevelData;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.tool.item.ItemBuilder;
+import dev.revere.alley.util.chat.CC;
 import lombok.AllArgsConstructor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -25,8 +26,9 @@ public class LevelButton extends Button {
             return new ItemBuilder(this.level.getMaterial())
                     .name(this.level.getDisplayName())
                     .lore(
-                            "",
-                            "&a&lUNLOCKED"
+                            CC.MENU_BAR,
+                            "&a&lUNLOCKED",
+                            CC.MENU_BAR
                     )
                     .durability(this.level.getDurability())
                     .hideMeta()
@@ -38,11 +40,12 @@ public class LevelButton extends Button {
         return new ItemBuilder(Material.STAINED_GLASS_PANE)
                 .name(this.level.getDisplayName())
                 .lore(
+                        CC.MENU_BAR,
+                        " &c&lLOCKED",
                         "",
-                        "&c&lLOCKED",
-                        "",
-                        "&fUnlock with &6" + requiredElo + " &fmore Elo!",
-                        "&fCurrent Elo: &6" + this.profile.getProfileData().getElo()
+                        " &fUnlock with &6" + requiredElo + " &fmore Elo!",
+                        " &fCurrent Elo: &6" + this.profile.getProfileData().getElo(),
+                        CC.MENU_BAR
                 )
                 .durability(14)
                 .hideMeta()

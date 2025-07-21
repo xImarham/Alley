@@ -1,12 +1,19 @@
 package dev.revere.alley.profile.menu.statistic.button;
 
 import dev.revere.alley.Alley;
+import dev.revere.alley.adapter.core.ICoreAdapter;
 import dev.revere.alley.api.menu.Button;
+import dev.revere.alley.feature.division.IDivisionService;
+import dev.revere.alley.feature.level.ILevelService;
 import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.data.impl.ProfileFFAData;
 import dev.revere.alley.tool.item.ItemBuilder;
+import dev.revere.alley.util.chat.CC;
+import dev.revere.alley.util.chat.Symbol;
+import lombok.RequiredArgsConstructor;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -15,7 +22,9 @@ import org.bukkit.inventory.ItemStack;
  * @project Alley
  * @date 5/26/2024
  */
+@RequiredArgsConstructor
 public class GlobalStatButton extends Button {
+    private final OfflinePlayer target;
 
     /**
      * Gets the item to display in the menu.
@@ -25,24 +34,43 @@ public class GlobalStatButton extends Button {
      */
     @Override
     public ItemStack getButtonItem(Player player) {
-        Profile profile = Alley.getInstance().getService(IProfileService.class).getProfile(player.getUniqueId());
-        return new ItemBuilder(Material.NETHER_STAR)
-                .name("&6&lGlobal")
+        Profile profile = Alley.getInstance().getService(IProfileService.class).getProfile(target.getUniqueId());
+
+        ICoreAdapter coreAdapter = Alley.getInstance().getService(ICoreAdapter.class);
+        ILevelService levelService = Alley.getInstance().getService(ILevelService.class);
+
+        int ffaKills = profile.getProfileData().getFfaData().values().stream()
+                .mapToInt(ProfileFFAData::getKills)
+                .sum();
+        int ffaDeaths = profile.getProfileData().getFfaData().values().stream()
+                .mapToInt(ProfileFFAData::getDeaths)
+                .sum();
+
+        return new ItemBuilder(Material.SKULL_ITEM)
+                .setSkull(target.getName())
+                .name("&6&l" + target.getName() + " &r&7│ &fStats")
                 .lore(
+                        CC.MENU_BAR,
+                        "&7Showing global data.",
                         "",
                         "&6&lUnranked",
-                        "&f● &6Wins: &f" + profile.getProfileData().getUnrankedWins(),
-                        "&f● &6Losses: &f" + profile.getProfileData().getUnrankedLosses(),
+                        " &6│ &fWins: &6" + profile.getProfileData().getUnrankedWins(),
+                        " &6│ &fLosses: &6" + profile.getProfileData().getUnrankedLosses(),
                         "",
                         "&6&lRanked",
-                        "&f● &6Wins: &f" + profile.getProfileData().getRankedWins(),
-                        "&f● &6Losses: &f" + profile.getProfileData().getRankedLosses(),
-                        "&f● &6Elo: &f" + profile.getProfileData().getElo(),
+                        " &6│ &fWins: &6" + profile.getProfileData().getRankedWins(),
+                        " &6│ &fLosses: &6" + profile.getProfileData().getRankedLosses(),
+                        " &6│ &fElo: &6" + profile.getProfileData().getElo(),
                         "",
                         "&6&lFFA",
-                        "&f● &6Kills: &f" + profile.getProfileData().getFfaData().values().stream().mapToInt(ProfileFFAData::getKills).sum(),
-                        "&f● &6Deaths: &f" + profile.getProfileData().getFfaData().values().stream().mapToInt(ProfileFFAData::getDeaths).sum(),
-                        ""
+                        " &6│ &fKills: &6" + ffaKills,
+                        " &6│ &fDeaths: &6" + ffaDeaths,
+                        "",
+                        "&6&lAccount",
+                        " &6│ &fRank: &6" + coreAdapter.getCore().getRankColor(target.getPlayer()) + coreAdapter.getCore().getRank(target.getPlayer()),
+                        " &6│ &fCoins: &6$" + profile.getProfileData().getCoins(),
+                        " &6│ &fLevel: &6" + levelService.getLevel(profile.getProfileData().getGlobalLevel()).getDisplayName(),
+                        CC.MENU_BAR
 
                 )
                 .build();

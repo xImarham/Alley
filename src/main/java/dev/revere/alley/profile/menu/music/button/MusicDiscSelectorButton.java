@@ -27,10 +27,11 @@ public class MusicDiscSelectorButton extends Button {
         return new ItemBuilder(this.disc.getMaterial())
                 .name("&6&l" + this.disc.getTitle())
                 .lore(
+                        CC.MENU_BAR,
+                        " " + LoreHelper.displayToggled(this.profile.getProfileData().getMusicData().isDiscSelected(this.disc.name())),
                         "",
-                        LoreHelper.toggledOrNot(this.profile.getProfileData().getMusicData().isDiscSelected(this.disc.name())),
-                        "",
-                        "&aClick to change!"
+                        "&aClick to toggle.",
+                        CC.MENU_BAR
                 )
                 .build();
     }

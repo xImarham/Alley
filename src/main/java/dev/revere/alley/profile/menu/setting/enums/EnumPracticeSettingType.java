@@ -2,6 +2,7 @@ package dev.revere.alley.profile.menu.setting.enums;
 
 import dev.revere.alley.profile.data.impl.ProfileSettingData;
 import dev.revere.alley.tool.visual.LoreHelper;
+import dev.revere.alley.util.chat.CC;
 import org.bukkit.Material;
 
 import java.util.Arrays;
@@ -17,106 +18,128 @@ public enum EnumPracticeSettingType {
 
     PARTY_MESSAGES(10, "&6&lToggle Party Messages", Material.FEATHER,
             settings -> Arrays.asList(
-                    "&fSee party chat messages.",
+                    CC.MENU_BAR,
+                    "&7See party chat messages.",
                     "",
-                    " " + LoreHelper.enabledOrDisabled(settings.isPartyMessagesEnabled()),
+                    LoreHelper.displayEnabled(settings.isPartyMessagesEnabled()),
                     "",
-                    "&aClick to change!"
+                    "&aClick to toggle.",
+                    CC.MENU_BAR
             )
     ),
 
     PARTY_INVITES(11, "&6&lToggle Party Invites", Material.NAME_TAG,
             settings -> Arrays.asList(
-                    "&fReceive party invites.",
+                    CC.MENU_BAR,
+                    "&7Receive party invites.",
                     "",
-                    " " + LoreHelper.enabledOrDisabled(settings.isPartyInvitesEnabled()),
+                    LoreHelper.displayEnabled(settings.isPartyInvitesEnabled()),
                     "",
-                    "&aClick to change!"
+                    "&aClick to toggle.",
+                    CC.MENU_BAR
             )
     ),
 
     SIDEBAR_VISIBILITY(12, "&6&lSidebar Visibility", Material.CARPET, 5,
             settings -> Arrays.asList(
-                    "&fSee the scoreboard.",
+                    CC.MENU_BAR,
+                    "&7See the scoreboard.",
                     "",
-                    " " + LoreHelper.shownOrHidden(settings.isScoreboardEnabled()),
+                    LoreHelper.displayShown(settings.isScoreboardEnabled()),
                     "",
-                    "&aClick to change!"
+                    "&aClick to toggle.",
+                    CC.MENU_BAR
             )
     ),
 
     TAB_VISIBILITY(13, "&6&lTablist Visibility", Material.ITEM_FRAME,
             settings -> Arrays.asList(
-                    "&fSee the tablist.",
+                    CC.MENU_BAR,
+                    "&7See the tablist.",
                     "",
-                    " " + LoreHelper.shownOrHidden(settings.isTablistEnabled()),
+                    LoreHelper.displayShown(settings.isTablistEnabled()),
                     "",
-                    "&aClick to change!"
+                    "&aClick to toggle.",
+                    CC.MENU_BAR
             )
     ),
 
     WORLD_TIME(14, "&6&lWorld time", Material.WATCH, settings -> Arrays.asList(
-            "&fChange your world time.",
+            CC.MENU_BAR,
+            "&7Change your world time.",
             "",
             formatTime("Default", settings.isDefaultTime(), "&a&l"),
             formatTime("Day", settings.isDayTime(), "&e&l"),
             formatTime("Sunset", settings.isSunsetTime(), "&6&l"),
             formatTime("Night", settings.isNightTime(), "&4&l"),
             "",
-            "&aClick to change!"
+            "&aClick to toggle.",
+            CC.MENU_BAR
     )),
 
     SCOREBOARD_LINES(19, "&6&lShow Scoreboard Lines", Material.STRING,
             settings -> Arrays.asList(
-                    "&fShow scoreboard lines.",
+                    CC.MENU_BAR,
+                    "&7Show scoreboard lines.",
                     "",
-                    " " + LoreHelper.shownOrHidden(settings.isShowScoreboardLines()),
+                    LoreHelper.displayShown(settings.isShowScoreboardLines()),
                     "",
-                    "&aClick to change!"
+                    "&aClick to toggle.",
+                    CC.MENU_BAR
             )
     ),
 
     PROFANITY_FILTER(20, "&6&lProfanity Filter", Material.ROTTEN_FLESH,
             settings -> Arrays.asList(
-                    "&fHide rude and offensive words.",
+                    CC.MENU_BAR,
+                    "&7Hide rude and offensive words.",
                     "",
-                    " " + LoreHelper.enabledOrDisabled(settings.isProfanityFilterEnabled()),
+                    LoreHelper.displayEnabled(settings.isProfanityFilterEnabled()),
                     "",
-                    "&aClick to change!"
+                    "&aClick to toggle.",
+                    CC.MENU_BAR
             )
     ),
 
     DUEL_REQUESTS(21, "&6&lDuel Requests", Material.DIAMOND_SWORD,
             settings -> Arrays.asList(
-                    "&fReceive duel requests.",
+                    CC.MENU_BAR,
+                    "&7Receive duel requests.",
                     "",
-                    " " + LoreHelper.enabledOrDisabled(settings.isReceiveDuelRequestsEnabled()),
+                    LoreHelper.displayEnabled(settings.isReceiveDuelRequestsEnabled()),
                     "",
-                    "&aClick to change!"
+                    "&aClick to toggle.",
+                    CC.MENU_BAR
             )
     ),
 
     MATCH_SETTINGS(16, "&6&lMatch Settings", Material.BOOK,
             settings -> Arrays.asList(
-                    "&fAdjust your match settings.",
+                    CC.MENU_BAR,
+                    "&7Adjust your match settings.",
                     "",
-                    "&aClick to view!"
+                    "&aClick to view.",
+                    CC.MENU_BAR
             )
     ),
 
     COSMETICS(25, "&6&lCosmetics", Material.NETHER_STAR,
             settings -> Arrays.asList(
-                    "&fCustomize your cosmetics.",
+                    CC.MENU_BAR,
+                    "&7Customize your cosmetics.",
                     "",
-                    "&aClick to view!"
+                    "&aClick to view.",
+                    CC.MENU_BAR
             )
     ),
 
     LOBBY_MUSIC(34, "&6&lLobby Music", Material.JUKEBOX,
             settings -> Arrays.asList(
-                    "&fCustomize your lobby music.",
+                    CC.MENU_BAR,
+                    "&7Customize your lobby music.",
                     "",
-                    "&aClick to customize!"
+                    "&aClick to view.",
+                    CC.MENU_BAR
             )
     ),
 

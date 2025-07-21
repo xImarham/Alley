@@ -3,6 +3,7 @@ package dev.revere.alley.feature.layout.menu.button.editor;
 import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.feature.layout.data.LayoutData;
 import dev.revere.alley.tool.item.ItemBuilder;
+import dev.revere.alley.util.chat.CC;
 import lombok.AllArgsConstructor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -23,9 +24,11 @@ public class LayoutDeleteButton extends Button {
                 .name("&c&lDelete Layout")
                 .durability(1)
                 .lore(
+                        CC.MENU_BAR,
                         "&7Warning: Permanent!",
                         "",
-                        "&aClick to delete!"
+                        "&aClick to delete.",
+                        CC.MENU_BAR
                 )
                 .hideMeta()
                 .build();
