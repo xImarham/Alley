@@ -7,6 +7,7 @@ import dev.revere.alley.plugin.annotation.Service;
 import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.tool.item.ItemBuilder;
+import dev.revere.alley.tool.reflection.utility.ReflectionUtility;
 import lombok.Getter;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -69,6 +70,7 @@ public class HotbarService implements IHotbarService {
             }
 
             itemStack.setDurability((short) item.getHotbarItems().getDurability());
+            itemStack = ReflectionUtility.setUnbreakable(itemStack, true);
             player.getInventory().setItem(item.getSlot(), itemStack);
         }
 
