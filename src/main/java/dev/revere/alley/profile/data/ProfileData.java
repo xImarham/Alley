@@ -215,4 +215,13 @@ public class ProfileData {
     public void incrementRankedLosses() {
         this.rankedLosses++;
     }
+
+    /**
+     * Increments the player's coins by the specified amount.
+     *
+     * @param amount The amount of coins to add.
+     */
+    public void incrementCoins(int amount) {
+        this.coins += amount;
+    }
 }

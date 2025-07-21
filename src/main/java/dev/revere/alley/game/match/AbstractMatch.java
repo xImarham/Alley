@@ -25,6 +25,7 @@ import dev.revere.alley.game.match.data.impl.MatchDataSoloImpl;
 import dev.revere.alley.game.match.enums.EnumMatchState;
 import dev.revere.alley.game.match.impl.MatchRoundsImpl;
 import dev.revere.alley.game.match.player.GamePlayer;
+import dev.revere.alley.game.match.player.data.MatchGamePlayerData;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.game.match.runnable.MatchRunnable;
@@ -1209,5 +1210,46 @@ public abstract class AbstractMatch {
         profile.setMatch(this);
 
         PlayerUtil.reset(player, false, true);
+    }
+
+    /**
+     * Calculates the coin reward for a player based on their performance in the match.
+     * The calculation is based on kills, deaths, and missed potions.
+     *
+     * @param player The player to calculate the coin reward for.
+     */
+    public void calculateCoinReward(Player player) {
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+        Profile profile = profileService.getProfile(player.getUniqueId());
+
+        MatchGamePlayerData data = this.getGamePlayer(player).getData();
+        int kills = data.getKills();
+        int deaths = data.getDeaths();
+        int missedPotions = data.getMissedPotions();
+
+        double score = 0;
+
+        score += kills * 15;
+        score -= deaths * 10;
+
+        int excessPotions = Math.max(missedPotions - 20, 0);
+        score -= excessPotions * 1.5;
+
+        int performanceScore = (int) Math.max(0, Math.min(100, score));
+        profile.getProfileData().incrementCoins(performanceScore);
+    }
+
+    /**
+     * Sends a reward message to the player after the match.
+     * This message includes the number of coins earned.
+     *
+     * @param player The player to send the reward message to.
+     */
+    public void sendRewardMessage(Player player) {
+        IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
+        Profile profile = profileService.getProfile(player.getUniqueId());
+        int coins = profile.getProfileData().getCoins();
+
+        player.sendMessage(CC.translate(" &7(&a+&6" + coins + "&f&7)"));
     }
 }
