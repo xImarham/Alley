@@ -1,9 +1,10 @@
 package dev.revere.alley.feature.level;
 
 import dev.revere.alley.config.IConfigService;
+import dev.revere.alley.feature.level.data.LevelData;
 import dev.revere.alley.plugin.AlleyContext;
 import dev.revere.alley.plugin.annotation.Service;
-import dev.revere.alley.feature.level.data.LevelData;
+import dev.revere.alley.util.visual.ProgressBarUtil;
 import lombok.Getter;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
@@ -12,6 +13,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -62,6 +64,8 @@ public class LevelService implements ILevelService {
             LevelData level = new LevelData(key, displayName, material, durability, minElo, maxElo);
             this.levels.add(level);
         }
+
+        this.levels.sort(Comparator.comparingInt(LevelData::getMinElo));
     }
 
     @Override
@@ -99,10 +103,27 @@ public class LevelService implements ILevelService {
 
     @Override
     public LevelData getLevel(int elo) {
-        return this.levels.stream()
-                .filter(tier -> elo >= tier.getMinElo() && elo <= tier.getMaxElo())
-                .findFirst()
-                .orElse(null);
+        if (this.levels.isEmpty()) {
+            return null;
+        }
+
+        for (LevelData level : this.levels) {
+            if (elo >= level.getMinElo() && elo <= level.getMaxElo()) {
+                return level;
+            }
+        }
+
+        LevelData lowestLevel = this.levels.get(0);
+        if (elo < lowestLevel.getMinElo()) {
+            return lowestLevel;
+        }
+
+        LevelData highestLevel = this.levels.get(this.levels.size() - 1);
+        if (elo > highestLevel.getMaxElo()) {
+            return highestLevel;
+        }
+
+        return null;
     }
 
     @Override
@@ -111,5 +132,75 @@ public class LevelService implements ILevelService {
                 .filter(tier -> tier.getName().equalsIgnoreCase(name))
                 .findFirst()
                 .orElse(null);
+    }
+
+    /**
+     * Helper method to determine the total ELO span for a given level's progression.
+     * This is the ELO needed to get from the start of the current level to the start of the next one.
+     */
+    private int getEloRequiredForLevel(LevelData level) {
+        int currentLevelIndex = this.levels.indexOf(level);
+        int minElo = level.getMinElo();
+        int maxEloForSpan;
+
+        if (currentLevelIndex != -1 && currentLevelIndex < this.levels.size() - 1) {
+            LevelData nextLevel = this.levels.get(currentLevelIndex + 1);
+            maxEloForSpan = nextLevel.getMinElo();
+        } else {
+            maxEloForSpan = level.getMaxElo();
+        }
+        return maxEloForSpan - minElo;
+    }
+
+    @Override
+    public String getProgressBar(int elo) {
+        LevelData level = this.getLevel(elo);
+        if (level == null) {
+            return "";
+        }
+
+        int eloForNextLevel = getEloRequiredForLevel(level);
+        int currentProgress = elo - level.getMinElo();
+
+        if (currentProgress < 0) {
+            currentProgress = 0;
+        }
+
+        if (eloForNextLevel <= 0 || currentProgress >= eloForNextLevel) {
+            return ProgressBarUtil.generate(11, 12, 8, "■");
+        }
+
+        return ProgressBarUtil.generate(currentProgress, eloForNextLevel, 8, "■");
+    }
+
+
+    @Override
+    public String getProgressDetails(int elo) {
+        LevelData level = this.getLevel(elo);
+        if (level == null) {
+            return "0%";
+        }
+
+        int eloSpanForLevel = getEloRequiredForLevel(level);
+
+        if (eloSpanForLevel <= 0) {
+            return "99%";
+        }
+
+        int currentProgress = elo - level.getMinElo();
+
+        if (currentProgress < 0) {
+            currentProgress = 0;
+        }
+
+        double percentage = ((double) currentProgress / eloSpanForLevel) * 100;
+
+        int finalPercentage = (int) Math.floor(percentage);
+
+        if (finalPercentage >= 100) {
+            return "99%";
+        }
+
+        return finalPercentage + "%";
     }
 }

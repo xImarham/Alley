@@ -39,7 +39,7 @@ public class HeliumCoreImpl implements ICore {
     }
 
     @Override
-    public String getRank(Player player) {
+    public String getRankName(Player player) {
         return this.heliumAPI.getRankName(player.getUniqueId());
     }
 

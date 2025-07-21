@@ -76,8 +76,7 @@ public class LayoutSelectRoleKitMenu extends Menu {
                     .name(this.role.getDisplayName() + " Kit &7(" + this.kit.getDisplayName() + ")")
                     .lore(
                             CC.MENU_BAR,
-                            "",
-                            "&aClick to edit!",
+                            "&aClick to edit.",
                             CC.MENU_BAR
                     )
                     .durability(this.kit.getDurability())

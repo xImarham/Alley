@@ -55,4 +55,20 @@ public interface ILevelService extends IService {
      * @return The matching LevelData, or null if not found.
      */
     LevelData getLevel(String name);
+
+    /**
+     * Generates a visual progress bar for the given elo.
+     *
+     * @param elo the elo to check.
+     * @return The formatted progress bar string.
+     */
+    String getProgressBar(int elo);
+
+    /**
+     * Generates the numerical details for level progression (e.g., 500/1000).
+     *
+     * @param elo the elo to check.
+     * @return The formatted progress details string.
+     */
+    String getProgressDetails(int elo);
 }

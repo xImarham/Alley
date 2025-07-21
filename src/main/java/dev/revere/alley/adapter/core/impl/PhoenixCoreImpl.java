@@ -42,7 +42,7 @@ public class PhoenixCoreImpl implements ICore {
     }
 
     @Override
-    public String getRank(Player player) {
+    public String getRankName(Player player) {
         return this.getProfile(player).getHighestRank().getName();
     }
 

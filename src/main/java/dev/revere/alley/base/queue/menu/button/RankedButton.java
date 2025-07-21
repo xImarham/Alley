@@ -59,10 +59,9 @@ public class RankedButton extends Button {
                     ""
             );
         }
-
         Collections.addAll(lore,
-                " &fPlaying: &6" + this.queue.getQueueFightCount(),
-                " &fQueueing: &6" + this.queue.getProfiles().size(),
+                "&6│ &rPlaying: &6" + this.queue.getQueueFightCount(),
+                "&6│ &rQueueing: &6" + this.queue.getProfiles().size(),
                 "",
                 "&f&lYour ELO: &6" + Alley.getInstance().getService(IProfileService.class).getProfile(player.getUniqueId()).getProfileData().getRankedKitData().get(kit.getName()).getElo(),
                 " &f1. &6NULL &f- &6N/A",

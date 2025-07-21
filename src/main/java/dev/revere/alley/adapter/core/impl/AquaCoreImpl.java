@@ -51,7 +51,7 @@ public class AquaCoreImpl implements ICore {
     }
 
     @Override
-    public String getRank(Player player) {
+    public String getRankName(Player player) {
         return this.aquaCoreAPI.getPlayerRank(player.getUniqueId()).getName();
     }
 

@@ -30,6 +30,7 @@ public class Symbol {
     public final String GEAR;
     public final String CROSSED_SWORDS;
     public final String VERTICAL_BAR;
+    public final String VERTICAL_BAR_THIN;
 
     static {
         SINGULAR_ARROW_R = "➤";
@@ -53,5 +54,6 @@ public class Symbol {
         GEAR = "⚙";
         CROSSED_SWORDS = "⚔";
         VERTICAL_BAR = "│";
+        VERTICAL_BAR_THIN = "┃";
     }
 }
