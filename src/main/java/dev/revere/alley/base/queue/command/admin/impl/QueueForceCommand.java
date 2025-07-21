@@ -52,7 +52,7 @@ public class QueueForceCommand extends BaseCommand {
         for (Queue queue : this.plugin.getService(IQueueService.class).getQueues()) {
             if (queue.getKit().equals(kit) && queue.isRanked() == ranked) {
                 queue.addPlayer(target, queue.isRanked() ? profile.getProfileData().getRankedKitData().get(queue.getKit().getName()).getElo() : 0);
-                PlayerUtil.reset(target, false);
+                PlayerUtil.reset(target, false, true);
                 SoundUtil.playBanHammer(target);
                 this.plugin.getService(IHotbarService.class).applyHotbarItems(target);
                 player.sendMessage(CC.translate("&aYou've added &6" + target.getName() + " &ato the &6" + queue.getQueueType() + " &aqueue."));

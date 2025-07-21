@@ -97,7 +97,7 @@ public class DefaultFFAMatchImpl extends AbstractFFAMatch {
 
         this.plugin.getService(IVisibilityService.class).updateVisibility(player);
 
-        PlayerUtil.reset(player, false);
+        PlayerUtil.reset(player, false, true);
         this.plugin.getService(ISpawnService.class).teleportToSpawn(player);
         this.plugin.getService(IHotbarService.class).applyHotbarItems(player);
     }
@@ -120,7 +120,7 @@ public class DefaultFFAMatchImpl extends AbstractFFAMatch {
         this.plugin.getService(IVisibilityService.class).updateVisibility(player);
         this.plugin.getService(IKnockbackAdapter.class).getKnockbackImplementation().applyKnockback(player.getPlayer(), getKit().getKnockbackProfile());
 
-        PlayerUtil.reset(player, true);
+        PlayerUtil.reset(player, true, true);
 
         AbstractArena arena = this.getArena();
         player.teleport(arena.getPos1());

@@ -48,7 +48,7 @@ public class MatchCheckpointImpl extends MatchRegularImpl {
 
     @Override
     public void handleRespawn(Player player) {
-        PlayerUtil.reset(player, true);
+        PlayerUtil.reset(player, true, true);
 
         MatchGamePlayerImpl gamePlayer = this.getGamePlayer(player);
 

@@ -88,7 +88,7 @@ public class UnrankedButton extends Button {
         this.queue.addPlayer(player, this.queue.isRanked() ? profile.getProfileData().getRankedKitData().get(this.queue.getKit().getName()).getElo() : 0);
         this.playNeutral(player);
 
-        PlayerUtil.reset(player, false);
+        PlayerUtil.reset(player, false, true);
         player.closeInventory();
     }
 }

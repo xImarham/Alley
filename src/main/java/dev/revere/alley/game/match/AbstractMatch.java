@@ -8,6 +8,7 @@ import dev.revere.alley.base.combat.ICombatService;
 import dev.revere.alley.base.hotbar.IHotbarService;
 import dev.revere.alley.base.kit.Kit;
 import dev.revere.alley.base.kit.setting.impl.mode.*;
+import dev.revere.alley.base.kit.setting.impl.visual.KitSettingHealthBarImpl;
 import dev.revere.alley.base.nametag.INametagService;
 import dev.revere.alley.base.queue.Queue;
 import dev.revere.alley.base.spawn.ISpawnService;
@@ -44,15 +45,15 @@ import dev.revere.alley.util.TimeUtil;
 import dev.revere.alley.util.chat.CC;
 import lombok.Getter;
 import lombok.Setter;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Sound;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.scoreboard.DisplaySlot;
+import org.bukkit.scoreboard.Objective;
+import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.util.Vector;
 
 import java.util.*;
@@ -143,6 +144,7 @@ public abstract class AbstractMatch {
 
         this.getParticipants().forEach(this::finalizeParticipant);
         this.updateParticipantNametags();
+        this.cleanupHealthDisplay();
 
         Alley.getInstance().getService(IMatchService.class).removeMatch(this);
         this.runnable.cancel();
@@ -203,6 +205,7 @@ public abstract class AbstractMatch {
                 visibilityService.updateVisibility(player);
                 knockbackAdapter.getKnockbackImplementation().applyKnockback(player, getKit().getKnockbackProfile());
                 this.setupPlayer(player);
+                this.registerHealthObjectiveForPlayer(player);
             }
         });
     }
@@ -238,6 +241,52 @@ public abstract class AbstractMatch {
     }
 
     /**
+     * Registers the below-name health objective for a player if the setting is enabled.
+     *
+     * @param player The player to register the objective for.
+     */
+    private void registerHealthObjectiveForPlayer(Player player) {
+        if (!this.getKit().isSettingEnabled(KitSettingHealthBarImpl.class)) {
+            return;
+        }
+
+        Scoreboard scoreboard = player.getScoreboard();
+        if (scoreboard.equals(this.plugin.getServer().getScoreboardManager().getMainScoreboard())) {
+            scoreboard = this.plugin.getServer().getScoreboardManager().getNewScoreboard();
+            player.setScoreboard(scoreboard);
+        }
+
+        Objective objective = scoreboard.getObjective("showhealth");
+        if (objective == null) {
+            objective = scoreboard.registerNewObjective("showhealth", "health");
+        }
+
+        objective.setDisplaySlot(DisplaySlot.BELOW_NAME);
+        objective.setDisplayName(ChatColor.RED + "\u2764");
+    }
+
+    /**
+     * Cleans up and unregisters the health objective from all match participants.
+     */
+    private void cleanupHealthDisplay() {
+        if (!this.getKit().isSettingEnabled(KitSettingHealthBarImpl.class)) {
+            return;
+        }
+
+        getParticipants().stream()
+                .flatMap(participant -> participant.getPlayers().stream())
+                .map(gamePlayer -> this.plugin.getServer().getPlayer(gamePlayer.getUuid()))
+                .filter(Objects::nonNull)
+                .forEach(player -> {
+                    Scoreboard scoreboard = player.getScoreboard();
+                    Objective objective = scoreboard.getObjective("showhealth");
+                    if (objective != null) {
+                        objective.unregister();
+                    }
+                });
+    }
+
+    /**
      * Sets up a player for the match.
      *
      * @param player The player to set up.
@@ -246,7 +295,8 @@ public abstract class AbstractMatch {
         MatchGamePlayerImpl gamePlayer = getGamePlayer(player);
         if (gamePlayer != null) {
             gamePlayer.setDead(false);
-            PlayerUtil.reset(player, true);
+            PlayerUtil.reset(player, true, false);
+            player.setHealth(player.getMaxHealth());
             this.giveLoadout(player, this.kit);
         }
     }
@@ -309,7 +359,7 @@ public abstract class AbstractMatch {
         player.setVelocity(new Vector());
 
         if (this.shouldHandleRegularRespawn(player)) {
-            handleRespawn(player);
+            this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> this.handleRespawn(player), 1L);
         }
 
         if (this.canEndRound()) {
@@ -1034,7 +1084,7 @@ public abstract class AbstractMatch {
     private void resetPlayerState(Player player) {
         player.setFireTicks(0);
         player.updateInventory();
-        PlayerUtil.reset(player, false);
+        PlayerUtil.reset(player, false, true);
     }
 
     /**
@@ -1158,6 +1208,6 @@ public abstract class AbstractMatch {
         profile.setState(EnumProfileState.SPECTATING);
         profile.setMatch(this);
 
-        PlayerUtil.reset(player, false);
+        PlayerUtil.reset(player, false, true);
     }
 }

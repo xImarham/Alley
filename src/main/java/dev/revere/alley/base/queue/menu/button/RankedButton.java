@@ -99,7 +99,7 @@ public class RankedButton extends Button {
         }
 
         this.queue.addPlayer(player, this.queue.isRanked() ? profile.getProfileData().getRankedKitData().get(queue.getKit().getName()).getElo() : 0);
-        PlayerUtil.reset(player, false);
+        PlayerUtil.reset(player, false, true);
         player.closeInventory();
         this.playNeutral(player);
         Alley.getInstance().getService(IHotbarService.class).applyHotbarItems(player);

@@ -180,7 +180,7 @@ public class MatchRoundsImpl extends MatchRegularImpl {
 
     @Override
     public void handleRespawn(Player player) {
-        PlayerUtil.reset(player, true);
+        PlayerUtil.reset(player, true, true);
 
         Location spawnLocation = getParticipants().get(0).containsPlayer(player.getUniqueId()) ? this.getArena().getPos1() : this.getArena().getPos2();
         ListenerUtil.teleportAndClearSpawn(player, spawnLocation);

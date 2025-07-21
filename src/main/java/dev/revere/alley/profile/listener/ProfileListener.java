@@ -157,7 +157,7 @@ public class ProfileListener implements Listener {
         player.setWalkSpeed(2 * 0.1F);
         player.getInventory().setHeldItemSlot(0);
 
-        PlayerUtil.reset(player, false);
+        PlayerUtil.reset(player, false, true);
 
         spawnService.teleportToSpawn(player);
         hotbarService.applyHotbarItems(player);

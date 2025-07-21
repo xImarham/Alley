@@ -22,9 +22,11 @@ public class PlayerUtil {
      * @param player         the player to reset.
      * @param closeInventory whether to close the player's inventory after resetting.
      */
-    public void reset(Player player, boolean closeInventory) {
-        player.setHealth(20.0D);
-        player.setSaturation(20.0F);
+    public void reset(Player player, boolean closeInventory, boolean resetHealth) {
+        if (resetHealth) {
+            player.setMaxHealth(20.0D);
+            player.setHealth(player.getMaxHealth());
+        }
         player.setFallDistance(0.0F);
         player.setFoodLevel(20);
         player.setFireTicks(0);
