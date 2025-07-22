@@ -46,7 +46,6 @@ public class ArenaService implements IArenaService {
 
     private final Map<String, List<AbstractArena>> arenasByKit = new ConcurrentHashMap<>();
     private final Map<String, AbstractArena> arenasByName = new ConcurrentHashMap<>();
-    private final List<AbstractArena> standAloneArenas = new ArrayList<>();
 
     private final ThreadLocalRandom random = ThreadLocalRandom.current();
 
@@ -110,7 +109,6 @@ public class ArenaService implements IArenaService {
 
     private void buildCaches() {
         arenasByKit.clear();
-        standAloneArenas.clear();
         arenasByName.clear();
 
         for (Kit kit : kitService.getKits()) {
@@ -120,11 +118,6 @@ public class ArenaService implements IArenaService {
                     .collect(Collectors.toList());
             arenasByKit.put(kit.getName(), kitArenas);
         }
-
-        standAloneArenas.addAll(arenas.stream()
-                .filter(arena -> arena.getType() == EnumArenaType.STANDALONE)
-                .filter(AbstractArena::isEnabled)
-                .collect(Collectors.toList()));
 
         for (AbstractArena arena : arenas) {
             arenasByName.put(arena.getName().toLowerCase(), arena);
@@ -286,8 +279,7 @@ public class ArenaService implements IArenaService {
         copiedArena.setHeightLimit(copiedArena.getPos1().getBlockY() + copiedArena.getHeightLimit());
 
         this.arenaSchematicService.paste(copyLocation, this.arenaSchematicService.getSchematicFile(originalArena.getName()));
-
-        temporaryArenas.add(copiedArena);
+        this.temporaryArenas.add(copiedArena);
         return copiedArena;
     }
 
@@ -315,7 +307,7 @@ public class ArenaService implements IArenaService {
         for (StandAloneArena arena : new ArrayList<>(temporaryArenas)) {
             arena.deleteCopiedArena();
         }
-        temporaryArenas.clear();
+        this.temporaryArenas.clear();
     }
 
     /**
@@ -356,21 +348,37 @@ public class ArenaService implements IArenaService {
 
     @Override
     public void saveArena(AbstractArena arena) {
+        if (arena == null) {
+            return;
+        }
+
         arena.saveArena();
         buildCaches();
     }
 
     @Override
     public void deleteArena(AbstractArena arena) {
+        if (arena == null) {
+            return;
+        }
+
         arena.deleteArena();
         arenas.remove(arena);
         buildCaches();
     }
 
     @Override
+    public void deleteTemporaryArena(StandAloneArena arena) {
+        if (arena == null || !temporaryArenas.contains(arena)) {
+            return;
+        }
+        arena.deleteCopiedArena();
+        this.temporaryArenas.remove(arena);
+    }
+
+    @Override
     public AbstractArena getRandomArena(Kit kit) {
         List<AbstractArena> availableArenas = arenasByKit.get(kit.getName());
-
         if (availableArenas == null || availableArenas.isEmpty()) {
             return null;
         }
@@ -401,19 +409,6 @@ public class ArenaService implements IArenaService {
             this.arenas.add(arena);
             this.buildCaches();
         }
-    }
-
-    /**
-     * Get a random arena of type StandAlone
-     *
-     * @return the arena
-     */
-    @Override
-    public AbstractArena getRandomStandAloneArena() {
-        if (standAloneArenas.isEmpty()) {
-            return null;
-        }
-        return standAloneArenas.get(random.nextInt(standAloneArenas.size()));
     }
 
     /**

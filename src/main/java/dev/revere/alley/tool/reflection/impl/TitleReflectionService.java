@@ -41,4 +41,15 @@ public class TitleReflectionService implements IReflection {
         this.sendPacket(player, titlePacket);
         this.sendPacket(player, subtitlePacket);
     }
+
+    /**
+     * Send a title to a player with default fade in, stay, and fade out times.
+     *
+     * @param player   the player to send the title to
+     * @param title    the title to send
+     * @param subtitle the subtitle to send
+     */
+    public void sendTitle(Player player, String title, String subtitle) {
+        this.sendTitle(player, title, subtitle, 10, 70, 20);
+    }
 }

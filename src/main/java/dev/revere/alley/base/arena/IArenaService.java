@@ -38,6 +38,8 @@ public interface IArenaService extends IService {
      */
     AbstractArena getArenaByName(String name);
 
+    void deleteTemporaryArena(StandAloneArena arena);
+
     /**
      * Selects a random, enabled arena that is compatible with the given kit.
      * If the selected arena is a StandAloneArena, a temporary copy is created and returned.
@@ -45,12 +47,6 @@ public interface IArenaService extends IService {
      * @return A suitable AbstractArena, or null if none are available.
      */
     AbstractArena getRandomArena(Kit kit);
-
-    /**
-     * Selects a random, enabled arena of the StandAlone type.
-     * @return A StandAloneArena, or null if none are available.
-     */
-    AbstractArena getRandomStandAloneArena();
 
     /**
      * Saves an arena's data to the configuration file.

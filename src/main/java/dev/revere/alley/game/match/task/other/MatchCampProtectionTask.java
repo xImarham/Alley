@@ -1,0 +1,92 @@
+package dev.revere.alley.game.match.task.other;
+
+import dev.revere.alley.Alley;
+import dev.revere.alley.base.arena.impl.StandAloneArena;
+import dev.revere.alley.game.match.AbstractMatch;
+import dev.revere.alley.game.match.enums.EnumMatchState;
+import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
+import dev.revere.alley.profile.IProfileService;
+import dev.revere.alley.profile.Profile;
+import dev.revere.alley.tool.reflection.IReflectionRepository;
+import dev.revere.alley.tool.reflection.impl.TitleReflectionService;
+import org.bukkit.GameMode;
+import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
+
+/**
+ * @author Remi
+ * @project alley-practice
+ * @date 22/07/2025
+ */
+public class MatchCampProtectionTask extends BukkitRunnable {
+    private final TitleReflectionService titleReflectionService = Alley.getInstance().getService(IReflectionRepository.class).getReflectionService(TitleReflectionService.class);
+
+    private final Player player;
+    private int ticks;
+
+    private static final int INITIAL_GRACE_PERIOD_SECONDS = 3;
+    private static final int COUNTDOWN_DURATION_SECONDS = 3;
+
+    /**
+     * Constructor for the MatchCampProtectionTask class.
+     *
+     * @param player The player to apply camp protection to.
+     */
+    public MatchCampProtectionTask(Player player) {
+        this.player = player;
+        this.ticks = 0;
+    }
+
+    @Override
+    public void run() {
+        if (this.player == null || !this.player.isOnline()) {
+            this.cancel();
+            return;
+        }
+
+        Profile profile = Alley.getInstance().getService(IProfileService.class).getProfile(this.player.getUniqueId());
+        AbstractMatch match = profile.getMatch();
+        if (match == null) {
+            this.cancel();
+            return;
+        }
+
+        if (match.getState() == EnumMatchState.ENDING_MATCH) {
+            this.cancel();
+            return;
+        }
+
+        StandAloneArena matchArena = (StandAloneArena) match.getArena();
+        int CAMP_Y_LEVEL = matchArena.getHeightLimit();
+
+        MatchGamePlayerImpl gamePlayer = match.getGamePlayer(player);
+        if (this.player.getLocation().getY() <= CAMP_Y_LEVEL + 3
+                || gamePlayer.isDead()
+                || gamePlayer.isEliminated()
+                || this.player.getGameMode() == GameMode.CREATIVE
+                || this.player.getGameMode() == GameMode.SPECTATOR) {
+            ticks = 0;
+            return;
+        }
+
+        this.ticks++;
+        int damageStartPeriod = INITIAL_GRACE_PERIOD_SECONDS + COUNTDOWN_DURATION_SECONDS;
+
+        if (ticks <= damageStartPeriod) {
+            int countdownValue = damageStartPeriod - ticks + 1;
+
+            this.titleReflectionService.sendTitle(
+                    this.player,
+                    "&cCAMP PROTECTION",
+                    "&fYou will take damage in " + countdownValue + " seconds!"
+            );
+        } else {
+            this.player.damage(4.0);
+            this.titleReflectionService.sendTitle(
+                    this.player,
+                    "&cTAKING DAMAGE!",
+                    "&fMove down!"
+            );
+        }
+    }
+}

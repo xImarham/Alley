@@ -92,6 +92,7 @@ public class MatchService implements IMatchService {
         matchFactoryRegistry.put(KitSettingBedImpl.class, MatchBedImpl::new);
         matchFactoryRegistry.put(KitSettingLivesImpl.class, MatchLivesImpl::new);
         matchFactoryRegistry.put(KitSettingCheckpointImpl.class, MatchCheckpointImpl::new);
+        matchFactoryRegistry.put(KitSettingHideAndSeekImpl.class, MatchHideAndSeekImpl::new);
         matchFactoryRegistry.put(KitSettingStickFightImpl.class, (q, k, ar, r, pA, pB) -> new MatchRoundsImpl(q, k, ar, r, pA, pB, 5));
         matchFactoryRegistry.put(KitSettingRoundsImpl.class, (q, k, ar, r, pA, pB) -> new MatchRoundsImpl(q, k, ar, r, pA, pB, 3));
     }

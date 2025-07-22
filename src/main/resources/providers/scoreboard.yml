@@ -90,6 +90,22 @@ scoreboard:
           - "&6&l│ &rOpponent: &6{opponent}"
           - "&6&l│ &rDuration: &6{duration}"
           - "&6&l│ &rPing: &a{player-ping}&f ┃ &c{opponent-ping}ms"
+        hideandseek-match:
+          hiding:
+            - "{sidebar}"
+            - "&6&lHide & Seek"
+            - "&6&l│ &rRole: {player-role}"
+            - "&6&l│ &rSeekers release in: &e{time-left}"
+            - ""
+            - "&6&lHiders Left: &a{hiders-alive}&f/&a{hiders-total}"
+          seeking:
+            - "{sidebar}"
+            - "&6&lHide & Seek"
+            - "&6&l│ &rRole: {player-role}"
+            - "&6&l│ &rTime Left: &e{time-left}"
+            - ""
+            - "&6&lHiders Left: &a{hiders-alive}&f/&a{hiders-total}"
+            - "&6&lSeekers Left: &c{seekers-alive}&f/&c{seekers-total}"
         boxing-match:
           - "{sidebar}"
           - "&6&lMatch"
@@ -169,6 +185,22 @@ scoreboard:
           - "&6&lTeams"
           - "&6&l│ &rYours: &a{your-alive}&f/&a{your-players}"
           - "&6&l│ &rTheirs: &c{opponent-alive}&f/&c{opponent-players}"
+        hideandseek-match:
+          hiding:
+            - "{sidebar}"
+            - "&6&lHide & Seek"
+            - "&6&l│ &rRole: {player-role}"
+            - "&6&l│ &rSeekers release in: &e{time-left}"
+            - ""
+            - "&6&lHiders Left: &a{hiders-alive}&f/&a{hiders-total}"
+          seeking:
+            - "{sidebar}"
+            - "&6&lHide & Seek"
+            - "&6&l│ &rRole: {player-role}"
+            - "&6&l│ &rTime Left: &e{time-left}"
+            - ""
+            - "&6&lHiders Left: &a{hiders-alive}&f/&a{hiders-total}"
+            - "&6&lSeekers Left: &c{seekers-alive}&f/&c{seekers-total}"
         boxing-match:
           - "{sidebar}"
           - "&6&lMatch"

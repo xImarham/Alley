@@ -1,4 +1,4 @@
-package dev.revere.alley.game.match.runnable.other;
+package dev.revere.alley.game.match.task.other;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.game.match.AbstractMatch;
@@ -6,7 +6,6 @@ import dev.revere.alley.game.match.enums.EnumMatchState;
 import dev.revere.alley.tool.reflection.IReflectionRepository;
 import dev.revere.alley.tool.reflection.impl.TitleReflectionService;
 import dev.revere.alley.util.chat.CC;
-import dev.revere.alley.util.chat.Symbol;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -15,19 +14,19 @@ import org.bukkit.scheduler.BukkitRunnable;
  * @project Alley
  * @since 23/05/2025
  */
-public class MatchRespawnRunnable extends BukkitRunnable {
+public class MatchRespawnTask extends BukkitRunnable {
     protected final Player player;
     protected final AbstractMatch match;
     private int count;
 
     /**
-     * Constructor for the MatchRespawnRunnable class.
+     * Constructor for the MatchRespawnTask class.
      *
      * @param player The player to respawn.
      * @param match  The match instance.
      * @param count  The countdown time in seconds.
      */
-    public MatchRespawnRunnable(Player player, AbstractMatch match, int count) {
+    public MatchRespawnTask(Player player, AbstractMatch match, int count) {
         this.player = player;
         this.match = match;
         this.count = count;

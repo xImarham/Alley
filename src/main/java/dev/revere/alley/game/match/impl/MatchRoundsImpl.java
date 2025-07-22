@@ -7,7 +7,6 @@ import dev.revere.alley.base.kit.Kit;
 import dev.revere.alley.base.kit.setting.impl.mode.KitSettingBridgesImpl;
 import dev.revere.alley.base.kit.setting.impl.mode.KitSettingStickFightImpl;
 import dev.revere.alley.base.queue.Queue;
-import dev.revere.alley.base.visibility.IVisibilityService;
 import dev.revere.alley.config.IConfigService;
 import dev.revere.alley.game.match.enums.EnumMatchState;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;

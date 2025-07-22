@@ -169,7 +169,7 @@ public class Logger {
      *
      * @param action   the action
      * @param task     the task to measure
-     * @param runnable the runnable to run
+     * @param runnable the task to run
      */
     public void logTimeWithAction(String action, String task, Runnable runnable) {
         long start = System.currentTimeMillis();

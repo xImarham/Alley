@@ -106,8 +106,8 @@ public class MatchListener implements Listener {
             }
 
             if (MatchUtility.isBeyondBounds(event.getTo(), profile)) {
-                player.teleport(event.getFrom());
-                player.sendMessage(CC.translate("&cYou cannot leave the arena."));
+                // player.teleport(event.getFrom());
+                // player.sendMessage(CC.translate("&cYou cannot leave the arena."));
             }
         }
     }

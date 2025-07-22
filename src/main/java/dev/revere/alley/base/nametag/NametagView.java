@@ -13,10 +13,16 @@ import java.util.Objects;
 public final class NametagView {
     private final String prefix;
     private final String suffix;
+    private final NametagVisibility visibility;
 
     public NametagView(String prefix, String suffix) {
+        this(prefix, suffix, NametagVisibility.ALWAYS);
+    }
+
+    public NametagView(String prefix, String suffix, NametagVisibility visibility) {
         this.prefix = prefix;
         this.suffix = suffix;
+        this.visibility = visibility;
     }
 
     @Override
@@ -24,11 +30,11 @@ public final class NametagView {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         NametagView that = (NametagView) o;
-        return Objects.equals(prefix, that.prefix) && Objects.equals(suffix, that.suffix);
+        return Objects.equals(prefix, that.prefix) && Objects.equals(suffix, that.suffix) && visibility == that.visibility;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(prefix, suffix);
+        return Objects.hash(prefix, suffix, visibility);
     }
 }

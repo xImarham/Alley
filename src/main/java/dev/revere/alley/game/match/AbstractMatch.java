@@ -3,10 +3,12 @@ package dev.revere.alley.game.match;
 import dev.revere.alley.Alley;
 import dev.revere.alley.adapter.knockback.IKnockbackAdapter;
 import dev.revere.alley.base.arena.AbstractArena;
+import dev.revere.alley.base.arena.IArenaService;
 import dev.revere.alley.base.arena.impl.StandAloneArena;
 import dev.revere.alley.base.combat.ICombatService;
 import dev.revere.alley.base.hotbar.IHotbarService;
 import dev.revere.alley.base.kit.Kit;
+import dev.revere.alley.base.kit.setting.impl.mechanic.KitSettingCampProtectionImpl;
 import dev.revere.alley.base.kit.setting.impl.mode.*;
 import dev.revere.alley.base.kit.setting.impl.visual.KitSettingHealthBarImpl;
 import dev.revere.alley.base.nametag.INametagService;
@@ -28,8 +30,10 @@ import dev.revere.alley.game.match.player.GamePlayer;
 import dev.revere.alley.game.match.player.data.MatchGamePlayerData;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
-import dev.revere.alley.game.match.runnable.MatchRunnable;
-import dev.revere.alley.game.match.runnable.other.MatchRespawnRunnable;
+import dev.revere.alley.game.match.task.MatchTask;
+import dev.revere.alley.game.match.task.mode.PlatformDecayTask;
+import dev.revere.alley.game.match.task.other.MatchCampProtectionTask;
+import dev.revere.alley.game.match.task.other.MatchRespawnTask;
 import dev.revere.alley.game.match.snapshot.ISnapshotRepository;
 import dev.revere.alley.game.match.snapshot.Snapshot;
 import dev.revere.alley.profile.IProfileService;
@@ -84,7 +88,7 @@ public abstract class AbstractMatch {
     private boolean teamMatch;
     private boolean affectStatistics = true;
 
-    private MatchRunnable runnable;
+    private MatchTask runnable;
     private EnumMatchState state;
     private long startTime;
     private long endTime;
@@ -126,17 +130,18 @@ public abstract class AbstractMatch {
     public abstract void handleDeathItemDrop(Player player, PlayerDeathEvent event);
 
     /**
-     * Starts the match by setting the state and updating player profiles and running the match runnable.
+     * Starts the match by setting the state and updating player profiles and running the match task.
      */
     public void startMatch() {
-        this.activateArenaIfStandalone();
         this.sendPlayerVersusPlayerMessage();
 
         this.state = EnumMatchState.STARTING;
-        this.runnable = new MatchRunnable(this);
-        this.runnable.runTaskTimer(this.plugin, 0L, 20L);
+
+        this.handleMatchTasks();
+
         this.getParticipants().forEach(this::initializeParticipant);
         this.updateParticipantNametags();
+
         this.startTime = System.currentTimeMillis();
     }
 
@@ -145,33 +150,20 @@ public abstract class AbstractMatch {
 
         this.getParticipants().forEach(this::finalizeParticipant);
         this.updateParticipantNametags();
+
+        this.cleanupTasks();
         this.cleanupHealthDisplay();
 
         Alley.getInstance().getService(IMatchService.class).removeMatch(this);
-        this.runnable.cancel();
-
-        this.deactivateArenaIfStandalone();
-    }
-
-    private void activateArenaIfStandalone() {
-        if (this.arena instanceof StandAloneArena) {
-            StandAloneArena standAloneArena = (StandAloneArena) this.arena;
-            standAloneArena.setActive(true);
-        }
-    }
-
-    private void deactivateArenaIfStandalone() {
-        if (this.arena instanceof StandAloneArena) {
-            StandAloneArena standAloneArena = (StandAloneArena) this.arena;
-            standAloneArena.setActive(false);
-        }
     }
 
     private void deleteArenaCopyIfStandalone() {
-        if (this.arena instanceof StandAloneArena) {
-            StandAloneArena standAloneArena = (StandAloneArena) this.arena;
-            standAloneArena.deleteCopiedArena();
+        if (!(this.arena instanceof StandAloneArena)) {
+            return;
         }
+
+        IArenaService arenaService = Alley.getInstance().getService(IArenaService.class);
+        arenaService.deleteTemporaryArena((StandAloneArena) this.arena);
     }
 
     /**
@@ -201,13 +193,18 @@ public abstract class AbstractMatch {
 
         gameParticipant.getPlayers().forEach(gamePlayer -> {
             Player player = this.plugin.getServer().getPlayer(gamePlayer.getUuid());
-            if (player != null) {
-                this.updatePlayerProfileForMatch(player);
-                visibilityService.updateVisibility(player);
-                knockbackAdapter.getKnockbackImplementation().applyKnockback(player, getKit().getKnockbackProfile());
-                this.setupPlayer(player);
-                this.registerHealthObjectiveForPlayer(player);
+            if (player == null) {
+                return;
             }
+
+            this.updatePlayerProfileForMatch(player);
+            this.setupPlayer(player);
+
+            visibilityService.updateVisibility(player);
+            knockbackAdapter.getKnockbackImplementation().applyKnockback(player, getKit().getKnockbackProfile());
+
+            this.registerHealthObjectiveForPlayer(player);
+            this.registerCampProtectionTask(player);
         });
     }
 
@@ -267,6 +264,20 @@ public abstract class AbstractMatch {
     }
 
     /**
+     * Registers a camp protection task for a player if the kit setting is enabled.
+     *
+     * @param player The player to register the task for.
+     */
+    private void registerCampProtectionTask(Player player) {
+        if (!this.getKit().isSettingEnabled(KitSettingCampProtectionImpl.class)) {
+            return;
+        }
+
+        MatchCampProtectionTask campProtectionTask = new MatchCampProtectionTask(player);
+        campProtectionTask.runTaskTimer(this.plugin, 0L, 20L);
+    }
+
+    /**
      * Cleans up and unregisters the health objective from all match participants.
      */
     private void cleanupHealthDisplay() {
@@ -287,6 +298,10 @@ public abstract class AbstractMatch {
                 });
     }
 
+    private void cleanupTasks() {
+        this.runnable.cancel();
+    }
+
     /**
      * Sets up a player for the match.
      *
@@ -294,11 +309,13 @@ public abstract class AbstractMatch {
      */
     public void setupPlayer(Player player) {
         MatchGamePlayerImpl gamePlayer = getGamePlayer(player);
-        if (gamePlayer != null) {
-            gamePlayer.setDead(false);
-            PlayerUtil.reset(player, true, true);
-            this.giveLoadout(player, this.kit);
+        if (gamePlayer == null) {
+            return;
         }
+
+        gamePlayer.setDead(false);
+        PlayerUtil.reset(player, true, true);
+        this.giveLoadout(player, this.kit);
     }
 
     /**
@@ -473,7 +490,7 @@ public abstract class AbstractMatch {
             String finalMessage = messageTemplate.replace("{victim}", victimProfile.getNameColor() + victim.getName() + "&f");
             finalMessage = finalMessage.replace("{killer}", killerProfile.getNameColor() + killer.getName() + "&f");
 
-            this.notifyAll(CC.translate(finalMessage));
+            this.notifyAll(CC.translate("&c&lDEATH! " + finalMessage));
             processKillerStatActions(killer);
         } else {
             handleDefaultDeathMessages(victim, killer, victimProfile);
@@ -482,7 +499,7 @@ public abstract class AbstractMatch {
 
     private void handleDefaultDeathMessages(Player victim, Player killer, Profile victimProfile) {
         if (killer == null) {
-            this.notifyAll("&c" + victimProfile.getFancyName() + " &fdied.");
+            this.notifyAll("&c&lDEATH! &r&c" + victimProfile.getFancyName() + " &fdied.");
         } else {
             processKillerActions(victim, killer, victimProfile);
         }
@@ -499,7 +516,7 @@ public abstract class AbstractMatch {
 
         reflectionRepository.getReflectionService(ActionBarReflectionService.class).sendDeathMessage(killer, victim);
 
-        this.notifyAll("&c" + victimProfile.getNameColor() + victim.getName() + " &fwas slain by &c" + killerProfile.getNameColor() + killer.getName() + "&f.");
+        this.notifyAll("&c&lDEATH! &r&c" + victimProfile.getNameColor() + victim.getName() + " &fwas slain by &c" + killerProfile.getNameColor() + killer.getName() + "&f.");
     }
 
     private void processKillerStatActions(Player killer) {
@@ -743,7 +760,7 @@ public abstract class AbstractMatch {
         Location spawnLocation = this.arena.getCenter();
         ListenerUtil.teleportAndClearSpawn(player, spawnLocation);
 
-        new MatchRespawnRunnable(player, this, 3).runTaskTimer(this.plugin, 0L, 20L);
+        new MatchRespawnTask(player, this, 3).runTaskTimer(this.plugin, 0L, 20L);
     }
 
     /**
@@ -1050,7 +1067,7 @@ public abstract class AbstractMatch {
      * @param player   The player to check.
      * @param location The designated location.
      */
-    private void teleportBackIfMoved(Player player, Location location) {
+    protected void teleportBackIfMoved(Player player, Location location) {
         Location playerLocation = player.getLocation();
 
         double deltaX = Math.abs(playerLocation.getX() - location.getX());
@@ -1184,6 +1201,15 @@ public abstract class AbstractMatch {
 
             String message = CC.translate(prefix + "&6" + participant.getLeader().getUsername() + " &avs &6" + opponent.getLeader().getUsername());
             this.sendMessage(message);
+        }
+    }
+
+    private void handleMatchTasks() {
+        this.runnable = new MatchTask(this);
+        this.runnable.runTaskTimer(this.plugin, 0L, 20L);
+
+        if (this.getKit().isSettingEnabled(KitSettingPlatformDecayImpl.class) && this.getArena() instanceof StandAloneArena) {
+            PlatformDecayTask.start(this);
         }
     }
 

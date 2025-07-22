@@ -21,13 +21,15 @@ public class NametagAdapter {
     private final String name;
     private final String prefix;
     private final String suffix;
+    private final NametagVisibility visibility;
     private final IReflection reflection = DefaultReflection.INSTANCE;
 
-    public NametagAdapter(NametagService engine, String name, String prefix, String suffix) {
+    public NametagAdapter(NametagService engine, String name, String prefix, String suffix, NametagVisibility visibility) {
         this.engine = engine;
         this.name = name;
         this.prefix = prefix;
         this.suffix = suffix;
+        this.visibility = visibility;
     }
 
     /**
@@ -80,6 +82,7 @@ public class NametagAdapter {
                 reflection.getField(PacketPlayOutScoreboardTeam.class, "c").set(packet, prefix);
                 reflection.getField(PacketPlayOutScoreboardTeam.class, "d").set(packet, suffix);
                 reflection.getField(PacketPlayOutScoreboardTeam.class, "i").set(packet, 1);
+                reflection.getField(PacketPlayOutScoreboardTeam.class, "e").set(packet, visibility.getValue());
             }
             if (mode == 0 || mode == 3 || mode == 4) {
                 ((Collection<String>) reflection.getField(PacketPlayOutScoreboardTeam.class, "g").get(packet)).addAll(Arrays.asList(players));

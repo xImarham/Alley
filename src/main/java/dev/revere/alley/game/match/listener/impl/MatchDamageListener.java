@@ -6,12 +6,14 @@ import dev.revere.alley.base.kit.Kit;
 import dev.revere.alley.base.kit.setting.impl.mechanic.KitSettingNoDamageImpl;
 import dev.revere.alley.base.kit.setting.impl.mechanic.KitSettingNoFallDamageImpl;
 import dev.revere.alley.base.kit.setting.impl.mode.KitSettingBoxingImpl;
+import dev.revere.alley.base.kit.setting.impl.mode.KitSettingHideAndSeekImpl;
 import dev.revere.alley.base.kit.setting.impl.mode.KitSettingSpleefImpl;
 import dev.revere.alley.base.kit.setting.impl.mode.KitSettingSumoImpl;
 import dev.revere.alley.base.kit.setting.impl.visual.KitSettingBowShotIndicatorImpl;
 import dev.revere.alley.base.kit.setting.impl.visual.KitSettingHealthBarImpl;
 import dev.revere.alley.game.match.AbstractMatch;
 import dev.revere.alley.game.match.enums.EnumMatchState;
+import dev.revere.alley.game.match.impl.MatchHideAndSeekImpl;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.profile.IProfileService;
@@ -136,6 +138,17 @@ public class MatchDamageListener implements Listener {
             }
 
             if (!attacker.getUniqueId().equals(damaged.getUniqueId()) && match.isInSameTeam(attacker, damaged)) {
+                if (match.getKit().isSettingEnabled(KitSettingHideAndSeekImpl.class)) {
+                    MatchHideAndSeekImpl matchHideAndSeek = (MatchHideAndSeekImpl) attackerProfile.getMatch();
+                    GameParticipant<MatchGamePlayerImpl> seekers = matchHideAndSeek.getParticipantA();
+
+                    boolean isSeeker = seekers.containsPlayer(attacker.getUniqueId());
+
+                    if (matchHideAndSeek.getGameEndTask() == null && isSeeker) {
+                        return;
+                    }
+                }
+
                 event.setCancelled(true);
                 return;
             }

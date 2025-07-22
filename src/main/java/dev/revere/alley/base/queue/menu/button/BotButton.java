@@ -38,7 +38,7 @@ public class BotButton extends Button {
 
     @Override
     public void clicked(Player player, ClickType clickType) {
-        AbstractArena arena = Alley.getInstance().getService(IArenaService.class).getRandomStandAloneArena();
+        AbstractArena arena = Alley.getInstance().getService(IArenaService.class).getRandomArena(this.kit);
         if (arena == null) {
             player.sendMessage("No arena available.");
             return;
