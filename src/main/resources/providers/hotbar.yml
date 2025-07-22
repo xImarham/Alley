@@ -1,0 +1,501 @@
+hotbar-items:
+
+  UNRANKED_QUEUES:
+    display-name: "&6Unranked Queues &7(Right Click)"
+    lore:
+      - "&7Join unranked queues to practice freely."
+    material: IRON_SWORD
+    durability: 0
+    command: "unrankedmenu"
+    menu: ""
+    types:
+      LOBBY:
+        enabled: true
+        slot: 0
+      PARTY:
+        enabled: false
+        slot: 0
+      QUEUE:
+        enabled: false
+        slot: 0
+      SPECTATOR:
+        enabled: false
+        slot: 0
+      TOURNAMENT:
+        enabled: false
+        slot: 0
+
+  RANKED_QUEUES:
+    display-name: "&6Ranked Queues &7(Right Click)"
+    lore:
+      - "&7Challenge yourself in ranked matches."
+    material: DIAMOND_SWORD
+    durability: 0
+    command: "rankedmenu"
+    menu: ""
+    types:
+      LOBBY:
+        enabled: true
+        slot: 1
+      PARTY:
+        enabled: false
+        slot: 0
+      QUEUE:
+        enabled: false
+        slot: 0
+      SPECTATOR:
+        enabled: false
+        slot: 0
+      TOURNAMENT:
+        enabled: false
+        slot: 0
+
+  LAYOUT_EDITOR:
+    display-name: "&6Layout Editor &7(Right Click)"
+    lore:
+      - "&7Customize your kit layouts."
+    material: BOOK
+    durability: 0
+    command: "layouteditor"
+    menu: ""
+    types:
+      LOBBY:
+        enabled: true
+        slot: 2
+      PARTY:
+        enabled: true
+        slot: 1
+      QUEUE:
+        enabled: false
+        slot: 0
+      SPECTATOR:
+        enabled: false
+        slot: 0
+      TOURNAMENT:
+        enabled: false
+        slot: 0
+
+  CURRENT_MATCHES:
+    display-name: "&6Current Matches &7(Right Click)"
+    lore:
+      - "&7View ongoing matches."
+    material: COMPASS
+    durability: 0
+    command: "currentmatches"
+    menu: ""
+    types:
+      LOBBY:
+        enabled: true
+        slot: 3
+      PARTY:
+        enabled: false
+        slot: 0
+      QUEUE:
+        enabled: false
+        slot: 0
+      SPECTATOR:
+        enabled: false
+        slot: 0
+      TOURNAMENT:
+        enabled: false
+        slot: 0
+
+  PARTY:
+    display-name: "&6Create Party &7(Right Click)"
+    lore:
+      - "&7Form a party with your friends."
+    material: NAME_TAG
+    durability: 0
+    command: "party create"
+    menu: ""
+    types:
+      LOBBY:
+        enabled: true
+        slot: 5
+      PARTY:
+        enabled: false
+        slot: 0
+      QUEUE:
+        enabled: false
+        slot: 0
+      SPECTATOR:
+        enabled: false
+        slot: 0
+      TOURNAMENT:
+        enabled: false
+        slot: 0
+
+  LEADERBOARD:
+    display-name: "&6Leaderboards &7(Right Click)"
+    lore:
+      - "&7Check the top players."
+    material: EMERALD
+    durability: 0
+    command: "leaderboards"
+    menu: ""
+    types:
+      LOBBY:
+        enabled: true
+        slot: 6
+      PARTY:
+        enabled: false
+        slot: 0
+      QUEUE:
+        enabled: false
+        slot: 0
+      SPECTATOR:
+        enabled: false
+        slot: 0
+      TOURNAMENT:
+        enabled: false
+        slot: 0
+
+  EVENTS:
+    display-name: "&6Events &7(Right Click)"
+    lore:
+      - "&7Join exciting events."
+    material: EYE_OF_ENDER
+    durability: 0
+    command: "host"
+    menu: ""
+    types:
+      LOBBY:
+        enabled: true
+        slot: 7
+      PARTY:
+        enabled: false
+        slot: 0
+      QUEUE:
+        enabled: false
+        slot: 0
+      SPECTATOR:
+        enabled: false
+        slot: 0
+      TOURNAMENT:
+        enabled: false
+        slot: 0
+
+  SETTINGS:
+    display-name: "&6Settings &7(Right Click)"
+    lore:
+      - "&7Adjust your personal preferences."
+    material: SKULL_ITEM
+    durability: 0
+    command: "practicesettings"
+    menu: ""
+    types:
+      LOBBY:
+        enabled: true
+        slot: 8
+      PARTY:
+        enabled: false
+        slot: 0
+      QUEUE:
+        enabled: false
+        slot: 0
+      SPECTATOR:
+        enabled: false
+        slot: 0
+      TOURNAMENT:
+        enabled: false
+        slot: 0
+
+  DUO_UNRANKED_QUEUE:
+    display-name: "&6Unranked Duo Queue &7(Right Click)"
+    lore:
+      - "&7Queue for unranked duo matches."
+    material: IRON_SWORD
+    durability: 0
+    command: ""
+    menu: ""
+    types:
+      LOBBY:
+        enabled: false
+        slot: 0
+      PARTY:
+        enabled: true
+        slot: 0
+      QUEUE:
+        enabled: false
+        slot: 0
+      SPECTATOR:
+        enabled: false
+        slot: 0
+      TOURNAMENT:
+        enabled: false
+        slot: 0
+
+  START_PARTY_EVENT:
+    display-name: "&6Start Party Event &7(Right Click)"
+    lore:
+      - "&7Initiate a party event."
+    material: IRON_AXE
+    durability: 0
+    command: ""
+    menu: ""
+    types:
+      LOBBY:
+        enabled: false
+        slot: 0
+      PARTY:
+        enabled: true
+        slot: 4
+      QUEUE:
+        enabled: false
+        slot: 0
+      SPECTATOR:
+        enabled: false
+        slot: 0
+      TOURNAMENT:
+        enabled: false
+        slot: 0
+
+  FIGHT_OTHER_PARTY:
+    display-name: "&6Fight Other Party &7(Right Click)"
+    lore:
+      - "&7Challenge another party to a fight."
+    material: DIAMOND_AXE
+    durability: 0
+    command: ""
+    menu: ""
+    types:
+      LOBBY:
+        enabled: false
+        slot: 0
+      PARTY:
+        enabled: true
+        slot: 5
+      QUEUE:
+        enabled: false
+        slot: 0
+      SPECTATOR:
+        enabled: false
+        slot: 0
+      TOURNAMENT:
+        enabled: false
+        slot: 0
+
+  PARTY_INFO:
+    display-name: "&6Party Info &7(Right Click)"
+    lore:
+      - "&7View details about your party."
+    material: PAPER
+    durability: 0
+    command: "party info"
+    menu: ""
+    types:
+      LOBBY:
+        enabled: false
+        slot: 0
+      PARTY:
+        enabled: true
+        slot: 7
+      QUEUE:
+        enabled: false
+        slot: 0
+      SPECTATOR:
+        enabled: false
+        slot: 0
+      TOURNAMENT:
+        enabled: false
+        slot: 0
+
+  PARTY_LEAVE:
+    display-name: "&cLeave Party &7(Right Click)"
+    lore:
+      - "&7Exit your current party."
+    material: REDSTONE
+    durability: 0
+    command: "party leave"
+    menu: ""
+    types:
+      LOBBY:
+        enabled: false
+        slot: 0
+      PARTY:
+        enabled: true
+        slot: 8
+      QUEUE:
+        enabled: false
+        slot: 0
+      SPECTATOR:
+        enabled: false
+        slot: 0
+      TOURNAMENT:
+        enabled: false
+        slot: 0
+
+  LAYOUT_EDITOR_2:
+    display-name: "&6Layout Editor &7(Right Click)"
+    lore:
+      - "&7Customize your kit layouts."
+    material: BOOK
+    durability: 0
+    command: "kiteditor"
+    menu: ""
+    types:
+      LOBBY:
+        enabled: false
+        slot: 0
+      PARTY:
+        enabled: false
+        slot: 0
+      QUEUE:
+        enabled: true
+        slot: 0
+      SPECTATOR:
+        enabled: false
+        slot: 0
+      TOURNAMENT:
+        enabled: false
+        slot: 0
+
+  TIPS:
+    display-name: "&6Tip Of The Day &7(Right Click)"
+    lore:
+      - "&7Get a helpful tip for the day."
+    material: PAPER
+    durability: 0
+    command: "tip"
+    menu: ""
+    types:
+      LOBBY:
+        enabled: false
+        slot: 0
+      PARTY:
+        enabled: false
+        slot: 0
+      QUEUE:
+        enabled: true
+        slot: 1
+      SPECTATOR:
+        enabled: false
+        slot: 0
+      TOURNAMENT:
+        enabled: false
+        slot: 0
+
+  LEAVE_QUEUE:
+    display-name: "&cLeave Queue &7(Right Click)"
+    lore:
+      - "&7Exit the current queue."
+    material: REDSTONE
+    durability: 0
+    command: "leavequeue"
+    menu: ""
+    types:
+      LOBBY:
+        enabled: false
+        slot: 0
+      PARTY:
+        enabled: false
+        slot: 0
+      QUEUE:
+        enabled: true
+        slot: 8
+      SPECTATOR:
+        enabled: false
+        slot: 0
+      TOURNAMENT:
+        enabled: false
+        slot: 0
+
+  SPECTATOR_MENU:
+    display-name: "&6Teleport Menu &7(Right Click)"
+    lore:
+      - "&7Teleport to various locations."
+    material: COMPASS
+    durability: 0
+    command: "viewplayers"
+    menu: ""
+    types:
+      LOBBY:
+        enabled: false
+        slot: 0
+      PARTY:
+        enabled: false
+        slot: 0
+      QUEUE:
+        enabled: false
+        slot: 0
+      SPECTATOR:
+        enabled: true
+        slot: 0
+      TOURNAMENT:
+        enabled: false
+        slot: 0
+
+  STOP_WATCHING:
+    display-name: "&cStop Watching &7(Right Click)"
+    lore:
+      - "&7Stop spectating the current match."
+    material: REDSTONE
+    durability: 0
+    command: "leavespectator"
+    menu: ""
+    types:
+      LOBBY:
+        enabled: false
+        slot: 0
+      PARTY:
+        enabled: false
+        slot: 0
+      QUEUE:
+        enabled: false
+        slot: 0
+      SPECTATOR:
+        enabled: true
+        slot: 8
+      TOURNAMENT:
+        enabled: false
+        slot: 0
+
+  TOURNAMENT_LEAVE:
+    display-name: "&cLeave Tournament &7(Right Click)"
+    lore:
+      - "&7Exit the current tournament."
+    material: REDSTONE
+    durability: 0
+    command: "tournament leave"
+    menu: ""
+    types:
+      LOBBY:
+        enabled: false
+        slot: 0
+      PARTY:
+        enabled: false
+        slot: 0
+      QUEUE:
+        enabled: false
+        slot: 0
+      SPECTATOR:
+        enabled: false
+        slot: 0
+      TOURNAMENT:
+        enabled: true
+        slot: 8
+
+  TOURNAMENT_INFO:
+    display-name: "&6Tournament Info &7(Right Click)"
+    lore:
+      - "&7Get information about the tournament."
+    material: PAPER
+    durability: 0
+    command: "tournament info"
+    menu: ""
+    types:
+      LOBBY:
+        enabled: false
+        slot: 0
+      PARTY:
+        enabled: false
+        slot: 0
+      QUEUE:
+        enabled: false
+        slot: 0
+      SPECTATOR:
+        enabled: false
+        slot: 0
+      TOURNAMENT:
+        enabled: true
+        slot: 0

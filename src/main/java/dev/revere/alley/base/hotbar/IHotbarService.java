@@ -9,11 +9,18 @@ import org.bukkit.inventory.ItemStack;
 import java.util.List;
 
 /**
- * @author Remi
+ * @author Emmy
  * @project alley-practice
- * @date 2/07/2025
+ * @since 21/07/2025
  */
 public interface IHotbarService extends IService {
+    /**
+     * Method to retrieve the list of hotbar items.
+     *
+     * @return A list of HotbarItem objects representing the items in the hotbar.
+     */
+    List<HotbarItem> getHotbarItems();
+
     /**
      * Applies a specific type of hotbar layout to a player's inventory.
      *
@@ -31,21 +38,20 @@ public interface IHotbarService extends IService {
     void applyHotbarItems(Player player);
 
     /**
-     * Finds a registered HotbarItem object by its corresponding ItemStack.
+     * Builds an ItemStack representation of a hotbar item that can be received by the player.
      *
-     * @param item The ItemStack to search for.
-     * @return The HotbarItem, or null if not found.
+     * @param hotbarItem The HotbarItem to build the ItemStack for.
+     * @return An ItemStack representing the hotbar item, ready to be given to the player.
      */
-    HotbarItem getItemByStack(ItemStack item);
+    ItemStack buildReceivableItem(HotbarItem hotbarItem);
 
     /**
-     * Gets a specific HotbarItem by its type and enum definition.
+     * Retrieves the list of hotbar items for a specific hotbar type.
      *
-     * @param type       The hotbar type.
-     * @param hotbarItem The HotbarItems enum constant.
-     * @return The HotbarItem, or null if not found.
+     * @param type The type of hotbar to retrieve items for.
+     * @return A list of HotbarItem objects corresponding to the specified type.
      */
-    HotbarItem getItemByStack(EnumHotbarType type, HotbarItems hotbarItem);
+    List<HotbarItem> getItemsForType(EnumHotbarType type);
 
     /**
      * Get the corresponding hotbar type for the given profile.
@@ -55,5 +61,21 @@ public interface IHotbarService extends IService {
      */
     EnumHotbarType getCorrespondingType(Profile profile);
 
-    List<HotbarItem> getItemsForType(EnumHotbarType type);
+    /**
+     * Checks if the given item stack is a hotbar item of the specified type.
+     *
+     * @param itemStack The item stack to check.
+     * @param type      The type of hotbar to check against.
+     * @return true if the item stack is a hotbar item of the specified type, false otherwise.
+     */
+    boolean isHotbarItem(ItemStack itemStack, EnumHotbarType type);
+
+    /**
+     * Retrieves the HotbarItem associated with the given ItemStack and hotbar type.
+     *
+     * @param itemStack The item stack to check.
+     * @param type      The type of hotbar to retrieve the item for.
+     * @return The HotbarItem associated with the item stack and type, or null if not found.
+     */
+    HotbarItem getHotbarItem(ItemStack itemStack, EnumHotbarType type);
 }
