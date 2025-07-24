@@ -18,7 +18,7 @@ SWITCHER:
     TARGET:
       - ''
       - ' &6►  &f%PLAYER% has hit you with &6%ABILITY%'
-      - ' &6►  &fYou have swaped position with &6%PLAYER% &fposition.'
+      - ' &6►  &fYou have swapped position with &6%PLAYER% &fposition.'
       - ''
 GUARDIAN_ANGEL:
   ICON:
