@@ -2,6 +2,7 @@ package dev.revere.alley.updater;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import dev.revere.alley.Alley;
 import dev.revere.alley.config.IConfigService;
 import dev.revere.alley.plugin.AlleyContext;
 import dev.revere.alley.plugin.annotation.Service;
@@ -21,7 +22,6 @@ import java.net.URL;
 public class UpdaterService implements IUpdaterService {
     private final IConfigService configService;
     private final String currentVersion;
-    private final JavaPlugin plugin;
 
     private final String githubRepo = "RevereInc/alley-practice";
     private String latestVersion;
@@ -30,12 +30,10 @@ public class UpdaterService implements IUpdaterService {
      * Constructor for DI. Receives the main plugin instance and config service.
      *
      * @param configService The configuration service to access settings.
-     * @param plugin        The main plugin instance.
      */
-    public UpdaterService(IConfigService configService, JavaPlugin plugin) {
+    public UpdaterService(IConfigService configService) {
         this.configService = configService;
-        this.plugin = plugin;
-        this.currentVersion = plugin.getDescription().getVersion();
+        this.currentVersion = Alley.getInstance().getDescription().getVersion();
     }
 
     @Override
@@ -54,7 +52,7 @@ public class UpdaterService implements IUpdaterService {
 
     @Override
     public void checkForUpdates() {
-        plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
+        Alley.getInstance().getServer().getScheduler().runTaskAsynchronously(Alley.getInstance(), () -> {
             try {
                 if (latestVersion != null && !currentVersion.equals(latestVersion)) {
                     Logger.warn("New version available: " + latestVersion + " (Current: " + currentVersion + ")");
@@ -77,7 +75,7 @@ public class UpdaterService implements IUpdaterService {
             URL url = new URL(downloadUrl);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
-            File pluginFile = new File(plugin.getClass().getProtectionDomain().getCodeSource().getLocation().toURI());
+            File pluginFile = new File(Alley.getInstance().getClass().getProtectionDomain().getCodeSource().getLocation().toURI());
             File updateFile = new File(pluginFile.getParent(), "Alley-" + version + ".jar");
 
             try (InputStream inputStream = connection.getInputStream();
