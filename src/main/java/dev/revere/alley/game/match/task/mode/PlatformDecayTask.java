@@ -1,6 +1,7 @@
 package dev.revere.alley.game.match.task.mode;
 
 import dev.revere.alley.Alley;
+import dev.revere.alley.base.arena.impl.StandAloneArena;
 import dev.revere.alley.game.match.AbstractMatch;
 import dev.revere.alley.game.match.enums.EnumMatchState;
 import dev.revere.alley.util.chat.CC;
@@ -23,15 +24,13 @@ public class PlatformDecayTask extends BukkitRunnable {
     private final int sideRadius;
     private int currentRadius;
 
-    // State variables
-    private boolean isSlowedDown;
+    private final boolean isSlowedDown;
     private boolean notifiedAt75;
     private boolean notifiedAt50;
     private boolean notifiedAt25;
 
-    // Timing constants (in ticks)
-    private static final long FAST_INTERVAL = 4L;  // Runs 5 times per second
-    private static final long SLOW_INTERVAL = 40L; // Runs every 2 seconds
+    private static final long FAST_INTERVAL = 4L;
+    private static final long SLOW_INTERVAL = 40L;
 
     /**
      * Public constructor to start the decay process.
@@ -40,7 +39,7 @@ public class PlatformDecayTask extends BukkitRunnable {
         this.plugin = Alley.getInstance();
         this.match = match;
 
-        if (!(match.getArena() instanceof dev.revere.alley.base.arena.impl.StandAloneArena)) {
+        if (!(match.getArena() instanceof StandAloneArena)) {
             throw new IllegalArgumentException("PlatformDecayTask requires a StandAloneArena.");
         }
 
@@ -61,12 +60,10 @@ public class PlatformDecayTask extends BukkitRunnable {
         this.sideRadius = oldTask.sideRadius;
         this.currentRadius = oldTask.currentRadius;
 
-        // Copy notification states
         this.notifiedAt75 = oldTask.notifiedAt75;
         this.notifiedAt50 = oldTask.notifiedAt50;
         this.notifiedAt25 = oldTask.notifiedAt25;
 
-        // Mark the new task as already slowed down
         this.isSlowedDown = true;
     }
 
@@ -89,7 +86,7 @@ public class PlatformDecayTask extends BukkitRunnable {
             return;
         }
 
-        dev.revere.alley.base.arena.impl.StandAloneArena arena = (dev.revere.alley.base.arena.impl.StandAloneArena) match.getArena();
+        StandAloneArena arena = (StandAloneArena) match.getArena();
         Location center = arena.getCenter();
         int centerX = center.getBlockX();
         int centerZ = center.getBlockZ();
@@ -119,7 +116,7 @@ public class PlatformDecayTask extends BukkitRunnable {
     }
 
     private int[] calculateBuildRadii() {
-        dev.revere.alley.base.arena.impl.StandAloneArena arena = (dev.revere.alley.base.arena.impl.StandAloneArena) match.getArena();
+        StandAloneArena arena = (StandAloneArena) match.getArena();
         Location center = arena.getCenter();
         Location minBound = arena.getMinimum();
         Location maxBound = arena.getMaximum();
