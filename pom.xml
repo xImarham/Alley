@@ -10,7 +10,7 @@
 
     <name>Alley</name>
     <description>A modern practice core built from the ground and up</description>
-    <version>2.0</version>
+    <version>2.0.0</version>
 
     <developers>
         <developer>
@@ -53,9 +53,30 @@
                         </goals>
                         <configuration>
                             <createDependencyReducedPom>false</createDependencyReducedPom>
+                            <filters>
+                                <filter>
+                                    <artifact>*:*</artifact>
+                                    <excludes>
+                                        <exclude>org/bukkit/**</exclude>
+                                        <exclude>org/spigotmc/**</exclude>
+                                        <exclude>me/clip/**</exclude>
+                                        <exclude>com/comphenix/**</exclude>
+                                        <exclude>com/boydti/**</exclude>
+                                        <exclude>net/citizensnpcs/**</exclude>
+                                    </excludes>
+                                </filter>
+                            </filters>
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>versions-maven-plugin</artifactId>
+                <version>2.18.0</version>
+                <configuration>
+                    <generateBackupPoms>false</generateBackupPoms>
+                </configuration>
             </plugin>
         </plugins>
         <resources>
@@ -67,6 +88,10 @@
     </build>
 
     <repositories>
+        <repository>
+            <id>revere-internal</id>
+            <url>https://revereinc.github.io/maven-repo/</url>
+        </repository>
         <repository>
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
@@ -107,10 +132,15 @@
             <groupId>dev.revere.spigot</groupId>
             <artifactId>ZoneSpigot</artifactId>
             <version>1.0.0</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/libs/zonespigot-api-1.8.8-R0.1-SNAPSHOT.jar</systemPath>
+            <scope>provided</scope>
         </dependency>
 
+        <dependency>
+            <groupId>com.boydti</groupId>
+            <artifactId>FAWE</artifactId>
+            <version>7.0.0</version>
+            <scope>provided</scope>
+        </dependency>
         <dependency>
             <groupId>io.github.classgraph</groupId>
             <artifactId>classgraph</artifactId>
@@ -145,14 +175,6 @@
             <groupId>com.sk89q.worldedit</groupId>
             <artifactId>WorldEdit</artifactId>
             <version>6.0.0</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.fastasyncworldedit</groupId>
-            <artifactId>FAWE</artifactId>
-            <version>7.0.0</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/libs/FAWE.jar</systemPath>
         </dependency>
 
         <!-- ProtocolLib -->

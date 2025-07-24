@@ -61,8 +61,6 @@ public class Alley extends JavaPlugin {
 
         this.runTasks();
 
-        // CommandUtility.registerCommands();
-
         long end = System.currentTimeMillis();
         long timeTaken = end - start;
 
