@@ -375,10 +375,6 @@ public abstract class AbstractMatch {
 
         player.setVelocity(new Vector());
 
-        if (this.shouldHandleRegularRespawn(player)) {
-            this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> this.handleRespawn(player), 1L);
-        }
-
         if (this.canEndRound()) {
             this.state = EnumMatchState.ENDING_ROUND;
             this.handleRoundEnd();
@@ -405,6 +401,10 @@ public abstract class AbstractMatch {
 
         if (gamePlayer.isEliminated()) {
             return;
+        }
+
+        if (this.shouldHandleRegularRespawn(player)) {
+            this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> this.handleRespawn(player), 1L);
         }
 
         if (!this.shouldHandleRegularRespawn(player)) {
