@@ -137,9 +137,9 @@ jobs:
           bump_type="${{ steps.version.outputs.bump_type }}"
           
           if [ -z "$last_tag" ]; then
-            commits=$(git log --oneline --pretty=format:"- %s (%h)" | head -50)
+            commits=$(git log --oneline --pretty=format:"- %s (%h)" --no-merges | head -50)
           else
-            commits=$(git log ${last_tag}..HEAD --oneline --pretty=format:"- %s (%h)")
+            commits=$(git log ${last_tag}..HEAD --oneline --pretty=format:"- %s (%h)" --no-merges)
           fi
           
           changelog="## 🎉 Alley v${{ steps.version.outputs.version }}\n\n"
@@ -182,19 +182,7 @@ jobs:
           
           echo -e "$changelog" > CHANGELOG.md
           
-          release_notes="## Changes in v${{ steps.version.outputs.version }}\n\n"
-          release_notes="${release_notes}**Version Bump:** ${bump_type^^}\n"
-          release_notes="${release_notes}**Previous:** ${{ steps.version.outputs.current_version }} → **New:** ${{ steps.version.outputs.version }}\n\n"
-          release_notes="${release_notes}### Commits:\n\n"
-          
-          while IFS= read -r line; do
-            if [[ $line =~ Merge\ pull\ request\ #([0-9]+) ]]; then
-              pr_number=${BASH_REMATCH[1]}
-              release_notes="${release_notes}${line} ([#${pr_number}](https://github.com/${{ github.repository }}/pull/${pr_number}))\n"
-            else
-              release_notes="${release_notes}${line}\n"
-            fi
-          done <<< "$commits"
+          release_notes="$changelog"
           
           echo "changelog<<EOF" >> $GITHUB_OUTPUT
           echo -e "$release_notes" >> $GITHUB_OUTPUT

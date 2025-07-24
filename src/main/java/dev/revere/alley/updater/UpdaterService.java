@@ -26,6 +26,12 @@ public class UpdaterService implements IUpdaterService {
     private final String githubRepo = "RevereInc/alley-practice";
     private String latestVersion;
 
+    /**
+     * Constructor for DI. Receives the main plugin instance and config service.
+     *
+     * @param configService The configuration service to access settings.
+     * @param plugin        The main plugin instance.
+     */
     public UpdaterService(IConfigService configService, JavaPlugin plugin) {
         this.configService = configService;
         this.plugin = plugin;
