@@ -1,16 +1,16 @@
-## 🎉 Alley v2.0.3
+## 🎉 Alley v2.0.4
 
 ### 🔧 **PATCH RELEASE** - Bug Fixes & Improvements
 
-**Previous Version:** `2.0.2`
-**New Version:** `2.0.3`
+**Previous Version:** `2.0.3`
+**New Version:** `2.0.4`
 
 ### 📝 Changes:
 
-- chore: fixed DI issue with updater service (902e4d90)
+- chore: update abilities config to test auto updater (1c61dd10)
 
 ---
-**Download:** [Alley-2.0.3.jar](https://github.com/RevereInc/alley-practice/releases/download/v2.0.3/Alley-2.0.3.jar)
+**Download:** [Alley-2.0.4.jar](https://github.com/RevereInc/alley-practice/releases/download/v2.0.4/Alley-2.0.4.jar)
 
 **Installation:** Place the JAR file in your `plugins/` folder and restart your server.
 
