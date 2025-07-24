@@ -76,10 +76,13 @@ public class UpdaterService implements IUpdaterService {
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
             File pluginFile = new File(Alley.getInstance().getClass().getProtectionDomain().getCodeSource().getLocation().toURI());
-            File updateFile = new File(pluginFile.getParent(), "Alley-" + version + ".jar");
+            File pluginDirectory = pluginFile.getParentFile();
+
+            File updateFile = new File(pluginDirectory, "Alley-" + version + ".jar");
+            File tempFile = new File(pluginDirectory, "Alley-temp.jar");
 
             try (InputStream inputStream = connection.getInputStream();
-                 FileOutputStream outputStream = new FileOutputStream(updateFile)) {
+                 FileOutputStream outputStream = new FileOutputStream(tempFile)) {
 
                 byte[] buffer = new byte[1024];
                 int bytesRead;
@@ -88,7 +91,20 @@ public class UpdaterService implements IUpdaterService {
                 }
             }
 
-            Logger.info("Update downloaded successfully! Restarting plugin to apply the update...");
+            if (pluginFile.delete()) {
+                Logger.info("Successfully deleted old plugin file: " + pluginFile.getName());
+            } else {
+                Logger.warn("Failed to delete old plugin file: " + pluginFile.getName());
+            }
+
+            if (tempFile.renameTo(updateFile)) {
+                Logger.info("Successfully updated plugin to version " + version);
+            } else {
+                Logger.warn("Failed to rename temporary file to plugin file: " + updateFile.getName());
+            }
+
+            Logger.info("Shutting down the server to apply the update. Please restart the server manually.");
+            Alley.getInstance().getServer().shutdown();
         } catch (Exception e) {
             Logger.logException("Failed to download and update to version " + version, e);
         }
