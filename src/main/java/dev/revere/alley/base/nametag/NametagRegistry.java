@@ -33,11 +33,11 @@ public class NametagRegistry {
      * @return The cached or newly created NametagAdapter.
      */
     public NametagAdapter getAdapter(NametagView view) {
-        String key = view.getPrefix() + "|" + view.getSuffix();
+        String key = view.getPrefix() + "|" + view.getSuffix() + "|" + view.getVisibility().name();
         try {
             return adapterCache.get(key, () -> {
                 String teamName = "nt" + teamIdCounter.getAndIncrement();
-                return new NametagAdapter(service, teamName, view.getPrefix(), view.getSuffix());
+                return new NametagAdapter(service, teamName, view.getPrefix(), view.getSuffix(), view.getVisibility());
             });
         } catch (Exception e) {
             throw new RuntimeException("Failed to load nametag adapter from cache", e);

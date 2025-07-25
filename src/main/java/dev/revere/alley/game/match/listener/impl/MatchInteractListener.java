@@ -63,8 +63,7 @@ public class MatchInteractListener implements Listener {
                 Alley.getInstance().getService(IReflectionRepository.class).getReflectionService(TitleReflectionService.class).sendTitle(
                         player,
                         "&aCHECKPOINT!",
-                        "&7(" + player.getLocation().getBlockX() + ", " + player.getLocation().getBlockY() + ", " + player.getLocation().getBlockZ() + ")",
-                        2, 10, 2
+                        "&7(" + player.getLocation().getBlockX() + ", " + player.getLocation().getBlockY() + ", " + player.getLocation().getBlockZ() + ")"
                 );
             }
 

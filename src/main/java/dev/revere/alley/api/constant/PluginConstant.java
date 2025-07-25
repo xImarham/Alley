@@ -35,7 +35,9 @@ public class PluginConstant implements IPluginConstant {
     private Reflections reflections;
 
     /**
-     * Constructor for DI. Receives the main plugin instance from the AlleyContext.
+     * Constructor for the PluginConstant class.
+     *
+     * @param plugin The Alley plugin instance.
      */
     public PluginConstant(Alley plugin) {
         this.plugin = plugin;

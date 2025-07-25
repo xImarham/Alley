@@ -84,7 +84,7 @@ public class MatchRegularImpl extends AbstractMatch {
         super.setupPlayer(player);
         this.applyColorKit(player);
 
-        Location spawnLocation = this.participantA.containsPlayer(player.getUniqueId()) ? getArena().getPos1() : getArena().getPos2();
+        Location spawnLocation = this.getParticipantA().containsPlayer(player.getUniqueId()) ? getArena().getPos1() : getArena().getPos2();
         player.teleport(spawnLocation);
 
         if (this.getKit().isSettingEnabled(KitSettingRaidingImpl.class)) {
@@ -94,7 +94,7 @@ public class MatchRegularImpl extends AbstractMatch {
 
     @Override
     public List<GameParticipant<MatchGamePlayerImpl>> getParticipants() {
-        return Arrays.asList(this.participantA, this.participantB);
+        return Arrays.asList(getParticipantA(), getParticipantB());
     }
 
     /**
@@ -104,7 +104,7 @@ public class MatchRegularImpl extends AbstractMatch {
      * @return The team color of the participant.
      */
     public ChatColor getTeamColor(GameParticipant<MatchGamePlayerImpl> participant) {
-        return participant == this.participantA ? this.teamAColor : this.teamBColor;
+        return participant == this.getParticipantA() ? this.teamAColor : this.teamBColor;
     }
 
     /**
@@ -118,7 +118,7 @@ public class MatchRegularImpl extends AbstractMatch {
             return;
         }
 
-        final InventoryUtil.TeamColor colorToApply = (participant == this.participantA)
+        final InventoryUtil.TeamColor colorToApply = (participant == this.getParticipantA())
                 ? InventoryUtil.TeamColor.BLUE
                 : InventoryUtil.TeamColor.RED;
 
@@ -135,9 +135,9 @@ public class MatchRegularImpl extends AbstractMatch {
 
     @Override
     public void handleRoundEnd() {
-        final boolean teamADead = this.participantA.isAllEliminated() || this.participantA.isAllDead();
-        final GameParticipant<MatchGamePlayerImpl> winner = teamADead ? this.participantB : this.participantA;
-        final GameParticipant<MatchGamePlayerImpl> loser = teamADead ? this.participantA : this.participantB;
+        final boolean teamADead = this.getParticipantA().isAllEliminated() || this.getParticipantA().isAllDead();
+        final GameParticipant<MatchGamePlayerImpl> winner = teamADead ? this.getParticipantB() : this.getParticipantA();
+        final GameParticipant<MatchGamePlayerImpl> loser = teamADead ? this.getParticipantA() : this.getParticipantB();
 
         this.winner = winner;
         this.loser = loser;
@@ -251,9 +251,8 @@ public class MatchRegularImpl extends AbstractMatch {
     private void sendVictory(Player player) {
         Alley.getInstance().getService(IReflectionRepository.class).getReflectionService(TitleReflectionService.class).sendTitle(
                 player,
-                "&6Victory!",
-                "&fYou have won the match!",
-                2, 20, 2
+                "&a&lVICTORY!",
+                "&fYou have won the match!"
         );
     }
 
@@ -265,9 +264,8 @@ public class MatchRegularImpl extends AbstractMatch {
     private void sendDefeat(Player player) {
         Alley.getInstance().getService(IReflectionRepository.class).getReflectionService(TitleReflectionService.class).sendTitle(
                 player,
-                "&cDefeat!",
-                "&fYou have lost the match!",
-                2, 20, 2
+                "&c&lDEFEAT!",
+                "&fYou have lost the match!"
         );
     }
 
@@ -399,9 +397,9 @@ public class MatchRegularImpl extends AbstractMatch {
 
     @Override
     public boolean canEndRound() {
-        return (this.participantA.isAllDead() || this.participantB.isAllDead())
-                || (this.participantA.getAllPlayers().stream().allMatch(MatchGamePlayerImpl::isDisconnected)
-                || this.participantB.getAllPlayers().stream().allMatch(MatchGamePlayerImpl::isDisconnected));
+        return (this.getParticipantA().isAllDead() || this.getParticipantB().isAllDead())
+                || (this.getParticipantA().getAllPlayers().stream().allMatch(MatchGamePlayerImpl::isDisconnected)
+                || this.getParticipantB().getAllPlayers().stream().allMatch(MatchGamePlayerImpl::isDisconnected));
     }
 
     @Override

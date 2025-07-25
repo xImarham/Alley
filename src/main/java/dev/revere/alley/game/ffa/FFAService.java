@@ -4,6 +4,8 @@ import dev.revere.alley.base.arena.AbstractArena;
 import dev.revere.alley.base.arena.IArenaService;
 import dev.revere.alley.base.kit.IKitService;
 import dev.revere.alley.base.kit.Kit;
+import dev.revere.alley.base.kit.setting.impl.mechanic.KitSettingBuildImpl;
+import dev.revere.alley.base.kit.setting.impl.mode.KitSettingBoxingImpl;
 import dev.revere.alley.plugin.AlleyContext;
 import dev.revere.alley.plugin.annotation.Service;
 import dev.revere.alley.game.ffa.impl.DefaultFFAMatchImpl;
@@ -110,5 +112,10 @@ public class FFAService implements IFFAService {
         this.ffaKits.clear();
         this.ffaKits.addAll(this.kitService.getKits().stream().filter(Kit::isFfaEnabled).collect(Collectors.toList()));
         this.initializeMatches();
+    }
+
+    @Override
+    public boolean isNotEligibleForFFA(Kit kit) {
+        return kit.isSettingEnabled(KitSettingBuildImpl.class) || kit.isSettingEnabled(KitSettingBoxingImpl.class);
     }
 }

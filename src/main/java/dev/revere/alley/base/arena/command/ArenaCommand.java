@@ -25,7 +25,7 @@ public class ArenaCommand extends BaseCommand {
     public List<String> arenaCompleter(CommandArgs command) {
         List<String> completion = new ArrayList<>();
 
-        if (command.getArgs().length == 1 && command.getPlayer().hasPermission("alley.admin")) {
+        if (command.getArgs().length == 1 && command.getPlayer().hasPermission(this.getAdminPermission())) {
             completion.addAll(Arrays.asList(
                     "create", "delete", "list", "kitlist", "setcuboid", "setcenter",
                     "setspawn", "removekit", "addkit", "teleport", "toggle", "tool",
@@ -37,7 +37,12 @@ public class ArenaCommand extends BaseCommand {
         return completion;
     }
 
-    @CommandData(name = "arena", isAdminOnly = true, inGameOnly = false)
+    @CommandData(
+            name = "arena",
+            aliases = "arena.help",
+            isAdminOnly = true,
+            inGameOnly = false
+    )
     @Override
     public void onCommand(CommandArgs command) {
         CommandSender sender = command.getSender();

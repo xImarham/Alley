@@ -84,11 +84,12 @@ public class SpawnListener implements Listener {
         if (event.getEntity() instanceof Player) {
             Player player = (Player) event.getEntity();
             IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
-        Profile profile = profileService.getProfile(player.getUniqueId());
+            Profile profile = profileService.getProfile(player.getUniqueId());
 
             if (profile.getState().equals(EnumProfileState.LOBBY)
                     || profile.getState().equals(EnumProfileState.EDITING)
-                    || profile.getState().equals(EnumProfileState.WAITING)) {
+                    || profile.getState().equals(EnumProfileState.WAITING)
+                    || profile.getState().equals(EnumProfileState.SPECTATING)) {
                 event.setCancelled(true);
             }
         }
@@ -99,7 +100,7 @@ public class SpawnListener implements Listener {
         if (event.getWhoClicked() instanceof Player) {
             Player player = (Player) event.getWhoClicked();
             IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
-        Profile profile = profileService.getProfile(player.getUniqueId());
+            Profile profile = profileService.getProfile(player.getUniqueId());
 
             if (profile.getState() == EnumProfileState.EDITING) {
                 return;

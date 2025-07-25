@@ -33,8 +33,6 @@ import java.util.UUID;
 public class StandAloneArena extends AbstractArena {
     protected final Alley plugin = Alley.getInstance();
 
-    private boolean active = false;
-
     private boolean isTemporaryCopy = false;
     private String originalArenaName;
     private int copyId = -1;
@@ -68,7 +66,6 @@ public class StandAloneArena extends AbstractArena {
         this.originalArenaName = originalArenaName;
         this.copyId = copyId;
         this.isTemporaryCopy = true;
-        this.active = true;
 
         if (team1Portal != null) this.team1Portal = team1Portal;
         if (team2Portal != null) this.team2Portal = team2Portal;
@@ -123,10 +120,8 @@ public class StandAloneArena extends AbstractArena {
 
     @Override
     public void deleteArena() {
-        if (this.isTemporaryCopy) {
-            this.deleteCopiedArena();
-            return;
-        }
+        this.deleteCopiedArena();
+
         FileConfiguration config = this.plugin.getService(IConfigService.class).getArenasConfig();
         config.set("arenas." + this.getName(), null);
 
@@ -187,7 +182,6 @@ public class StandAloneArena extends AbstractArena {
             Bukkit.broadcastMessage("[Arena] Arena appears to exist with " + nonAirBlocks + " non-air blocks sampled.");
         }
     }
-
 
     public StandAloneArena createCopy(World targetWorld, Location targetLocation, int copyId) {
         if (isTemporaryCopy) {

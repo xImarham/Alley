@@ -24,12 +24,12 @@ public class KitCommand extends BaseCommand {
     @CompleterData(name = "kit")
     public List<String> kitCompleter(CommandArgs command) {
         List<String> completion = new ArrayList<>();
-        if (command.getArgs().length == 1 && command.getPlayer().hasPermission("alley.admin")) {
+        if (command.getArgs().length == 1 && command.getPlayer().hasPermission(this.getAdminPermission())) {
             completion.addAll(Arrays.asList(
                     "list", "create", "delete", "toggle", "view", "settings", "viewsettings",
                     "setsetting", "setcategory", "setdescription", "setdisclaimer", "setdisplayname",
                     "seteditable", "seticon", "setinv", "getinv", "addpotion", "clearpotions", "removepotion",
-                    "setupffa", "toggleffa", "setffaslot", "saveall", "save", "setraidingrolekit",
+                    "saveall", "save", "setraidingrolekit",
                     "removeraidingrolekit", "setmenutitle", "setprofile", "resetlayouts"
             ));
         }
@@ -37,7 +37,12 @@ public class KitCommand extends BaseCommand {
         return completion;
     }
 
-    @CommandData(name = "kit", isAdminOnly = true, inGameOnly = false)
+    @CommandData(
+            name = "kit",
+            aliases = "kit.help",
+            isAdminOnly = true,
+            inGameOnly = false
+    )
     @Override
     public void onCommand(CommandArgs command) {
         CommandSender sender = command.getSender();
@@ -104,11 +109,6 @@ public class KitCommand extends BaseCommand {
                     " &f● &6/kit addpotion &8(&7kitName&8) &7| Set potion effects of a kit",
                     " &f● &6/kit removepotion &8(&7kitName&8) &7| Remove potion effects of a kit",
                     " &f● &6/kit clearpotions &8(&7kitName&8) &7| Clear potion effects of a kit"
-            },
-            {
-                    " &f● &6/kit setupffa &8(&7kitName&8) &7| Setup ffa kit",
-                    " &f● &6/kit toggleffa &8(&7kitName&8) &7| Toggle ffa kit",
-                    " &f● &6/kit setffaslot &8(&7kitName&8) &8(&7slot&8) &7| Set ffa menu slot"
             },
             {
                     " &f● &6/kit setraidingrolekit &8(&7kitName&8) &8(&7role&8) &8(&7roleKitName&8) &7| Set raiding role kit",

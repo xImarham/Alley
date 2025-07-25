@@ -7,7 +7,6 @@ import dev.revere.alley.base.kit.Kit;
 import dev.revere.alley.base.kit.setting.impl.mode.KitSettingBridgesImpl;
 import dev.revere.alley.base.kit.setting.impl.mode.KitSettingStickFightImpl;
 import dev.revere.alley.base.queue.Queue;
-import dev.revere.alley.base.visibility.IVisibilityService;
 import dev.revere.alley.config.IConfigService;
 import dev.revere.alley.game.match.enums.EnumMatchState;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
@@ -242,8 +241,7 @@ public class MatchRoundsImpl extends MatchRegularImpl {
             Alley.getInstance().getService(IReflectionRepository.class).getReflectionService(TitleReflectionService.class).sendTitle(
                     player,
                     teamWinnerColor.toString() + scorer + " &fhas scored!",
-                    "&f" + winner.getLeader().getData().getScore() + " &7/&f " + this.rounds,
-                    2, 20, 2
+                    "&f" + winner.getLeader().getData().getScore() + " &7/&f " + this.rounds
             );
         }));
     }

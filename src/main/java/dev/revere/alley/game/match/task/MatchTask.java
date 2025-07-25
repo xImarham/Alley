@@ -1,4 +1,4 @@
-package dev.revere.alley.game.match.runnable;
+package dev.revere.alley.game.match.task;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.base.kit.setting.impl.mode.KitSettingRoundsImpl;
@@ -10,7 +10,6 @@ import dev.revere.alley.tool.reflection.impl.TitleReflectionService;
 import dev.revere.alley.util.chat.CC;
 import lombok.Getter;
 import lombok.Setter;
-import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -22,16 +21,16 @@ import org.bukkit.scheduler.BukkitRunnable;
  */
 @Getter
 @Setter
-public class MatchRunnable extends BukkitRunnable {
+public class MatchTask extends BukkitRunnable {
     private final AbstractMatch match;
     private int stage;
 
     /**
-     * Constructor for the MatchRunnable class.
+     * Constructor for the MatchTask class.
      *
      * @param match The match.
      */
-    public MatchRunnable(AbstractMatch match) {
+    public MatchTask(AbstractMatch match) {
         this.match = match;
         this.stage = 6;
     }
@@ -123,8 +122,7 @@ public class MatchRunnable extends BukkitRunnable {
             Alley.getInstance().getService(IReflectionRepository.class).getReflectionService(TitleReflectionService.class).sendTitle(
                     matchGamePlayer.getTeamPlayer(),
                     "&6&lMatch started",
-                    "&fGood Luck!",
-                    15, 20, 2
+                    "&fGood Luck!"
             );
         }));
     }
@@ -135,7 +133,7 @@ public class MatchRunnable extends BukkitRunnable {
                     matchGamePlayer.getTeamPlayer(),
                     "&6&lMatch",
                     "&fStarts in &6" + this.stage + "s",
-                    2, 10, 2
+                    0, 23, 20
             );
         }));
     }

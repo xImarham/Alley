@@ -1,6 +1,7 @@
 package dev.revere.alley.api.command;
 
 import dev.revere.alley.Alley;
+import dev.revere.alley.api.constant.IPluginConstant;
 import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.util.PlayerUtil;
@@ -57,5 +58,14 @@ public abstract class BaseCommand {
         }
 
         return profile;
+    }
+
+    /**
+     * Gets the admin permission prefix for the plugin.
+     *
+     * @return The admin permission prefix.
+     */
+    public String getAdminPermission() {
+        return this.plugin.getService(IPluginConstant.class).getAdminPermissionPrefix();
     }
 }

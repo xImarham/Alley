@@ -58,17 +58,4 @@ public class HotbarItem {
     private List<HotbarTypeData> feedTypeData() {
         return Arrays.stream(EnumHotbarType.values()).map(type -> new HotbarTypeData(type, -1)).collect(Collectors.toList());
     }
-
-    /**
-     * Gets the item stack representation of this hotbar item.
-     *
-     * @return An ItemStack representing this hotbar item.
-     */
-    public ItemStack getItemStack() {
-        ItemStack itemStack = new ItemStack(this.material, 1, (short) this.durability);
-        itemStack.getItemMeta().setDisplayName(this.displayName);
-        itemStack.getItemMeta().setLore(this.lore);
-
-        return itemStack;
-    }
 }

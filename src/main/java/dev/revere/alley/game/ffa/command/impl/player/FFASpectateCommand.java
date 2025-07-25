@@ -17,7 +17,7 @@ import org.bukkit.entity.Player;
  * @project Alley
  * @since 04/06/2025
  */
-public class SpectateFFACommand extends BaseCommand {
+public class FFASpectateCommand extends BaseCommand {
     @CommandData(name = "ffa.spectate", usage = "/spectate <ffaKit>", aliases = {"specffa", "spectateffa"}, description = "Spectate a FFA match")
     @Override
     public void onCommand(CommandArgs command) {

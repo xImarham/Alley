@@ -22,7 +22,7 @@ public class AlleyCommand extends BaseCommand {
     @CompleterData(name = "alley")
     public List<String> alleyCompleter(CommandArgs command) {
         List<String> completion = new ArrayList<>();
-        if (command.getArgs().length == 1 && command.getPlayer().hasPermission("alley.admin")) {
+        if (command.getArgs().length == 1 && command.getPlayer().hasPermission(this.getAdminPermission())) {
             completion.addAll(Arrays.asList(
                     "reload", "debug", "server"
             ));

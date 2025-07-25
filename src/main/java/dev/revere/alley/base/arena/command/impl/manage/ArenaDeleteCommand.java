@@ -25,7 +25,7 @@ public class ArenaDeleteCommand extends BaseCommand {
         IArenaService arenaService = this.plugin.getService(IArenaService.class);
 
 
-        if (command.getArgs().length == 1 && command.getPlayer().hasPermission("alley.admin")) {
+        if (command.getArgs().length == 1 && command.getPlayer().hasPermission(this.getAdminPermission())) {
             arenaService.getArenas().forEach(arena -> completion.add(arena.getName()));
         }
 

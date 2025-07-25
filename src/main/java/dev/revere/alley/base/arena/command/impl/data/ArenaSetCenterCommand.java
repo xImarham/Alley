@@ -24,7 +24,7 @@ public class ArenaSetCenterCommand extends BaseCommand {
     public List<String> arenaSetCenterCompleter(CommandArgs command) {
         List<String> completion = new ArrayList<>();
 
-        if (command.getArgs().length == 1 && command.getPlayer().hasPermission("alley.admin")) {
+        if (command.getArgs().length == 1 && command.getPlayer().hasPermission(this.getAdminPermission())) {
             this.plugin.getService(IArenaService.class).getArenas().forEach(arena -> completion.add(arena.getName()));
         }
 

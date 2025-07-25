@@ -1,5 +1,9 @@
 package dev.revere.alley.util;
 
+import dev.revere.alley.Alley;
+import dev.revere.alley.profile.IProfileService;
+import dev.revere.alley.profile.Profile;
+import dev.revere.alley.profile.enums.EnumProfileState;
 import lombok.experimental.UtilityClass;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -33,8 +37,13 @@ public class PlayerUtil {
         player.setFireTicks(0);
         player.setMaximumNoDamageTicks(20);
 
-        player.setAllowFlight(false);
-        player.setFlying(false);
+        if (canFly(player)) {
+            player.setAllowFlight(true);
+            player.setFlying(true);
+        } else {
+            player.setAllowFlight(false);
+            player.setFlying(false);
+        }
 
         player.setExp(0.0F);
         player.setLevel(0);
@@ -53,6 +62,16 @@ public class PlayerUtil {
         if (closeInventory) {
             player.closeInventory();
         }
+    }
+
+    /**
+     * Starts flying for the player if they have the required permission.
+     *
+     * @param player the player to start flying.
+     */
+    public boolean canFly(Player player) {
+        Profile profile = Alley.getInstance().getService(IProfileService.class).getProfile(player.getUniqueId());
+        return (profile.getState() == EnumProfileState.LOBBY || profile.getState() == EnumProfileState.WAITING) && player.hasPermission("alley.donator.fly");
     }
 
     public static void decrement(Player player) {
