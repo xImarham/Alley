@@ -15,6 +15,7 @@ import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
+import dev.revere.alley.tool.reflection.IReflectionRepository;
 import dev.revere.alley.tool.reflection.impl.BlockAnimationReflectionService;
 import dev.revere.alley.util.ListenerUtil;
 import dev.revere.alley.util.chat.CC;
@@ -28,7 +29,6 @@ import org.bukkit.block.Sign;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.*;
 import org.bukkit.event.entity.ProjectileHitEvent;
@@ -517,8 +517,8 @@ public class MatchBlockListener implements Listener {
      * Handles the logic for blocks that disappear after a set time.
      * This is triggered from the onBlockPlace event.
      *
-     * @param event The BlockPlaceEvent.
-     * @param match The current match.
+     * @param event          The BlockPlaceEvent.
+     * @param match          The current match.
      * @param profileService The profile service instance.
      */
     private void handleTimedBlockPlacement(BlockPlaceEvent event, AbstractMatch match, IProfileService profileService) {
@@ -537,7 +537,7 @@ public class MatchBlockListener implements Listener {
         final Player player = event.getPlayer();
         final int DURATION_TICKS = 100;
 
-        BlockAnimationReflectionService animationService = new BlockAnimationReflectionService();
+        BlockAnimationReflectionService animationService = Alley.getInstance().getService(IReflectionRepository.class).getReflectionService(BlockAnimationReflectionService.class);
         int animationId = placedBlock.getLocation().hashCode();
 
         List<Player> playersInMatch = match.getParticipants().stream()
@@ -559,7 +559,7 @@ public class MatchBlockListener implements Listener {
                 }
 
                 Profile currentProfile = profileService.getProfile(player.getUniqueId());
-                boolean playerIsStillPlaying = player.getGameMode() == GameMode.SURVIVAL && currentProfile != null && currentProfile.getMatch() == match && currentProfile.getState() == EnumProfileState.PLAYING;
+                boolean playerIsStillPlaying = player.getGameMode() == GameMode.SURVIVAL && currentProfile != null && currentProfile.getMatch() == match && currentProfile.getState() == EnumProfileState.PLAYING && match.getState() == EnumMatchState.RUNNING;
 
                 if (placedBlock.getLocation().getBlock().getType() == type) {
                     playersInMatch.forEach(p -> animationService.sendBreakAnimation(p, placedBlock, animationId, -1));
