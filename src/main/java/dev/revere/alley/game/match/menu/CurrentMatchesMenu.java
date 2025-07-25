@@ -85,11 +85,13 @@ public class CurrentMatchesMenu extends PaginatedMenu {
         public ItemStack getButtonItem(Player player) {
             return new ItemBuilder(match.getKit().getIcon()).name("&6&l" + match.getParticipants().get(0).getLeader().getUsername() + " &7vs &6&l" + match.getParticipants().get(1).getLeader().getUsername()).durability(match.getKit().getDurability()).hideMeta()
                     .lore(
+                            CC.MENU_BAR,
                             " &f● &6Arena: &f" + match.getArena().getName(),
                             " &f● &6Kit: &f" + match.getKit().getDisplayName(),
                             " &f● &6Queue: &f" + (match.getQueue() == null ? "None" : match.getQueue().getQueueType()),
                             " ",
-                            "&aClick to spectate!"
+                            "&aClick to spectate.",
+                            CC.MENU_BAR
                     )
                     .hideMeta().build();
         }

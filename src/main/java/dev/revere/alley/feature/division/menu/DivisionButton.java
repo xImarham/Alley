@@ -6,6 +6,7 @@ import dev.revere.alley.feature.division.Division;
 import dev.revere.alley.feature.title.menu.TitleMenu;
 import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.tool.item.ItemBuilder;
+import dev.revere.alley.util.chat.CC;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.bukkit.entity.Player;
@@ -28,6 +29,7 @@ public class DivisionButton extends Button {
                 .durability(this.division.getDurability())
                 .name("&6&l" + this.division.getDisplayName() + " Division")
                 .lore(
+                        CC.MENU_BAR,
                         "&f&l● &6Tiers: &f" + this.division.getTiers().size(),
                         "  &7▶ (" + this.division.getTiers().get(0).getRequiredWins() + " - " + this.division.getTotalWins() + " Wins)",
                         "",
@@ -35,7 +37,8 @@ public class DivisionButton extends Button {
                         " &fa division based on your",
                         " &6Unranked &fwins.",
                         "",
-                        "&aClick to see your titles."
+                        "&aClick to see your titles.",
+                        CC.MENU_BAR
                 )
                 .hideMeta()
                 .build();

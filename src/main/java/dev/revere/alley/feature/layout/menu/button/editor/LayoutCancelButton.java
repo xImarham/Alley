@@ -5,6 +5,7 @@ import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.feature.layout.ILayoutService;
 import dev.revere.alley.profile.progress.IProgressService;
 import dev.revere.alley.tool.item.ItemBuilder;
+import dev.revere.alley.util.chat.CC;
 import lombok.AllArgsConstructor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -24,10 +25,12 @@ public class LayoutCancelButton extends Button {
                 .name("&6&lCancel")
                 .durability(14)
                 .lore(
+                        CC.MENU_BAR,
                         "&7Cancel changes &",
                         "&7return to main menu.",
                         "",
-                        "&aClick to cancel!"
+                        "&aClick to cancel.",
+                        CC.MENU_BAR
                 )
                 .hideMeta()
                 .build();

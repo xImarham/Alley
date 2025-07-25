@@ -32,16 +32,18 @@ public class ShopItemButton extends Button {
         boolean hasPermission = player.hasPermission(cosmetic.getPermission());
 
         List<String> lore = new ArrayList<>();
-        lore.add("&7" + cosmetic.getDescription());
+        lore.add(CC.MENU_BAR);
+        lore.addAll(cosmetic.getDisplayLore());
         lore.add("");
 
         if (hasPermission) {
             lore.add("&aYou already own this item.");
         } else {
-            lore.add("&fPrice: &6" + cosmetic.getPrice() + " Coins");
+            lore.add(" &fPrice: &6$" + cosmetic.getPrice());
             lore.add("");
-            lore.add("&aClick to purchase!");
+            lore.add("&aClick to purchase.");
         }
+        lore.add(CC.MENU_BAR);
 
         return new ItemBuilder(cosmetic.getIcon())
                 .name("&6&l" + cosmetic.getName())

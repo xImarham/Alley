@@ -50,6 +50,8 @@ public class UnrankedButton extends Button {
      */
     private @NotNull List<String> getLore(Kit kit) {
         List<String> lore = new ArrayList<>();
+        lore.add(CC.MENU_BAR);
+
         if (!kit.getDescription().isEmpty()) {
             Collections.addAll(lore,
                     "&7" + kit.getDescription(),
@@ -58,15 +60,16 @@ public class UnrankedButton extends Button {
         }
 
         Collections.addAll(lore,
-                "&fPlaying: &6" + this.queue.getQueueFightCount(),
-                "&fQueueing: &6" + this.queue.getTotalPlayerCount(),
+                "&6│ &rPlaying: &6" + this.queue.getQueueFightCount(),
+                "&6│ &rQueueing: &6" + this.queue.getTotalPlayerCount(),
                 "",
                 "&f&lDaily Streak: &6N/A",
                 " &f1. &6NULL &f- &6N/A",
                 " &f2. &6NULL &f- &6N/A",
                 " &f3. &6NULL &f- &6N/A",
                 "",
-                "&aClick to play!"
+                "&aClick to play.",
+                CC.MENU_BAR
         );
 
         return lore;
@@ -88,7 +91,7 @@ public class UnrankedButton extends Button {
         this.queue.addPlayer(player, this.queue.isRanked() ? profile.getProfileData().getRankedKitData().get(this.queue.getKit().getName()).getElo() : 0);
         this.playNeutral(player);
 
-        PlayerUtil.reset(player, false);
+        PlayerUtil.reset(player, false, true);
         player.closeInventory();
     }
 }

@@ -54,6 +54,5 @@ public class TrollCommand extends BaseCommand {
         }
 
         sender.sendMessage(CC.translate("&eYou have trolled &d" + targetPlayer.getName() + "&e."));
-        targetPlayer.sendMessage(CC.translate("&eYou have been trolled."));
     }
 }

@@ -42,6 +42,11 @@ public class PhoenixCoreImpl implements ICore {
     }
 
     @Override
+    public String getRankName(Player player) {
+        return this.getProfile(player).getHighestRank().getName();
+    }
+
+    @Override
     public String getRankSuffix(Player player) {
         return this.getProfile(player).getHighestRank().getSuffix();
     }

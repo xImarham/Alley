@@ -6,6 +6,7 @@ import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
 import dev.revere.alley.feature.layout.ILayoutService;
 import dev.revere.alley.profile.IProfileService;
+import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.entity.Player;
@@ -21,7 +22,10 @@ public class LayoutCommand extends BaseCommand {
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
 
-        if (this.plugin.getService(IProfileService.class).getProfile(player.getUniqueId()).getState() != EnumProfileState.LOBBY) {
+        IProfileService profileService = this.plugin.getService(IProfileService.class);
+        Profile profile = profileService.getProfile(player.getUniqueId());
+
+        if (profile.getState() != EnumProfileState.LOBBY && profile.getState() != EnumProfileState.WAITING) {
             player.sendMessage(CC.translate("&cYou are not in the lobby!"));
             return;
         }

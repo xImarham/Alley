@@ -4,6 +4,7 @@ import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.game.ffa.AbstractFFAMatch;
 import dev.revere.alley.tool.item.ItemBuilder;
 import dev.revere.alley.util.SoundUtil;
+import dev.revere.alley.util.chat.CC;
 import lombok.AllArgsConstructor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
@@ -24,12 +25,14 @@ public class FFAButton extends Button {
                 .name("&6&l" + this.match.getKit().getMenuTitle())
                 .durability(this.match.getKit().getDurability())
                 .lore(
+                        CC.MENU_BAR,
+                        " &fPlaying: &6" + this.match.getPlayers().size() + "/" + this.match.getMaxPlayers(),
+                        " &fArena: &6" + this.match.getArena().getName(),
+                        " &fKit: &6" + this.match.getKit().getName(),
                         "",
-                        "&fPlaying: &6" + this.match.getPlayers().size() + "/" + this.match.getMaxPlayers(),
-                        "&fArena: &6" + this.match.getArena().getName(),
-                        "&fKit: &6" + this.match.getKit().getName(),
-                        "",
-                        "&fClick to join the &6" + this.match.getName() + " &fqueue."
+                        "&aClick to join.",
+                        CC.MENU_BAR
+
                 )
                 .hideMeta()
                 .build();

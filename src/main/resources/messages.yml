@@ -200,3 +200,9 @@ rename-item:
   missing-arguments: "&cMissing arguments! Please enter a name for the item."
   no-item: "&cYou need to be holding an item!"
   renamed: "&aYou've renamed the &a'&r{item}&a' &aitem to &a'&r{renamed}&a'."
+
+tips:
+  - "&6Tip: &fUse F5 to look at your opponent one last time before they end you."
+  - "&6Tip: &fW-tap like your life depends on it. It kinda does."
+  - "&6Tip: &fKeep your crosshair at head level... unless you like tickling toes."
+  - "&6Tip: &fPractice spacing — or just hug them and pray."

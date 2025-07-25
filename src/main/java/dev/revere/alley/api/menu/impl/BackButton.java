@@ -3,6 +3,7 @@ package dev.revere.alley.api.menu.impl;
 import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.api.menu.Menu;
 import dev.revere.alley.tool.item.ItemBuilder;
+import dev.revere.alley.util.chat.CC;
 import lombok.AllArgsConstructor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -19,8 +20,10 @@ public class BackButton extends Button {
                 .name("&c&lBack")
                 .durability(0)
                 .lore(
-                        "&cClick here to return to",
-                        "&cthe previous menu."
+                        CC.MENU_BAR,
+                        " &cClick here to return to",
+                        " &cthe previous menu.",
+                        CC.MENU_BAR
                 )
                 .build();
     }

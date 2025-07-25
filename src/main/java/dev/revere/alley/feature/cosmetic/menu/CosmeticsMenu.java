@@ -2,8 +2,10 @@ package dev.revere.alley.feature.cosmetic.menu;
 
 import dev.revere.alley.api.menu.Button;
 import dev.revere.alley.api.menu.Menu;
+import dev.revere.alley.api.menu.impl.BackButton;
 import dev.revere.alley.feature.cosmetic.EnumCosmeticType;
 import dev.revere.alley.feature.cosmetic.menu.button.CosmeticCategoryButton;
+import dev.revere.alley.profile.menu.setting.PracticeSettingsMenu;
 import lombok.AllArgsConstructor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -27,10 +29,11 @@ public class CosmeticsMenu extends Menu {
     public Map<Integer, Button> getButtons(Player player) {
         final Map<Integer, Button> buttons = new HashMap<>();
 
-        buttons.put(10, new CosmeticCategoryButton(EnumCosmeticType.KILL_EFFECT, Material.DIAMOND_SWORD));
+        buttons.put(0, new BackButton(new PracticeSettingsMenu()));
+        buttons.put(11, new CosmeticCategoryButton(EnumCosmeticType.KILL_EFFECT, Material.DIAMOND_SWORD));
         buttons.put(12, new CosmeticCategoryButton(EnumCosmeticType.SOUND_EFFECT, Material.NOTE_BLOCK));
         buttons.put(14, new CosmeticCategoryButton(EnumCosmeticType.PROJECTILE_TRAIL, Material.ARROW));
-        buttons.put(16, new CosmeticCategoryButton(EnumCosmeticType.KILL_MESSAGE, Material.BOOK_AND_QUILL));
+        buttons.put(15, new CosmeticCategoryButton(EnumCosmeticType.KILL_MESSAGE, Material.BOOK_AND_QUILL));
 
         this.addBorder(buttons, 15, 3);
 

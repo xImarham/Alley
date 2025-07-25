@@ -34,6 +34,10 @@ public class DefaultCoreImpl implements ICore {
 
     @Override
     public ChatColor getPlayerColor(Player player) {
+        if (player == null) {
+            return ChatColor.WHITE;
+        }
+
         if (player.isOp()) {
             return ChatColor.DARK_RED;
         } else if (player.hasPermission(this.adminPermission)) {
@@ -45,6 +49,10 @@ public class DefaultCoreImpl implements ICore {
 
     @Override
     public String getRankPrefix(Player player) {
+        if (player == null) {
+            return CC.translate("&a");
+        }
+
         if (player.isOp()) {
             return CC.translate("&7[&4&oOwner&7] &4");
         } else if (player.hasPermission(this.adminPermission)) {
@@ -55,12 +63,31 @@ public class DefaultCoreImpl implements ICore {
     }
 
     @Override
+    public String getRankName(Player player) {
+        if (player == null) {
+            return "Default";
+        }
+
+        if (player.isOp()) {
+            return "Owner";
+        } else if (player.hasPermission(this.adminPermission)) {
+            return "Admin";
+        }
+
+        return "Default";
+    }
+
+    @Override
     public String getRankSuffix(Player player) {
         return "";
     }
 
     @Override
     public ChatColor getRankColor(Player player) {
+        if (player == null) {
+            return ChatColor.WHITE;
+        }
+
         if (player.isOp()) {
             return ChatColor.DARK_RED;
         } else if (player.hasPermission(this.adminPermission)) {

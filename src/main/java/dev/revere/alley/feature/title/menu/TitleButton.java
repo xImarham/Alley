@@ -44,10 +44,11 @@ public class TitleButton extends Button {
         return new ItemBuilder(this.title.getKit().getIcon())
                 .name("&6&l" + this.title.getKit().getName())
                 .lore(
+                        CC.MENU_BAR,
+                        " &a&lUNLOCKED",
                         "",
-                        "&a&lUNLOCKED",
-                        "",
-                        "&aClick to select!"
+                        "&aClick to select!",
+                        CC.MENU_BAR
                 )
                 .durability(this.title.getKit().getDurability())
                 .hideMeta()
@@ -81,17 +82,18 @@ public class TitleButton extends Button {
         PlayerProgress progress = Alley.getInstance().getService(IProgressService.class).calculateProgress(this.profile, this.title.getKit().getName());
 
         return Arrays.asList(
+                CC.MENU_BAR,
+                " &c&lLOCKED",
                 "",
-                "&c&lLOCKED",
-                "",
-                String.format("&fUnlock &6%s &fwith %d more %s.",
+                String.format(" &fUnlock &6%s &fwith %d more %s.",
                         progress.getNextRankName(),
                         progress.getWinsRequired(),
                         progress.getWinOrWins()
                 ),
-                "&f" + progress.getProgressBar(12, "■") + " &7" + progress.getProgressPercentage(),
+                "&f " + progress.getProgressBar(12, "■") + " &7" + progress.getProgressPercentage(),
                 "",
-                "&fRequires &c&l" + this.title.getRequiredDivision().getName().toUpperCase() + " &fdivision."
+                "&fRequires &c&l" + this.title.getRequiredDivision().getName().toUpperCase() + " &fdivision.",
+                CC.MENU_BAR
         );
     }
 }

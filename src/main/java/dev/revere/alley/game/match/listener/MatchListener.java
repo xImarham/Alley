@@ -8,10 +8,7 @@ import dev.revere.alley.base.kit.Kit;
 import dev.revere.alley.base.kit.setting.impl.mechanic.KitSettingDenyMovementImpl;
 import dev.revere.alley.base.kit.setting.impl.mechanic.KitSettingNoHungerImpl;
 import dev.revere.alley.base.kit.setting.impl.mechanic.KitSettingVoidDeathImpl;
-import dev.revere.alley.base.kit.setting.impl.mode.KitSettingRoundsImpl;
-import dev.revere.alley.base.kit.setting.impl.mode.KitSettingSpleefImpl;
-import dev.revere.alley.base.kit.setting.impl.mode.KitSettingStickFightImpl;
-import dev.revere.alley.base.kit.setting.impl.mode.KitSettingSumoImpl;
+import dev.revere.alley.base.kit.setting.impl.mode.*;
 import dev.revere.alley.game.match.AbstractMatch;
 import dev.revere.alley.game.match.enums.EnumMatchState;
 import dev.revere.alley.game.match.impl.MatchRoundsImpl;
@@ -22,7 +19,6 @@ import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
 import dev.revere.alley.util.ListenerUtil;
-import dev.revere.alley.util.PlayerUtil;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -212,7 +208,7 @@ public class MatchListener implements Listener {
         if (event.getEntity() instanceof Player) {
             Player player = (Player) event.getEntity();
             IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
-        Profile profile = profileService.getProfile(player.getUniqueId());
+            Profile profile = profileService.getProfile(player.getUniqueId());
             if (profile.getState() != EnumProfileState.PLAYING) return;
 
             if (profile.getMatch().getKit().isSettingEnabled(KitSettingNoHungerImpl.class)) {
@@ -239,10 +235,16 @@ public class MatchListener implements Listener {
 
                     if (!arena.isEnemyPortal(match, player.getLocation(), playerTeam)) {
                         player.sendMessage(CC.translate("&cYou cannot enter your own portal!"));
-                        player.setHealth(0);
-                        player.setAllowFlight(true);
-                        player.setFlying(true);
-                        player.setGameMode(GameMode.SPECTATOR);
+
+                        if (match.getKit().isSettingEnabled(KitSettingRespawnTimerImpl.class)) {
+                            player.setHealth(0);
+                            player.setAllowFlight(true);
+                            player.setFlying(true);
+                            player.setGameMode(GameMode.SPECTATOR);
+                        } else {
+                            Location spawnLocation = match.getParticipantA().containsPlayer(player.getUniqueId()) ? match.getArena().getPos1() : match.getArena().getPos2();
+                            player.teleport(spawnLocation);
+                        }
                         return;
                     }
 

@@ -8,6 +8,8 @@ import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.Collections;
+
 public abstract class Button {
 
     public static Button placeholder(final Material material, final byte data, String... title) {

@@ -51,23 +51,25 @@ public class RankedButton extends Button {
      */
     private @NotNull List<String> getLore(Kit kit, Player player) {
         List<String> lore = new ArrayList<>();
+        lore.add(CC.MENU_BAR);
+
         if (!kit.getDescription().isEmpty()) {
             Collections.addAll(lore,
                     "&7" + kit.getDescription(),
                     ""
             );
         }
-
         Collections.addAll(lore,
-                "&fPlaying: &6" + this.queue.getQueueFightCount(),
-                "&fQueueing: &6" + this.queue.getProfiles().size(),
+                "&6│ &rPlaying: &6" + this.queue.getQueueFightCount(),
+                "&6│ &rQueueing: &6" + this.queue.getProfiles().size(),
                 "",
                 "&f&lYour ELO: &6" + Alley.getInstance().getService(IProfileService.class).getProfile(player.getUniqueId()).getProfileData().getRankedKitData().get(kit.getName()).getElo(),
                 " &f1. &6NULL &f- &6N/A",
                 " &f2. &6NULL &f- &6N/A",
                 " &f3. &6NULL &f- &6N/A",
                 "",
-                "&aClick to play!"
+                "&aClick to play.",
+                CC.MENU_BAR
         );
 
         return lore;
@@ -99,7 +101,7 @@ public class RankedButton extends Button {
         }
 
         this.queue.addPlayer(player, this.queue.isRanked() ? profile.getProfileData().getRankedKitData().get(queue.getKit().getName()).getElo() : 0);
-        PlayerUtil.reset(player, false);
+        PlayerUtil.reset(player, false, true);
         player.closeInventory();
         this.playNeutral(player);
         Alley.getInstance().getService(IHotbarService.class).applyHotbarItems(player);

@@ -412,7 +412,7 @@ public class MatchRegularImpl extends AbstractMatch {
     @Override
     public void handleRespawn(Player player) {
         player.spigot().respawn();
-        PlayerUtil.reset(player, false);
+        PlayerUtil.reset(player, false, true);
     }
 
     @Override

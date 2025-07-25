@@ -41,11 +41,13 @@ public class PartyEventMenu extends Menu {
                 Material.DIAMOND_SWORD, 0,
                 "&6&lTeam split",
                 Arrays.asList(
-                        "&fSplit the party into",
-                        "&f2 teams and fight",
-                        "&fagainst each other.",
+                        CC.MENU_BAR,
+                        "&7Split the party into",
+                        "&72 teams and fight",
+                        "&7against each other.",
                         "",
-                        "&aClick to select a kit."
+                        "&aClick to select a kit.",
+                        CC.MENU_BAR
                 )
         ));
 
@@ -53,10 +55,12 @@ public class PartyEventMenu extends Menu {
                 Material.GOLD_AXE, 0,
                 "&6&lFree for all",
                 Arrays.asList(
-                        "&fEvery player fights",
-                        "&fagainst each other.",
+                        CC.MENU_BAR,
+                        "&7Every player fights",
+                        "&7against each other.",
                         "",
-                        "&aClick to select a kit."
+                        "&aClick to select a kit.",
+                        CC.MENU_BAR
                 )
         ));
 
@@ -64,10 +68,12 @@ public class PartyEventMenu extends Menu {
                 Material.REDSTONE, 0,
                 "&cBest of 3 Sumo",
                 Arrays.asList(
-                        "&fThis event is not",
-                        "&fimplemented yet.",
+                        CC.MENU_BAR,
+                        "&7This event is not",
+                        "&7implemented yet.",
                         "",
-                        "&c&mClick to start the event."
+                        "&c&mClick to start the event.",
+                        CC.MENU_BAR
                 )
         ));
 

@@ -1,6 +1,5 @@
 package dev.revere.alley.tool.visual;
 
-import com.avaje.ebeaninternal.server.lib.util.StringHelper;
 import dev.revere.alley.Alley;
 import dev.revere.alley.api.constant.IPluginConstant;
 import lombok.experimental.UtilityClass;
@@ -20,18 +19,18 @@ public class LoreHelper {
      * @param value The boolean value to represent.
      * @return A formatted string indicating whether the feature is toggled or not.
      */
-    public String toggledOrNot(boolean value) {
+    public String displayToggled(boolean value) {
         String returnValue = value ? "&a&l✔ &6Toggled" : "&c&l✘ &cNot Toggled";
-        return ChatColor.translateAlternateColorCodes('&', "&f&l┃ " + returnValue);
+        return ChatColor.translateAlternateColorCodes('&', "&f&l│ " + returnValue);
     }
     /**
      * Returns a string representation of a boolean value.
      *
      * @param value The boolean value to represent.
      */
-    public String enabledOrDisabled(boolean value) {
+    public String displayEnabled(boolean value) {
         String returnValue = value ? "&6Enabled" : "&cDisabled";
-        return ChatColor.translateAlternateColorCodes('&', "&f&l┃ " + returnValue);
+        return ChatColor.translateAlternateColorCodes('&', "&f&l│ " + returnValue);
     }
 
     /**
@@ -39,9 +38,9 @@ public class LoreHelper {
      *
      * @param value The boolean value to represent.
      */
-    public String shownOrHidden(boolean value) {
+    public String displayShown(boolean value) {
         String returnValue = value ? "&6Shown" : "&cHidden";
-        return ChatColor.translateAlternateColorCodes('&', "&f&l┃ " + returnValue);
+        return ChatColor.translateAlternateColorCodes('&', "&f&l│ " + returnValue);
     }
 
     /**
@@ -49,7 +48,7 @@ public class LoreHelper {
      *
      * @param value The boolean value to represent.
      */
-    public String status(boolean value) {
+    public String displayStatus(boolean value) {
         String returnValue = value ? "&aEnabled" : "&cDisabled";
         return ChatColor.translateAlternateColorCodes('&', "&f● &6Status: &f" + returnValue);
     }
@@ -59,9 +58,9 @@ public class LoreHelper {
      *
      * @param value The boolean value to represent.
      */
-    public String tickOrCross(boolean value) {
+    public String displaySymbol(boolean value) {
         String returnValue = value ? "&a&l✔" : "&c&l✘";
-        return ChatColor.translateAlternateColorCodes('&', "&f&l┃ " + returnValue);
+        return ChatColor.translateAlternateColorCodes('&', "&f&l│ " + returnValue);
     }
 
     /**
@@ -90,9 +89,9 @@ public class LoreHelper {
      */
     public String selectionLore(boolean inUse, String clickToAction) {
         if (inUse) {
-            return "&a&lSELECTED";
+            return "&aSelected.";
         } else {
-            return "&aClick to " + clickToAction + "!";
+            return "&aClick to " + clickToAction + ".";
         }
     }
 }

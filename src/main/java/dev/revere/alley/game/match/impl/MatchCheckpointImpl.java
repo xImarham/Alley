@@ -2,17 +2,12 @@ package dev.revere.alley.game.match.impl;
 
 import dev.revere.alley.base.arena.AbstractArena;
 import dev.revere.alley.base.kit.Kit;
-import dev.revere.alley.base.kit.setting.impl.mode.KitSettingRespawnTimerImpl;
 import dev.revere.alley.base.queue.Queue;
 import dev.revere.alley.game.match.player.impl.MatchGamePlayerImpl;
 import dev.revere.alley.game.match.player.participant.GameParticipant;
-import dev.revere.alley.game.match.runnable.other.MatchRespawnRunnable;
-import dev.revere.alley.util.ListenerUtil;
 import dev.revere.alley.util.PlayerUtil;
-import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import org.bukkit.event.entity.PlayerDeathEvent;
 
 /**
  * @author Remi
@@ -48,7 +43,7 @@ public class MatchCheckpointImpl extends MatchRegularImpl {
 
     @Override
     public void handleRespawn(Player player) {
-        PlayerUtil.reset(player, true);
+        PlayerUtil.reset(player, true, true);
 
         MatchGamePlayerImpl gamePlayer = this.getGamePlayer(player);
 

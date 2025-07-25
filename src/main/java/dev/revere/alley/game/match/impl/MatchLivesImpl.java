@@ -52,19 +52,31 @@ public class MatchLivesImpl extends MatchRegularImpl {
                 || this.participantB.getAllPlayers().stream().allMatch(MatchGamePlayerImpl::isDisconnected));
     }
 
+    @Override
+    public void setupPlayer(Player player) {
+        super.setupPlayer(player);
+
+        MatchGamePlayerData data = this.getGamePlayer(player).getData();
+        player.setMaxHealth(data.getLives() * 2);
+        player.setHealth(player.getMaxHealth());
+    }
+
     /**
      * Reduces the life count of a player in the match.
      *
+     * @param player The player whose life is to be reduced.
      * @param data The MatchGamePlayerData of the player whose life is to be reduced.
      */
-    public void reduceLife(MatchGamePlayerData data) {
+    public void reduceLife(Player player, MatchGamePlayerData data) {
         data.setLives(data.getLives() - 1);
+        player.setMaxHealth(data.getLives() <= 0 ? 20 : data.getLives() * 2);
+        player.setHealth(player.getMaxHealth());
     }
 
     @Override
     public void handleParticipant(Player player, MatchGamePlayerImpl gamePlayer) {
         MatchGamePlayerData data = this.getGamePlayer(player).getData();
-        this.reduceLife(data);
+        this.reduceLife(player, data);
 
         if (data.getLives() <= 0) {
             gamePlayer.setEliminated(true);
@@ -75,7 +87,7 @@ public class MatchLivesImpl extends MatchRegularImpl {
 
     @Override
     public void handleRespawn(Player player) {
-        PlayerUtil.reset(player, true);
+        PlayerUtil.reset(player, true, false);
 
         Location spawnLocation = this.getParticipants().get(0).containsPlayer(player.getUniqueId()) ? this.getArena().getPos1() : this.getArena().getPos2();
         player.teleport(spawnLocation);

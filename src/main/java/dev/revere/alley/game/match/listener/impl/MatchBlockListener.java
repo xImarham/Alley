@@ -3,6 +3,7 @@ package dev.revere.alley.game.match.listener.impl;
 import dev.revere.alley.Alley;
 import dev.revere.alley.base.arena.impl.StandAloneArena;
 import dev.revere.alley.base.kit.setting.impl.mechanic.KitSettingBuildImpl;
+import dev.revere.alley.base.kit.setting.impl.mechanic.KitSettingTimedBlocksImpl;
 import dev.revere.alley.base.kit.setting.impl.mode.KitSettingBedImpl;
 import dev.revere.alley.base.kit.setting.impl.mode.KitSettingBridgesImpl;
 import dev.revere.alley.base.kit.setting.impl.mode.KitSettingRaidingImpl;
@@ -16,10 +17,12 @@ import dev.revere.alley.game.match.player.participant.GameParticipant;
 import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
+import dev.revere.alley.tool.reflection.impl.BlockAnimationReflectionService;
 import dev.revere.alley.util.ListenerUtil;
 import dev.revere.alley.util.RayTracerUtil;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -37,8 +40,11 @@ import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
 
 /**
  * @author Emmy
@@ -172,9 +178,10 @@ public class MatchBlockListener implements Listener {
     @EventHandler
     private void onBlockPlace(BlockPlaceEvent event) {
         Player player = event.getPlayer();
+        Block placedBlock = event.getBlockPlaced();
+
         IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
         Profile profile = profileService.getProfile(player.getUniqueId());
-        int blockY = event.getBlock().getLocation().getBlockY();
 
         AbstractMatch match = profile.getMatch();
         if (match == null) {
@@ -183,13 +190,21 @@ public class MatchBlockListener implements Listener {
 
         switch (profile.getState()) {
             case PLAYING:
-                if (match.getState() == EnumMatchState.STARTING) event.setCancelled(true);
+                if (match.getState() == EnumMatchState.STARTING) {
+                    if (match.getKit().isSettingEnabled(KitSettingBuildImpl.class)
+                            && placedBlock.getType() == Material.TNT) {
+                        return;
+                    }
+
+                    event.setCancelled(true);
+                }
+
                 if (match.getState() == EnumMatchState.ENDING_MATCH) event.setCancelled(true);
                 if (match.getState() == EnumMatchState.RESTARTING_ROUND) event.setCancelled(true);
 
                 if (match.getArena() instanceof StandAloneArena) {
                     StandAloneArena arena = (StandAloneArena) match.getArena();
-                    Location blockLocation = event.getBlock().getLocation();
+                    Location blockLocation = placedBlock.getLocation();
 
                     if (blockLocation.getBlockY() > arena.getHeightLimit()) {
                         player.sendMessage(CC.translate("&cYou cannot place blocks above the height limit!"));
@@ -208,14 +223,15 @@ public class MatchBlockListener implements Listener {
                 if (match.getKit().isSettingEnabled(KitSettingRaidingImpl.class) && match.getKit().isSettingEnabled(KitSettingBuildImpl.class)) {
                     GameParticipant<MatchGamePlayerImpl> participant = match.getParticipant(player);
                     if (participant.getLeader().getData().getRole() == EnumBaseRaiderRole.TRAPPER) {
-                        // event.setCancelled(false);
-                        match.addBlockToPlacedBlocksMap(event.getBlock().getState(), event.getBlock().getLocation());
+                        match.addBlockToPlacedBlocksMap(placedBlock.getState(), placedBlock.getLocation());
                     } else {
                         event.setCancelled(true);
                     }
                     return;
                 } else if (match.getKit().isSettingEnabled(KitSettingBuildImpl.class)) {
-                    match.addBlockToPlacedBlocksMap(event.getBlock().getState(), event.getBlockPlaced().getLocation());
+                    match.addBlockToPlacedBlocksMap(placedBlock.getState(), event.getBlockPlaced().getLocation());
+
+                    handleTimedBlockPlacement(event, match, profileService);
                     return;
                 }
 
@@ -232,7 +248,7 @@ public class MatchBlockListener implements Listener {
         if (event.getEntityType() == EntityType.SNOWBALL && event.getEntity().getShooter() instanceof Player) {
             Player player = (Player) event.getEntity().getShooter();
             IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
-        Profile profile = profileService.getProfile(player.getUniqueId());
+            Profile profile = profileService.getProfile(player.getUniqueId());
 
             if (profile.getState() != EnumProfileState.PLAYING) return;
             if (profile.getMatch().getState() != EnumMatchState.RUNNING) return;
@@ -460,5 +476,67 @@ public class MatchBlockListener implements Listener {
         );
 
         player.teleport(teleportLocation);
+    }
+
+    /**
+     * Handles the logic for blocks that disappear after a set time.
+     * This is triggered from the onBlockPlace event.
+     *
+     * @param event The BlockPlaceEvent.
+     * @param match The current match.
+     * @param profileService The profile service instance.
+     */
+    private void handleTimedBlockPlacement(BlockPlaceEvent event, AbstractMatch match, IProfileService profileService) {
+        if (!match.getKit().isSettingEnabled(KitSettingTimedBlocksImpl.class)) {
+            return;
+        }
+
+        Block placedBlock = event.getBlockPlaced();
+        final BlockState originalState = placedBlock.getState();
+        Material type = placedBlock.getType();
+
+        if (type != Material.WOOL && type != Material.STAINED_CLAY) {
+            return;
+        }
+
+        final Player player = event.getPlayer();
+        final int DURATION_TICKS = 100;
+
+        BlockAnimationReflectionService animationService = new BlockAnimationReflectionService();
+        int animationId = placedBlock.getLocation().hashCode();
+
+        List<Player> playersInMatch = match.getParticipants().stream()
+                .flatMap(participant -> participant.getPlayers().stream())
+                .map(MatchGamePlayerImpl::getTeamPlayer)
+                .filter(p -> p != null && p.isOnline())
+                .collect(Collectors.toList());
+
+        animationService.sendBreakAnimationSequence(playersInMatch, placedBlock, animationId, DURATION_TICKS);
+
+        ItemStack itemToReturn = new ItemStack(event.getItemInHand());
+        itemToReturn.setAmount(1);
+
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (!match.getPlacedBlocks().containsKey(originalState)) {
+                    return;
+                }
+
+                Profile currentProfile = profileService.getProfile(player.getUniqueId());
+                boolean playerIsStillPlaying = player.getGameMode() == GameMode.SURVIVAL && currentProfile != null && currentProfile.getMatch() == match && currentProfile.getState() == EnumProfileState.PLAYING;
+
+                if (placedBlock.getLocation().getBlock().getType() == type) {
+                    playersInMatch.forEach(p -> animationService.sendBreakAnimation(p, placedBlock, animationId, -1));
+
+                    placedBlock.setType(Material.AIR);
+                    match.removeBlockFromPlacedBlocksMap(placedBlock.getState(), placedBlock.getLocation());
+
+                    if (playerIsStillPlaying) {
+                        player.getInventory().addItem(itemToReturn);
+                    }
+                }
+            }
+        }.runTaskLater(Alley.getInstance(), DURATION_TICKS);
     }
 }

@@ -9,6 +9,7 @@ import dev.revere.alley.profile.data.impl.ProfileCosmeticData;
 import dev.revere.alley.tool.item.ItemBuilder;
 import dev.revere.alley.util.chat.CC;
 import lombok.AllArgsConstructor;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
@@ -33,19 +34,21 @@ public class CosmeticButton extends Button {
         boolean isSelected = profile.getProfileData().getCosmeticData().isSelected(cosmetic);
         boolean hasPermission = player.hasPermission(cosmetic.getPermission());
 
-        List<String> lore = new ArrayList<>(cosmetic.getDisplayLore());
-
+        List<String> lore = new ArrayList<>();
+        lore.add(CC.MENU_BAR);
+        lore.addAll(cosmetic.getDisplayLore());
         lore.add("");
-
         if (hasPermission) {
-            lore.add(isSelected ? "&eThis cosmetic is currently selected." : "&aClick to select this cosmetic.");
+            lore.add(isSelected ? "&eSelected." : "&aClick to select.");
         } else {
             lore.add("&cYou do not own this cosmetic.");
         }
+        lore.add(CC.MENU_BAR);
 
         return new ItemBuilder(cosmetic.getIcon())
                 .name("&6&l" + cosmetic.getName())
                 .lore(lore)
+                .glow(isSelected)
                 .hideMeta()
                 .build();
     }

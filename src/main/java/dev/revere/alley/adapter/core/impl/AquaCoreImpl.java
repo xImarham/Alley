@@ -51,6 +51,11 @@ public class AquaCoreImpl implements ICore {
     }
 
     @Override
+    public String getRankName(Player player) {
+        return this.aquaCoreAPI.getPlayerRank(player.getUniqueId()).getName();
+    }
+
+    @Override
     public ChatColor getRankColor(Player player) {
         return this.aquaCoreAPI.getPlayerRank(player.getUniqueId()).getColor();
     }

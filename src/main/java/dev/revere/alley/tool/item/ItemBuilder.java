@@ -120,6 +120,22 @@ public class ItemBuilder implements Listener {
         return this;
     }
 
+    public ItemBuilder glow(boolean glow) {
+        ItemMeta meta = itemStack.getItemMeta();
+
+        if (glow) {
+            meta.addEnchant(Enchantment.LURE, 1, true);
+            meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        } else {
+            meta.removeEnchant(Enchantment.LURE);
+            meta.removeItemFlags(ItemFlag.HIDE_ENCHANTS);
+        }
+
+        itemStack.setItemMeta(meta);
+
+        return this;
+    }
+
     public ItemBuilder clearEnchantments() {
         for (Enchantment e : itemStack.getEnchantments().keySet()) {
             itemStack.removeEnchantment(e);
