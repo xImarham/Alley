@@ -3,25 +3,17 @@ package dev.revere.alley.base.hotbar.listener;
 import dev.revere.alley.Alley;
 import dev.revere.alley.base.hotbar.HotbarItem;
 import dev.revere.alley.base.hotbar.IHotbarService;
+import dev.revere.alley.base.hotbar.enums.EnumHotbarAction;
 import dev.revere.alley.base.hotbar.enums.EnumHotbarType;
-import dev.revere.alley.base.queue.IQueueService;
-import dev.revere.alley.base.queue.enums.EnumQueueType;
-import dev.revere.alley.base.queue.menu.sub.RankedMenu;
-import dev.revere.alley.feature.leaderboard.menu.LeaderboardMenu;
-import dev.revere.alley.game.match.menu.CurrentMatchesMenu;
-import dev.revere.alley.game.party.menu.duel.DuelOtherPartyMenu;
-import dev.revere.alley.game.party.menu.event.PartyEventMenu;
 import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
-import dev.revere.alley.util.chat.CC;
+import dev.revere.alley.tool.logger.Logger;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
-
-import java.util.List;
 
 /**
  * @author Remi
@@ -38,7 +30,6 @@ public class HotbarListener implements Listener {
 
         IProfileService profileService = Alley.getInstance().getService(IProfileService.class);
         IHotbarService hotbarService = Alley.getInstance().getService(IHotbarService.class);
-        IQueueService queueService = Alley.getInstance().getService(IQueueService.class);
 
         Player player = event.getPlayer();
         ItemStack clickedItem = player.getItemInHand();
@@ -51,66 +42,30 @@ public class HotbarListener implements Listener {
         EnumHotbarType currentHotbarType = hotbarService.getCorrespondingType(profile);
         if (currentHotbarType == null) return;
 
-        List<HotbarItem> possibleItems = hotbarService.getItemsForType(currentHotbarType);
-
-        HotbarItem hotbarItem = possibleItems.stream()
-                .filter(item -> item.getItemStack().getItemMeta().getDisplayName().equals(clickedItem.getItemMeta().getDisplayName()))
-                .findFirst()
-                .orElse(null);
-
-        if (hotbarItem != null) {
-            String command = hotbarItem.getHotbarItems().getCommand();
-            if (command != null && !command.isEmpty()) {
-                player.performCommand(command);
-            } else {
-                switch (profile.getState()) {
-                    case LOBBY:
-                        switch (hotbarItem.getHotbarItems()) {
-                            case UNRANKED_QUEUES:
-                                queueService.getQueueMenu().openMenu(player);
-                                break;
-                            case DUO_UNRANKED_QUEUE:
-                                profile.setQueueType(EnumQueueType.DUOS);
-                                queueService.getQueueMenu().openMenu(player);
-                                break;
-                            case RANKED_QUEUES:
-                                new RankedMenu().openMenu(player);
-                                break;
-                            case CURRENT_MATCHES:
-                                new CurrentMatchesMenu().openMenu(player);
-                                break;
-                            case LAYOUT_EDITOR:
-                                break;
-                            case LEADERBOARD:
-                                new LeaderboardMenu().openMenu(player);
-                                break;
-                            case START_PARTY_EVENT:
-                                if (this.checkForPartyLeader(player, profile)) return;
-                                new PartyEventMenu().openMenu(player);
-                                break;
-                            case FIGHT_OTHER_PARTY:
-                                if (this.checkForPartyLeader(player, profile)) return;
-                                new DuelOtherPartyMenu().openMenu(player);
-                                break;
-                        }
-                        break;
-                }
-            }
+        if (!hotbarService.isHotbarItem(clickedItem, currentHotbarType)) {
+            return;
         }
-    }
 
-    /**
-     * Check if the player is the leader of the party.
-     *
-     * @param player  the player to check
-     * @param profile the profile of the player
-     * @return true if the player is not the leader of the party
-     */
-    private boolean checkForPartyLeader(Player player, Profile profile) {
-        if (player != profile.getParty().getLeader()) {
-            player.sendMessage(CC.translate("&cYou're not the leader of this party."));
-            return true;
+        HotbarItem hotbarItem = hotbarService.getHotbarItem(clickedItem, currentHotbarType);
+        if (hotbarItem == null) {
+            return;
         }
-        return false;
+
+        EnumHotbarAction actionType = hotbarItem.getActionData().getAction();
+        if (actionType == null) {
+            Logger.error("Hotbar item action type is null for item: " + hotbarItem.getName());
+            return;
+        }
+
+        switch (actionType) {
+            case RUN_COMMAND:
+                player.performCommand(hotbarItem.getActionData().getCommand());
+                break;
+            case OPEN_MENU:
+                hotbarItem.getActionData().getMenu().openMenu(player);
+                break;
+        }
+
+        event.setCancelled(true);
     }
 }

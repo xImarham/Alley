@@ -42,6 +42,8 @@ public interface IConfigService extends IService {
 
     FileConfiguration getSettingsConfig();
 
+    FileConfiguration getHotbarConfig();
+
     FileConfiguration getMessagesConfig();
 
     FileConfiguration getDatabaseConfig();
