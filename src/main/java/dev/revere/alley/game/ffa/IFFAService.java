@@ -61,4 +61,11 @@ public interface IFFAService extends IService {
      * and re-initialize the matches based on the current kit configurations.
      */
     void reloadFFAKits();
+
+    /**
+     * Checks if a specific kit is eligible for FFA mode.
+     * @param kit The kit to check.
+     * @return true if the kit is eligible for FFA, false otherwise.
+     */
+    boolean isNotEligibleForFFA(Kit kit);
 }

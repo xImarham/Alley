@@ -24,9 +24,9 @@ public class DivisionSetWinsCommand extends BaseCommand {
     @CompleterData(name = "division.setwins")
     public List<String> DivisionSetWinsCompleter(CommandArgs command) {
         List<String> completion = new ArrayList<>();
-        if (command.getArgs().length == 1 && command.getPlayer().hasPermission("alley.admin")) {
+        if (command.getArgs().length == 1 && command.getPlayer().hasPermission(this.getAdminPermission())) {
             this.plugin.getService(IDivisionService.class).getDivisions().forEach(division -> completion.add(division.getName()));
-        } else if (command.getArgs().length == 2 && command.getPlayer().hasPermission("alley.admin")) {
+        } else if (command.getArgs().length == 2 && command.getPlayer().hasPermission(this.getAdminPermission())) {
             Division division = this.plugin.getService(IDivisionService.class).getDivision(command.getArgs()[0]);
             if (division != null) {
                 division.getTiers().forEach(tier -> completion.add(tier.getName()));

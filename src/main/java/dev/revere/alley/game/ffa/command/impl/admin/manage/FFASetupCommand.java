@@ -1,4 +1,4 @@
-package dev.revere.alley.base.kit.command.impl.manage.ffa;
+package dev.revere.alley.game.ffa.command.impl.admin.manage;
 
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
@@ -9,7 +9,6 @@ import dev.revere.alley.base.arena.enums.EnumArenaType;
 import dev.revere.alley.base.kit.IKitService;
 import dev.revere.alley.base.kit.Kit;
 import dev.revere.alley.game.ffa.IFFAService;
-import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.util.chat.CC;
 import org.bukkit.entity.Player;
 
@@ -18,15 +17,15 @@ import org.bukkit.entity.Player;
  * @project Alley
  * @since 11/04/2025
  */
-public class KitSetupFFACommand extends BaseCommand {
-    @CommandData(name = "kit.setupffa", isAdminOnly = true)
+public class FFASetupCommand extends BaseCommand {
+    @CommandData(name = "ffa.setup", isAdminOnly = true)
     @Override
     public void onCommand(CommandArgs command) {
         Player player = command.getPlayer();
         String[] args = command.getArgs();
 
         if (args.length < 4) {
-            player.sendMessage(CC.translate("&6Usage: &e/kit setfupfa &6<kitName> <arenaName> <maxPlayers> <menu-slot>"));
+            player.sendMessage(CC.translate("&6Usage: &e/ffa setup &6<kitName> <arenaName> <maxPlayers> <menu-slot>"));
             return;
         }
 
@@ -56,7 +55,7 @@ public class KitSetupFFACommand extends BaseCommand {
         int maxPlayers;
         try {
             maxPlayers = Integer.parseInt(args[2]);
-        } catch (NumberFormatException e) {
+        } catch (NumberFormatException exception) {
             player.sendMessage(CC.translate("&cThe max players must be a number."));
             return;
         }
@@ -64,21 +63,25 @@ public class KitSetupFFACommand extends BaseCommand {
         int menuSlot;
         try {
             menuSlot = Integer.parseInt(args[3]);
-        } catch (NumberFormatException e) {
+        } catch (NumberFormatException exception) {
             player.sendMessage(CC.translate("&cThe menu slot must be a number."));
             return;
         }
-        
-        /* TODO: Verify which settings are enabled for the kit to prevent conflicting settings, 
-            such as setting Boxing as FFA. Afterwards too, if (/kit setsetting) */
+
+        IFFAService ffaService = this.plugin.getService(IFFAService.class);
+        if (ffaService.isNotEligibleForFFA(kit)) {
+            player.sendMessage(CC.translate("&cThis kit is not eligible for FFA due to the kit setting it has enabled!"));
+            return;
+        }
 
         kit.setFfaEnabled(true);
         kit.setFfaSlot(menuSlot);
         kit.setFfaArenaName(arena.getName());
         kit.setMaxFfaPlayers(maxPlayers);
-        this.plugin.getService(IFFAService.class).createFFAMatch(arena, kit, maxPlayers);
+        ffaService.createFFAMatch(arena, kit, maxPlayers);
         kitService.saveKit(kit);
-        this.plugin.getService(IProfileService.class).loadProfiles();
+
+        //this.plugin.getService(IProfileService.class).loadProfiles();
         player.sendMessage(CC.translate("&aFFA match has been created with the kit &6" + kit.getName() + "&a!"));
     }
 }

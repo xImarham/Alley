@@ -1,4 +1,4 @@
-package dev.revere.alley.game.ffa.command.impl;
+package dev.revere.alley.game.ffa.command.impl.admin.manage;
 
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
