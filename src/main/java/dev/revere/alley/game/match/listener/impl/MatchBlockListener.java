@@ -568,7 +568,15 @@ public class MatchBlockListener implements Listener {
                     match.removeBlockFromPlacedBlocksMap(placedBlock.getState(), placedBlock.getLocation());
 
                     if (playerIsStillPlaying) {
-                        player.getInventory().addItem(itemToReturn);
+                        for (int i = 0; i < player.getInventory().getSize(); i++) {
+                            ItemStack itemInSlot = player.getInventory().getItem(i);
+                            if (itemInSlot != null && itemInSlot.isSimilar(itemToReturn)) {
+                                if (itemInSlot.getAmount() < itemInSlot.getMaxStackSize()) {
+                                    itemInSlot.setAmount(itemInSlot.getAmount() + 1);
+                                    return;
+                                }
+                            }
+                        }
                     }
                 }
             }
