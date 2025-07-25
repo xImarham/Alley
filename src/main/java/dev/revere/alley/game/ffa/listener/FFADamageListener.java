@@ -2,10 +2,14 @@ package dev.revere.alley.game.ffa.listener;
 
 import dev.revere.alley.Alley;
 import dev.revere.alley.base.combat.ICombatService;
+import dev.revere.alley.base.kit.setting.impl.visual.KitSettingBowShotIndicatorImpl;
 import dev.revere.alley.game.ffa.cuboid.IFFASpawnService;
 import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
+import dev.revere.alley.util.chat.CC;
+import dev.revere.alley.util.chat.Symbol;
+import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
@@ -63,6 +67,15 @@ public class FFADamageListener implements Listener {
         Profile profile = profileService.getProfile(victim.getUniqueId());
         if (profile.getState() != EnumProfileState.FFA) {
             return;
+        }
+
+        if (profile.getFfaMatch().getKit().isSettingEnabled(KitSettingBowShotIndicatorImpl.class) && event.getDamager() instanceof Arrow) {
+            double finalHealth = victim.getHealth() - event.getFinalDamage();
+            finalHealth = Math.max(0, finalHealth);
+
+            if (finalHealth > 0) {
+                attacker.sendMessage(CC.translate(profile.getNameColor() + victim.getName() + " &7&l" + Symbol.ARROW_R + " &6" + String.format("%.1f", finalHealth) + " &c" + Symbol.HEART));
+            }
         }
 
         IFFASpawnService ffaSpawnService = Alley.getInstance().getService(IFFASpawnService.class);
