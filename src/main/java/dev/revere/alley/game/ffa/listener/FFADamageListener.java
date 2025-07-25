@@ -73,6 +73,10 @@ public class FFADamageListener implements Listener {
             }
 
             event.setCancelled(true);
+            return;
         }
+
+        ICombatService combatService = Alley.getInstance().getService(ICombatService.class);
+        combatService.setLastAttacker(victim, attacker);
     }
 }
