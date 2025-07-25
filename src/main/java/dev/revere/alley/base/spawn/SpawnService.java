@@ -5,6 +5,7 @@ import dev.revere.alley.plugin.AlleyContext;
 import dev.revere.alley.plugin.annotation.Service;
 import dev.revere.alley.tool.logger.Logger;
 import dev.revere.alley.tool.serializer.Serializer;
+import dev.revere.alley.util.PlayerUtil;
 import dev.revere.alley.util.chat.CC;
 import lombok.Getter;
 import org.bukkit.Location;
@@ -65,10 +66,6 @@ public class SpawnService implements ISpawnService {
         }
 
         player.teleport(this.location);
-
-        if (player.hasPermission("alley.donator.fly")) {
-            player.setAllowFlight(true);
-            player.setFlying(true);
-        }
+        PlayerUtil.reset(player, false, true);
     }
 }
