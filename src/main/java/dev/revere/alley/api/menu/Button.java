@@ -31,26 +31,6 @@ public abstract class Button {
 
     }
 
-    /**
-     * Creates a customizable, colored progress bar string.
-     *
-     * @param current The number of unlocked items.
-     * @param max The total number of items.
-     * @return A formatted progress bar string.
-     */
-    public String buildProgressBar(int current, int max) {
-        if (max == 0) return "&8[&7--------------------&8] &7(0%)";
-
-        float percent = (float) current / max;
-        int totalBars = 20;
-        int progressBars = (int) (totalBars * percent);
-
-        return "&a" +
-                String.join("", Collections.nCopies(progressBars, "│")) +
-                "&7" +
-                String.join("", Collections.nCopies(totalBars - progressBars, "│"));
-    }
-
     public void playSuccess(Player player) {
         player.playSound(player.getLocation(), Sound.NOTE_PLING, 20F, 15F);
     }
