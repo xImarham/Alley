@@ -89,13 +89,11 @@ public abstract class AbstractFFAMatch {
             return;
         }
 
-        if (profile.getState() != EnumProfileState.SPECTATING) {
-            profile.setState(EnumProfileState.SPECTATING);
-            profile.setFfaMatch(this);
+        profile.setState(EnumProfileState.SPECTATING);
+        profile.setFfaMatch(this);
 
-            visibilityService.updateVisibility(player);
-            hotbarService.applyHotbarItems(player);
-        }
+        visibilityService.updateVisibility(player);
+        hotbarService.applyHotbarItems(player);
 
         player.teleport(this.arena.getCenter());
         player.spigot().setCollidesWithEntities(false);
@@ -117,13 +115,11 @@ public abstract class AbstractFFAMatch {
         ISpawnService spawnService = this.plugin.getService(ISpawnService.class);
 
         Profile profile = profileService.getProfile(player.getUniqueId());
-        if (profile.getState() == EnumProfileState.SPECTATING) {
-            profile.setState(EnumProfileState.LOBBY);
-            profile.setFfaMatch(null);
+        profile.setState(EnumProfileState.LOBBY);
+        profile.setFfaMatch(null);
 
-            visibilityService.updateVisibility(player);
-            hotbarService.applyHotbarItems(player);
-        }
+        visibilityService.updateVisibility(player);
+        hotbarService.applyHotbarItems(player);
 
         player.spigot().setCollidesWithEntities(true);
         player.setAllowFlight(false);
