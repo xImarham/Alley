@@ -76,12 +76,14 @@ public class FFADamageListener implements Listener {
             return;
         }
 
-        if (profile.getFfaMatch().getKit().isSettingEnabled(KitSettingBowShotIndicatorImpl.class) && event.getDamager() instanceof Arrow) {
-            double finalHealth = victim.getHealth() - event.getFinalDamage();
-            finalHealth = Math.max(0, finalHealth);
+        if (victim != attacker) {
+            if (profile.getFfaMatch().getKit().isSettingEnabled(KitSettingBowShotIndicatorImpl.class) && event.getDamager() instanceof Arrow) {
+                double finalHealth = victim.getHealth() - event.getFinalDamage();
+                finalHealth = Math.max(0, finalHealth);
 
-            if (finalHealth > 0) {
-                attacker.sendMessage(CC.translate(profile.getNameColor() + victim.getName() + " &7&l" + Symbol.ARROW_R + " &6" + String.format("%.1f", finalHealth) + " &c" + Symbol.HEART));
+                if (finalHealth > 0) {
+                    attacker.sendMessage(CC.translate(profile.getNameColor() + victim.getName() + " &7&l" + Symbol.ARROW_R + " &6" + String.format("%.1f", finalHealth) + " &c" + Symbol.HEART));
+                }
             }
         }
 
@@ -96,7 +98,9 @@ public class FFADamageListener implements Listener {
             return;
         }
 
-        ICombatService combatService = Alley.getInstance().getService(ICombatService.class);
-        combatService.setLastAttacker(victim, attacker);
+        if (victim != attacker) {
+            ICombatService combatService = Alley.getInstance().getService(ICombatService.class);
+            combatService.setLastAttacker(victim, attacker);
+        }
     }
 }
