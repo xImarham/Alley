@@ -3,10 +3,13 @@ package dev.revere.alley.game.ffa.listener;
 import dev.revere.alley.Alley;
 import dev.revere.alley.base.combat.ICombatService;
 import dev.revere.alley.base.kit.setting.impl.visual.KitSettingBowShotIndicatorImpl;
+import dev.revere.alley.base.kit.setting.impl.visual.KitSettingHealthBarImpl;
 import dev.revere.alley.game.ffa.cuboid.IFFASpawnService;
 import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
+import dev.revere.alley.tool.reflection.IReflectionRepository;
+import dev.revere.alley.tool.reflection.impl.ActionBarReflectionService;
 import dev.revere.alley.util.chat.CC;
 import dev.revere.alley.util.chat.Symbol;
 import org.bukkit.entity.Arrow;
@@ -42,6 +45,10 @@ public class FFADamageListener implements Listener {
 
         ICombatService combatService = Alley.getInstance().getService(ICombatService.class);
         combatService.setLastAttacker(player, attacker);
+
+        if (profile.getFfaMatch().getKit().isSettingEnabled(KitSettingHealthBarImpl.class)) {
+            Alley.getInstance().getService(IReflectionRepository.class).getReflectionService(ActionBarReflectionService.class).visualizeTargetHealth(attacker, player);
+        }
     }
 
     @EventHandler

@@ -208,8 +208,7 @@ public class MatchDamageListener implements Listener {
                 Alley.getInstance().getService(ICombatService.class).setLastAttacker(player, attacker);
 
                 if (profile.getMatch().getKit().isSettingEnabled(KitSettingHealthBarImpl.class)) {
-                    Alley.getInstance().getService(IReflectionRepository.class).getReflectionService(ActionBarReflectionService.class)
-                            .visualizeTargetHealth(attacker, player);
+                    Alley.getInstance().getService(IReflectionRepository.class).getReflectionService(ActionBarReflectionService.class).visualizeTargetHealth(attacker, player);
                 }
             }
         }
