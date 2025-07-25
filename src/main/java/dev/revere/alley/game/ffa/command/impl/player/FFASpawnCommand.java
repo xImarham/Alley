@@ -3,10 +3,6 @@ package dev.revere.alley.game.ffa.command.impl.player;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
-import dev.revere.alley.base.combat.ICombatService;
-import dev.revere.alley.base.kit.IKitService;
-import dev.revere.alley.base.kit.Kit;
-import dev.revere.alley.game.ffa.IFFAService;
 import dev.revere.alley.profile.IProfileService;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.enums.EnumProfileState;
@@ -32,12 +28,6 @@ public class FFASpawnCommand extends BaseCommand {
             return;
         }
 
-        ICombatService combatService = this.plugin.getService(ICombatService.class);
-        if (combatService.isPlayerInCombat(player.getUniqueId())) {
-            player.sendMessage(CC.translate("&cYou cannot spawn while in combat."));
-            return;
-        }
-
-        player.teleport(profile.getFfaMatch().getArena().getPos1());
+        profile.getFfaMatch().teleportToSafeZone(player);
     }
 }
