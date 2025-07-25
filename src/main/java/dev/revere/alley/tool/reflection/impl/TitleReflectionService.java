@@ -50,6 +50,6 @@ public class TitleReflectionService implements IReflection {
      * @param subtitle the subtitle to send
      */
     public void sendTitle(Player player, String title, String subtitle) {
-        this.sendTitle(player, title, subtitle, 10, 70, 20);
+        this.sendTitle(player, title, subtitle, 10, 20, 20);
     }
 }

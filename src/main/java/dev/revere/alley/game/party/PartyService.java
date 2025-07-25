@@ -136,8 +136,7 @@ public class PartyService implements IPartyService {
         this.reflectionRepository.getReflectionService(TitleReflectionService.class).sendTitle(
                 player,
                 "&a&l" + Symbol.CROSSED_SWORDS + " Party Created",
-                "&7Type /p for help.",
-                2, 10, 2
+                "&7Type /p for help."
         );
 
         SoundUtil.playCustomSound(player, Sound.FIREWORK_TWINKLE, 1.0F, 1.0F);
@@ -186,8 +185,7 @@ public class PartyService implements IPartyService {
         this.reflectionRepository.getReflectionService(TitleReflectionService.class).sendTitle(
                 leader,
                 "&c&l✖ Party Disbanded",
-                "&7You've removed your party.",
-                2, 10, 2
+                "&7You've removed your party."
         );
 
         SoundUtil.playBanHammer(leader);

@@ -49,7 +49,7 @@ public class MatchRespawnTask extends BukkitRunnable {
                 player,
                 "&6&lRespawn",
                 "&fRespawning in &6" + this.count + "s",
-                2, 10, 2
+                0, 23, 20
         );
 
         this.player.sendMessage(CC.translate("&a" + this.count + "..."));

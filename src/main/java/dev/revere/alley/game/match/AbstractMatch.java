@@ -957,11 +957,8 @@ public abstract class AbstractMatch {
      *
      * @param title    The title to send.
      * @param subtitle The subtitle to send.
-     * @param fadeIn   The fade-in time in ticks.
-     * @param stay     The stay time in ticks.
-     * @param fadeOut  The fade-out time in ticks.
      */
-    public void sendTitle(String title, String subtitle, int fadeIn, int stay, int fadeOut) {
+    public void sendTitle(String title, String subtitle) {
         IReflectionRepository reflectionRepository = Alley.getInstance().getService(IReflectionRepository.class);
         this.getParticipants().forEach(gameParticipant -> gameParticipant.getPlayers().forEach(uuid -> {
             Player player = this.plugin.getServer().getPlayer(uuid.getUuid());
@@ -969,8 +966,7 @@ public abstract class AbstractMatch {
                 reflectionRepository.getReflectionService(TitleReflectionService.class).sendTitle(
                         player,
                         title,
-                        subtitle,
-                        fadeIn, stay, fadeOut
+                        subtitle
                 );
             }
         }));
@@ -981,8 +977,7 @@ public abstract class AbstractMatch {
                 reflectionRepository.getReflectionService(TitleReflectionService.class).sendTitle(
                         player,
                         title,
-                        subtitle,
-                        fadeIn, stay, fadeOut
+                        subtitle
                 );
             }
         });

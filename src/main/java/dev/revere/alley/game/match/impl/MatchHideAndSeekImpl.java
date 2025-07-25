@@ -128,7 +128,7 @@ public class MatchHideAndSeekImpl extends MatchRegularImpl {
         long totalDelayTicks = (hidingTimeSeconds + preMatchCountdownSeconds) * 20L;
 
         this.seekerReleaseTask = plugin.getServer().getScheduler().runTaskLater(plugin, () -> {
-            sendTitle("&c&lSeekers Released!", "&7The hunt has begun!", 10, 60, 10);
+            sendTitle("&c&lSeekers Released!", "&7The hunt has begun!");
             playSound(Sound.ENDERDRAGON_GROWL);
 
             getParticipantA().getPlayers().forEach(seeker -> {

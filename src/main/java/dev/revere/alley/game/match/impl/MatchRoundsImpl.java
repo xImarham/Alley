@@ -241,8 +241,7 @@ public class MatchRoundsImpl extends MatchRegularImpl {
             Alley.getInstance().getService(IReflectionRepository.class).getReflectionService(TitleReflectionService.class).sendTitle(
                     player,
                     teamWinnerColor.toString() + scorer + " &fhas scored!",
-                    "&f" + winner.getLeader().getData().getScore() + " &7/&f " + this.rounds,
-                    2, 20, 2
+                    "&f" + winner.getLeader().getData().getScore() + " &7/&f " + this.rounds
             );
         }));
     }

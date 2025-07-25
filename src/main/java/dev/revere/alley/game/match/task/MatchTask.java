@@ -122,8 +122,7 @@ public class MatchTask extends BukkitRunnable {
             Alley.getInstance().getService(IReflectionRepository.class).getReflectionService(TitleReflectionService.class).sendTitle(
                     matchGamePlayer.getTeamPlayer(),
                     "&6&lMatch started",
-                    "&fGood Luck!",
-                    15, 20, 2
+                    "&fGood Luck!"
             );
         }));
     }
@@ -134,7 +133,7 @@ public class MatchTask extends BukkitRunnable {
                     matchGamePlayer.getTeamPlayer(),
                     "&6&lMatch",
                     "&fStarts in &6" + this.stage + "s",
-                    2, 10, 2
+                    0, 23, 20
             );
         }));
     }

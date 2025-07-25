@@ -125,8 +125,7 @@ public class MatchBedImpl extends MatchRegularImpl {
 
         this.sendTitle(
                 destructionMessage,
-                subMessage,
-                10, 70, 20
+                subMessage
         );
 
         this.playSound(Sound.ENDERDRAGON_GROWL);

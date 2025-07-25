@@ -251,9 +251,8 @@ public class MatchRegularImpl extends AbstractMatch {
     private void sendVictory(Player player) {
         Alley.getInstance().getService(IReflectionRepository.class).getReflectionService(TitleReflectionService.class).sendTitle(
                 player,
-                "&6Victory!",
-                "&fYou have won the match!",
-                2, 20, 2
+                "&a&lVICTORY!",
+                "&fYou have won the match!"
         );
     }
 
@@ -265,9 +264,8 @@ public class MatchRegularImpl extends AbstractMatch {
     private void sendDefeat(Player player) {
         Alley.getInstance().getService(IReflectionRepository.class).getReflectionService(TitleReflectionService.class).sendTitle(
                 player,
-                "&cDefeat!",
-                "&fYou have lost the match!",
-                2, 20, 2
+                "&c&lDEFEAT!",
+                "&fYou have lost the match!"
         );
     }
 
