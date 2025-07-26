@@ -55,6 +55,6 @@ public class HotbarItem {
      * @return A list of HotbarTypeData objects representing the default hotbar types.
      */
     private List<HotbarTypeData> feedTypeData() {
-        return Arrays.stream(HotbarType.values()).map(type -> new HotbarTypeData(type, -1)).collect(Collectors.toList());
+        return Arrays.stream(HotbarType.values()).map(type -> new HotbarTypeData(type, 0)).collect(Collectors.toList());
     }
 }

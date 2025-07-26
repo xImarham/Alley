@@ -39,6 +39,28 @@ public interface HotbarService extends Service {
     void applyHotbarItems(Player player);
 
     /**
+     * Creates a new hotbar item with the specified name and type.
+     *
+     * @param name The name of the hotbar item to create.
+     * @param type The type of the hotbar item to create.
+     */
+    void createHotbarItem(String name, HotbarType type);
+
+    /**
+     * Deletes a hotbar item by its object reference.
+     *
+     * @param hotbarItem The HotbarItem object to delete.
+     */
+    void deleteHotbarItem(HotbarItem hotbarItem);
+
+    /**
+     * Deletes a hotbar item by its object.
+     *
+     * @param hotbarItem The name of the hotbar item to delete.
+     */
+    void saveToConfig(HotbarItem hotbarItem);
+
+    /**
      * Builds an ItemStack representation of a hotbar item that can be received by the player.
      *
      * @param hotbarItem The HotbarItem to build the ItemStack for.
@@ -70,6 +92,14 @@ public interface HotbarService extends Service {
      * @return The HotbarItem associated with the item stack and type, or null if not found.
      */
     HotbarItem getHotbarItem(ItemStack itemStack, HotbarType type);
+
+    /**
+     * Method to retrieve the given hotbar item object.
+     *
+     * @param name the name of the item.
+     * @return the hotbar item.
+     */
+    HotbarItem getHotbarItem(String name);
 
     /**
      * Gets a menu instance by a given name.

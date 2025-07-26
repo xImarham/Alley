@@ -33,6 +33,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -197,6 +198,69 @@ public class HotbarServiceImpl implements HotbarService {
     }
 
     @Override
+    public void createHotbarItem(String name, HotbarType type) {
+        FileConfiguration hotbarConfig = this.configService.getHotbarConfig();
+        File hotbarFile = this.configService.getConfigFile("providers/hotbar.yml");
+
+        HotbarItem hotbarItem = new HotbarItem(name);
+        hotbarItem.getTypeData().stream()
+                .filter(typeData -> typeData.getType() == type)
+                .findFirst()
+                .ifPresent(typeData -> typeData.setEnabled(true));
+
+        this.hotbarItems.add(hotbarItem);
+        this.saveToConfig(hotbarItem);
+    }
+
+    @Override
+    public void deleteHotbarItem(HotbarItem hotbarItem) {
+        FileConfiguration hotbarConfig = this.configService.getHotbarConfig();
+        File hotbarFile = this.configService.getConfigFile("providers/hotbar.yml");
+
+        ConfigurationSection hotbarSection = hotbarConfig.getConfigurationSection("hotbar-items");
+        if (hotbarSection != null) {
+            hotbarSection.set(hotbarItem.getName(), null);
+            this.hotbarItems.remove(hotbarItem);
+        } else {
+            Logger.error("Hotbar items section is missing in the hotbar configuration file.");
+        }
+
+        this.configService.saveConfig(hotbarFile, hotbarConfig);
+    }
+
+
+    @Override
+    public void saveToConfig(HotbarItem hotbarItem) {
+        FileConfiguration hotbarConfig = this.configService.getHotbarConfig();
+        File hotbarFile = this.configService.getConfigFile("providers/hotbar.yml");
+
+        ConfigurationSection hotbarSection = hotbarConfig.getConfigurationSection("hotbar-items");
+        if (hotbarSection == null) {
+            hotbarSection = hotbarConfig.createSection("hotbar-items");
+        }
+
+        ConfigurationSection itemSection = hotbarSection.createSection(hotbarItem.getName());
+        itemSection.set("display-name", hotbarItem.getDisplayName());
+        itemSection.set("lore", hotbarItem.getLore());
+        itemSection.set("material", hotbarItem.getMaterial().name());
+        itemSection.set("durability", hotbarItem.getDurability());
+
+        ConfigurationSection typesSection = itemSection.createSection("types");
+        for (HotbarTypeData typeData : hotbarItem.getTypeData()) {
+            ConfigurationSection typeSection = typesSection.createSection(typeData.getType().name().toLowerCase());
+            typeSection.set("slot", typeData.getSlot());
+            typeSection.set("enabled", typeData.isEnabled());
+        }
+
+        if (hotbarItem.getActionData() != null) {
+            itemSection.set("command", hotbarItem.getActionData().getCommand());
+            itemSection.set("menu", hotbarItem.getActionData().getMenuName());
+        }
+
+        this.configService.saveConfig(hotbarFile, hotbarConfig);
+    }
+
+    @Override
     public List<HotbarItem> getItemsForType(HotbarType type) {
         return this.hotbarItems.stream()
                 .filter(item -> item.getTypeData().stream().anyMatch(data -> data.getType() == type && data.isEnabled()))
@@ -238,6 +302,11 @@ public class HotbarServiceImpl implements HotbarService {
                 .filter(hotbarItem -> hotbarItem.getDisplayName().equals(itemStack.getItemMeta().getDisplayName()))
                 .findFirst()
                 .orElse(null);
+    }
+
+    @Override
+    public HotbarItem getHotbarItem(String name) {
+        return this.hotbarItems.stream().filter(hotbarItem -> hotbarItem.getName().equalsIgnoreCase(name)).findFirst().orElse(null);
     }
 
     @Override
