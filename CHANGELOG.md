@@ -1,17 +1,16 @@
-## 🎉 Alley v2.1.1
+## 🎉 Alley v2.1.2
 
 ### 🔧 **PATCH RELEASE** - Bug Fixes & Improvements
 
-**Previous Version:** `2.1.0`
-**New Version:** `2.1.1`
+**Previous Version:** `2.1.1`
+**New Version:** `2.1.2`
 
 ### 📝 Changes:
 
-- feat: add build test workflow (060bb391)
-- chore: prevent workflow from running in other branches (11dbdfbc)
+- chore: prevent duplicate build-test runs (dfce0814)
 
 ---
-**Download:** [Alley-2.1.1.jar](https://github.com/RevereInc/alley-practice/releases/download/v2.1.1/Alley-2.1.1.jar)
+**Download:** [Alley-2.1.2.jar](https://github.com/RevereInc/alley-practice/releases/download/v2.1.2/Alley-2.1.2.jar)
 
 **Installation:** Place the JAR file in your `plugins/` folder and restart your server.
 
