@@ -7,12 +7,13 @@ import dev.revere.alley.base.hotbar.data.HotbarTypeData;
 import dev.revere.alley.base.hotbar.enums.HotbarAction;
 import dev.revere.alley.base.hotbar.enums.HotbarType;
 import dev.revere.alley.base.queue.QueueService;
+import dev.revere.alley.base.queue.enums.QueueType;
 import dev.revere.alley.base.queue.menu.sub.RankedMenu;
 import dev.revere.alley.config.ConfigService;
 import dev.revere.alley.plugin.AlleyContext;
 import dev.revere.alley.plugin.annotation.Service;
-import dev.revere.alley.profile.ProfileService;
 import dev.revere.alley.profile.Profile;
+import dev.revere.alley.profile.ProfileService;
 import dev.revere.alley.tool.item.ItemBuilder;
 import dev.revere.alley.tool.logger.Logger;
 import dev.revere.alley.tool.reflection.utility.ReflectionUtility;
@@ -103,9 +104,8 @@ public class HotbarServiceImpl implements HotbarService {
             } else {
                 String menuName = itemSection.getString("menu");
                 if (menuName != null && !menuName.isEmpty()) {
-                    Menu menu = this.getMenuInstanceFromName(menuName);
                     try {
-                        actionData.setMenu(menu);
+                        actionData.setMenuName(menuName);
                     } catch (Exception exception) {
                         Logger.error("Failed to set menu for hotbar item: " + key + ". Menu: " + menuName + " does not exist or is not properly configured.");
                     }
@@ -236,18 +236,17 @@ public class HotbarServiceImpl implements HotbarService {
                 .orElse(null);
     }
 
-    /**
-     * Gets a menu instance by a given name.
-     *
-     * @param name the name of the menu
-     * @return the menu instance
-     */
-    public Menu getMenuInstanceFromName(String name) {
+    @Override
+    public Menu getMenuInstanceFromName(String name, Player player) {
+        Profile profile = this.profileService.getProfile(player.getUniqueId());
         switch (name) {
             case "UNRANKED_MENU":
                 return Alley.getInstance().getService(QueueService.class).getQueueMenu();
             case "RANKED_MENU":
                 return new RankedMenu();
+            case "UNRANKED_DUO_MENU":
+                profile.setQueueType(QueueType.DUOS);
+                return Alley.getInstance().getService(QueueService.class).getQueueMenu();
             default:
                 throw new IllegalArgumentException("Unknown menu type: " + name);
 

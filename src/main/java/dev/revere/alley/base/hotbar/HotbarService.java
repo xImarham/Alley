@@ -1,5 +1,6 @@
 package dev.revere.alley.base.hotbar;
 
+import dev.revere.alley.api.menu.Menu;
 import dev.revere.alley.base.hotbar.enums.HotbarType;
 import dev.revere.alley.plugin.lifecycle.Service;
 import dev.revere.alley.profile.Profile;
@@ -78,4 +79,12 @@ public interface HotbarService extends Service {
      * @return The HotbarItem associated with the item stack and type, or null if not found.
      */
     HotbarItem getHotbarItem(ItemStack itemStack, HotbarType type);
+
+    /**
+     * Gets a menu instance by a given name.
+     *
+     * @param name the name of the menu
+     * @return the menu instance
+     */
+    Menu getMenuInstanceFromName(String name, Player player);
 }

@@ -1,6 +1,7 @@
 package dev.revere.alley.base.hotbar.listener;
 
 import dev.revere.alley.Alley;
+import dev.revere.alley.api.menu.Menu;
 import dev.revere.alley.base.hotbar.HotbarItem;
 import dev.revere.alley.base.hotbar.HotbarService;
 import dev.revere.alley.base.hotbar.enums.HotbarAction;
@@ -62,7 +63,8 @@ public class HotbarListener implements Listener {
                 player.performCommand(hotbarItem.getActionData().getCommand());
                 break;
             case OPEN_MENU:
-                hotbarItem.getActionData().getMenu().openMenu(player);
+                Menu menu = hotbarService.getMenuInstanceFromName(hotbarItem.getActionData().getMenuName(), player);
+                menu.openMenu(player);
                 break;
         }
 
