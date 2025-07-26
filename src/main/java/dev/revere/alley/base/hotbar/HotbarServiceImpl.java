@@ -10,10 +10,18 @@ import dev.revere.alley.base.queue.QueueService;
 import dev.revere.alley.base.queue.enums.QueueType;
 import dev.revere.alley.base.queue.menu.sub.RankedMenu;
 import dev.revere.alley.config.ConfigService;
+import dev.revere.alley.feature.layout.LayoutService;
+import dev.revere.alley.feature.leaderboard.menu.LeaderboardMenu;
+import dev.revere.alley.game.host.HostMenu;
+import dev.revere.alley.game.match.menu.CurrentMatchesMenu;
+import dev.revere.alley.game.match.menu.SpectatorTeleportMenu;
+import dev.revere.alley.game.party.menu.duel.PartyDuelMenu;
+import dev.revere.alley.game.party.menu.event.PartyEventMenu;
 import dev.revere.alley.plugin.AlleyContext;
 import dev.revere.alley.plugin.annotation.Service;
 import dev.revere.alley.profile.Profile;
 import dev.revere.alley.profile.ProfileService;
+import dev.revere.alley.profile.menu.setting.PracticeSettingsMenu;
 import dev.revere.alley.tool.item.ItemBuilder;
 import dev.revere.alley.tool.logger.Logger;
 import dev.revere.alley.tool.reflection.utility.ReflectionUtility;
@@ -242,6 +250,22 @@ public class HotbarServiceImpl implements HotbarService {
         switch (name) {
             case "UNRANKED_MENU":
                 return Alley.getInstance().getService(QueueService.class).getQueueMenu();
+            case "LAYOUT_EDITOR_MENU":
+                return Alley.getInstance().getService(LayoutService.class).getLayoutMenu();
+            case "CURRENT_MATCHES_MENU":
+                return new CurrentMatchesMenu();
+            case "SETTINGS_MENU":
+                return new PracticeSettingsMenu();
+            case "HOST_EVENTS_MENU":
+                return new HostMenu();
+            case "LEADERBOARD_MENU":
+                return new LeaderboardMenu();
+            case "PARTY_EVENT_MENU":
+                return new PartyEventMenu();
+            case "PARTY_DUEL_MENU":
+                return new PartyDuelMenu();
+            case "SPECTATOR_TELEPORTER_MENU":
+                return new SpectatorTeleportMenu(profile.getMatch());
             case "RANKED_MENU":
                 return new RankedMenu();
             case "UNRANKED_DUO_MENU":
@@ -249,7 +273,6 @@ public class HotbarServiceImpl implements HotbarService {
                 return Alley.getInstance().getService(QueueService.class).getQueueMenu();
             default:
                 throw new IllegalArgumentException("Unknown menu type: " + name);
-
         }
     }
 }
