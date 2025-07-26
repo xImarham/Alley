@@ -228,16 +228,6 @@ public class HotbarServiceImpl implements HotbarService {
     }
 
     @Override
-    public boolean isHotbarItem(ItemStack itemStack, HotbarType type) {
-        if (itemStack == null || !itemStack.hasItemMeta() || !itemStack.getItemMeta().hasDisplayName()) {
-            return false;
-        }
-
-        List<HotbarItem> items = this.getItemsForType(type);
-        return items.stream().anyMatch(hotbarItem -> hotbarItem.getDisplayName().equals(itemStack.getItemMeta().getDisplayName()));
-    }
-
-    @Override
     public HotbarItem getHotbarItem(ItemStack itemStack, HotbarType type) {
         if (itemStack == null || !itemStack.hasItemMeta() || !itemStack.getItemMeta().hasDisplayName()) {
             return null;

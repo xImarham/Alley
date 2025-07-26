@@ -43,10 +43,6 @@ public class HotbarListener implements Listener {
         HotbarType currentHotbarType = hotbarService.getCorrespondingType(profile);
         if (currentHotbarType == null) return;
 
-        if (!hotbarService.isHotbarItem(clickedItem, currentHotbarType)) {
-            return;
-        }
-
         HotbarItem hotbarItem = hotbarService.getHotbarItem(clickedItem, currentHotbarType);
         if (hotbarItem == null) {
             return;

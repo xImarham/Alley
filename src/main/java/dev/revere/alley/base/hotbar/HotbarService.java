@@ -63,15 +63,6 @@ public interface HotbarService extends Service {
     HotbarType getCorrespondingType(Profile profile);
 
     /**
-     * Checks if the given item stack is a hotbar item of the specified type.
-     *
-     * @param itemStack The item stack to check.
-     * @param type      The type of hotbar to check against.
-     * @return true if the item stack is a hotbar item of the specified type, false otherwise.
-     */
-    boolean isHotbarItem(ItemStack itemStack, HotbarType type);
-
-    /**
      * Retrieves the HotbarItem associated with the given ItemStack and hotbar type.
      *
      * @param itemStack The item stack to check.
