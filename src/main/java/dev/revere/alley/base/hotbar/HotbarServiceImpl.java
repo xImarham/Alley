@@ -48,6 +48,8 @@ import java.util.stream.Collectors;
 public class HotbarServiceImpl implements HotbarService {
     private final ProfileService profileService;
     private final ConfigService configService;
+    private final LayoutService layoutService;
+    private final QueueService queueService;
 
     private final List<HotbarItem> hotbarItems = new ArrayList<>();
 
@@ -56,10 +58,14 @@ public class HotbarServiceImpl implements HotbarService {
      *
      * @param profileService The profile service to manage player profiles.
      * @param configService  The configuration service to manage hotbar configurations.
+     * @param queueService The Queue service instance.
+     * @param layoutService The Layout service instance.
      */
-    public HotbarServiceImpl(ProfileService profileService, ConfigService configService) {
+    public HotbarServiceImpl(ProfileService profileService, ConfigService configService, LayoutService layoutService, QueueService queueService) {
         this.profileService = profileService;
         this.configService = configService;
+        this.layoutService = layoutService;
+        this.queueService = queueService;
     }
 
     @Override
@@ -249,9 +255,9 @@ public class HotbarServiceImpl implements HotbarService {
         Profile profile = this.profileService.getProfile(player.getUniqueId());
         switch (name) {
             case "UNRANKED_MENU":
-                return Alley.getInstance().getService(QueueService.class).getQueueMenu();
+                return this.queueService.getQueueMenu();
             case "LAYOUT_EDITOR_MENU":
-                return Alley.getInstance().getService(LayoutService.class).getLayoutMenu();
+                return this.layoutService.getLayoutMenu();
             case "CURRENT_MATCHES_MENU":
                 return new CurrentMatchesMenu();
             case "SETTINGS_MENU":
@@ -270,7 +276,7 @@ public class HotbarServiceImpl implements HotbarService {
                 return new RankedMenu();
             case "UNRANKED_DUO_MENU":
                 profile.setQueueType(QueueType.DUOS);
-                return Alley.getInstance().getService(QueueService.class).getQueueMenu();
+                return this.queueService.getQueueMenu();
             default:
                 throw new IllegalArgumentException("Unknown menu type: " + name);
         }
