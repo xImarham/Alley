@@ -1,16 +1,19 @@
-## 🎉 Alley v2.1.4
+## 🎉 Alley v2.1.5
 
 ### 🔧 **PATCH RELEASE** - Bug Fixes & Improvements
 
-**Previous Version:** `2.1.3`
-**New Version:** `2.1.4`
+**Previous Version:** `2.1.4`
+**New Version:** `2.1.5`
 
 ### 📝 Changes:
 
-- chore: add prevent release keyword (2cab2e52)
+- chore: fix auto-release.yml skip keyword (cc247c9a)
+- chore: doing the requested changes (df51e457)
+- feat: add bstats for data (696ebdb6)
+- fix: ensure schematics folder exists, as standalone arenas won't be saved if it doesn't (2a26a028)
 
 ---
-**Download:** [Alley-2.1.4.jar](https://github.com/RevereInc/alley-practice/releases/download/v2.1.4/Alley-2.1.4.jar)
+**Download:** [Alley-2.1.5.jar](https://github.com/RevereInc/alley-practice/releases/download/v2.1.5/Alley-2.1.5.jar)
 
 **Installation:** Place the JAR file in your `plugins/` folder and restart your server.
 
