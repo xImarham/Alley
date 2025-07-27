@@ -17,6 +17,7 @@ import com.sk89q.worldedit.regions.CuboidRegion;
 import dev.revere.alley.Alley;
 import dev.revere.alley.base.arena.Arena;
 import dev.revere.alley.base.arena.impl.StandAloneArena;
+import dev.revere.alley.plugin.AlleyContext;
 import dev.revere.alley.plugin.annotation.Service;
 import dev.revere.alley.tool.logger.Logger;
 import org.bukkit.Location;
@@ -34,12 +35,32 @@ import java.util.List;
 @Service(provides = ArenaSchematicService.class, priority = 120)
 public class ArenaSchematicServiceImpl implements ArenaSchematicService {
     private final Alley plugin;
+    private File schematicsDirectory;
 
     /**
-     * Constructor for DI.
+     * Constructor for the ArenaSchematicServiceImpl class.
+     *
+     * @param plugin The main Alley plugin instance.
      */
     public ArenaSchematicServiceImpl(Alley plugin) {
         this.plugin = plugin;
+    }
+
+    @Override
+    public void setup(AlleyContext context) {
+        this.schematicsDirectory = this.getSchematicsDirectory();
+        this.createSchematicsFolder();
+    }
+
+    private void createSchematicsFolder() {
+        File schematicsDir = this.getSchematicsDirectory();
+        if (!schematicsDir.exists()) {
+            if (schematicsDir.mkdirs()) {
+                Logger.info("Created schematics directory: " + schematicsDir.getPath());
+            } else {
+                Logger.error("Failed to create schematics directory: " + schematicsDir.getPath());
+            }
+        }
     }
 
     @Override
@@ -51,21 +72,6 @@ public class ArenaSchematicServiceImpl implements ArenaSchematicService {
                 save(arena, schematicFile);
             }
         }
-    }
-
-    public File createSchematicFile(String name) {
-        File schematicFile = this.getSchematicFile(name);
-
-        schematicFile.getParentFile().mkdirs();
-        try {
-            schematicFile.createNewFile();
-            if (schematicFile.exists()) {
-                Logger.info("Created/updated schematic file: " + schematicFile.getPath());
-            }
-        } catch (Exception e) {
-            Logger.logException("Failed to create schematic file: " + schematicFile.getPath(), e);
-        }
-        return schematicFile;
     }
 
     @Override
@@ -168,11 +174,15 @@ public class ArenaSchematicServiceImpl implements ArenaSchematicService {
 
     @Override
     public File getSchematicFile(String name) {
-        return new File(this.plugin.getDataFolder(), "schematics" + File.separator + name.toLowerCase().replace(" ", "_") + ".schematic");
+        return new File(getSchematicsDirectory() + File.separator + name.toLowerCase().replace(" ", "_") + ".schematic");
     }
 
     @Override
     public File getSchematicFile(Arena arena) {
         return this.getSchematicFile(arena.getName());
+    }
+
+    private File getSchematicsDirectory() {
+        return new File(this.plugin.getDataFolder(), "schematics");
     }
 }

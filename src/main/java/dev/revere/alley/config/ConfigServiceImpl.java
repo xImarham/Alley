@@ -56,21 +56,7 @@ public class ConfigServiceImpl implements ConfigService {
             this.loadConfig(fileName);
         }
 
-        this.createSchematicsFolder();
         this.assignConfigs();
-    }
-
-    private void createSchematicsFolder() {
-        File file = new File(this.plugin.getDataFolder(), "schematics");
-        if (!file.exists()) {
-            if (file.mkdirs()) {
-                Logger.info("Created schematics folder: " + file.getPath());
-            } else {
-                Logger.error("Failed to create schematics folder: " + file.getPath());
-            }
-        } else {
-            Logger.info("Schematics folder already exists: " + file.getPath());
-        }
     }
 
     @Override
