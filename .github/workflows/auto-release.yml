@@ -16,8 +16,9 @@ jobs:
         with:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
-      
+
       - name: Check for skip release keyword
+        id: skip_check
         run: |
           commit_msg="${{ github.event.head_commit.message }}"
           echo "Commit message: $commit_msg"
@@ -25,12 +26,14 @@ jobs:
           if echo "$commit_msg" | grep -q "SKIP-RELEASE\|NO-RELEASE\|\[skip release\]\|\[no release\]"; then
             echo "🚫 Release skipped due to keyword in commit message"
             echo "💡 To create a release, commit without: SKIP-RELEASE, NO-RELEASE, [skip release], or [no release]"
-            exit 0
+            echo "skip_release=true" >> $GITHUB_OUTPUT
+          else
+            echo "✅ No skip keyword found, proceeding with release"
+            echo "skip_release=false" >> $GITHUB_OUTPUT
           fi
-          
-          echo "✅ No skip keyword found, proceeding with release"
 
       - name: Set up JDK 8
+        if: steps.skip_check.outputs.skip_release == 'false'
         uses: actions/setup-java@v4
         with:
           java-version: '8'
@@ -38,11 +41,13 @@ jobs:
           cache: maven
 
       - name: Configure Git
+        if: steps.skip_check.outputs.skip_release == 'false'
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
 
       - name: Analyze merge commits for version bump type
+        if: steps.skip_check.outputs.skip_release == 'false'
         id: bump_type
         run: |
           echo "Analyzing merge commits for version bump keywords..."
@@ -86,6 +91,7 @@ jobs:
           echo "bump_type=$bump_type" >> $GITHUB_OUTPUT
 
       - name: Get current version and calculate new version
+        if: steps.skip_check.outputs.skip_release == 'false'
         id: version
         run: |
           current_version=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
@@ -136,10 +142,12 @@ jobs:
           echo "bump_type=$bump_type" >> $GITHUB_OUTPUT
 
       - name: Update version in pom.xml
+        if: steps.skip_check.outputs.skip_release == 'false'
         run: |
           mvn versions:set -DnewVersion=${{ steps.version.outputs.version }} -DgenerateBackupPoms=false
 
       - name: Generate Changelog
+        if: steps.skip_check.outputs.skip_release == 'false'
         id: changelog
         run: |
           echo "Generating changelog..."
@@ -201,9 +209,11 @@ jobs:
           echo "EOF" >> $GITHUB_OUTPUT
 
       - name: Build with Maven
+        if: steps.skip_check.outputs.skip_release == 'false'
         run: mvn clean package
 
       - name: Commit version update
+        if: steps.skip_check.outputs.skip_release == 'false'
         run: |
           git add pom.xml CHANGELOG.md
           commit_msg="🚀 Auto-update version to ${{ steps.version.outputs.version }}"
@@ -224,12 +234,14 @@ jobs:
           git push
 
       - name: Create Release Tag
+        if: steps.skip_check.outputs.skip_release == 'false'
         run: |
           tag_msg="Release v${{ steps.version.outputs.version }} (${{ steps.version.outputs.bump_type }} bump)"
           git tag -a "v${{ steps.version.outputs.version }}" -m "$tag_msg"
           git push origin "v${{ steps.version.outputs.version }}"
 
       - name: Create GitHub Release
+        if: steps.skip_check.outputs.skip_release == 'false'
         uses: softprops/action-gh-release@v1
         with:
           tag_name: "v${{ steps.version.outputs.version }}"
@@ -243,6 +255,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload Build Artifact (Backup)
+        if: steps.skip_check.outputs.skip_release == 'false'
         uses: actions/upload-artifact@v4
         with:
           name: Alley-${{ steps.version.outputs.version }}-${{ steps.version.outputs.bump_type }}
@@ -250,6 +263,7 @@ jobs:
           if-no-files-found: error
 
       - name: Post-release summary
+        if: steps.skip_check.outputs.skip_release == 'false'
         run: |
           echo "🎉 Successfully released Alley v${{ steps.version.outputs.version }}!"
           echo "📦 Version bump type: ${{ steps.version.outputs.bump_type }}"
