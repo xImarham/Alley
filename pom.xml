@@ -65,7 +65,19 @@
                                         <exclude>net/citizensnpcs/**</exclude>
                                     </excludes>
                                 </filter>
+                                <filter>
+                                    <artifact>org.mongodb:bson-record-codec</artifact>
+                                    <excludes>
+                                        <exclude>**</exclude>
+                                    </excludes>
+                                </filter>
                             </filters>
+                            <relocations>
+                                <relocation>
+                                    <pattern>org.bstats</pattern>
+                                    <shadedPattern>dev.revere.alley.shaded.org.bstats</shadedPattern>
+                                </relocation>
+                            </relocations>
                         </configuration>
                     </execution>
                 </executions>
@@ -128,6 +140,11 @@
     </repositories>
 
     <dependencies>
+        <dependency>
+            <groupId>org.bstats</groupId>
+            <artifactId>bstats-bukkit</artifactId>
+            <version>3.0.2</version>
+        </dependency>
         <dependency>
             <groupId>dev.revere.spigot</groupId>
             <artifactId>ZoneSpigot</artifactId>
