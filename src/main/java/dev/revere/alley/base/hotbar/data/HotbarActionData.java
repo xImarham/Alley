@@ -15,7 +15,7 @@ import lombok.Setter;
 public class HotbarActionData {
     private HotbarAction action;
     private String command;
-    private Menu menu;
+    private String menuName;
 
     /**
      * Constructor for the HotbarActionData class.
@@ -25,6 +25,6 @@ public class HotbarActionData {
     public HotbarActionData(HotbarAction action) {
         this.action = action;
         this.command = null;
-        this.menu = null;
+        this.menuName = null;
     }
 }

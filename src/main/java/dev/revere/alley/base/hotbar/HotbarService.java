@@ -1,5 +1,6 @@
 package dev.revere.alley.base.hotbar;
 
+import dev.revere.alley.api.menu.Menu;
 import dev.revere.alley.base.hotbar.enums.HotbarType;
 import dev.revere.alley.plugin.lifecycle.Service;
 import dev.revere.alley.profile.Profile;
@@ -38,6 +39,28 @@ public interface HotbarService extends Service {
     void applyHotbarItems(Player player);
 
     /**
+     * Creates a new hotbar item with the specified name and type.
+     *
+     * @param name The name of the hotbar item to create.
+     * @param type The type of the hotbar item to create.
+     */
+    void createHotbarItem(String name, HotbarType type);
+
+    /**
+     * Deletes a hotbar item by its object reference.
+     *
+     * @param hotbarItem The HotbarItem object to delete.
+     */
+    void deleteHotbarItem(HotbarItem hotbarItem);
+
+    /**
+     * Deletes a hotbar item by its object.
+     *
+     * @param hotbarItem The name of the hotbar item to delete.
+     */
+    void saveToConfig(HotbarItem hotbarItem);
+
+    /**
      * Builds an ItemStack representation of a hotbar item that can be received by the player.
      *
      * @param hotbarItem The HotbarItem to build the ItemStack for.
@@ -62,15 +85,6 @@ public interface HotbarService extends Service {
     HotbarType getCorrespondingType(Profile profile);
 
     /**
-     * Checks if the given item stack is a hotbar item of the specified type.
-     *
-     * @param itemStack The item stack to check.
-     * @param type      The type of hotbar to check against.
-     * @return true if the item stack is a hotbar item of the specified type, false otherwise.
-     */
-    boolean isHotbarItem(ItemStack itemStack, HotbarType type);
-
-    /**
      * Retrieves the HotbarItem associated with the given ItemStack and hotbar type.
      *
      * @param itemStack The item stack to check.
@@ -78,4 +92,20 @@ public interface HotbarService extends Service {
      * @return The HotbarItem associated with the item stack and type, or null if not found.
      */
     HotbarItem getHotbarItem(ItemStack itemStack, HotbarType type);
+
+    /**
+     * Method to retrieve the given hotbar item object.
+     *
+     * @param name the name of the item.
+     * @return the hotbar item.
+     */
+    HotbarItem getHotbarItem(String name);
+
+    /**
+     * Gets a menu instance by a given name.
+     *
+     * @param name the name of the menu
+     * @return the menu instance
+     */
+    Menu getMenuInstanceFromName(String name, Player player);
 }

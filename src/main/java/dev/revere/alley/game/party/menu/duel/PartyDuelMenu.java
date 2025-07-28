@@ -16,7 +16,7 @@ import java.util.Map;
  * @project Alley
  * @date 08/10/2024 - 21:01
  */
-public class DuelOtherPartyMenu extends PaginatedMenu {
+public class PartyDuelMenu extends PaginatedMenu {
     @Override
     public String getPrePaginatedTitle(Player player) {
         return "&6&lDuel other parties";

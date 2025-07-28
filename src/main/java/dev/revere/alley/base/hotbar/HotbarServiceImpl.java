@@ -7,12 +7,21 @@ import dev.revere.alley.base.hotbar.data.HotbarTypeData;
 import dev.revere.alley.base.hotbar.enums.HotbarAction;
 import dev.revere.alley.base.hotbar.enums.HotbarType;
 import dev.revere.alley.base.queue.QueueService;
+import dev.revere.alley.base.queue.enums.QueueType;
 import dev.revere.alley.base.queue.menu.sub.RankedMenu;
 import dev.revere.alley.config.ConfigService;
+import dev.revere.alley.feature.layout.LayoutService;
+import dev.revere.alley.feature.leaderboard.menu.LeaderboardMenu;
+import dev.revere.alley.game.host.HostMenu;
+import dev.revere.alley.game.match.menu.CurrentMatchesMenu;
+import dev.revere.alley.game.match.menu.SpectatorTeleportMenu;
+import dev.revere.alley.game.party.menu.duel.PartyDuelMenu;
+import dev.revere.alley.game.party.menu.event.PartyEventMenu;
 import dev.revere.alley.plugin.AlleyContext;
 import dev.revere.alley.plugin.annotation.Service;
-import dev.revere.alley.profile.ProfileService;
 import dev.revere.alley.profile.Profile;
+import dev.revere.alley.profile.ProfileService;
+import dev.revere.alley.profile.menu.setting.PracticeSettingsMenu;
 import dev.revere.alley.tool.item.ItemBuilder;
 import dev.revere.alley.tool.logger.Logger;
 import dev.revere.alley.tool.reflection.utility.ReflectionUtility;
@@ -24,6 +33,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -39,6 +49,8 @@ import java.util.stream.Collectors;
 public class HotbarServiceImpl implements HotbarService {
     private final ProfileService profileService;
     private final ConfigService configService;
+    private final LayoutService layoutService;
+    private final QueueService queueService;
 
     private final List<HotbarItem> hotbarItems = new ArrayList<>();
 
@@ -47,10 +59,14 @@ public class HotbarServiceImpl implements HotbarService {
      *
      * @param profileService The profile service to manage player profiles.
      * @param configService  The configuration service to manage hotbar configurations.
+     * @param queueService The Queue service instance.
+     * @param layoutService The Layout service instance.
      */
-    public HotbarServiceImpl(ProfileService profileService, ConfigService configService) {
+    public HotbarServiceImpl(ProfileService profileService, ConfigService configService, LayoutService layoutService, QueueService queueService) {
         this.profileService = profileService;
         this.configService = configService;
+        this.layoutService = layoutService;
+        this.queueService = queueService;
     }
 
     @Override
@@ -103,9 +119,8 @@ public class HotbarServiceImpl implements HotbarService {
             } else {
                 String menuName = itemSection.getString("menu");
                 if (menuName != null && !menuName.isEmpty()) {
-                    Menu menu = this.getMenuInstanceFromName(menuName);
                     try {
-                        actionData.setMenu(menu);
+                        actionData.setMenuName(menuName);
                     } catch (Exception exception) {
                         Logger.error("Failed to set menu for hotbar item: " + key + ". Menu: " + menuName + " does not exist or is not properly configured.");
                     }
@@ -183,6 +198,71 @@ public class HotbarServiceImpl implements HotbarService {
     }
 
     @Override
+    public void createHotbarItem(String name, HotbarType type) {
+        if (this.hotbarItems.stream().anyMatch(item -> item.getName().equalsIgnoreCase(name))) {
+            Logger.warn("A hotbar item with the name '" + name + "' already exists.");
+            return;
+        }
+
+        HotbarItem hotbarItem = new HotbarItem(name);
+        hotbarItem.getTypeData().stream()
+                .filter(typeData -> typeData.getType() == type)
+                .findFirst()
+                .ifPresent(typeData -> typeData.setEnabled(true));
+
+        this.hotbarItems.add(hotbarItem);
+        this.saveToConfig(hotbarItem);
+    }
+
+    @Override
+    public void deleteHotbarItem(HotbarItem hotbarItem) {
+        FileConfiguration hotbarConfig = this.configService.getHotbarConfig();
+        File hotbarFile = this.configService.getConfigFile("providers/hotbar.yml");
+
+        ConfigurationSection hotbarSection = hotbarConfig.getConfigurationSection("hotbar-items");
+        if (hotbarSection != null) {
+            hotbarSection.set(hotbarItem.getName(), null);
+            this.hotbarItems.remove(hotbarItem);
+        } else {
+            Logger.error("Hotbar items section is missing in the hotbar configuration file.");
+        }
+
+        this.configService.saveConfig(hotbarFile, hotbarConfig);
+    }
+
+
+    @Override
+    public void saveToConfig(HotbarItem hotbarItem) {
+        FileConfiguration hotbarConfig = this.configService.getHotbarConfig();
+        File hotbarFile = this.configService.getConfigFile("providers/hotbar.yml");
+
+        ConfigurationSection hotbarSection = hotbarConfig.getConfigurationSection("hotbar-items");
+        if (hotbarSection == null) {
+            hotbarSection = hotbarConfig.createSection("hotbar-items");
+        }
+
+        ConfigurationSection itemSection = hotbarSection.createSection(hotbarItem.getName());
+        itemSection.set("display-name", hotbarItem.getDisplayName());
+        itemSection.set("lore", hotbarItem.getLore());
+        itemSection.set("material", hotbarItem.getMaterial().name());
+        itemSection.set("durability", hotbarItem.getDurability());
+
+        ConfigurationSection typesSection = itemSection.createSection("types");
+        for (HotbarTypeData typeData : hotbarItem.getTypeData()) {
+            ConfigurationSection typeSection = typesSection.createSection(typeData.getType().name().toLowerCase());
+            typeSection.set("slot", typeData.getSlot());
+            typeSection.set("enabled", typeData.isEnabled());
+        }
+
+        if (hotbarItem.getActionData() != null) {
+            itemSection.set("command", hotbarItem.getActionData().getCommand());
+            itemSection.set("menu", hotbarItem.getActionData().getMenuName());
+        }
+
+        this.configService.saveConfig(hotbarFile, hotbarConfig);
+    }
+
+    @Override
     public List<HotbarItem> getItemsForType(HotbarType type) {
         return this.hotbarItems.stream()
                 .filter(item -> item.getTypeData().stream().anyMatch(data -> data.getType() == type && data.isEnabled()))
@@ -214,16 +294,6 @@ public class HotbarServiceImpl implements HotbarService {
     }
 
     @Override
-    public boolean isHotbarItem(ItemStack itemStack, HotbarType type) {
-        if (itemStack == null || !itemStack.hasItemMeta() || !itemStack.getItemMeta().hasDisplayName()) {
-            return false;
-        }
-
-        List<HotbarItem> items = this.getItemsForType(type);
-        return items.stream().anyMatch(hotbarItem -> hotbarItem.getDisplayName().equals(itemStack.getItemMeta().getDisplayName()));
-    }
-
-    @Override
     public HotbarItem getHotbarItem(ItemStack itemStack, HotbarType type) {
         if (itemStack == null || !itemStack.hasItemMeta() || !itemStack.getItemMeta().hasDisplayName()) {
             return null;
@@ -236,21 +306,40 @@ public class HotbarServiceImpl implements HotbarService {
                 .orElse(null);
     }
 
-    /**
-     * Gets a menu instance by a given name.
-     *
-     * @param name the name of the menu
-     * @return the menu instance
-     */
-    public Menu getMenuInstanceFromName(String name) {
+    @Override
+    public HotbarItem getHotbarItem(String name) {
+        return this.hotbarItems.stream().filter(hotbarItem -> hotbarItem.getName().equalsIgnoreCase(name)).findFirst().orElse(null);
+    }
+
+    @Override
+    public Menu getMenuInstanceFromName(String name, Player player) {
+        Profile profile = this.profileService.getProfile(player.getUniqueId());
         switch (name) {
             case "UNRANKED_MENU":
-                return Alley.getInstance().getService(QueueService.class).getQueueMenu();
+                return this.queueService.getQueueMenu();
+            case "LAYOUT_EDITOR_MENU":
+                return this.layoutService.getLayoutMenu();
+            case "CURRENT_MATCHES_MENU":
+                return new CurrentMatchesMenu();
+            case "SETTINGS_MENU":
+                return new PracticeSettingsMenu();
+            case "HOST_EVENTS_MENU":
+                return new HostMenu();
+            case "LEADERBOARD_MENU":
+                return new LeaderboardMenu();
+            case "PARTY_EVENT_MENU":
+                return new PartyEventMenu();
+            case "PARTY_DUEL_MENU":
+                return new PartyDuelMenu();
+            case "SPECTATOR_TELEPORTER_MENU":
+                return new SpectatorTeleportMenu(profile.getMatch());
             case "RANKED_MENU":
                 return new RankedMenu();
+            case "UNRANKED_DUO_MENU":
+                profile.setQueueType(QueueType.DUOS);
+                return this.queueService.getQueueMenu();
             default:
                 throw new IllegalArgumentException("Unknown menu type: " + name);
-
         }
     }
 }

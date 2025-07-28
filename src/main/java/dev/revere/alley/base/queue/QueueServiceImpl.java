@@ -44,7 +44,7 @@ public class QueueServiceImpl implements QueueService {
 
     @Override
     public void initialize(AlleyContext context) {
-        this.queueMenu = determineMenu();
+        this.queueMenu = new QueuesMenuModern();
         this.reloadQueues();
 
         this.queueTask = new QueueTask();
@@ -62,27 +62,6 @@ public class QueueServiceImpl implements QueueService {
                 this.queues.add(new Queue(kit, true, false));
             }
         });
-    }
-
-    /**
-     * Determines the menu type based on the configuration.
-     *
-     * @return the appropriate menu instance
-     */
-    private Menu determineMenu() {
-        FileConfiguration config = this.configService.getMenusConfig();
-        String menuType = config.getString("queues-menu.type", "DEFAULT");
-
-        switch (menuType.toUpperCase()) {
-            case "MODERN":
-                return new QueuesMenuModern();
-            case "DEFAULT":
-            default:
-                if (!menuType.equalsIgnoreCase("DEFAULT")) {
-                    Logger.warn("Invalid queues menu type '" + menuType + "'. Defaulting to DEFAULT.");
-                }
-                return new QueuesMenuDefault();
-        }
     }
 
     /**

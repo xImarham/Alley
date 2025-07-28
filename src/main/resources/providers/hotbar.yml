@@ -1,3 +1,19 @@
+#   ─────────────────────────────────────────────────────────────────────────────────────
+#   List of available menus to use:
+#
+#   UNRANKED_MENU              - Opens the regular unranked queue menu
+#   LAYOUT_EDITOR_MENU         - Opens the kit editor
+#   CURRENT_MATCHES_MENU       - Opens a menu with the current ongoing matches
+#   SETTINGS_MENU              - Opens the player settings menu (/practicesettings)
+#   HOST_EVENTS_MENU           - Opens the events menu
+#   LEADERBOARD_MENU           - Opens the leaderboards/stats menu
+#   PARTY_EVENT_MENU           - Opens the party event menu to start a party event
+#   PARTY_DUEL_MENU            - Opens the party duel menu
+#   SPECTATOR_TELEPORTER_MENU  - Opens the spectator teleporter menu
+#   RANKED_MENU                - Opens the ranked queue menu
+#   UNRANKED_DUO_MENU          - Opens the unranked duo queue menu
+#   ─────────────────────────────────────────────────────────────────────────────────────
+
 hotbar-items:
 
   UNRANKED_QUEUES:
@@ -6,8 +22,8 @@ hotbar-items:
       - "&7Join unranked queues to practice freely."
     material: IRON_SWORD
     durability: 0
-    command: "unrankedmenu"
-    menu: ""
+    command: ""
+    menu: "UNRANKED_MENU"
     types:
       LOBBY:
         enabled: true
@@ -31,8 +47,8 @@ hotbar-items:
       - "&7Challenge yourself in ranked matches."
     material: DIAMOND_SWORD
     durability: 0
-    command: "rankedmenu"
-    menu: ""
+    command: ""
+    menu: "RANKED_MENU"
     types:
       LOBBY:
         enabled: true
@@ -56,8 +72,8 @@ hotbar-items:
       - "&7Customize your kit layouts."
     material: BOOK
     durability: 0
-    command: "layouteditor"
-    menu: ""
+    command: ""
+    menu: "LAYOUT_EDITOR_MENU"
     types:
       LOBBY:
         enabled: true
@@ -66,7 +82,7 @@ hotbar-items:
         enabled: true
         slot: 1
       QUEUE:
-        enabled: false
+        enabled: true
         slot: 0
       SPECTATOR:
         enabled: false
@@ -81,8 +97,8 @@ hotbar-items:
       - "&7View ongoing matches."
     material: COMPASS
     durability: 0
-    command: "currentmatches"
-    menu: ""
+    command: ""
+    menu: "CURRENT_MATCHES_MENU"
     types:
       LOBBY:
         enabled: true
@@ -131,8 +147,8 @@ hotbar-items:
       - "&7Check the top players."
     material: EMERALD
     durability: 0
-    command: "leaderboards"
-    menu: ""
+    command: ""
+    menu: "LEADERBOARD_MENU"
     types:
       LOBBY:
         enabled: true
@@ -156,8 +172,8 @@ hotbar-items:
       - "&7Join exciting events."
     material: EYE_OF_ENDER
     durability: 0
-    command: "host"
-    menu: ""
+    command: ""
+    menu: "HOST_EVENTS_MENU"
     types:
       LOBBY:
         enabled: true
@@ -181,8 +197,8 @@ hotbar-items:
       - "&7Adjust your personal preferences."
     material: SKULL_ITEM
     durability: 0
-    command: "practicesettings"
-    menu: ""
+    command: ""
+    menu: "SETTINGS_MENU"
     types:
       LOBBY:
         enabled: true
@@ -207,7 +223,7 @@ hotbar-items:
     material: IRON_SWORD
     durability: 0
     command: ""
-    menu: ""
+    menu: "UNRANKED_DUO_MENU"
     types:
       LOBBY:
         enabled: false
@@ -232,7 +248,7 @@ hotbar-items:
     material: IRON_AXE
     durability: 0
     command: ""
-    menu: ""
+    menu: "PARTY_EVENT_MENU"
     types:
       LOBBY:
         enabled: false
@@ -257,7 +273,7 @@ hotbar-items:
     material: DIAMOND_AXE
     durability: 0
     command: ""
-    menu: ""
+    menu: "PARTY_DUEL_MENU"
     types:
       LOBBY:
         enabled: false
@@ -325,31 +341,6 @@ hotbar-items:
         enabled: false
         slot: 0
 
-  LAYOUT_EDITOR_2:
-    display-name: "&6Layout Editor &7(Right Click)"
-    lore:
-      - "&7Customize your kit layouts."
-    material: BOOK
-    durability: 0
-    command: "kiteditor"
-    menu: ""
-    types:
-      LOBBY:
-        enabled: false
-        slot: 0
-      PARTY:
-        enabled: false
-        slot: 0
-      QUEUE:
-        enabled: true
-        slot: 0
-      SPECTATOR:
-        enabled: false
-        slot: 0
-      TOURNAMENT:
-        enabled: false
-        slot: 0
-
   TIPS:
     display-name: "&6Tip Of The Day &7(Right Click)"
     lore:
@@ -400,14 +391,14 @@ hotbar-items:
         enabled: false
         slot: 0
 
-  SPECTATOR_MENU:
-    display-name: "&6Teleport Menu &7(Right Click)"
+  SPECTATOR_TELEPORTER:
+    display-name: "&6Teleporter &7(Right Click)"
     lore:
       - "&7Teleport to various locations."
     material: COMPASS
     durability: 0
-    command: "viewplayers"
-    menu: ""
+    command: ""
+    menu: "SPECTATOR_TELEPORTER_MENU"
     types:
       LOBBY:
         enabled: false
@@ -425,7 +416,7 @@ hotbar-items:
         enabled: false
         slot: 0
 
-  STOP_WATCHING:
+  STOP_SPECTATING:
     display-name: "&cStop Watching &7(Right Click)"
     lore:
       - "&7Stop spectating the current match."
