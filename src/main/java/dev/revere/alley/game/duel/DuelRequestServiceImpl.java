@@ -73,7 +73,7 @@ public class DuelRequestServiceImpl implements DuelRequestService {
         }
 
         Arena finalArena = arena != null ? arena : this.arenaService.getRandomArena(kit);
-        if (finalArena instanceof StandAloneArena) {
+        if (finalArena instanceof StandAloneArena && ((StandAloneArena) finalArena).getOriginalArenaName() != null) {
             finalArena = this.arenaService.getArenaByName(((StandAloneArena) finalArena).getOriginalArenaName());
         }
 
