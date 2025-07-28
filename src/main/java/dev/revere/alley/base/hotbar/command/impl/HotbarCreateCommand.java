@@ -3,7 +3,6 @@ package dev.revere.alley.base.hotbar.command.impl;
 import dev.revere.alley.api.command.BaseCommand;
 import dev.revere.alley.api.command.CommandArgs;
 import dev.revere.alley.api.command.annotation.CommandData;
-import dev.revere.alley.base.hotbar.HotbarItem;
 import dev.revere.alley.base.hotbar.HotbarService;
 import dev.revere.alley.base.hotbar.enums.HotbarType;
 import dev.revere.alley.util.chat.CC;
@@ -29,15 +28,7 @@ public class HotbarCreateCommand extends BaseCommand {
             return;
         }
 
-        HotbarService hotbarService = this.plugin.getService(HotbarService.class);
-
         String name = args[0];
-
-        HotbarItem hotbarItem = hotbarService.getHotbarItem(name);
-        if (hotbarItem != null) {
-            player.sendMessage(CC.translate("&cAn hotbar item with this name already exists!"));
-            return;
-        }
 
         HotbarType type;
         try {
@@ -47,7 +38,7 @@ public class HotbarCreateCommand extends BaseCommand {
             return;
         }
 
-        hotbarService.createHotbarItem(name, type);
+        this.plugin.getService(HotbarService.class).createHotbarItem(name, type);
         player.sendMessage(CC.translate("&aHotbar item &e" + name + " &acreated successfully with type &e" + type.name() + "&a!"));
     }
 }

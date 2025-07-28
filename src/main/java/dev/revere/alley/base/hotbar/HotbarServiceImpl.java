@@ -199,8 +199,10 @@ public class HotbarServiceImpl implements HotbarService {
 
     @Override
     public void createHotbarItem(String name, HotbarType type) {
-        FileConfiguration hotbarConfig = this.configService.getHotbarConfig();
-        File hotbarFile = this.configService.getConfigFile("providers/hotbar.yml");
+        if (this.hotbarItems.stream().anyMatch(item -> item.getName().equalsIgnoreCase(name))) {
+            Logger.warn("A hotbar item with the name '" + name + "' already exists.");
+            return;
+        }
 
         HotbarItem hotbarItem = new HotbarItem(name);
         hotbarItem.getTypeData().stream()
