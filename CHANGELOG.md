@@ -1,19 +1,21 @@
-## 🎉 Alley v2.1.5
+## 🎉 Alley v2.1.6
 
 ### 🔧 **PATCH RELEASE** - Bug Fixes & Improvements
 
-**Previous Version:** `2.1.4`
-**New Version:** `2.1.5`
+**Previous Version:** `2.1.5`
+**New Version:** `2.1.6`
 
 ### 📝 Changes:
 
-- chore: fix auto-release.yml skip keyword (cc247c9a)
-- chore: doing the requested changes (df51e457)
-- feat: add bstats for data (696ebdb6)
-- fix: ensure schematics folder exists, as standalone arenas won't be saved if it doesn't (2a26a028)
+- chore: check if said hotbar item already exists in "createHotbarItem" method itself (f6eb574c)
+- feat: implement the hotbar commands (needs testing and clean up) (d2a8e204)
+- chore(hotbar-service-impl): remove "isHotbarItem" method (2f38abe2)
+- chore(hotbar-service-impl): inject layout service, queue service (89ecc957)
+- feat: add the remaining menu instances to the "HotbarServiceImpl#getMenuInstanceFromName" method and add an informative comment in hotbar.yml and removed duplicated kit_editor hotbar item (fcbc59fe)
+- chore: added player parameter to HotbarServiceImpl::getMenuInstanceFromName so we can access profile (e1cb7f44)
 
 ---
-**Download:** [Alley-2.1.5.jar](https://github.com/RevereInc/alley-practice/releases/download/v2.1.5/Alley-2.1.5.jar)
+**Download:** [Alley-2.1.6.jar](https://github.com/RevereInc/alley-practice/releases/download/v2.1.6/Alley-2.1.6.jar)
 
 **Installation:** Place the JAR file in your `plugins/` folder and restart your server.
 
