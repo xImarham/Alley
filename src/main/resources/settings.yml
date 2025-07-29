@@ -21,6 +21,9 @@ game:
   # The radius of the portal in blocks.
   portal-radius: 5
 
+essentials:
+  emojis: true
+
 explosive:
   enabled: true # Whether to enable explosives or not (in case if you want to use your own custom approach)
   values:
