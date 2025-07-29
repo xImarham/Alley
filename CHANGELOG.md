@@ -1,16 +1,16 @@
-## 🎉 Alley v2.1.8
+## 🎉 Alley v2.1.9
 
 ### 🔧 **PATCH RELEASE** - Bug Fixes & Improvements
 
-**Previous Version:** `2.1.7`
-**New Version:** `2.1.8`
+**Previous Version:** `2.1.8`
+**New Version:** `2.1.9`
 
 ### 📝 Changes:
 
-- chore(duel-request-service-impl): validate that original arena name isnt null before overwriting the final arena (bd73f78c)
+- chore: Added missing string in settings.yml (e769ae35)
 
 ---
-**Download:** [Alley-2.1.8.jar](https://github.com/RevereInc/alley-practice/releases/download/v2.1.8/Alley-2.1.8.jar)
+**Download:** [Alley-2.1.9.jar](https://github.com/RevereInc/alley-practice/releases/download/v2.1.9/Alley-2.1.9.jar)
 
 **Installation:** Place the JAR file in your `plugins/` folder and restart your server.
 
